@@ -19,7 +19,7 @@ class ClassFile {
 
     var thisClass: ConstClassInfo = null  // the current class
     var superClass: ConstClassInfo = null  // null if Object; non-null otherwise
-    var interfaces: Vector[ConstClassInfo] = null
+    var interfaces = new Vector[ConstClassInfo]()
 
     var fields = new FieldPool()
     var methods = new MethodPool()
@@ -73,7 +73,6 @@ class ClassFile {
             superClass = constants.getClassByIndex(superClassIndex)
         }
 
-        interfaces = new Vector[ConstClassInfo]()
         val interfacesCount = input.readUnsignedShort()
         for (_ <- 1 to interfacesCount) {
             interfaces.add(constants.getClassByIndex(input.readUnsignedShort()))
