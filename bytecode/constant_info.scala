@@ -106,8 +106,10 @@ trait ConstInfo extends Comparable[ConstInfo] {
 //
 // TODO: Fix encoding / decoding.  jvm uses a non-standard "modified-utf8"
 // encoding.  Why use the standard when you can reinvent your own ...
-class ConstUtf8Info extends ConstInfo {
-    var value: String = ""
+class ConstUtf8Info(v: String) extends ConstInfo {
+    def this() = this("")
+
+    var value: String = v
 
     def tag(): Int = ConstInfo.UTF8
 

@@ -63,7 +63,7 @@ class ObjectType(s: String) extends FieldType {
 
 class MethodType extends DescriptorType {
     var parameters = new Vector[FieldType]()
-    var returnType: ReturnType = null  // null for void
+    var returnType: FieldType = null  // null for void
 
     def descriptorString(): String = {
         var result = "("
@@ -204,7 +204,7 @@ class DescriptorParser(s: String) {
             if (tokenizer.lookAhead() == 'V') {
                 tokenizer.nextToken()
             } else {
-                method.returnType = new ReturnType(_parseField())
+                method.returnType = _parseField()
             }
         } catch {
             case ex: IndexOutOfBoundsException => throw new Exception(

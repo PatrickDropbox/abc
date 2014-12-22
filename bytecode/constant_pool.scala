@@ -15,6 +15,23 @@ class ConstantPool {
     // only used for deserialization.  invalidate when _constInfos is modified.
     var _tmpConstInfosByIndex: TreeMap[Int, ConstInfo] = null
 
+    def _get[T <: ConstInfo: ClassTag](info: T): T = {
+        _tmpConstInfosByIndex = null
+        if (_constInfos.containsKey(info)) {
+            val cls = implicitly[ClassTag[T]].runtimeClass
+            _constInfos.get(info) match {
+                case t: T if cls.isInstance(t) => return t
+                case _ => throw new Exception("unexpected const info type")
+            }
+        }
+        _constInfos.put(info, info)
+        return info
+    }
+
+    def getUtf8(value: String): ConstUtf8Info = {
+        return _get[ConstUtf8Info](new ConstUtf8Info(value))
+    }
+
     def _getByIndex[T <: ConstInfo : ClassTag](index: Int): T = {
         if (_tmpConstInfosByIndex == null) {
             throw new Exception(
