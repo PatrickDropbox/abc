@@ -61,6 +61,28 @@ trait ConstInfo extends Comparable[ConstInfo] {
 
     def typeName(): String
 
+    def debugString(): String = {
+        val indexValue = _debugIndexValue()
+        if (indexValue != "") {
+            return String.format(
+                    "%7d = %-18s %s  // %s",
+                    "#" + index,
+                    typeName(),
+                    indexValue,
+                    _debugValue())
+        }
+
+        return String.format(
+                "%7d = %-18s %s",
+                "#" + index,
+                typeName(),
+                _debugValue())
+    }
+
+    def _debugIndexValue(): String = ""
+
+    def _debugValue(): String
+
     def serialize(output: DataOutputStream)
 
     def deserialize(parsedTag: Int, input: DataInputStream)
@@ -90,6 +112,10 @@ class ConstUtf8Info extends ConstInfo {
     def tag(): Int = ConstInfo.UTF8
 
     def typeName(): String = "Utf8"
+
+    def _debugValue(): String = {
+        return value.replaceAll("\\p{C}", "?")
+    }
 
     def serialize(output: DataOutputStream) {
         var buffer = new ByteArrayOutputStream()
@@ -140,6 +166,10 @@ class ConstIntegerInfo extends ConstInfo {
 
     def typeName(): String = "Integer"
 
+    def _debugValue(): String = {
+        return "" + value
+    }
+
     def serialize(output: DataOutputStream) {
         output.writeByte(tag())
         output.writeInt(value)
@@ -182,6 +212,10 @@ class ConstLongInfo extends ConstInfo {
 
     def typeName(): String = "Long"
 
+    def _debugValue(): String = {
+        return "" + value + "l"
+    }
+
     def serialize(output: DataOutputStream) {
         output.writeByte(tag())
         output.writeLong(value)
@@ -221,6 +255,10 @@ class ConstFloatInfo extends ConstInfo {
     def tag(): Int = ConstInfo.FLOAT
 
     def typeName(): String = "Float"
+
+    def _debugValue(): String = {
+        return "" + value + "f"
+    }
 
     def serialize(output: DataOutputStream) {
         output.writeByte(tag())
@@ -263,6 +301,10 @@ class ConstDoubleInfo extends ConstInfo {
     override def indexSize(): Int = 2
 
     def typeName(): String = "Double"
+
+    def _debugValue(): String = {
+        return "" + value + "d"
+    }
 
     def serialize(output: DataOutputStream) {
         output.writeByte(tag())
@@ -307,6 +349,14 @@ class ConstStringInfo extends ConstInfo {
 
     def typeName(): String = "String"
 
+    override def _debugIndexValue(): String = {
+        return "#" + utf8String.index
+    }
+
+    def _debugValue(): String = {
+        return utf8String._debugValue()
+    }
+
     def serialize(output: DataOutputStream) {
         output.writeByte(tag())
         output.writeShort(utf8String.index)
@@ -344,6 +394,14 @@ class ConstClassInfo extends ConstInfo {
 
     def typeName(): String = "Class"
 
+    override def _debugIndexValue(): String = {
+        return "#" + className.index
+    }
+
+    def _debugValue(): String = {
+        return className._debugValue()
+    }
+
     def serialize(output: DataOutputStream) {
         output.writeByte(tag())
         output.writeShort(className.index)
@@ -380,6 +438,14 @@ class ConstMethodTypeInfo extends ConstInfo {
     def tag(): Int = ConstInfo.METHOD_TYPE
 
     def typeName(): String = "MethodType"
+
+    override def _debugIndexValue(): String = {
+        return "#" + descriptor.index
+    }
+
+    def _debugValue(): String = {
+        return descriptor._debugValue()
+    }
 
     def serialize(output: DataOutputStream) {
         output.writeByte(tag())
@@ -419,6 +485,14 @@ class ConstNameAndTypeInfo extends ConstInfo {
     def tag(): Int = ConstInfo.NAME_AND_TYPE
 
     def typeName(): String = "NameAndType"
+
+    override def _debugIndexValue(): String = {
+        return "#" + name.index + ":#" + descriptor.index
+    }
+
+    def _debugValue(): String = {
+        return name._debugValue() + ":" + descriptor._debugValue()
+    }
 
     def serialize(output: DataOutputStream) {
         output.writeByte(tag())
@@ -461,6 +535,14 @@ abstract class ConstRefInfo extends ConstInfo {
     // only used during deserialization
     var _tmpClassIndex = 0
     var _tmpNameAndTypeIndex = 0
+
+    override def _debugIndexValue(): String = {
+        return "#" + classInfo.index + ":#" + nameAndType.index
+    }
+
+    def _debugValue(): String = {
+        return classInfo._debugValue() + ":" + nameAndType._debugValue()
+    }
 
     def serialize(output: DataOutputStream) {
         output.writeByte(tag())
@@ -528,6 +610,14 @@ class ConstMethodHandleInfo extends ConstInfo {
 
     def typeName(): String = "MethodHandle"
 
+    override def _debugIndexValue(): String = {
+        return "" + referenceKind + " #" + reference.index
+    }
+
+    def _debugValue(): String = {
+        return "" + referenceKind + " " + reference._debugValue()
+    }
+
     def serialize(output: DataOutputStream) {
         output.writeByte(tag())
         output.writeByte(referenceKind)
@@ -573,6 +663,14 @@ class ConstInvokeDynamicInfo extends ConstInfo {
     def tag(): Int = ConstInfo.INVOKE_DYNAMIC
 
     def typeName(): String = "InvokeDynamic"
+
+    override def _debugIndexValue(): String = {
+        return "" + bootstrapMethodAttrIndex + " #" + nameAndType.index
+    }
+
+    def _debugValue(): String = {
+        return "" + bootstrapMethodAttrIndex + " " + nameAndType._debugValue()
+    }
 
     def serialize(output: DataOutputStream) {
         output.writeByte(tag())
