@@ -109,19 +109,21 @@ trait ConstInfo extends Comparable[ConstInfo] {
 class ConstUtf8Info(v: String) extends ConstInfo {
     def this() = this("")
 
-    var value: String = v
+    var _value: String = v
 
     def tag(): Int = ConstInfo.UTF8
 
     def typeName(): String = "Utf8"
 
+    def value(): String = _value
+
     def debugValue(): String = {
-        return value.replaceAll("\\p{C}", "?")
+        return _value.replaceAll("\\p{C}", "?")
     }
 
     def serialize(output: DataOutputStream) {
         var buffer = new ByteArrayOutputStream()
-        (new DataOutputStream(buffer)).writeUTF(value)
+        (new DataOutputStream(buffer)).writeUTF(_value)
         val utf8Value = buffer.toByteArray()
 
         if (utf8Value.length > 65535) {
@@ -143,7 +145,7 @@ class ConstUtf8Info(v: String) extends ConstInfo {
         var utf8Bytes = new Array[Byte](length)
         input.readFully(utf8Bytes)
 
-        value = new String(utf8Bytes, "UTF-8")
+        _value = new String(utf8Bytes, "UTF-8")
     }
 
     def bindConstReferences(pool: ConstantPool) {
@@ -153,7 +155,7 @@ class ConstUtf8Info(v: String) extends ConstInfo {
     def _compareTo(o: ConstInfo): Int = {
         o match {
             case other: ConstUtf8Info => {
-                return value.compareTo(other.value)
+                return _value.compareTo(other._value)
             }
             case _ => throw new Exception("unexpected other type")
         }
@@ -164,26 +166,28 @@ class ConstUtf8Info(v: String) extends ConstInfo {
 class ConstIntegerInfo(v: Int) extends ConstInfo {
     def this() = this(0)
 
-    var value: Int = v
+    var _value: Int = v
 
     def tag(): Int = ConstInfo.INTEGER
 
     def typeName(): String = "Integer"
 
+    def value(): Int = _value
+
     def debugValue(): String = {
-        return "" + value
+        return "" + _value
     }
 
     def serialize(output: DataOutputStream) {
         output.writeByte(tag())
-        output.writeInt(value)
+        output.writeInt(_value)
     }
 
     def deserialize(parsedTag: Int, input: DataInputStream) {
         if (parsedTag != tag()) {
             throw new Exception("unexpected tag")
         }
-        value = input.readInt()
+        _value = input.readInt()
     }
 
     def bindConstReferences(pool: ConstantPool) {
@@ -193,10 +197,10 @@ class ConstIntegerInfo(v: Int) extends ConstInfo {
     def _compareTo(o: ConstInfo): Int = {
         o match {
             case other: ConstIntegerInfo => {
-                if (value < other.value) {
+                if (_value < other._value) {
                     return -1
                 }
-                if (value > other.value) {
+                if (_value > other._value) {
                     return 1
                 }
                 return 0
@@ -210,7 +214,7 @@ class ConstIntegerInfo(v: Int) extends ConstInfo {
 class ConstLongInfo(v: Long) extends ConstInfo {
     def this() = this(0)
 
-    var value: Long = 0
+    var _value: Long = 0
 
     def tag(): Int = ConstInfo.LONG
 
@@ -218,20 +222,22 @@ class ConstLongInfo(v: Long) extends ConstInfo {
 
     def typeName(): String = "Long"
 
+    def value(): Long = _value
+
     def debugValue(): String = {
-        return "" + value + "l"
+        return "" + _value + "l"
     }
 
     def serialize(output: DataOutputStream) {
         output.writeByte(tag())
-        output.writeLong(value)
+        output.writeLong(_value)
     }
 
     def deserialize(parsedTag: Int, input: DataInputStream) {
         if (parsedTag != tag()) {
             throw new Exception("unexpected tag")
         }
-        value = input.readLong()
+        _value = input.readLong()
     }
 
     def bindConstReferences(pool: ConstantPool) {
@@ -241,10 +247,10 @@ class ConstLongInfo(v: Long) extends ConstInfo {
     def _compareTo(o: ConstInfo): Int = {
         o match {
             case other: ConstLongInfo => {
-                if (value < other.value) {
+                if (_value < other._value) {
                     return -1
                 }
-                if (value > other.value) {
+                if (_value > other._value) {
                     return 1
                 }
                 return 0
@@ -258,26 +264,28 @@ class ConstLongInfo(v: Long) extends ConstInfo {
 class ConstFloatInfo(v: Float) extends ConstInfo {
     def this() = this(0)
 
-    var value: Float = 0
+    var _value: Float = 0
 
     def tag(): Int = ConstInfo.FLOAT
 
     def typeName(): String = "Float"
 
+    def value(): Float = _value
+
     def debugValue(): String = {
-        return "" + value + "f"
+        return "" + _value + "f"
     }
 
     def serialize(output: DataOutputStream) {
         output.writeByte(tag())
-        output.writeFloat(value)
+        output.writeFloat(_value)
     }
 
     def deserialize(parsedTag: Int, input: DataInputStream) {
         if (parsedTag != tag()) {
             throw new Exception("unexpected tag")
         }
-        value = input.readFloat()
+        _value = input.readFloat()
     }
 
     def bindConstReferences(pool: ConstantPool) {
@@ -287,10 +295,10 @@ class ConstFloatInfo(v: Float) extends ConstInfo {
     def _compareTo(o: ConstInfo): Int = {
         o match {
             case other: ConstFloatInfo => {
-                if (value < other.value) {
+                if (_value < other._value) {
                     return -1
                 }
-                if (value > other.value) {
+                if (_value > other._value) {
                     return 1
                 }
                 return 0
@@ -304,7 +312,7 @@ class ConstFloatInfo(v: Float) extends ConstInfo {
 class ConstDoubleInfo(v: Double) extends ConstInfo {
     def this() = this(0)
 
-    var value: Double = 0
+    var _value: Double = 0
 
     def tag(): Int = ConstInfo.DOUBLE
 
@@ -312,20 +320,22 @@ class ConstDoubleInfo(v: Double) extends ConstInfo {
 
     def typeName(): String = "Double"
 
+    def value(): Double = _value
+
     def debugValue(): String = {
-        return "" + value + "d"
+        return "" + _value + "d"
     }
 
     def serialize(output: DataOutputStream) {
         output.writeByte(tag())
-        output.writeDouble(value)
+        output.writeDouble(_value)
     }
 
     def deserialize(parsedTag: Int, input: DataInputStream) {
         if (parsedTag != tag()) {
             throw new Exception("unexpected tag")
         }
-        value = input.readDouble()
+        _value = input.readDouble()
     }
 
     def bindConstReferences(pool: ConstantPool) {
@@ -335,10 +345,10 @@ class ConstDoubleInfo(v: Double) extends ConstInfo {
     def _compareTo(o: ConstInfo): Int = {
         o match {
             case other: ConstDoubleInfo => {
-                if (value < other.value) {
+                if (_value < other._value) {
                     return -1
                 }
-                if (value > other.value) {
+                if (_value > other._value) {
                     return 1
                 }
                 return 0
@@ -352,7 +362,7 @@ class ConstDoubleInfo(v: Double) extends ConstInfo {
 class ConstStringInfo(v: ConstUtf8Info) extends ConstInfo {
     def this() = this(null)
 
-    var utf8String: ConstUtf8Info = v
+    var _utf8String: ConstUtf8Info = v
 
     // only used during deserialization
     var _tmpUtf8StringIndex = 0
@@ -361,17 +371,19 @@ class ConstStringInfo(v: ConstUtf8Info) extends ConstInfo {
 
     def typeName(): String = "String"
 
+    def value(): String = _utf8String.value()
+
     override def _debugIndexValue(): String = {
-        return "#" + utf8String.index
+        return "#" + _utf8String.index
     }
 
     def debugValue(): String = {
-        return utf8String.debugValue()
+        return _utf8String.debugValue()
     }
 
     def serialize(output: DataOutputStream) {
         output.writeByte(tag())
-        output.writeShort(utf8String.index)
+        output.writeShort(_utf8String.index)
     }
 
     def deserialize(parsedTag: Int, input: DataInputStream) {
@@ -382,13 +394,13 @@ class ConstStringInfo(v: ConstUtf8Info) extends ConstInfo {
     }
 
     def bindConstReferences(pool: ConstantPool) {
-        utf8String = pool.getUtf8ByIndex(_tmpUtf8StringIndex)
+        _utf8String = pool.getUtf8ByIndex(_tmpUtf8StringIndex)
     }
 
     def _compareTo(o: ConstInfo): Int = {
         o match {
             case other: ConstStringInfo => {
-                return utf8String.compareTo(other.utf8String)
+                return _utf8String.compareTo(other._utf8String)
             }
             case _ => throw new Exception("unexpected other type")
         }
@@ -399,7 +411,7 @@ class ConstStringInfo(v: ConstUtf8Info) extends ConstInfo {
 class ConstClassInfo(n: ConstUtf8Info) extends ConstInfo {
     def this() = this(null)
 
-    var className: ConstUtf8Info = n
+    var _className: ConstUtf8Info = n
 
     // only used during deserialization
     var _tmpClassNameIndex = 0
@@ -408,17 +420,19 @@ class ConstClassInfo(n: ConstUtf8Info) extends ConstInfo {
 
     def typeName(): String = "Class"
 
+    def className(): String = _className.value()
+
     override def _debugIndexValue(): String = {
-        return "#" + className.index
+        return "#" + _className.index
     }
 
     def debugValue(): String = {
-        return className.debugValue()
+        return _className.debugValue()
     }
 
     def serialize(output: DataOutputStream) {
         output.writeByte(tag())
-        output.writeShort(className.index)
+        output.writeShort(_className.index)
     }
 
     def deserialize(parsedTag: Int, input: DataInputStream) {
@@ -429,13 +443,13 @@ class ConstClassInfo(n: ConstUtf8Info) extends ConstInfo {
     }
 
     def bindConstReferences(pool: ConstantPool) {
-        className = pool.getUtf8ByIndex(_tmpClassNameIndex)
+        _className = pool.getUtf8ByIndex(_tmpClassNameIndex)
     }
 
     def _compareTo(o: ConstInfo): Int = {
         o match {
             case other: ConstClassInfo => {
-                return className.compareTo(other.className)
+                return _className.compareTo(other._className)
             }
             case _ => throw new Exception("unexpected other type")
         }
