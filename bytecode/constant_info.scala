@@ -396,8 +396,10 @@ class ConstStringInfo(v: ConstUtf8Info) extends ConstInfo {
 }
 
 // see section 4.4.1 page 79-80
-class ConstClassInfo extends ConstInfo {
-    var className: ConstUtf8Info = null
+class ConstClassInfo(n: ConstUtf8Info) extends ConstInfo {
+    def this() = this(null)
+
+    var className: ConstUtf8Info = n
 
     // only used during deserialization
     var _tmpClassNameIndex = 0

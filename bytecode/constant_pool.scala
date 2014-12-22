@@ -52,6 +52,10 @@ class ConstantPool {
         return _get[ConstStringInfo](new ConstStringInfo(getUtf8(value)))
     }
 
+    def getClass(name: String): ConstClassInfo = {
+        return _get[ConstClassInfo](new ConstClassInfo(getUtf8(name)))
+    }
+
     def _getByIndex[T <: ConstInfo : ClassTag](index: Int): T = {
         if (_tmpConstInfosByIndex == null) {
             throw new Exception(
