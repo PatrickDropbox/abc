@@ -148,7 +148,8 @@ def main():
         write('}')
 
         pop()
-        write ('}')
+        write('}')
+        write('')
 
     f = open('access_flags.scala', 'w')
     f.write(w.body())

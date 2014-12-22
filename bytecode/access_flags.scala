@@ -108,6 +108,7 @@ class FieldAccessFlags {
         isEnum = ((flags & 0x4000) != 0)
     }
 }
+
 // see table 4.1-A / page 71-72
 class ClassAccessFlags {
     var isPublic = false
