@@ -30,13 +30,13 @@ object ConstInfo {
     tagTopoOrder.put(FLOAT, 3)
     tagTopoOrder.put(DOUBLE, 4)
     tagTopoOrder.put(STRING, 5)
+    tagTopoOrder.put(CLASS, 6)
+    tagTopoOrder.put(NAME_AND_TYPE, 7)
 
 /* TODO
-    tagTopoOrder.put(CLASS, )
     tagTopoOrder.put(FIELD_REF, )
     tagTopoOrder.put(METHOD_REF, )
     tagTopoOrder.put(INTERFACE_METHOD_REF, )
-    tagTopoOrder.put(NAME_AND_TYPE, )
     tagTopoOrder.put(METHOD_HANDLE, )
     tagTopoOrder.put(METHOD_TYPE, )
     tagTopoOrder.put(INVOKE_DYNAMIC, )
@@ -331,26 +331,85 @@ class ConstStringInfo extends ConstInfo {
     }
 }
 
+// see section 4.4.1 page 79-80
 class ConstClassInfo extends ConstInfo {
+    var className: ConstUtf8Info = null
+
+    // only used during deserialization
+    var _tmpClassNameIndex = 0
+
     def tag(): Int = ConstInfo.CLASS
 
     def typeName(): String = "Class"
 
     def serialize(output: DataOutputStream) {
-        throw new Exception("TODO")
+        output.writeByte(tag())
+        output.writeShort(className.index)
     }
 
     def deserialize(parsedTag: Int, input: DataInputStream) {
-        throw new Exception("TODO")
+        if (parsedTag != tag()) {
+            throw new Exception("unexpected tag")
+        }
+        _tmpClassNameIndex = input.readUnsignedShort()
     }
 
     def bindConstReferences(pool: ConstantPool) {
-        throw new Exception("TODO")
+        className = pool.getUtf8ByIndex(_tmpClassNameIndex)
     }
 
     def _compareTo(o: ConstInfo): Int = {
-        // TODO
-        return 0
+        o match {
+            case other: ConstClassInfo => {
+                return className.compareTo(other.className)
+            }
+            case _ => throw new Exception("unexpected other type")
+        }
     }
 }
 
+// see section 4.4.6 page 85
+class ConstNameAndTypeInfo extends ConstInfo {
+    var name: ConstUtf8Info = null
+    var descriptor: ConstUtf8Info = null
+
+    // only used during deserialization
+    var _tmpNameIndex = 0
+    var _tmpDescriptorIndex = 0
+
+    def tag(): Int = ConstInfo.NAME_AND_TYPE
+
+    def typeName(): String = "NameAndType"
+
+    def serialize(output: DataOutputStream) {
+        output.writeByte(tag())
+        output.writeShort(name.index)
+        output.writeShort(descriptor.index)
+    }
+
+    def deserialize(parsedTag: Int, input: DataInputStream) {
+        if (parsedTag != tag()) {
+            throw new Exception("unexpected tag")
+        }
+        _tmpNameIndex = input.readUnsignedShort()
+        _tmpDescriptorIndex = input.readUnsignedShort()
+    }
+
+    def bindConstReferences(pool: ConstantPool) {
+        name = pool.getUtf8ByIndex(_tmpNameIndex)
+        descriptor = pool.getUtf8ByIndex(_tmpDescriptorIndex)
+    }
+
+    def _compareTo(o: ConstInfo): Int = {
+        o match {
+            case other: ConstNameAndTypeInfo => {
+                val c = name.compareTo(other.name)
+                if (c != 0) {
+                    return c
+                }
+                return descriptor.compareTo(other.descriptor)
+            }
+            case _ => throw new Exception("unexpected other type")
+        }
+    }
+}

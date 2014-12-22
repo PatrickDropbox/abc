@@ -98,14 +98,14 @@ class ConstantPool {
                 case ConstInfo.LONG => new ConstLongInfo()
                 case ConstInfo.FLOAT => new ConstFloatInfo()
                 case ConstInfo.DOUBLE => new ConstDoubleInfo()
-/*
+                case ConstInfo.STRING => new ConstStringInfo()
                 case ConstInfo.CLASS => new ConstClassInfo()
+                case ConstInfo.NAME_AND_TYPE => new ConstNameAndTypeInfo()
+/*
                 case ConstInfo.FIELD_REF => new ConstFieldRefInfo()
                 case ConstInfo.METHOD_REF => new ConstMethodRefInfo()
                 case ConstInfo.INTERFACE_METHOD_REF =>
                         new ConstInterfaceMethodRefInfo()
-                case ConstInfo.STRING => new ConstStringInfo()
-                case ConstInfo.NAME_AND_TYPE => new ConstNameAndTypeInfo()
                 case ConstInfo.METHOD_HANDLE => new ConstMethodHandleInfo()
                 case ConstInfo.METHOD_TYPE => new ConstMethodTypeInfo()
                 case ConstInfo.INVOKE_DYNAMIC => new ConstInvokeDynamicInfo()
