@@ -11,3 +11,13 @@ class ClassAttributes {
         // TODO
     }
 }
+
+class FieldAttributes {
+    def serialize(output: DataOutputStream) {
+        // TODO
+    }
+
+    def deserialize(input: DataInputStream, constants: ConstantPool) {
+        // TODO
+    }
+}

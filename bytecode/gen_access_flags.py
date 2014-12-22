@@ -19,6 +19,19 @@ ACCESS_FLAGS = {
                     'annotation': 0x2000,
                     'enum':       0x4000,
                 }),
+        'FieldAccessFlags': (
+                'see table 4.5-A / page 90-91',
+                {
+                    'public':    0x0001,
+                    'private':   0x0002,
+                    'protected': 0x0004,
+                    'static':    0x0008,
+                    'final':     0x0010,
+                    'volatile':  0x0040,
+                    'transient': 0x0080,
+                    'synthetic': 0x1000,
+                    'enum':      0x4000,
+                }),
         }
 
 
