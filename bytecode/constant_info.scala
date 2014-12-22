@@ -24,21 +24,23 @@ object ConstInfo {
     // tag -> order
     var tagTopoOrder = new HashMap[Int, Int]()
 
+    // no dependencies
     tagTopoOrder.put(UTF8, 0)
     tagTopoOrder.put(INTEGER, 1)
     tagTopoOrder.put(LONG, 2)
     tagTopoOrder.put(FLOAT, 3)
     tagTopoOrder.put(DOUBLE, 4)
+    // depends on utf8
     tagTopoOrder.put(STRING, 5)
     tagTopoOrder.put(CLASS, 6)
-    tagTopoOrder.put(NAME_AND_TYPE, 7)
+    tagTopoOrder.put(METHOD_TYPE, 7)
+    tagTopoOrder.put(NAME_AND_TYPE, 8)
 
 /* TODO
     tagTopoOrder.put(FIELD_REF, )
     tagTopoOrder.put(METHOD_REF, )
     tagTopoOrder.put(INTERFACE_METHOD_REF, )
     tagTopoOrder.put(METHOD_HANDLE, )
-    tagTopoOrder.put(METHOD_TYPE, )
     tagTopoOrder.put(INVOKE_DYNAMIC, )
 */
 
@@ -362,6 +364,43 @@ class ConstClassInfo extends ConstInfo {
         o match {
             case other: ConstClassInfo => {
                 return className.compareTo(other.className)
+            }
+            case _ => throw new Exception("unexpected other type")
+        }
+    }
+}
+
+// see section 4.4.9 page 89
+class ConstMethodTypeInfo extends ConstInfo {
+    var descriptor: ConstUtf8Info = null
+
+    // only used during deserialization
+    var _tmpDescriptorIndex = 0
+
+    def tag(): Int = ConstInfo.METHOD_TYPE
+
+    def typeName(): String = "MethodType"
+
+    def serialize(output: DataOutputStream) {
+        output.writeByte(tag())
+        output.writeShort(descriptor.index)
+    }
+
+    def deserialize(parsedTag: Int, input: DataInputStream) {
+        if (parsedTag != tag()) {
+            throw new Exception("unexpected tag")
+        }
+        _tmpDescriptorIndex = input.readUnsignedShort()
+    }
+
+    def bindConstReferences(pool: ConstantPool) {
+        descriptor = pool.getUtf8ByIndex(_tmpDescriptorIndex)
+    }
+
+    def _compareTo(o: ConstInfo): Int = {
+        o match {
+            case other: ConstMethodTypeInfo => {
+                return descriptor.compareTo(other.descriptor)
             }
             case _ => throw new Exception("unexpected other type")
         }
