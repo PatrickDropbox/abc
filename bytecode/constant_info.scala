@@ -161,8 +161,10 @@ class ConstUtf8Info(v: String) extends ConstInfo {
 }
 
 // See section 4.4.4 page 82-83
-class ConstIntegerInfo extends ConstInfo {
-    var value: Int = 0
+class ConstIntegerInfo(v: Int) extends ConstInfo {
+    def this() = this(0)
+
+    var value: Int = v
 
     def tag(): Int = ConstInfo.INTEGER
 
@@ -205,7 +207,9 @@ class ConstIntegerInfo extends ConstInfo {
 }
 
 // See section 4.4.5 page 83-85
-class ConstLongInfo extends ConstInfo {
+class ConstLongInfo(v: Long) extends ConstInfo {
+    def this() = this(0)
+
     var value: Long = 0
 
     def tag(): Int = ConstInfo.LONG
@@ -251,7 +255,9 @@ class ConstLongInfo extends ConstInfo {
 }
 
 // See section 4.4.4 page 82-83
-class ConstFloatInfo extends ConstInfo {
+class ConstFloatInfo(v: Float) extends ConstInfo {
+    def this() = this(0)
+
     var value: Float = 0
 
     def tag(): Int = ConstInfo.FLOAT
@@ -295,7 +301,9 @@ class ConstFloatInfo extends ConstInfo {
 }
 
 // See section 4.4.5 page 83-85
-class ConstDoubleInfo extends ConstInfo {
+class ConstDoubleInfo(v: Double) extends ConstInfo {
+    def this() = this(0)
+
     var value: Double = 0
 
     def tag(): Int = ConstInfo.DOUBLE
@@ -341,8 +349,10 @@ class ConstDoubleInfo extends ConstInfo {
 }
 
 // see section 4.4.3 page 81-82
-class ConstStringInfo extends ConstInfo {
-    var utf8String: ConstUtf8Info = null
+class ConstStringInfo(v: ConstUtf8Info) extends ConstInfo {
+    def this() = this(null)
+
+    var utf8String: ConstUtf8Info = v
 
     // only used during deserialization
     var _tmpUtf8StringIndex = 0

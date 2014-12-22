@@ -32,6 +32,26 @@ class ConstantPool {
         return _get[ConstUtf8Info](new ConstUtf8Info(value))
     }
 
+    def getInteger(value: Int): ConstIntegerInfo = {
+        return _get[ConstIntegerInfo](new ConstIntegerInfo(value))
+    }
+
+    def getLong(value: Long): ConstLongInfo = {
+        return _get[ConstLongInfo](new ConstLongInfo(value))
+    }
+
+    def getFloat(value: Float): ConstFloatInfo = {
+        return _get[ConstFloatInfo](new ConstFloatInfo(value))
+    }
+
+    def getDouble(value: Double): ConstDoubleInfo = {
+        return _get[ConstDoubleInfo](new ConstDoubleInfo(value))
+    }
+
+    def getString(value: String): ConstStringInfo = {
+        return _get[ConstStringInfo](new ConstStringInfo(getUtf8(value)))
+    }
+
     def _getByIndex[T <: ConstInfo : ClassTag](index: Int): T = {
         if (_tmpConstInfosByIndex == null) {
             throw new Exception(
@@ -57,6 +77,14 @@ class ConstantPool {
 
     def getIntegerByIndex(index: Int): ConstIntegerInfo = {
         return _getByIndex[ConstIntegerInfo](index)
+    }
+
+    def getLongByIndex(index: Int): ConstLongInfo = {
+        return _getByIndex[ConstLongInfo](index)
+    }
+
+    def getFloatByIndex(index: Int): ConstFloatInfo = {
+        return _getByIndex[ConstFloatInfo](index)
     }
 
     def getStringByIndex(index: Int): ConstStringInfo = {
