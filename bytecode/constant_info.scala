@@ -510,9 +510,15 @@ class ConstMethodTypeInfo(d: MethodType, s: ConstUtf8Info) extends ConstInfo {
 }
 
 // see section 4.4.6 page 85
-class ConstNameAndTypeInfo extends ConstInfo {
-    var name: ConstUtf8Info = null
-    var descriptor: ConstUtf8Info = null
+class ConstNameAndTypeInfo(
+        n: ConstUtf8Info,
+        d: ConstUtf8Info) extends ConstInfo {
+    def this() = this(null, null)
+
+    var _name: ConstUtf8Info = n
+    // NOTE: we can't parse the descriptor yet since we don't know
+    // if it's either a method or field descriptor.
+    var _descriptorString: ConstUtf8Info = d
 
     // only used during deserialization
     var _tmpNameIndex = 0
@@ -522,18 +528,21 @@ class ConstNameAndTypeInfo extends ConstInfo {
 
     def typeName(): String = "NameAndType"
 
+    def name(): String = _name.value()
+    def descriptorString(): String = _descriptorString.value()
+
     override def _debugIndexValue(): String = {
-        return "#" + name.index + ":#" + descriptor.index
+        return "#" + _name.index + ":#" + _descriptorString.index
     }
 
     def debugValue(): String = {
-        return name.debugValue() + ":" + descriptor.debugValue()
+        return _name.debugValue() + ":" + _descriptorString.debugValue()
     }
 
     def serialize(output: DataOutputStream) {
         output.writeByte(tag())
-        output.writeShort(name.index)
-        output.writeShort(descriptor.index)
+        output.writeShort(_name.index)
+        output.writeShort(_descriptorString.index)
     }
 
     def deserialize(parsedTag: Int, input: DataInputStream) {
@@ -545,18 +554,18 @@ class ConstNameAndTypeInfo extends ConstInfo {
     }
 
     def bindConstReferences(pool: ConstantPool) {
-        name = pool.getUtf8ByIndex(_tmpNameIndex)
-        descriptor = pool.getUtf8ByIndex(_tmpDescriptorIndex)
+        _name = pool.getUtf8ByIndex(_tmpNameIndex)
+        _descriptorString = pool.getUtf8ByIndex(_tmpDescriptorIndex)
     }
 
     def _compareTo(o: ConstInfo): Int = {
         o match {
             case other: ConstNameAndTypeInfo => {
-                val c = name.compareTo(other.name)
+                val c = _name.compareTo(other._name)
                 if (c != 0) {
                     return c
                 }
-                return descriptor.compareTo(other.descriptor)
+                return _descriptorString.compareTo(other._descriptorString)
             }
             case _ => throw new Exception("unexpected other type")
         }

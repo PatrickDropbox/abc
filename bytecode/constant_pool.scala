@@ -63,6 +63,15 @@ class ConstantPool {
                         getUtf8(methodType.descriptorString())))
     }
 
+    def getNameAndType(
+            name: String,
+            descriptorString: String): ConstNameAndTypeInfo = {
+        return _get[ConstNameAndTypeInfo](
+                new ConstNameAndTypeInfo(
+                        getUtf8(name),
+                        getUtf8(descriptorString)))
+    }
+
     def _getByIndex[T <: ConstInfo : ClassTag](index: Int): T = {
         if (_tmpConstInfosByIndex == null) {
             throw new Exception(
