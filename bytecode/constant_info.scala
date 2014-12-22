@@ -26,8 +26,8 @@ object ConstInfo {
 
     tagTopoOrder.put(UTF8, 0)
     tagTopoOrder.put(INTEGER, 1)
-    tagTopoOrder.put(FLOAT, 2)
-    tagTopoOrder.put(LONG, 3)
+    tagTopoOrder.put(LONG, 2)
+    tagTopoOrder.put(FLOAT, 3)
     tagTopoOrder.put(DOUBLE, 4)
 
 /* TODO
@@ -43,10 +43,10 @@ object ConstInfo {
 */
 
     def tagOrder(tag: Int): Int = {
-        if (tagTopoOrder.containsKey(tag)) {
-            return tagTopoOrder.get(tag)
+        if (!tagTopoOrder.containsKey(tag)) {
+            throw new Exception("Unknown tag type: " + tag)
         }
-        return 10000
+        return tagTopoOrder.get(tag)
     }
 }
 
@@ -78,10 +78,12 @@ trait ConstInfo extends Comparable[ConstInfo] {
     def _compareTo(other: ConstInfo): Int
 }
 
+// See section 4.4.7 page 85-86
+//
 // TODO: Fix encoding / decoding.  jvm uses a non-standard "modified-utf8"
-// encoding (see section 4.4.7 page 85-86).
+// encoding.  Why use the standard when you can reinvent your own ...
 class ConstUtf8Info extends ConstInfo {
-    var value = ""
+    var value: String = ""
 
     def tag(): Int = ConstInfo.UTF8
 
@@ -122,6 +124,162 @@ class ConstUtf8Info extends ConstInfo {
         o match {
             case other: ConstUtf8Info => {
                 return value.compareTo(other.value)
+            }
+            case _ => throw new Exception("unexpected other type")
+        }
+    }
+}
+
+class ConstIntegerInfo extends ConstInfo {
+    var value: Int = 0
+
+    def tag(): Int = ConstInfo.INTEGER
+
+    def typeName(): String = "Integer"
+
+    def serialize(output: DataOutputStream) {
+        output.writeByte(tag())
+        output.writeInt(value)
+    }
+
+    def deserialize(parsedTag: Int, input: DataInputStream) {
+        if (parsedTag != tag()) {
+            throw new Exception("unexpected tag")
+        }
+        value = input.readInt()
+    }
+
+    def bindConstReferences(pool: ConstantPool) {
+        // nothing to bind
+    }
+
+    def _compareTo(o: ConstInfo): Int = {
+        o match {
+            case other: ConstIntegerInfo => {
+                if (value < other.value) {
+                    return -1
+                }
+                if (value > other.value) {
+                    return 1
+                }
+                return 0
+            }
+            case _ => throw new Exception("unexpected other type")
+        }
+    }
+}
+
+class ConstLongInfo extends ConstInfo {
+    var value: Long = 0
+
+    def tag(): Int = ConstInfo.LONG
+
+    def typeName(): String = "Long"
+
+    def serialize(output: DataOutputStream) {
+        output.writeByte(tag())
+        output.writeLong(value)
+    }
+
+    def deserialize(parsedTag: Int, input: DataInputStream) {
+        if (parsedTag != tag()) {
+            throw new Exception("unexpected tag")
+        }
+        value = input.readLong()
+    }
+
+    def bindConstReferences(pool: ConstantPool) {
+        // nothing to bind
+    }
+
+    def _compareTo(o: ConstInfo): Int = {
+        o match {
+            case other: ConstLongInfo => {
+                if (value < other.value) {
+                    return -1
+                }
+                if (value > other.value) {
+                    return 1
+                }
+                return 0
+            }
+            case _ => throw new Exception("unexpected other type")
+        }
+    }
+}
+
+class ConstFloatInfo extends ConstInfo {
+    var value: Float = 0
+
+    def tag(): Int = ConstInfo.FLOAT
+
+    def typeName(): String = "Float"
+
+    def serialize(output: DataOutputStream) {
+        output.writeByte(tag())
+        output.writeFloat(value)
+    }
+
+    def deserialize(parsedTag: Int, input: DataInputStream) {
+        if (parsedTag != tag()) {
+            throw new Exception("unexpected tag")
+        }
+        value = input.readFloat()
+    }
+
+    def bindConstReferences(pool: ConstantPool) {
+        // nothing to bind
+    }
+
+    def _compareTo(o: ConstInfo): Int = {
+        o match {
+            case other: ConstFloatInfo => {
+                if (value < other.value) {
+                    return -1
+                }
+                if (value > other.value) {
+                    return 1
+                }
+                return 0
+            }
+            case _ => throw new Exception("unexpected other type")
+        }
+    }
+}
+
+class ConstDoubleInfo extends ConstInfo {
+    var value: Double = 0
+
+    def tag(): Int = ConstInfo.DOUBLE
+
+    def typeName(): String = "Double"
+
+    def serialize(output: DataOutputStream) {
+        output.writeByte(tag())
+        output.writeDouble(value)
+    }
+
+    def deserialize(parsedTag: Int, input: DataInputStream) {
+        if (parsedTag != tag()) {
+            throw new Exception("unexpected tag")
+        }
+        value = input.readDouble()
+    }
+
+    def bindConstReferences(pool: ConstantPool) {
+        // nothing to bind
+    }
+
+    def _compareTo(o: ConstInfo): Int = {
+        o match {
+            case other: ConstDoubleInfo => {
+                if (value < other.value) {
+                    return -1
+                }
+                if (value > other.value) {
+                    return 1
+                }
+                return 0
             }
             case _ => throw new Exception("unexpected other type")
         }
@@ -174,52 +332,3 @@ class ConstStringInfo extends ConstInfo {
     }
 }
 
-class ConstLongInfo extends ConstInfo {
-    def tag(): Int = ConstInfo.LONG
-
-    def typeName(): String = "Long"
-
-    override def indexSize(): Int = 2
-
-    def serialize(output: DataOutputStream) {
-        throw new Exception("TODO")
-    }
-
-    def deserialize(parsedTag: Int, input: DataInputStream) {
-        throw new Exception("TODO")
-    }
-
-    def bindConstReferences(pool: ConstantPool) {
-        throw new Exception("TODO")
-    }
-
-    def _compareTo(other: ConstInfo): Int = {
-        // TODO
-        return 0
-    }
-}
-
-class ConstDoubleInfo extends ConstInfo {
-    def tag(): Int = ConstInfo.DOUBLE
-
-    def typeName(): String = "Double"
-
-    override def indexSize(): Int = 2
-
-    def serialize(output: DataOutputStream) {
-        throw new Exception("TODO")
-    }
-
-    def deserialize(parsedTag: Int, input: DataInputStream) {
-        throw new Exception("TODO")
-    }
-
-    def bindConstReferences(pool: ConstantPool) {
-        throw new Exception("TODO")
-    }
-
-    def _compareTo(other: ConstInfo): Int = {
-        // TODO
-        return 0
-    }
-}

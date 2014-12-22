@@ -38,6 +38,10 @@ class ConstantPool {
         return _getByIndex[ConstUtf8Info](index)
     }
 
+    def getIntegerByIndex(index: Int): ConstIntegerInfo = {
+        return _getByIndex[ConstIntegerInfo](index)
+    }
+
     def getStringByIndex(index: Int): ConstStringInfo = {
         return _getByIndex[ConstStringInfo](index)
     }
@@ -85,19 +89,19 @@ class ConstantPool {
         while (nextIndex < constPoolCount) {
             val tag = input.readByte()
             var info = tag match {
-                case ConstInfo.CLASS => new ConstClassInfo()
+                case ConstInfo.UTF8 => new ConstUtf8Info()
+                case ConstInfo.INTEGER => new ConstIntegerInfo()
+                case ConstInfo.LONG => new ConstLongInfo()
+                case ConstInfo.FLOAT => new ConstFloatInfo()
+                case ConstInfo.DOUBLE => new ConstDoubleInfo()
 /*
+                case ConstInfo.CLASS => new ConstClassInfo()
                 case ConstInfo.FIELD_REF => new ConstFieldRefInfo()
                 case ConstInfo.METHOD_REF => new ConstMethodRefInfo()
                 case ConstInfo.INTERFACE_METHOD_REF =>
                         new ConstInterfaceMethodRefInfo()
                 case ConstInfo.STRING => new ConstStringInfo()
-                case ConstInfo.INTEGER => new ConstIntegerInfo()
-                case ConstInfo.FLOAT => new ConstFloatInfo()
-                case ConstInfo.LONG => new ConstLongInfo()
-                case ConstInfo.DOUBLE => new ConstDoubleInfo()
                 case ConstInfo.NAME_AND_TYPE => new ConstNameAndTypeInfo()
-                case ConstInfo.UTF8 => new ConstUtf8Info()
                 case ConstInfo.METHOD_HANDLE => new ConstMethodHandleInfo()
                 case ConstInfo.METHOD_TYPE => new ConstMethodTypeInfo()
                 case ConstInfo.INVOKE_DYNAMIC => new ConstInvokeDynamicInfo()
