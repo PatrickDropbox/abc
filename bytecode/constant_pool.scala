@@ -50,6 +50,10 @@ class ConstantPool {
         return _getByIndex[ConstNameAndTypeInfo](index)
     }
 
+    def getRefByIndex(index: Int): ConstRefInfo = {
+        return _getByIndex[ConstRefInfo](index)
+    }
+
     def getClassByIndex(index: Int): ConstClassInfo = {
         return _getByIndex[ConstClassInfo](index)
     }
@@ -110,8 +114,8 @@ class ConstantPool {
                 case ConstInfo.METHOD_REF => new ConstMethodRefInfo()
                 case ConstInfo.INTERFACE_METHOD_REF =>
                         new ConstInterfaceMethodRefInfo()
-/* TODO
                 case ConstInfo.METHOD_HANDLE => new ConstMethodHandleInfo()
+/* TODO
                 case ConstInfo.INVOKE_DYNAMIC => new ConstInvokeDynamicInfo()
 */
                 case _ => throw new Exception("Unknown const info type: " + tag)

@@ -39,11 +39,10 @@ object ConstInfo {
     tagTopoOrder.put(FIELD_REF, 9)
     tagTopoOrder.put(METHOD_REF, 10)
     tagTopoOrder.put(INTERFACE_METHOD_REF, 11)
-
-/* TODO
+    // depends on ref infos
     tagTopoOrder.put(METHOD_HANDLE, 12)
+    // depends on method index
     tagTopoOrder.put(INVOKE_DYNAMIC, 13)
-*/
 
     def tagOrder(tag: Int): Int = {
         if (!tagTopoOrder.containsKey(tag)) {
@@ -515,5 +514,51 @@ class ConstInterfaceMethodRefInfo extends ConstRefInfo {
     def tag(): Int = ConstInfo.INTERFACE_METHOD_REF
 
     def typeName(): String = "InterfaceMethodRef"
+}
+
+// see section 4.4.8 page 87-89
+class ConstMethodHandleInfo extends ConstInfo {
+    var referenceKind: Byte = 0
+    var reference: ConstRefInfo = null
+
+    def tag(): Int = ConstInfo.METHOD_HANDLE
+
+    def typeName(): String = "MethodHandle"
+
+    // only used during deserialization
+    var _tmpReferenceIndex = 0
+
+    def serialize(output: DataOutputStream) {
+        output.writeByte(tag())
+        output.writeByte(referenceKind)
+        output.writeShort(reference.index)
+    }
+
+    def deserialize(parsedTag: Int, input: DataInputStream) {
+        if (parsedTag != tag()) {
+            throw new Exception("unexpected tag")
+        }
+        referenceKind = input.readByte()
+        _tmpReferenceIndex = input.readUnsignedShort()
+    }
+
+    def bindConstReferences(pool: ConstantPool) {
+        reference = pool.getRefByIndex(_tmpReferenceIndex)
+    }
+
+    def _compareTo(o: ConstInfo): Int = {
+        o match {
+            case other: ConstMethodHandleInfo => {
+                if (referenceKind < other.referenceKind) {
+                    return -1
+                }
+                if (referenceKind > other.referenceKind) {
+                    return 1
+                }
+                return reference.compareTo(other.reference)
+            }
+            case _ => throw new Exception("unexpected other type")
+        }
+    }
 }
 
