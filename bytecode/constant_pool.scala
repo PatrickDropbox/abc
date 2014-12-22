@@ -56,6 +56,10 @@ class ConstantPool {
             info.index = nextIndex
             nextIndex += info.indexSize()
         }
+
+        if (nextIndex > 65535) {
+            throw new Exception("const pool too large")
+        }
         return nextIndex
     }
 

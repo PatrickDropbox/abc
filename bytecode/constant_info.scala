@@ -29,13 +29,13 @@ object ConstInfo {
     tagTopoOrder.put(LONG, 2)
     tagTopoOrder.put(FLOAT, 3)
     tagTopoOrder.put(DOUBLE, 4)
+    tagTopoOrder.put(STRING, 5)
 
 /* TODO
     tagTopoOrder.put(CLASS, )
     tagTopoOrder.put(FIELD_REF, )
     tagTopoOrder.put(METHOD_REF, )
     tagTopoOrder.put(INTERFACE_METHOD_REF, )
-    tagTopoOrder.put(STRING, )
     tagTopoOrder.put(NAME_AND_TYPE, )
     tagTopoOrder.put(METHOD_HANDLE, )
     tagTopoOrder.put(METHOD_TYPE, )
@@ -130,6 +130,7 @@ class ConstUtf8Info extends ConstInfo {
     }
 }
 
+// See section 4.4.4 page 82-83
 class ConstIntegerInfo extends ConstInfo {
     var value: Int = 0
 
@@ -169,10 +170,13 @@ class ConstIntegerInfo extends ConstInfo {
     }
 }
 
+// See section 4.4.5 page 83-85
 class ConstLongInfo extends ConstInfo {
     var value: Long = 0
 
     def tag(): Int = ConstInfo.LONG
+
+    override def indexSize(): Int = 2
 
     def typeName(): String = "Long"
 
@@ -208,6 +212,7 @@ class ConstLongInfo extends ConstInfo {
     }
 }
 
+// See section 4.4.4 page 82-83
 class ConstFloatInfo extends ConstInfo {
     var value: Float = 0
 
@@ -247,10 +252,13 @@ class ConstFloatInfo extends ConstInfo {
     }
 }
 
+// See section 4.4.5 page 83-85
 class ConstDoubleInfo extends ConstInfo {
     var value: Double = 0
 
     def tag(): Int = ConstInfo.DOUBLE
+
+    override def indexSize(): Int = 2
 
     def typeName(): String = "Double"
 
@@ -286,6 +294,43 @@ class ConstDoubleInfo extends ConstInfo {
     }
 }
 
+// see section 4.4.3 page 81-82
+class ConstStringInfo extends ConstInfo {
+    var utf8String: ConstUtf8Info = null
+
+    // only used during deserialization
+    var _tmpUtf8StringIndex = 0
+
+    def tag(): Int = ConstInfo.STRING
+
+    def typeName(): String = "String"
+
+    def serialize(output: DataOutputStream) {
+        output.writeByte(tag())
+        output.writeShort(utf8String.index)
+    }
+
+    def deserialize(parsedTag: Int, input: DataInputStream) {
+        if (parsedTag != tag()) {
+            throw new Exception("unexpected tag")
+        }
+        _tmpUtf8StringIndex = input.readUnsignedShort()
+    }
+
+    def bindConstReferences(pool: ConstantPool) {
+        utf8String = pool.getUtf8ByIndex(_tmpUtf8StringIndex)
+    }
+
+    def _compareTo(o: ConstInfo): Int = {
+        o match {
+            case other: ConstStringInfo => {
+                return utf8String.compareTo(other.utf8String)
+            }
+            case _ => throw new Exception("unexpected other type")
+        }
+    }
+}
+
 class ConstClassInfo extends ConstInfo {
     def tag(): Int = ConstInfo.CLASS
 
@@ -303,30 +348,7 @@ class ConstClassInfo extends ConstInfo {
         throw new Exception("TODO")
     }
 
-    def _compareTo(other: ConstInfo): Int = {
-        // TODO
-        return 0
-    }
-}
-
-class ConstStringInfo extends ConstInfo {
-    def tag(): Int = ConstInfo.STRING
-
-    def typeName(): String = "String"
-
-    def serialize(output: DataOutputStream) {
-        throw new Exception("TODO")
-    }
-
-    def deserialize(parsedTag: Int, input: DataInputStream) {
-        throw new Exception("TODO")
-    }
-
-    def bindConstReferences(pool: ConstantPool) {
-        throw new Exception("TODO")
-    }
-
-    def _compareTo(other: ConstInfo): Int = {
+    def _compareTo(o: ConstInfo): Int = {
         // TODO
         return 0
     }
