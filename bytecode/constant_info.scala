@@ -430,7 +430,8 @@ class ConstClassInfo extends ConstInfo {
 
 // see section 4.4.9 page 89
 class ConstMethodTypeInfo extends ConstInfo {
-    var descriptor: ConstUtf8Info = null
+    var descriptorString: ConstUtf8Info = null
+    var descriptor: MethodType = null
 
     // only used during deserialization
     var _tmpDescriptorIndex = 0
@@ -440,16 +441,16 @@ class ConstMethodTypeInfo extends ConstInfo {
     def typeName(): String = "MethodType"
 
     override def _debugIndexValue(): String = {
-        return "#" + descriptor.index
+        return "#" + descriptorString.index
     }
 
     def debugValue(): String = {
-        return descriptor.debugValue()
+        return descriptorString.debugValue()
     }
 
     def serialize(output: DataOutputStream) {
         output.writeByte(tag())
-        output.writeShort(descriptor.index)
+        output.writeShort(descriptorString.index)
     }
 
     def deserialize(parsedTag: Int, input: DataInputStream) {
@@ -460,13 +461,15 @@ class ConstMethodTypeInfo extends ConstInfo {
     }
 
     def bindConstReferences(pool: ConstantPool) {
-        descriptor = pool.getUtf8ByIndex(_tmpDescriptorIndex)
+        descriptorString = pool.getUtf8ByIndex(_tmpDescriptorIndex)
+        var parser = new DescriptorParser(descriptorString.value)
+        descriptor = parser.parseMethodDescriptor()
     }
 
     def _compareTo(o: ConstInfo): Int = {
         o match {
             case other: ConstMethodTypeInfo => {
-                return descriptor.compareTo(other.descriptor)
+                return descriptorString.compareTo(other.descriptorString)
             }
             case _ => throw new Exception("unexpected other type")
         }
