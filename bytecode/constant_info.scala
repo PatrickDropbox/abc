@@ -35,13 +35,14 @@ object ConstInfo {
     tagTopoOrder.put(CLASS, 6)
     tagTopoOrder.put(METHOD_TYPE, 7)
     tagTopoOrder.put(NAME_AND_TYPE, 8)
+    // depends on class / name and type
+    tagTopoOrder.put(FIELD_REF, 9)
+    tagTopoOrder.put(METHOD_REF, 10)
+    tagTopoOrder.put(INTERFACE_METHOD_REF, 11)
 
 /* TODO
-    tagTopoOrder.put(FIELD_REF, )
-    tagTopoOrder.put(METHOD_REF, )
-    tagTopoOrder.put(INTERFACE_METHOD_REF, )
-    tagTopoOrder.put(METHOD_HANDLE, )
-    tagTopoOrder.put(INVOKE_DYNAMIC, )
+    tagTopoOrder.put(METHOD_HANDLE, 12)
+    tagTopoOrder.put(INVOKE_DYNAMIC, 13)
 */
 
     def tagOrder(tag: Int): Int = {
@@ -452,3 +453,67 @@ class ConstNameAndTypeInfo extends ConstInfo {
         }
     }
 }
+
+// see section 4.4.2 page 80
+abstract class ConstRefInfo extends ConstInfo {
+    var classInfo: ConstClassInfo = null
+    var nameAndType: ConstNameAndTypeInfo = null
+
+    // only used during deserialization
+    var _tmpClassIndex = 0
+    var _tmpNameAndTypeIndex = 0
+
+    def serialize(output: DataOutputStream) {
+        output.writeByte(tag())
+        output.writeShort(classInfo.index)
+        output.writeShort(nameAndType.index)
+    }
+
+    def deserialize(parsedTag: Int, input: DataInputStream) {
+        if (parsedTag != tag()) {
+            throw new Exception("unexpected tag")
+        }
+        _tmpClassIndex = input.readUnsignedShort()
+        _tmpNameAndTypeIndex = input.readUnsignedShort()
+    }
+
+    def bindConstReferences(pool: ConstantPool) {
+        classInfo = pool.getClassByIndex(_tmpClassIndex)
+        nameAndType = pool.getNameAndTypeByIndex(_tmpNameAndTypeIndex)
+    }
+
+    def _compareTo(o: ConstInfo): Int = {
+        o match {
+            case other: ConstRefInfo => {
+                val c = classInfo.compareTo(other.classInfo)
+                if (c != 0) {
+                    return c
+                }
+                return nameAndType.compareTo(other.nameAndType)
+            }
+            case _ => throw new Exception("unexpected other type")
+        }
+    }
+}
+
+// see section 4.4.2 page 80
+class ConstFieldRefInfo extends ConstRefInfo {
+    def tag(): Int = ConstInfo.FIELD_REF
+
+    def typeName(): String = "FieldRef"
+}
+
+// see section 4.4.2 page 80
+class ConstMethodRefInfo extends ConstRefInfo {
+    def tag(): Int = ConstInfo.METHOD_REF
+
+    def typeName(): String = "MethodRef"
+}
+
+// see section 4.4.2 page 80
+class ConstInterfaceMethodRefInfo extends ConstRefInfo {
+    def tag(): Int = ConstInfo.INTERFACE_METHOD_REF
+
+    def typeName(): String = "InterfaceMethodRef"
+}
+
