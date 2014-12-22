@@ -65,23 +65,23 @@ trait ConstInfo extends Comparable[ConstInfo] {
         val indexValue = _debugIndexValue()
         if (indexValue != "") {
             return String.format(
-                    "%7d = %-18s %s  // %s",
+                    "%7s = %-18s %-15s  // %s",
                     "#" + index,
                     typeName(),
                     indexValue,
-                    _debugValue())
+                    debugValue())
         }
 
         return String.format(
-                "%7d = %-18s %s",
+                "%7s = %-18s %s",
                 "#" + index,
                 typeName(),
-                _debugValue())
+                debugValue())
     }
 
     def _debugIndexValue(): String = ""
 
-    def _debugValue(): String
+    def debugValue(): String
 
     def serialize(output: DataOutputStream)
 
@@ -113,7 +113,7 @@ class ConstUtf8Info extends ConstInfo {
 
     def typeName(): String = "Utf8"
 
-    def _debugValue(): String = {
+    def debugValue(): String = {
         return value.replaceAll("\\p{C}", "?")
     }
 
@@ -166,7 +166,7 @@ class ConstIntegerInfo extends ConstInfo {
 
     def typeName(): String = "Integer"
 
-    def _debugValue(): String = {
+    def debugValue(): String = {
         return "" + value
     }
 
@@ -212,7 +212,7 @@ class ConstLongInfo extends ConstInfo {
 
     def typeName(): String = "Long"
 
-    def _debugValue(): String = {
+    def debugValue(): String = {
         return "" + value + "l"
     }
 
@@ -256,7 +256,7 @@ class ConstFloatInfo extends ConstInfo {
 
     def typeName(): String = "Float"
 
-    def _debugValue(): String = {
+    def debugValue(): String = {
         return "" + value + "f"
     }
 
@@ -302,7 +302,7 @@ class ConstDoubleInfo extends ConstInfo {
 
     def typeName(): String = "Double"
 
-    def _debugValue(): String = {
+    def debugValue(): String = {
         return "" + value + "d"
     }
 
@@ -353,8 +353,8 @@ class ConstStringInfo extends ConstInfo {
         return "#" + utf8String.index
     }
 
-    def _debugValue(): String = {
-        return utf8String._debugValue()
+    def debugValue(): String = {
+        return utf8String.debugValue()
     }
 
     def serialize(output: DataOutputStream) {
@@ -398,8 +398,8 @@ class ConstClassInfo extends ConstInfo {
         return "#" + className.index
     }
 
-    def _debugValue(): String = {
-        return className._debugValue()
+    def debugValue(): String = {
+        return className.debugValue()
     }
 
     def serialize(output: DataOutputStream) {
@@ -443,8 +443,8 @@ class ConstMethodTypeInfo extends ConstInfo {
         return "#" + descriptor.index
     }
 
-    def _debugValue(): String = {
-        return descriptor._debugValue()
+    def debugValue(): String = {
+        return descriptor.debugValue()
     }
 
     def serialize(output: DataOutputStream) {
@@ -490,8 +490,8 @@ class ConstNameAndTypeInfo extends ConstInfo {
         return "#" + name.index + ":#" + descriptor.index
     }
 
-    def _debugValue(): String = {
-        return name._debugValue() + ":" + descriptor._debugValue()
+    def debugValue(): String = {
+        return name.debugValue() + ":" + descriptor.debugValue()
     }
 
     def serialize(output: DataOutputStream) {
@@ -537,11 +537,11 @@ abstract class ConstRefInfo extends ConstInfo {
     var _tmpNameAndTypeIndex = 0
 
     override def _debugIndexValue(): String = {
-        return "#" + classInfo.index + ":#" + nameAndType.index
+        return "#" + classInfo.index + ".#" + nameAndType.index
     }
 
-    def _debugValue(): String = {
-        return classInfo._debugValue() + ":" + nameAndType._debugValue()
+    def debugValue(): String = {
+        return classInfo.debugValue() + "." + nameAndType.debugValue()
     }
 
     def serialize(output: DataOutputStream) {
@@ -614,8 +614,8 @@ class ConstMethodHandleInfo extends ConstInfo {
         return "" + referenceKind + " #" + reference.index
     }
 
-    def _debugValue(): String = {
-        return "" + referenceKind + " " + reference._debugValue()
+    def debugValue(): String = {
+        return "" + referenceKind + " " + reference.debugValue()
     }
 
     def serialize(output: DataOutputStream) {
@@ -668,8 +668,8 @@ class ConstInvokeDynamicInfo extends ConstInfo {
         return "" + bootstrapMethodAttrIndex + " #" + nameAndType.index
     }
 
-    def _debugValue(): String = {
-        return "" + bootstrapMethodAttrIndex + " " + nameAndType._debugValue()
+    def debugValue(): String = {
+        return "" + bootstrapMethodAttrIndex + " " + nameAndType.debugValue()
     }
 
     def serialize(output: DataOutputStream) {

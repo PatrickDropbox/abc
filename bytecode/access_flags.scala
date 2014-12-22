@@ -8,5 +8,7 @@ class ClassAccessFlags {
     }
 
     def deserialize(input: DataInputStream) {
+        // TODO
+        input.readUnsignedShort()
     }
 }

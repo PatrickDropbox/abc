@@ -1,7 +1,6 @@
 import java.io.DataInputStream
 import java.io.DataOutputStream
 import java.util.Collection
-import java.util.HashMap
 import java.util.TreeMap
 import java.util.Vector
 
@@ -14,7 +13,7 @@ class ConstantPool {
     var _constInfos = new TreeMap[ConstInfo, ConstInfo]()
 
     // only used for deserialization.  invalidate when _constInfos is modified.
-    var _tmpConstInfosByIndex: HashMap[Int, ConstInfo] = null
+    var _tmpConstInfosByIndex: TreeMap[Int, ConstInfo] = null
 
     def _getByIndex[T <: ConstInfo : ClassTag](index: Int): T = {
         if (_tmpConstInfosByIndex == null) {
@@ -30,7 +29,8 @@ class ConstantPool {
         val cls = implicitly[ClassTag[T]].runtimeClass
         info match {
             case t: T if cls.isInstance(t) => return t
-            case _ => throw new Exception("unexpected const info type")
+            case _ => throw new Exception(
+                    "unexpected const info type at " + index)
         }
     }
 
@@ -130,7 +130,7 @@ class ConstantPool {
     }
 
     def _generateIndexMap(constants: Collection[ConstInfo]) {
-        _tmpConstInfosByIndex = new HashMap[Int, ConstInfo]()
+        _tmpConstInfosByIndex = new TreeMap[Int, ConstInfo]()
 
         for (info <- constants) {
             if (info.index < 1) {
@@ -156,6 +156,8 @@ class ConstantPool {
                 _constInfos.put(info, info)
             } else {
                 println("Dedup " + info.index + " -> " + first.index)
+                println("  old: " + info.debugString())
+                println("  new: " + info.debugString())
                 _tmpConstInfosByIndex.put(info.index, first)
             }
         }
