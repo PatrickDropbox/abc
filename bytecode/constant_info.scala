@@ -1,3 +1,4 @@
+import java.io.ByteArrayOutputStream
 import java.io.DataInputStream
 import java.io.DataOutputStream
 import java.util.HashMap
@@ -58,18 +59,11 @@ trait ConstInfo extends Comparable[ConstInfo] {
 
     def typeName(): String
 
-    def serialize(output: DataOutputStream) {
-        throw new Exception("TODO")
-    }
+    def serialize(output: DataOutputStream)
 
-    def deserialize(tag: Int, input: DataInputStream) {
-        throw new Exception("TODO")
-    }
+    def deserialize(parsedTag: Int, input: DataInputStream)
 
-
-    def bindConstReferences(pool: ConstantPool) {
-        throw new Exception("TODO")
-    }
+    def bindConstReferences(pool: ConstantPool)
 
     def compareTo(other: ConstInfo): Int = {
         if (tag() < other.tag()) {
@@ -84,21 +78,72 @@ trait ConstInfo extends Comparable[ConstInfo] {
     def _compareTo(other: ConstInfo): Int
 }
 
+// TODO: Fix encoding / decoding.  jvm uses a non-standard "modified-utf8"
+// encoding (see section 4.4.7 page 85-86).
+class ConstUtf8Info extends ConstInfo {
+    var value = ""
+
+    def tag(): Int = ConstInfo.UTF8
+
+    def typeName(): String = "Utf8"
+
+    def serialize(output: DataOutputStream) {
+        var buffer = new ByteArrayOutputStream()
+        (new DataOutputStream(buffer)).writeUTF(value)
+        val utf8Value = buffer.toByteArray()
+
+        if (utf8Value.length > 65535) {
+            throw new Exception("utf8 string too long")
+        }
+
+        output.writeByte(tag())
+        output.writeShort(utf8Value.length)
+        output.write(utf8Value)
+    }
+
+    def deserialize(parsedTag: Int, input: DataInputStream) {
+        if (parsedTag != tag()) {
+            throw new Exception("unexpected tag")
+        }
+
+        val length = input.readUnsignedShort()
+
+        var utf8Bytes = new Array[Byte](length)
+        input.readFully(utf8Bytes)
+
+        value = new String(utf8Bytes, "UTF-8")
+    }
+
+    def bindConstReferences(pool: ConstantPool) {
+        // nothing to bind
+    }
+
+    def _compareTo(o: ConstInfo): Int = {
+        o match {
+            case other: ConstUtf8Info => {
+                return value.compareTo(other.value)
+            }
+            case _ => throw new Exception("unexpected other type")
+        }
+    }
+}
+
 class ConstClassInfo extends ConstInfo {
     def tag(): Int = ConstInfo.CLASS
 
     def typeName(): String = "Class"
 
-    def _compareTo(other: ConstInfo): Int = {
-        // TODO
-        return 0
+    def serialize(output: DataOutputStream) {
+        throw new Exception("TODO")
     }
-}
 
-class ConstUtf8Info extends ConstInfo {
-    def tag(): Int = ConstInfo.UTF8
+    def deserialize(parsedTag: Int, input: DataInputStream) {
+        throw new Exception("TODO")
+    }
 
-    def typeName(): String = "Utf8"
+    def bindConstReferences(pool: ConstantPool) {
+        throw new Exception("TODO")
+    }
 
     def _compareTo(other: ConstInfo): Int = {
         // TODO
@@ -110,6 +155,18 @@ class ConstStringInfo extends ConstInfo {
     def tag(): Int = ConstInfo.STRING
 
     def typeName(): String = "String"
+
+    def serialize(output: DataOutputStream) {
+        throw new Exception("TODO")
+    }
+
+    def deserialize(parsedTag: Int, input: DataInputStream) {
+        throw new Exception("TODO")
+    }
+
+    def bindConstReferences(pool: ConstantPool) {
+        throw new Exception("TODO")
+    }
 
     def _compareTo(other: ConstInfo): Int = {
         // TODO
@@ -124,6 +181,18 @@ class ConstLongInfo extends ConstInfo {
 
     override def indexSize(): Int = 2
 
+    def serialize(output: DataOutputStream) {
+        throw new Exception("TODO")
+    }
+
+    def deserialize(parsedTag: Int, input: DataInputStream) {
+        throw new Exception("TODO")
+    }
+
+    def bindConstReferences(pool: ConstantPool) {
+        throw new Exception("TODO")
+    }
+
     def _compareTo(other: ConstInfo): Int = {
         // TODO
         return 0
@@ -136,6 +205,18 @@ class ConstDoubleInfo extends ConstInfo {
     def typeName(): String = "Double"
 
     override def indexSize(): Int = 2
+
+    def serialize(output: DataOutputStream) {
+        throw new Exception("TODO")
+    }
+
+    def deserialize(parsedTag: Int, input: DataInputStream) {
+        throw new Exception("TODO")
+    }
+
+    def bindConstReferences(pool: ConstantPool) {
+        throw new Exception("TODO")
+    }
 
     def _compareTo(other: ConstInfo): Int = {
         // TODO
