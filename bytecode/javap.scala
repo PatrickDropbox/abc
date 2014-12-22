@@ -25,6 +25,7 @@ object Javap {
         println("Classfile " + file.getAbsolutePath())
         println("  minor version: " + classInfo.minorVersion)
         println("  major version: " + classInfo.majorVersion)
+        println("  flags: " + classInfo.access.debugString())
 
         println("Constant pool:")
         for (info <- classInfo.constants._tmpConstInfosByIndex.values()) {
