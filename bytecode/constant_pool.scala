@@ -80,7 +80,7 @@ class ConstantPool {
         }
     }
 
-    // TODO bind invoke dynamic reference index to reference
+    // TODO bind invoke dynamic bootstrap method attr index to reference
     def deserialize(input: DataInputStream) {
         if (!_constInfos.isEmpty()) {
             throw new Exception("deserializing into non-empty constant pool")
@@ -115,9 +115,7 @@ class ConstantPool {
                 case ConstInfo.INTERFACE_METHOD_REF =>
                         new ConstInterfaceMethodRefInfo()
                 case ConstInfo.METHOD_HANDLE => new ConstMethodHandleInfo()
-/* TODO
                 case ConstInfo.INVOKE_DYNAMIC => new ConstInvokeDynamicInfo()
-*/
                 case _ => throw new Exception("Unknown const info type: " + tag)
             }
             info.index = nextIndex

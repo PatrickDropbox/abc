@@ -41,7 +41,7 @@ object ConstInfo {
     tagTopoOrder.put(INTERFACE_METHOD_REF, 11)
     // depends on ref infos
     tagTopoOrder.put(METHOD_HANDLE, 12)
-    // depends on method index
+    // depends on (external attribute) bootstrap method index
     tagTopoOrder.put(INVOKE_DYNAMIC, 13)
 
     def tagOrder(tag: Int): Int = {
@@ -521,12 +521,12 @@ class ConstMethodHandleInfo extends ConstInfo {
     var referenceKind: Byte = 0
     var reference: ConstRefInfo = null
 
+    // only used during deserialization
+    var _tmpReferenceIndex = 0
+
     def tag(): Int = ConstInfo.METHOD_HANDLE
 
     def typeName(): String = "MethodHandle"
-
-    // only used during deserialization
-    var _tmpReferenceIndex = 0
 
     def serialize(output: DataOutputStream) {
         output.writeByte(tag())
@@ -562,3 +562,48 @@ class ConstMethodHandleInfo extends ConstInfo {
     }
 }
 
+// TODO: bind bootstrap method attr index to real entry
+class ConstInvokeDynamicInfo extends ConstInfo {
+    var bootstrapMethodAttrIndex = 0
+    var nameAndType: ConstNameAndTypeInfo = null
+
+    // only used during deserialization
+    var _tmpNameAndTypeIndex = 0
+
+    def tag(): Int = ConstInfo.INVOKE_DYNAMIC
+
+    def typeName(): String = "InvokeDynamic"
+
+    def serialize(output: DataOutputStream) {
+        output.writeByte(tag())
+        output.writeShort(bootstrapMethodAttrIndex)
+        output.writeShort(nameAndType.index)
+    }
+
+    def deserialize(parsedTag: Int, input: DataInputStream) {
+        if (parsedTag != tag()) {
+            throw new Exception("unexpected tag")
+        }
+        bootstrapMethodAttrIndex = input.readUnsignedShort()
+        _tmpNameAndTypeIndex = input.readUnsignedShort()
+    }
+
+    def bindConstReferences(pool: ConstantPool) {
+        nameAndType = pool.getNameAndTypeByIndex(_tmpNameAndTypeIndex)
+    }
+
+    def _compareTo(o: ConstInfo): Int = {
+        o match {
+            case other: ConstInvokeDynamicInfo => {
+                if (bootstrapMethodAttrIndex < other.bootstrapMethodAttrIndex) {
+                    return -1
+                }
+                if (bootstrapMethodAttrIndex > other.bootstrapMethodAttrIndex) {
+                    return 1
+                }
+                return nameAndType.compareTo(other.nameAndType)
+            }
+            case _ => throw new Exception("unexpected other type")
+        }
+    }
+}
