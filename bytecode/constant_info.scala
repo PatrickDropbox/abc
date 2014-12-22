@@ -457,9 +457,11 @@ class ConstClassInfo(n: ConstUtf8Info) extends ConstInfo {
 }
 
 // see section 4.4.9 page 89
-class ConstMethodTypeInfo extends ConstInfo {
-    var descriptorString: ConstUtf8Info = null
-    var descriptor: MethodType = null
+class ConstMethodTypeInfo(d: MethodType, s: ConstUtf8Info) extends ConstInfo {
+    def this() = this(null, null)
+
+    var _methodDescriptor: MethodType = d
+    var _descriptorString: ConstUtf8Info = s
 
     // only used during deserialization
     var _tmpDescriptorIndex = 0
@@ -468,17 +470,20 @@ class ConstMethodTypeInfo extends ConstInfo {
 
     def typeName(): String = "MethodType"
 
+    def methodDescriptor(): MethodType = _methodDescriptor
+    def descriptor(): String = _descriptorString.value()
+
     override def _debugIndexValue(): String = {
-        return "#" + descriptorString.index
+        return "#" + _descriptorString.index
     }
 
     def debugValue(): String = {
-        return descriptorString.debugValue()
+        return _descriptorString.debugValue()
     }
 
     def serialize(output: DataOutputStream) {
         output.writeByte(tag())
-        output.writeShort(descriptorString.index)
+        output.writeShort(_descriptorString.index)
     }
 
     def deserialize(parsedTag: Int, input: DataInputStream) {
@@ -489,15 +494,15 @@ class ConstMethodTypeInfo extends ConstInfo {
     }
 
     def bindConstReferences(pool: ConstantPool) {
-        descriptorString = pool.getUtf8ByIndex(_tmpDescriptorIndex)
-        var parser = new DescriptorParser(descriptorString.value)
-        descriptor = parser.parseMethodDescriptor()
+        _descriptorString = pool.getUtf8ByIndex(_tmpDescriptorIndex)
+        var parser = new DescriptorParser(_descriptorString.value)
+        _methodDescriptor = parser.parseMethodDescriptor()
     }
 
     def _compareTo(o: ConstInfo): Int = {
         o match {
             case other: ConstMethodTypeInfo => {
-                return descriptorString.compareTo(other.descriptorString)
+                return _descriptorString.compareTo(other._descriptorString)
             }
             case _ => throw new Exception("unexpected other type")
         }
