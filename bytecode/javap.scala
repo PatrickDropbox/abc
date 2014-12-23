@@ -23,13 +23,19 @@ object Javap {
         }
 
         println("Classfile " + file.getAbsolutePath())
-        println("  minor version: " + classInfo.minorVersion)
-        println("  major version: " + classInfo.majorVersion)
+        println("  minor version: " + classInfo.minorVersion())
+        println("  major version: " + classInfo.majorVersion())
         println("  flags: " + classInfo.access.debugString())
 
-        println("Constant pool:")
-        for (info <- classInfo.constants._tmpConstInfosByIndex.values()) {
+        println("Constants:")
+        for (info <- classInfo.constants()._tmpConstInfosByIndex.values()) {
             println(info.debugString())
+        }
+        println("Fields:")
+        for (field <- classInfo.fields.fields()) {
+            println("  " + field.name())
+            println("    type: " + field.descriptor().descriptorString())
+            println("    flags: " + field.access().debugString())
         }
     }
 }

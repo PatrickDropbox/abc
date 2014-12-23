@@ -10,45 +10,56 @@ object ClassFile {
 }
 
 class ClassFile {
-    var minorVersion = 0
-    var majorVersion = 51  // jvm7
+    var _minorVersion = 0
+    var _majorVersion = 51  // jvm7
 
-    var constants = new ConstantPool()
+    var _constants = new ConstantPool()
 
-    var access = new ClassAccessFlags()
+    var _access = new ClassAccessFlags()
 
-    var thisClass: ConstClassInfo = null  // the current class
-    var superClass: ConstClassInfo = null  // null if Object; non-null otherwise
-    var interfaces = new Vector[ConstClassInfo]()
+    var _thisClass: ConstClassInfo = null  // the current class
+    var _superClass: ConstClassInfo = null  // null if Object; non-null otherwise
+    var _interfaces = new Vector[ConstClassInfo]()
 
-    var fields = new FieldPool()
-    var methods = new MethodPool()
-    var attributes = new ClassAttributes()
+    var _fields = new FieldPool(_constants)
+    var _methods = new MethodPool()
+    var _attributes = new ClassAttributes()
+
+    def minorVersion(): Int = _minorVersion
+    def majorVersion(): Int = _majorVersion
+    def constants(): ConstantPool = _constants
+    def access(): ClassAccessFlags = _access
+    def thisClass(): ConstClassInfo = _thisClass
+    def superClass(): ConstClassInfo = _superClass
+    def interfaces(): Vector[ConstClassInfo] = _interfaces
+    def fields(): FieldPool = _fields
+    def methods(): MethodPool = _methods
+    def attribute(): ClassAttributes = _attributes
 
     def serialize(output: DataOutputStream) {
         output.writeInt(ClassFile.MAGIC)
 
-        output.writeShort(minorVersion)
-        output.writeShort(majorVersion)
+        output.writeShort(_minorVersion)
+        output.writeShort(_majorVersion)
 
-        constants.serialize(output)
+        _constants.serialize(output)
 
-        access.serialize(output)
+        _access.serialize(output)
 
-        output.writeShort(thisClass.index)
-        var superClassIndex = 0
-        if (superClass != null) {  // i.e., not Object
-            superClassIndex = superClass.index
+        output.writeShort(_thisClass.index)
+        var _superClassIndex = 0
+        if (_superClass != null) {  // i.e., not Object
+            _superClassIndex = _superClass.index
         }
-        output.writeShort(superClassIndex)
-        output.writeShort(interfaces.length)
-        for (iface <- interfaces) {
+        output.writeShort(_superClassIndex)
+        output.writeShort(_interfaces.length)
+        for (iface <- _interfaces) {
             output.writeShort(iface.index)
         }
 
-        fields.serialize(output)
-        methods.serialize(output)
-        attributes.serialize(output)
+        _fields.serialize(output)
+        _methods.serialize(output)
+        _attributes.serialize(output)
     }
 
     def deserialize(input: DataInputStream) {
@@ -56,30 +67,33 @@ class ClassFile {
             throw new Exception("Invalid magic")
         }
 
-        minorVersion = input.readUnsignedShort()
-        majorVersion = input.readUnsignedShort()
+        _minorVersion = input.readUnsignedShort()
+        _majorVersion = input.readUnsignedShort()
 
-        constants.deserialize(input)
+        _constants.deserialize(input)
 
-        access.deserialize(input)
+        _access.deserialize(input)
 
-        val thisClassIndex = input.readUnsignedShort()
-        thisClass = constants.getClassByIndex(thisClassIndex)
+        val _thisClassIndex = input.readUnsignedShort()
+        _thisClass = _constants.getClassByIndex(_thisClassIndex)
 
-        val superClassIndex = input.readUnsignedShort()
-        if (superClassIndex == 0) {
-            superClass = null
+        val _superClassIndex = input.readUnsignedShort()
+        if (_superClassIndex == 0) {
+            _superClass = null
         } else {
-            superClass = constants.getClassByIndex(superClassIndex)
+            _superClass = _constants.getClassByIndex(_superClassIndex)
         }
 
-        val interfacesCount = input.readUnsignedShort()
-        for (_ <- 1 to interfacesCount) {
-            interfaces.add(constants.getClassByIndex(input.readUnsignedShort()))
+        val _interfacesCount = input.readUnsignedShort()
+        for (_ <- 1 to _interfacesCount) {
+            _interfaces.add(
+                    _constants.getClassByIndex(input.readUnsignedShort()))
         }
 
-        fields.deserialize(input, constants)
-        methods.deserialize(input, constants)
-        attributes.deserialize(input, constants)
+        _fields.deserialize(input)
+        /* TODO
+        _methods.deserialize(input, _constants)
+        _attributes.deserialize(input, _constants)
+        */
     }
 }
