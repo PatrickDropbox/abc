@@ -670,11 +670,17 @@ class ConstFieldRefInfo(
     override def _isFieldRef(): Boolean = true
 }
 
+abstract class ConstBaseMethodRefInfo(
+        c: ConstClassInfo,
+        n: ConstNameAndTypeInfo,
+        d: MethodType) extends ConstRefInfo(c, n, d) {
+}
+
 // see section 4.4.2 page 80
 class ConstMethodRefInfo(
         c: ConstClassInfo,
         n: ConstNameAndTypeInfo,
-        d: MethodType) extends ConstRefInfo(c, n, d) {
+        d: MethodType) extends ConstBaseMethodRefInfo(c, n, d) {
     def this() = this(null, null, null)
 
     def tag(): Int = ConstInfo.METHOD_REF
@@ -686,7 +692,7 @@ class ConstMethodRefInfo(
 class ConstInterfaceMethodRefInfo(
         c: ConstClassInfo,
         n: ConstNameAndTypeInfo,
-        d: MethodType) extends ConstRefInfo(c, n, d) {
+        d: MethodType) extends ConstBaseMethodRefInfo(c, n, d) {
     def this() = this(null, null, null)
 
     def tag(): Int = ConstInfo.INTERFACE_METHOD_REF
@@ -696,7 +702,8 @@ class ConstInterfaceMethodRefInfo(
 
 // see section 4.4.8 page 87-89
 //
-// XXX: maybe subclass this by kind.  It's fuck up ...
+// NOTE: use ConstMethodHandleInfo.New<Kind>MethodHandle(ref) to initialize
+// the constructor!!!
 class ConstMethodHandleInfo(
         kind: Byte,
         ref: ConstRefInfo) extends ConstInfo {
@@ -732,7 +739,48 @@ class ConstMethodHandleInfo(
         return "" + _referenceKind + " " + _reference.debugValue()
     }
 
+    def _checkIsFieldRef() {
+        _reference match {
+            case _: ConstFieldRefInfo => return
+            case _ => throw new Exception("invalid ref type")
+        }
+    }
+
+    def _checkIsBaseMethodRef() {
+        _reference match {
+            case _: ConstBaseMethodRefInfo => return
+            case _ => throw new Exception("invalid ref type")
+        }
+    }
+
+    def _checkIsMethodRef() {
+        _reference match {
+            case _: ConstMethodRefInfo => return
+            case _ => throw new Exception("invalid ref type")
+        }
+    }
+
+    def _checkIsInterfaceMethodRef() {
+        _reference match {
+            case _: ConstInterfaceMethodRefInfo => return
+            case _ => throw new Exception("invalid ref type")
+        }
+    }
+
     def serialize(output: DataOutputStream) {
+        _referenceKind match {
+            case 1 => _checkIsFieldRef()
+            case 2 => _checkIsFieldRef()
+            case 3 => _checkIsFieldRef()
+            case 4 => _checkIsFieldRef()
+            case 5 => _checkIsMethodRef()
+            case 6 => _checkIsBaseMethodRef()
+            case 7 => _checkIsBaseMethodRef()
+            case 8 => _checkIsMethodRef()
+            case 9 => _checkIsInterfaceMethodRef()
+            case _ => throw new Exception("Unknown reference kind")
+        }
+
         output.writeByte(tag())
         output.writeByte(_referenceKind)
         output.writeShort(_reference.index)
@@ -765,6 +813,66 @@ class ConstMethodHandleInfo(
         }
     }
 }
+
+object ConstMethodHandleInfo {
+    //
+    // kinds with field ref
+    //
+    def NewGetFieldMethodHandle(
+            ref: ConstFieldRefInfo): ConstMethodHandleInfo = {
+        return new ConstMethodHandleInfo(1, ref)
+    }
+
+    def NewGetStaticMethodHandle(
+            ref: ConstFieldRefInfo): ConstMethodHandleInfo = {
+        return new ConstMethodHandleInfo(2, ref)
+    }
+
+    def NewPutFieldMethodHandle(
+            ref: ConstFieldRefInfo): ConstMethodHandleInfo = {
+        return new ConstMethodHandleInfo(3, ref)
+    }
+
+    def NewPutStaticMethodHandle(
+            ref: ConstFieldRefInfo): ConstMethodHandleInfo = {
+        return new ConstMethodHandleInfo(4, ref)
+    }
+
+    //
+    // kinds with method ref
+    //
+    def NewInvokeVirtualMethodHandle(
+            ref: ConstMethodRefInfo): ConstMethodHandleInfo = {
+        return new ConstMethodHandleInfo(5, ref)
+    }
+
+    def NewNewInvokeVirtualMethodHandle(
+            ref: ConstMethodRefInfo): ConstMethodHandleInfo = {
+        return new ConstMethodHandleInfo(8, ref)
+    }
+
+    //
+    // kinds with either method or interface method ref
+    //
+    def NewInvokeStaticMethodHandle(
+            ref: ConstBaseMethodRefInfo): ConstMethodHandleInfo = {
+        return new ConstMethodHandleInfo(6, ref)
+    }
+
+    def NewInvokeSpecialMethodHandle(
+            ref: ConstBaseMethodRefInfo): ConstMethodHandleInfo = {
+        return new ConstMethodHandleInfo(7, ref)
+    }
+
+    //
+    // kinds with interface method ref
+    //
+    def NewInvokeSpecialMethodHandle(
+            ref: ConstInterfaceMethodRefInfo): ConstMethodHandleInfo = {
+        return new ConstMethodHandleInfo(9, ref)
+    }
+}
+
 
 // TODO: bind bootstrap method attr index to real entry
 class ConstInvokeDynamicInfo extends ConstInfo {
