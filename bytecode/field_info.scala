@@ -6,7 +6,7 @@ class FieldInfo(
         c: ClassInfo,
         n: ConstUtf8Info,
         s: ConstUtf8Info,
-        f: FieldType) {
+        f: FieldType) extends AttributeOwner {
     def this(c: ClassInfo) = this(c, null, null, null)
 
     var _owner = c
@@ -18,6 +18,8 @@ class FieldInfo(
     var _descriptor: FieldType = f
 
     var _attributes = new FieldAttributes(this)
+
+    def constants(): ConstantPool = _owner.constants()
 
     def access(): FieldAccessFlags = _access
     def name(): String = _name.value()

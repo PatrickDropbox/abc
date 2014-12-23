@@ -9,7 +9,7 @@ object ClassInfo {
     val MAGIC = 0xcafebabe
 }
 
-class ClassInfo {
+class ClassInfo extends AttributeOwner {
     var _minorVersion = 0
     var _majorVersion = 51  // jvm7
 
@@ -22,7 +22,7 @@ class ClassInfo {
     var _interfaces = new Vector[ConstClassInfo]()
 
     var _fields = new FieldPool(this)
-    var _methods = new MethodPool()
+    var _methods = new MethodPool(this)
     var _attributes = new ClassAttributes(this)
 
     def minorVersion(): Int = _minorVersion

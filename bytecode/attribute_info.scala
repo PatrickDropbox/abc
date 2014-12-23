@@ -5,10 +5,14 @@ import java.util.Vector
 import scala.collection.JavaConversions._
 
 
+trait AttributeOwner {
+    def constants(): ConstantPool
+}
+
 object Attribute {
     def deserialize(
             inputStream: DataInputStream,
-            constants: ConstantPool): Vector[Attribute] = {
+            owner: AttributeOwner): Vector[Attribute] = {
         val attrCount = inputStream.readUnsignedShort()
         for (_ <- 1 to attrCount) {
             // TODO
@@ -33,7 +37,7 @@ class ClassAttributes(c: ClassInfo) {
 
     def deserialize(input: DataInputStream) {
         // TODO
-        Attribute.deserialize(input, _owner.constants())
+        Attribute.deserialize(input, _owner)
     }
 }
 
@@ -46,7 +50,7 @@ class FieldAttributes(f: FieldInfo) {
 
     def deserialize(input: DataInputStream) {
         // TODO
-        Attribute.deserialize(input, _owner._owner.constants())
+        Attribute.deserialize(input, _owner._owner)
     }
 }
 
@@ -59,6 +63,6 @@ class MethodAttributes(f: MethodInfo) {
 
     def deserialize(input: DataInputStream) {
         // TODO
-        Attribute.deserialize(input, _owner._owner.constants())
+        Attribute.deserialize(input, _owner._owner)
     }
 }

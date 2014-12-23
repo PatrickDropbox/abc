@@ -6,7 +6,7 @@ class MethodInfo(
         c: ClassInfo,
         n: ConstUtf8Info,
         s: ConstUtf8Info,
-        f: MethodType) {
+        f: MethodType) extends AttributeOwner {
     def this(c: ClassInfo) = this(c, null, null, null)
 
     var _owner = c
@@ -18,6 +18,8 @@ class MethodInfo(
     var _descriptor: MethodType = f
 
     var _attributes = new MethodAttributes(this)
+
+    def constants(): ConstantPool = _owner.constants()
 
     def access(): MethodAccessFlags = _access
     def name(): String = _name.value()
