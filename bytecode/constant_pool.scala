@@ -8,7 +8,9 @@ import scala.collection.JavaConversions._
 import scala.reflect.ClassTag
 
 
-class ConstantPool {
+class ConstantPool(owner: ClassInfo) {
+    var _owner = owner
+
     // using TreeMap instead of TreeSet to simplify deduplication.
     var _constInfos = new TreeMap[ConstInfo, ConstInfo]()
 
@@ -29,38 +31,39 @@ class ConstantPool {
     }
 
     def getUtf8(value: String): ConstUtf8Info = {
-        return _get[ConstUtf8Info](new ConstUtf8Info(value))
+        return _get[ConstUtf8Info](new ConstUtf8Info(_owner, value))
     }
 
     def getInteger(value: Int): ConstIntegerInfo = {
-        return _get[ConstIntegerInfo](new ConstIntegerInfo(value))
+        return _get[ConstIntegerInfo](new ConstIntegerInfo(_owner, value))
     }
 
     def getLong(value: Long): ConstLongInfo = {
-        return _get[ConstLongInfo](new ConstLongInfo(value))
+        return _get[ConstLongInfo](new ConstLongInfo(_owner, value))
     }
 
     def getFloat(value: Float): ConstFloatInfo = {
-        return _get[ConstFloatInfo](new ConstFloatInfo(value))
+        return _get[ConstFloatInfo](new ConstFloatInfo(_owner, value))
     }
 
     def getDouble(value: Double): ConstDoubleInfo = {
-        return _get[ConstDoubleInfo](new ConstDoubleInfo(value))
+        return _get[ConstDoubleInfo](new ConstDoubleInfo(_owner, value))
     }
 
     def getString(value: String): ConstStringInfo = {
-        return _get[ConstStringInfo](new ConstStringInfo(getUtf8(value)))
+        return _get[ConstStringInfo](
+                new ConstStringInfo(_owner, getUtf8(value)))
     }
 
     def getClass(name: String): ConstClassInfo = {
-        return _get[ConstClassInfo](new ConstClassInfo(getUtf8(name)))
+        return _get[ConstClassInfo](new ConstClassInfo(_owner, getUtf8(name)))
     }
 
     def getMethodType(methodType: MethodType): ConstMethodTypeInfo = {
         return _get[ConstMethodTypeInfo](
                 new ConstMethodTypeInfo(
-                        methodType,
-                        getUtf8(methodType.descriptorString())))
+                        _owner,
+                        methodType))
     }
 
     def getNameAndType(
@@ -68,6 +71,7 @@ class ConstantPool {
             descriptorString: String): ConstNameAndTypeInfo = {
         return _get[ConstNameAndTypeInfo](
                 new ConstNameAndTypeInfo(
+                        _owner,
                         getUtf8(name),
                         getUtf8(descriptorString)))
     }
@@ -78,6 +82,7 @@ class ConstantPool {
             descriptor: FieldType): ConstFieldRefInfo = {
         return _get[ConstFieldRefInfo](
                 new ConstFieldRefInfo(
+                        _owner,
                         getClass(className),
                         getNameAndType(refName, descriptor.descriptorString()),
                         descriptor))
@@ -89,6 +94,7 @@ class ConstantPool {
             descriptor: MethodType): ConstMethodRefInfo = {
         return _get[ConstMethodRefInfo](
                 new ConstMethodRefInfo(
+                        _owner,
                         getClass(className),
                         getNameAndType(refName, descriptor.descriptorString()),
                         descriptor))
@@ -100,6 +106,7 @@ class ConstantPool {
             descriptor: MethodType): ConstInterfaceMethodRefInfo = {
         return _get[ConstInterfaceMethodRefInfo](
                 new ConstInterfaceMethodRefInfo(
+                        _owner,
                         getClass(className),
                         getNameAndType(refName, descriptor.descriptorString()),
                         descriptor))
@@ -111,6 +118,7 @@ class ConstantPool {
             descriptor: FieldType): ConstMethodHandleInfo = {
         return _get[ConstMethodHandleInfo](
                 ConstMethodHandleInfo.NewGetFieldMethodHandle(
+                        _owner,
                         getFieldRef(className, refName, descriptor)))
     }
 
@@ -120,6 +128,7 @@ class ConstantPool {
             descriptor: FieldType): ConstMethodHandleInfo = {
         return _get[ConstMethodHandleInfo](
                 ConstMethodHandleInfo.NewGetStaticMethodHandle(
+                        _owner,
                         getFieldRef(className, refName, descriptor)))
     }
 
@@ -129,6 +138,7 @@ class ConstantPool {
             descriptor: FieldType): ConstMethodHandleInfo = {
         return _get[ConstMethodHandleInfo](
                 ConstMethodHandleInfo.NewPutFieldMethodHandle(
+                        _owner,
                         getFieldRef(className, refName, descriptor)))
     }
 
@@ -138,6 +148,7 @@ class ConstantPool {
             descriptor: FieldType): ConstMethodHandleInfo = {
         return _get[ConstMethodHandleInfo](
                 ConstMethodHandleInfo.NewPutStaticMethodHandle(
+                        _owner,
                         getFieldRef(className, refName, descriptor)))
     }
 
@@ -147,6 +158,7 @@ class ConstantPool {
             descriptor: MethodType): ConstMethodHandleInfo = {
         return _get[ConstMethodHandleInfo](
                 ConstMethodHandleInfo.NewInvokeVirtualMethodHandle(
+                        _owner,
                         getMethodRef(className, refName, descriptor)))
     }
 
@@ -156,6 +168,7 @@ class ConstantPool {
             descriptor: MethodType): ConstMethodHandleInfo = {
         return _get[ConstMethodHandleInfo](
                 ConstMethodHandleInfo.NewNewInvokeVirtualMethodHandle(
+                        _owner,
                         getMethodRef(className, refName, descriptor)))
     }
 
@@ -170,7 +183,9 @@ class ConstantPool {
             getMethodRef(className, refName, descriptor)
         }
         return _get[ConstMethodHandleInfo](
-                ConstMethodHandleInfo.NewInvokeStaticMethodHandle(ref))
+                ConstMethodHandleInfo.NewInvokeStaticMethodHandle(
+                        _owner,
+                        ref))
     }
 
     def getNewInvokeSpecialMethodHandle(
@@ -184,7 +199,9 @@ class ConstantPool {
             getMethodRef(className, refName, descriptor)
         }
         return _get[ConstMethodHandleInfo](
-                ConstMethodHandleInfo.NewInvokeSpecialMethodHandle(ref))
+                ConstMethodHandleInfo.NewInvokeSpecialMethodHandle(
+                        _owner,
+                        ref))
     }
 
     def getNewInvokeInterfaceMethodHandle(
@@ -193,6 +210,7 @@ class ConstantPool {
             descriptor: MethodType): ConstMethodHandleInfo = {
         return _get[ConstMethodHandleInfo](
                 ConstMethodHandleInfo.NewInvokeInterfaceMethodHandle(
+                        _owner,
                         getInterfaceMethodRef(className, refName, descriptor)))
     }
 
@@ -203,6 +221,7 @@ class ConstantPool {
             descriptor: MethodType): ConstInvokeDynamicInfo = {
         return _get[ConstInvokeDynamicInfo](
                 new ConstInvokeDynamicInfo(
+                        _owner,
                         bootstrapMethodAttrIndex,
                         getNameAndType(className,
                                        descriptor.descriptorString()),
@@ -303,21 +322,23 @@ class ConstantPool {
         while (nextIndex < constPoolCount) {
             val tag = input.readByte()
             var info = tag match {
-                case ConstInfo.UTF8 => new ConstUtf8Info()
-                case ConstInfo.INTEGER => new ConstIntegerInfo()
-                case ConstInfo.LONG => new ConstLongInfo()
-                case ConstInfo.FLOAT => new ConstFloatInfo()
-                case ConstInfo.DOUBLE => new ConstDoubleInfo()
-                case ConstInfo.STRING => new ConstStringInfo()
-                case ConstInfo.CLASS => new ConstClassInfo()
-                case ConstInfo.NAME_AND_TYPE => new ConstNameAndTypeInfo()
-                case ConstInfo.METHOD_TYPE => new ConstMethodTypeInfo()
-                case ConstInfo.FIELD_REF => new ConstFieldRefInfo()
-                case ConstInfo.METHOD_REF => new ConstMethodRefInfo()
+                case ConstInfo.UTF8 => new ConstUtf8Info(_owner)
+                case ConstInfo.INTEGER => new ConstIntegerInfo(_owner)
+                case ConstInfo.LONG => new ConstLongInfo(_owner)
+                case ConstInfo.FLOAT => new ConstFloatInfo(_owner)
+                case ConstInfo.DOUBLE => new ConstDoubleInfo(_owner)
+                case ConstInfo.STRING => new ConstStringInfo(_owner)
+                case ConstInfo.CLASS => new ConstClassInfo(_owner)
+                case ConstInfo.NAME_AND_TYPE => new ConstNameAndTypeInfo(_owner)
+                case ConstInfo.METHOD_TYPE => new ConstMethodTypeInfo(_owner)
+                case ConstInfo.FIELD_REF => new ConstFieldRefInfo(_owner)
+                case ConstInfo.METHOD_REF => new ConstMethodRefInfo(_owner)
                 case ConstInfo.INTERFACE_METHOD_REF =>
-                        new ConstInterfaceMethodRefInfo()
-                case ConstInfo.METHOD_HANDLE => new ConstMethodHandleInfo()
-                case ConstInfo.INVOKE_DYNAMIC => new ConstInvokeDynamicInfo()
+                        new ConstInterfaceMethodRefInfo(_owner)
+                case ConstInfo.METHOD_HANDLE =>
+                        new ConstMethodHandleInfo(_owner)
+                case ConstInfo.INVOKE_DYNAMIC =>
+                        new ConstInvokeDynamicInfo(_owner)
                 case _ => throw new Exception("Unknown const info type: " + tag)
             }
             info.index = nextIndex
@@ -347,7 +368,7 @@ class ConstantPool {
 
     def _bindConstReferences(constants: Vector[ConstInfo]) {
         for (info <- constants) {
-            info.bindConstReferences(this)
+            info.bindConstReferences()
         }
     }
 

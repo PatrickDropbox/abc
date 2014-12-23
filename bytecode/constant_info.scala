@@ -52,7 +52,9 @@ object ConstInfo {
     }
 }
 
-trait ConstInfo extends Comparable[ConstInfo] {
+abstract class ConstInfo(c: ClassInfo) extends Comparable[ConstInfo] {
+    var _owner = c
+
     var index = 0
 
     def indexSize(): Int = 1
@@ -87,7 +89,7 @@ trait ConstInfo extends Comparable[ConstInfo] {
 
     def deserialize(parsedTag: Int, input: DataInputStream)
 
-    def bindConstReferences(pool: ConstantPool)
+    def bindConstReferences()
 
     def compareTo(other: ConstInfo): Int = {
         if (tag() < other.tag()) {
@@ -106,8 +108,8 @@ trait ConstInfo extends Comparable[ConstInfo] {
 //
 // TODO: Fix encoding / decoding.  jvm uses a non-standard "modified-utf8"
 // encoding.  Why use the standard when you can reinvent your own ...
-class ConstUtf8Info(v: String) extends ConstInfo {
-    def this() = this("")
+class ConstUtf8Info(o: ClassInfo, v: String) extends ConstInfo(o) {
+    def this(o: ClassInfo) = this(o, "")
 
     var _value: String = v
 
@@ -148,7 +150,7 @@ class ConstUtf8Info(v: String) extends ConstInfo {
         _value = new String(utf8Bytes, "UTF-8")
     }
 
-    def bindConstReferences(pool: ConstantPool) {
+    def bindConstReferences() {
         // nothing to bind
     }
 
@@ -163,8 +165,8 @@ class ConstUtf8Info(v: String) extends ConstInfo {
 }
 
 // See section 4.4.4 page 82-83
-class ConstIntegerInfo(v: Int) extends ConstInfo {
-    def this() = this(0)
+class ConstIntegerInfo(o: ClassInfo, v: Int) extends ConstInfo(o) {
+    def this(o: ClassInfo) = this(o, 0)
 
     var _value: Int = v
 
@@ -190,7 +192,7 @@ class ConstIntegerInfo(v: Int) extends ConstInfo {
         _value = input.readInt()
     }
 
-    def bindConstReferences(pool: ConstantPool) {
+    def bindConstReferences() {
         // nothing to bind
     }
 
@@ -211,8 +213,8 @@ class ConstIntegerInfo(v: Int) extends ConstInfo {
 }
 
 // See section 4.4.5 page 83-85
-class ConstLongInfo(v: Long) extends ConstInfo {
-    def this() = this(0)
+class ConstLongInfo(o: ClassInfo, v: Long) extends ConstInfo(o) {
+    def this(o: ClassInfo) = this(o, 0)
 
     var _value: Long = 0
 
@@ -240,7 +242,7 @@ class ConstLongInfo(v: Long) extends ConstInfo {
         _value = input.readLong()
     }
 
-    def bindConstReferences(pool: ConstantPool) {
+    def bindConstReferences() {
         // nothing to bind
     }
 
@@ -261,8 +263,8 @@ class ConstLongInfo(v: Long) extends ConstInfo {
 }
 
 // See section 4.4.4 page 82-83
-class ConstFloatInfo(v: Float) extends ConstInfo {
-    def this() = this(0)
+class ConstFloatInfo(o: ClassInfo, v: Float) extends ConstInfo(o) {
+    def this(o: ClassInfo) = this(o, 0)
 
     var _value: Float = 0
 
@@ -288,7 +290,7 @@ class ConstFloatInfo(v: Float) extends ConstInfo {
         _value = input.readFloat()
     }
 
-    def bindConstReferences(pool: ConstantPool) {
+    def bindConstReferences() {
         // nothing to bind
     }
 
@@ -309,8 +311,8 @@ class ConstFloatInfo(v: Float) extends ConstInfo {
 }
 
 // See section 4.4.5 page 83-85
-class ConstDoubleInfo(v: Double) extends ConstInfo {
-    def this() = this(0)
+class ConstDoubleInfo(o: ClassInfo, v: Double) extends ConstInfo(o) {
+    def this(o: ClassInfo) = this(o, 0)
 
     var _value: Double = 0
 
@@ -338,7 +340,7 @@ class ConstDoubleInfo(v: Double) extends ConstInfo {
         _value = input.readDouble()
     }
 
-    def bindConstReferences(pool: ConstantPool) {
+    def bindConstReferences() {
         // nothing to bind
     }
 
@@ -359,8 +361,8 @@ class ConstDoubleInfo(v: Double) extends ConstInfo {
 }
 
 // see section 4.4.3 page 81-82
-class ConstStringInfo(v: ConstUtf8Info) extends ConstInfo {
-    def this() = this(null)
+class ConstStringInfo(o: ClassInfo, v: ConstUtf8Info) extends ConstInfo(o) {
+    def this(o: ClassInfo) = this(o, null)
 
     var _utf8String: ConstUtf8Info = v
 
@@ -393,8 +395,8 @@ class ConstStringInfo(v: ConstUtf8Info) extends ConstInfo {
         _tmpUtf8StringIndex = input.readUnsignedShort()
     }
 
-    def bindConstReferences(pool: ConstantPool) {
-        _utf8String = pool.getUtf8ByIndex(_tmpUtf8StringIndex)
+    def bindConstReferences() {
+        _utf8String = _owner.constants().getUtf8ByIndex(_tmpUtf8StringIndex)
     }
 
     def _compareTo(o: ConstInfo): Int = {
@@ -408,8 +410,8 @@ class ConstStringInfo(v: ConstUtf8Info) extends ConstInfo {
 }
 
 // see section 4.4.1 page 79-80
-class ConstClassInfo(n: ConstUtf8Info) extends ConstInfo {
-    def this() = this(null)
+class ConstClassInfo(o: ClassInfo, n: ConstUtf8Info) extends ConstInfo(o) {
+    def this(o: ClassInfo) = this(o, null)
 
     var _className: ConstUtf8Info = n
 
@@ -442,8 +444,8 @@ class ConstClassInfo(n: ConstUtf8Info) extends ConstInfo {
         _tmpClassNameIndex = input.readUnsignedShort()
     }
 
-    def bindConstReferences(pool: ConstantPool) {
-        _className = pool.getUtf8ByIndex(_tmpClassNameIndex)
+    def bindConstReferences() {
+        _className = _owner.constants().getUtf8ByIndex(_tmpClassNameIndex)
     }
 
     def _compareTo(o: ConstInfo): Int = {
@@ -457,11 +459,15 @@ class ConstClassInfo(n: ConstUtf8Info) extends ConstInfo {
 }
 
 // see section 4.4.9 page 89
-class ConstMethodTypeInfo(d: MethodType, s: ConstUtf8Info) extends ConstInfo {
-    def this() = this(null, null)
+class ConstMethodTypeInfo(o: ClassInfo, d: MethodType) extends ConstInfo(o) {
+    def this(o: ClassInfo) = this(o, null)
 
     var _methodDescriptor: MethodType = d
-    var _descriptorString: ConstUtf8Info = s
+
+    var _descriptorString: ConstUtf8Info = null
+    if (d != null) {
+        _descriptorString = _owner.constants().getUtf8(d.descriptorString())
+    }
 
     // only used during deserialization
     var _tmpDescriptorIndex = 0
@@ -493,8 +499,9 @@ class ConstMethodTypeInfo(d: MethodType, s: ConstUtf8Info) extends ConstInfo {
         _tmpDescriptorIndex = input.readUnsignedShort()
     }
 
-    def bindConstReferences(pool: ConstantPool) {
-        _descriptorString = pool.getUtf8ByIndex(_tmpDescriptorIndex)
+    def bindConstReferences() {
+        _descriptorString = _owner.constants().getUtf8ByIndex(
+                _tmpDescriptorIndex)
         var parser = new DescriptorParser(_descriptorString.value)
         _methodDescriptor = parser.parseMethodDescriptor()
     }
@@ -511,9 +518,10 @@ class ConstMethodTypeInfo(d: MethodType, s: ConstUtf8Info) extends ConstInfo {
 
 // see section 4.4.6 page 85
 class ConstNameAndTypeInfo(
+        o: ClassInfo,
         n: ConstUtf8Info,
-        d: ConstUtf8Info) extends ConstInfo {
-    def this() = this(null, null)
+        d: ConstUtf8Info) extends ConstInfo(o) {
+    def this(o: ClassInfo) = this(o, null, null)
 
     var _name: ConstUtf8Info = n
     // NOTE: we can't parse the descriptor yet since we don't know
@@ -553,9 +561,10 @@ class ConstNameAndTypeInfo(
         _tmpDescriptorIndex = input.readUnsignedShort()
     }
 
-    def bindConstReferences(pool: ConstantPool) {
-        _name = pool.getUtf8ByIndex(_tmpNameIndex)
-        _descriptorString = pool.getUtf8ByIndex(_tmpDescriptorIndex)
+    def bindConstReferences() {
+        _name = _owner.constants().getUtf8ByIndex(_tmpNameIndex)
+        _descriptorString = _owner.constants().getUtf8ByIndex(
+                _tmpDescriptorIndex)
     }
 
     def _compareTo(o: ConstInfo): Int = {
@@ -574,9 +583,10 @@ class ConstNameAndTypeInfo(
 
 // see section 4.4.2 page 80
 abstract class ConstRefInfo(
+        o: ClassInfo,
         c: ConstClassInfo,
         n: ConstNameAndTypeInfo,
-        d: DescriptorType) extends ConstInfo {
+        d: DescriptorType) extends ConstInfo(o) {
 
     var _classInfo: ConstClassInfo = c
     var _nameAndType: ConstNameAndTypeInfo = n
@@ -630,9 +640,10 @@ abstract class ConstRefInfo(
         _tmpNameAndTypeIndex = input.readUnsignedShort()
     }
 
-    def bindConstReferences(pool: ConstantPool) {
-        _classInfo = pool.getClassByIndex(_tmpClassIndex)
-        _nameAndType = pool.getNameAndTypeByIndex(_tmpNameAndTypeIndex)
+    def bindConstReferences() {
+        _classInfo = _owner.constants().getClassByIndex(_tmpClassIndex)
+        _nameAndType = _owner.constants().getNameAndTypeByIndex(
+                _tmpNameAndTypeIndex)
 
         var parser = new DescriptorParser(_nameAndType.descriptorString())
         if (_isFieldRef()) {
@@ -658,10 +669,11 @@ abstract class ConstRefInfo(
 
 // see section 4.4.2 page 80
 class ConstFieldRefInfo(
+        o: ClassInfo,
         c: ConstClassInfo,
         n: ConstNameAndTypeInfo,
-        d: FieldType) extends ConstRefInfo(c, n, d) {
-    def this() = this(null, null, null)
+        d: FieldType) extends ConstRefInfo(o, c, n, d) {
+    def this(o: ClassInfo) = this(o, null, null, null)
 
     def tag(): Int = ConstInfo.FIELD_REF
 
@@ -671,17 +683,19 @@ class ConstFieldRefInfo(
 }
 
 abstract class ConstBaseMethodRefInfo(
+        o: ClassInfo,
         c: ConstClassInfo,
         n: ConstNameAndTypeInfo,
-        d: MethodType) extends ConstRefInfo(c, n, d) {
+        d: MethodType) extends ConstRefInfo(o, c, n, d) {
 }
 
 // see section 4.4.2 page 80
 class ConstMethodRefInfo(
+        o: ClassInfo,
         c: ConstClassInfo,
         n: ConstNameAndTypeInfo,
-        d: MethodType) extends ConstBaseMethodRefInfo(c, n, d) {
-    def this() = this(null, null, null)
+        d: MethodType) extends ConstBaseMethodRefInfo(o, c, n, d) {
+    def this(o: ClassInfo) = this(o, null, null, null)
 
     def tag(): Int = ConstInfo.METHOD_REF
 
@@ -690,10 +704,11 @@ class ConstMethodRefInfo(
 
 // see section 4.4.2 page 80
 class ConstInterfaceMethodRefInfo(
+        o: ClassInfo,
         c: ConstClassInfo,
         n: ConstNameAndTypeInfo,
-        d: MethodType) extends ConstBaseMethodRefInfo(c, n, d) {
-    def this() = this(null, null, null)
+        d: MethodType) extends ConstBaseMethodRefInfo(o, c, n, d) {
+    def this(o: ClassInfo) = this(o, null, null, null)
 
     def tag(): Int = ConstInfo.INTERFACE_METHOD_REF
 
@@ -705,9 +720,10 @@ class ConstInterfaceMethodRefInfo(
 // NOTE: use ConstMethodHandleInfo.New<Kind>MethodHandle(ref) to initialize
 // the constructor!!!
 class ConstMethodHandleInfo(
+        o: ClassInfo,
         kind: Byte,
-        ref: ConstRefInfo) extends ConstInfo {
-    def this() = this(0, null)
+        ref: ConstRefInfo) extends ConstInfo(o) {
+    def this(o: ClassInfo) = this(o, 0, null)
 
     var _referenceKind: Byte = kind
     var _reference: ConstRefInfo = ref
@@ -794,8 +810,8 @@ class ConstMethodHandleInfo(
         _tmpReferenceIndex = input.readUnsignedShort()
     }
 
-    def bindConstReferences(pool: ConstantPool) {
-        _reference = pool.getRefByIndex(_tmpReferenceIndex)
+    def bindConstReferences() {
+        _reference = _owner.constants().getRefByIndex(_tmpReferenceIndex)
     }
 
     def _compareTo(o: ConstInfo): Int = {
@@ -819,67 +835,77 @@ object ConstMethodHandleInfo {
     // kinds with field ref
     //
     def NewGetFieldMethodHandle(
+            owner: ClassInfo,
             ref: ConstFieldRefInfo): ConstMethodHandleInfo = {
-        return new ConstMethodHandleInfo(1, ref)
+        return new ConstMethodHandleInfo(owner, 1, ref)
     }
 
     def NewGetStaticMethodHandle(
+            owner: ClassInfo,
             ref: ConstFieldRefInfo): ConstMethodHandleInfo = {
-        return new ConstMethodHandleInfo(2, ref)
+        return new ConstMethodHandleInfo(owner, 2, ref)
     }
 
     def NewPutFieldMethodHandle(
+            owner: ClassInfo,
             ref: ConstFieldRefInfo): ConstMethodHandleInfo = {
-        return new ConstMethodHandleInfo(3, ref)
+        return new ConstMethodHandleInfo(owner, 3, ref)
     }
 
     def NewPutStaticMethodHandle(
+            owner: ClassInfo,
             ref: ConstFieldRefInfo): ConstMethodHandleInfo = {
-        return new ConstMethodHandleInfo(4, ref)
+        return new ConstMethodHandleInfo(owner, 4, ref)
     }
 
     //
     // kinds with method ref
     //
     def NewInvokeVirtualMethodHandle(
+            owner: ClassInfo,
             ref: ConstMethodRefInfo): ConstMethodHandleInfo = {
-        return new ConstMethodHandleInfo(5, ref)
+        return new ConstMethodHandleInfo(owner, 5, ref)
     }
 
     def NewNewInvokeVirtualMethodHandle(
+            owner: ClassInfo,
             ref: ConstMethodRefInfo): ConstMethodHandleInfo = {
-        return new ConstMethodHandleInfo(8, ref)
+        return new ConstMethodHandleInfo(owner, 8, ref)
     }
 
     //
     // kinds with either method or interface method ref
     //
     def NewInvokeStaticMethodHandle(
+            owner: ClassInfo,
             ref: ConstBaseMethodRefInfo): ConstMethodHandleInfo = {
-        return new ConstMethodHandleInfo(6, ref)
+        return new ConstMethodHandleInfo(owner, 6, ref)
     }
 
     def NewInvokeSpecialMethodHandle(
+            owner: ClassInfo,
             ref: ConstBaseMethodRefInfo): ConstMethodHandleInfo = {
-        return new ConstMethodHandleInfo(7, ref)
+        return new ConstMethodHandleInfo(owner, 7, ref)
     }
 
     //
     // kinds with interface method ref
     //
     def NewInvokeInterfaceMethodHandle(
+            owner: ClassInfo,
             ref: ConstInterfaceMethodRefInfo): ConstMethodHandleInfo = {
-        return new ConstMethodHandleInfo(9, ref)
+        return new ConstMethodHandleInfo(owner, 9, ref)
     }
 }
 
 
 // TODO: bind bootstrap method attr index to real entry
 class ConstInvokeDynamicInfo(
+        o: ClassInfo,
         i: Int,
         n: ConstNameAndTypeInfo,
-        m: MethodType) extends ConstInfo {
-    def this() = this(0, null, null)
+        m: MethodType) extends ConstInfo(o) {
+    def this(o: ClassInfo) = this(o, 0, null, null)
 
     var _bootstrapMethodAttrIndex = i
     var _nameAndType: ConstNameAndTypeInfo = n
@@ -919,8 +945,9 @@ class ConstInvokeDynamicInfo(
         _tmpNameAndTypeIndex = input.readUnsignedShort()
     }
 
-    def bindConstReferences(pool: ConstantPool) {
-        _nameAndType = pool.getNameAndTypeByIndex(_tmpNameAndTypeIndex)
+    def bindConstReferences() {
+        _nameAndType = _owner.constants().getNameAndTypeByIndex(
+                _tmpNameAndTypeIndex)
     }
 
     def _compareTo(o: ConstInfo): Int = {

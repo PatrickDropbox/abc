@@ -13,7 +13,7 @@ class ClassInfo {
     var _minorVersion = 0
     var _majorVersion = 51  // jvm7
 
-    var _constants = new ConstantPool()
+    var _constants = new ConstantPool(this)
 
     var _access = new ClassAccessFlags(this)
 
