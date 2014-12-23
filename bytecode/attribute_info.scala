@@ -49,3 +49,16 @@ class FieldAttributes(f: FieldInfo) {
         Attribute.deserialize(input, _owner._owner.constants())
     }
 }
+
+class MethodAttributes(f: MethodInfo) {
+    var _owner = f
+
+    def serialize(output: DataOutputStream) {
+        // TODO
+    }
+
+    def deserialize(input: DataInputStream) {
+        // TODO
+        Attribute.deserialize(input, _owner._owner.constants())
+    }
+}

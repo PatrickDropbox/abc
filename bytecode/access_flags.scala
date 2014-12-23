@@ -5,6 +5,137 @@ import java.util.Vector
 import scala.collection.JavaConversions._
 
 
+// see table 4.6-A / page 93-94
+class MethodAccessFlags(o: MethodInfo) {
+
+    var _owner = o
+
+    var isPublic = false
+    var isPrivate = false
+    var isProtected = false
+    var isStatic = false
+    var isFinal = false
+    var isSynchronized = false
+    var isBridge = false
+    var isVarargs = false
+    var isNative = false
+    var isAbstract = false
+    var isStrict = false
+    var isSynthetic = false
+
+    def debugString(): String = {
+        var flagStrings = new Vector[String]()
+
+        if (isPublic) {
+            flagStrings.add("PUBLIC")
+        }
+        if (isPrivate) {
+            flagStrings.add("PRIVATE")
+        }
+        if (isProtected) {
+            flagStrings.add("PROTECTED")
+        }
+        if (isStatic) {
+            flagStrings.add("STATIC")
+        }
+        if (isFinal) {
+            flagStrings.add("FINAL")
+        }
+        if (isSynchronized) {
+            flagStrings.add("SYNCHRONIZED")
+        }
+        if (isBridge) {
+            flagStrings.add("BRIDGE")
+        }
+        if (isVarargs) {
+            flagStrings.add("VARARGS")
+        }
+        if (isNative) {
+            flagStrings.add("NATIVE")
+        }
+        if (isAbstract) {
+            flagStrings.add("ABSTRACT")
+        }
+        if (isStrict) {
+            flagStrings.add("STRICT")
+        }
+        if (isSynthetic) {
+            flagStrings.add("SYNTHETIC")
+        }
+
+        var result = ""
+        for (s <- flagStrings) {
+            if (result.equals("")) {
+                result = s
+            } else {
+                result += ", " + s
+            }
+        }
+
+        return result
+    }
+
+    def serialize(output: DataOutputStream) {
+        var result = 0
+
+        if (isPublic) {
+            result |= 0x0001
+        }
+        if (isPrivate) {
+            result |= 0x0002
+        }
+        if (isProtected) {
+            result |= 0x0004
+        }
+        if (isStatic) {
+            result |= 0x0008
+        }
+        if (isFinal) {
+            result |= 0x0010
+        }
+        if (isSynchronized) {
+            result |= 0x0020
+        }
+        if (isBridge) {
+            result |= 0x0040
+        }
+        if (isVarargs) {
+            result |= 0x0080
+        }
+        if (isNative) {
+            result |= 0x0100
+        }
+        if (isAbstract) {
+            result |= 0x0400
+        }
+        if (isStrict) {
+            result |= 0x0800
+        }
+        if (isSynthetic) {
+            result |= 0x1000
+        }
+
+        output.writeShort(result)
+    }
+
+    def deserialize(input: DataInputStream) {
+        val flags = input.readUnsignedShort()
+
+        isPublic = ((flags & 0x0001) != 0)
+        isPrivate = ((flags & 0x0002) != 0)
+        isProtected = ((flags & 0x0004) != 0)
+        isStatic = ((flags & 0x0008) != 0)
+        isFinal = ((flags & 0x0010) != 0)
+        isSynchronized = ((flags & 0x0020) != 0)
+        isBridge = ((flags & 0x0040) != 0)
+        isVarargs = ((flags & 0x0080) != 0)
+        isNative = ((flags & 0x0100) != 0)
+        isAbstract = ((flags & 0x0400) != 0)
+        isStrict = ((flags & 0x0800) != 0)
+        isSynthetic = ((flags & 0x1000) != 0)
+    }
+}
+
 // see table 4.5-A / page 90-91
 class FieldAccessFlags(o: FieldInfo) {
 
