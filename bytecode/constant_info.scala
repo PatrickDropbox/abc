@@ -875,9 +875,15 @@ object ConstMethodHandleInfo {
 
 
 // TODO: bind bootstrap method attr index to real entry
-class ConstInvokeDynamicInfo extends ConstInfo {
-    var bootstrapMethodAttrIndex = 0
-    var nameAndType: ConstNameAndTypeInfo = null
+class ConstInvokeDynamicInfo(
+        i: Int,
+        n: ConstNameAndTypeInfo,
+        m: MethodType) extends ConstInfo {
+    def this() = this(0, null, null)
+
+    var _bootstrapMethodAttrIndex = i
+    var _nameAndType: ConstNameAndTypeInfo = n
+    var _methodType: MethodType = m
 
     // only used during deserialization
     var _tmpNameAndTypeIndex = 0
@@ -886,42 +892,49 @@ class ConstInvokeDynamicInfo extends ConstInfo {
 
     def typeName(): String = "InvokeDynamic"
 
+    def bootstrapMethodAttrIndex(): Int = _bootstrapMethodAttrIndex
+    def refName(): String = _nameAndType.name()
+    def descriptorString(): String = _nameAndType.descriptorString()
+    def methodType(): MethodType = _methodType
+
     override def _debugIndexValue(): String = {
-        return "" + bootstrapMethodAttrIndex + " #" + nameAndType.index
+        return "" + _bootstrapMethodAttrIndex + " #" + _nameAndType.index
     }
 
     def debugValue(): String = {
-        return "" + bootstrapMethodAttrIndex + " " + nameAndType.debugValue()
+        return "" + _bootstrapMethodAttrIndex + " " + _nameAndType.debugValue()
     }
 
     def serialize(output: DataOutputStream) {
         output.writeByte(tag())
-        output.writeShort(bootstrapMethodAttrIndex)
-        output.writeShort(nameAndType.index)
+        output.writeShort(_bootstrapMethodAttrIndex)
+        output.writeShort(_nameAndType.index)
     }
 
     def deserialize(parsedTag: Int, input: DataInputStream) {
         if (parsedTag != tag()) {
             throw new Exception("unexpected tag")
         }
-        bootstrapMethodAttrIndex = input.readUnsignedShort()
+        _bootstrapMethodAttrIndex = input.readUnsignedShort()
         _tmpNameAndTypeIndex = input.readUnsignedShort()
     }
 
     def bindConstReferences(pool: ConstantPool) {
-        nameAndType = pool.getNameAndTypeByIndex(_tmpNameAndTypeIndex)
+        _nameAndType = pool.getNameAndTypeByIndex(_tmpNameAndTypeIndex)
     }
 
     def _compareTo(o: ConstInfo): Int = {
         o match {
             case other: ConstInvokeDynamicInfo => {
-                if (bootstrapMethodAttrIndex < other.bootstrapMethodAttrIndex) {
+                if (_bootstrapMethodAttrIndex <
+                        other._bootstrapMethodAttrIndex) {
                     return -1
                 }
-                if (bootstrapMethodAttrIndex > other.bootstrapMethodAttrIndex) {
+                if (_bootstrapMethodAttrIndex >
+                        other._bootstrapMethodAttrIndex) {
                     return 1
                 }
-                return nameAndType.compareTo(other.nameAndType)
+                return _nameAndType.compareTo(other._nameAndType)
             }
             case _ => throw new Exception("unexpected other type")
         }

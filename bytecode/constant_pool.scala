@@ -196,6 +196,19 @@ class ConstantPool {
                         getInterfaceMethodRef(className, refName, descriptor)))
     }
 
+    def getInvokeDynamic(
+            bootstrapMethodAttrIndex: Int,
+            className: String,
+            refName: String,
+            descriptor: MethodType): ConstInvokeDynamicInfo = {
+        return _get[ConstInvokeDynamicInfo](
+                new ConstInvokeDynamicInfo(
+                        bootstrapMethodAttrIndex,
+                        getNameAndType(className,
+                                       descriptor.descriptorString()),
+                        descriptor))
+    }
+
     def _getByIndex[T <: ConstInfo : ClassTag](index: Int): T = {
         if (_tmpConstInfosByIndex == null) {
             throw new Exception(
