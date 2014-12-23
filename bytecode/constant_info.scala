@@ -867,7 +867,7 @@ object ConstMethodHandleInfo {
     //
     // kinds with interface method ref
     //
-    def NewInvokeSpecialMethodHandle(
+    def NewInvokeInterfaceMethodHandle(
             ref: ConstInterfaceMethodRefInfo): ConstMethodHandleInfo = {
         return new ConstMethodHandleInfo(9, ref)
     }

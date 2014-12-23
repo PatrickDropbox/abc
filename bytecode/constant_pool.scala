@@ -105,6 +105,97 @@ class ConstantPool {
                         descriptor))
     }
 
+    def getGetFieldMethodHandle(
+            className: String,
+            refName: String,
+            descriptor: FieldType): ConstMethodHandleInfo = {
+        return _get[ConstMethodHandleInfo](
+                ConstMethodHandleInfo.NewGetFieldMethodHandle(
+                        getFieldRef(className, refName, descriptor)))
+    }
+
+    def getGetStaticMethodHandle(
+            className: String,
+            refName: String,
+            descriptor: FieldType): ConstMethodHandleInfo = {
+        return _get[ConstMethodHandleInfo](
+                ConstMethodHandleInfo.NewGetStaticMethodHandle(
+                        getFieldRef(className, refName, descriptor)))
+    }
+
+    def getPutFieldMethodHandle(
+            className: String,
+            refName: String,
+            descriptor: FieldType): ConstMethodHandleInfo = {
+        return _get[ConstMethodHandleInfo](
+                ConstMethodHandleInfo.NewPutFieldMethodHandle(
+                        getFieldRef(className, refName, descriptor)))
+    }
+
+    def getPutStaticMethodHandle(
+            className: String,
+            refName: String,
+            descriptor: FieldType): ConstMethodHandleInfo = {
+        return _get[ConstMethodHandleInfo](
+                ConstMethodHandleInfo.NewPutStaticMethodHandle(
+                        getFieldRef(className, refName, descriptor)))
+    }
+
+    def getInvokeVirtualMethodHandle(
+            className: String,
+            refName: String,
+            descriptor: MethodType): ConstMethodHandleInfo = {
+        return _get[ConstMethodHandleInfo](
+                ConstMethodHandleInfo.NewInvokeVirtualMethodHandle(
+                        getMethodRef(className, refName, descriptor)))
+    }
+
+    def getNewInvokeVirtualMethodHandle(
+            className: String,
+            refName: String,
+            descriptor: MethodType): ConstMethodHandleInfo = {
+        return _get[ConstMethodHandleInfo](
+                ConstMethodHandleInfo.NewNewInvokeVirtualMethodHandle(
+                        getMethodRef(className, refName, descriptor)))
+    }
+
+    def getNewInvokeStaticMethodHandle(
+            className: String,
+            refName: String,
+            descriptor: MethodType,
+            isInterfaceMethod: Boolean): ConstMethodHandleInfo = {
+        val ref = if (isInterfaceMethod) {
+            getInterfaceMethodRef(className, refName, descriptor)
+        } else {
+            getMethodRef(className, refName, descriptor)
+        }
+        return _get[ConstMethodHandleInfo](
+                ConstMethodHandleInfo.NewInvokeStaticMethodHandle(ref))
+    }
+
+    def getNewInvokeSpecialMethodHandle(
+            className: String,
+            refName: String,
+            descriptor: MethodType,
+            isInterfaceMethod: Boolean): ConstMethodHandleInfo = {
+        val ref = if (isInterfaceMethod) {
+            getInterfaceMethodRef(className, refName, descriptor)
+        } else {
+            getMethodRef(className, refName, descriptor)
+        }
+        return _get[ConstMethodHandleInfo](
+                ConstMethodHandleInfo.NewInvokeSpecialMethodHandle(ref))
+    }
+
+    def getNewInvokeInterfaceMethodHandle(
+            className: String,
+            refName: String,
+            descriptor: MethodType): ConstMethodHandleInfo = {
+        return _get[ConstMethodHandleInfo](
+                ConstMethodHandleInfo.NewInvokeInterfaceMethodHandle(
+                        getInterfaceMethodRef(className, refName, descriptor)))
+    }
+
     def _getByIndex[T <: ConstInfo : ClassTag](index: Int): T = {
         if (_tmpConstInfosByIndex == null) {
             throw new Exception(
