@@ -573,26 +573,53 @@ class ConstNameAndTypeInfo(
 }
 
 // see section 4.4.2 page 80
-abstract class ConstRefInfo extends ConstInfo {
-    var classInfo: ConstClassInfo = null
-    var nameAndType: ConstNameAndTypeInfo = null
+abstract class ConstRefInfo(
+        c: ConstClassInfo,
+        n: ConstNameAndTypeInfo,
+        d: DescriptorType) extends ConstInfo {
+
+    var _classInfo: ConstClassInfo = c
+    var _nameAndType: ConstNameAndTypeInfo = n
+    var _descriptor: DescriptorType = d
 
     // only used during deserialization
     var _tmpClassIndex = 0
     var _tmpNameAndTypeIndex = 0
 
+    def _isFieldRef(): Boolean = false
+
+    def className(): String = _classInfo.className()
+
+    def referenceName(): String = _nameAndType.name()
+
+    def descriptorString(): String = _nameAndType.descriptorString()
+
+    def fieldDescriptor(): FieldType = {
+        _descriptor match {
+            case f: FieldType => return f
+            case _ => throw new Exception("unexpected descriptor type")
+        }
+    }
+
+    def methodDescriptor(): MethodType = {
+        _descriptor match {
+            case m: MethodType => return m
+            case _ => throw new Exception("unexpected descriptor type")
+        }
+    }
+
     override def _debugIndexValue(): String = {
-        return "#" + classInfo.index + ".#" + nameAndType.index
+        return "#" + _classInfo.index + ".#" + _nameAndType.index
     }
 
     def debugValue(): String = {
-        return classInfo.debugValue() + "." + nameAndType.debugValue()
+        return _classInfo.debugValue() + "." + _nameAndType.debugValue()
     }
 
     def serialize(output: DataOutputStream) {
         output.writeByte(tag())
-        output.writeShort(classInfo.index)
-        output.writeShort(nameAndType.index)
+        output.writeShort(_classInfo.index)
+        output.writeShort(_nameAndType.index)
     }
 
     def deserialize(parsedTag: Int, input: DataInputStream) {
@@ -604,18 +631,25 @@ abstract class ConstRefInfo extends ConstInfo {
     }
 
     def bindConstReferences(pool: ConstantPool) {
-        classInfo = pool.getClassByIndex(_tmpClassIndex)
-        nameAndType = pool.getNameAndTypeByIndex(_tmpNameAndTypeIndex)
+        _classInfo = pool.getClassByIndex(_tmpClassIndex)
+        _nameAndType = pool.getNameAndTypeByIndex(_tmpNameAndTypeIndex)
+
+        var parser = new DescriptorParser(_nameAndType.descriptorString())
+        if (_isFieldRef()) {
+            _descriptor = parser.parseFieldDescriptor()
+        } else {
+            _descriptor = parser.parseMethodDescriptor()
+        }
     }
 
     def _compareTo(o: ConstInfo): Int = {
         o match {
             case other: ConstRefInfo => {
-                val c = classInfo.compareTo(other.classInfo)
+                val c = _classInfo.compareTo(other._classInfo)
                 if (c != 0) {
                     return c
                 }
-                return nameAndType.compareTo(other.nameAndType)
+                return _nameAndType.compareTo(other._nameAndType)
             }
             case _ => throw new Exception("unexpected other type")
         }
@@ -623,21 +657,38 @@ abstract class ConstRefInfo extends ConstInfo {
 }
 
 // see section 4.4.2 page 80
-class ConstFieldRefInfo extends ConstRefInfo {
+class ConstFieldRefInfo(
+        c: ConstClassInfo,
+        n: ConstNameAndTypeInfo,
+        d: FieldType) extends ConstRefInfo(c, n, d) {
+    def this() = this(null, null, null)
+
     def tag(): Int = ConstInfo.FIELD_REF
 
     def typeName(): String = "FieldRef"
+
+    override def _isFieldRef(): Boolean = true
 }
 
 // see section 4.4.2 page 80
-class ConstMethodRefInfo extends ConstRefInfo {
+class ConstMethodRefInfo(
+        c: ConstClassInfo,
+        n: ConstNameAndTypeInfo,
+        d: MethodType) extends ConstRefInfo(c, n, d) {
+    def this() = this(null, null, null)
+
     def tag(): Int = ConstInfo.METHOD_REF
 
     def typeName(): String = "MethodRef"
 }
 
 // see section 4.4.2 page 80
-class ConstInterfaceMethodRefInfo extends ConstRefInfo {
+class ConstInterfaceMethodRefInfo(
+        c: ConstClassInfo,
+        n: ConstNameAndTypeInfo,
+        d: MethodType) extends ConstRefInfo(c, n, d) {
+    def this() = this(null, null, null)
+
     def tag(): Int = ConstInfo.INTERFACE_METHOD_REF
 
     def typeName(): String = "InterfaceMethodRef"

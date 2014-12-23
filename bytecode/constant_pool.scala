@@ -72,6 +72,39 @@ class ConstantPool {
                         getUtf8(descriptorString)))
     }
 
+    def getFieldRef(
+            className: String,
+            refName: String,
+            descriptor: FieldType): ConstFieldRefInfo = {
+        return _get[ConstFieldRefInfo](
+                new ConstFieldRefInfo(
+                        getClass(className),
+                        getNameAndType(refName, descriptor.descriptorString()),
+                        descriptor))
+    }
+
+    def getMethodRef(
+            className: String,
+            refName: String,
+            descriptor: MethodType): ConstMethodRefInfo = {
+        return _get[ConstMethodRefInfo](
+                new ConstMethodRefInfo(
+                        getClass(className),
+                        getNameAndType(refName, descriptor.descriptorString()),
+                        descriptor))
+    }
+
+    def getInterfaceMethodRef(
+            className: String,
+            refName: String,
+            descriptor: MethodType): ConstInterfaceMethodRefInfo = {
+        return _get[ConstInterfaceMethodRefInfo](
+                new ConstInterfaceMethodRefInfo(
+                        getClass(className),
+                        getNameAndType(refName, descriptor.descriptorString()),
+                        descriptor))
+    }
+
     def _getByIndex[T <: ConstInfo : ClassTag](index: Int): T = {
         if (_tmpConstInfosByIndex == null) {
             throw new Exception(
