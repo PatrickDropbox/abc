@@ -8,7 +8,7 @@ IMPORTS = [
 # class name -> (owner type, comment, {name -> bit})
 ACCESS_FLAGS = {
         'ClassAccessFlags': (
-                'ClassFile',
+                'ClassInfo',
                 'see table 4.1-A / page 71-72',
                 {
                     'public':     0x0001,

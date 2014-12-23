@@ -6,8 +6,8 @@ import java.util.TreeMap
 import scala.collection.JavaConversions._
 
 
-class FieldPool(c: ClassFile) {
-    var _ownerClass = c
+class FieldPool(c: ClassInfo) {
+    var _owner = c
 
     var _fields = new TreeMap[String, FieldInfo]()
 
@@ -22,7 +22,7 @@ class FieldPool(c: ClassFile) {
         _fields.put(
                 name,
                 new FieldInfo(
-                        _ownerClass,
+                        _owner,
                         _constants.getUtf8(name),
                         _constants.getUtf8(fieldType.descriptorString()),
                         fieldType))
@@ -50,7 +50,7 @@ class FieldPool(c: ClassFile) {
 
         val fieldCount = input.readUnsignedShort()
         for (i <- 1 to fieldCount) {
-            var field = new FieldInfo(_ownerClass)
+            var field = new FieldInfo(_owner)
             field.deserialize(input, _constants)
             if (_fields.containsKey(field.name())) {
                 throw new Exception("duplicate field name: " + field.name())

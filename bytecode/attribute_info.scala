@@ -24,8 +24,8 @@ object Attribute {
 trait Attribute {
 }
 
-class ClassAttributes(c: ClassFile) {
-    var _ownerClass = c
+class ClassAttributes(c: ClassInfo) {
+    var _owner = c
 
     def serialize(output: DataOutputStream) {
         // TODO
@@ -33,12 +33,12 @@ class ClassAttributes(c: ClassFile) {
 
     def deserialize(input: DataInputStream) {
         // TODO
-        Attribute.deserialize(input, _ownerClass.constants())
+        Attribute.deserialize(input, _owner.constants())
     }
 }
 
 class FieldAttributes(f: FieldInfo) {
-    var _ownerField = f
+    var _owner = f
 
     def serialize(output: DataOutputStream) {
         // TODO
@@ -46,6 +46,6 @@ class FieldAttributes(f: FieldInfo) {
 
     def deserialize(input: DataInputStream) {
         // TODO
-        Attribute.deserialize(input, _ownerField._ownerClass.constants())
+        Attribute.deserialize(input, _owner._owner.constants())
     }
 }

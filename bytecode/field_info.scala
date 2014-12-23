@@ -3,13 +3,13 @@ import java.io.DataOutputStream
 
 
 class FieldInfo(
-        c: ClassFile,
+        c: ClassInfo,
         n: ConstUtf8Info,
         s: ConstUtf8Info,
         f: FieldType) {
-    def this(c: ClassFile) = this(c, null, null, null)
+    def this(c: ClassInfo) = this(c, null, null, null)
 
-    var _ownerClass = c
+    var _owner = c
 
     var _access = new FieldAccessFlags(this)
     var _name: ConstUtf8Info = n

@@ -5,11 +5,11 @@ import java.util.Vector
 import scala.collection.JavaConversions._
 
 
-object ClassFile {
+object ClassInfo {
     val MAGIC = 0xcafebabe
 }
 
-class ClassFile {
+class ClassInfo {
     var _minorVersion = 0
     var _majorVersion = 51  // jvm7
 
@@ -46,7 +46,7 @@ class ClassFile {
     def attribute(): ClassAttributes = _attributes
 
     def serialize(output: DataOutputStream) {
-        output.writeInt(ClassFile.MAGIC)
+        output.writeInt(ClassInfo.MAGIC)
 
         output.writeShort(_minorVersion)
         output.writeShort(_majorVersion)
@@ -72,7 +72,7 @@ class ClassFile {
     }
 
     def deserialize(input: DataInputStream) {
-        if (input.readInt() != ClassFile.MAGIC) {
+        if (input.readInt() != ClassInfo.MAGIC) {
             throw new Exception("Invalid magic")
         }
 

@@ -15,7 +15,7 @@ object Javap {
         var file = new File(args(0))
         var input = new DataInputStream(new FileInputStream(file))
 
-        var classInfo = new ClassFile()
+        var classInfo = new ClassInfo()
         try {
             classInfo.deserialize(input)
         } finally {

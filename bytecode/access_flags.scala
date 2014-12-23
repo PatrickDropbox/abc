@@ -113,7 +113,7 @@ class FieldAccessFlags(o: FieldInfo) {
 }
 
 // see table 4.1-A / page 71-72
-class ClassAccessFlags(o: ClassFile) {
+class ClassAccessFlags(o: ClassInfo) {
 
     var _owner = o
 
