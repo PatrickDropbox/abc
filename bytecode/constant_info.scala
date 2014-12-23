@@ -695,9 +695,15 @@ class ConstInterfaceMethodRefInfo(
 }
 
 // see section 4.4.8 page 87-89
-class ConstMethodHandleInfo extends ConstInfo {
-    var referenceKind: Byte = 0
-    var reference: ConstRefInfo = null
+//
+// XXX: maybe subclass this by kind.  It's fuck up ...
+class ConstMethodHandleInfo(
+        kind: Byte,
+        ref: ConstRefInfo) extends ConstInfo {
+    def this() = this(0, null)
+
+    var _referenceKind: Byte = kind
+    var _reference: ConstRefInfo = ref
 
     // only used during deserialization
     var _tmpReferenceIndex = 0
@@ -706,42 +712,54 @@ class ConstMethodHandleInfo extends ConstInfo {
 
     def typeName(): String = "MethodHandle"
 
+    def referenceKind(): Byte = _referenceKind
+
+    def className(): String = _reference.className()
+
+    def referenceName(): String = _reference.referenceName()
+
+    def descriptorString(): String = _reference.descriptorString()
+
+    def fieldDescriptor(): FieldType = _reference.fieldDescriptor()
+
+    def methodDescriptor(): MethodType = _reference.methodDescriptor()
+
     override def _debugIndexValue(): String = {
-        return "" + referenceKind + " #" + reference.index
+        return "" + _referenceKind + " #" + _reference.index
     }
 
     def debugValue(): String = {
-        return "" + referenceKind + " " + reference.debugValue()
+        return "" + _referenceKind + " " + _reference.debugValue()
     }
 
     def serialize(output: DataOutputStream) {
         output.writeByte(tag())
-        output.writeByte(referenceKind)
-        output.writeShort(reference.index)
+        output.writeByte(_referenceKind)
+        output.writeShort(_reference.index)
     }
 
     def deserialize(parsedTag: Int, input: DataInputStream) {
         if (parsedTag != tag()) {
             throw new Exception("unexpected tag")
         }
-        referenceKind = input.readByte()
+        _referenceKind = input.readByte()
         _tmpReferenceIndex = input.readUnsignedShort()
     }
 
     def bindConstReferences(pool: ConstantPool) {
-        reference = pool.getRefByIndex(_tmpReferenceIndex)
+        _reference = pool.getRefByIndex(_tmpReferenceIndex)
     }
 
     def _compareTo(o: ConstInfo): Int = {
         o match {
             case other: ConstMethodHandleInfo => {
-                if (referenceKind < other.referenceKind) {
+                if (_referenceKind < other._referenceKind) {
                     return -1
                 }
-                if (referenceKind > other.referenceKind) {
+                if (_referenceKind > other._referenceKind) {
                     return 1
                 }
-                return reference.compareTo(other.reference)
+                return _reference.compareTo(other._reference)
             }
             case _ => throw new Exception("unexpected other type")
         }
