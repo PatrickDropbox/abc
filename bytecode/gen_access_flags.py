@@ -5,9 +5,10 @@ IMPORTS = [
         'scala.collection.JavaConversions._'
         ]
 
-# class name -> (comment, {name -> bit})
+# class name -> (owner type, comment, {name -> bit})
 ACCESS_FLAGS = {
         'ClassAccessFlags': (
+                'ClassFile',
                 'see table 4.1-A / page 71-72',
                 {
                     'public':     0x0001,
@@ -20,6 +21,7 @@ ACCESS_FLAGS = {
                     'enum':       0x4000,
                 }),
         'FieldAccessFlags': (
+                'FieldInfo',
                 'see table 4.5-A / page 90-91',
                 {
                     'public':    0x0001,
@@ -67,16 +69,21 @@ def main():
     write('')
     write('')
 
-    for className, (comment, nameBits) in ACCESS_FLAGS.items():
-        nameBits = nameBits.items()
-        nameBits.sort(key=lambda x: x[1])
+    for class_name, (owner_type, comment, name_bits) in ACCESS_FLAGS.items():
+        name_bits = name_bits.items()
+        name_bits.sort(key=lambda x: x[1])
 
         write('// %s' % comment)
-        write('class %s {' % className)
+        write('class %s(o: %s) {' % (class_name, owner_type))
         push()
 
+        # track owner
+        write('')
+        write('var _owner = o')
+        write('')
+
         # fields
-        for name, _ in nameBits:
+        for name, _ in name_bits:
             write('var is%s = false' % name.title())
         write('')
 
@@ -87,7 +94,7 @@ def main():
         write('var flagStrings = new Vector[String]()')
         write('')
 
-        for name, bit in nameBits:
+        for name, bit in name_bits:
             write('if (is%s) {' % name.title())
             push()
             write('flagStrings.add("%s")' % name.upper())
@@ -123,7 +130,7 @@ def main():
         write('var result = 0')
         write('')
 
-        for name, bit in nameBits:
+        for name, bit in name_bits:
             write('if (is%s) {' % name.title())
             push()
             write('result |= 0x%04x' % bit)
@@ -142,7 +149,7 @@ def main():
         push()
         write('val flags = input.readUnsignedShort()')
         write('')
-        for name, bit in nameBits:
+        for name, bit in name_bits:
             write('is%s = ((flags & 0x%04x) != 0)' % (name.title(), bit))
         pop()
         write('}')

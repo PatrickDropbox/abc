@@ -24,24 +24,28 @@ object Attribute {
 trait Attribute {
 }
 
-class ClassAttributes {
+class ClassAttributes(c: ClassFile) {
+    var _ownerClass = c
+
     def serialize(output: DataOutputStream) {
         // TODO
     }
 
-    def deserialize(input: DataInputStream, constants: ConstantPool) {
+    def deserialize(input: DataInputStream) {
         // TODO
-        Attribute.deserialize(input, constants)
+        Attribute.deserialize(input, _ownerClass.constants())
     }
 }
 
-class FieldAttributes {
+class FieldAttributes(f: FieldInfo) {
+    var _ownerField = f
+
     def serialize(output: DataOutputStream) {
         // TODO
     }
 
-    def deserialize(input: DataInputStream, constants: ConstantPool) {
+    def deserialize(input: DataInputStream) {
         // TODO
-        Attribute.deserialize(input, constants)
+        Attribute.deserialize(input, _ownerField._ownerClass.constants())
     }
 }

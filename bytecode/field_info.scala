@@ -2,14 +2,22 @@ import java.io.DataInputStream
 import java.io.DataOutputStream
 
 
-class FieldInfo {
-    var _access = new FieldAccessFlags()
-    var _name: ConstUtf8Info = null
+class FieldInfo(
+        c: ClassFile,
+        n: ConstUtf8Info,
+        s: ConstUtf8Info,
+        f: FieldType) {
+    def this(c: ClassFile) = this(c, null, null, null)
 
-    var _descriptorString: ConstUtf8Info = null
-    var _descriptor: FieldType = null
+    var _ownerClass = c
 
-    var _attributes = new FieldAttributes()
+    var _access = new FieldAccessFlags(this)
+    var _name: ConstUtf8Info = n
+
+    var _descriptorString: ConstUtf8Info = s
+    var _descriptor: FieldType = f
+
+    var _attributes = new FieldAttributes(this)
 
     def access(): FieldAccessFlags = _access
     def name(): String = _name.value()
@@ -32,6 +40,6 @@ class FieldInfo {
         var parser = new DescriptorParser(_descriptorString.value())
         _descriptor = parser.parseFieldDescriptor()
 
-        _attributes.deserialize(input, constants)
+        _attributes.deserialize(input)
     }
 }

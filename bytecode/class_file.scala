@@ -15,23 +15,32 @@ class ClassFile {
 
     var _constants = new ConstantPool()
 
-    var _access = new ClassAccessFlags()
+    var _access = new ClassAccessFlags(this)
 
     var _thisClass: ConstClassInfo = null  // the current class
-    var _superClass: ConstClassInfo = null  // null if Object; non-null otherwise
+    var _superClass: ConstClassInfo = null  // if null then Object
     var _interfaces = new Vector[ConstClassInfo]()
 
-    var _fields = new FieldPool(_constants)
+    var _fields = new FieldPool(this)
     var _methods = new MethodPool()
-    var _attributes = new ClassAttributes()
+    var _attributes = new ClassAttributes(this)
 
     def minorVersion(): Int = _minorVersion
     def majorVersion(): Int = _majorVersion
+
     def constants(): ConstantPool = _constants
+
     def access(): ClassAccessFlags = _access
-    def thisClass(): ConstClassInfo = _thisClass
-    def superClass(): ConstClassInfo = _superClass
+
+    def thisClassName(): String = _thisClass.className()
+    def superClassName(): String = {
+        if (_superClass == null) {
+            return null
+        }
+        return _superClass.className()
+    }
     def interfaces(): Vector[ConstClassInfo] = _interfaces
+
     def fields(): FieldPool = _fields
     def methods(): MethodPool = _methods
     def attribute(): ClassAttributes = _attributes
@@ -92,8 +101,8 @@ class ClassFile {
 
         _fields.deserialize(input)
         /* TODO
-        _methods.deserialize(input, _constants)
-        _attributes.deserialize(input, _constants)
+        _methods.deserialize(input)
+        _attributes.deserialize(input)
         */
     }
 }

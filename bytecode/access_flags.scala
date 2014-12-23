@@ -6,7 +6,10 @@ import scala.collection.JavaConversions._
 
 
 // see table 4.5-A / page 90-91
-class FieldAccessFlags {
+class FieldAccessFlags(o: FieldInfo) {
+
+    var _owner = o
+
     var isPublic = false
     var isPrivate = false
     var isProtected = false
@@ -110,7 +113,10 @@ class FieldAccessFlags {
 }
 
 // see table 4.1-A / page 71-72
-class ClassAccessFlags {
+class ClassAccessFlags(o: ClassFile) {
+
+    var _owner = o
+
     var isPublic = false
     var isFinal = false
     var isSuper = false
