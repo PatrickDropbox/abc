@@ -44,7 +44,62 @@ class UnsupportedAttribute(
         input.readFully(_bytes)
     }
 
-    def debugString(indent: String): String = indent + name + " (Unsupported)"
+    def debugString(indent: String): String = indent + name() + " (Unsupported)"
+}
+
+class SourceFileAttribute(
+        o: AttributeOwner,
+        n: ConstUtf8Info) extends Attribute(
+                o,
+                o.constants().getUtf8("SourceFile")) {
+    def this(o: AttributeOwner) = this(o, null)
+
+    var _sourceFile: ConstUtf8Info = n
+
+    def sourceFile(): String = _sourceFile.value()
+
+    def serialize(output: DataOutputStream) {
+        output.writeShort(_name.index)
+        output.writeInt(2)
+        output.writeShort(_sourceFile.index)
+    }
+
+    def deserialize(n: ConstUtf8Info, attrLength: Int, input: DataInputStream) {
+        if (n.compareTo(_name) != 0) {
+            throw new Exception("Unexpected attribute name: " + n.value())
+        }
+        if (attrLength != 2) {
+            throw new Exception("Unexpected attribute length")
+        }
+        _sourceFile = _owner.constants().getUtf8ByIndex(
+                input.readUnsignedShort())
+    }
+
+    def debugString(indent: String): String = {
+        return indent + name() + ": " + sourceFile()
+    }
+}
+
+class DeprecatedAttribute(
+        o: AttributeOwner) extends Attribute(
+                o,
+                o.constants().getUtf8("Deprecated")) {
+
+    def serialize(output: DataOutputStream) {
+        output.writeShort(_name.index)
+        output.writeInt(0)
+    }
+
+    def deserialize(n: ConstUtf8Info, attrLength: Int, input: DataInputStream) {
+        if (n.compareTo(_name) != 0) {
+            throw new Exception("Unexpected attribute name: " + n.value())
+        }
+        if (attrLength != 0) {
+            throw new Exception("Unexpected attribute length")
+        }
+    }
+
+    def debugString(indent: String): String = indent + "Deprecated"
 }
 
 abstract class AttributeGroup(o: AttributeOwner) {
@@ -88,6 +143,9 @@ abstract class AttributeGroup(o: AttributeOwner) {
             val name = _owner.constants().getUtf8ByIndex(
                     inputStream.readUnsignedShort())
             var attr = name.value() match {
+                // TODO
+                case "Deprecated" => new DeprecatedAttribute(_owner)
+                case "SourceFile" => new SourceFileAttribute(_owner)
                 case _ => new UnsupportedAttribute(_owner)
             }
 
@@ -102,10 +160,43 @@ abstract class AttributeGroup(o: AttributeOwner) {
 }
 
 class ClassAttributes(c: ClassInfo) extends AttributeGroup(c) {
+    var _sourceFile: SourceFileAttribute = null
+    var _deprecated: DeprecatedAttribute = null
+
+    def sourceFile(): String = {
+        if (_sourceFile == null) {
+            return null
+        }
+        return _sourceFile.sourceFile()
+    }
+
+    def setSourceFile(s: String) {
+        _sourceFile = new SourceFileAttribute(
+                _owner,
+                _owner.constants().getUtf8(s))
+    }
+
+    def isDeprecated(): Boolean = _deprecated != null
+    def setIsDeprecated(b: Boolean) {
+        if (b) {
+            _deprecated = new DeprecatedAttribute(_owner)
+        } else {
+            _deprecated = null
+        }
+    }
+
     def allAttributes(): Vector[Attribute] = {
         var allAttributes = new Vector[Attribute]()
 
         // TODO
+
+        if (_sourceFile != null) {
+            allAttributes.add(_sourceFile)
+        }
+
+        if (_deprecated != null) {
+            allAttributes.add(_deprecated)
+        }
 
         for (attr <- _unsupported) {
             allAttributes.add(attr)
@@ -115,22 +206,39 @@ class ClassAttributes(c: ClassInfo) extends AttributeGroup(c) {
     }
 
     def deserialize(input: DataInputStream) {
-        for (attr <- _readAttributes(input)) {
-            attr match {
+        for (a <- _readAttributes(input)) {
+            a match {
                 // TODO
-                case u: UnsupportedAttribute => _unsupported.add(u)
+                case attr: DeprecatedAttribute => _deprecated = attr
+                case attr: SourceFileAttribute => _sourceFile = attr
+                case attr: UnsupportedAttribute => _unsupported.add(attr)
                 case _ => throw new Exception(
-                        "Unexpected class attribute: " + attr.name())
+                        "Unexpected class attribute: " + a.name())
             }
         }
     }
 }
 
 class FieldAttributes(f: FieldInfo) extends AttributeGroup(f) {
+    var _deprecated: DeprecatedAttribute = null
+
+    def isDeprecated(): Boolean = _deprecated != null
+    def setIsDeprecated(b: Boolean) {
+        if (b) {
+            _deprecated = new DeprecatedAttribute(_owner)
+        } else {
+            _deprecated = null
+        }
+    }
+
     def allAttributes(): Vector[Attribute] = {
         var allAttributes = new Vector[Attribute]()
 
         // TODO
+
+        if (_deprecated != null) {
+            allAttributes.add(_deprecated)
+        }
 
         for (attr <- _unsupported) {
             allAttributes.add(attr)
@@ -140,22 +248,38 @@ class FieldAttributes(f: FieldInfo) extends AttributeGroup(f) {
     }
 
     def deserialize(input: DataInputStream) {
-        for (attr <- _readAttributes(input)) {
-            attr match {
+        for (a <- _readAttributes(input)) {
+            a match {
                 // TODO
-                case u: UnsupportedAttribute => _unsupported.add(u)
+                case attr: DeprecatedAttribute => _deprecated = attr
+                case attr: UnsupportedAttribute => _unsupported.add(attr)
                 case _ => throw new Exception(
-                        "Unexpected class attribute: " + attr.name())
+                        "Unexpected class attribute: " + a.name())
             }
         }
     }
 }
 
 class MethodAttributes(m: MethodInfo) extends AttributeGroup(m) {
+    var _deprecated: DeprecatedAttribute = null
+
+    def isDeprecated(): Boolean = _deprecated != null
+    def setIsDeprecated(b: Boolean) {
+        if (b) {
+            _deprecated = new DeprecatedAttribute(_owner)
+        } else {
+            _deprecated = null
+        }
+    }
+
     def allAttributes(): Vector[Attribute] = {
         var allAttributes = new Vector[Attribute]()
 
         // TODO
+
+        if (_deprecated != null) {
+            allAttributes.add(_deprecated)
+        }
 
         for (attr <- _unsupported) {
             allAttributes.add(attr)
@@ -165,13 +289,16 @@ class MethodAttributes(m: MethodInfo) extends AttributeGroup(m) {
     }
 
     def deserialize(input: DataInputStream) {
-        for (attr <- _readAttributes(input)) {
-            attr match {
+        for (a <- _readAttributes(input)) {
+            a match {
                 // TODO
-                case u: UnsupportedAttribute => _unsupported.add(u)
+                case attr: DeprecatedAttribute => _deprecated = attr
+                case attr: UnsupportedAttribute => _unsupported.add(attr)
                 case _ => throw new Exception(
-                        "Unexpected class attribute: " + attr.name())
+                        "Unexpected class attribute: " + a.name())
             }
         }
     }
 }
+
+// TODO code attributes

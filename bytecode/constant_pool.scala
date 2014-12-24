@@ -18,7 +18,6 @@ class ConstantPool(owner: ClassInfo) {
     var _tmpConstInfosByIndex: TreeMap[Int, ConstInfo] = null
 
     def _get[T <: ConstInfo: ClassTag](info: T): T = {
-        _tmpConstInfosByIndex = null
         if (_constInfos.containsKey(info)) {
             val cls = implicitly[ClassTag[T]].runtimeClass
             _constInfos.get(info) match {
@@ -26,6 +25,10 @@ class ConstantPool(owner: ClassInfo) {
                 case _ => throw new Exception("unexpected const info type")
             }
         }
+
+        // invalidate only when we actually mutated the pool.
+        _tmpConstInfosByIndex = null
+
         _constInfos.put(info, info)
         return info
     }
