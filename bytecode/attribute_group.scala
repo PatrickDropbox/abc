@@ -49,6 +49,7 @@ abstract class AttributeGroup(o: AttributeOwner) {
                 // TODO
                 case "Deprecated" => new DeprecatedAttribute(_owner)
                 case "SourceFile" => new SourceFileAttribute(_owner)
+                case "Synthetic" => new SyntheticAttribute(_owner)
                 case _ => new UnsupportedAttribute(_owner)
             }
 
@@ -65,6 +66,7 @@ abstract class AttributeGroup(o: AttributeOwner) {
 class ClassAttributes(c: ClassInfo) extends AttributeGroup(c) {
     var _sourceFile: SourceFileAttribute = null
     var _deprecated: DeprecatedAttribute = null
+    var _synthetic: SyntheticAttribute = null
 
     def sourceFile(): String = {
         if (_sourceFile == null) {
@@ -88,6 +90,15 @@ class ClassAttributes(c: ClassInfo) extends AttributeGroup(c) {
         }
     }
 
+    def isSynthetic(): Boolean = _synthetic != null
+    def setIsSynthetic(b: Boolean) {
+        if (b) {
+            _synthetic = new SyntheticAttribute(_owner)
+        } else {
+            _synthetic = null
+        }
+    }
+
     def allAttributes(): Vector[Attribute] = {
         var allAttributes = new Vector[Attribute]()
 
@@ -96,9 +107,11 @@ class ClassAttributes(c: ClassInfo) extends AttributeGroup(c) {
         if (_sourceFile != null) {
             allAttributes.add(_sourceFile)
         }
-
         if (_deprecated != null) {
             allAttributes.add(_deprecated)
+        }
+        if (_synthetic != null) {
+            allAttributes.add(_synthetic)
         }
 
         for (attr <- _unsupported) {
@@ -114,6 +127,7 @@ class ClassAttributes(c: ClassInfo) extends AttributeGroup(c) {
                 // TODO
                 case attr: DeprecatedAttribute => _deprecated = attr
                 case attr: SourceFileAttribute => _sourceFile = attr
+                case attr: SyntheticAttribute => _synthetic = attr
                 case attr: UnsupportedAttribute => _unsupported.add(attr)
                 case _ => throw new Exception(
                         "Unexpected class attribute: " + a.name())
@@ -124,6 +138,7 @@ class ClassAttributes(c: ClassInfo) extends AttributeGroup(c) {
 
 class FieldAttributes(f: FieldInfo) extends AttributeGroup(f) {
     var _deprecated: DeprecatedAttribute = null
+    var _synthetic: SyntheticAttribute = null
 
     def isDeprecated(): Boolean = _deprecated != null
     def setIsDeprecated(b: Boolean) {
@@ -134,6 +149,15 @@ class FieldAttributes(f: FieldInfo) extends AttributeGroup(f) {
         }
     }
 
+    def isSynthetic(): Boolean = _synthetic != null
+    def setIsSynthetic(b: Boolean) {
+        if (b) {
+            _synthetic = new SyntheticAttribute(_owner)
+        } else {
+            _synthetic = null
+        }
+    }
+
     def allAttributes(): Vector[Attribute] = {
         var allAttributes = new Vector[Attribute]()
 
@@ -141,6 +165,9 @@ class FieldAttributes(f: FieldInfo) extends AttributeGroup(f) {
 
         if (_deprecated != null) {
             allAttributes.add(_deprecated)
+        }
+        if (_synthetic != null) {
+            allAttributes.add(_synthetic)
         }
 
         for (attr <- _unsupported) {
@@ -155,6 +182,7 @@ class FieldAttributes(f: FieldInfo) extends AttributeGroup(f) {
             a match {
                 // TODO
                 case attr: DeprecatedAttribute => _deprecated = attr
+                case attr: SyntheticAttribute => _synthetic = attr
                 case attr: UnsupportedAttribute => _unsupported.add(attr)
                 case _ => throw new Exception(
                         "Unexpected class attribute: " + a.name())
@@ -165,6 +193,7 @@ class FieldAttributes(f: FieldInfo) extends AttributeGroup(f) {
 
 class MethodAttributes(m: MethodInfo) extends AttributeGroup(m) {
     var _deprecated: DeprecatedAttribute = null
+    var _synthetic: SyntheticAttribute = null
 
     def isDeprecated(): Boolean = _deprecated != null
     def setIsDeprecated(b: Boolean) {
@@ -175,6 +204,15 @@ class MethodAttributes(m: MethodInfo) extends AttributeGroup(m) {
         }
     }
 
+    def isSynthetic(): Boolean = _synthetic != null
+    def setIsSynthetic(b: Boolean) {
+        if (b) {
+            _synthetic = new SyntheticAttribute(_owner)
+        } else {
+            _synthetic = null
+        }
+    }
+
     def allAttributes(): Vector[Attribute] = {
         var allAttributes = new Vector[Attribute]()
 
@@ -182,6 +220,9 @@ class MethodAttributes(m: MethodInfo) extends AttributeGroup(m) {
 
         if (_deprecated != null) {
             allAttributes.add(_deprecated)
+        }
+        if (_synthetic != null) {
+            allAttributes.add(_synthetic)
         }
 
         for (attr <- _unsupported) {
@@ -196,6 +237,7 @@ class MethodAttributes(m: MethodInfo) extends AttributeGroup(m) {
             a match {
                 // TODO
                 case attr: DeprecatedAttribute => _deprecated = attr
+                case attr: SyntheticAttribute => _synthetic = attr
                 case attr: UnsupportedAttribute => _unsupported.add(attr)
                 case _ => throw new Exception(
                         "Unexpected class attribute: " + a.name())

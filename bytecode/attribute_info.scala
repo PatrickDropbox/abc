@@ -102,3 +102,25 @@ class DeprecatedAttribute(
     def debugString(indent: String): String = indent + "Deprecated"
 }
 
+class SyntheticAttribute(
+        o: AttributeOwner) extends Attribute(
+                o,
+                o.constants().getUtf8("Synthetic")) {
+
+    def serialize(output: DataOutputStream) {
+        output.writeShort(_name.index)
+        output.writeInt(0)
+    }
+
+    def deserialize(n: ConstUtf8Info, attrLength: Int, input: DataInputStream) {
+        if (n.compareTo(_name) != 0) {
+            throw new Exception("Unexpected attribute name: " + n.value())
+        }
+        if (attrLength != 0) {
+            throw new Exception("Unexpected attribute length")
+        }
+    }
+
+    def debugString(indent: String): String = indent + "Synthetic"
+}
+
