@@ -47,21 +47,47 @@ class UnsupportedAttribute(
     def debugString(indent: String): String = indent + name() + " (Unsupported)"
 }
 
-class SourceFileAttribute(
-        o: AttributeOwner,
-        n: ConstUtf8Info) extends Attribute(
+class NoValueAttribute(
+        attributeName: String,
+        o: AttributeOwner) extends Attribute(
                 o,
-                o.constants().getUtf8("SourceFile")) {
-    def this(o: AttributeOwner) = this(o, null)
+                o.constants().getUtf8(attributeName)) {
 
-    var _sourceFile: ConstUtf8Info = n
+    def serialize(output: DataOutputStream) {
+        output.writeShort(_name.index)
+        output.writeInt(0)
+    }
 
-    def sourceFile(): String = _sourceFile.value()
+    def deserialize(n: ConstUtf8Info, attrLength: Int, input: DataInputStream) {
+        if (n.compareTo(_name) != 0) {
+            throw new Exception("Unexpected attribute name: " + n.value())
+        }
+        if (attrLength != 0) {
+            throw new Exception("Unexpected attribute length")
+        }
+    }
+
+    def debugString(indent: String): String = indent + name()
+}
+
+class StringValueAttribute(
+        attributeName: String,
+        o: AttributeOwner,
+        v: String) extends Attribute(
+                o,
+                o.constants().getUtf8(attributeName)) {
+
+    var _value: ConstUtf8Info = null
+    if (v != null) {
+        _value = _owner.constants().getUtf8(v)
+    }
+
+    def value(): String = _value.value()
 
     def serialize(output: DataOutputStream) {
         output.writeShort(_name.index)
         output.writeInt(2)
-        output.writeShort(_sourceFile.index)
+        output.writeShort(_value.index)
     }
 
     def deserialize(n: ConstUtf8Info, attrLength: Int, input: DataInputStream) {
@@ -71,56 +97,33 @@ class SourceFileAttribute(
         if (attrLength != 2) {
             throw new Exception("Unexpected attribute length")
         }
-        _sourceFile = _owner.constants().getUtf8ByIndex(
+        _value = _owner.constants().getUtf8ByIndex(
                 input.readUnsignedShort())
     }
 
     def debugString(indent: String): String = {
-        return indent + name() + ": " + sourceFile()
+        return indent + name() + ": " + value()
     }
+}
+
+class SourceFileAttribute(
+        o: AttributeOwner,
+        n: String) extends StringValueAttribute("SourceFile", o, n) {
+    def this(o: AttributeOwner) = this(o, null)
+}
+
+// see page 118-123 for signature syntax
+class SignatureAttribute(
+        o: AttributeOwner,
+        n: String) extends StringValueAttribute("SourceFile", o, n) {
+    def this(o: AttributeOwner) = this(o, null)
 }
 
 class DeprecatedAttribute(
-        o: AttributeOwner) extends Attribute(
-                o,
-                o.constants().getUtf8("Deprecated")) {
-
-    def serialize(output: DataOutputStream) {
-        output.writeShort(_name.index)
-        output.writeInt(0)
-    }
-
-    def deserialize(n: ConstUtf8Info, attrLength: Int, input: DataInputStream) {
-        if (n.compareTo(_name) != 0) {
-            throw new Exception("Unexpected attribute name: " + n.value())
-        }
-        if (attrLength != 0) {
-            throw new Exception("Unexpected attribute length")
-        }
-    }
-
-    def debugString(indent: String): String = indent + "Deprecated"
+        o: AttributeOwner) extends NoValueAttribute("Deprecated", o) {
 }
 
 class SyntheticAttribute(
-        o: AttributeOwner) extends Attribute(
-                o,
-                o.constants().getUtf8("Synthetic")) {
-
-    def serialize(output: DataOutputStream) {
-        output.writeShort(_name.index)
-        output.writeInt(0)
-    }
-
-    def deserialize(n: ConstUtf8Info, attrLength: Int, input: DataInputStream) {
-        if (n.compareTo(_name) != 0) {
-            throw new Exception("Unexpected attribute name: " + n.value())
-        }
-        if (attrLength != 0) {
-            throw new Exception("Unexpected attribute length")
-        }
-    }
-
-    def debugString(indent: String): String = indent + "Synthetic"
+        o: AttributeOwner) extends NoValueAttribute("Synthetic", o) {
 }
 

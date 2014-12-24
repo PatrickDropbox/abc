@@ -48,6 +48,7 @@ abstract class AttributeGroup(o: AttributeOwner) {
             var attr = name.value() match {
                 // TODO
                 case "Deprecated" => new DeprecatedAttribute(_owner)
+                case "Signature" => new SignatureAttribute(_owner)
                 case "SourceFile" => new SourceFileAttribute(_owner)
                 case "Synthetic" => new SyntheticAttribute(_owner)
                 case _ => new UnsupportedAttribute(_owner)
@@ -65,6 +66,7 @@ abstract class AttributeGroup(o: AttributeOwner) {
 
 class ClassAttributes(c: ClassInfo) extends AttributeGroup(c) {
     var _sourceFile: SourceFileAttribute = null
+    var _signature: SignatureAttribute = null
     var _deprecated: DeprecatedAttribute = null
     var _synthetic: SyntheticAttribute = null
 
@@ -72,13 +74,28 @@ class ClassAttributes(c: ClassInfo) extends AttributeGroup(c) {
         if (_sourceFile == null) {
             return null
         }
-        return _sourceFile.sourceFile()
+        return _sourceFile.value()
+    }
+    def setSourceFile(s: String) {
+        if (s == null) {
+            _sourceFile = null
+        } else {
+            _sourceFile = new SourceFileAttribute(_owner, s)
+        }
     }
 
-    def setSourceFile(s: String) {
-        _sourceFile = new SourceFileAttribute(
-                _owner,
-                _owner.constants().getUtf8(s))
+    def signature(): String = {
+        if (_signature == null) {
+            return null
+        }
+        return _signature.value()
+    }
+    def setSignature(s: String) {
+        if (s == null) {
+            _signature = null
+        } else {
+            _signature = new SignatureAttribute(_owner, s)
+        }
     }
 
     def isDeprecated(): Boolean = _deprecated != null
@@ -107,6 +124,9 @@ class ClassAttributes(c: ClassInfo) extends AttributeGroup(c) {
         if (_sourceFile != null) {
             allAttributes.add(_sourceFile)
         }
+        if (_signature != null) {
+            allAttributes.add(_signature)
+        }
         if (_deprecated != null) {
             allAttributes.add(_deprecated)
         }
@@ -125,9 +145,30 @@ class ClassAttributes(c: ClassInfo) extends AttributeGroup(c) {
         for (a <- _readAttributes(input)) {
             a match {
                 // TODO
-                case attr: DeprecatedAttribute => _deprecated = attr
-                case attr: SourceFileAttribute => _sourceFile = attr
-                case attr: SyntheticAttribute => _synthetic = attr
+                case attr: DeprecatedAttribute => {
+                    if (_deprecated != null) {
+                        throw new Exception("multiple deprecated attribute")
+                    }
+                    _deprecated = attr
+                }
+                case attr: SignatureAttribute => {
+                    if (_signature != null) {
+                        throw new Exception("multiple signature attribute")
+                    }
+                    _signature = attr
+                }
+                case attr: SourceFileAttribute => {
+                    if (_sourceFile != null) {
+                        throw new Exception("multiple sourceFile attribute")
+                    }
+                    _sourceFile = attr
+                }
+                case attr: SyntheticAttribute => {
+                    if (_synthetic != null) {
+                        throw new Exception("multiple synthetic attribute")
+                    }
+                    _synthetic = attr
+                }
                 case attr: UnsupportedAttribute => _unsupported.add(attr)
                 case _ => throw new Exception(
                         "Unexpected class attribute: " + a.name())
@@ -137,8 +178,23 @@ class ClassAttributes(c: ClassInfo) extends AttributeGroup(c) {
 }
 
 class FieldAttributes(f: FieldInfo) extends AttributeGroup(f) {
+    var _signature: SignatureAttribute = null
     var _deprecated: DeprecatedAttribute = null
     var _synthetic: SyntheticAttribute = null
+
+    def signature(): String = {
+        if (_signature == null) {
+            return null
+        }
+        return _signature.value()
+    }
+    def setSignature(s: String) {
+        if (s == null) {
+            _signature = null
+        } else {
+            _signature = new SignatureAttribute(_owner, s)
+        }
+    }
 
     def isDeprecated(): Boolean = _deprecated != null
     def setIsDeprecated(b: Boolean) {
@@ -163,6 +219,9 @@ class FieldAttributes(f: FieldInfo) extends AttributeGroup(f) {
 
         // TODO
 
+        if (_signature != null) {
+            allAttributes.add(_signature)
+        }
         if (_deprecated != null) {
             allAttributes.add(_deprecated)
         }
@@ -181,9 +240,24 @@ class FieldAttributes(f: FieldInfo) extends AttributeGroup(f) {
         for (a <- _readAttributes(input)) {
             a match {
                 // TODO
-                case attr: DeprecatedAttribute => _deprecated = attr
-                case attr: SyntheticAttribute => _synthetic = attr
-                case attr: UnsupportedAttribute => _unsupported.add(attr)
+                case attr: DeprecatedAttribute => {
+                    if (_deprecated != null) {
+                        throw new Exception("multiple deprecated attribute")
+                    }
+                    _deprecated = attr
+                }
+                case attr: SignatureAttribute => {
+                    if (_signature != null) {
+                        throw new Exception("multiple signature attribute")
+                    }
+                    _signature = attr
+                }
+                case attr: SyntheticAttribute => {
+                    if (_synthetic != null) {
+                        throw new Exception("multiple synthetic attribute")
+                    }
+                    _synthetic = attr
+                }
                 case _ => throw new Exception(
                         "Unexpected class attribute: " + a.name())
             }
@@ -192,8 +266,23 @@ class FieldAttributes(f: FieldInfo) extends AttributeGroup(f) {
 }
 
 class MethodAttributes(m: MethodInfo) extends AttributeGroup(m) {
+    var _signature: SignatureAttribute = null
     var _deprecated: DeprecatedAttribute = null
     var _synthetic: SyntheticAttribute = null
+
+    def signature(): String = {
+        if (_signature == null) {
+            return null
+        }
+        return _signature.value()
+    }
+    def setSignature(s: String) {
+        if (s == null) {
+            _signature = null
+        } else {
+            _signature = new SignatureAttribute(_owner, s)
+        }
+    }
 
     def isDeprecated(): Boolean = _deprecated != null
     def setIsDeprecated(b: Boolean) {
@@ -218,6 +307,9 @@ class MethodAttributes(m: MethodInfo) extends AttributeGroup(m) {
 
         // TODO
 
+        if (_signature != null) {
+            allAttributes.add(_signature)
+        }
         if (_deprecated != null) {
             allAttributes.add(_deprecated)
         }
@@ -236,9 +328,24 @@ class MethodAttributes(m: MethodInfo) extends AttributeGroup(m) {
         for (a <- _readAttributes(input)) {
             a match {
                 // TODO
-                case attr: DeprecatedAttribute => _deprecated = attr
-                case attr: SyntheticAttribute => _synthetic = attr
-                case attr: UnsupportedAttribute => _unsupported.add(attr)
+                case attr: DeprecatedAttribute => {
+                    if (_deprecated != null) {
+                        throw new Exception("multiple deprecated attribute")
+                    }
+                    _deprecated = attr
+                }
+                case attr: SignatureAttribute => {
+                    if (_signature != null) {
+                        throw new Exception("multiple signature attribute")
+                    }
+                    _signature = attr
+                }
+                case attr: SyntheticAttribute => {
+                    if (_synthetic != null) {
+                        throw new Exception("multiple synthetic attribute")
+                    }
+                    _synthetic = attr
+                }
                 case _ => throw new Exception(
                         "Unexpected class attribute: " + a.name())
             }
