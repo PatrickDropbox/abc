@@ -44,7 +44,7 @@ class ClassInfo extends AttributeOwner {
 
     def fields(): FieldPool = _fields
     def methods(): MethodPool = _methods
-    def attribute(): ClassAttributes = _attributes
+    def attributes(): ClassAttributes = _attributes
 
     def serialize(output: DataOutputStream) {
         output.writeInt(ClassInfo.MAGIC)

@@ -23,27 +23,34 @@ object Javap {
         }
 
         println("Classfile " + file.getAbsolutePath())
-        println("  minor version: " + classInfo.minorVersion())
-        println("  major version: " + classInfo.majorVersion())
-        println("  flags: " + classInfo.access.debugString())
+        println("  Minor version: " + classInfo.minorVersion())
+        println("  Major version: " + classInfo.majorVersion())
+        println("  Flags: " + classInfo.access.debugString())
+
+        println("\nAttributes:")
+        println(classInfo.attributes().debugString("  "))
 
         println("Constants:")
         for (info <- classInfo.constants()._tmpConstInfosByIndex.values()) {
             println(info.debugString())
         }
 
-        println("Fields:")
+        println("\nFields:")
         for (field <- classInfo.fields.fields()) {
             println("  " + field.name())
-            println("    type: " + field.descriptor().descriptorString())
-            println("    flags: " + field.access().debugString())
+            println("    Type: " + field.descriptor().descriptorString())
+            println("    Flags: " + field.access().debugString())
+            println("    Attributes:")
+            println(field.attributes().debugString("      "))
         }
 
         println("Methods:")
         for (method <- classInfo.methods.methods()) {
             println("  " + method.name())
-            println("    type: " + method.descriptorString())
-            println("    flags: " + method.access().debugString())
+            println("    Type: " + method.descriptorString())
+            println("    Flags: " + method.access().debugString())
+            println("    Attributes:")
+            println(method.attributes().debugString("      "))
         }
     }
 }
