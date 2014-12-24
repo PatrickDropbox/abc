@@ -80,7 +80,7 @@ abstract class AttributeGroup(o: AttributeOwner) {
         }
     }
 
-    def _parse(inputStream: DataInputStream): Vector[Attribute] = {
+    def _readAttributes(inputStream: DataInputStream): Vector[Attribute] = {
         var attributes = new Vector[Attribute]()
 
         val attrCount = inputStream.readUnsignedShort()
@@ -115,7 +115,7 @@ class ClassAttributes(c: ClassInfo) extends AttributeGroup(c) {
     }
 
     def deserialize(input: DataInputStream) {
-        for (attr <- _parse(input)) {
+        for (attr <- _readAttributes(input)) {
             attr match {
                 // TODO
                 case u: UnsupportedAttribute => _unsupported.add(u)
@@ -140,7 +140,7 @@ class FieldAttributes(f: FieldInfo) extends AttributeGroup(f) {
     }
 
     def deserialize(input: DataInputStream) {
-        for (attr <- _parse(input)) {
+        for (attr <- _readAttributes(input)) {
             attr match {
                 // TODO
                 case u: UnsupportedAttribute => _unsupported.add(u)
@@ -165,7 +165,7 @@ class MethodAttributes(m: MethodInfo) extends AttributeGroup(m) {
     }
 
     def deserialize(input: DataInputStream) {
-        for (attr <- _parse(input)) {
+        for (attr <- _readAttributes(input)) {
             attr match {
                 // TODO
                 case u: UnsupportedAttribute => _unsupported.add(u)
