@@ -100,9 +100,7 @@ class ClassInfo extends AttributeOwner {
         }
 
         _fields.deserialize(input)
-        /* TODO
         _methods.deserialize(input)
         _attributes.deserialize(input)
-        */
     }
 }

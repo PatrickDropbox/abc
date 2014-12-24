@@ -1,5 +1,6 @@
 import java.io.DataInputStream
 import java.io.DataOutputStream
+import java.util.Collection
 import java.util.HashMap
 import java.util.TreeMap
 import java.util.TreeSet
@@ -48,11 +49,29 @@ class MethodPool(c: ClassInfo) {
         return method
     }
 
-    def serialize(output: DataOutputStream) {
-        // TODO
+    def getByName(name: String): TreeSet[MethodInfo] = {
+        val methods = _methodsByName.get(name)
+        if (methods == null) {
+            throw new Exception("method name not found: " + name)
+        }
+        return methods
     }
 
-    def deserialize(input: DataInputStream, constants: ConstantPool) {
-        // TODO
+    def methods(): Collection[MethodInfo] = _methods.values()
+
+    def serialize(output: DataOutputStream) {
+        output.writeShort(_methods.size())
+        for (method <- _methods.values()) {
+            method.serialize(output)
+        }
+    }
+
+    def deserialize(input: DataInputStream) {
+        val methodCount = input.readUnsignedShort()
+        for (_ <- 1 to methodCount) {
+            var method = new MethodInfo(_owner)
+            method.deserialize(input)
+            _add(method)
+        }
     }
 }

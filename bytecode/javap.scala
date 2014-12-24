@@ -31,11 +31,19 @@ object Javap {
         for (info <- classInfo.constants()._tmpConstInfosByIndex.values()) {
             println(info.debugString())
         }
+
         println("Fields:")
         for (field <- classInfo.fields.fields()) {
             println("  " + field.name())
             println("    type: " + field.descriptor().descriptorString())
             println("    flags: " + field.access().debugString())
+        }
+
+        println("Methods:")
+        for (method <- classInfo.methods.methods()) {
+            println("  " + method.name())
+            println("    type: " + method.descriptorString())
+            println("    flags: " + method.access().debugString())
         }
     }
 }

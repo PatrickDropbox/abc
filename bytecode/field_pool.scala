@@ -15,17 +15,20 @@ class FieldPool(c: ClassInfo) {
 
     def fields(): Collection[FieldInfo] = _fields.values()
 
-    def add(name: String, fieldType: FieldType): FieldInfo = {
-        if (_fields.containsKey(name)) {
-            throw new Exception("adding duplicate field: " + name)
+    def _add(field: FieldInfo) {
+        if (_fields.containsKey(field.name())) {
+            throw new Exception("adding duplicate field: " + field.name())
         }
-        _fields.put(
-                name,
-                new FieldInfo(
-                        _owner,
-                        _constants.getUtf8(name),
-                        _constants.getUtf8(fieldType.descriptorString()),
-                        fieldType))
+        _fields.put(field.name(), field)
+    }
+
+    def add(name: String, fieldType: FieldType): FieldInfo = {
+        val field = new FieldInfo(
+                _owner,
+                _constants.getUtf8(name),
+                fieldType)
+        _add(field)
+        return field
     }
 
     def get(name: String): FieldInfo = {
@@ -52,10 +55,7 @@ class FieldPool(c: ClassInfo) {
         for (i <- 1 to fieldCount) {
             var field = new FieldInfo(_owner)
             field.deserialize(input, _constants)
-            if (_fields.containsKey(field.name())) {
-                throw new Exception("duplicate field name: " + field.name())
-            }
-            _fields.put(field.name(), field)
+            _add(field)
         }
     }
 }

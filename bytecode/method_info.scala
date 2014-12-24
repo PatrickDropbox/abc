@@ -70,11 +70,12 @@ class MethodInfo(
         _attributes.serialize(output)
     }
 
-    def deserialize(input: DataInputStream, constants: ConstantPool) {
+    def deserialize(input: DataInputStream) {
         _access.deserialize(input)
-        _name = constants.getUtf8ByIndex(input.readUnsignedShort())
+        _name = constants().getUtf8ByIndex(input.readUnsignedShort())
 
-        _descriptorString = constants.getUtf8ByIndex(input.readUnsignedShort())
+        _descriptorString = constants().getUtf8ByIndex(
+                input.readUnsignedShort())
         var parser = new DescriptorParser(_descriptorString.value())
         _descriptor = parser.parseMethodDescriptor()
 
