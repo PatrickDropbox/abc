@@ -2,6 +2,7 @@ import java.io.ByteArrayOutputStream
 import java.io.DataInputStream
 import java.io.DataOutputStream
 import java.util.HashMap
+import java.util.Vector
 
 
 object ConstInfo {
@@ -22,33 +23,39 @@ object ConstInfo {
     val INVOKE_DYNAMIC = 18
 
     // tag -> order
-    var tagTopoOrder = new HashMap[Int, Int]()
+    var tagTopoOrder = new Vector[Int]()
 
     // no dependencies
-    tagTopoOrder.put(UTF8, 0)
-    tagTopoOrder.put(INTEGER, 1)
-    tagTopoOrder.put(LONG, 2)
-    tagTopoOrder.put(FLOAT, 3)
-    tagTopoOrder.put(DOUBLE, 4)
+    tagTopoOrder.add(UTF8)
+    tagTopoOrder.add(INTEGER)
+    tagTopoOrder.add(LONG)
+    tagTopoOrder.add(FLOAT)
+    tagTopoOrder.add(DOUBLE)
     // depends on utf8
-    tagTopoOrder.put(STRING, 5)
-    tagTopoOrder.put(CLASS, 6)
-    tagTopoOrder.put(METHOD_TYPE, 7)
-    tagTopoOrder.put(NAME_AND_TYPE, 8)
+    tagTopoOrder.add(STRING)
+    tagTopoOrder.add(CLASS)
+    tagTopoOrder.add(METHOD_TYPE)
+    tagTopoOrder.add(NAME_AND_TYPE)
     // depends on class / name and type
-    tagTopoOrder.put(FIELD_REF, 9)
-    tagTopoOrder.put(METHOD_REF, 10)
-    tagTopoOrder.put(INTERFACE_METHOD_REF, 11)
+    tagTopoOrder.add(FIELD_REF)
+    tagTopoOrder.add(METHOD_REF)
+    tagTopoOrder.add(INTERFACE_METHOD_REF)
     // depends on ref infos
-    tagTopoOrder.put(METHOD_HANDLE, 12)
+    tagTopoOrder.add(METHOD_HANDLE)
     // depends on (external attribute) bootstrap method index
-    tagTopoOrder.put(INVOKE_DYNAMIC, 13)
+    tagTopoOrder.add(INVOKE_DYNAMIC)
+
+    var tagTopoOrderMap = new HashMap[Int, Int]()
+
+    for (i <- 0 to (tagTopoOrder.size() - 1)) {
+        tagTopoOrderMap.put(tagTopoOrder.elementAt(i), i)
+    }
 
     def tagOrder(tag: Int): Int = {
-        if (!tagTopoOrder.containsKey(tag)) {
+        if (!tagTopoOrderMap.containsKey(tag)) {
             throw new Exception("Unknown tag type: " + tag)
         }
-        return tagTopoOrder.get(tag)
+        return tagTopoOrderMap.get(tag)
     }
 }
 
@@ -144,10 +151,14 @@ class ConstUtf8Info(o: ClassInfo, v: String) extends ConstInfo(o) {
 
         val length = input.readUnsignedShort()
 
-        var utf8Bytes = new Array[Byte](length)
-        input.readFully(utf8Bytes)
+        if (length == 0) {
+            _value = ""
+        } else {
+            var utf8Bytes = new Array[Byte](length)
+            input.readFully(utf8Bytes)
 
-        _value = new String(utf8Bytes, "UTF-8")
+            _value = new String(utf8Bytes, "UTF-8")
+        }
     }
 
     def bindConstReferences() {
@@ -376,7 +387,7 @@ class ConstStringInfo(o: ClassInfo, v: ConstUtf8Info) extends ConstInfo(o) {
     def value(): String = _utf8String.value()
 
     override def _debugIndexValue(): String = {
-        return "#" + _utf8String.index
+        return "#" + _tmpUtf8StringIndex
     }
 
     def debugValue(): String = {
@@ -425,7 +436,7 @@ class ConstClassInfo(o: ClassInfo, n: ConstUtf8Info) extends ConstInfo(o) {
     def className(): String = _className.value()
 
     override def _debugIndexValue(): String = {
-        return "#" + _className.index
+        return "#" + _tmpClassNameIndex
     }
 
     def debugValue(): String = {
@@ -480,7 +491,7 @@ class ConstMethodTypeInfo(o: ClassInfo, d: MethodType) extends ConstInfo(o) {
     def descriptor(): String = _descriptorString.value()
 
     override def _debugIndexValue(): String = {
-        return "#" + _descriptorString.index
+        return "#" + _tmpDescriptorIndex
     }
 
     def debugValue(): String = {
@@ -540,7 +551,7 @@ class ConstNameAndTypeInfo(
     def descriptorString(): String = _descriptorString.value()
 
     override def _debugIndexValue(): String = {
-        return "#" + _name.index + ":#" + _descriptorString.index
+        return "#" + _tmpNameIndex + ":#" + _tmpDescriptorIndex
     }
 
     def debugValue(): String = {
@@ -619,7 +630,7 @@ abstract class ConstRefInfo(
     }
 
     override def _debugIndexValue(): String = {
-        return "#" + _classInfo.index + ".#" + _nameAndType.index
+        return "#" + _tmpClassIndex + ".#" + _tmpNameAndTypeIndex
     }
 
     def debugValue(): String = {
@@ -748,7 +759,7 @@ class ConstMethodHandleInfo(
     def methodDescriptor(): MethodType = _reference.methodDescriptor()
 
     override def _debugIndexValue(): String = {
-        return "" + _referenceKind + " #" + _reference.index
+        return "" + _referenceKind + " #" + _tmpReferenceIndex
     }
 
     def debugValue(): String = {
@@ -924,7 +935,7 @@ class ConstInvokeDynamicInfo(
     def methodType(): MethodType = _methodType
 
     override def _debugIndexValue(): String = {
-        return "" + _bootstrapMethodAttrIndex + " #" + _nameAndType.index
+        return "" + _bootstrapMethodAttrIndex + " #" + _tmpNameAndTypeIndex
     }
 
     def debugValue(): String = {

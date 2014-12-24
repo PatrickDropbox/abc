@@ -258,8 +258,9 @@ class FieldAttributes(f: FieldInfo) extends AttributeGroup(f) {
                     }
                     _synthetic = attr
                 }
+                case attr: UnsupportedAttribute => _unsupported.add(attr)
                 case _ => throw new Exception(
-                        "Unexpected class attribute: " + a.name())
+                        "Unexpected field attribute: " + a.name())
             }
         }
     }
@@ -346,8 +347,9 @@ class MethodAttributes(m: MethodInfo) extends AttributeGroup(m) {
                     }
                     _synthetic = attr
                 }
+                case attr: UnsupportedAttribute => _unsupported.add(attr)
                 case _ => throw new Exception(
-                        "Unexpected class attribute: " + a.name())
+                        "Unexpected method attribute: " + a.name())
             }
         }
     }

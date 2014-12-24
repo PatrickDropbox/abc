@@ -370,8 +370,12 @@ class ConstantPool(owner: ClassInfo) {
     }
 
     def _bindConstReferences(constants: Vector[ConstInfo]) {
-        for (info <- constants) {
-            info.bindConstReferences()
+        for (t <- ConstInfo.tagTopoOrder) {
+            for (info <- constants) {
+                if (info.tag() == t) {
+                    info.bindConstReferences()
+                }
+            }
         }
     }
 
