@@ -11,7 +11,7 @@ import scala.reflect.ClassTag
 class ConstantPool(owner: ClassInfo) {
     var _owner = owner
 
-    // using TreeMap instead of TreeSet to simplify deduplication.
+    // using TreeMap instead of TreeSet to simplify deduplication / lookup.
     var _constInfos = new TreeMap[ConstInfo, ConstInfo]()
 
     // only used for deserialization.  invalidate when _constInfos is modified.

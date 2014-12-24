@@ -15,7 +15,7 @@ class FieldPool(c: ClassInfo) {
 
     def fields(): Collection[FieldInfo] = _fields.values()
 
-    def addField(name: String, fieldType: FieldType): FieldInfo = {
+    def add(name: String, fieldType: FieldType): FieldInfo = {
         if (_fields.containsKey(name)) {
             throw new Exception("adding duplicate field: " + name)
         }
@@ -28,7 +28,7 @@ class FieldPool(c: ClassInfo) {
                         fieldType))
     }
 
-    def getField(name: String): FieldInfo = {
+    def get(name: String): FieldInfo = {
         val f = _fields.get(name)
         if (f == null) {
             throw new Exception("missing field: " + name)

@@ -61,16 +61,34 @@ class ObjectType(s: String) extends FieldType {
     def descriptorString(): String = name
 }
 
-class MethodType extends DescriptorType {
-    var parameters = new Vector[FieldType]()
-    var returnType: FieldType = null  // null for void
+class ParameterTypes extends Comparable[ParameterTypes] {
+    var _parameters = new Vector[FieldType]()
+
+    def add(field: FieldType) {
+        _parameters.add(field)
+    }
 
     def descriptorString(): String = {
         var result = "("
-        for (p <- parameters) {
+        for (p <- _parameters) {
             result += p.descriptorString()
         }
         result += ")"
+
+        return result
+    }
+
+    def compareTo(other: ParameterTypes): Int = {
+        return descriptorString().compareTo(other.descriptorString())
+    }
+}
+
+class MethodType extends DescriptorType {
+    var parameters = new ParameterTypes()
+    var returnType: FieldType = null  // null for void
+
+    def descriptorString(): String = {
+        var result = parameters.descriptorString()
 
         if (returnType != null) {
             result += returnType.descriptorString()
