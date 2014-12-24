@@ -1,5 +1,6 @@
 import java.io.DataInputStream
 import java.io.DataOutputStream
+import java.io.EOFException
 import java.util.Vector
 
 import scala.collection.JavaConversions._
@@ -102,5 +103,16 @@ class ClassInfo extends AttributeOwner {
         _fields.deserialize(input)
         _methods.deserialize(input)
         _attributes.deserialize(input)
+
+        var isEof = false
+        try {
+            input.readByte()
+        } catch {
+            case ex: EOFException => isEof = true
+        }
+
+        if (!isEof) {
+            throw new Exception("Unparsed bytes at the end of class file")
+        }
     }
 }
