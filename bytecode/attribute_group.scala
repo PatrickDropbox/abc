@@ -47,6 +47,28 @@ abstract class AttributeGroup(o: AttributeOwner) {
                     inputStream.readUnsignedShort())
             var attr = name.value() match {
                 // TODO
+/*
+InnerClasses
+EnclosingMethod
+SourceDebugExtension
+BootstrapMethods
+Code
+Exceptions
+RuntimeVisibleParameterAnnotations
+RuntimeInvisibleParameterAnnotations
+AnnotationDefault
+MethodParameters
+RuntimeVisibleAnnotations
+RuntimeInvisibleAnnotations
+LineNumberTable
+LocalVariableTable
+LocalVariableTypeTable
+StackMapTable
+RuntimeVisibleTypeAnnotations
+RuntimeInvisibleTypeAnnotations
+
+*/
+                case "ConstantValue" => new ConstantValueAttribute(_owner)
                 case "Deprecated" => new DeprecatedAttribute(_owner)
                 case "Signature" => new SignatureAttribute(_owner)
                 case "SourceFile" => new SourceFileAttribute(_owner)
@@ -179,6 +201,7 @@ class ClassAttributes(c: ClassInfo) extends AttributeGroup(c) {
 
 class FieldAttributes(f: FieldInfo) extends AttributeGroup(f) {
     var _signature: SignatureAttribute = null
+    var _constantValue: ConstantValueAttribute = null
     var _deprecated: DeprecatedAttribute = null
     var _synthetic: SyntheticAttribute = null
 
@@ -195,6 +218,8 @@ class FieldAttributes(f: FieldInfo) extends AttributeGroup(f) {
             _signature = new SignatureAttribute(_owner, s)
         }
     }
+
+    def constantValue(): ConstantValueAttribute = _constantValue
 
     def isDeprecated(): Boolean = _deprecated != null
     def setIsDeprecated(b: Boolean) {
@@ -240,6 +265,12 @@ class FieldAttributes(f: FieldInfo) extends AttributeGroup(f) {
         for (a <- _readAttributes(input)) {
             a match {
                 // TODO
+                case attr: ConstantValueAttribute => {
+                    if (_constantValue != null) {
+                        throw new Exception("multiple constant value attribute")
+                    }
+                    _constantValue = attr
+                }
                 case attr: DeprecatedAttribute => {
                     if (_deprecated != null) {
                         throw new Exception("multiple deprecated attribute")

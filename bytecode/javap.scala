@@ -38,7 +38,7 @@ object Javap {
         println("\nFields:")
         for (field <- classInfo.fields.fields()) {
             println("  " + field.name())
-            println("    Type: " + field.descriptor().descriptorString())
+            println("    Type: " + field.fieldTypeString())
             println("    Flags: " + field.access().debugString())
             println("    Attributes:")
             println(field.attributes().debugString("      "))
@@ -47,7 +47,7 @@ object Javap {
         println("Methods:")
         for (method <- classInfo.methods.methods()) {
             println("  " + method.name())
-            println("    Type: " + method.descriptorString())
+            println("    Type: " + method.methodTypeString())
             println("    Flags: " + method.access().debugString())
             println("    Attributes:")
             println(method.attributes().debugString("      "))

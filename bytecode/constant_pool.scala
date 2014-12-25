@@ -251,6 +251,8 @@ class ConstantPool(owner: ClassInfo) {
         }
     }
 
+    def getByIndex(index: Int): ConstInfo = _getByIndex[ConstInfo](index)
+
     def getUtf8ByIndex(index: Int): ConstUtf8Info = {
         return _getByIndex[ConstUtf8Info](index)
     }

@@ -59,6 +59,8 @@ class ObjectType(s: String) extends FieldType {
     val name = s
 
     def descriptorString(): String = name
+
+    def isJavaString(): Boolean = name == "Ljava/lang/String;"
 }
 
 class ParameterTypes extends Comparable[ParameterTypes] {

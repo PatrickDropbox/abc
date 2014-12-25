@@ -33,10 +33,10 @@ class MethodInfo(
         _name = _owner.constants().getUtf8(n)
     }
 
-    var _descriptor: MethodType = f
-    var _descriptorString: ConstUtf8Info = null
+    var _methodType: MethodType = f
+    var _methodTypeString: ConstUtf8Info = null
     if (f != null) {
-        _descriptorString = constants.getUtf8(_descriptor.descriptorString())
+        _methodTypeString = constants.getUtf8(_methodType.descriptorString())
     }
 
     var _attributes = new MethodAttributes(this)
@@ -53,23 +53,23 @@ class MethodInfo(
         if (c != 0) {
             return c
         }
-        return _descriptorString.compareTo(other._descriptorString)
+        return _methodTypeString.compareTo(other._methodTypeString)
     }
 
     def signature(): MethodSignature = {
-        return new MethodSignature(name(), descriptor().parameters)
+        return new MethodSignature(name(), methodType().parameters)
     }
 
     def access(): MethodAccessFlags = _access
     def name(): String = _name.value()
-    def descriptorString(): String = _descriptorString.value()
-    def descriptor(): MethodType = _descriptor
+    def methodTypeString(): String = _methodTypeString.value()
+    override def methodType(): MethodType = _methodType
     def attributes(): MethodAttributes = _attributes
 
     def serialize(output: DataOutputStream) {
         _access.serialize(output)
         output.writeShort(_name.index)
-        output.writeShort(_descriptorString.index)
+        output.writeShort(_methodTypeString.index)
         _attributes.serialize(output)
     }
 
@@ -77,10 +77,10 @@ class MethodInfo(
         _access.deserialize(input)
         _name = constants().getUtf8ByIndex(input.readUnsignedShort())
 
-        _descriptorString = constants().getUtf8ByIndex(
+        _methodTypeString = constants().getUtf8ByIndex(
                 input.readUnsignedShort())
-        var parser = new DescriptorParser(_descriptorString.value())
-        _descriptor = parser.parseMethodDescriptor()
+        var parser = new DescriptorParser(_methodTypeString.value())
+        _methodType = parser.parseMethodDescriptor()
 
         _attributes.deserialize(input)
     }

@@ -7,6 +7,12 @@ import scala.collection.JavaConversions._
 
 trait AttributeOwner {
     def constants(): ConstantPool
+
+    // only applicable if the owner is FieldInfo
+    def fieldType(): FieldType = null
+
+    // only applicable if the owner is MethodInfo
+    def methodType(): MethodType = null
 }
 
 abstract class Attribute(o: AttributeOwner, n: ConstUtf8Info) {
