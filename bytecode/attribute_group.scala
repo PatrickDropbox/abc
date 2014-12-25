@@ -48,7 +48,6 @@ abstract class AttributeGroup(o: AttributeOwner) {
             var attr = name.value() match {
                 // TODO
 /*
-InnerClasses
 EnclosingMethod
 BootstrapMethods
 Code
@@ -69,6 +68,7 @@ RuntimeInvisibleTypeAnnotations
 */
                 case "ConstantValue" => new ConstantValueAttribute(_owner)
                 case "Deprecated" => new DeprecatedAttribute(_owner)
+                case "InnerClasses" => new InnerClassesAttribute(_owner)
                 case "Signature" => new SignatureAttribute(_owner)
                 case "SourceDebugExtension" =>
                         new SourceDebugExtensionAttribute(_owner)
@@ -90,6 +90,7 @@ RuntimeInvisibleTypeAnnotations
 class ClassAttributes(c: ClassInfo) extends AttributeGroup(c) {
     var _sourceFile: SourceFileAttribute = null
     var _signature: SignatureAttribute = null
+    var _innerClasses: InnerClassesAttribute = null
     var _deprecated: DeprecatedAttribute = null
     var _synthetic: SyntheticAttribute = null
     var _sourceDebugExtension: SourceDebugExtensionAttribute = null
@@ -120,6 +121,25 @@ class ClassAttributes(c: ClassInfo) extends AttributeGroup(c) {
         } else {
             _signature = new SignatureAttribute(_owner, s)
         }
+    }
+
+    def innerClasses(): InnerClassesAttribute = innerClasses
+    def addInnerClass(
+            innerClass: String,
+            outerClass: String,
+            innerName: String): InnerClassInfo = {
+        val inner = new InnerClassInfo(
+                _owner,
+                innerClass,
+                outerClass,
+                innerName)
+
+        if (_innerClasses == null) {
+            _innerClasses = new InnerClassesAttribute(_owner)
+        }
+
+        _innerClasses.add(inner)
+        return inner
     }
 
     def isDeprecated(): Boolean = _deprecated != null
@@ -162,6 +182,9 @@ class ClassAttributes(c: ClassInfo) extends AttributeGroup(c) {
         if (_signature != null) {
             allAttributes.add(_signature)
         }
+        if (_innerClasses != null) {
+            allAttributes.add(_innerClasses)
+        }
         if (_deprecated != null) {
             allAttributes.add(_deprecated)
         }
@@ -194,6 +217,12 @@ class ClassAttributes(c: ClassInfo) extends AttributeGroup(c) {
                         throw new Exception("multiple signature attribute")
                     }
                     _signature = attr
+                }
+                case attr: InnerClassesAttribute => {
+                    if (_innerClasses != null) {
+                        throw new Exception("multiple inner classes attribute")
+                    }
+                    _innerClasses = attr
                 }
                 case attr: SourceDebugExtensionAttribute => {
                     if (_sourceDebugExtension != null) {
