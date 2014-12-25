@@ -54,8 +54,8 @@ class InnerClassInfo(
         return _outerClass.className()
     }
 
-    // original method of C
-    def outerClassName(): String = {
+    // original name of innerClass
+    def originalInnerName(): String = {
         if (_innerClass == null) {
             return null
         }
@@ -85,11 +85,25 @@ class InnerClassInfo(
         _access.deserialize(input)
     }
 
-    def debugString(indent: String): String = ""
+    def debugString(indent: String): String = {
+        var oc = outerClass()
+        if (oc == null) {
+            oc = "???"
+        }
+
+        var in = originalInnerName()
+        if (in == null) {
+            in = "???"
+        }
+
+        return indent + innerClass() + " of " + oc + " (name: " + in +
+                " flags: " + _access.debugString() + ")\n"
+
+    }
 }
 
 class InnerClassesAttribute(
-        o: AttributeOwner) extends Attribute(o, "InnerClassesAttribute") {
+        o: AttributeOwner) extends Attribute(o, "InnerClasses") {
     var _innerClasses = new Vector[InnerClassInfo]()
 
     def _attrSize(numClasses: Int): Int = {
@@ -127,9 +141,21 @@ class InnerClassesAttribute(
         for (_ <- 1 to numClasses) {
             var inner = new InnerClassInfo(_owner)
             inner.deserialize(input)
+            add(inner)
         }
     }
 
-    def debugString(indent: String): String = "TODO"
+    def debugString(indent: String): String = {
+        if (_innerClasses.isEmpty()) {
+            return indent + name() + ": (no inner classes)\n"
+        }
+        var result = indent + name() + ":\n"
+
+        for (c <- _innerClasses) {
+            result += c.debugString(indent + "  ")
+        }
+
+        return result
+    }
 }
 
