@@ -33,10 +33,7 @@ class MethodPool(c: ClassInfo) {
     }
 
     def add(name: String, methodType: MethodType): MethodInfo = {
-        val method = new MethodInfo(
-                _owner,
-                _owner.constants().getUtf8(name),
-                methodType)
+        val method = new MethodInfo(_owner, name, methodType)
         _add(method)
         return method
     }

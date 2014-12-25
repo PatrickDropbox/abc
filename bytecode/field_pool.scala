@@ -23,10 +23,7 @@ class FieldPool(c: ClassInfo) {
     }
 
     def add(name: String, fieldType: FieldType): FieldInfo = {
-        val field = new FieldInfo(
-                _owner,
-                _constants.getUtf8(name),
-                fieldType)
+        val field = new FieldInfo(_owner, name, fieldType)
         _add(field)
         return field
     }

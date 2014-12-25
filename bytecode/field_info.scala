@@ -4,14 +4,17 @@ import java.io.DataOutputStream
 
 class FieldInfo(
         c: ClassInfo,
-        n: ConstUtf8Info,
+        n: String,
         f: FieldType) extends AttributeOwner {
     def this(c: ClassInfo) = this(c, null, null)
 
     var _owner = c
 
     var _access = new FieldAccessFlags(this)
-    var _name: ConstUtf8Info = n
+    var _name: ConstUtf8Info = null
+    if (n != null) {
+        _name = _owner.constants.getUtf8(n)
+    }
 
     var _descriptor: FieldType = f
     var _descriptorString: ConstUtf8Info = null
