@@ -1,6 +1,7 @@
 import java.io.DataInputStream
 import java.io.DataOutputStream
 import java.util.Collection
+import java.util.HashMap
 import java.util.TreeMap
 import java.util.Vector
 
@@ -370,17 +371,19 @@ class ConstantPool(owner: ClassInfo) {
     }
 
     def _bindConstReferences(constants: Vector[ConstInfo]) {
-        var current = constants
+        var tagInfos = new HashMap[Int, Vector[ConstInfo]]()
         for (t <- ConstInfo.tagTopoOrder) {
-            var remaining = new Vector[ConstInfo]()
-            for (info <- current) {
-                if (info.tag() == t) {
-                    info.bindConstReferences()
-                } else {
-                    remaining.add(info)
-                }
+            tagInfos.put(t, new Vector[ConstInfo]())
+        }
+
+        for (info <- constants) {
+            tagInfos.get(info.tag()).add(info)
+        }
+
+        for (t <- ConstInfo.tagTopoOrder) {
+            for (info <- tagInfos.get(t)) {
+                info.bindConstReferences()
             }
-            current = remaining
         }
     }
 
