@@ -1,3 +1,4 @@
+import java.io.ByteArrayOutputStream
 import java.io.DataInputStream
 import java.io.DataOutputStream
 import java.util.Vector
@@ -33,13 +34,13 @@ abstract class Attribute(o: AttributeOwner, attributeName: String) {
     def debugString(indent: String): String
 }
 
-class UnsupportedAttribute(
+abstract class RawBytesAttribute(
         o: AttributeOwner,
         attributeName: String,
         b: Array[Byte]) extends Attribute(o, attributeName) {
-    def this(o: AttributeOwner) = this(o, null, null)
-
     var _bytes: Array[Byte] = b
+
+    def bytes(): Array[Byte] = _bytes
 
     def serialize(output: DataOutputStream) {
         output.writeShort(_name.index)
@@ -52,8 +53,6 @@ class UnsupportedAttribute(
         _bytes = new Array[Byte](attrLength)
         input.readFully(_bytes)
     }
-
-    def debugString(indent: String): String = indent + name() + " (Unsupported)"
 }
 
 class NoValueAttribute(
@@ -109,6 +108,37 @@ class StringValueAttribute(
     def debugString(indent: String): String = {
         return indent + name() + ": " + value()
     }
+}
+
+class UnsupportedAttribute(
+        o: AttributeOwner,
+        attributeName: String,
+        b: Array[Byte]) extends RawBytesAttribute(o, attributeName, b) {
+    def this(o: AttributeOwner) = this(o, null, null)
+
+    def debugString(indent: String): String = indent + name() + " (Unsupported)"
+}
+
+object SourceDebugExtensionAttribute {
+    def modifiedUtf8(s: String): Array[Byte] = {
+        if (s == null) {
+            return null
+        }
+        var buffer = new ByteArrayOutputStream()
+        (new DataOutputStream(buffer)).writeUTF(s)
+        return buffer.toByteArray()
+    }
+}
+
+class SourceDebugExtensionAttribute(
+        o: AttributeOwner,
+        s: String) extends RawBytesAttribute(
+                o,
+                "SourceDebugExtension",
+                SourceDebugExtensionAttribute.modifiedUtf8(s)) {
+    def this(o: AttributeOwner) = this(o, null)
+
+    def debugString(indent: String): String = indent + name()
 }
 
 class SourceFileAttribute(

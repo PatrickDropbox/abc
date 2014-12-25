@@ -50,7 +50,6 @@ abstract class AttributeGroup(o: AttributeOwner) {
 /*
 InnerClasses
 EnclosingMethod
-SourceDebugExtension
 BootstrapMethods
 Code
 Exceptions
@@ -71,6 +70,8 @@ RuntimeInvisibleTypeAnnotations
                 case "ConstantValue" => new ConstantValueAttribute(_owner)
                 case "Deprecated" => new DeprecatedAttribute(_owner)
                 case "Signature" => new SignatureAttribute(_owner)
+                case "SourceDebugExtension" =>
+                        new SourceDebugExtensionAttribute(_owner)
                 case "SourceFile" => new SourceFileAttribute(_owner)
                 case "Synthetic" => new SyntheticAttribute(_owner)
                 case _ => new UnsupportedAttribute(_owner)
@@ -91,6 +92,7 @@ class ClassAttributes(c: ClassInfo) extends AttributeGroup(c) {
     var _signature: SignatureAttribute = null
     var _deprecated: DeprecatedAttribute = null
     var _synthetic: SyntheticAttribute = null
+    var _sourceDebugExtension: SourceDebugExtensionAttribute = null
 
     def sourceFile(): String = {
         if (_sourceFile == null) {
@@ -138,6 +140,17 @@ class ClassAttributes(c: ClassInfo) extends AttributeGroup(c) {
         }
     }
 
+    def sourceDebugExtension(): String = {
+        return new String(_sourceDebugExtension.bytes(), "UTF-8")
+    }
+    def setSourceDebugExtension(s: String) {
+        if (s == null) {
+            _sourceDebugExtension = null
+        } else {
+            _sourceDebugExtension = new SourceDebugExtensionAttribute(_owner, s)
+        }
+    }
+
     def allAttributes(): Vector[Attribute] = {
         var allAttributes = new Vector[Attribute]()
 
@@ -154,6 +167,9 @@ class ClassAttributes(c: ClassInfo) extends AttributeGroup(c) {
         }
         if (_synthetic != null) {
             allAttributes.add(_synthetic)
+        }
+        if (_sourceDebugExtension != null) {
+            allAttributes.add(_sourceDebugExtension)
         }
 
         for (attr <- _unsupported) {
@@ -178,6 +194,13 @@ class ClassAttributes(c: ClassInfo) extends AttributeGroup(c) {
                         throw new Exception("multiple signature attribute")
                     }
                     _signature = attr
+                }
+                case attr: SourceDebugExtensionAttribute => {
+                    if (_sourceDebugExtension != null) {
+                        throw new Exception(
+                                "multiple source debug extension attribute")
+                    }
+                    _sourceDebugExtension = attr
                 }
                 case attr: SourceFileAttribute => {
                     if (_sourceFile != null) {
