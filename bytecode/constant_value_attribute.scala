@@ -5,10 +5,7 @@ import scala.reflect.ClassTag
 
 
 class ConstantValueAttribute(
-        o: AttributeOwner) extends Attribute(
-                o,
-                o.constants().getUtf8("ConstantValue")) {
-
+        o: AttributeOwner) extends Attribute(o, "ConstantValue") {
     var _constant: ConstInfo = null
 
     def _checkOwnerType[T <: FieldType: ClassTag]() {

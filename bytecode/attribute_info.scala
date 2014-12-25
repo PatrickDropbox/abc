@@ -15,9 +15,12 @@ trait AttributeOwner {
     def methodType(): MethodType = null
 }
 
-abstract class Attribute(o: AttributeOwner, n: ConstUtf8Info) {
+abstract class Attribute(o: AttributeOwner, attributeName: String) {
     var _owner: AttributeOwner = o
-    var _name: ConstUtf8Info = n
+    var _name: ConstUtf8Info = null
+    if (attributeName != null) {
+        _name = _owner.constants().getUtf8(attributeName)
+    }
 
     def name(): String = _name.value()
 
@@ -32,8 +35,8 @@ abstract class Attribute(o: AttributeOwner, n: ConstUtf8Info) {
 
 class UnsupportedAttribute(
         o: AttributeOwner,
-        n: ConstUtf8Info,
-        b: Array[Byte]) extends Attribute(o, n) {
+        attributeName: String,
+        b: Array[Byte]) extends Attribute(o, attributeName) {
     def this(o: AttributeOwner) = this(o, null, null)
 
     var _bytes: Array[Byte] = b
@@ -54,10 +57,8 @@ class UnsupportedAttribute(
 }
 
 class NoValueAttribute(
-        attributeName: String,
-        o: AttributeOwner) extends Attribute(
-                o,
-                o.constants().getUtf8(attributeName)) {
+        o: AttributeOwner,
+        attributeName: String) extends Attribute(o, attributeName) {
 
     def serialize(output: DataOutputStream) {
         output.writeShort(_name.index)
@@ -77,11 +78,9 @@ class NoValueAttribute(
 }
 
 class StringValueAttribute(
-        attributeName: String,
         o: AttributeOwner,
-        v: String) extends Attribute(
-                o,
-                o.constants().getUtf8(attributeName)) {
+        attributeName: String,
+        v: String) extends Attribute(o, attributeName) {
 
     var _value: ConstUtf8Info = null
     if (v != null) {
@@ -114,22 +113,22 @@ class StringValueAttribute(
 
 class SourceFileAttribute(
         o: AttributeOwner,
-        n: String) extends StringValueAttribute("SourceFile", o, n) {
+        n: String) extends StringValueAttribute(o, "SourceFile", n) {
     def this(o: AttributeOwner) = this(o, null)
 }
 
 // see page 118-123 for signature syntax
 class SignatureAttribute(
         o: AttributeOwner,
-        n: String) extends StringValueAttribute("SourceFile", o, n) {
+        n: String) extends StringValueAttribute(o, "Signature", n) {
     def this(o: AttributeOwner) = this(o, null)
 }
 
 class DeprecatedAttribute(
-        o: AttributeOwner) extends NoValueAttribute("Deprecated", o) {
+        o: AttributeOwner) extends NoValueAttribute(o, "Deprecated") {
 }
 
 class SyntheticAttribute(
-        o: AttributeOwner) extends NoValueAttribute("Synthetic", o) {
+        o: AttributeOwner) extends NoValueAttribute(o, "Synthetic") {
 }
 
