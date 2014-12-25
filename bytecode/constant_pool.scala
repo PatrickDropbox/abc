@@ -390,9 +390,6 @@ class ConstantPool(owner: ClassInfo) {
             if (first == null) {
                 _constInfos.put(info, info)
             } else {
-                println("Dedup " + info.index + " -> " + first.index)
-                println("  old: " + info.debugString())
-                println("  new: " + info.debugString())
                 _tmpConstInfosByIndex.put(info.index, first)
             }
         }
