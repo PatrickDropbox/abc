@@ -285,6 +285,10 @@ class ConstantPool(owner: ClassInfo) {
         return _getByIndex[ConstClassInfo](index)
     }
 
+    def getMethodHandleByIndex(index: Int): ConstMethodHandleInfo = {
+        return _getByIndex[ConstMethodHandleInfo](index)
+    }
+
     def _assignIndex(): Int = {
         var nextIndex = 1
         for (info <- _constInfos.keySet()) {

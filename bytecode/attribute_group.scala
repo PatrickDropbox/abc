@@ -48,7 +48,6 @@ abstract class AttributeGroup(o: AttributeOwner) {
             var attr = name.value() match {
                 // TODO
 /*
-BootstrapMethods
 Code
 Exceptions
 RuntimeVisibleParameterAnnotations
@@ -65,6 +64,7 @@ RuntimeVisibleTypeAnnotations
 RuntimeInvisibleTypeAnnotations
 
 */
+                case "BootstrapMethods" => new BootstrapMethodsAttribute(_owner)
                 case "ConstantValue" => new ConstantValueAttribute(_owner)
                 case "Deprecated" => new DeprecatedAttribute(_owner)
                 case "EnclosingMethod" => new EnclosingMethodAttribute(_owner)
@@ -92,6 +92,7 @@ class ClassAttributes(c: ClassInfo) extends AttributeGroup(c) {
     var _signature: SignatureAttribute = null
     var _innerClasses: InnerClassesAttribute = null
     var _enclosingMethod: EnclosingMethodAttribute = null
+    var _bootstrapMethods: BootstrapMethodsAttribute = null
     var _deprecated: DeprecatedAttribute = null
     var _synthetic: SyntheticAttribute = null
     var _sourceDebugExtension: SourceDebugExtensionAttribute = null
@@ -158,6 +159,18 @@ class ClassAttributes(c: ClassInfo) extends AttributeGroup(c) {
         _enclosingMethod = null
     }
 
+    def bootstrapMethods(): BootstrapMethodsAttribute = _bootstrapMethods
+    def addBootstrapMethods(
+            mh: ConstMethodHandleInfo): BootstrapMethodInfo = {
+        if (_bootstrapMethods == null) {
+            _bootstrapMethods = new BootstrapMethodsAttribute(_owner)
+        }
+        return _bootstrapMethods.add(mh)
+    }
+    def clearBootstrapMethods() {
+        _bootstrapMethods = null
+    }
+
     def isDeprecated(): Boolean = _deprecated != null
     def setIsDeprecated(b: Boolean) {
         if (b) {
@@ -204,6 +217,9 @@ class ClassAttributes(c: ClassInfo) extends AttributeGroup(c) {
         if (_enclosingMethod != null) {
             allAttributes.add(_enclosingMethod)
         }
+        if (_bootstrapMethods != null) {
+            allAttributes.add(_bootstrapMethods)
+        }
         if (_deprecated != null) {
             allAttributes.add(_deprecated)
         }
@@ -225,6 +241,13 @@ class ClassAttributes(c: ClassInfo) extends AttributeGroup(c) {
         for (a <- _readAttributes(input)) {
             a match {
                 // TODO
+                case attr: BootstrapMethodsAttribute => {
+                    if (_bootstrapMethods != null) {
+                        throw new Exception(
+                                "multiple bootstrap methods attribute")
+                    }
+                    _bootstrapMethods = attr
+                }
                 case attr: DeprecatedAttribute => {
                     if (_deprecated != null) {
                         throw new Exception("multiple deprecated attribute")
