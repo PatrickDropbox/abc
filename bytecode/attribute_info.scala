@@ -233,3 +233,62 @@ class EnclosingMethodAttribute(
         return indent + name() + ": " + enclosingClassName() + "." + v
     }
 }
+
+class ExceptionsAttribute(
+        o: AttributeOwner) extends Attribute(o, "Exceptions") {
+    var _exceptions = new Vector[ConstClassInfo]()
+
+    def exceptions(): Vector[String] = {
+        var result = new Vector[String]()
+        for (c <- _exceptions) {
+            result.add(c.className())
+        }
+        return result
+    }
+
+    def add(exceptionName: String) {
+        _exceptions.add(_owner.constants().getClass(exceptionName))
+    }
+
+    def serialize(output: DataOutputStream) {
+        output.writeShort(_name.index)
+        output.writeShort(2 + 2 * _exceptions.size())
+        output.writeShort(_exceptions.size())
+        for (c <- _exceptions) {
+            output.writeShort(c.index)
+        }
+    }
+
+    def deserialize(n: ConstUtf8Info, attrLength: Int, input: DataInputStream) {
+        if (n.compareTo(_name) != 0) {
+            throw new Exception("Unexpected attribute name: " + n.value())
+        }
+        val numEntries = input.readUnsignedShort()
+        if (attrLength != (2 + 2 * numEntries)) {
+            throw new Exception("Unexpected attribute length")
+        }
+
+        if (!_exceptions.isEmpty()) {
+            throw new Exception(
+                    "deserializing into non-empty Exceptions attribute")
+        }
+
+        for (_ <- 1 to numEntries) {
+            _exceptions.add(_owner.constants().getClassByIndex(
+                    input.readUnsignedShort()))
+        }
+    }
+
+    def debugString(indent: String): String = {
+        var result: String = null
+        for (c <- _exceptions) {
+            if (result == null) {
+                result = c.className()
+            } else {
+                result += ", " + c.className()
+            }
+        }
+
+        return indent + name() + ": " + result
+    }
+}

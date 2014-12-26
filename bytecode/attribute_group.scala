@@ -46,10 +46,8 @@ abstract class AttributeGroup(o: AttributeOwner) {
             val name = _owner.constants().getUtf8ByIndex(
                     inputStream.readUnsignedShort())
             var attr = name.value() match {
-                // TODO
-/*
+/* TODO
 Code
-Exceptions
 RuntimeVisibleParameterAnnotations
 RuntimeInvisibleParameterAnnotations
 AnnotationDefault
@@ -62,12 +60,12 @@ LocalVariableTypeTable
 StackMapTable
 RuntimeVisibleTypeAnnotations
 RuntimeInvisibleTypeAnnotations
-
 */
                 case "BootstrapMethods" => new BootstrapMethodsAttribute(_owner)
                 case "ConstantValue" => new ConstantValueAttribute(_owner)
                 case "Deprecated" => new DeprecatedAttribute(_owner)
                 case "EnclosingMethod" => new EnclosingMethodAttribute(_owner)
+                case "Exceptions" => new ExceptionsAttribute(_owner)
                 case "InnerClasses" => new InnerClassesAttribute(_owner)
                 case "Signature" => new SignatureAttribute(_owner)
                 case "SourceDebugExtension" =>
@@ -400,6 +398,7 @@ class FieldAttributes(f: FieldInfo) extends AttributeGroup(f) {
 
 class MethodAttributes(m: MethodInfo) extends AttributeGroup(m) {
     var _signature: SignatureAttribute = null
+    var _exceptions: ExceptionsAttribute = null
     var _deprecated: DeprecatedAttribute = null
     var _synthetic: SyntheticAttribute = null
 
@@ -415,6 +414,19 @@ class MethodAttributes(m: MethodInfo) extends AttributeGroup(m) {
         } else {
             _signature = new SignatureAttribute(_owner, s)
         }
+    }
+
+    def exceptions(): Vector[String] = {
+        if (_exceptions == null) {
+            return null
+        }
+        return _exceptions.exceptions()
+    }
+    def addException(exceptionName: String) {
+        if (_exceptions == null) {
+            _exceptions = new ExceptionsAttribute(_owner)
+        }
+        _exceptions.add(exceptionName)
     }
 
     def isDeprecated(): Boolean = _deprecated != null
@@ -443,6 +455,9 @@ class MethodAttributes(m: MethodInfo) extends AttributeGroup(m) {
         if (_signature != null) {
             allAttributes.add(_signature)
         }
+        if (_exceptions != null) {
+            allAttributes.add(_exceptions)
+        }
         if (_deprecated != null) {
             allAttributes.add(_deprecated)
         }
@@ -466,6 +481,12 @@ class MethodAttributes(m: MethodInfo) extends AttributeGroup(m) {
                         throw new Exception("multiple deprecated attribute")
                     }
                     _deprecated = attr
+                }
+                case attr: ExceptionsAttribute => {
+                    if (_exceptions != null) {
+                        throw new Exception("multiple exceptions attribute")
+                    }
+                    _exceptions = attr
                 }
                 case attr: SignatureAttribute => {
                     if (_signature != null) {
