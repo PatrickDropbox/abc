@@ -48,7 +48,6 @@ abstract class AttributeGroup(o: AttributeOwner) {
             var attr = name.value() match {
                 // TODO
 /*
-EnclosingMethod
 BootstrapMethods
 Code
 Exceptions
@@ -68,6 +67,7 @@ RuntimeInvisibleTypeAnnotations
 */
                 case "ConstantValue" => new ConstantValueAttribute(_owner)
                 case "Deprecated" => new DeprecatedAttribute(_owner)
+                case "EnclosingMethod" => new EnclosingMethodAttribute(_owner)
                 case "InnerClasses" => new InnerClassesAttribute(_owner)
                 case "Signature" => new SignatureAttribute(_owner)
                 case "SourceDebugExtension" =>
@@ -91,6 +91,7 @@ class ClassAttributes(c: ClassInfo) extends AttributeGroup(c) {
     var _sourceFile: SourceFileAttribute = null
     var _signature: SignatureAttribute = null
     var _innerClasses: InnerClassesAttribute = null
+    var _enclosingMethod: EnclosingMethodAttribute = null
     var _deprecated: DeprecatedAttribute = null
     var _synthetic: SyntheticAttribute = null
     var _sourceDebugExtension: SourceDebugExtensionAttribute = null
@@ -142,6 +143,21 @@ class ClassAttributes(c: ClassInfo) extends AttributeGroup(c) {
         return inner
     }
 
+    def enclosingMethod(): EnclosingMethodAttribute = _enclosingMethod
+    def setEnclosingMethod(
+            className: String,
+            methodName: String,
+            methodType: MethodType) {
+        _enclosingMethod = new EnclosingMethodAttribute(
+                _owner,
+                className,
+                methodName,
+                methodType)
+    }
+    def clearEnclosingMethod() {
+        _enclosingMethod = null
+    }
+
     def isDeprecated(): Boolean = _deprecated != null
     def setIsDeprecated(b: Boolean) {
         if (b) {
@@ -185,6 +201,9 @@ class ClassAttributes(c: ClassInfo) extends AttributeGroup(c) {
         if (_innerClasses != null) {
             allAttributes.add(_innerClasses)
         }
+        if (_enclosingMethod != null) {
+            allAttributes.add(_enclosingMethod)
+        }
         if (_deprecated != null) {
             allAttributes.add(_deprecated)
         }
@@ -211,6 +230,13 @@ class ClassAttributes(c: ClassInfo) extends AttributeGroup(c) {
                         throw new Exception("multiple deprecated attribute")
                     }
                     _deprecated = attr
+                }
+                case attr: EnclosingMethodAttribute => {
+                    if (_enclosingMethod != null) {
+                        throw new Exception(
+                                "multiple enclosing method attribute")
+                    }
+                    _enclosingMethod = attr
                 }
                 case attr: SignatureAttribute => {
                     if (_signature != null) {

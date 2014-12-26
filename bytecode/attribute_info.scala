@@ -162,3 +162,74 @@ class SyntheticAttribute(
         o: AttributeOwner) extends NoValueAttribute(o, "Synthetic") {
 }
 
+class EnclosingMethodAttribute(
+        o: AttributeOwner,
+        className: String,
+        methodName: String,
+        methodType: MethodType) extends Attribute(
+                o,
+                "EnclosingMethod") {
+    def this(o: AttributeOwner) = this(o, null, null, null)
+
+    var _enclosingClass: ConstClassInfo = null
+    if (className != null) {
+        _enclosingClass = _owner.constants().getClass(className)
+    }
+
+    var _methodNameAndType: ConstNameAndTypeInfo = null
+    var _enclosingMethodType: MethodType = null
+    if (methodName != null) {  // assume method type is also not null
+        _methodNameAndType = _owner.constants().getNameAndType(
+                methodName,
+                methodType.descriptorString())
+        _enclosingMethodType = methodType
+    }
+
+    def enclosingClassName(): String = _enclosingClass.className()
+
+    def enclosingMethodName(): String = {
+        if (_methodNameAndType == null) {
+            return null
+        }
+        return _methodNameAndType.name()
+    }
+
+    def enclosingMethodType(): MethodType = return _enclosingMethodType
+
+    def serialize(output: DataOutputStream) {
+        output.writeShort(_name.index)
+        output.writeInt(4)
+        output.writeShort(_enclosingClass.index)
+        output.writeShort(_methodNameAndType.index)
+    }
+
+    def deserialize(n: ConstUtf8Info, attrLength: Int, input: DataInputStream) {
+        if (n.compareTo(_name) != 0) {
+            throw new Exception("Unexpected attribute name: " + n.value())
+        }
+        if (attrLength != 4) {
+            throw new Exception("Unexpected attribute length")
+        }
+        _enclosingClass = _owner.constants().getClassByIndex(
+                input.readUnsignedShort())
+
+        val index = input.readUnsignedShort()
+        if (index == 0) {
+            _methodNameAndType = null
+            _enclosingMethodType = null
+        } else {
+            _methodNameAndType = _owner.constants().getNameAndTypeByIndex(index)
+            var parser = new DescriptorParser(
+                    _methodNameAndType.descriptorString())
+            _enclosingMethodType = parser.parseMethodDescriptor()
+        }
+    }
+
+    def debugString(indent: String): String = {
+        var v = "???"
+        if (_methodNameAndType != null) {
+            v = _methodNameAndType.debugValue()
+        }
+        return indent + name() + ": " + enclosingClassName() + "." + v
+    }
+}
