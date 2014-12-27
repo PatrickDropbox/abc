@@ -15,38 +15,55 @@ trait FieldType extends DescriptorType {
 }
 
 trait BaseType extends FieldType {
+    def arrayType(): Int
 }
 
 class ByteType extends BaseType {
     def descriptorString(): String = "B"
+
+    def arrayType(): Int = 8
 }
 
 class CharType extends BaseType {
     def descriptorString(): String = "C"
+
+    def arrayType(): Int = 5
 }
 
 class DoubleType extends BaseType {
     def descriptorString(): String = "D"
+
+    def arrayType(): Int = 7
 }
 
 class FloatType extends BaseType {
     def descriptorString(): String = "F"
+
+    def arrayType(): Int = 6
 }
 
 class IntType extends BaseType {
     def descriptorString(): String = "I"
+
+    def arrayType(): Int = 10
 }
 
 class LongType extends BaseType {
     def descriptorString(): String = "J"
+
+    def arrayType(): Int = 11
 }
 
 class ShortType extends BaseType {
     def descriptorString(): String = "S"
+
+    def arrayType(): Int = 9
 }
 
 class BoolType extends BaseType {
     def descriptorString(): String = "Z"
+
+    def arrayType(): Int = 4
 }
 
 class ArrayType(t: FieldType) extends FieldType {

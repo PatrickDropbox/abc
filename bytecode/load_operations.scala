@@ -212,3 +212,67 @@ class Aload3(owner: MethodInfo)
         return new LoadA(owner, 3)
     }
 }
+
+//
+// iaload
+// stack: ..., arrayref, index -> ..., value
+//
+class LoadFromIArray(owner: MethodInfo)
+        extends NoOperandOp(owner, OpCode.IALOAD, "iaload") {
+}
+
+//
+// laload
+// stack: ..., arrayref, index -> ..., value
+//
+class LoadFromLArray(owner: MethodInfo)
+        extends NoOperandOp(owner, OpCode.LALOAD, "laload") {
+}
+
+//
+// faload
+// stack: ..., arrayref, index -> ..., value
+//
+class LoadFromFArray(owner: MethodInfo)
+        extends NoOperandOp(owner, OpCode.FALOAD, "faload") {
+}
+
+//
+// daload
+// stack: ..., arrayref, index -> ..., value
+//
+class LoadFromDArray(owner: MethodInfo)
+        extends NoOperandOp(owner, OpCode.DALOAD, "daload") {
+}
+
+//
+// aaload
+// stack: ..., arrayref, index -> ..., value
+//
+class LoadFromAArray(owner: MethodInfo)
+        extends NoOperandOp(owner, OpCode.AALOAD, "aaload") {
+}
+
+//
+// baload
+// stack: ..., arrayref, index -> ..., value
+//
+class LoadFromBArray(owner: MethodInfo)
+        extends NoOperandOp(owner, OpCode.BALOAD, "baload") {
+}
+
+//
+// caload
+// stack: ..., arrayref, index -> ..., value
+//
+class LoadFromCArray(owner: MethodInfo)
+        extends NoOperandOp(owner, OpCode.CALOAD, "caload") {
+}
+
+//
+// saload
+// stack: ..., arrayref, index -> ..., value
+//
+class LoadFromSArray(owner: MethodInfo)
+        extends NoOperandOp(owner, OpCode.SALOAD, "saload") {
+}
