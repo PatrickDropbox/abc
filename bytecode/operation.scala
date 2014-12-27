@@ -17,6 +17,7 @@ abstract class Operation(o: MethodInfo) {
     def debugString(): String
 }
 
+// operations of the form: <op code>
 class NoOperandOp(
         owner: MethodInfo,
         opCode: Int,
@@ -35,6 +36,70 @@ class NoOperandOp(
     }
 
     def debugString(): String = _mnemonic
+}
+
+// operations of the form: <op code> <byte operand>
+class ByteOperandOp(
+        owner: MethodInfo,
+        opCode: Int,
+        mnemonic: String,
+        signed: Boolean,
+        v: Int) extends Operation(owner) {
+    val _opCode = opCode
+    val _mnemonic = mnemonic
+    var isSigned = signed
+    var operand = v
+
+    def serialize(output: DataOutputStream) {
+        output.writeByte(_opCode)
+        output.writeByte(operand)
+    }
+
+    def deserialize(opCode: Int, input: DataInputStream) {
+        if (opCode != _opCode) {
+            throw new Exception("Unexpected op-code: " + opCode)
+        }
+
+        if (isSigned) {
+            operand = input.readByte()
+        } else {
+            operand = input.readUnsignedByte()
+        }
+    }
+
+    def debugString(): String = _mnemonic + " " + operand
+}
+
+// operations of the form: <op code> <short operand>
+class ShortOperandOp(
+        owner: MethodInfo,
+        opCode: Int,
+        mnemonic: String,
+        signed: Boolean,
+        v: Int) extends Operation(owner) {
+    val _opCode = opCode
+    val _mnemonic = mnemonic
+    var isSigned = signed
+    var operand = v
+
+    def serialize(output: DataOutputStream) {
+        output.writeByte(_opCode)
+        output.writeShort(operand)
+    }
+
+    def deserialize(opCode: Int, input: DataInputStream) {
+        if (opCode != _opCode) {
+            throw new Exception("Unexpected op-code: " + opCode)
+        }
+
+        if (isSigned) {
+            operand = input.readShort()
+        } else {
+            operand = input.readUnsignedShort()
+        }
+    }
+
+    def debugString(): String = _mnemonic + " " + operand
 }
 
 object Operation {
@@ -57,8 +122,8 @@ object Operation {
             case 13 => new Fconst2(owner)
             case 14 => new Dconst0(owner)
             case 15 => new Dconst1(owner)
-            case 16 => throw new Exception("TODO")
-            case 17 => throw new Exception("TODO")
+            case 16 => new Bipush(owner)
+            case 17 => new Sipush(owner)
             case 18 => throw new Exception("TODO")
             case 19 => throw new Exception("TODO")
             case 20 => throw new Exception("TODO")

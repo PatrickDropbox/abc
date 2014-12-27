@@ -300,3 +300,29 @@ class Dconst1(owner: MethodInfo) extends NoOperandOp(
     }
 }
 
+class Bipush(owner: MethodInfo, v: Int) extends ByteOperandOp(
+        owner,
+        OpCode.BIPUSH,
+        "bipush",
+        true,  // is signed
+        v) {
+    def this(owner: MethodInfo) = this(owner, 0)
+
+    override def canonicalForm(): Operation = {
+        return new PushI(_owner, operand)
+    }
+}
+
+class Sipush(owner: MethodInfo, v: Int) extends ShortOperandOp(
+        owner,
+        OpCode.SIPUSH,
+        "sipush",
+        true,  // is signed
+        v) {
+    def this(owner: MethodInfo) = this(owner, 0)
+
+    override def canonicalForm(): Operation = {
+        return new PushI(_owner, operand)
+    }
+}
+
