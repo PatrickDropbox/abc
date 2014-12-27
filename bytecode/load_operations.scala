@@ -30,7 +30,7 @@ abstract class _Load(
 
 //
 // iload <local var index>
-// stack: ..., value -> ...
+// stack: ... -> ..., value
 //
 class LoadI(owner: MethodInfo, index: Int)
         extends _Load(owner, OpCode.ILOAD, OpCode.ILOAD_0, "iload", index) {
@@ -39,7 +39,7 @@ class LoadI(owner: MethodInfo, index: Int)
 
 //
 // lload <local var index>
-// stack: ..., value -> ...
+// stack: ... -> ..., value
 //
 class LoadL(owner: MethodInfo, index: Int)
         extends _Load(owner, OpCode.LLOAD, OpCode.LLOAD_0, "lload", index) {
@@ -48,7 +48,7 @@ class LoadL(owner: MethodInfo, index: Int)
 
 //
 // fload <local var index>
-// stack: ..., value -> ...
+// stack: ... -> ..., value
 //
 class LoadF(owner: MethodInfo, index: Int)
         extends _Load(owner, OpCode.FLOAD, OpCode.FLOAD_0, "fload", index) {
@@ -57,7 +57,7 @@ class LoadF(owner: MethodInfo, index: Int)
 
 //
 // dload <local var index>
-// stack: ..., value -> ...
+// stack: ... -> ..., value
 //
 class LoadD(owner: MethodInfo, index: Int)
         extends _Load(owner, OpCode.DLOAD, OpCode.DLOAD_0, "dload", index) {
@@ -66,7 +66,7 @@ class LoadD(owner: MethodInfo, index: Int)
 
 //
 // aload <local var index>
-// stack: ..., value -> ...
+// stack: ... -> ..., value
 //
 class LoadA(owner: MethodInfo, index: Int)
         extends _Load(owner, OpCode.ALOAD, OpCode.ALOAD_0, "aload", index) {
