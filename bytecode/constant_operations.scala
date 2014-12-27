@@ -6,17 +6,16 @@ import java.io.DataOutputStream
 // nop
 // stack: ... -> ...
 //
-class Nop(owner: MethodInfo) extends NoOperandOp(owner, OpCode.NOP, "nop") {
+class Nop(owner: MethodInfo)
+        extends NoOperandOp(owner, OpCode.NOP, "nop") {
 }
 
 //
 // aconst_null
 // stack: ... -> ..., null
 //
-class AconstNull(owner: MethodInfo) extends NoOperandOp(
-        owner,
-        OpCode.ACONST_NULL,
-        "aconst_null") {
+class AconstNull(owner: MethodInfo)
+        extends NoOperandOp(owner, OpCode.ACONST_NULL, "aconst_null") {
 }
 
 //
@@ -60,10 +59,10 @@ class PushI(owner: MethodInfo, v: Int) extends Operation(owner) {
     }
 
     def deserialize(opCode: Int, input: DataInputStream) {
-        throw new Exception("cannot directly deserialize iconst")
+        throw new Exception("cannot directly deserialize \"iconst\"")
     }
 
-    def debugString(): String = "iconst " + value
+    def debugString(): String = "\"iconst\" " + value
 }
 
 //
@@ -89,10 +88,10 @@ class PushL(owner: MethodInfo, v: Long) extends Operation(owner) {
     }
 
     def deserialize(opCode: Int, input: DataInputStream) {
-        throw new Exception("cannot directly deserialize lconst")
+        throw new Exception("cannot directly deserialize \"lconst\"")
     }
 
-    def debugString(): String = "lconst " + value
+    def debugString(): String = "\"lconst\" " + value
 }
 
 //
@@ -125,10 +124,10 @@ class PushF(owner: MethodInfo, v: Float) extends Operation(owner) {
     }
 
     def deserialize(opCode: Int, input: DataInputStream) {
-        throw new Exception("cannot directly deserialize fconst")
+        throw new Exception("cannot directly deserialize \"fconst\"")
     }
 
-    def debugString(): String = "fconst " + value
+    def debugString(): String = "\"fconst\" " + value
 }
 
 //
@@ -154,146 +153,135 @@ class PushD(owner: MethodInfo, v: Double) extends Operation(owner) {
     }
 
     def deserialize(opCode: Int, input: DataInputStream) {
-        throw new Exception("cannot directly deserialize dconst")
+        throw new Exception("cannot directly deserialize \"dconst\"")
     }
 
-    def debugString(): String = "dconst " + value
+    def debugString(): String = "\"dconst\" " + value
 }
 
-class IconstM1(owner: MethodInfo) extends NoOperandOp(
-        owner,
-        OpCode.ICONST_M1,
-        "iconst_m1") {
+//
+// "PushString" <value>
+// stack: ... -> ..., value
+//
+class PushString(owner: MethodInfo, v: String) extends Operation(owner) {
+    var _constString: ConstStringInfo = null
+    if (value != 0 && value != 1) {
+        _constString = owner.constants().getString(value)
+    }
 
+    def value(): String = _constString.value()
+
+    def serialize(output: DataOutputStream) {
+        if (_constString.index < 256) {
+            output.write(OpCode.LDC)
+            output.writeByte(_constString.index)
+        } else {
+            output.write(OpCode.LDC_W)
+            output.writeShort(_constString.index)
+        }
+    }
+
+    def deserialize(opCode: Int, input: DataInputStream) {
+        throw new Exception("cannot directly deserialize \"sconst\"")
+    }
+
+    def debugString(): String = "\"sconst\" " + value
+}
+
+class IconstM1(owner: MethodInfo)
+        extends NoOperandOp(owner, OpCode.ICONST_M1, "iconst_m1") {
     override def canonicalForm(): Operation = {
         return new PushI(_owner, -1)
     }
 }
 
-class Iconst0(owner: MethodInfo) extends NoOperandOp(
-        owner,
-        OpCode.ICONST_0,
-        "iconst_0") {
-
+class Iconst0(owner: MethodInfo)
+        extends NoOperandOp(owner, OpCode.ICONST_0, "iconst_0") {
     override def canonicalForm(): Operation = {
         return new PushI(_owner, 0)
     }
 }
 
-class Iconst1(owner: MethodInfo) extends NoOperandOp(
-        owner,
-        OpCode.ICONST_1,
-        "iconst_1") {
-
+class Iconst1(owner: MethodInfo)
+        extends NoOperandOp(owner, OpCode.ICONST_1, "iconst_1") {
     override def canonicalForm(): Operation = {
         return new PushI(_owner, 1)
     }
 }
 
-class Iconst2(owner: MethodInfo) extends NoOperandOp(
-        owner,
-        OpCode.ICONST_2,
-        "iconst_2") {
-
+class Iconst2(owner: MethodInfo)
+        extends NoOperandOp(owner, OpCode.ICONST_2, "iconst_2") {
     override def canonicalForm(): Operation = {
         return new PushI(_owner, 2)
     }
 }
 
-class Iconst3(owner: MethodInfo) extends NoOperandOp(
-        owner,
-        OpCode.ICONST_3,
-        "iconst_3") {
-
+class Iconst3(owner: MethodInfo)
+        extends NoOperandOp(owner, OpCode.ICONST_3, "iconst_3") {
     override def canonicalForm(): Operation = {
         return new PushI(_owner, 3)
     }
 }
 
-class Iconst4(owner: MethodInfo) extends NoOperandOp(
-        owner,
-        OpCode.ICONST_4,
-        "iconst_4") {
-
+class Iconst4(owner: MethodInfo)
+        extends NoOperandOp(owner, OpCode.ICONST_4, "iconst_4") {
     override def canonicalForm(): Operation = {
         return new PushI(_owner, 4)
     }
 }
 
-class Iconst5(owner: MethodInfo) extends NoOperandOp(
-        owner,
-        OpCode.ICONST_5,
-        "iconst_5") {
-
+class Iconst5(owner: MethodInfo)
+        extends NoOperandOp(owner, OpCode.ICONST_5, "iconst_5") {
     override def canonicalForm(): Operation = {
         return new PushI(_owner, 5)
     }
 }
 
-class Lconst0(owner: MethodInfo) extends NoOperandOp(
-        owner,
-        OpCode.LCONST_0,
-        "lconst_0") {
-
+class Lconst0(owner: MethodInfo)
+        extends NoOperandOp(owner, OpCode.LCONST_0, "lconst_0") {
     override def canonicalForm(): Operation = {
         return new PushL(_owner, 0)
     }
 }
 
-class Lconst1(owner: MethodInfo) extends NoOperandOp(
-        owner,
-        OpCode.LCONST_1,
-        "lconst_1") {
-
+class Lconst1(owner: MethodInfo)
+        extends NoOperandOp(owner, OpCode.LCONST_1, "lconst_1") {
     override def canonicalForm(): Operation = {
         return new PushL(_owner, 1)
     }
 }
 
-class Fconst0(owner: MethodInfo) extends NoOperandOp(
-        owner,
-        OpCode.FCONST_0,
-        "fconst_0") {
-
+class Fconst0(owner: MethodInfo)
+        extends NoOperandOp(owner, OpCode.FCONST_0, "fconst_0") {
     override def canonicalForm(): Operation = {
         return new PushF(_owner, 0)
     }
 }
 
-class Fconst1(owner: MethodInfo) extends NoOperandOp(
-        owner,
-        OpCode.FCONST_1,
-        "fconst_1") {
-
+class Fconst1(owner: MethodInfo)
+        extends NoOperandOp(owner, OpCode.FCONST_1, "fconst_1") {
     override def canonicalForm(): Operation = {
         return new PushF(_owner, 1)
     }
 }
 
-class Fconst2(owner: MethodInfo) extends NoOperandOp(
-        owner,
-        OpCode.FCONST_2,
-        "fconst_2") {
+class Fconst2(owner: MethodInfo)
+        extends NoOperandOp(owner, OpCode.FCONST_2, "fconst_2") {
 
     override def canonicalForm(): Operation = {
         return new PushF(_owner, 2)
     }
 }
 
-class Dconst0(owner: MethodInfo) extends NoOperandOp(
-        owner,
-        OpCode.DCONST_0,
-        "dconst_0") {
-
+class Dconst0(owner: MethodInfo)
+        extends NoOperandOp(owner, OpCode.DCONST_0, "dconst_0") {
     override def canonicalForm(): Operation = {
         return new PushD(_owner, 0)
     }
 }
 
-class Dconst1(owner: MethodInfo) extends NoOperandOp(
-        owner,
-        OpCode.DCONST_1,
-        "dconst_1") {
+class Dconst1(owner: MethodInfo)
+        extends NoOperandOp(owner, OpCode.DCONST_1, "dconst_1") {
 
     override def canonicalForm(): Operation = {
         return new PushD(_owner, 1)
@@ -326,3 +314,94 @@ class Sipush(owner: MethodInfo, v: Int) extends ShortOperandOp(
     }
 }
 
+class Ldc(owner: MethodInfo, v: ConstInfo) extends ByteOperandOp(
+        owner,
+        OpCode.LDC,
+        "ldc",
+        false,  // signed
+        0) {
+    def this(owner: MethodInfo) = this(owner, null)
+
+    var _const = v
+
+    override def serialize(output: DataOutputStream) {
+        operand = _const.index
+        super.serialize(output)
+    }
+
+    override def deserialize(opCode: Int, input: DataInputStream) {
+        super.deserialize(opCode, input)
+        _const = _owner.constants().getByIndex(operand)
+    }
+
+    override def canonicalForm(): Operation = {
+        return _const match {
+            case c: ConstIntegerInfo => new PushI(_owner, c.value())
+            case c: ConstFloatInfo => new PushF(_owner, c.value())
+            case c: ConstStringInfo => new PushString(_owner, c.value())
+            // TODO: support class / method type / method handle
+            case _ => this
+        }
+    }
+}
+
+class LdcW(owner: MethodInfo, v: ConstInfo) extends ShortOperandOp(
+        owner,
+        OpCode.LDC_W,
+        "ldc_w",
+        false,  // signed
+        0) {
+    def this(owner: MethodInfo) = this(owner, null)
+
+    var _const = v
+
+    override def serialize(output: DataOutputStream) {
+        operand = _const.index
+        super.serialize(output)
+    }
+
+    override def deserialize(opCode: Int, input: DataInputStream) {
+        super.deserialize(opCode, input)
+        _const = _owner.constants().getByIndex(operand)
+    }
+
+    override def canonicalForm(): Operation = {
+        return _const match {
+            case c: ConstIntegerInfo => new PushI(_owner, c.value())
+            case c: ConstFloatInfo => new PushF(_owner, c.value())
+            case c: ConstStringInfo => new PushString(_owner, c.value())
+            // TODO: support class / method type / method handle
+            case _ => this
+        }
+    }
+}
+
+class Ldc2W(owner: MethodInfo, v: ConstInfo) extends ShortOperandOp(
+        owner,
+        OpCode.LDC2_W,
+        "ldc2_w",
+        false,  // signed
+        0) {
+    def this(owner: MethodInfo) = this(owner, null)
+
+    var _const = v
+
+    override def serialize(output: DataOutputStream) {
+        operand = _const.index
+        super.serialize(output)
+    }
+
+    override def deserialize(opCode: Int, input: DataInputStream) {
+        super.deserialize(opCode, input)
+        _const = _owner.constants().getByIndex(operand)
+    }
+
+    override def canonicalForm(): Operation = {
+        return _const match {
+            case c: ConstDoubleInfo => new PushD(_owner, c.value())
+            case c: ConstLongInfo => new PushL(_owner, c.value())
+            case _ => throw new Exception(
+                    "Unexpected constant type: " + _const.typeName())
+        }
+    }
+}

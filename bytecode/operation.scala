@@ -4,7 +4,7 @@ import java.util.Vector
 
 
 abstract class Operation(o: MethodInfo) {
-    var _owner: MethodInfo = null
+    var _owner: MethodInfo = o
     var line = -1
     var pc = -1
 
@@ -18,7 +18,7 @@ abstract class Operation(o: MethodInfo) {
 }
 
 // operations of the form: <op code>
-class NoOperandOp(
+abstract class NoOperandOp(
         owner: MethodInfo,
         opCode: Int,
         mnemonic: String) extends Operation(owner) {
@@ -39,7 +39,7 @@ class NoOperandOp(
 }
 
 // operations of the form: <op code> <byte operand>
-class ByteOperandOp(
+abstract class ByteOperandOp(
         owner: MethodInfo,
         opCode: Int,
         mnemonic: String,
@@ -124,9 +124,9 @@ object Operation {
             case 15 => new Dconst1(owner)
             case 16 => new Bipush(owner)
             case 17 => new Sipush(owner)
-            case 18 => throw new Exception("TODO")
-            case 19 => throw new Exception("TODO")
-            case 20 => throw new Exception("TODO")
+            case 18 => new Ldc(owner)
+            case 19 => new LdcW(owner)
+            case 20 => new Ldc2W(owner)
             case 21 => throw new Exception("TODO")
             case 22 => throw new Exception("TODO")
             case 23 => throw new Exception("TODO")
