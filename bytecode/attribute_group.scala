@@ -48,16 +48,17 @@ abstract class AttributeGroup(o: AttributeOwner) {
             var attr = name.value() match {
 /* TODO
 Code
-RuntimeVisibleParameterAnnotations
-RuntimeInvisibleParameterAnnotations
 AnnotationDefault
 MethodParameters
-RuntimeVisibleAnnotations
-RuntimeInvisibleAnnotations
 LineNumberTable
 LocalVariableTable
 LocalVariableTypeTable
 StackMapTable
+
+RuntimeVisibleParameterAnnotations
+RuntimeInvisibleParameterAnnotations
+RuntimeVisibleAnnotations
+RuntimeInvisibleAnnotations
 RuntimeVisibleTypeAnnotations
 RuntimeInvisibleTypeAnnotations
 */
