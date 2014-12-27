@@ -213,12 +213,18 @@ class Aload3(owner: MethodInfo)
     }
 }
 
+abstract class _LoadFromArray(
+        owner: MethodInfo,
+        opCode: Int,
+        mnemonic: String) extends NoOperandOp(owner, opCode, mnemonic) {
+}
+
 //
 // iaload
 // stack: ..., arrayref, index -> ..., value
 //
 class LoadFromIArray(owner: MethodInfo)
-        extends NoOperandOp(owner, OpCode.IALOAD, "iaload") {
+        extends _LoadFromArray(owner, OpCode.IALOAD, "iaload") {
 }
 
 //
@@ -226,7 +232,7 @@ class LoadFromIArray(owner: MethodInfo)
 // stack: ..., arrayref, index -> ..., value
 //
 class LoadFromLArray(owner: MethodInfo)
-        extends NoOperandOp(owner, OpCode.LALOAD, "laload") {
+        extends _LoadFromArray(owner, OpCode.LALOAD, "laload") {
 }
 
 //
@@ -234,7 +240,7 @@ class LoadFromLArray(owner: MethodInfo)
 // stack: ..., arrayref, index -> ..., value
 //
 class LoadFromFArray(owner: MethodInfo)
-        extends NoOperandOp(owner, OpCode.FALOAD, "faload") {
+        extends _LoadFromArray(owner, OpCode.FALOAD, "faload") {
 }
 
 //
@@ -242,7 +248,7 @@ class LoadFromFArray(owner: MethodInfo)
 // stack: ..., arrayref, index -> ..., value
 //
 class LoadFromDArray(owner: MethodInfo)
-        extends NoOperandOp(owner, OpCode.DALOAD, "daload") {
+        extends _LoadFromArray(owner, OpCode.DALOAD, "daload") {
 }
 
 //
@@ -250,7 +256,7 @@ class LoadFromDArray(owner: MethodInfo)
 // stack: ..., arrayref, index -> ..., value
 //
 class LoadFromAArray(owner: MethodInfo)
-        extends NoOperandOp(owner, OpCode.AALOAD, "aaload") {
+        extends _LoadFromArray(owner, OpCode.AALOAD, "aaload") {
 }
 
 //
@@ -258,7 +264,7 @@ class LoadFromAArray(owner: MethodInfo)
 // stack: ..., arrayref, index -> ..., value
 //
 class LoadFromBArray(owner: MethodInfo)
-        extends NoOperandOp(owner, OpCode.BALOAD, "baload") {
+        extends _LoadFromArray(owner, OpCode.BALOAD, "baload") {
 }
 
 //
@@ -266,7 +272,7 @@ class LoadFromBArray(owner: MethodInfo)
 // stack: ..., arrayref, index -> ..., value
 //
 class LoadFromCArray(owner: MethodInfo)
-        extends NoOperandOp(owner, OpCode.CALOAD, "caload") {
+        extends _LoadFromArray(owner, OpCode.CALOAD, "caload") {
 }
 
 //
@@ -274,5 +280,5 @@ class LoadFromCArray(owner: MethodInfo)
 // stack: ..., arrayref, index -> ..., value
 //
 class LoadFromSArray(owner: MethodInfo)
-        extends NoOperandOp(owner, OpCode.SALOAD, "saload") {
+        extends _LoadFromArray(owner, OpCode.SALOAD, "saload") {
 }
