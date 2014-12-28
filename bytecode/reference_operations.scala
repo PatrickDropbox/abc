@@ -7,7 +7,9 @@ class ClassOp(
         opCode: Int,
         mnemonic: String,
         className: String) extends Operation(owner) {
-    def this(owner: MethodInfo) = this(owner, null)
+    def this(owner: MethodInfo,
+             opCode: Int,
+             mnemonic: String) = this(owner, opCode, mnemonic, null)
 
     val _opCode = opCode
     val _mnemonic = mnemonic
@@ -150,7 +152,7 @@ class New(owner: MethodInfo, className: String)
     def this(owner: MethodInfo) = this(owner, null)
 }
 
-// stack: ... obj ref -> int result
+// stack: ... obj ref -> ..., int result
 class Instanceof(owner: MethodInfo, className: String)
         extends ClassOp(owner, OpCode.INSTANCEOF, "instanceof", className) {
     def this(owner: MethodInfo) = this(owner, null)

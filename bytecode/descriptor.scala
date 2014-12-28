@@ -20,6 +20,9 @@ trait BaseType extends FieldType {
     def arrayType(): Int
 }
 
+trait RefType extends FieldType {
+}
+
 class ByteType extends BaseType {
     def descriptorString(): String = "B"
 
@@ -72,18 +75,18 @@ class BoolType extends BaseType {
     def arrayType(): Int = 4
 }
 
-class ArrayType(t: FieldType) extends FieldType {
+class ArrayType(t: FieldType) extends RefType {
     val itemType = t
 
     def descriptorString(): String = "[" + itemType.descriptorString()
 }
 
-class ObjectType(s: String) extends FieldType {
+class ObjectType(s: String) extends RefType {
     val name = s
 
-    def descriptorString(): String = name
+    def descriptorString(): String = "L" + name + ";"
 
-    def isJavaString(): Boolean = name == "Ljava/lang/String;"
+    def isJavaString(): Boolean = name == "java/lang/String"
 }
 
 class ParameterTypes extends Comparable[ParameterTypes] {
@@ -177,7 +180,7 @@ class DescriptorTokenizer(d: String) {
                     throw new Exception(
                             "malformed descriptor: " + descriptorString)
                 }
-                value = descriptorString.substring(nextPos - 1, end + 1)
+                value = descriptorString.substring(nextPos, end)
                 nextPos = end + 1
                 return DescriptorToken.OBJECT
             }
