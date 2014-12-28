@@ -388,14 +388,16 @@ object Operation {
             case 183 => throw new Exception("TODO")
             case 184 => throw new Exception("TODO")
             case 185 => throw new Exception("TODO")
-            case 186 => throw new Exception("TODO")
+            // XXX: maybe implement this, but I feel dumb after reading the
+            // description ...
+            case 186 => throw new Exception("invokedynamic not implemented")
             case 187 => new New(owner)
             case 188 => throw new Exception("TODO")
             case 189 => throw new Exception("TODO")
             case 190 => new Arraylength(owner)
             case 191 => throw new Exception("TODO")
             case 192 => throw new Exception("TODO")
-            case 193 => throw new Exception("TODO")
+            case 193 => new Instanceof(owner)
             case 194 => new Monitorenter(owner)
             case 195 => new Monitorexit(owner)
             case 196 => return parseWide(owner, input)

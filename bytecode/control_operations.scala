@@ -93,3 +93,9 @@ class Dreturn(owner: MethodInfo)
 class Areturn(owner: MethodInfo)
         extends ReturnValue(owner, OpCode.ARETURN, "areturn") {
 }
+
+
+// TODO: lookup / table switches
+// for serialization, use lookup switch when
+//      8* (# entries) + 8 < 4 * (high - low + 1) + 12
+// otherwise use table switch

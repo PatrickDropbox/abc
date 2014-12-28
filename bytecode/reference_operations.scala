@@ -2,6 +2,47 @@ import java.io.DataInputStream
 import java.io.DataOutputStream
 
 
+class ClassOp(
+        owner: MethodInfo,
+        opCode: Int,
+        mnemonic: String,
+        className: String) extends Operation(owner) {
+    def this(owner: MethodInfo) = this(owner, null)
+
+    val _opCode = opCode
+    val _mnemonic = mnemonic
+
+    var _constClass: ConstClassInfo = null
+    if (className != null) {
+        _constClass = _owner.constants().getClass(className)
+    }
+
+    def serialize(output: DataOutputStream) {
+        output.writeByte(_opCode)
+        output.writeShort(_constClass.index)
+    }
+
+    def deserialize(
+            startAddress: Int,
+            opCode: Int,
+            input: DataInputStream) {
+        if (opCode != _opCode) {
+            throw new Exception("Unexpected op-code: " + opCode)
+        }
+
+        _constClass = _owner.constants().getClassByIndex(
+                input.readUnsignedShort())
+    }
+
+    def debugString(indent: String): String = {
+        var name = "???"
+        if (_constClass != null) {
+            name = _constClass.className()
+        }
+        return indent + _mnemonic + " " + name
+    }
+}
+
 class FieldOp(
         owner: MethodInfo,
         opCode: Int,
@@ -105,34 +146,14 @@ class Putfield(
 
 // stack: ... -> ..., obj ref
 class New(owner: MethodInfo, className: String)
-        extends ShortOperandOp(owner, OpCode.NEW, "new", false, 0) {
+        extends ClassOp(owner, OpCode.NEW, "new", className) {
     def this(owner: MethodInfo) = this(owner, null)
+}
 
-    var _constClass: ConstClassInfo = null
-    if (className != null) {
-        _constClass = _owner.constants().getClass(className)
-    }
-
-    override def serialize(output: DataOutputStream) {
-        operand = _constClass.index
-        super.serialize(output)
-    }
-
-    override def deserialize(
-            startAddress: Int,
-            opCode: Int,
-            input: DataInputStream) {
-        super.deserialize(startAddress: Int, opCode, input)
-        _constClass = _owner.constants().getClassByIndex(operand)
-    }
-
-    override def debugString(indent: String): String = {
-        var name = "???"
-        if (_constClass != null) {
-            name = _constClass.className()
-        }
-        return indent + "new " + name
-    }
+// stack: ... obj ref -> int result
+class Instanceof(owner: MethodInfo, className: String)
+        extends ClassOp(owner, OpCode.INSTANCEOF, "instanceof", className) {
+    def this(owner: MethodInfo) = this(owner, null)
 }
 
 // stack: ..., array ref -> ...
@@ -149,3 +170,4 @@ class Monitorenter(owner: MethodInfo)
 class Monitorexit(owner: MethodInfo)
         extends NoOperandOp(owner, OpCode.MONITOREXIT, "monitorexit") {
 }
+
