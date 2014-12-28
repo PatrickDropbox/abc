@@ -145,6 +145,31 @@ class ShortOperandOp(
     def debugString(): String = _mnemonic + " " + operand
 }
 
+// operations of the form: <op code> <int operand>
+class IntOperandOp(
+        owner: MethodInfo,
+        opCode: Int,
+        mnemonic: String,
+        v: Int) extends Operation(owner) {
+    val _opCode = opCode
+    val _mnemonic = mnemonic
+    var operand = v
+
+    def serialize(output: DataOutputStream) {
+        output.writeByte(_opCode)
+        output.writeInt(operand)
+    }
+
+    def deserialize(opCode: Int, input: DataInputStream) {
+        if (opCode != _opCode) {
+            throw new Exception("Unexpected op-code: " + opCode)
+        }
+        operand = input.readInt()
+    }
+
+    def debugString(): String = _mnemonic + " " + operand
+}
+
 object Operation {
     def parseWide(owner: MethodInfo, input: DataInputStream): Operation = {
         val opCode = input.readUnsignedByte()
@@ -161,7 +186,7 @@ object Operation {
             case OpCode.ASTORE => new StoreA(owner, index)
             case OpCode.LSTORE => new StoreL(owner, index)
             case OpCode.DSTORE => new StoreD(owner, index)
-            case OpCode.RET => throw new Exception("TODO")
+            case OpCode.RET => throw new Exception("ret deprecated")
             case OpCode.IINC => new Iinc(owner, index, input.readShort())
         }
     }
@@ -336,8 +361,8 @@ object Operation {
             case 164 => new IfIcmple(owner)
             case 165 => new IfAcmpeq(owner)
             case 166 => new IfAcmpne(owner)
-            case 167 => throw new Exception("TODO")
-            case 168 => throw new Exception("TODO")
+            case 167 => new Goto(owner)
+            case 168 => throw new Exception("jsr deprecated")
             case 169 => throw new Exception("TODO")
             case 170 => throw new Exception("TODO")
             case 171 => throw new Exception("TODO")
@@ -356,7 +381,7 @@ object Operation {
             case 184 => throw new Exception("TODO")
             case 185 => throw new Exception("TODO")
             case 186 => throw new Exception("TODO")
-            case 187 => throw new Exception("TODO")
+            case 187 => new New(owner)
             case 188 => throw new Exception("TODO")
             case 189 => throw new Exception("TODO")
             case 190 => throw new Exception("TODO")
@@ -369,8 +394,8 @@ object Operation {
             case 197 => throw new Exception("TODO")
             case 198 => new Ifnull(owner)
             case 199 => new Ifnonnull(owner)
-            case 200 => throw new Exception("TODO")
-            case 201 => throw new Exception("TODO")
+            case 200 => new GotoW(owner)
+            case 201 => throw new Exception("jsr_w deprecated")
             case _ => throw new Exception("Unknown op code" + opCode)
         }
 
