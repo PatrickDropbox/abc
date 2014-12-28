@@ -392,10 +392,10 @@ object Operation {
             // description ...
             case 186 => throw new Exception("invokedynamic not implemented")
             case 187 => new New(owner)
-            case 188 => throw new Exception("TODO")
-            case 189 => throw new Exception("TODO")
+            case 188 => new Newarray(owner)
+            case 189 => new Anewarray(owner)
             case 190 => new Arraylength(owner)
-            case 191 => throw new Exception("TODO")
+            case 191 => new Athrow(owner)
             case 192 => throw new Exception("TODO")
             case 193 => new Instanceof(owner)
             case 194 => new Monitorenter(owner)

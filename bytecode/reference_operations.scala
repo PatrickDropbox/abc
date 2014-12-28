@@ -158,9 +158,60 @@ class Instanceof(owner: MethodInfo, className: String)
     def this(owner: MethodInfo) = this(owner, null)
 }
 
+// stack: ..., count -> ..., array ref
+class Newarray(owner: MethodInfo, arrayType: BaseType)
+        extends Operation(owner) {
+    def this(owner: MethodInfo) = this(owner, null)
+
+    var _arrayType = arrayType
+
+    def serialize(output: DataOutputStream) {
+        output.writeByte(OpCode.NEWARRAY)
+        output.writeByte(_arrayType.arrayType())
+    }
+
+    def deserialize(
+            startAddress: Int,
+            opCode: Int,
+            input: DataInputStream) {
+        if (opCode != OpCode.NEWARRAY) {
+            throw new Exception("Unexpected op-code: " + opCode)
+        }
+
+        val v = input.readUnsignedByte()
+        _arrayType = v match {
+            case 4 => new BoolType()
+            case 5 => new CharType()
+            case 6 => new FloatType()
+            case 7 => new DoubleType()
+            case 8 => new ByteType()
+            case 9 => new ShortType()
+            case 10 => new IntType()
+            case 11 => new LongType()
+            case _ => throw new Exception("Unknown base array type " + v)
+        }
+    }
+
+    def debugString(indent: String): String = {
+        return indent + "newarray " + _arrayType.descriptorString()
+    }
+}
+
+// stack: ..., count -> ..., array ref
+// NOTE: for array type, use the descriptor string as class name
+class Anewarray(owner: MethodInfo, className: String)
+        extends ClassOp(owner, OpCode.ANEWARRAY, "anewarray", className) {
+    def this(owner: MethodInfo) = this(owner, null)
+}
+
 // stack: ..., array ref -> ...
 class Arraylength(owner: MethodInfo)
         extends NoOperandOp(owner, OpCode.ARRAYLENGTH, "arraylength") {
+}
+
+// stack: ..., obj ref -> ...
+class Athrow(owner: MethodInfo)
+        extends NoOperandOp(owner, OpCode.ATHROW, "athrow") {
 }
 
 // stack: ..., obj ref -> ...
