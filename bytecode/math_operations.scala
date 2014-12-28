@@ -99,6 +99,17 @@ class Iinc(owner: MethodInfo, index: Int, v: Int)
                 true,  // signed
                 v) {
     def this(owner: MethodInfo) = this(owner, -1, 0)
+
+    override def serialize(output: DataOutputStream) {
+        if (operand1 < 256 && (-128 <= operand2 && operand2 <= 127)) {
+            super.serialize(output)
+        } else {
+            output.writeByte(OpCode.WIDE)
+            output.writeByte(OpCode.IINC)
+            output.writeShort(operand1)
+            output.writeShort(operand2)
+        }
+    }
 }
 
 //

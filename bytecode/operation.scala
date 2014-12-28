@@ -146,6 +146,26 @@ class ShortOperandOp(
 }
 
 object Operation {
+    def parseWide(owner: MethodInfo, input: DataInputStream): Operation = {
+        val opCode = input.readUnsignedByte()
+        val index = input.readUnsignedShort()
+
+        return opCode match {
+            case OpCode.ILOAD => new LoadI(owner, index)
+            case OpCode.FLOAD => new LoadF(owner, index)
+            case OpCode.ALOAD => new LoadF(owner, index)
+            case OpCode.LLOAD => new LoadL(owner, index)
+            case OpCode.DLOAD => new LoadD(owner, index)
+            case OpCode.ISTORE => new StoreI(owner, index)
+            case OpCode.FSTORE => new StoreF(owner, index)
+            case OpCode.ASTORE => new StoreA(owner, index)
+            case OpCode.LSTORE => new StoreL(owner, index)
+            case OpCode.DSTORE => new StoreD(owner, index)
+            case OpCode.RET => throw new Exception("TODO")
+            case OpCode.IINC => new Iinc(owner, index, input.readShort())
+        }
+    }
+
     def deserialize(owner: MethodInfo, input: DataInputStream): Operation = {
         val opCode = input.readUnsignedByte()
         var operation: Operation = opCode match {
@@ -345,7 +365,7 @@ object Operation {
             case 193 => throw new Exception("TODO")
             case 194 => throw new Exception("TODO")
             case 195 => throw new Exception("TODO")
-            case 196 => throw new Exception("TODO")
+            case 196 => return parseWide(owner, input)
             case 197 => throw new Exception("TODO")
             case 198 => new Ifnull(owner)
             case 199 => new Ifnonnull(owner)
@@ -358,3 +378,4 @@ object Operation {
         return operation.canonicalForm()
     }
 }
+
