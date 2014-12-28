@@ -70,6 +70,49 @@ abstract class ByteOperandOp(
     def debugString(): String = _mnemonic + " " + operand
 }
 
+// operations of the form: <op code> <byte operand1> <byte operand2>
+abstract class TwoByteOperandsOp(
+        owner: MethodInfo,
+        opCode: Int,
+        mnemonic: String,
+        signed1: Boolean,
+        v1: Int,
+        signed2: Boolean,
+        v2: Int) extends Operation(owner) {
+    val _opCode = opCode
+    val _mnemonic = mnemonic
+    var isSigned1 = signed1
+    var operand1 = v1
+    var isSigned2 = signed2
+    var operand2 = v2
+
+    def serialize(output: DataOutputStream) {
+        output.writeByte(_opCode)
+        output.writeByte(operand1)
+        output.writeByte(operand2)
+    }
+
+    def deserialize(opCode: Int, input: DataInputStream) {
+        if (opCode != _opCode) {
+            throw new Exception("Unexpected op-code: " + opCode)
+        }
+
+        if (isSigned1) {
+            operand1 = input.readByte()
+        } else {
+            operand1 = input.readUnsignedByte()
+        }
+
+        if (isSigned2) {
+            operand2 = input.readByte()
+        } else {
+            operand2 = input.readUnsignedByte()
+        }
+    }
+
+    def debugString(): String = _mnemonic + " " + operand1 + " " + operand2
+}
+
 // operations of the form: <op code> <short operand>
 class ShortOperandOp(
         owner: MethodInfo,
@@ -202,43 +245,43 @@ object Operation {
             case 93 => new Dup2X1(owner)
             case 94 => new Dup2X2(owner)
             case 95 => new Swap(owner)
-            case 96 => throw new Exception("TODO")
-            case 97 => throw new Exception("TODO")
-            case 98 => throw new Exception("TODO")
-            case 99 => throw new Exception("TODO")
-            case 100 => throw new Exception("TODO")
-            case 101 => throw new Exception("TODO")
-            case 102 => throw new Exception("TODO")
-            case 103 => throw new Exception("TODO")
-            case 104 => throw new Exception("TODO")
-            case 105 => throw new Exception("TODO")
-            case 106 => throw new Exception("TODO")
-            case 107 => throw new Exception("TODO")
-            case 108 => throw new Exception("TODO")
-            case 109 => throw new Exception("TODO")
-            case 110 => throw new Exception("TODO")
-            case 111 => throw new Exception("TODO")
-            case 112 => throw new Exception("TODO")
-            case 113 => throw new Exception("TODO")
-            case 114 => throw new Exception("TODO")
-            case 115 => throw new Exception("TODO")
-            case 116 => throw new Exception("TODO")
-            case 117 => throw new Exception("TODO")
-            case 118 => throw new Exception("TODO")
-            case 119 => throw new Exception("TODO")
-            case 120 => throw new Exception("TODO")
-            case 121 => throw new Exception("TODO")
-            case 122 => throw new Exception("TODO")
-            case 123 => throw new Exception("TODO")
-            case 124 => throw new Exception("TODO")
-            case 125 => throw new Exception("TODO")
-            case 126 => throw new Exception("TODO")
-            case 127 => throw new Exception("TODO")
-            case 128 => throw new Exception("TODO")
-            case 129 => throw new Exception("TODO")
-            case 130 => throw new Exception("TODO")
-            case 131 => throw new Exception("TODO")
-            case 132 => throw new Exception("TODO")
+            case 96 => new Iadd(owner)
+            case 97 => new Ladd(owner)
+            case 98 => new Fadd(owner)
+            case 99 => new Dadd(owner)
+            case 100 => new Isub(owner)
+            case 101 => new Lsub(owner)
+            case 102 => new Fsub(owner)
+            case 103 => new Dsub(owner)
+            case 104 => new Imul(owner)
+            case 105 => new Lmul(owner)
+            case 106 => new Fmul(owner)
+            case 107 => new Dmul(owner)
+            case 108 => new Idiv(owner)
+            case 109 => new Ldiv(owner)
+            case 110 => new Fdiv(owner)
+            case 111 => new Ddiv(owner)
+            case 112 => new Irem(owner)
+            case 113 => new Lrem(owner)
+            case 114 => new Frem(owner)
+            case 115 => new Drem(owner)
+            case 116 => new Ineg(owner)
+            case 117 => new Lneg(owner)
+            case 118 => new Fneg(owner)
+            case 119 => new Dneg(owner)
+            case 120 => new Ishl(owner)
+            case 121 => new Lshl(owner)
+            case 122 => new Ishr(owner)
+            case 123 => new Lshr(owner)
+            case 124 => new Iushr(owner)
+            case 125 => new Lushr(owner)
+            case 126 => new Iand(owner)
+            case 127 => new Land(owner)
+            case 128 => new Ior(owner)
+            case 129 => new Lor(owner)
+            case 130 => new Ixor(owner)
+            case 131 => new Lxor(owner)
+            case 132 => new Iinc(owner)
             case 133 => throw new Exception("TODO")
             case 134 => throw new Exception("TODO")
             case 135 => throw new Exception("TODO")

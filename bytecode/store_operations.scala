@@ -1,7 +1,7 @@
 import java.io.DataInputStream
 import java.io.DataOutputStream
 
-abstract class _Store(
+abstract class Store(
         owner: MethodInfo,
         opCode: Int,
         shortOpCodeStart: Int,
@@ -33,7 +33,7 @@ abstract class _Store(
 // stack: ..., value -> ...
 //
 class StoreI(owner: MethodInfo, index: Int)
-        extends _Store(owner, OpCode.ISTORE, OpCode.ISTORE_0, "istore", index) {
+        extends Store(owner, OpCode.ISTORE, OpCode.ISTORE_0, "istore", index) {
     def this(owner: MethodInfo) = this(owner, 0)
 }
 
@@ -42,7 +42,7 @@ class StoreI(owner: MethodInfo, index: Int)
 // stack: ..., value -> ...
 //
 class StoreL(owner: MethodInfo, index: Int)
-        extends _Store(owner, OpCode.LSTORE, OpCode.LSTORE_0, "lstore", index) {
+        extends Store(owner, OpCode.LSTORE, OpCode.LSTORE_0, "lstore", index) {
     def this(owner: MethodInfo) = this(owner, 0)
 }
 
@@ -51,7 +51,7 @@ class StoreL(owner: MethodInfo, index: Int)
 // stack: ..., value -> ...
 //
 class StoreF(owner: MethodInfo, index: Int)
-        extends _Store(owner, OpCode.FSTORE, OpCode.FSTORE_0, "fstore", index) {
+        extends Store(owner, OpCode.FSTORE, OpCode.FSTORE_0, "fstore", index) {
     def this(owner: MethodInfo) = this(owner, 0)
 }
 
@@ -60,7 +60,7 @@ class StoreF(owner: MethodInfo, index: Int)
 // stack: ..., value -> ...
 //
 class StoreD(owner: MethodInfo, index: Int)
-        extends _Store(owner, OpCode.DSTORE, OpCode.DSTORE_0, "dstore", index) {
+        extends Store(owner, OpCode.DSTORE, OpCode.DSTORE_0, "dstore", index) {
     def this(owner: MethodInfo) = this(owner, 0)
 }
 
@@ -69,7 +69,7 @@ class StoreD(owner: MethodInfo, index: Int)
 // stack: ..., value -> ...
 //
 class StoreA(owner: MethodInfo, index: Int)
-        extends _Store(owner, OpCode.ASTORE, OpCode.ASTORE_0, "astore", index) {
+        extends Store(owner, OpCode.ASTORE, OpCode.ASTORE_0, "astore", index) {
     def this(owner: MethodInfo) = this(owner, 0)
 }
 
@@ -213,7 +213,7 @@ class Astore3(owner: MethodInfo)
     }
 }
 
-abstract class _StoreIntoArray(
+abstract class StoreIntoArray(
         owner: MethodInfo,
         opCode: Int,
         mnemonic: String) extends NoOperandOp(owner, opCode, mnemonic) {
@@ -224,7 +224,7 @@ abstract class _StoreIntoArray(
 // stack: ..., arrayref, index, value -> ...
 //
 class StoreIntoIArray(owner: MethodInfo)
-        extends _StoreIntoArray(owner, OpCode.IASTORE, "iastore") {
+        extends StoreIntoArray(owner, OpCode.IASTORE, "iastore") {
 }
 
 //
@@ -232,7 +232,7 @@ class StoreIntoIArray(owner: MethodInfo)
 // stack: ..., arrayref, index, value -> ...
 //
 class StoreIntoLArray(owner: MethodInfo)
-        extends _StoreIntoArray(owner, OpCode.LASTORE, "lastore") {
+        extends StoreIntoArray(owner, OpCode.LASTORE, "lastore") {
 }
 
 //
@@ -240,7 +240,7 @@ class StoreIntoLArray(owner: MethodInfo)
 // stack: ..., arrayref, index, value -> ...
 //
 class StoreIntoFArray(owner: MethodInfo)
-        extends _StoreIntoArray(owner, OpCode.FASTORE, "fastore") {
+        extends StoreIntoArray(owner, OpCode.FASTORE, "fastore") {
 }
 
 //
@@ -248,7 +248,7 @@ class StoreIntoFArray(owner: MethodInfo)
 // stack: ..., arrayref, index, value -> ...
 //
 class StoreIntoDArray(owner: MethodInfo)
-        extends _StoreIntoArray(owner, OpCode.DASTORE, "dastore") {
+        extends StoreIntoArray(owner, OpCode.DASTORE, "dastore") {
 }
 
 //
@@ -256,7 +256,7 @@ class StoreIntoDArray(owner: MethodInfo)
 // stack: ..., arrayref, index, value -> ...
 //
 class StoreIntoAArray(owner: MethodInfo)
-        extends _StoreIntoArray(owner, OpCode.AASTORE, "aastore") {
+        extends StoreIntoArray(owner, OpCode.AASTORE, "aastore") {
 }
 
 //
@@ -264,7 +264,7 @@ class StoreIntoAArray(owner: MethodInfo)
 // stack: ..., arrayref, index, value -> ...
 //
 class StoreIntoBArray(owner: MethodInfo)
-        extends _StoreIntoArray(owner, OpCode.BASTORE, "bastore") {
+        extends StoreIntoArray(owner, OpCode.BASTORE, "bastore") {
 }
 
 //
@@ -272,7 +272,7 @@ class StoreIntoBArray(owner: MethodInfo)
 // stack: ..., arrayref, index, value -> ...
 //
 class StoreIntoCArray(owner: MethodInfo)
-        extends _StoreIntoArray(owner, OpCode.CASTORE, "castore") {
+        extends StoreIntoArray(owner, OpCode.CASTORE, "castore") {
 }
 
 //
@@ -280,5 +280,5 @@ class StoreIntoCArray(owner: MethodInfo)
 // stack: ..., arrayref, index, value -> ...
 //
 class StoreIntoSArray(owner: MethodInfo)
-        extends _StoreIntoArray(owner, OpCode.SASTORE, "sastore") {
+        extends StoreIntoArray(owner, OpCode.SASTORE, "sastore") {
 }

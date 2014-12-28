@@ -1,7 +1,7 @@
 import java.io.DataInputStream
 import java.io.DataOutputStream
 
-abstract class _Load(
+abstract class Load(
         owner: MethodInfo,
         opCode: Int,
         shortOpCodeStart: Int,
@@ -33,7 +33,7 @@ abstract class _Load(
 // stack: ... -> ..., value
 //
 class LoadI(owner: MethodInfo, index: Int)
-        extends _Load(owner, OpCode.ILOAD, OpCode.ILOAD_0, "iload", index) {
+        extends Load(owner, OpCode.ILOAD, OpCode.ILOAD_0, "iload", index) {
     def this(owner: MethodInfo) = this(owner, 0)
 }
 
@@ -42,7 +42,7 @@ class LoadI(owner: MethodInfo, index: Int)
 // stack: ... -> ..., value
 //
 class LoadL(owner: MethodInfo, index: Int)
-        extends _Load(owner, OpCode.LLOAD, OpCode.LLOAD_0, "lload", index) {
+        extends Load(owner, OpCode.LLOAD, OpCode.LLOAD_0, "lload", index) {
     def this(owner: MethodInfo) = this(owner, 0)
 }
 
@@ -51,7 +51,7 @@ class LoadL(owner: MethodInfo, index: Int)
 // stack: ... -> ..., value
 //
 class LoadF(owner: MethodInfo, index: Int)
-        extends _Load(owner, OpCode.FLOAD, OpCode.FLOAD_0, "fload", index) {
+        extends Load(owner, OpCode.FLOAD, OpCode.FLOAD_0, "fload", index) {
     def this(owner: MethodInfo) = this(owner, 0)
 }
 
@@ -60,7 +60,7 @@ class LoadF(owner: MethodInfo, index: Int)
 // stack: ... -> ..., value
 //
 class LoadD(owner: MethodInfo, index: Int)
-        extends _Load(owner, OpCode.DLOAD, OpCode.DLOAD_0, "dload", index) {
+        extends Load(owner, OpCode.DLOAD, OpCode.DLOAD_0, "dload", index) {
     def this(owner: MethodInfo) = this(owner, 0)
 }
 
@@ -69,7 +69,7 @@ class LoadD(owner: MethodInfo, index: Int)
 // stack: ... -> ..., value
 //
 class LoadA(owner: MethodInfo, index: Int)
-        extends _Load(owner, OpCode.ALOAD, OpCode.ALOAD_0, "aload", index) {
+        extends Load(owner, OpCode.ALOAD, OpCode.ALOAD_0, "aload", index) {
     def this(owner: MethodInfo) = this(owner, 0)
 }
 
@@ -213,7 +213,7 @@ class Aload3(owner: MethodInfo)
     }
 }
 
-abstract class _LoadFromArray(
+abstract class LoadFromArray(
         owner: MethodInfo,
         opCode: Int,
         mnemonic: String) extends NoOperandOp(owner, opCode, mnemonic) {
@@ -224,7 +224,7 @@ abstract class _LoadFromArray(
 // stack: ..., arrayref, index -> ..., value
 //
 class LoadFromIArray(owner: MethodInfo)
-        extends _LoadFromArray(owner, OpCode.IALOAD, "iaload") {
+        extends LoadFromArray(owner, OpCode.IALOAD, "iaload") {
 }
 
 //
@@ -232,7 +232,7 @@ class LoadFromIArray(owner: MethodInfo)
 // stack: ..., arrayref, index -> ..., value
 //
 class LoadFromLArray(owner: MethodInfo)
-        extends _LoadFromArray(owner, OpCode.LALOAD, "laload") {
+        extends LoadFromArray(owner, OpCode.LALOAD, "laload") {
 }
 
 //
@@ -240,7 +240,7 @@ class LoadFromLArray(owner: MethodInfo)
 // stack: ..., arrayref, index -> ..., value
 //
 class LoadFromFArray(owner: MethodInfo)
-        extends _LoadFromArray(owner, OpCode.FALOAD, "faload") {
+        extends LoadFromArray(owner, OpCode.FALOAD, "faload") {
 }
 
 //
@@ -248,7 +248,7 @@ class LoadFromFArray(owner: MethodInfo)
 // stack: ..., arrayref, index -> ..., value
 //
 class LoadFromDArray(owner: MethodInfo)
-        extends _LoadFromArray(owner, OpCode.DALOAD, "daload") {
+        extends LoadFromArray(owner, OpCode.DALOAD, "daload") {
 }
 
 //
@@ -256,7 +256,7 @@ class LoadFromDArray(owner: MethodInfo)
 // stack: ..., arrayref, index -> ..., value
 //
 class LoadFromAArray(owner: MethodInfo)
-        extends _LoadFromArray(owner, OpCode.AALOAD, "aaload") {
+        extends LoadFromArray(owner, OpCode.AALOAD, "aaload") {
 }
 
 //
@@ -264,7 +264,7 @@ class LoadFromAArray(owner: MethodInfo)
 // stack: ..., arrayref, index -> ..., value
 //
 class LoadFromBArray(owner: MethodInfo)
-        extends _LoadFromArray(owner, OpCode.BALOAD, "baload") {
+        extends LoadFromArray(owner, OpCode.BALOAD, "baload") {
 }
 
 //
@@ -272,7 +272,7 @@ class LoadFromBArray(owner: MethodInfo)
 // stack: ..., arrayref, index -> ..., value
 //
 class LoadFromCArray(owner: MethodInfo)
-        extends _LoadFromArray(owner, OpCode.CALOAD, "caload") {
+        extends LoadFromArray(owner, OpCode.CALOAD, "caload") {
 }
 
 //
@@ -280,5 +280,5 @@ class LoadFromCArray(owner: MethodInfo)
 // stack: ..., arrayref, index -> ..., value
 //
 class LoadFromSArray(owner: MethodInfo)
-        extends _LoadFromArray(owner, OpCode.SALOAD, "saload") {
+        extends LoadFromArray(owner, OpCode.SALOAD, "saload") {
 }
