@@ -25,7 +25,7 @@ class FieldOp(
         output.writeShort(_constFieldRef.index)
     }
 
-    def deserialize(opCode: Int, input: DataInputStream) {
+    def deserialize(startAddress: Int, opCode: Int, input: DataInputStream) {
         if (opCode != _opCode) {
             throw new Exception("Unexpected op-code: " + opCode)
         }
@@ -118,8 +118,11 @@ class New(owner: MethodInfo, className: String)
         super.serialize(output)
     }
 
-    override def deserialize(opCode: Int, input: DataInputStream) {
-        super.deserialize(opCode, input)
+    override def deserialize(
+            startAddress: Int,
+            opCode: Int,
+            input: DataInputStream) {
+        super.deserialize(startAddress: Int, opCode, input)
         _constClass = _owner.constants().getClassByIndex(operand)
     }
 

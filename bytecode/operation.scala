@@ -12,7 +12,7 @@ abstract class Operation(o: MethodInfo) {
 
     def serialize(output: DataOutputStream)
 
-    def deserialize(opCode: Int, input: DataInputStream)
+    def deserialize(startAddress: Int, opCode: Int, input: DataInputStream)
 
     def debugString(): String
 }
@@ -29,7 +29,7 @@ abstract class NoOperandOp(
         output.writeByte(_opCode)
     }
 
-    def deserialize(opCode: Int, input: DataInputStream) {
+    def deserialize(startAddress: Int, opCode: Int, input: DataInputStream) {
         if (opCode != _opCode) {
             throw new Exception("Unexpected op-code: " + opCode)
         }
@@ -55,7 +55,7 @@ abstract class ByteOperandOp(
         output.writeByte(operand)
     }
 
-    def deserialize(opCode: Int, input: DataInputStream) {
+    def deserialize(startAddress: Int, opCode: Int, input: DataInputStream) {
         if (opCode != _opCode) {
             throw new Exception("Unexpected op-code: " + opCode)
         }
@@ -92,7 +92,7 @@ abstract class TwoByteOperandsOp(
         output.writeByte(operand2)
     }
 
-    def deserialize(opCode: Int, input: DataInputStream) {
+    def deserialize(startAddress: Int, opCode: Int, input: DataInputStream) {
         if (opCode != _opCode) {
             throw new Exception("Unexpected op-code: " + opCode)
         }
@@ -130,7 +130,7 @@ class ShortOperandOp(
         output.writeShort(operand)
     }
 
-    def deserialize(opCode: Int, input: DataInputStream) {
+    def deserialize(startAddress: Int, opCode: Int, input: DataInputStream) {
         if (opCode != _opCode) {
             throw new Exception("Unexpected op-code: " + opCode)
         }
@@ -160,7 +160,7 @@ class IntOperandOp(
         output.writeInt(operand)
     }
 
-    def deserialize(opCode: Int, input: DataInputStream) {
+    def deserialize(startAddress: Int, opCode: Int, input: DataInputStream) {
         if (opCode != _opCode) {
             throw new Exception("Unexpected op-code: " + opCode)
         }
@@ -191,7 +191,11 @@ object Operation {
         }
     }
 
-    def deserialize(owner: MethodInfo, input: DataInputStream): Operation = {
+    def deserialize(
+            owner: MethodInfo,
+            startAddress: Int,
+            input: DataInputStream): Operation = {
+
         val opCode = input.readUnsignedByte()
         var operation: Operation = opCode match {
             case 0 => new Nop(owner)
@@ -399,7 +403,7 @@ object Operation {
             case _ => throw new Exception("Unknown op code" + opCode)
         }
 
-        operation.deserialize(opCode, input)
+        operation.deserialize(startAddress, opCode, input)
         return operation.canonicalForm()
     }
 }

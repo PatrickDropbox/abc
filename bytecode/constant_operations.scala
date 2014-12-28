@@ -58,7 +58,7 @@ class PushI(owner: MethodInfo, v: Int) extends Operation(owner) {
         }
     }
 
-    def deserialize(opCode: Int, input: DataInputStream) {
+    def deserialize(startAddress: Int, opCode: Int, input: DataInputStream) {
         throw new Exception("cannot directly deserialize \"iconst\"")
     }
 
@@ -87,7 +87,7 @@ class PushL(owner: MethodInfo, v: Long) extends Operation(owner) {
         }
     }
 
-    def deserialize(opCode: Int, input: DataInputStream) {
+    def deserialize(startAddress: Int, opCode: Int, input: DataInputStream) {
         throw new Exception("cannot directly deserialize \"lconst\"")
     }
 
@@ -123,7 +123,7 @@ class PushF(owner: MethodInfo, v: Float) extends Operation(owner) {
         }
     }
 
-    def deserialize(opCode: Int, input: DataInputStream) {
+    def deserialize(startAddress: Int, opCode: Int, input: DataInputStream) {
         throw new Exception("cannot directly deserialize \"fconst\"")
     }
 
@@ -152,7 +152,7 @@ class PushD(owner: MethodInfo, v: Double) extends Operation(owner) {
         }
     }
 
-    def deserialize(opCode: Int, input: DataInputStream) {
+    def deserialize(startAddress: Int, opCode: Int, input: DataInputStream) {
         throw new Exception("cannot directly deserialize \"dconst\"")
     }
 
@@ -181,7 +181,7 @@ class PushString(owner: MethodInfo, v: String) extends Operation(owner) {
         }
     }
 
-    def deserialize(opCode: Int, input: DataInputStream) {
+    def deserialize(startAddress: Int, opCode: Int, input: DataInputStream) {
         throw new Exception("cannot directly deserialize \"sconst\"")
     }
 
@@ -329,8 +329,11 @@ class Ldc(owner: MethodInfo, v: ConstInfo) extends ByteOperandOp(
         super.serialize(output)
     }
 
-    override def deserialize(opCode: Int, input: DataInputStream) {
-        super.deserialize(opCode, input)
+    override def deserialize(
+            startAddress: Int,
+            opCode: Int,
+            input: DataInputStream) {
+        super.deserialize(startAddress, opCode, input)
         _const = _owner.constants().getByIndex(operand)
     }
 
@@ -360,8 +363,11 @@ class LdcW(owner: MethodInfo, v: ConstInfo) extends ShortOperandOp(
         super.serialize(output)
     }
 
-    override def deserialize(opCode: Int, input: DataInputStream) {
-        super.deserialize(opCode, input)
+    override def deserialize(
+            startAddress: Int,
+            opCode: Int,
+            input: DataInputStream) {
+        super.deserialize(startAddress, opCode, input)
         _const = _owner.constants().getByIndex(operand)
     }
 
@@ -391,8 +397,11 @@ class Ldc2W(owner: MethodInfo, v: ConstInfo) extends ShortOperandOp(
         super.serialize(output)
     }
 
-    override def deserialize(opCode: Int, input: DataInputStream) {
-        super.deserialize(opCode, input)
+    override def deserialize(
+            startAddress: Int,
+            opCode: Int,
+            input: DataInputStream) {
+        super.deserialize(startAddress, opCode, input)
         _const = _owner.constants().getByIndex(operand)
     }
 
