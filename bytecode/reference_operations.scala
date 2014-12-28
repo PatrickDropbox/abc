@@ -2,18 +2,15 @@ import java.io.DataInputStream
 import java.io.DataOutputStream
 
 
-// stack: ... -> ..., value
-class Getstatic(
+class FieldOp(
         owner: MethodInfo,
+        opCode: Int,
+        mnemonic: String,
         className: String,
         fieldName: String,
-        fieldType: FieldType) extends ShortOperandOp(
-                owner,
-                OpCode.GETSTATIC,
-                "getstatic",
-                false,
-                0) {
-    def this(owner: MethodInfo) = this(owner, null, null, null)
+        fieldType: FieldType) extends Operation(owner) {
+    val _opCode = opCode
+    val _mnemonic = mnemonic
 
     var _constFieldRef: ConstFieldRefInfo = null
     if (className != null) {
@@ -23,23 +20,87 @@ class Getstatic(
                 fieldType)
     }
 
-    override def serialize(output: DataOutputStream) {
-        operand = _constFieldRef.index
-        super.serialize(output)
+    def serialize(output: DataOutputStream) {
+        output.writeByte(_opCode)
+        output.writeShort(_constFieldRef.index)
     }
 
-    override def deserialize(opCode: Int, input: DataInputStream) {
-        super.deserialize(opCode, input)
-        _constFieldRef = _owner.constants().getFieldRefByIndex(operand)
+    def deserialize(opCode: Int, input: DataInputStream) {
+        if (opCode != _opCode) {
+            throw new Exception("Unexpected op-code: " + opCode)
+        }
+
+        val index = input.readUnsignedShort()
+        _constFieldRef = _owner.constants().getFieldRefByIndex(index)
     }
 
-    override def debugString(): String = {
+    def debugString(): String = {
         var name = "???"
         if (_constFieldRef != null) {
             name = _constFieldRef.debugString()
         }
-        return "getstatic " + name
+        return _mnemonic + " " + name
     }
+}
+
+// stack: ... -> ..., value
+class Getstatic(
+        owner: MethodInfo,
+        className: String,
+        fieldName: String,
+        fieldType: FieldType) extends FieldOp(
+                owner,
+                OpCode.GETSTATIC,
+                "getstatic",
+                className,
+                fieldName,
+                fieldType) {
+    def this(owner: MethodInfo) = this(owner, null, null, null)
+}
+
+// stack: ..., value -> ...
+class Putstatic(
+        owner: MethodInfo,
+        className: String,
+        fieldName: String,
+        fieldType: FieldType) extends FieldOp(
+                owner,
+                OpCode.PUTSTATIC,
+                "putstatic",
+                className,
+                fieldName,
+                fieldType) {
+    def this(owner: MethodInfo) = this(owner, null, null, null)
+}
+
+// stack: ..., obj ref -> ..., value
+class Getfield(
+        owner: MethodInfo,
+        className: String,
+        fieldName: String,
+        fieldType: FieldType) extends FieldOp(
+                owner,
+                OpCode.GETFIELD,
+                "getfield",
+                className,
+                fieldName,
+                fieldType) {
+    def this(owner: MethodInfo) = this(owner, null, null, null)
+}
+
+// stack: ..., obj ref, value -> ...
+class Putfield(
+        owner: MethodInfo,
+        className: String,
+        fieldName: String,
+        fieldType: FieldType) extends FieldOp(
+                owner,
+                OpCode.PUTFIELD,
+                "putfield",
+                className,
+                fieldName,
+                fieldType) {
+    def this(owner: MethodInfo) = this(owner, null, null, null)
 }
 
 // stack: ... -> ..., obj ref
