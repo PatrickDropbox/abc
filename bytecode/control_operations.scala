@@ -25,3 +25,34 @@ class GotoW(owner: MethodInfo, pc: Int)
     }
 }
 
+// return void
+class Return(owner: MethodInfo)
+        extends NoOperandOp(owner, OpCode.RETURN, "return") {
+}
+
+// stack: ..., value -> ...
+abstract class ReturnValue(
+        owner: MethodInfo,
+        opCode: Int,
+        mnemonic: String) extends NoOperandOp(owner, opCode, mnemonic) {
+}
+
+class Ireturn(owner: MethodInfo)
+        extends ReturnValue(owner, OpCode.IRETURN, "ireturn") {
+}
+
+class Lreturn(owner: MethodInfo)
+        extends ReturnValue(owner, OpCode.LRETURN, "lreturn") {
+}
+
+class Freturn(owner: MethodInfo)
+        extends ReturnValue(owner, OpCode.FRETURN, "freturn") {
+}
+
+class Dreturn(owner: MethodInfo)
+        extends ReturnValue(owner, OpCode.DRETURN, "dreturn") {
+}
+
+class Areturn(owner: MethodInfo)
+        extends ReturnValue(owner, OpCode.ARETURN, "areturn") {
+}
