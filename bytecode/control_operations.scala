@@ -25,6 +25,43 @@ class GotoW(owner: MethodInfo, pc: Int)
     }
 }
 
+// DEPRECATED: this is only kept around for deserializing older classes
+// stack: ... -> ..., address
+class Jsr(owner: MethodInfo, pc: Int)
+        extends ShortOperandOp(owner, OpCode.JSR, "jsr", false, pc) {
+    def this(owner: MethodInfo) = this(owner, -1)
+
+    override def serialize(output: DataOutputStream) {
+        throw new Exception("jsr deprecated")
+    }
+}
+
+// DEPRECATED: this is only kept around for deserializing older classes
+// stack: ... -> ..., address
+class JsrW(owner: MethodInfo, pc: Int)
+        extends IntOperandOp(owner, OpCode.JSR, "jsr_w", pc) {
+    def this(owner: MethodInfo) = this(owner, -1)
+
+    override def serialize(output: DataOutputStream) {
+        throw new Exception("jsr_w deprecated")
+    }
+
+    override def canonicalForm(): Operation = {
+        return new Jsr(_owner, operand)
+    }
+}
+
+// DEPRECATED: this is only kept around for deserializing older classes
+class Ret(owner: MethodInfo, index: Int)
+        extends ByteOperandOp(owner, OpCode.RET, "ret", false, index) {
+    def this(owner: MethodInfo) = this(owner, -1)
+
+    override def serialize(output: DataOutputStream) {
+        throw new Exception("ret deprecated")
+    }
+}
+
+
 // return void
 class Return(owner: MethodInfo)
         extends NoOperandOp(owner, OpCode.RETURN, "return") {

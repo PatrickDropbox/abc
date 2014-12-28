@@ -186,7 +186,7 @@ object Operation {
             case OpCode.ASTORE => new StoreA(owner, index)
             case OpCode.LSTORE => new StoreL(owner, index)
             case OpCode.DSTORE => new StoreD(owner, index)
-            case OpCode.RET => throw new Exception("ret deprecated")
+            case OpCode.RET => new Ret(owner, index)
             case OpCode.IINC => new Iinc(owner, index, input.readShort())
         }
     }
@@ -362,8 +362,8 @@ object Operation {
             case 165 => new IfAcmpeq(owner)
             case 166 => new IfAcmpne(owner)
             case 167 => new Goto(owner)
-            case 168 => throw new Exception("jsr deprecated")
-            case 169 => throw new Exception("ret deprecated")
+            case 168 => new Jsr(owner)
+            case 169 => new Ret(owner)
             case 170 => throw new Exception("TODO")
             case 171 => throw new Exception("TODO")
             case 172 => new Ireturn(owner)
@@ -395,7 +395,7 @@ object Operation {
             case 198 => new Ifnull(owner)
             case 199 => new Ifnonnull(owner)
             case 200 => new GotoW(owner)
-            case 201 => throw new Exception("jsr_w deprecated")
+            case 201 => new JsrW(owner)
             case _ => throw new Exception("Unknown op code" + opCode)
         }
 
