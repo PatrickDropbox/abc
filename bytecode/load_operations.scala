@@ -6,26 +6,42 @@ abstract class Load(
         opCode: Int,
         shortOpCodeStart: Int,
         mnemonic: String,
-        v: Int) extends ByteOperandOp(owner, opCode, mnemonic, false, v) {
+        v: Int) extends Operation(owner) {
+    val _opCode = opCode
+    val _mnemonic = mnemonic
     val _shortOpCodeStart = shortOpCodeStart
+    var index = v
 
-    override def serialize(output: DataOutputStream) {
-        operand match {
+    def serialize(output: DataOutputStream) {
+        index match {
             case 0 => output.writeByte(_shortOpCodeStart)
             case 1 => output.writeByte(_shortOpCodeStart + 1)
             case 2 => output.writeByte(_shortOpCodeStart + 2)
             case 3 => output.writeByte(_shortOpCodeStart + 3)
             case _ => {
-                if (operand < 256) {
-                    super.serialize(output)
+                if (index < 256) {
+                    output.writeByte(_opCode)
+                    output.writeByte(index)
                 } else {
                     output.writeByte(OpCode.WIDE)
                     output.writeByte(_opCode)
-                    output.writeShort(operand)
+                    output.writeShort(index)
                 }
             }
         }
     }
+
+    def deserialize(startAddress: Int, opCode: Int, input: DataInputStream) {
+        if (_shortOpCodeStart <= opCode && opCode <= _shortOpCodeStart + 3) {
+            index = opCode - _shortOpCodeStart
+        } else if (opCode == _opCode) {
+            index = input.readUnsignedByte()
+        } else {
+            throw new Exception("Unexpected op code " + opCode)
+        }
+    }
+
+    def debugString(indent: String): String = indent + _opCode + " " + index
 }
 
 //
@@ -34,6 +50,7 @@ abstract class Load(
 //
 class LoadI(owner: MethodInfo, index: Int)
         extends Load(owner, OpCode.ILOAD, OpCode.ILOAD_0, "iload", index) {
+
     def this(owner: MethodInfo) = this(owner, 0)
 }
 
@@ -71,146 +88,6 @@ class LoadD(owner: MethodInfo, index: Int)
 class LoadA(owner: MethodInfo, index: Int)
         extends Load(owner, OpCode.ALOAD, OpCode.ALOAD_0, "aload", index) {
     def this(owner: MethodInfo) = this(owner, 0)
-}
-
-class Iload0(owner: MethodInfo)
-        extends NoOperandOp(owner, OpCode.ILOAD_0, "iload_0") {
-    override def canonicalForm(): Operation = {
-        return new LoadI(owner, 0)
-    }
-}
-
-class Iload1(owner: MethodInfo)
-        extends NoOperandOp(owner, OpCode.ILOAD_1, "iload_1") {
-    override def canonicalForm(): Operation = {
-        return new LoadI(owner, 1)
-    }
-}
-
-class Iload2(owner: MethodInfo)
-        extends NoOperandOp(owner, OpCode.ILOAD_2, "iload_2") {
-    override def canonicalForm(): Operation = {
-        return new LoadI(owner, 2)
-    }
-}
-
-class Iload3(owner: MethodInfo)
-        extends NoOperandOp(owner, OpCode.ILOAD_3, "iload_3") {
-    override def canonicalForm(): Operation = {
-        return new LoadI(owner, 3)
-    }
-}
-
-class Lload0(owner: MethodInfo)
-        extends NoOperandOp(owner, OpCode.LLOAD_0, "lload_0") {
-    override def canonicalForm(): Operation = {
-        return new LoadL(owner, 0)
-    }
-}
-
-class Lload1(owner: MethodInfo)
-        extends NoOperandOp(owner, OpCode.LLOAD_1, "lload_1") {
-    override def canonicalForm(): Operation = {
-        return new LoadL(owner, 1)
-    }
-}
-
-class Lload2(owner: MethodInfo)
-        extends NoOperandOp(owner, OpCode.LLOAD_2, "lload_2") {
-    override def canonicalForm(): Operation = {
-        return new LoadL(owner, 2)
-    }
-}
-
-class Lload3(owner: MethodInfo)
-        extends NoOperandOp(owner, OpCode.LLOAD_3, "lload_3") {
-    override def canonicalForm(): Operation = {
-        return new LoadL(owner, 3)
-    }
-}
-
-class Fload0(owner: MethodInfo)
-        extends NoOperandOp(owner, OpCode.FLOAD_0, "fload_0") {
-    override def canonicalForm(): Operation = {
-        return new LoadF(owner, 0)
-    }
-}
-
-class Fload1(owner: MethodInfo)
-        extends NoOperandOp(owner, OpCode.FLOAD_1, "fload_1") {
-    override def canonicalForm(): Operation = {
-        return new LoadF(owner, 1)
-    }
-}
-
-class Fload2(owner: MethodInfo)
-        extends NoOperandOp(owner, OpCode.FLOAD_2, "fload_2") {
-    override def canonicalForm(): Operation = {
-        return new LoadF(owner, 2)
-    }
-}
-
-class Fload3(owner: MethodInfo)
-        extends NoOperandOp(owner, OpCode.FLOAD_3, "fload_3") {
-    override def canonicalForm(): Operation = {
-        return new LoadF(owner, 3)
-    }
-}
-
-class Dload0(owner: MethodInfo)
-        extends NoOperandOp(owner, OpCode.DLOAD_0, "dload_0") {
-    override def canonicalForm(): Operation = {
-        return new LoadD(owner, 0)
-    }
-}
-
-class Dload1(owner: MethodInfo)
-        extends NoOperandOp(owner, OpCode.DLOAD_1, "dload_1") {
-    override def canonicalForm(): Operation = {
-        return new LoadD(owner, 1)
-    }
-}
-
-class Dload2(owner: MethodInfo)
-        extends NoOperandOp(owner, OpCode.DLOAD_2, "dload_2") {
-    override def canonicalForm(): Operation = {
-        return new LoadD(owner, 2)
-    }
-}
-
-class Dload3(owner: MethodInfo)
-        extends NoOperandOp(owner, OpCode.DLOAD_3, "dload_3") {
-    override def canonicalForm(): Operation = {
-        return new LoadD(owner, 3)
-    }
-}
-
-class Aload0(owner: MethodInfo)
-        extends NoOperandOp(owner, OpCode.ALOAD_0, "aload_0") {
-    override def canonicalForm(): Operation = {
-        return new LoadA(owner, 0)
-    }
-}
-
-class Aload1(owner: MethodInfo)
-        extends NoOperandOp(owner, OpCode.ALOAD_1, "aload_1") {
-    override def canonicalForm(): Operation = {
-        return new LoadA(owner, 1)
-    }
-}
-
-class Aload2(owner: MethodInfo)
-        extends NoOperandOp(owner, OpCode.ALOAD_2, "aload_2") {
-    override def canonicalForm(): Operation = {
-        return new LoadA(owner, 2)
-    }
-}
-
-class Aload3(owner: MethodInfo)
-        extends NoOperandOp(owner, OpCode.ALOAD_3, "aload_3") {
-    override def canonicalForm(): Operation = {
-        return new LoadA(owner, 3)
-    }
 }
 
 abstract class LoadFromArray(
