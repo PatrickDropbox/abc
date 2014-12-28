@@ -14,7 +14,7 @@ abstract class Operation(o: MethodInfo) {
 
     def deserialize(startAddress: Int, opCode: Int, input: DataInputStream)
 
-    def debugString(): String
+    def debugString(indent: String): String
 }
 
 // operations of the form: <op code>
@@ -35,7 +35,7 @@ abstract class NoOperandOp(
         }
     }
 
-    def debugString(): String = _mnemonic
+    def debugString(indent: String): String = indent + _mnemonic
 }
 
 // operations of the form: <op code> <byte operand>
@@ -67,7 +67,7 @@ abstract class ByteOperandOp(
         }
     }
 
-    def debugString(): String = _mnemonic + " " + operand
+    def debugString(indent: String): String = indent + _mnemonic + " " + operand
 }
 
 // operations of the form: <op code> <byte operand1> <byte operand2>
@@ -110,7 +110,9 @@ abstract class TwoByteOperandsOp(
         }
     }
 
-    def debugString(): String = _mnemonic + " " + operand1 + " " + operand2
+    def debugString(indent: String): String = {
+        return indent + _mnemonic + " " + operand1 + " " + operand2
+    }
 }
 
 // operations of the form: <op code> <short operand>
@@ -142,7 +144,9 @@ class ShortOperandOp(
         }
     }
 
-    def debugString(): String = _mnemonic + " " + operand
+    def debugString(indent: String): String = {
+        return indent + _mnemonic + " " + operand
+    }
 }
 
 // operations of the form: <op code> <int operand>
@@ -167,7 +171,7 @@ class IntOperandOp(
         operand = input.readInt()
     }
 
-    def debugString(): String = _mnemonic + " " + operand
+    def debugString(indent: String): String = indent + _mnemonic + " " + operand
 }
 
 object Operation {

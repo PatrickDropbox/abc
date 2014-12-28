@@ -34,12 +34,12 @@ class FieldOp(
         _constFieldRef = _owner.constants().getFieldRefByIndex(index)
     }
 
-    def debugString(): String = {
+    def debugString(indent: String): String = {
         var name = "???"
         if (_constFieldRef != null) {
             name = _constFieldRef.debugString()
         }
-        return _mnemonic + " " + name
+        return indent + _mnemonic + " " + name
     }
 }
 
@@ -126,12 +126,12 @@ class New(owner: MethodInfo, className: String)
         _constClass = _owner.constants().getClassByIndex(operand)
     }
 
-    override def debugString(): String = {
+    override def debugString(indent: String): String = {
         var name = "???"
         if (_constClass != null) {
             name = _constClass.className()
         }
-        return "new " + name
+        return indent + "new " + name
     }
 }
 

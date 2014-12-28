@@ -62,7 +62,7 @@ class PushI(owner: MethodInfo, v: Int) extends Operation(owner) {
         throw new Exception("cannot directly deserialize \"iconst\"")
     }
 
-    def debugString(): String = "\"iconst\" " + value
+    def debugString(indent: String): String = indent + "\"iconst\" " + value
 }
 
 //
@@ -91,7 +91,7 @@ class PushL(owner: MethodInfo, v: Long) extends Operation(owner) {
         throw new Exception("cannot directly deserialize \"lconst\"")
     }
 
-    def debugString(): String = "\"lconst\" " + value
+    def debugString(indent: String): String = indent + "\"lconst\" " + value
 }
 
 //
@@ -127,7 +127,7 @@ class PushF(owner: MethodInfo, v: Float) extends Operation(owner) {
         throw new Exception("cannot directly deserialize \"fconst\"")
     }
 
-    def debugString(): String = "\"fconst\" " + value
+    def debugString(indent: String): String = indent + "\"fconst\" " + value
 }
 
 //
@@ -156,7 +156,7 @@ class PushD(owner: MethodInfo, v: Double) extends Operation(owner) {
         throw new Exception("cannot directly deserialize \"dconst\"")
     }
 
-    def debugString(): String = "\"dconst\" " + value
+    def debugString(indent: String): String = indent + "\"dconst\" " + value
 }
 
 //
@@ -185,7 +185,7 @@ class PushString(owner: MethodInfo, v: String) extends Operation(owner) {
         throw new Exception("cannot directly deserialize \"sconst\"")
     }
 
-    def debugString(): String = "\"sconst\" " + value
+    def debugString(indent: String): String = indent + "\"sconst\" " + value
 }
 
 class IconstM1(owner: MethodInfo)
