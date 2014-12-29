@@ -1,6 +1,7 @@
 import java.io.ByteArrayOutputStream
 import java.io.DataInputStream
 import java.io.DataOutputStream
+import java.util.TreeMap
 import java.util.Vector
 
 import scala.collection.JavaConversions._
@@ -252,7 +253,7 @@ class ExceptionsAttribute(
 
     def serialize(output: DataOutputStream) {
         output.writeShort(_name.index)
-        output.writeShort(2 + 2 * _exceptions.size())
+        output.writeInt(2 + 2 * _exceptions.size())
         output.writeShort(_exceptions.size())
         for (c <- _exceptions) {
             output.writeShort(c.index)
@@ -290,5 +291,45 @@ class ExceptionsAttribute(
         }
 
         return indent + name() + ": " + result
+    }
+}
+
+class LineNumberTableAttribute(
+        o: AttributeOwner) extends Attribute(o, "LineNumberTable") {
+    // pc -> line #
+    var _table = new TreeMap[Int, Int]()
+
+    def mergeFrom(other: LineNumberTableAttribute) {
+        for (entry <- _table.entrySet()) {
+            _table.put(entry.getKey(), entry.getValue())
+        }
+    }
+
+    def serialize(output: DataOutputStream) {
+        output.writeShort(_name.index)
+        output.writeInt(2 + 4 * _table.size())
+        output.writeShort(_table.size())
+        for (entry <- _table.entrySet()) {
+            output.writeShort(entry.getKey())
+            output.writeShort(entry.getValue())
+        }
+    }
+
+    def deserialize(n: ConstUtf8Info, attrLength: Int, input: DataInputStream) {
+        val numEntries = input.readUnsignedShort()
+        for (_ <- 1 to numEntries) {
+            val pc = input.readUnsignedShort()
+            val line = input.readUnsignedShort()
+            _table.put(pc, line)
+        }
+    }
+
+    def debugString(indent: String): String = {
+        var result = indent + "LineNumberTable:\n"
+        for (entry <- _table.entrySet()) {
+            result += indent + "  " + entry.getKey() +
+                    ": line " + entry.getValue() + "\n"
+        }
+        return result
     }
 }

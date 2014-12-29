@@ -101,7 +101,7 @@ class BootstrapMethodsAttribute(
         val value = buffer.toByteArray()
 
         output.writeShort(_name.index)
-        output.writeShort(2 + value.length)
+        output.writeInt(2 + value.length)
         output.writeShort(_methods.size())
         output.write(value)
     }

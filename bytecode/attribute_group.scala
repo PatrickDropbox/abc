@@ -47,10 +47,8 @@ abstract class AttributeGroup(o: AttributeOwner) {
                     inputStream.readUnsignedShort())
             var attr = name.value() match {
 /* TODO
-Code
 AnnotationDefault
 MethodParameters
-LineNumberTable
 LocalVariableTable
 LocalVariableTypeTable
 StackMapTable
@@ -63,11 +61,13 @@ RuntimeVisibleTypeAnnotations
 RuntimeInvisibleTypeAnnotations
 */
                 case "BootstrapMethods" => new BootstrapMethodsAttribute(_owner)
+                case "Code" => new CodeAttribute(_owner)
                 case "ConstantValue" => new ConstantValueAttribute(_owner)
                 case "Deprecated" => new DeprecatedAttribute(_owner)
                 case "EnclosingMethod" => new EnclosingMethodAttribute(_owner)
                 case "Exceptions" => new ExceptionsAttribute(_owner)
                 case "InnerClasses" => new InnerClassesAttribute(_owner)
+                case "LineNumberTable" => new LineNumberTableAttribute(_owner)
                 case "Signature" => new SignatureAttribute(_owner)
                 case "SourceDebugExtension" =>
                         new SourceDebugExtensionAttribute(_owner)
@@ -400,6 +400,7 @@ class FieldAttributes(f: FieldInfo) extends AttributeGroup(f) {
 class MethodAttributes(m: MethodInfo) extends AttributeGroup(m) {
     var _signature: SignatureAttribute = null
     var _exceptions: ExceptionsAttribute = null
+    var _code: CodeAttribute = null
     var _deprecated: DeprecatedAttribute = null
     var _synthetic: SyntheticAttribute = null
 
@@ -430,6 +431,8 @@ class MethodAttributes(m: MethodInfo) extends AttributeGroup(m) {
         _exceptions.add(exceptionName)
     }
 
+    def code(): CodeAttribute = _code
+
     def isDeprecated(): Boolean = _deprecated != null
     def setIsDeprecated(b: Boolean) {
         if (b) {
@@ -459,6 +462,9 @@ class MethodAttributes(m: MethodInfo) extends AttributeGroup(m) {
         if (_exceptions != null) {
             allAttributes.add(_exceptions)
         }
+        if (_code != null) {
+            allAttributes.add(_code)
+        }
         if (_deprecated != null) {
             allAttributes.add(_deprecated)
         }
@@ -477,6 +483,12 @@ class MethodAttributes(m: MethodInfo) extends AttributeGroup(m) {
         for (a <- _readAttributes(input)) {
             a match {
                 // TODO
+                case attr: CodeAttribute => {
+                    if (_code != null) {
+                        throw new Exception("multiple code attribute")
+                    }
+                    _code = attr
+                }
                 case attr: DeprecatedAttribute => {
                     if (_deprecated != null) {
                         throw new Exception("multiple deprecated attribute")
@@ -510,3 +522,40 @@ class MethodAttributes(m: MethodInfo) extends AttributeGroup(m) {
 }
 
 // TODO code attributes
+class CodeAttributes(c: CodeAttribute) extends AttributeGroup(c) {
+    var _lineNumberTable: LineNumberTableAttribute = null
+
+    def allAttributes(): Vector[Attribute] = {
+        var allAttributes = new Vector[Attribute]()
+
+        // TODO
+
+        if (_lineNumberTable != null) {
+            allAttributes.add(_lineNumberTable)
+        }
+
+        for (attr <- _unsupported) {
+            allAttributes.add(attr)
+        }
+
+        return allAttributes
+    }
+
+    def deserialize(input: DataInputStream) {
+        for (a <- _readAttributes(input)) {
+            a match {
+                // TODO
+                case attr: LineNumberTableAttribute => {
+                    if (_lineNumberTable != null) {
+                        _lineNumberTable.mergeFrom(attr)
+                    } else {
+                        _lineNumberTable = attr
+                    }
+                }
+                case attr: UnsupportedAttribute => _unsupported.add(attr)
+                case _ => throw new Exception(
+                        "Unexpected method attribute: " + a.name())
+            }
+        }
+    }
+}
