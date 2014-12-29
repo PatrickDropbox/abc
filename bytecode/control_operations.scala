@@ -98,4 +98,5 @@ class Areturn(owner: AttributeOwner)
 // TODO: lookup / table switches
 // for serialization, use lookup switch when
 //      8* (# entries) + 8 < 4 * (high - low + 1) + 12
+// => 2 * n < (h - l +2)
 // otherwise use table switch

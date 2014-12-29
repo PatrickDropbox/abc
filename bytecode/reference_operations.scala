@@ -6,7 +6,7 @@ class ClassOp(
         owner: AttributeOwner,
         opCode: Int,
         mnemonic: String,
-        className: String) extends Operation(owner) {
+        t: RefType) extends Operation(owner) {
     def this(owner: AttributeOwner,
              opCode: Int,
              mnemonic: String) = this(owner, opCode, mnemonic, null)
@@ -14,8 +14,14 @@ class ClassOp(
     val _opCode = opCode
     val _mnemonic = mnemonic
 
+    val _classType = t
     var _constClass: ConstClassInfo = null
-    if (className != null) {
+    if (t != null) {
+        val className = t match {
+            case t: ArrayType => t.descriptorString()
+            case t: ObjectType => t.name
+            case _ => throw new Exception("Unexpected type ...")
+        }
         _constClass = _owner.constants().getClass(className)
     }
 
@@ -272,20 +278,20 @@ class Invokevirtual(
 }
 
 // stack: ... -> ..., obj ref
-class New(owner: AttributeOwner, className: String)
-        extends ClassOp(owner, OpCode.NEW, "new", className) {
+class New(owner: AttributeOwner, t: ObjectType)
+        extends ClassOp(owner, OpCode.NEW, "new", t) {
     def this(owner: AttributeOwner) = this(owner, null)
 }
 
 // stack: ... obj ref -> ..., obj ref
-class Checkcast(owner: AttributeOwner, className: String)
-        extends ClassOp(owner, OpCode.CHECKCAST, "checkcast", className) {
+class Checkcast(owner: AttributeOwner, t: ObjectType)
+        extends ClassOp(owner, OpCode.CHECKCAST, "checkcast", t) {
     def this(owner: AttributeOwner) = this(owner, null)
 }
 
 // stack: ... obj ref -> ..., int result
-class Instanceof(owner: AttributeOwner, className: String)
-        extends ClassOp(owner, OpCode.INSTANCEOF, "instanceof", className) {
+class Instanceof(owner: AttributeOwner, t: ObjectType)
+        extends ClassOp(owner, OpCode.INSTANCEOF, "instanceof", t) {
     def this(owner: AttributeOwner) = this(owner, null)
 }
 
@@ -331,20 +337,20 @@ class Newarray(owner: AttributeOwner, arrayType: BaseType)
 
 // stack: ..., count -> ..., array ref
 // NOTE: for array type, use the descriptor string as class name
-class Anewarray(owner: AttributeOwner, className: String)
-        extends ClassOp(owner, OpCode.ANEWARRAY, "anewarray", className) {
+class Anewarray(owner: AttributeOwner, t: RefType)
+        extends ClassOp(owner, OpCode.ANEWARRAY, "anewarray", t) {
     def this(owner: AttributeOwner) = this(owner, null)
 }
 
 // stack: ..., count1, [count2, ...] -> ..., array ref
 class Multianewarray(
         owner: AttributeOwner,
-        arrayDescriptorString: String,
+        t: ArrayType,
         dimensions: Int) extends ClassOp(
                 owner,
                 OpCode.MULTIANEWARRAY,
                 "multianewarray",
-                arrayDescriptorString) {
+                t) {
     def this(owner: AttributeOwner) = this (owner, null, 0)
 
     var _dimensions = dimensions
