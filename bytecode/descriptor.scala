@@ -96,6 +96,8 @@ class ParameterTypes extends Comparable[ParameterTypes] {
         _parameters.add(field)
     }
 
+    def size(): Int = _parameters.size()
+
     def descriptorString(): String = {
         var result = "("
         for (p <- _parameters) {

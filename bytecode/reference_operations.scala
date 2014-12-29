@@ -86,6 +86,55 @@ class FieldOp(
     }
 }
 
+class MethodOp(
+        owner: MethodInfo,
+        opCode: Int,
+        mnemonic: String,
+        className: String,
+        methodName: String,
+        methodType: MethodType,
+        useInterfaceMethodRef: Boolean) extends Operation(owner) {
+    val _opCode = opCode
+    val _mnemonic = mnemonic
+
+    var _constMethodRef: ConstBaseMethodRefInfo = null
+    if (className != null) {
+        if (useInterfaceMethodRef) {
+            _constMethodRef = _owner.constants().getInterfaceMethodRef(
+                    className,
+                    methodName,
+                    methodType)
+        } else {
+            _constMethodRef = _owner.constants().getMethodRef(
+                    className,
+                    methodName,
+                    methodType)
+        }
+    }
+
+    def serialize(output: DataOutputStream) {
+        output.writeByte(_opCode)
+        output.writeShort(_constMethodRef.index)
+    }
+
+    def deserialize(startAddress: Int, opCode: Int, input: DataInputStream) {
+        if (opCode != _opCode) {
+            throw new Exception("Unexpected op-code: " + opCode)
+        }
+
+        val index = input.readUnsignedShort()
+        _constMethodRef = _owner.constants().getBaseMethodRefByIndex(index)
+    }
+
+    def debugString(indent: String): String = {
+        var name = "???"
+        if (_constMethodRef != null) {
+            name = _constMethodRef.debugString()
+        }
+        return indent + _mnemonic + " " + name
+    }
+}
+
 // stack: ... -> ..., value
 class Getstatic(
         owner: MethodInfo,
@@ -146,9 +195,91 @@ class Putfield(
     def this(owner: MethodInfo) = this(owner, null, null, null)
 }
 
+// stack: ..., objref, [arg1, [arg2, ...]] -> ..., [result]
+class Invokeinterface(
+        owner: MethodInfo,
+        className: String,
+        methodName: String,
+        methodType: MethodType) extends MethodOp(
+                owner,
+                OpCode.INVOKEINTERFACE,
+                "invokeinterface",
+                className,
+                methodName,
+                methodType,
+                true) {  // use interface method ref
+    def this(owner: MethodInfo) = this(owner, null, null, null)
+
+    override def serialize(output: DataOutputStream) {
+        super.serialize(output)
+        val methodType = _constMethodRef.methodDescriptor()
+        output.writeByte(1 + methodType.parameters.size())
+        output.writeByte(0)
+    }
+
+    override def deserialize(pc: Int, opCode: Int, input: DataInputStream) {
+        super.deserialize(pc, opCode, input)
+        input.readUnsignedShort()  // ignore padding
+    }
+}
+
+// stack: ..., objref, [arg1, [arg2, ...]] -> ..., [result]
+class Invokespecial(
+        owner: MethodInfo,
+        className: String,
+        methodName: String,
+        methodType: MethodType) extends MethodOp(
+                owner,
+                OpCode.INVOKESPECIAL,
+                "invokespecial",
+                className,
+                methodName,
+                methodType,
+                false) {  // use interface method ref
+    def this(owner: MethodInfo) = this(owner, null, null, null)
+}
+
+// stack: ..., [arg1, [arg2, ...]] -> ..., [result]
+class Invokestatic(
+        owner: MethodInfo,
+        className: String,
+        methodName: String,
+        methodType: MethodType) extends MethodOp(
+                owner,
+                OpCode.INVOKESTATIC,
+                "invokestatic",
+                className,
+                methodName,
+                methodType,
+                false) {  // use interface method ref
+    def this(owner: MethodInfo) = this(owner, null, null, null)
+}
+
+// stack: ..., objref, [arg1, [arg2, ...]] -> ..., [result]
+class Invokevirtual(
+        owner: MethodInfo,
+        className: String,
+        methodName: String,
+        methodType: MethodType) extends MethodOp(
+                owner,
+                OpCode.INVOKEVIRTUAL,
+                "invokevirtual",
+                className,
+                methodName,
+                methodType,
+                false) {  // use interface method ref
+    def this(owner: MethodInfo) = this(owner, null, null, null)
+}
+
 // stack: ... -> ..., obj ref
 class New(owner: MethodInfo, className: String)
         extends ClassOp(owner, OpCode.NEW, "new", className) {
+    def this(owner: MethodInfo) = this(owner, null)
+}
+
+// stack: ... obj ref -> ..., obj ref
+class Checkcast(owner: MethodInfo, className: String)
+        extends ClassOp(owner, OpCode.CHECKCAST, "checkcast", className) {
     def this(owner: MethodInfo) = this(owner, null)
 }
 
@@ -202,6 +333,34 @@ class Newarray(owner: MethodInfo, arrayType: BaseType)
 class Anewarray(owner: MethodInfo, className: String)
         extends ClassOp(owner, OpCode.ANEWARRAY, "anewarray", className) {
     def this(owner: MethodInfo) = this(owner, null)
+}
+
+// stack: ..., count1, [count2, ...] -> ..., array ref
+class Multianewarray(
+        owner: MethodInfo,
+        arrayDescriptorString: String,
+        dimensions: Int) extends ClassOp(
+                owner,
+                OpCode.MULTIANEWARRAY,
+                "multianewarray",
+                arrayDescriptorString) {
+    def this(owner: MethodInfo) = this (owner, null, 0)
+
+    var _dimensions = dimensions
+
+    override def serialize(output: DataOutputStream) {
+        super.serialize(output)
+        output.writeByte(_dimensions)
+    }
+
+    override def deserialize(pc: Int, opCode: Int, input: DataInputStream) {
+        super.deserialize(pc, opCode, input)
+        _dimensions = input.readUnsignedByte()
+    }
+
+    override def debugString(indent: String): String = {
+        return super.debugString(indent) + " " + _dimensions
+    }
 }
 
 // stack: ..., array ref -> ...

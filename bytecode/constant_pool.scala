@@ -285,6 +285,10 @@ class ConstantPool(owner: ClassInfo) {
         return _getByIndex[ConstFieldRefInfo](index)
     }
 
+    def getBaseMethodRefByIndex(index: Int): ConstBaseMethodRefInfo = {
+        return _getByIndex[ConstBaseMethodRefInfo](index)
+    }
+
     def getMethodRefByIndex(index: Int): ConstMethodRefInfo = {
         return _getByIndex[ConstMethodRefInfo](index)
     }
