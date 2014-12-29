@@ -1,18 +1,61 @@
 import java.io.DataInputStream
 import java.io.DataOutputStream
+import java.util.TreeMap
 
 
-class Goto(owner: AttributeOwner, pcOffset: Int)
-        extends ShortOperandOp(owner, OpCode.GOTO, "goto", false, pcOffset) {
-    def this(owner: AttributeOwner) = this(owner, -1)
+class Goto(owner: AttributeOwner,
+           current: CodeBlock,
+           target: CodeBlock)
+        extends Operation(owner) {
+    def this(owner: AttributeOwner, offset: Int) = {
+        this(owner, null, null)
+        _offset = offset
+    }
 
-    override def serialize(output: DataOutputStream) {
-        if (pcOffset <= 65535) {
-            super.serialize(output)
+    def this(owner: AttributeOwner) = this(owner, 0)
+
+    var _currentBlock = current
+    var _targetBlock = target
+    var _offset = 0
+
+    def serialize(output: DataOutputStream) {
+        if (_currentBlock.segmentNumber + 1 == _targetBlock.segmentNumber) {
+            // skip writing goto since the two code block are next to each other
+            return
+        }
+        _offset = _targetBlock.pc - pc
+        if (_offset <= 65535) {
+            output.writeByte(OpCode.GOTO)
+            output.writeShort(_offset)
         } else {
             output.writeByte(OpCode.GOTO_W)
-            output.writeInt(operand)
+            output.writeInt(_offset)
         }
+    }
+
+    def deserialize(startAddress: Int, opCode: Int, input: DataInputStream) {
+        if (opCode != OpCode.GOTO) {
+            throw new Exception("Unexpected op-code: " + opCode)
+        }
+
+        _offset = input.readUnsignedByte()
+    }
+
+    override def bindBlockRefs(table: TreeMap[Int, CodeBlock]) {
+        val entry = table.floorEntry(pc)
+        if (entry == null) {
+            throw new Exception("can't find current block")
+        }
+        _currentBlock = entry.getValue()
+
+        _targetBlock = table.get(pc + _offset)
+        if (_targetBlock == null) {
+            throw new Exception("can't find target block")
+        }
+    }
+
+    def debugString(indent: String): String = {
+        return indent + _pcLine() + ": goto (offset) " + _offset
     }
 }
 

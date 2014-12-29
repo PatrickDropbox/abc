@@ -1,6 +1,7 @@
 import java.io.ByteArrayInputStream
 import java.io.DataInputStream
 import java.io.DataOutputStream
+import java.util.TreeMap
 import java.util.Vector
 
 
@@ -14,6 +15,9 @@ abstract class Operation(o: AttributeOwner) {
     def serialize(output: DataOutputStream)
 
     def deserialize(startAddress: Int, opCode: Int, input: DataInputStream)
+
+    // used for control flow graph reconstruction.
+    def bindBlockRefs(table: TreeMap[Int, CodeBlock]) {}
 
     def debugString(indent: String): String
 

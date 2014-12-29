@@ -13,7 +13,7 @@ abstract class CodeSegment(
     var _parentScope: CodeSection = parent
     var _lineContext: LineContext = context
 
-    var _segmentNumber = -1
+    var segmentNumber = -1
 
     def _assignAddress(startAddress: Int): Int
 }
@@ -236,6 +236,8 @@ class CodeBlock(parent: CodeSection)
     // Control operations
     //
 
+    def goto(target: CodeBlock) { _addControl(new Goto(_owner, this, target)) }
+
     // XXX: maybe infer return type from method signature?
     def returnI() { _addControl(new Ireturn(_owner)) }
     def returnL() { _addControl(new Lreturn(_owner)) }
@@ -266,8 +268,6 @@ IfAcmpne(owner)
 
 Ifnull(owner)
 Ifnonnull(owner)
-
-Goto(owner)
 */
 
     def _assignAddress(startAddress: Int): Int = {
