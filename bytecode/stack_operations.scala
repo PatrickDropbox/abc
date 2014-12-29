@@ -6,7 +6,7 @@ import java.io.DataOutputStream
 // pop
 // stack: ..., value -> ...
 //
-class Pop(owner: MethodInfo) extends NoOperandOp(owner, OpCode.POP, "pop") {
+class Pop(owner: AttributeOwner) extends NoOperandOp(owner, OpCode.POP, "pop") {
 }
 
 //
@@ -16,14 +16,15 @@ class Pop(owner: MethodInfo) extends NoOperandOp(owner, OpCode.POP, "pop") {
 // stack: ..., value -> ... (category 2 value)
 // (see table 2.3  / pg 29)
 //
-class Pop2(owner: MethodInfo) extends NoOperandOp(owner, OpCode.POP2, "pop2") {
+class Pop2(owner: AttributeOwner)
+        extends NoOperandOp(owner, OpCode.POP2, "pop2") {
 }
 
 //
 // dup
 // stack: ..., value -> ..., value, value
 //
-class Dup(owner: MethodInfo) extends NoOperandOp(owner, OpCode.DUP, "dup") {
+class Dup(owner: AttributeOwner) extends NoOperandOp(owner, OpCode.DUP, "dup") {
 }
 
 //
@@ -31,7 +32,7 @@ class Dup(owner: MethodInfo) extends NoOperandOp(owner, OpCode.DUP, "dup") {
 // stack: ..., value2, value1 -> ..., value1, value2, value1
 // (value1 and value2 must be category 1; see table 2.3 / pg 29)
 //
-class DupX1(owner: MethodInfo)
+class DupX1(owner: AttributeOwner)
         extends NoOperandOp(owner, OpCode.DUP_X1, "dup_x1") {
 }
 
@@ -41,7 +42,7 @@ class DupX1(owner: MethodInfo)
 // (value1 must be category 1, and value2 must be category 2;
 // see table 2.3 / pg 29)
 //
-class DupX2(owner: MethodInfo)
+class DupX2(owner: AttributeOwner)
         extends NoOperandOp(owner, OpCode.DUP_X2, "dup_x2") {
 }
 
@@ -53,7 +54,8 @@ class DupX2(owner: MethodInfo)
 // stack: ..., value -> ..., value, value (category 2 value)
 // (see table 2.3  / pg 29)
 //
-class Dup2(owner: MethodInfo) extends NoOperandOp(owner, OpCode.DUP2, "dup2") {
+class Dup2(owner: AttributeOwner)
+        extends NoOperandOp(owner, OpCode.DUP2, "dup2") {
 }
 
 //
@@ -65,7 +67,7 @@ class Dup2(owner: MethodInfo) extends NoOperandOp(owner, OpCode.DUP2, "dup2") {
 //          (value1 is category 2, value2 is category 1)
 // (see table 2.3  / pg 29)
 //
-class Dup2X1(owner: MethodInfo)
+class Dup2X1(owner: AttributeOwner)
         extends NoOperandOp(owner, OpCode.DUP2_X1, "dup2_x1") {
 }
 
@@ -79,7 +81,7 @@ class Dup2X1(owner: MethodInfo)
 //          (value1 is category 2, value2/value3 are category 1)
 // (see table 2.3  / pg 29)
 //
-class Dup2X2(owner: MethodInfo)
+class Dup2X2(owner: AttributeOwner)
         extends NoOperandOp(owner, OpCode.DUP2_X2, "dup2_x2") {
 }
 
@@ -87,5 +89,6 @@ class Dup2X2(owner: MethodInfo)
 // swap
 // stack: ..., value1, value2 -> ..., value2, value1
 //
-class Swap(owner: MethodInfo) extends NoOperandOp(owner, OpCode.SWAP, "swap") {
+class Swap(owner: AttributeOwner)
+        extends NoOperandOp(owner, OpCode.SWAP, "swap") {
 }

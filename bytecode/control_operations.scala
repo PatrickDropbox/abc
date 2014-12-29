@@ -2,12 +2,12 @@ import java.io.DataInputStream
 import java.io.DataOutputStream
 
 
-class Goto(owner: MethodInfo, pc: Int)
-        extends ShortOperandOp(owner, OpCode.GOTO, "goto", false, pc) {
-    def this(owner: MethodInfo) = this(owner, -1)
+class Goto(owner: AttributeOwner, pcOffset: Int)
+        extends ShortOperandOp(owner, OpCode.GOTO, "goto", false, pcOffset) {
+    def this(owner: AttributeOwner) = this(owner, -1)
 
     override def serialize(output: DataOutputStream) {
-        if (pc <= 65535) {
+        if (pcOffset <= 65535) {
             super.serialize(output)
         } else {
             output.writeByte(OpCode.GOTO_W)
@@ -16,9 +16,9 @@ class Goto(owner: MethodInfo, pc: Int)
     }
 }
 
-class GotoW(owner: MethodInfo, pc: Int)
-        extends IntOperandOp(owner, OpCode.GOTO_W, "goto_w", pc) {
-    def this(owner: MethodInfo) = this(owner, -1)
+class GotoW(owner: AttributeOwner, pcOffset: Int)
+        extends IntOperandOp(owner, OpCode.GOTO_W, "goto_w", pcOffset) {
+    def this(owner: AttributeOwner) = this(owner, -1)
 
     override def canonicalForm(): Operation = {
         return new Goto(_owner, operand)
@@ -27,9 +27,9 @@ class GotoW(owner: MethodInfo, pc: Int)
 
 // DEPRECATED: this is only kept around for deserializing older classes
 // stack: ... -> ..., address
-class Jsr(owner: MethodInfo, pc: Int)
+class Jsr(owner: AttributeOwner, pc: Int)
         extends ShortOperandOp(owner, OpCode.JSR, "jsr", false, pc) {
-    def this(owner: MethodInfo) = this(owner, -1)
+    def this(owner: AttributeOwner) = this(owner, -1)
 
     override def serialize(output: DataOutputStream) {
         throw new Exception("jsr deprecated")
@@ -38,9 +38,9 @@ class Jsr(owner: MethodInfo, pc: Int)
 
 // DEPRECATED: this is only kept around for deserializing older classes
 // stack: ... -> ..., address
-class JsrW(owner: MethodInfo, pc: Int)
+class JsrW(owner: AttributeOwner, pc: Int)
         extends IntOperandOp(owner, OpCode.JSR, "jsr_w", pc) {
-    def this(owner: MethodInfo) = this(owner, -1)
+    def this(owner: AttributeOwner) = this(owner, -1)
 
     override def serialize(output: DataOutputStream) {
         throw new Exception("jsr_w deprecated")
@@ -52,9 +52,9 @@ class JsrW(owner: MethodInfo, pc: Int)
 }
 
 // DEPRECATED: this is only kept around for deserializing older classes
-class Ret(owner: MethodInfo, index: Int)
+class Ret(owner: AttributeOwner, index: Int)
         extends ByteOperandOp(owner, OpCode.RET, "ret", false, index) {
-    def this(owner: MethodInfo) = this(owner, -1)
+    def this(owner: AttributeOwner) = this(owner, -1)
 
     override def serialize(output: DataOutputStream) {
         throw new Exception("ret deprecated")
@@ -63,34 +63,34 @@ class Ret(owner: MethodInfo, index: Int)
 
 
 // return void
-class Return(owner: MethodInfo)
+class Return(owner: AttributeOwner)
         extends NoOperandOp(owner, OpCode.RETURN, "return") {
 }
 
 // stack: ..., value -> ...
 abstract class ReturnValue(
-        owner: MethodInfo,
+        owner: AttributeOwner,
         opCode: Int,
         mnemonic: String) extends NoOperandOp(owner, opCode, mnemonic) {
 }
 
-class Ireturn(owner: MethodInfo)
+class Ireturn(owner: AttributeOwner)
         extends ReturnValue(owner, OpCode.IRETURN, "ireturn") {
 }
 
-class Lreturn(owner: MethodInfo)
+class Lreturn(owner: AttributeOwner)
         extends ReturnValue(owner, OpCode.LRETURN, "lreturn") {
 }
 
-class Freturn(owner: MethodInfo)
+class Freturn(owner: AttributeOwner)
         extends ReturnValue(owner, OpCode.FRETURN, "freturn") {
 }
 
-class Dreturn(owner: MethodInfo)
+class Dreturn(owner: AttributeOwner)
         extends ReturnValue(owner, OpCode.DRETURN, "dreturn") {
 }
 
-class Areturn(owner: MethodInfo)
+class Areturn(owner: AttributeOwner)
         extends ReturnValue(owner, OpCode.ARETURN, "areturn") {
 }
 

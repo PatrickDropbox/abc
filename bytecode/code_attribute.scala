@@ -66,8 +66,7 @@ class CodeAttribute(o: AttributeOwner)
     var maxStack = 0
     var maxLocals = 0
 
-    // TODO
-    var codeBytes: Array[Byte] = null
+    var operations = new Vector[Operation]()
 
     var exceptionEntries = new Vector[ExceptionEntry]()
 
@@ -82,12 +81,18 @@ class CodeAttribute(o: AttributeOwner)
     def deserialize(name: ConstUtf8Info,
                     attrLength: Int,
                     input: DataInputStream) {
+        if (!operations.isEmpty()) {
+            throw new Exception("deserializing into non-empty code attribute")
+        }
+
         maxStack = input.readUnsignedShort()
         maxLocals = input.readUnsignedShort()
 
         val codeLength = input.readInt()
-        codeBytes = new Array[Byte](codeLength)
+        var codeBytes = new Array[Byte](codeLength)
         input.readFully(codeBytes)
+
+        operations = Operation.deserialize(this, codeBytes)
 
         exceptionEntries = new Vector[ExceptionEntry]()
         val numExceptionEntries = input.readUnsignedShort()
@@ -105,12 +110,16 @@ class CodeAttribute(o: AttributeOwner)
         var result = indent + "Code:\n"
         result += indent + "  Max stack: " + maxStack + "\n"
         result += indent + "  Max locals: " + maxLocals + "\n"
+        val subIndent = indent + "    "
+        for (op <- operations) {
+            result += op.debugString(subIndent)
+        }
         result += indent + "  Exceptions:\n"
         for (entry <- exceptionEntries) {
-            result += entry.debugString(indent + "    ")
+            result += entry.debugString(subIndent)
         }
         result += indent + "  Attributes:\n"
-        result += attributes.debugString(indent + "    ")
+        result += attributes.debugString(subIndent)
 
         return result
     }

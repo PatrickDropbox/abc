@@ -3,47 +3,47 @@ import java.io.DataOutputStream
 
 
 // stack: ..., value1, value2 -> ..., result
-abstract class BinaryIOp(owner: MethodInfo, opCode: Int, mnemonic: String)
+abstract class BinaryIOp(owner: AttributeOwner, opCode: Int, mnemonic: String)
         extends NoOperandOp(owner, opCode, mnemonic) {
 }
 
 // stack: ..., value1 -> ..., result
-abstract class UnaryIOp(owner: MethodInfo, opCode: Int, mnemonic: String)
+abstract class UnaryIOp(owner: AttributeOwner, opCode: Int, mnemonic: String)
         extends NoOperandOp(owner, opCode, mnemonic) {
 }
 
 // stack: ..., value1, value2 -> ..., result
-abstract class BinaryLOp(owner: MethodInfo, opCode: Int, mnemonic: String)
+abstract class BinaryLOp(owner: AttributeOwner, opCode: Int, mnemonic: String)
         extends NoOperandOp(owner, opCode, mnemonic) {
 }
 
 // stack: ..., value1 -> ..., result
-abstract class UnaryLOp(owner: MethodInfo, opCode: Int, mnemonic: String)
+abstract class UnaryLOp(owner: AttributeOwner, opCode: Int, mnemonic: String)
         extends NoOperandOp(owner, opCode, mnemonic) {
 }
 
 // stack: ..., (long) value1, (int) value2 -> (long) result
-abstract class ShiftLOp(owner: MethodInfo, opCode: Int, mnemonic: String)
+abstract class ShiftLOp(owner: AttributeOwner, opCode: Int, mnemonic: String)
         extends NoOperandOp(owner, opCode, mnemonic) {
 }
 
 // stack: ..., value1, value2 -> ..., result
-abstract class BinaryFOp(owner: MethodInfo, opCode: Int, mnemonic: String)
+abstract class BinaryFOp(owner: AttributeOwner, opCode: Int, mnemonic: String)
         extends NoOperandOp(owner, opCode, mnemonic) {
 }
 
 // stack: ..., value1 -> ..., result
-abstract class UnaryFOp(owner: MethodInfo, opCode: Int, mnemonic: String)
+abstract class UnaryFOp(owner: AttributeOwner, opCode: Int, mnemonic: String)
         extends NoOperandOp(owner, opCode, mnemonic) {
 }
 
 // stack: ..., value1, value2 -> ..., result
-abstract class BinaryDOp(owner: MethodInfo, opCode: Int, mnemonic: String)
+abstract class BinaryDOp(owner: AttributeOwner, opCode: Int, mnemonic: String)
         extends NoOperandOp(owner, opCode, mnemonic) {
 }
 
 // stack: ..., value1 -> ..., result
-abstract class UnaryDOp(owner: MethodInfo, opCode: Int, mnemonic: String)
+abstract class UnaryDOp(owner: AttributeOwner, opCode: Int, mnemonic: String)
         extends NoOperandOp(owner, opCode, mnemonic) {
 }
 
@@ -51,45 +51,56 @@ abstract class UnaryDOp(owner: MethodInfo, opCode: Int, mnemonic: String)
 // int operations
 //
 
-class Iadd(owner: MethodInfo) extends BinaryIOp(owner, OpCode.IADD, "iadd") {
+class Iadd(owner: AttributeOwner)
+        extends BinaryIOp(owner, OpCode.IADD, "iadd") {
 }
 
-class Isub(owner: MethodInfo) extends BinaryIOp(owner, OpCode.ISUB, "isub") {
+class Isub(owner: AttributeOwner)
+        extends BinaryIOp(owner, OpCode.ISUB, "isub") {
 }
 
-class Imul(owner: MethodInfo) extends BinaryIOp(owner, OpCode.IMUL, "imul") {
+class Imul(owner: AttributeOwner)
+        extends BinaryIOp(owner, OpCode.IMUL, "imul") {
 }
 
-class Idiv(owner: MethodInfo) extends BinaryIOp(owner, OpCode.IDIV, "idiv") {
+class Idiv(owner: AttributeOwner)
+        extends BinaryIOp(owner, OpCode.IDIV, "idiv") {
 }
 
-class Irem(owner: MethodInfo) extends BinaryIOp(owner, OpCode.IREM, "irem") {
+class Irem(owner: AttributeOwner)
+        extends BinaryIOp(owner, OpCode.IREM, "irem") {
 }
 
-class Ineg(owner: MethodInfo) extends UnaryIOp(owner, OpCode.INEG, "ineg") {
+class Ineg(owner: AttributeOwner)
+        extends UnaryIOp(owner, OpCode.INEG, "ineg") {
 }
 
-class Ishl(owner: MethodInfo) extends BinaryIOp(owner, OpCode.ISHL, "ishl") {
+class Ishl(owner: AttributeOwner)
+        extends BinaryIOp(owner, OpCode.ISHL, "ishl") {
 }
 
-class Ishr(owner: MethodInfo) extends BinaryIOp(owner, OpCode.ISHR, "ishr") {
+class Ishr(owner: AttributeOwner)
+        extends BinaryIOp(owner, OpCode.ISHR, "ishr") {
 }
 
-class Iushr(owner: MethodInfo) extends BinaryIOp(owner, OpCode.IUSHR, "iushr") {
+class Iushr(owner: AttributeOwner)
+        extends BinaryIOp(owner, OpCode.IUSHR, "iushr") {
 }
 
-class Iand(owner: MethodInfo) extends BinaryIOp(owner, OpCode.IAND, "iand") {
+class Iand(owner: AttributeOwner)
+        extends BinaryIOp(owner, OpCode.IAND, "iand") {
 }
 
-class Ior(owner: MethodInfo) extends BinaryIOp(owner, OpCode.IOR, "ior") {
+class Ior(owner: AttributeOwner) extends BinaryIOp(owner, OpCode.IOR, "ior") {
 }
 
-class Ixor(owner: MethodInfo) extends BinaryIOp(owner, OpCode.IXOR, "ixor") {
+class Ixor(owner: AttributeOwner)
+        extends BinaryIOp(owner, OpCode.IXOR, "ixor") {
 }
 
 // iinc <local var index> <const int>
 // increment local variable by const without modifying stack
-class Iinc(owner: MethodInfo, index: Int, v: Int)
+class Iinc(owner: AttributeOwner, index: Int, v: Int)
         extends TwoByteOperandsOp(
                 owner,
                 OpCode.IINC,
@@ -98,7 +109,7 @@ class Iinc(owner: MethodInfo, index: Int, v: Int)
                 index,
                 true,  // signed
                 v) {
-    def this(owner: MethodInfo) = this(owner, -1, 0)
+    def this(owner: AttributeOwner) = this(owner, -1, 0)
 
     override def serialize(output: DataOutputStream) {
         if (operand1 < 256 && (-128 <= operand2 && operand2 <= 127)) {
@@ -116,83 +127,102 @@ class Iinc(owner: MethodInfo, index: Int, v: Int)
 // long operations
 //
 
-class Ladd(owner: MethodInfo) extends BinaryLOp(owner, OpCode.LADD, "ladd") {
+class Ladd(owner: AttributeOwner)
+        extends BinaryLOp(owner, OpCode.LADD, "ladd") {
 }
 
-class Lsub(owner: MethodInfo) extends BinaryLOp(owner, OpCode.LSUB, "lsub") {
+class Lsub(owner: AttributeOwner)
+        extends BinaryLOp(owner, OpCode.LSUB, "lsub") {
 }
 
-class Lmul(owner: MethodInfo) extends BinaryLOp(owner, OpCode.LMUL, "lmul") {
+class Lmul(owner: AttributeOwner)
+        extends BinaryLOp(owner, OpCode.LMUL, "lmul") {
 }
 
-class Ldiv(owner: MethodInfo) extends BinaryLOp(owner, OpCode.LDIV, "ldiv") {
+class Ldiv(owner: AttributeOwner)
+        extends BinaryLOp(owner, OpCode.LDIV, "ldiv") {
 }
 
-class Lrem(owner: MethodInfo) extends BinaryLOp(owner, OpCode.LREM, "lrem") {
+class Lrem(owner: AttributeOwner)
+        extends BinaryLOp(owner, OpCode.LREM, "lrem") {
 }
 
-class Lneg(owner: MethodInfo) extends UnaryLOp(owner, OpCode.LNEG, "lneg") {
+class Lneg(owner: AttributeOwner)
+        extends UnaryLOp(owner, OpCode.LNEG, "lneg") {
 }
 
-class Lshl(owner: MethodInfo) extends ShiftLOp(owner, OpCode.LSHL, "lshl") {
+class Lshl(owner: AttributeOwner) extends ShiftLOp(owner, OpCode.LSHL, "lshl") {
 }
 
-class Lshr(owner: MethodInfo) extends ShiftLOp(owner, OpCode.LSHR, "lshr") {
+class Lshr(owner: AttributeOwner) extends ShiftLOp(owner, OpCode.LSHR, "lshr") {
 }
 
-class Lushr(owner: MethodInfo) extends ShiftLOp(owner, OpCode.LUSHR, "lushr") {
+class Lushr(owner: AttributeOwner)
+        extends ShiftLOp(owner, OpCode.LUSHR, "lushr") {
 }
 
-class Land(owner: MethodInfo) extends BinaryLOp(owner, OpCode.LAND, "land") {
+class Land(owner: AttributeOwner)
+        extends BinaryLOp(owner, OpCode.LAND, "land") {
 }
 
-class Lor(owner: MethodInfo) extends BinaryLOp(owner, OpCode.LOR, "lor") {
+class Lor(owner: AttributeOwner) extends BinaryLOp(owner, OpCode.LOR, "lor") {
 }
 
-class Lxor(owner: MethodInfo) extends BinaryLOp(owner, OpCode.LXOR, "lxor") {
+class Lxor(owner: AttributeOwner)
+        extends BinaryLOp(owner, OpCode.LXOR, "lxor") {
 }
 
 //
 // float operations
 //
 
-class Fadd(owner: MethodInfo) extends BinaryFOp(owner, OpCode.FADD, "fadd") {
+class Fadd(owner: AttributeOwner)
+        extends BinaryFOp(owner, OpCode.FADD, "fadd") {
 }
 
-class Fsub(owner: MethodInfo) extends BinaryFOp(owner, OpCode.FSUB, "fsub") {
+class Fsub(owner: AttributeOwner)
+        extends BinaryFOp(owner, OpCode.FSUB, "fsub") {
 }
 
-class Fmul(owner: MethodInfo) extends BinaryFOp(owner, OpCode.FMUL, "fmul") {
+class Fmul(owner: AttributeOwner)
+        extends BinaryFOp(owner, OpCode.FMUL, "fmul") {
 }
 
-class Fdiv(owner: MethodInfo) extends BinaryFOp(owner, OpCode.FDIV, "fdiv") {
+class Fdiv(owner: AttributeOwner)
+        extends BinaryFOp(owner, OpCode.FDIV, "fdiv") {
 }
 
-class Frem(owner: MethodInfo) extends BinaryFOp(owner, OpCode.FREM, "frem") {
+class Frem(owner: AttributeOwner)
+        extends BinaryFOp(owner, OpCode.FREM, "frem") {
 }
 
-class Fneg(owner: MethodInfo) extends UnaryFOp(owner, OpCode.FNEG, "fneg") {
+class Fneg(owner: AttributeOwner) extends UnaryFOp(owner, OpCode.FNEG, "fneg") {
 }
 
 //
 // double operations
 //
 
-class Dadd(owner: MethodInfo) extends BinaryDOp(owner, OpCode.DADD, "dadd") {
+class Dadd(owner: AttributeOwner)
+        extends BinaryDOp(owner, OpCode.DADD, "dadd") {
 }
 
-class Dsub(owner: MethodInfo) extends BinaryDOp(owner, OpCode.DSUB, "dsub") {
+class Dsub(owner: AttributeOwner)
+        extends BinaryDOp(owner, OpCode.DSUB, "dsub") {
 }
 
-class Dmul(owner: MethodInfo) extends BinaryDOp(owner, OpCode.DMUL, "dmul") {
+class Dmul(owner: AttributeOwner)
+        extends BinaryDOp(owner, OpCode.DMUL, "dmul") {
 }
 
-class Ddiv(owner: MethodInfo) extends BinaryDOp(owner, OpCode.DDIV, "ddiv") {
+class Ddiv(owner: AttributeOwner)
+        extends BinaryDOp(owner, OpCode.DDIV, "ddiv") {
 }
 
-class Drem(owner: MethodInfo) extends BinaryDOp(owner, OpCode.DREM, "drem") {
+class Drem(owner: AttributeOwner)
+        extends BinaryDOp(owner, OpCode.DREM, "drem") {
 }
 
-class Dneg(owner: MethodInfo) extends UnaryDOp(owner, OpCode.DNEG, "dneg") {
+class Dneg(owner: AttributeOwner) extends UnaryDOp(owner, OpCode.DNEG, "dneg") {
 }
 

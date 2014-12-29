@@ -1,10 +1,11 @@
+import java.io.ByteArrayInputStream
 import java.io.DataInputStream
 import java.io.DataOutputStream
 import java.util.Vector
 
 
-abstract class Operation(o: MethodInfo) {
-    var _owner: MethodInfo = o
+abstract class Operation(o: AttributeOwner) {
+    var _owner: AttributeOwner = o
     var line = -1
     var pc = -1
 
@@ -19,7 +20,7 @@ abstract class Operation(o: MethodInfo) {
 
 // operations of the form: <op code>
 abstract class NoOperandOp(
-        owner: MethodInfo,
+        owner: AttributeOwner,
         opCode: Int,
         mnemonic: String) extends Operation(owner) {
     val _opCode = opCode
@@ -35,12 +36,14 @@ abstract class NoOperandOp(
         }
     }
 
-    def debugString(indent: String): String = indent + _mnemonic
+    def debugString(indent: String): String = {
+        return indent + pc + ": " + _mnemonic + "\n"
+    }
 }
 
 // operations of the form: <op code> <byte operand>
 abstract class ByteOperandOp(
-        owner: MethodInfo,
+        owner: AttributeOwner,
         opCode: Int,
         mnemonic: String,
         signed: Boolean,
@@ -67,12 +70,14 @@ abstract class ByteOperandOp(
         }
     }
 
-    def debugString(indent: String): String = indent + _mnemonic + " " + operand
+    def debugString(indent: String): String = {
+        indent + pc + ": " + _mnemonic + " " + operand + "\n"
+    }
 }
 
 // operations of the form: <op code> <byte operand1> <byte operand2>
 abstract class TwoByteOperandsOp(
-        owner: MethodInfo,
+        owner: AttributeOwner,
         opCode: Int,
         mnemonic: String,
         signed1: Boolean,
@@ -111,13 +116,14 @@ abstract class TwoByteOperandsOp(
     }
 
     def debugString(indent: String): String = {
-        return indent + _mnemonic + " " + operand1 + " " + operand2
+        return indent + pc + ": " + _mnemonic + " " +
+                operand1 + " " + operand2 + "\n"
     }
 }
 
 // operations of the form: <op code> <short operand>
 class ShortOperandOp(
-        owner: MethodInfo,
+        owner: AttributeOwner,
         opCode: Int,
         mnemonic: String,
         signed: Boolean,
@@ -145,13 +151,13 @@ class ShortOperandOp(
     }
 
     def debugString(indent: String): String = {
-        return indent + _mnemonic + " " + operand
+        return indent + pc + ": " + _mnemonic + " " + operand + "\n"
     }
 }
 
 // operations of the form: <op code> <int operand>
 class IntOperandOp(
-        owner: MethodInfo,
+        owner: AttributeOwner,
         opCode: Int,
         mnemonic: String,
         v: Int) extends Operation(owner) {
@@ -171,11 +177,13 @@ class IntOperandOp(
         operand = input.readInt()
     }
 
-    def debugString(indent: String): String = indent + _mnemonic + " " + operand
+    def debugString(indent: String): String = {
+        return indent + pc + ": " + _mnemonic + " " + operand + "\n"
+    }
 }
 
 object Operation {
-    def parseWide(owner: MethodInfo, input: DataInputStream): Operation = {
+    def parseWide(owner: AttributeOwner, input: DataInputStream): Operation = {
         val opCode = input.readUnsignedByte()
         val index = input.readUnsignedShort()
 
@@ -195,10 +203,24 @@ object Operation {
         }
     }
 
-    def deserialize(
-            owner: MethodInfo,
-            startAddress: Int,
-            input: DataInputStream): Operation = {
+    def deserialize(owner: AttributeOwner,
+                    codeBytes: Array[Byte]): Vector[Operation] = {
+        var byteStream = new ByteArrayInputStream(codeBytes)
+        var dataStream = new DataInputStream(byteStream)
+
+        var result = new Vector[Operation]()
+
+        while (byteStream.available() > 0) {
+            val pc = codeBytes.length - byteStream.available()
+            result.add(parse(owner, pc, dataStream))
+        }
+
+        return result
+    }
+
+    def parse(owner: AttributeOwner,
+              startAddress: Int,
+              input: DataInputStream): Operation = {
 
         val opCode = input.readUnsignedByte()
         var operation: Operation = opCode match {
@@ -410,7 +432,9 @@ object Operation {
         }
 
         operation.deserialize(startAddress, opCode, input)
-        return operation.canonicalForm()
+        var result = operation.canonicalForm()
+        result.pc = startAddress
+        return result
     }
 }
 

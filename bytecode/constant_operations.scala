@@ -6,7 +6,7 @@ import java.io.DataOutputStream
 // nop
 // stack: ... -> ...
 //
-class Nop(owner: MethodInfo)
+class Nop(owner: AttributeOwner)
         extends NoOperandOp(owner, OpCode.NOP, "nop") {
 }
 
@@ -14,7 +14,7 @@ class Nop(owner: MethodInfo)
 // aconst_null
 // stack: ... -> ..., null
 //
-class AconstNull(owner: MethodInfo)
+class AconstNull(owner: AttributeOwner)
         extends NoOperandOp(owner, OpCode.ACONST_NULL, "aconst_null") {
 }
 
@@ -22,8 +22,8 @@ class AconstNull(owner: MethodInfo)
 // "PushI" <value>
 // stack: ... -> ..., value
 //
-class PushI(owner: MethodInfo, v: Int) extends Operation(owner) {
-    def this(owner: MethodInfo) = this(owner, 0)
+class PushI(owner: AttributeOwner, v: Int) extends Operation(owner) {
+    def this(owner: AttributeOwner) = this(owner, 0)
 
     var value = v
     var _constInt: ConstIntegerInfo = null
@@ -76,15 +76,17 @@ class PushI(owner: MethodInfo, v: Int) extends Operation(owner) {
         }
     }
 
-    def debugString(indent: String): String = indent + "\"iconst\" " + value
+    def debugString(indent: String): String = {
+        return indent + pc + ": \"iconst\" " + value + "\n"
+    }
 }
 
 //
 // "PushL" <value>
 // stack: ... -> ..., value
 //
-class PushL(owner: MethodInfo, v: Long) extends Operation(owner) {
-    def this(owner: MethodInfo) = this(owner, 0)
+class PushL(owner: AttributeOwner, v: Long) extends Operation(owner) {
+    def this(owner: AttributeOwner) = this(owner, 0)
 
     var value = v
     var _constLong: ConstLongInfo = null
@@ -112,15 +114,17 @@ class PushL(owner: MethodInfo, v: Long) extends Operation(owner) {
         }
     }
 
-    def debugString(indent: String): String = indent + "\"lconst\" " + value
+    def debugString(indent: String): String = {
+        return indent + pc + ": \"lconst\" " + value + "\n"
+    }
 }
 
 //
 // "PushF" <value>
 // stack: ... -> ..., value
 //
-class PushF(owner: MethodInfo, v: Float) extends Operation(owner) {
-    def this(owner: MethodInfo) = this(owner, 0)
+class PushF(owner: AttributeOwner, v: Float) extends Operation(owner) {
+    def this(owner: AttributeOwner) = this(owner, 0)
 
     var value = v
     var _constFloat: ConstFloatInfo = null
@@ -156,15 +160,17 @@ class PushF(owner: MethodInfo, v: Float) extends Operation(owner) {
         }
     }
 
-    def debugString(indent: String): String = indent + "\"fconst\" " + value
+    def debugString(indent: String): String = {
+        return indent + pc + ": \"fconst\" " + value + "\n"
+    }
 }
 
 //
 // "PushD" <value>
 // stack: ... -> ..., value
 //
-class PushD(owner: MethodInfo, v: Double) extends Operation(owner) {
-    def this(owner: MethodInfo) = this(owner, 0)
+class PushD(owner: AttributeOwner, v: Double) extends Operation(owner) {
+    def this(owner: AttributeOwner) = this(owner, 0)
 
     var value = v
     var _constDouble: ConstDoubleInfo = null
@@ -192,17 +198,19 @@ class PushD(owner: MethodInfo, v: Double) extends Operation(owner) {
         }
     }
 
-    def debugString(indent: String): String = indent + "\"dconst\" " + value
+    def debugString(indent: String): String = {
+        indent + pc + ": \"dconst\" " + value + "\n"
+    }
 }
 
 //
 // "PushString" <value>
 // stack: ... -> ..., value
 //
-class PushString(owner: MethodInfo, v: String) extends Operation(owner) {
+class PushString(owner: AttributeOwner, v: String) extends Operation(owner) {
     var _constString: ConstStringInfo = null
-    if (value != 0 && value != 1) {
-        _constString = owner.constants().getString(value)
+    if (v != null) {
+        _constString = owner.constants().getString(v)
     }
 
     def value(): String = _constString.value()
@@ -221,16 +229,18 @@ class PushString(owner: MethodInfo, v: String) extends Operation(owner) {
         throw new Exception("cannot directly deserialize \"sconst\"")
     }
 
-    def debugString(indent: String): String = indent + "\"sconst\" " + value
+    def debugString(indent: String): String = {
+        indent + pc + ": \"sconst\" " + _constString.debugString() + "\n"
+    }
 }
 
-class Ldc(owner: MethodInfo, v: ConstInfo) extends ByteOperandOp(
+class Ldc(owner: AttributeOwner, v: ConstInfo) extends ByteOperandOp(
         owner,
         OpCode.LDC,
         "ldc",
         false,  // signed
         0) {
-    def this(owner: MethodInfo) = this(owner, null)
+    def this(owner: AttributeOwner) = this(owner, null)
 
     var _const = v
 
@@ -258,13 +268,13 @@ class Ldc(owner: MethodInfo, v: ConstInfo) extends ByteOperandOp(
     }
 }
 
-class LdcW(owner: MethodInfo, v: ConstInfo) extends ShortOperandOp(
+class LdcW(owner: AttributeOwner, v: ConstInfo) extends ShortOperandOp(
         owner,
         OpCode.LDC_W,
         "ldc_w",
         false,  // signed
         0) {
-    def this(owner: MethodInfo) = this(owner, null)
+    def this(owner: AttributeOwner) = this(owner, null)
 
     var _const = v
 
@@ -292,13 +302,13 @@ class LdcW(owner: MethodInfo, v: ConstInfo) extends ShortOperandOp(
     }
 }
 
-class Ldc2W(owner: MethodInfo, v: ConstInfo) extends ShortOperandOp(
+class Ldc2W(owner: AttributeOwner, v: ConstInfo) extends ShortOperandOp(
         owner,
         OpCode.LDC2_W,
         "ldc2_w",
         false,  // signed
         0) {
-    def this(owner: MethodInfo) = this(owner, null)
+    def this(owner: AttributeOwner) = this(owner, null)
 
     var _const = v
 

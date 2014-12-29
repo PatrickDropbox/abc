@@ -3,11 +3,11 @@ import java.io.DataOutputStream
 
 
 class ClassOp(
-        owner: MethodInfo,
+        owner: AttributeOwner,
         opCode: Int,
         mnemonic: String,
         className: String) extends Operation(owner) {
-    def this(owner: MethodInfo,
+    def this(owner: AttributeOwner,
              opCode: Int,
              mnemonic: String) = this(owner, opCode, mnemonic, null)
 
@@ -37,16 +37,16 @@ class ClassOp(
     }
 
     def debugString(indent: String): String = {
-        var name = "???"
+        var value = "???"
         if (_constClass != null) {
-            name = _constClass.className()
+            value = _constClass.debugString()
         }
-        return indent + _mnemonic + " " + name
+        return indent + pc + ": " + _mnemonic + " " + value + "\n"
     }
 }
 
 class FieldOp(
-        owner: MethodInfo,
+        owner: AttributeOwner,
         opCode: Int,
         mnemonic: String,
         className: String,
@@ -82,12 +82,12 @@ class FieldOp(
         if (_constFieldRef != null) {
             name = _constFieldRef.debugString()
         }
-        return indent + _mnemonic + " " + name
+        return indent + pc + ": " + _mnemonic + " " + name + "\n"
     }
 }
 
 class MethodOp(
-        owner: MethodInfo,
+        owner: AttributeOwner,
         opCode: Int,
         mnemonic: String,
         className: String,
@@ -131,13 +131,13 @@ class MethodOp(
         if (_constMethodRef != null) {
             name = _constMethodRef.debugString()
         }
-        return indent + _mnemonic + " " + name
+        return indent + pc + ": " + _mnemonic + " " + name + "\n"
     }
 }
 
 // stack: ... -> ..., value
 class Getstatic(
-        owner: MethodInfo,
+        owner: AttributeOwner,
         className: String,
         fieldName: String,
         fieldType: FieldType) extends FieldOp(
@@ -147,12 +147,12 @@ class Getstatic(
                 className,
                 fieldName,
                 fieldType) {
-    def this(owner: MethodInfo) = this(owner, null, null, null)
+    def this(owner: AttributeOwner) = this(owner, null, null, null)
 }
 
 // stack: ..., value -> ...
 class Putstatic(
-        owner: MethodInfo,
+        owner: AttributeOwner,
         className: String,
         fieldName: String,
         fieldType: FieldType) extends FieldOp(
@@ -162,12 +162,12 @@ class Putstatic(
                 className,
                 fieldName,
                 fieldType) {
-    def this(owner: MethodInfo) = this(owner, null, null, null)
+    def this(owner: AttributeOwner) = this(owner, null, null, null)
 }
 
 // stack: ..., obj ref -> ..., value
 class Getfield(
-        owner: MethodInfo,
+        owner: AttributeOwner,
         className: String,
         fieldName: String,
         fieldType: FieldType) extends FieldOp(
@@ -177,12 +177,12 @@ class Getfield(
                 className,
                 fieldName,
                 fieldType) {
-    def this(owner: MethodInfo) = this(owner, null, null, null)
+    def this(owner: AttributeOwner) = this(owner, null, null, null)
 }
 
 // stack: ..., obj ref, value -> ...
 class Putfield(
-        owner: MethodInfo,
+        owner: AttributeOwner,
         className: String,
         fieldName: String,
         fieldType: FieldType) extends FieldOp(
@@ -192,12 +192,12 @@ class Putfield(
                 className,
                 fieldName,
                 fieldType) {
-    def this(owner: MethodInfo) = this(owner, null, null, null)
+    def this(owner: AttributeOwner) = this(owner, null, null, null)
 }
 
 // stack: ..., objref, [arg1, [arg2, ...]] -> ..., [result]
 class Invokeinterface(
-        owner: MethodInfo,
+        owner: AttributeOwner,
         className: String,
         methodName: String,
         methodType: MethodType) extends MethodOp(
@@ -208,7 +208,7 @@ class Invokeinterface(
                 methodName,
                 methodType,
                 true) {  // use interface method ref
-    def this(owner: MethodInfo) = this(owner, null, null, null)
+    def this(owner: AttributeOwner) = this(owner, null, null, null)
 
     override def serialize(output: DataOutputStream) {
         super.serialize(output)
@@ -225,7 +225,7 @@ class Invokeinterface(
 
 // stack: ..., objref, [arg1, [arg2, ...]] -> ..., [result]
 class Invokespecial(
-        owner: MethodInfo,
+        owner: AttributeOwner,
         className: String,
         methodName: String,
         methodType: MethodType) extends MethodOp(
@@ -236,12 +236,12 @@ class Invokespecial(
                 methodName,
                 methodType,
                 false) {  // use interface method ref
-    def this(owner: MethodInfo) = this(owner, null, null, null)
+    def this(owner: AttributeOwner) = this(owner, null, null, null)
 }
 
 // stack: ..., [arg1, [arg2, ...]] -> ..., [result]
 class Invokestatic(
-        owner: MethodInfo,
+        owner: AttributeOwner,
         className: String,
         methodName: String,
         methodType: MethodType) extends MethodOp(
@@ -252,12 +252,12 @@ class Invokestatic(
                 methodName,
                 methodType,
                 false) {  // use interface method ref
-    def this(owner: MethodInfo) = this(owner, null, null, null)
+    def this(owner: AttributeOwner) = this(owner, null, null, null)
 }
 
 // stack: ..., objref, [arg1, [arg2, ...]] -> ..., [result]
 class Invokevirtual(
-        owner: MethodInfo,
+        owner: AttributeOwner,
         className: String,
         methodName: String,
         methodType: MethodType) extends MethodOp(
@@ -268,31 +268,31 @@ class Invokevirtual(
                 methodName,
                 methodType,
                 false) {  // use interface method ref
-    def this(owner: MethodInfo) = this(owner, null, null, null)
+    def this(owner: AttributeOwner) = this(owner, null, null, null)
 }
 
 // stack: ... -> ..., obj ref
-class New(owner: MethodInfo, className: String)
+class New(owner: AttributeOwner, className: String)
         extends ClassOp(owner, OpCode.NEW, "new", className) {
-    def this(owner: MethodInfo) = this(owner, null)
+    def this(owner: AttributeOwner) = this(owner, null)
 }
 
 // stack: ... obj ref -> ..., obj ref
-class Checkcast(owner: MethodInfo, className: String)
+class Checkcast(owner: AttributeOwner, className: String)
         extends ClassOp(owner, OpCode.CHECKCAST, "checkcast", className) {
-    def this(owner: MethodInfo) = this(owner, null)
+    def this(owner: AttributeOwner) = this(owner, null)
 }
 
 // stack: ... obj ref -> ..., int result
-class Instanceof(owner: MethodInfo, className: String)
+class Instanceof(owner: AttributeOwner, className: String)
         extends ClassOp(owner, OpCode.INSTANCEOF, "instanceof", className) {
-    def this(owner: MethodInfo) = this(owner, null)
+    def this(owner: AttributeOwner) = this(owner, null)
 }
 
 // stack: ..., count -> ..., array ref
-class Newarray(owner: MethodInfo, arrayType: BaseType)
+class Newarray(owner: AttributeOwner, arrayType: BaseType)
         extends Operation(owner) {
-    def this(owner: MethodInfo) = this(owner, null)
+    def this(owner: AttributeOwner) = this(owner, null)
 
     var _arrayType = arrayType
 
@@ -324,27 +324,28 @@ class Newarray(owner: MethodInfo, arrayType: BaseType)
     }
 
     def debugString(indent: String): String = {
-        return indent + "newarray " + _arrayType.descriptorString()
+        return indent + pc + ": newarray " +
+                _arrayType.descriptorString() + "\n"
     }
 }
 
 // stack: ..., count -> ..., array ref
 // NOTE: for array type, use the descriptor string as class name
-class Anewarray(owner: MethodInfo, className: String)
+class Anewarray(owner: AttributeOwner, className: String)
         extends ClassOp(owner, OpCode.ANEWARRAY, "anewarray", className) {
-    def this(owner: MethodInfo) = this(owner, null)
+    def this(owner: AttributeOwner) = this(owner, null)
 }
 
 // stack: ..., count1, [count2, ...] -> ..., array ref
 class Multianewarray(
-        owner: MethodInfo,
+        owner: AttributeOwner,
         arrayDescriptorString: String,
         dimensions: Int) extends ClassOp(
                 owner,
                 OpCode.MULTIANEWARRAY,
                 "multianewarray",
                 arrayDescriptorString) {
-    def this(owner: MethodInfo) = this (owner, null, 0)
+    def this(owner: AttributeOwner) = this (owner, null, 0)
 
     var _dimensions = dimensions
 
@@ -359,27 +360,27 @@ class Multianewarray(
     }
 
     override def debugString(indent: String): String = {
-        return super.debugString(indent) + " " + _dimensions
+        return super.debugString(indent) + " " + _dimensions + "\n"
     }
 }
 
 // stack: ..., array ref -> ...
-class Arraylength(owner: MethodInfo)
+class Arraylength(owner: AttributeOwner)
         extends NoOperandOp(owner, OpCode.ARRAYLENGTH, "arraylength") {
 }
 
 // stack: ..., obj ref -> ...
-class Athrow(owner: MethodInfo)
+class Athrow(owner: AttributeOwner)
         extends NoOperandOp(owner, OpCode.ATHROW, "athrow") {
 }
 
 // stack: ..., obj ref -> ...
-class Monitorenter(owner: MethodInfo)
+class Monitorenter(owner: AttributeOwner)
         extends NoOperandOp(owner, OpCode.MONITORENTER, "monitorenter") {
 }
 
 // stack: ..., obj ref -> ...
-class Monitorexit(owner: MethodInfo)
+class Monitorexit(owner: AttributeOwner)
         extends NoOperandOp(owner, OpCode.MONITOREXIT, "monitorexit") {
 }
 
