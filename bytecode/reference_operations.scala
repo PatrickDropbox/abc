@@ -41,7 +41,7 @@ class ClassOp(
         if (_constClass != null) {
             value = _constClass.debugString()
         }
-        return indent + pc + ": " + _mnemonic + " " + value + "\n"
+        return indent + _pcLine() + ": " + _mnemonic + " " + value + "\n"
     }
 }
 
@@ -82,7 +82,7 @@ class FieldOp(
         if (_constFieldRef != null) {
             name = _constFieldRef.debugString()
         }
-        return indent + pc + ": " + _mnemonic + " " + name + "\n"
+        return indent + _pcLine() + ": " + _mnemonic + " " + name + "\n"
     }
 }
 
@@ -131,7 +131,7 @@ class MethodOp(
         if (_constMethodRef != null) {
             name = _constMethodRef.debugString()
         }
-        return indent + pc + ": " + _mnemonic + " " + name + "\n"
+        return indent + _pcLine() + ": " + _mnemonic + " " + name + "\n"
     }
 }
 
@@ -324,7 +324,7 @@ class Newarray(owner: AttributeOwner, arrayType: BaseType)
     }
 
     def debugString(indent: String): String = {
-        return indent + pc + ": newarray " +
+        return indent + _pcLine() + ": newarray " +
                 _arrayType.descriptorString() + "\n"
     }
 }

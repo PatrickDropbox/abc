@@ -77,7 +77,7 @@ class PushI(owner: AttributeOwner, v: Int) extends Operation(owner) {
     }
 
     def debugString(indent: String): String = {
-        return indent + pc + ": \"iconst\" " + value + "\n"
+        return indent + _pcLine() + ": \"iconst\" " + value + "\n"
     }
 }
 
@@ -115,7 +115,7 @@ class PushL(owner: AttributeOwner, v: Long) extends Operation(owner) {
     }
 
     def debugString(indent: String): String = {
-        return indent + pc + ": \"lconst\" " + value + "\n"
+        return indent + _pcLine() + ": \"lconst\" " + value + "\n"
     }
 }
 
@@ -161,7 +161,7 @@ class PushF(owner: AttributeOwner, v: Float) extends Operation(owner) {
     }
 
     def debugString(indent: String): String = {
-        return indent + pc + ": \"fconst\" " + value + "\n"
+        return indent + _pcLine() + ": \"fconst\" " + value + "\n"
     }
 }
 
@@ -199,7 +199,7 @@ class PushD(owner: AttributeOwner, v: Double) extends Operation(owner) {
     }
 
     def debugString(indent: String): String = {
-        indent + pc + ": \"dconst\" " + value + "\n"
+        indent + _pcLine() + ": \"dconst\" " + value + "\n"
     }
 }
 
@@ -230,7 +230,7 @@ class PushString(owner: AttributeOwner, v: String) extends Operation(owner) {
     }
 
     def debugString(indent: String): String = {
-        indent + pc + ": \"sconst\" " + _constString.debugString() + "\n"
+        indent + _pcLine() + ": \"sconst\" " + _constString.debugString() + "\n"
     }
 }
 

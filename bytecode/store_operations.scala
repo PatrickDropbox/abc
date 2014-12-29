@@ -42,7 +42,7 @@ abstract class Store(
     }
 
     def debugString(indent: String): String = {
-        return indent + pc + ": \"" + _mnemonic + "\" " + index + "\n"
+        return indent + _pcLine() + ": \"" + _mnemonic + "\" " + index + "\n"
     }
 }
 

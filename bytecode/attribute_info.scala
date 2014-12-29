@@ -297,19 +297,19 @@ class ExceptionsAttribute(
 class LineNumberTableAttribute(
         o: AttributeOwner) extends Attribute(o, "LineNumberTable") {
     // pc -> line #
-    var _table = new TreeMap[Int, Int]()
+    var table = new TreeMap[Int, Int]()
 
     def mergeFrom(other: LineNumberTableAttribute) {
-        for (entry <- _table.entrySet()) {
-            _table.put(entry.getKey(), entry.getValue())
+        for (entry <- table.entrySet()) {
+            table.put(entry.getKey(), entry.getValue())
         }
     }
 
     def serialize(output: DataOutputStream) {
         output.writeShort(_name.index)
-        output.writeInt(2 + 4 * _table.size())
-        output.writeShort(_table.size())
-        for (entry <- _table.entrySet()) {
+        output.writeInt(2 + 4 * table.size())
+        output.writeShort(table.size())
+        for (entry <- table.entrySet()) {
             output.writeShort(entry.getKey())
             output.writeShort(entry.getValue())
         }
@@ -320,13 +320,13 @@ class LineNumberTableAttribute(
         for (_ <- 1 to numEntries) {
             val pc = input.readUnsignedShort()
             val line = input.readUnsignedShort()
-            _table.put(pc, line)
+            table.put(pc, line)
         }
     }
 
     def debugString(indent: String): String = {
         var result = indent + "LineNumberTable:\n"
-        for (entry <- _table.entrySet()) {
+        for (entry <- table.entrySet()) {
             result += indent + "  " + entry.getKey() +
                     ": line " + entry.getValue() + "\n"
         }

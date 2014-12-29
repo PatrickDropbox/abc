@@ -523,15 +523,15 @@ class MethodAttributes(m: MethodInfo) extends AttributeGroup(m) {
 
 // TODO code attributes
 class CodeAttributes(c: CodeAttribute) extends AttributeGroup(c) {
-    var _lineNumberTable: LineNumberTableAttribute = null
+    var lineNumberTable: LineNumberTableAttribute = null
 
     def allAttributes(): Vector[Attribute] = {
         var allAttributes = new Vector[Attribute]()
 
         // TODO
 
-        if (_lineNumberTable != null) {
-            allAttributes.add(_lineNumberTable)
+        if (lineNumberTable != null) {
+            allAttributes.add(lineNumberTable)
         }
 
         for (attr <- _unsupported) {
@@ -546,10 +546,10 @@ class CodeAttributes(c: CodeAttribute) extends AttributeGroup(c) {
             a match {
                 // TODO
                 case attr: LineNumberTableAttribute => {
-                    if (_lineNumberTable != null) {
-                        _lineNumberTable.mergeFrom(attr)
+                    if (lineNumberTable != null) {
+                        lineNumberTable.mergeFrom(attr)
                     } else {
-                        _lineNumberTable = attr
+                        lineNumberTable = attr
                     }
                 }
                 case attr: UnsupportedAttribute => _unsupported.add(attr)

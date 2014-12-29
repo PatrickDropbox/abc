@@ -78,6 +78,18 @@ class CodeAttribute(o: AttributeOwner)
         // TODO
     }
 
+    def _populateLineNumber() {
+        if (attributes.lineNumberTable != null) {
+            val table = attributes.lineNumberTable.table
+            for (op <- operations) {
+                val entry = table.floorEntry(op.pc)
+                if (entry != null) {
+                    op.line = entry.getValue()
+                }
+            }
+        }
+    }
+
     def deserialize(name: ConstUtf8Info,
                     attrLength: Int,
                     input: DataInputStream) {
@@ -104,6 +116,8 @@ class CodeAttribute(o: AttributeOwner)
 
         attributes = new CodeAttributes(this)
         attributes.deserialize(input)
+
+        _populateLineNumber()
     }
 
     def debugString(indent: String): String = {

@@ -16,6 +16,8 @@ abstract class Operation(o: AttributeOwner) {
     def deserialize(startAddress: Int, opCode: Int, input: DataInputStream)
 
     def debugString(indent: String): String
+
+    def _pcLine(): String = "" + pc + "(" + line + ")"
 }
 
 // operations of the form: <op code>
@@ -37,7 +39,7 @@ abstract class NoOperandOp(
     }
 
     def debugString(indent: String): String = {
-        return indent + pc + ": " + _mnemonic + "\n"
+        return indent + _pcLine() + ": " + _mnemonic + "\n"
     }
 }
 
@@ -71,7 +73,7 @@ abstract class ByteOperandOp(
     }
 
     def debugString(indent: String): String = {
-        indent + pc + ": " + _mnemonic + " " + operand + "\n"
+        indent + _pcLine() + ": " + _mnemonic + " " + operand + "\n"
     }
 }
 
@@ -116,7 +118,7 @@ abstract class TwoByteOperandsOp(
     }
 
     def debugString(indent: String): String = {
-        return indent + pc + ": " + _mnemonic + " " +
+        return indent + _pcLine() + ": " + _mnemonic + " " +
                 operand1 + " " + operand2 + "\n"
     }
 }
@@ -151,7 +153,7 @@ class ShortOperandOp(
     }
 
     def debugString(indent: String): String = {
-        return indent + pc + ": " + _mnemonic + " " + operand + "\n"
+        return indent + _pcLine() + ": " + _mnemonic + " " + operand + "\n"
     }
 }
 
@@ -178,7 +180,7 @@ class IntOperandOp(
     }
 
     def debugString(indent: String): String = {
-        return indent + pc + ": " + _mnemonic + " " + operand + "\n"
+        return indent + _pcLine() + ": " + _mnemonic + " " + operand + "\n"
     }
 }
 
