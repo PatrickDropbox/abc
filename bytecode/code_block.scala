@@ -236,6 +236,55 @@ class CodeBlock(parent: CodeSection)
     // Control operations
     //
 
+    def ifEq(ifBlock: CodeBlock, elseBlock: CodeBlock) {
+        _addControl(new Ifeq(_owner, ifBlock, elseBlock))
+    }
+    def ifNe(ifBlock: CodeBlock, elseBlock: CodeBlock) {
+        _addControl(new Ifne(_owner, ifBlock, elseBlock))
+    }
+    def ifLt(ifBlock: CodeBlock, elseBlock: CodeBlock) {
+        _addControl(new Iflt(_owner, ifBlock, elseBlock))
+    }
+    def ifGe(ifBlock: CodeBlock, elseBlock: CodeBlock) {
+        _addControl(new Ifge(_owner, ifBlock, elseBlock))
+    }
+    def ifGt(ifBlock: CodeBlock, elseBlock: CodeBlock) {
+        _addControl(new Ifgt(_owner, ifBlock, elseBlock))
+    }
+    def ifLe(ifBlock: CodeBlock, elseBlock: CodeBlock) {
+        _addControl(new Ifle(_owner, ifBlock, elseBlock))
+    }
+    def ifICmpEq(ifBlock: CodeBlock, elseBlock: CodeBlock) {
+        _addControl(new IfIcmpeq(_owner, ifBlock, elseBlock))
+    }
+    def ifICmpNe(ifBlock: CodeBlock, elseBlock: CodeBlock) {
+        _addControl(new IfIcmpne(_owner, ifBlock, elseBlock))
+    }
+    def ifICmpLt(ifBlock: CodeBlock, elseBlock: CodeBlock) {
+        _addControl(new IfIcmplt(_owner, ifBlock, elseBlock))
+    }
+    def ifICmpGe(ifBlock: CodeBlock, elseBlock: CodeBlock) {
+        _addControl(new IfIcmpge(_owner, ifBlock, elseBlock))
+    }
+    def ifICmpGt(ifBlock: CodeBlock, elseBlock: CodeBlock) {
+        _addControl(new IfIcmpgt(_owner, ifBlock, elseBlock))
+    }
+    def ifICmpLe(ifBlock: CodeBlock, elseBlock: CodeBlock) {
+        _addControl(new IfIcmple(_owner, ifBlock, elseBlock))
+    }
+    def ifACmpEq(ifBlock: CodeBlock, elseBlock: CodeBlock) {
+        _addControl(new IfAcmpeq(_owner, ifBlock, elseBlock))
+    }
+    def ifACmpNe(ifBlock: CodeBlock, elseBlock: CodeBlock) {
+        _addControl(new IfAcmpne(_owner, ifBlock, elseBlock))
+    }
+    def ifNull(ifBlock: CodeBlock, elseBlock: CodeBlock) {
+        _addControl(new Ifnull(_owner, ifBlock, elseBlock))
+    }
+    def ifNonNull(ifBlock: CodeBlock, elseBlock: CodeBlock) {
+        _addControl(new Ifnonnull(_owner, ifBlock, elseBlock))
+    }
+
     def goto(target: CodeBlock) { _addControl(new Goto(_owner, this, target)) }
 
     // XXX: maybe infer return type from method signature?
@@ -247,28 +296,6 @@ class CodeBlock(parent: CodeSection)
     def returnVoid() { _addControl(new Return(_owner)) }
 
     def throwA() { _addControl(new Athrow(_owner)) }
-
-/* TODO
-Ifeq(owner)
-Ifne(owner)
-Iflt(owner)
-Ifge(owner)
-Ifgt(owner)
-Ifle(owner)
-
-IfIcmpeq(owner)
-IfIcmpne(owner)
-IfIcmplt(owner)
-IfIcmpge(owner)
-IfIcmpgt(owner)
-IfIcmple(owner)
-
-IfAcmpeq(owner)
-IfAcmpne(owner)
-
-Ifnull(owner)
-Ifnonnull(owner)
-*/
 
     def _assignAddress(startAddress: Int): Int = {
         throw new Exception("TODO")
