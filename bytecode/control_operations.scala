@@ -38,7 +38,7 @@ class Goto(owner: AttributeOwner,
             throw new Exception("Unexpected op-code: " + opCode)
         }
 
-        _offset = input.readUnsignedByte()
+        _offset = input.readShort()
     }
 
     override def bindBlockRefs(table: TreeMap[Int, CodeBlock]) {

@@ -1,5 +1,6 @@
 import java.io.DataInputStream
 import java.io.DataOutputStream
+import java.util.TreeMap
 
 
 // stack: ..., long value1, long value2 -> int result
@@ -33,12 +34,46 @@ abstract class IfBaseOp(
         owner: AttributeOwner,
         opCode: Int,
         mnemonic: String,
-        truePcOffset: Int) extends ShortOperandOp(
-                owner,
-                opCode,
-                mnemonic,
-                false,  // signed
-                truePcOffset) {
+        ifBranch: CodeBlock,
+        elseBranch: CodeBlock) extends Operation(owner) {
+    val _opCode = opCode
+    val _mnemonic = mnemonic
+    var _ifBranch = ifBranch
+    var _elseBranch = elseBranch
+
+    var _ifBranchOffset = 0
+
+    def serialize(output: DataOutputStream) {
+        _ifBranchOffset = _ifBranch.pc - pc
+        output.writeByte(_opCode)
+        output.writeShort(_ifBranchOffset)
+    }
+
+    def deserialize(startAddress: Int, opCode: Int, input: DataInputStream) {
+        if (opCode != _opCode) {
+            throw new Exception("Unexpected op-code: " + opCode)
+        }
+
+        _ifBranchOffset = input.readShort()
+    }
+
+    override def bindBlockRefs(table: TreeMap[Int, CodeBlock]) {
+        _ifBranch = table.get(pc + _ifBranchOffset)
+        if (_ifBranch == null) {
+            throw new Exception("can't find if block")
+        }
+
+        val elseEntry = table.higherEntry(pc)
+        if (elseEntry == null) {
+            throw new Exception("can't find else block")
+        }
+        _elseBranch = elseEntry.getValue()
+    }
+
+    def debugString(indent: String): String = {
+        return indent + _pcLine() + ": " + _mnemonic +
+                " (if branch offset) " + _ifBranchOffset
+    }
 }
 
 // stack: ..., int value -> ... (compare against 0)
@@ -46,11 +81,13 @@ abstract class IfIOp(
         owner: AttributeOwner,
         opCode: Int,
         mnemonic: String,
-        truePcOffset: Int) extends IfBaseOp(
+        ifBranch: CodeBlock,
+        elseBranch: CodeBlock) extends IfBaseOp(
                 owner,
                 opCode,
                 mnemonic,
-                truePcOffset) {
+                ifBranch,
+                elseBranch) {
 }
 
 // stack: ..., int value1, int value2 -> ...
@@ -58,11 +95,13 @@ abstract class IfCmpIOp(
         owner: AttributeOwner,
         opCode: Int,
         mnemonic: String,
-        truePcOffset: Int) extends IfBaseOp(
+        ifBranch: CodeBlock,
+        elseBranch: CodeBlock) extends IfBaseOp(
                 owner,
                 opCode,
                 mnemonic,
-                truePcOffset) {
+                ifBranch,
+                elseBranch) {
 }
 
 // stack: ..., ref value -> ...
@@ -70,11 +109,13 @@ abstract class IfAOp(
         owner: AttributeOwner,
         opCode: Int,
         mnemonic: String,
-        truePcOffset: Int) extends IfBaseOp(
+        ifBranch: CodeBlock,
+        elseBranch: CodeBlock) extends IfBaseOp(
                 owner,
                 opCode,
                 mnemonic,
-                truePcOffset) {
+                ifBranch,
+                elseBranch) {
 }
 
 // stack: ..., ref value1, ref value2 -> ...
@@ -82,93 +123,162 @@ abstract class IfCmpAOp(
         owner: AttributeOwner,
         opCode: Int,
         mnemonic: String,
-        truePcOffset: Int) extends IfBaseOp(owner, opCode, mnemonic, truePcOffset) {
+        ifBranch: CodeBlock,
+        elseBranch: CodeBlock) extends IfBaseOp(
+                owner,
+                opCode,
+                mnemonic,
+                ifBranch,
+                elseBranch) {
 }
 
 //
 // int conditional branching
 //
 
-class Ifeq(owner: AttributeOwner, truePcOffset: Int)
-        extends IfIOp(owner, OpCode.IFEQ, "ifeq", truePcOffset) {
-    def this(owner: AttributeOwner) = this(owner, -1)
+class Ifeq(owner: AttributeOwner, ifBranch: CodeBlock, elseBranch: CodeBlock)
+        extends IfIOp(owner, OpCode.IFEQ, "ifeq", ifBranch, elseBranch) {
+    def this(owner: AttributeOwner) = this(owner, null, null)
 }
 
-class Ifne(owner: AttributeOwner, truePcOffset: Int)
-        extends IfIOp(owner, OpCode.IFNE, "ifne", truePcOffset) {
-    def this(owner: AttributeOwner) = this(owner, -1)
+class Ifne(owner: AttributeOwner, ifBranch: CodeBlock, elseBranch: CodeBlock)
+        extends IfIOp(owner, OpCode.IFNE, "ifne", ifBranch, elseBranch) {
+    def this(owner: AttributeOwner) = this(owner, null, null)
 }
 
-class Iflt(owner: AttributeOwner, truePcOffset: Int)
-        extends IfIOp(owner, OpCode.IFLT, "iflt", truePcOffset) {
-    def this(owner: AttributeOwner) = this(owner, -1)
+class Iflt(owner: AttributeOwner, ifBranch: CodeBlock, elseBranch: CodeBlock)
+        extends IfIOp(owner, OpCode.IFLT, "iflt", ifBranch, elseBranch) {
+    def this(owner: AttributeOwner) = this(owner, null, null)
 }
 
-class Ifle(owner: AttributeOwner, truePcOffset: Int)
-        extends IfIOp(owner, OpCode.IFLE, "ifle", truePcOffset) {
-    def this(owner: AttributeOwner) = this(owner, -1)
+class Ifle(owner: AttributeOwner, ifBranch: CodeBlock, elseBranch: CodeBlock)
+        extends IfIOp(owner, OpCode.IFLE, "ifle", ifBranch, elseBranch) {
+    def this(owner: AttributeOwner) = this(owner, null, null)
 }
 
-class Ifgt(owner: AttributeOwner, truePcOffset: Int)
-        extends IfIOp(owner, OpCode.IFGT, "ifgt", truePcOffset) {
-    def this(owner: AttributeOwner) = this(owner, -1)
+class Ifgt(owner: AttributeOwner, ifBranch: CodeBlock, elseBranch: CodeBlock)
+        extends IfIOp(owner, OpCode.IFGT, "ifgt", ifBranch, elseBranch) {
+    def this(owner: AttributeOwner) = this(owner, null, null)
 }
 
-class Ifge(owner: AttributeOwner, truePcOffset: Int)
-        extends IfIOp(owner, OpCode.IFGE, "ifge", truePcOffset) {
-    def this(owner: AttributeOwner) = this(owner, -1)
+class Ifge(owner: AttributeOwner, ifBranch: CodeBlock, elseBranch: CodeBlock)
+        extends IfIOp(owner, OpCode.IFGE, "ifge", ifBranch, elseBranch) {
+    def this(owner: AttributeOwner) = this(owner, null, null)
 }
 
-class IfIcmpeq(owner: AttributeOwner, truePcOffset: Int)
-        extends IfCmpIOp(owner, OpCode.IF_ICMPEQ, "if_icmpeq", truePcOffset) {
-    def this(owner: AttributeOwner) = this(owner, -1)
+class IfIcmpeq(
+        owner: AttributeOwner,
+        ifBranch: CodeBlock,
+        elseBranch: CodeBlock) extends IfCmpIOp(
+                owner,
+                OpCode.IF_ICMPEQ,
+                "if_icmpeq",
+                ifBranch,
+                elseBranch) {
+    def this(owner: AttributeOwner) = this(owner, null, null)
 }
 
-class IfIcmpne(owner: AttributeOwner, truePcOffset: Int)
-        extends IfCmpIOp(owner, OpCode.IF_ICMPNE, "if_icmpne", truePcOffset) {
-    def this(owner: AttributeOwner) = this(owner, -1)
+class IfIcmpne(
+        owner: AttributeOwner,
+        ifBranch: CodeBlock,
+        elseBranch: CodeBlock) extends IfCmpIOp(
+                owner,
+                OpCode.IF_ICMPNE,
+                "if_icmpne",
+                ifBranch,
+                elseBranch) {
+    def this(owner: AttributeOwner) = this(owner, null, null)
 }
 
-class IfIcmplt(owner: AttributeOwner, truePcOffset: Int)
-        extends IfCmpIOp(owner, OpCode.IF_ICMPLT, "if_icmplt", truePcOffset) {
-    def this(owner: AttributeOwner) = this(owner, -1)
+class IfIcmplt(
+        owner: AttributeOwner,
+        ifBranch: CodeBlock,
+        elseBranch: CodeBlock) extends IfCmpIOp(
+                owner,
+                OpCode.IF_ICMPLT,
+                "if_icmplt",
+                ifBranch,
+                elseBranch) {
+    def this(owner: AttributeOwner) = this(owner, null, null)
 }
 
-class IfIcmpge(owner: AttributeOwner, truePcOffset: Int)
-        extends IfCmpIOp(owner, OpCode.IF_ICMPGE, "if_icmpge", truePcOffset) {
-    def this(owner: AttributeOwner) = this(owner, -1)
+class IfIcmpge(
+        owner: AttributeOwner,
+        ifBranch: CodeBlock,
+        elseBranch: CodeBlock) extends IfCmpIOp(
+                owner,
+                OpCode.IF_ICMPGE,
+                "if_icmpge",
+                ifBranch,
+                elseBranch) {
+    def this(owner: AttributeOwner) = this(owner, null, null)
 }
 
-class IfIcmpgt(owner: AttributeOwner, truePcOffset: Int)
-        extends IfCmpIOp(owner, OpCode.IF_ICMPGT, "if_icmpgt", truePcOffset) {
-    def this(owner: AttributeOwner) = this(owner, -1)
+class IfIcmpgt(
+        owner: AttributeOwner,
+        ifBranch: CodeBlock,
+        elseBranch: CodeBlock) extends IfCmpIOp(
+                owner,
+                OpCode.IF_ICMPGT,
+                "if_icmpgt",
+                ifBranch,
+                elseBranch) {
+    def this(owner: AttributeOwner) = this(owner, null, null)
 }
 
-class IfIcmple(owner: AttributeOwner, truePcOffset: Int)
-        extends IfCmpIOp(owner, OpCode.IF_ICMPLE, "if_icmple", truePcOffset) {
-    def this(owner: AttributeOwner) = this(owner, -1)
+class IfIcmple(
+        owner: AttributeOwner,
+        ifBranch: CodeBlock,
+        elseBranch: CodeBlock) extends IfCmpIOp(
+                owner,
+                OpCode.IF_ICMPLE,
+                "if_icmple",
+                ifBranch,
+                elseBranch) {
+    def this(owner: AttributeOwner) = this(owner, null, null)
 }
 
 //
 // ref conditional branching
 //
 
-class IfAcmpeq(owner: AttributeOwner, truePcOffset: Int)
-        extends IfCmpAOp(owner, OpCode.IF_ACMPEQ, "if_acmpeq", truePcOffset) {
-    def this(owner: AttributeOwner) = this(owner, -1)
+class IfAcmpeq(
+        owner: AttributeOwner,
+        ifBranch: CodeBlock,
+        elseBranch: CodeBlock) extends IfCmpAOp(
+                owner,
+                OpCode.IF_ACMPEQ,
+                "if_acmpeq",
+                ifBranch,
+                elseBranch) {
+    def this(owner: AttributeOwner) = this(owner, null, null)
 }
 
-class IfAcmpne(owner: AttributeOwner, truePcOffset: Int)
-        extends IfCmpAOp(owner, OpCode.IF_ACMPNE, "if_acmpne", truePcOffset) {
-    def this(owner: AttributeOwner) = this(owner, -1)
+class IfAcmpne(
+        owner: AttributeOwner,
+        ifBranch: CodeBlock,
+        elseBranch: CodeBlock) extends IfCmpAOp(
+                owner,
+                OpCode.IF_ACMPNE,
+                "if_acmpne",
+                ifBranch,
+                elseBranch) {
+    def this(owner: AttributeOwner) = this(owner, null, null)
 }
 
-class Ifnonnull(owner: AttributeOwner, truePcOffset: Int)
-        extends IfAOp(owner, OpCode.IFNONNULL, "ifnonnull", truePcOffset) {
-    def this(owner: AttributeOwner) = this(owner, -1)
+class Ifnonnull(
+        owner: AttributeOwner,
+        ifBranch: CodeBlock,
+        elseBranch: CodeBlock) extends IfAOp(
+                owner,
+                OpCode.IFNONNULL,
+                "ifnonnull",
+                ifBranch,
+                elseBranch) {
+    def this(owner: AttributeOwner) = this(owner, null, null)
 }
 
-class Ifnull(owner: AttributeOwner, truePcOffset: Int)
-        extends IfAOp(owner, OpCode.IFNULL, "ifnull", truePcOffset) {
-    def this(owner: AttributeOwner) = this(owner, -1)
+class Ifnull(owner: AttributeOwner, ifBranch: CodeBlock, elseBranch: CodeBlock)
+        extends IfAOp(owner, OpCode.IFNULL, "ifnull", ifBranch, elseBranch) {
+    def this(owner: AttributeOwner) = this(owner, null, null)
 }
