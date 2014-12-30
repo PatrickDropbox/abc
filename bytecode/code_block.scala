@@ -465,6 +465,51 @@ class CodeSection(
         }
     }
 
+    // returns true if this equals, or contains, the other section
+    def _contains(other: CodeSection): Boolean = {
+        if (this == other) {
+            return true
+        }
+
+        var tmp = other
+        while (tmp._parentScope != null) {
+            if (this == tmp._parentScope) {
+                return true
+            }
+            tmp = tmp._parentScope
+        }
+
+        return false
+    }
+
+    def getEntryPoint(): CodeBlock = {
+        var results = new Vector[CodeBlock]
+        _collectEntryPoints(results)
+
+        if (results.isEmpty()) {
+            throw new Exception("no entry point")
+        }
+
+        if (results.size() > 1) {
+            throw new Exception("multiple entry points")
+        }
+
+        return results.elementAt(0)
+    }
+
+    def _collectEntryPoints(entries: Vector[CodeBlock]) {
+        for (seg <- _segments) {
+            seg match {
+                case b: CodeBlock => {
+                    if (b.isEntryPoint) {
+                        entries.add(b)
+                    }
+                }
+                case s: CodeSection => s._collectEntryPoints(entries)
+            }
+        }
+    }
+
     def _insertImplicitGoto() {
         for (seg <- _segments) {
             seg._insertImplicitGoto()
