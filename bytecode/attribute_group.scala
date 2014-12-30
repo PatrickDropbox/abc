@@ -46,7 +46,7 @@ abstract class AttributeGroup(o: AttributeOwner) {
             val name = _owner.constants().getUtf8ByIndex(
                     inputStream.readUnsignedShort())
             var attr = name.value() match {
-/* TODO
+/* TODO implement more attributes
 AnnotationDefault
 MethodParameters
 LocalVariableTable
@@ -202,7 +202,7 @@ class ClassAttributes(c: ClassInfo) extends AttributeGroup(c) {
     def allAttributes(): Vector[Attribute] = {
         var allAttributes = new Vector[Attribute]()
 
-        // TODO
+        // TODO add more attributes
 
         if (_sourceFile != null) {
             allAttributes.add(_sourceFile)
@@ -239,7 +239,7 @@ class ClassAttributes(c: ClassInfo) extends AttributeGroup(c) {
     def deserialize(input: DataInputStream) {
         for (a <- _readAttributes(input)) {
             a match {
-                // TODO
+                // TODO add more attributes
                 case attr: BootstrapMethodsAttribute => {
                     if (_bootstrapMethods != null) {
                         throw new Exception(
@@ -342,7 +342,7 @@ class FieldAttributes(f: FieldInfo) extends AttributeGroup(f) {
     def allAttributes(): Vector[Attribute] = {
         var allAttributes = new Vector[Attribute]()
 
-        // TODO
+        // TODO add more attributes
 
         if (_signature != null) {
             allAttributes.add(_signature)
@@ -364,7 +364,7 @@ class FieldAttributes(f: FieldInfo) extends AttributeGroup(f) {
     def deserialize(input: DataInputStream) {
         for (a <- _readAttributes(input)) {
             a match {
-                // TODO
+                // TODO add more attributes
                 case attr: ConstantValueAttribute => {
                     if (_constantValue != null) {
                         throw new Exception("multiple constant value attribute")
@@ -454,7 +454,7 @@ class MethodAttributes(m: MethodInfo) extends AttributeGroup(m) {
     def allAttributes(): Vector[Attribute] = {
         var allAttributes = new Vector[Attribute]()
 
-        // TODO
+        // TODO add more attributes
 
         if (_signature != null) {
             allAttributes.add(_signature)
@@ -482,7 +482,7 @@ class MethodAttributes(m: MethodInfo) extends AttributeGroup(m) {
     def deserialize(input: DataInputStream) {
         for (a <- _readAttributes(input)) {
             a match {
-                // TODO
+                // TODO add more attributes
                 case attr: CodeAttribute => {
                     if (_code != null) {
                         throw new Exception("multiple code attribute")
@@ -521,14 +521,13 @@ class MethodAttributes(m: MethodInfo) extends AttributeGroup(m) {
     }
 }
 
-// TODO code attributes
 class CodeAttributes(c: CodeAttribute) extends AttributeGroup(c) {
     var lineNumberTable: LineNumberTableAttribute = null
 
     def allAttributes(): Vector[Attribute] = {
         var allAttributes = new Vector[Attribute]()
 
-        // TODO
+        // TODO add more attributes
 
         if (lineNumberTable != null) {
             allAttributes.add(lineNumberTable)
@@ -544,7 +543,7 @@ class CodeAttributes(c: CodeAttribute) extends AttributeGroup(c) {
     def deserialize(input: DataInputStream) {
         for (a <- _readAttributes(input)) {
             a match {
-                // TODO
+                // TODO add more attributes
                 case attr: LineNumberTableAttribute => {
                     if (lineNumberTable != null) {
                         lineNumberTable.mergeFrom(attr)

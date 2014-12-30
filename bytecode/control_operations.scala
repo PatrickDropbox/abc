@@ -2,6 +2,8 @@ import java.io.DataInputStream
 import java.io.DataOutputStream
 import java.util.TreeMap
 
+import scala.collection.JavaConversions._
+
 
 class Goto(owner: AttributeOwner,
            current: CodeBlock,
@@ -9,27 +11,29 @@ class Goto(owner: AttributeOwner,
         extends Operation(owner) {
     def this(owner: AttributeOwner, offset: Int) = {
         this(owner, null, null)
-        _offset = offset
+        _tmpOffset = offset
     }
 
     def this(owner: AttributeOwner) = this(owner, 0)
 
     var _currentBlock = current
     var _targetBlock = target
-    var _offset = 0
+
+    // only used during deserialization
+    var _tmpOffset = 0
 
     def serialize(output: DataOutputStream) {
         if (_currentBlock.segmentNumber + 1 == _targetBlock.segmentNumber) {
             // skip writing goto since the two code block are next to each other
             return
         }
-        _offset = _targetBlock.pc - pc
-        if (_offset <= 65535) {
+        val offset = _targetBlock.pc - pc
+        if (offset <= 65535) {
             output.writeByte(OpCode.GOTO)
-            output.writeShort(_offset)
+            output.writeShort(offset)
         } else {
             output.writeByte(OpCode.GOTO_W)
-            output.writeInt(_offset)
+            output.writeInt(offset)
         }
     }
 
@@ -38,7 +42,7 @@ class Goto(owner: AttributeOwner,
             throw new Exception("Unexpected op-code: " + opCode)
         }
 
-        _offset = input.readShort()
+        _tmpOffset = input.readShort()
     }
 
     override def bindBlockRefs(table: TreeMap[Int, CodeBlock]) {
@@ -48,14 +52,14 @@ class Goto(owner: AttributeOwner,
         }
         _currentBlock = entry.getValue()
 
-        _targetBlock = table.get(pc + _offset)
+        _targetBlock = table.get(pc + _tmpOffset)
         if (_targetBlock == null) {
             throw new Exception("can't find target block")
         }
     }
 
     def debugString(indent: String): String = {
-        return indent + _pcLine() + ": goto (offset) " + _offset
+        return indent + _pcLine() + ": goto " + _targetBlock.pc
     }
 }
 
@@ -104,7 +108,6 @@ class Ret(owner: AttributeOwner, index: Int)
     }
 }
 
-
 // return void
 class Return(owner: AttributeOwner)
         extends NoOperandOp(owner, OpCode.RETURN, "return") {
@@ -137,9 +140,162 @@ class Areturn(owner: AttributeOwner)
         extends ReturnValue(owner, OpCode.ARETURN, "areturn") {
 }
 
+class Switch(owner: AttributeOwner, defaultBranch: CodeBlock)
+        extends Operation(owner) {
+    def this(owner: AttributeOwner) = this(owner, null)
 
-// TODO: lookup / table switches
-// for serialization, use lookup switch when
-//      8* (# entries) + 8 < 4 * (high - low + 1) + 12
-// => 2 * n < (h - l +2)
-// otherwise use table switch
+    var _defaultBranch = defaultBranch
+    var _table = new TreeMap[Int, CodeBlock]()
+
+    // only used during deserialization
+    var _tmpDefaultOffset = 0
+    var _tmpOffset: TreeMap[Int, Int] = null
+
+    def add(i: Int, branch: CodeBlock) {
+        if (branch != _defaultBranch) {
+            _table.put(i, branch)
+        }
+    }
+
+    // Use lookup switch instead of table switch when lookup is more compact:
+    //  Table switch size = 4 * (high - low + 1) + 12
+    //  Lookup switch size = 8 * num entries + 8
+    //      4 * (high - low + 1) + 12 <= 8 * num entries + 8
+    //  ->  high - low + 2 <= 2 * num entries
+    def _useTableSwitch(): Boolean = {
+        if (_table.isEmpty()) {
+            throw new Exception("No switch cases ...")
+        }
+
+        val low = _table.firstEntry().getKey()
+        val high = _table.lastEntry().getKey()
+
+        return (high - low + 2) <= (2 * _table.size())
+    }
+
+    def _paddingSize(startAddress: Int): Int = {
+        return (4 - ((startAddress + 1) % 4)) % 4
+    }
+
+    def serialize(output: DataOutputStream) {
+        if (_useTableSwitch()) {
+            _serializeTableSwitch(output)
+        } else {
+            _serializeLookupSwitch(output)
+        }
+    }
+
+    def _serializeLookupSwitch(output: DataOutputStream) {
+        output.writeByte(OpCode.TABLESWITCH)
+        for (_ <- 1 to _paddingSize(pc)) {
+            output.writeByte(0)
+        }
+
+        output.writeInt(_defaultBranch.pc - pc)  // default offset
+
+        output.writeInt(_table.size())
+        for (entry <- _table.entrySet()) {
+            output.writeInt(entry.getKey())
+            output.writeInt(entry.getValue().pc - pc)
+        }
+    }
+
+    def _serializeTableSwitch(output: DataOutputStream) {
+        output.writeByte(OpCode.TABLESWITCH)
+        for (_ <- 1 to _paddingSize(pc)) {
+            output.writeByte(0)
+        }
+
+        val low = _table.firstEntry().getKey()
+        val high = _table.lastEntry().getKey()
+
+        output.writeInt(_defaultBranch.pc - pc)  // default offset
+        output.writeInt(low)
+        output.writeInt(high)
+
+        for (i <- low to high) {
+            val branch = _table.get(i)
+            if (branch == null) {
+                output.writeInt(_defaultBranch.pc - pc)
+            } else {
+                output.writeInt(branch.pc - pc)
+            }
+        }
+    }
+
+    def deserialize(startAddress: Int, opCode: Int, input: DataInputStream) {
+        if (!_table.isEmpty()) {
+            throw new Exception("deserializing into non-empty switch")
+        }
+
+        opCode match {
+            case OpCode.TABLESWITCH =>
+                    _deserializeTableSwitch(startAddress, input)
+            case OpCode.LOOKUPSWITCH =>
+                    _deserializeLookupSwitch(startAddress, input)
+            case _ => throw new Exception("Unexpected op code: " + opCode)
+        }
+    }
+
+    def _deserializeTableSwitch(startAddress: Int, input: DataInputStream) {
+        input.skipBytes(_paddingSize(startAddress))
+
+        _tmpDefaultOffset = input.readInt()
+        val low = input.readInt()
+        val high = input.readInt()
+
+        _tmpOffset = new TreeMap[Int, Int]()
+        for (i <- low to high) {
+            val offset = input.readInt()
+            if (offset != _tmpDefaultOffset) {
+                _tmpOffset.put(i, offset)
+            }
+        }
+    }
+
+    def _deserializeLookupSwitch(startAddress: Int, input: DataInputStream) {
+        input.skipBytes(_paddingSize(startAddress))
+
+        _tmpDefaultOffset = input.readInt()
+
+        val numEntries = input.readInt()
+
+        _tmpOffset = new TreeMap[Int, Int]()
+        for (_ <- 1 to numEntries) {
+            val value = input.readInt()
+            val offset = input.readInt()
+            if (offset != _tmpDefaultOffset) {
+                _tmpOffset.put(value, offset)
+            }
+        }
+    }
+
+    override def bindBlockRefs(table: TreeMap[Int, CodeBlock]) {
+        _defaultBranch = table.get(pc + _tmpDefaultOffset)
+        if (_defaultBranch == null) {
+            throw new Exception("can't find switch default block")
+        }
+
+        for (entry <- _tmpOffset.entrySet()) {
+            val block = table.get(pc + entry.getValue())
+            if (block == null) {
+                throw new Exception("can't find switch case block")
+            }
+            _table.put(entry.getKey(), block)
+        }
+
+        // free up tmp map
+        _tmpOffset = null
+    }
+
+    def debugString(indent: String): String = {
+        var result = indent + _pcLine() + ": switch\n"
+        result += indent + "  default: " + _defaultBranch.pc + "\n"
+        for (entry <- _table.entrySet()) {
+            result += indent + "  case " + entry.getKey() + ": " +
+                    entry.getValue().pc + "\n"
+        }
+        return result
+    }
+}
+

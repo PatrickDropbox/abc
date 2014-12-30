@@ -41,12 +41,12 @@ abstract class IfBaseOp(
     var _ifBranch = ifBranch
     var _elseBranch = elseBranch
 
-    var _ifBranchOffset = 0
+    // only used during deserialization
+    var _tmpOffset = 0
 
     def serialize(output: DataOutputStream) {
-        _ifBranchOffset = _ifBranch.pc - pc
         output.writeByte(_opCode)
-        output.writeShort(_ifBranchOffset)
+        output.writeShort(_ifBranch.pc - pc)
     }
 
     def deserialize(startAddress: Int, opCode: Int, input: DataInputStream) {
@@ -54,11 +54,11 @@ abstract class IfBaseOp(
             throw new Exception("Unexpected op-code: " + opCode)
         }
 
-        _ifBranchOffset = input.readShort()
+        _tmpOffset = input.readShort()
     }
 
     override def bindBlockRefs(table: TreeMap[Int, CodeBlock]) {
-        _ifBranch = table.get(pc + _ifBranchOffset)
+        _ifBranch = table.get(pc + _tmpOffset)
         if (_ifBranch == null) {
             throw new Exception("can't find if block")
         }
@@ -71,8 +71,7 @@ abstract class IfBaseOp(
     }
 
     def debugString(indent: String): String = {
-        return indent + _pcLine() + ": " + _mnemonic +
-                " (if branch offset) " + _ifBranchOffset
+        return indent + _pcLine() + ": " + _mnemonic + " " + _ifBranch.pc
     }
 }
 
