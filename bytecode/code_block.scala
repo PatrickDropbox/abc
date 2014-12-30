@@ -1,21 +1,42 @@
 import java.io.DataInputStream
 import java.io.DataOutputStream
+import java.util.Collections
+import java.util.HashMap
+import java.util.HashSet
+import java.util.TreeMap
 import java.util.Vector
 
-class LineContext {
-    var lineNumber = -1
-}
+import scala.collection.JavaConversions._
+
 
 abstract class CodeSegment(
         owner: AttributeOwner,
-        parent: CodeSection,
-        context: LineContext) extends Operation(owner) {
+        parent: CodeSection)
+        extends Operation(owner) with Comparable[CodeSegment] {
     var _parentScope: CodeSection = parent
-    var _lineContext: LineContext = context
+
+    // not inclusive.
+    var _endPc = -1
 
     var segmentNumber = -1
 
     def _assignAddress(startAddress: Int): Int
+
+    def compareTo(other: CodeSegment): Int = {
+        if (segmentNumber < other.segmentNumber) {
+            return -1
+        } else if (segmentNumber > other.segmentNumber) {
+            return 1
+        }
+
+        if (pc < other.pc) {
+            return -1
+        } else if (pc > other.pc) {
+            return 1
+        }
+
+        return 0
+    }
 }
 
 // a linear section in the control flow graph.
@@ -26,7 +47,11 @@ abstract class CodeSegment(
 // if implicitGoto is set and the last ops is not a jump/return, then
 // and goto is inserted to the end of the block during verification.
 class CodeBlock(parent: CodeSection)
-        extends CodeSegment(parent._owner, parent, parent._lineContext) {
+        extends CodeSegment(parent._owner, parent) {
+    var isEntryPoint = false
+
+    var lineContext = -1
+
     var _ops = new Vector[Operation]()
 
     var _hasControlOp = false
@@ -37,17 +62,21 @@ class CodeBlock(parent: CodeSection)
         if (_hasControlOp) {
             throw new Exception("Cannot add more ops after control op")
         }
-        op.line = _lineContext.lineNumber
-        _ops.add(op)
-    }
 
-    def _addControl(op: Operation) {
-        if (_hasControlOp) {
-            throw new Exception("Cannot add more ops after control op")
+        if (lineContext >= 0) {
+            op.line = lineContext
         }
-        _hasControlOp = true
-        op.line = _lineContext.lineNumber
         _ops.add(op)
+
+        _hasControlOp = op match {
+            case _: Return => true
+            case _: ReturnValue => true
+            case _: Athrow => true
+            case g: Goto => true
+            case i: IfBaseOp => true
+            case s: Switch => true
+            case _ => false
+        }
     }
 
     //
@@ -237,65 +266,65 @@ class CodeBlock(parent: CodeSection)
     //
 
     def ifEq(ifBlock: CodeBlock, elseBlock: CodeBlock) {
-        _addControl(new Ifeq(_owner, ifBlock, elseBlock))
+        _add(new Ifeq(_owner, ifBlock, elseBlock))
     }
     def ifNe(ifBlock: CodeBlock, elseBlock: CodeBlock) {
-        _addControl(new Ifne(_owner, ifBlock, elseBlock))
+        _add(new Ifne(_owner, ifBlock, elseBlock))
     }
     def ifLt(ifBlock: CodeBlock, elseBlock: CodeBlock) {
-        _addControl(new Iflt(_owner, ifBlock, elseBlock))
+        _add(new Iflt(_owner, ifBlock, elseBlock))
     }
     def ifGe(ifBlock: CodeBlock, elseBlock: CodeBlock) {
-        _addControl(new Ifge(_owner, ifBlock, elseBlock))
+        _add(new Ifge(_owner, ifBlock, elseBlock))
     }
     def ifGt(ifBlock: CodeBlock, elseBlock: CodeBlock) {
-        _addControl(new Ifgt(_owner, ifBlock, elseBlock))
+        _add(new Ifgt(_owner, ifBlock, elseBlock))
     }
     def ifLe(ifBlock: CodeBlock, elseBlock: CodeBlock) {
-        _addControl(new Ifle(_owner, ifBlock, elseBlock))
+        _add(new Ifle(_owner, ifBlock, elseBlock))
     }
     def ifICmpEq(ifBlock: CodeBlock, elseBlock: CodeBlock) {
-        _addControl(new IfIcmpeq(_owner, ifBlock, elseBlock))
+        _add(new IfIcmpeq(_owner, ifBlock, elseBlock))
     }
     def ifICmpNe(ifBlock: CodeBlock, elseBlock: CodeBlock) {
-        _addControl(new IfIcmpne(_owner, ifBlock, elseBlock))
+        _add(new IfIcmpne(_owner, ifBlock, elseBlock))
     }
     def ifICmpLt(ifBlock: CodeBlock, elseBlock: CodeBlock) {
-        _addControl(new IfIcmplt(_owner, ifBlock, elseBlock))
+        _add(new IfIcmplt(_owner, ifBlock, elseBlock))
     }
     def ifICmpGe(ifBlock: CodeBlock, elseBlock: CodeBlock) {
-        _addControl(new IfIcmpge(_owner, ifBlock, elseBlock))
+        _add(new IfIcmpge(_owner, ifBlock, elseBlock))
     }
     def ifICmpGt(ifBlock: CodeBlock, elseBlock: CodeBlock) {
-        _addControl(new IfIcmpgt(_owner, ifBlock, elseBlock))
+        _add(new IfIcmpgt(_owner, ifBlock, elseBlock))
     }
     def ifICmpLe(ifBlock: CodeBlock, elseBlock: CodeBlock) {
-        _addControl(new IfIcmple(_owner, ifBlock, elseBlock))
+        _add(new IfIcmple(_owner, ifBlock, elseBlock))
     }
     def ifACmpEq(ifBlock: CodeBlock, elseBlock: CodeBlock) {
-        _addControl(new IfAcmpeq(_owner, ifBlock, elseBlock))
+        _add(new IfAcmpeq(_owner, ifBlock, elseBlock))
     }
     def ifACmpNe(ifBlock: CodeBlock, elseBlock: CodeBlock) {
-        _addControl(new IfAcmpne(_owner, ifBlock, elseBlock))
+        _add(new IfAcmpne(_owner, ifBlock, elseBlock))
     }
     def ifNull(ifBlock: CodeBlock, elseBlock: CodeBlock) {
-        _addControl(new Ifnull(_owner, ifBlock, elseBlock))
+        _add(new Ifnull(_owner, ifBlock, elseBlock))
     }
     def ifNonNull(ifBlock: CodeBlock, elseBlock: CodeBlock) {
-        _addControl(new Ifnonnull(_owner, ifBlock, elseBlock))
+        _add(new Ifnonnull(_owner, ifBlock, elseBlock))
     }
 
-    def goto(target: CodeBlock) { _addControl(new Goto(_owner, this, target)) }
+    def goto(target: CodeBlock) { _add(new Goto(_owner, this, target)) }
 
     // XXX: maybe infer return type from method signature?
-    def returnI() { _addControl(new Ireturn(_owner)) }
-    def returnL() { _addControl(new Lreturn(_owner)) }
-    def returnF() { _addControl(new Freturn(_owner)) }
-    def returnD() { _addControl(new Dreturn(_owner)) }
-    def returnA() { _addControl(new Areturn(_owner)) }
-    def returnVoid() { _addControl(new Return(_owner)) }
+    def returnI() { _add(new Ireturn(_owner)) }
+    def returnL() { _add(new Lreturn(_owner)) }
+    def returnF() { _add(new Freturn(_owner)) }
+    def returnD() { _add(new Dreturn(_owner)) }
+    def returnA() { _add(new Areturn(_owner)) }
+    def returnVoid() { _add(new Return(_owner)) }
 
-    def throwA() { _addControl(new Athrow(_owner)) }
+    def throwA() { _add(new Athrow(_owner)) }
 
     def _assignAddress(startAddress: Int): Int = {
         throw new Exception("TODO")
@@ -310,7 +339,11 @@ class CodeBlock(parent: CodeSection)
     }
 
     def debugString(indent: String): String = {
-        throw new Exception("TODO")
+        var result = indent + "Block: " + pc + "\n"
+        for (op <- _ops) {
+            result += op.debugString(indent + "  ")
+        }
+        return result
     }
 }
 
@@ -323,24 +356,13 @@ class ExceptionTarget(e: ConstClassInfo, t: CodeSection) {
 // unit.
 class CodeSection(
         owner: AttributeOwner,
-        parent: CodeSection,
-        context: LineContext) extends CodeSegment(owner, parent, context) {
-    def this(parent: CodeSection) = this(
-            parent._owner,
-            parent,
-            parent._lineContext)
+        parent: CodeSection) extends CodeSegment(owner, parent) {
+    def this(parent: CodeSection) = this(parent._owner, parent)
 
     var _segments = new Vector[CodeSegment]()
-    _segments.add(new CodeBlock(this))  // entry block
+    var _subsections = new Vector[CodeSection]()
 
     var _exceptionTargets = new Vector[ExceptionTarget]()
-
-    def entryBlock(): CodeBlock = {
-        _segments.elementAt(0) match {
-            case block: CodeBlock => return block
-            case _ => throw new Exception("entry point should be a block ...")
-        }
-    }
 
     def newBlock(): CodeBlock = {
         val block = new CodeBlock(this)
@@ -351,7 +373,19 @@ class CodeSection(
     def newSubSection(): CodeSection = {
         val section = new CodeSection(this)
         _segments.add(section)
+        _subsections.add(section)
         return section
+    }
+
+    // only used for reconstruction
+    def _getMostSpecificSection(pc: Int): CodeSection = {
+        for (s <- _subsections) {
+            if (s.pc <= pc && pc < s._endPc) {
+                return s._getMostSpecificSection(pc)
+            }
+        }
+
+        return this
     }
 
     // add new exception handle for the current section.
@@ -376,6 +410,37 @@ class CodeSection(
         return target
     }
 
+    // For sharing exception section (needed for javac)
+    def shareExceptionHandle(exceptionClassName: String, target: CodeSection) {
+        if (_parentScope == null) {
+            throw new Exception(
+                    "cannot create exception handle for top level scope")
+        }
+
+        var exception: ConstClassInfo = null
+        if (exceptionClassName != null) {
+            exception =_owner.constants().getClass(exceptionClassName)
+        }
+
+        _exceptionTargets.add(new ExceptionTarget(exception, target))
+    }
+
+    // this assumes pc are assigned and segments are sorted
+    def collectExceptionEntries(result: Vector[ExceptionEntry]) {
+        for (section <- _subsections) {
+            section.collectExceptionEntries(result)
+        }
+
+        for (entry <- _exceptionTargets) {
+            result.add(new ExceptionEntry(
+                    _owner,
+                    pc,
+                    _endPc,
+                    entry.target.pc,
+                    entry.exception))
+        }
+    }
+
     def _assignSegmentNumber(startNumber: Int): Int = {
         throw new Exception("TODO")
     }
@@ -392,7 +457,156 @@ class CodeSection(
         throw new Exception("TODO")
     }
 
+    def sort() {
+        Collections.sort(_segments)
+        Collections.sort(_subsections)
+
+        for (section <- _subsections) {
+            section.sort()
+        }
+    }
+
     def debugString(indent: String): String = {
-        throw new Exception("TODO")
+        sort()
+
+        var result = ""
+        for (segment <- _segments) {
+            result += segment.debugString(indent)
+        }
+
+        return result
+    }
+}
+
+object CodeSection {
+    def reconstructFlowGraph(
+            owner: AttributeOwner,
+            exceptions: Vector[ExceptionEntry],
+            ops: Vector[Operation]): CodeSection = {
+
+        _checkExceptionOverlaps(exceptions)
+
+        val jumpTargets = _collectJumpTargets(exceptions, ops)
+
+        var result = new CodeSection(owner, null)
+        result.pc = 0
+        result._endPc = ops.elementAt(ops.size() -1).pc + 1
+
+        // handler pc -> exception entry
+        var handlerSection = _createExceptionSubsections(exceptions, result)
+
+        var pcBlockMap = new TreeMap[Int, CodeBlock]()
+
+        var prevBlock: CodeBlock = null
+        var currBlock: CodeBlock = null
+        for (op <- ops) {
+            if (jumpTargets.contains(op.pc)) {
+                if (prevBlock != null) {
+                    prevBlock.implicitGoto = currBlock
+                    prevBlock._endPc = op.pc
+                }
+                prevBlock = currBlock
+
+                var section = result._getMostSpecificSection(op.pc)
+
+                val exceptions = handlerSection.get(op.pc)
+                if (exceptions != null) {
+                    section = section.newSubSection()
+                    section.pc = op.pc
+                    for (entry <- exceptions) {
+                        entry._tmpSection.shareExceptionHandle(
+                                entry.className(),
+                                section)
+                    }
+                }
+
+                currBlock = section.newBlock()
+                currBlock.pc = op.pc
+
+                if (op.pc == 0) {
+                    currBlock.isEntryPoint = true
+                }
+
+                pcBlockMap.put(op.pc, currBlock)
+            }
+
+            currBlock._add(op)
+        }
+
+        for (op <- ops) {
+            op.bindBlockRefs(pcBlockMap)
+        }
+
+        return result
+    }
+
+    // 1. ensure there are no partial overlaps
+    // 2. ensure more specific scope is before less specific scope
+    def _checkExceptionOverlaps(exceptions: Vector[ExceptionEntry]) {
+        // TODO
+    }
+
+    def _createExceptionSubsections(
+            exceptions: Vector[ExceptionEntry],
+            global: CodeSection): HashMap[Int, Vector[ExceptionEntry]] = {
+        var handlerSection = new HashMap[Int, Vector[ExceptionEntry]]()
+
+        for (i <- (exceptions.size() - 1).to(0, -1)) {
+            var entry = exceptions.elementAt(i)
+
+            var section = global._getMostSpecificSection(entry.startPc)
+            if (section.pc < entry.startPc || entry.endPc < section._endPc) {
+                section = section.newSubSection()
+                section.pc = entry.startPc
+                section._endPc = entry.endPc
+            }
+            entry._tmpSection = section
+
+            if (!handlerSection.containsKey(entry.handlerPc)) {
+                handlerSection.put(
+                        entry.handlerPc,
+                        new Vector[ExceptionEntry]())
+            }
+            handlerSection.get(entry.handlerPc).add(entry)
+        }
+
+        return handlerSection
+    }
+
+    def _collectJumpTargets(
+            exceptions: Vector[ExceptionEntry],
+            ops: Vector[Operation]): HashSet[Int] = {
+        var jumpTargets = new HashSet[Int]()
+
+        for (ex <- exceptions) {
+            jumpTargets.add(ex.startPc)
+            jumpTargets.add(ex.endPc)
+            jumpTargets.add(ex.handlerPc)
+        }
+
+        for (op <- ops) {
+            op match {
+                case _: CodeSegment => throw new Exception(
+                        "cannot group non-basic ops")
+                case _: Return => jumpTargets.add(op.pc + 1)
+                case _: ReturnValue => jumpTargets.add(op.pc + 1)
+                case _: Athrow => jumpTargets.add(op.pc + 1)
+                case g: Goto => jumpTargets.add(g.pc + g._tmpOffset)
+                case i: IfBaseOp => {
+                    jumpTargets.add(i.pc + i._tmpOffset)  // if branch
+                    jumpTargets.add(i.pc + 1)  // else branch
+                }
+                case s: Switch => {
+                    jumpTargets.add(s.pc + s._tmpDefaultOffset)
+                    for (offset <- s._tmpOffset.values()) {
+                        jumpTargets.add(s.pc + offset)
+                    }
+                }
+                case _ => {}
+            }
+        }
+
+        jumpTargets.add(0)
+        return jumpTargets
     }
 }

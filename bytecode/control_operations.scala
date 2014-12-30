@@ -59,7 +59,7 @@ class Goto(owner: AttributeOwner,
     }
 
     def debugString(indent: String): String = {
-        return indent + _pcLine() + ": goto " + _targetBlock.pc
+        return indent + _pcLine() + ": goto " + _targetBlock.pc + "\n"
     }
 }
 

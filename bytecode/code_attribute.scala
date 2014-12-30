@@ -10,7 +10,7 @@ class ExceptionEntry(
         spc: Int,
         epc: Int,
         hpc: Int,
-        className: String) {
+        c: ConstClassInfo) {
     def this(owner: AttributeOwner) = this(owner, 0, 0, 0, null)
 
     var _owner = owner
@@ -18,9 +18,16 @@ class ExceptionEntry(
     var startPc = spc  // inclusive
     var endPc = epc  // exclusive
     var handlerPc = hpc
-    var classType: ConstClassInfo = null  // null means catch all
-    if (className != null) {
-        classType = _owner.constants().getClass(className)
+    var classType: ConstClassInfo = c  // null means catch all
+
+    // only used for deserialization
+    var _tmpSection: CodeSection = null
+
+    def className(): String = {
+        if (classType == null) {
+            return null
+        }
+        return classType.className()
     }
 
     def serialize(output: DataOutputStream) {
@@ -66,9 +73,7 @@ class CodeAttribute(o: AttributeOwner)
     var maxStack = 0
     var maxLocals = 0
 
-    var operations = new Vector[Operation]()
-
-    var exceptionEntries = new Vector[ExceptionEntry]()
+    var code = new CodeSection(this, null)
 
     var attributes = new CodeAttributes(this)
 
@@ -78,7 +83,7 @@ class CodeAttribute(o: AttributeOwner)
         // TODO
     }
 
-    def _populateLineNumber() {
+    def _populateLineNumber(operations: Vector[Operation]) {
         if (attributes.lineNumberTable != null) {
             val table = attributes.lineNumberTable.table
             for (op <- operations) {
@@ -93,10 +98,6 @@ class CodeAttribute(o: AttributeOwner)
     def deserialize(name: ConstUtf8Info,
                     attrLength: Int,
                     input: DataInputStream) {
-        if (!operations.isEmpty()) {
-            throw new Exception("deserializing into non-empty code attribute")
-        }
-
         maxStack = input.readUnsignedShort()
         maxLocals = input.readUnsignedShort()
 
@@ -104,9 +105,9 @@ class CodeAttribute(o: AttributeOwner)
         var codeBytes = new Array[Byte](codeLength)
         input.readFully(codeBytes)
 
-        operations = Operation.deserialize(this, codeBytes)
+        var operations = Operation.deserialize(this, codeBytes)
 
-        exceptionEntries = new Vector[ExceptionEntry]()
+        var exceptionEntries = new Vector[ExceptionEntry]()
         val numExceptionEntries = input.readUnsignedShort()
         for (_ <- 1 to numExceptionEntries) {
             var entry = new ExceptionEntry(_owner)
@@ -117,7 +118,12 @@ class CodeAttribute(o: AttributeOwner)
         attributes = new CodeAttributes(this)
         attributes.deserialize(input)
 
-        _populateLineNumber()
+        _populateLineNumber(operations)
+
+        code = CodeSection.reconstructFlowGraph(
+                this,
+                exceptionEntries,
+                operations)
     }
 
     def debugString(indent: String): String = {
@@ -125,11 +131,11 @@ class CodeAttribute(o: AttributeOwner)
         result += indent + "  Max stack: " + maxStack + "\n"
         result += indent + "  Max locals: " + maxLocals + "\n"
         val subIndent = indent + "    "
-        for (op <- operations) {
-            result += op.debugString(subIndent)
-        }
+        result += code.debugString(subIndent)
         result += indent + "  Exceptions:\n"
-        for (entry <- exceptionEntries) {
+        var exceptions = new Vector[ExceptionEntry]()
+        code.collectExceptionEntries(exceptions)
+        for (entry <- exceptions) {
             result += entry.debugString(subIndent)
         }
         result += indent + "  Attributes:\n"
