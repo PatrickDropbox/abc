@@ -22,6 +22,8 @@ abstract class CodeSegment(
 
     def _assignAddress(startAddress: Int): Int
 
+    def _insertImplicitGoto()
+
     def compareTo(other: CodeSegment): Int = {
         if (segmentNumber < other.segmentNumber) {
             return -1
@@ -48,7 +50,7 @@ abstract class CodeSegment(
 // and goto is inserted to the end of the block during verification.
 class CodeBlock(parent: CodeSection)
         extends CodeSegment(parent._owner, parent) {
-    var isEntryPoint = false
+    var isEntryPoint = false  // for the method.  there can only be one.
 
     var lineContext = -1
 
@@ -326,6 +328,28 @@ class CodeBlock(parent: CodeSection)
 
     def throwA() { _add(new Athrow(_owner)) }
 
+    def _insertImplicitGoto() {
+        if (_hasControlOp) {
+            var lastOp = _ops.elementAt(_ops.size() - 1)
+            lastOp match {
+            // this simplifies control flow flattening since we no
+            // longer need to pair the else branch immediately after the
+            // condition operation.
+            case i: IfBaseOp => {
+                var indirection = _parentScope.newBlock()
+                indirection.goto(i._elseBranch)
+                i._elseBranch = indirection
+            }
+            case _ => {}
+            }
+        }
+        if (implicitGoto == null) {
+            throw new Exception("no implicit goto")
+        }
+
+        goto(implicitGoto)
+    }
+
     def _assignAddress(startAddress: Int): Int = {
         throw new Exception("TODO")
     }
@@ -438,6 +462,12 @@ class CodeSection(
                     _endPc,
                     entry.target.pc,
                     entry.exception))
+        }
+    }
+
+    def _insertImplicitGoto() {
+        for (seg <- _segments) {
+            seg._insertImplicitGoto()
         }
     }
 
