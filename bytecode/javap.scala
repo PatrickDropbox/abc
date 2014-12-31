@@ -25,7 +25,7 @@ object Javap {
 // TODO: REMOVE HACK
 for (m <- classInfo.methods.methods()) {
     var code = m.attributes().code.code
-    code.serialize()
+    code.serialize(null)
 }
 
 
