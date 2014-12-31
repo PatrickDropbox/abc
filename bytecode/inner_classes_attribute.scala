@@ -56,7 +56,7 @@ class InnerClassInfo(
 
     // original name of innerClass
     def originalInnerName(): String = {
-        if (_innerClass == null) {
+        if (_innerName == null) {
             return null
         }
         return _innerName.value()

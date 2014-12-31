@@ -3,7 +3,9 @@ import java.io.DataOutputStream
 import java.util.Collections
 import java.util.HashMap
 import java.util.HashSet
+import java.util.Stack
 import java.util.TreeMap
+import java.util.TreeSet
 import java.util.Vector
 
 import scala.collection.JavaConversions._
@@ -18,16 +20,18 @@ abstract class CodeSegment(
     // not inclusive.
     var _endPc = -1
 
-    var segmentNumber = -1
+    var segmentId = -1
 
     def _assignAddress(startAddress: Int): Int
 
-    def _insertImplicitGoto()
+    def _insertImplicitGoto(): CodeBlock
+
+    def _resetPcIds()
 
     def compareTo(other: CodeSegment): Int = {
-        if (segmentNumber < other.segmentNumber) {
+        if (segmentId < other.segmentId) {
             return -1
-        } else if (segmentNumber > other.segmentNumber) {
+        } else if (segmentId > other.segmentId) {
             return 1
         }
 
@@ -48,8 +52,9 @@ abstract class CodeSegment(
 //
 // if implicitGoto is set and the last ops is not a jump/return, then
 // and goto is inserted to the end of the block during verification.
-class CodeBlock(parent: CodeSection)
-        extends CodeSegment(parent._owner, parent) {
+class CodeBlock(owner: AttributeOwner)
+        extends CodeSegment(owner, null) {
+
     var isEntryPoint = false  // for the method.  there can only be one.
 
     var lineContext = -1
@@ -62,7 +67,9 @@ class CodeBlock(parent: CodeSection)
 
     def _add(op: Operation) {
         if (_hasControlOp) {
-            throw new Exception("Cannot add more ops after control op")
+            throw new Exception(
+                    "Cannot add more ops after control op: " +
+                            _ops.lastElement().pc)
         }
 
         if (lineContext >= 0) {
@@ -328,30 +335,42 @@ class CodeBlock(parent: CodeSection)
 
     def throwA() { _add(new Athrow(_owner)) }
 
-    def _insertImplicitGoto() {
-        if (_hasControlOp) {
-            var lastOp = _ops.elementAt(_ops.size() - 1)
-            lastOp match {
+    def _insertImplicitGoto(): CodeBlock = {
+        if (!_hasControlOp) {
+            if (implicitGoto == null) {
+                throw new Exception("no implicit goto - pc: " + pc)
+            }
+            goto(implicitGoto)
+            return null
+        }
+
+        var lastOp = _ops.lastElement()
+        lastOp match {
             // this simplifies control flow flattening since we no
             // longer need to pair the else branch immediately after the
             // condition operation.
             case i: IfBaseOp => {
-                var indirection = _parentScope.newBlock()
+                var indirection = new CodeBlock(_owner)
                 indirection.goto(i._elseBranch)
                 i._elseBranch = indirection
+                return indirection
             }
             case _ => {}
-            }
-        }
-        if (implicitGoto == null) {
-            throw new Exception("no implicit goto")
         }
 
-        goto(implicitGoto)
+        return null
     }
 
     def _assignAddress(startAddress: Int): Int = {
         throw new Exception("TODO")
+    }
+
+    def _resetPcIds() {
+        /* TODO
+        pc = -1
+        _endPc = -1
+        */
+        segmentId = -1
     }
 
     def serialize(output: DataOutputStream) {
@@ -363,7 +382,8 @@ class CodeBlock(parent: CodeSection)
     }
 
     def debugString(indent: String): String = {
-        var result = indent + "Block: " + pc + "\n"
+        var result = indent + "Block (pc: [" + pc + ", " + _endPc +
+                ") segment: " + segmentId + ")\n"
         for (op <- _ops) {
             result += op.debugString(indent + "  ")
         }
@@ -381,16 +401,24 @@ class ExceptionTarget(e: ConstClassInfo, t: CodeSection) {
 class CodeSection(
         owner: AttributeOwner,
         parent: CodeSection) extends CodeSegment(owner, parent) {
+    var _mapId = -1  // unique unordered id
+
     def this(parent: CodeSection) = this(parent._owner, parent)
 
     var _segments = new Vector[CodeSegment]()
+    var _blocks = new Vector[CodeBlock]()
     var _subsections = new Vector[CodeSection]()
 
     var _exceptionTargets = new Vector[ExceptionTarget]()
 
     def newBlock(): CodeBlock = {
-        val block = new CodeBlock(this)
+        return _addBlock(new CodeBlock(_owner))
+    }
+
+    def _addBlock(block: CodeBlock): CodeBlock = {
+        block._parentScope = this
         _segments.add(block)
+        _blocks.add(block)
         return block
     }
 
@@ -494,7 +522,7 @@ class CodeSection(
             throw new Exception("multiple entry points")
         }
 
-        return results.elementAt(0)
+        return results.firstElement()
     }
 
     def _collectEntryPoints(entries: Vector[CodeBlock]) {
@@ -510,22 +538,94 @@ class CodeSection(
         }
     }
 
-    def _insertImplicitGoto() {
+    def _collectBlocks(result: Vector[CodeBlock]) {
         for (seg <- _segments) {
-            seg._insertImplicitGoto()
+            seg match {
+                case b: CodeBlock => result.add(b)
+                case s: CodeSection => s._collectEntryPoints(result)
+            }
         }
     }
 
-    def _assignSegmentNumber(startNumber: Int): Int = {
-        throw new Exception("TODO")
+    def _insertImplicitGoto(): CodeBlock = {
+        var indirections = new Vector[CodeBlock]()
+        for (seg <- _segments) {
+            val block = seg._insertImplicitGoto()
+            if (block != null) {
+                indirections.add(block)
+            }
+        }
+        for (block <- indirections) {
+            _addBlock(block)
+        }
+        return null
+    }
+
+    def _assignMapId(
+            startNumber: Int,
+            mapping: HashMap[Int, CodeSection]): Int = {
+        var number = startNumber
+        for (seg <- _subsections) {
+            number = seg._assignMapId(number, mapping)
+        }
+
+        _mapId = number
+        mapping.put(number, this)
+
+        number += 1
+        return number
+    }
+
+    def _resetPcIds() {
+        for (seg <- _subsections) {
+            seg._resetPcIds()
+        }
+
+        /* TODO
+        pc = -1
+        _endPc = -1
+        */
+        segmentId = -1
+        _mapId = -1
     }
 
     def _assignAddress(startAddress: Int): Int = {
         throw new Exception("TODO")
     }
 
+    // only used for reconstruction
+    def _fixPcs() {
+        for (s <- _subsections) {
+            s._fixPcs()
+        }
+
+        pc = -1
+        _endPc = -1
+        for (seg <- _segments) {
+            if (pc == -1) {
+                pc = seg.pc
+                _endPc = seg._endPc
+            } else {
+                if (seg.pc < pc) {
+                    pc = seg.pc
+                }
+
+                if (seg._endPc > _endPc) {
+                    _endPc = seg._endPc
+                }
+            }
+        }
+    }
+
     def serialize(output: DataOutputStream) {
-        throw new Exception("TODO")
+        _resetPcIds()
+
+        _insertImplicitGoto()
+
+        var segmentIdAssigner = new SegmentIdAssigner(this)
+        segmentIdAssigner.assignIds()
+
+        // TODO
     }
 
     def deserialize(startAddress: Int, opCode: Int, input: DataInputStream) {
@@ -534,6 +634,7 @@ class CodeSection(
 
     def sort() {
         Collections.sort(_segments)
+        Collections.sort(_blocks)
         Collections.sort(_subsections)
 
         for (section <- _subsections) {
@@ -544,12 +645,170 @@ class CodeSection(
     def debugString(indent: String): String = {
         sort()
 
-        var result = ""
+        var result = indent + "Section (pc: [" + pc + ", " + _endPc +
+                ") segment: " + segmentId + ")\n"
         for (segment <- _segments) {
-            result += segment.debugString(indent)
+            result += segment.debugString(indent + "  ")
         }
 
         return result
+    }
+}
+
+// NOTE/WARNING: the algorithm extremely inefficient/naive, but should be ok
+// since # segment << # of ops.  Fix/optimize later as needed.
+class SegmentIdAssigner(root: CodeSection) {
+    if (root._parentScope != null) {
+        throw new Exception("not root ...")
+    }
+
+    var rootSection = root
+
+    // section's map id -> section
+    var sectionMap: HashMap[Int, CodeSection] = null
+
+    // section's map id -> stack
+    var stacksMap: HashMap[Int, Stack[CodeBlock]] = null
+
+    var scopeStack: Stack[CodeSection] = null
+
+    var currentScope: CodeSection = null
+    var currentStack: Stack[CodeBlock] = null
+
+    var nextSegmentId = 1
+
+    def _init() {
+        sectionMap = new HashMap[Int, CodeSection]()
+        rootSection._assignMapId(0, sectionMap)
+
+        scopeStack = new Stack[CodeSection]()
+
+        var entryBlock = rootSection.getEntryPoint()
+        var tmp = entryBlock._parentScope
+        while (tmp != null) {
+            scopeStack.add(0, tmp)
+            tmp = tmp._parentScope
+        }
+
+        stacksMap = new HashMap[Int, Stack[CodeBlock]]()
+        for (i <- sectionMap.keySet()) {
+            stacksMap.put(i, new Stack[CodeBlock]())
+        }
+
+        currentScope = entryBlock._parentScope
+        currentStack = stacksMap.get(entryBlock._parentScope._mapId)
+        currentStack.push(entryBlock)
+    }
+
+    def assignIds() {
+        _init()
+        while (!scopeStack.isEmpty()) {
+            if (currentStack.isEmpty()) {
+                _updateStacks()
+            } else {
+                _assignId()
+            }
+        }
+    }
+
+    def _updateStacks() {
+
+        var minId = nextSegmentId
+
+        // try assigning blocks in current scope first, since subsections tend
+        // to be exceptions related.
+        for (block <- currentScope._blocks) {
+            if (block.segmentId < 0) {
+                currentStack.push(block)
+                return
+            }
+            if (minId > block.segmentId) {
+                minId = block.segmentId
+            }
+        }
+
+        for (section <- currentScope._subsections) {
+            if (section.segmentId < 0) {
+                currentScope = section
+                currentStack = stacksMap.get(section._mapId)
+                scopeStack.push(section)
+                return
+            }
+            if (minId > section.segmentId) {
+                minId = section.segmentId
+            }
+        }
+
+        currentScope.segmentId = minId
+        scopeStack.pop()
+
+        if (scopeStack.isEmpty()) {
+            currentScope = null
+            currentStack = null
+        } else {
+            currentScope = scopeStack.peek()
+            currentStack = stacksMap.get(currentScope._mapId)
+        }
+    }
+
+    def _assignId() {
+        var block = currentStack.pop()
+        if (block.segmentId > 0) {  // already visited
+            return
+        }
+
+        block.segmentId = nextSegmentId
+        nextSegmentId += 1
+
+        var candidates = new Vector[CodeBlock]()
+        block._ops.lastElement() match {
+            case g: Goto => candidates.add(g._targetBlock)
+            case i: IfBaseOp => {
+                candidates.add(i._ifBranch)
+
+                // else branch should be an implicit goto and must be next
+                // to the current block
+                if (i._elseBranch._parentScope != currentScope) {
+                    throw new Exception("unexpected")
+                }
+                if (i._elseBranch._ops.size() != 1) {
+                    throw new Exception("unexpected")
+                }
+                i._elseBranch._ops.lastElement() match {
+                    case g: Goto => {
+                        i._elseBranch.segmentId = nextSegmentId
+                        nextSegmentId += 1
+                        candidates.add(g._targetBlock)
+                    }
+                    case _ => throw new Exception("unexpected")
+                }
+            }
+            case s: Switch => {
+                for (block <- s._table.values()) {
+                    candidates.add(block)
+                }
+                candidates.add(s._defaultBranch)
+            }
+            case _ => {}
+        }
+
+        var candidateScope: CodeSection = null
+        for (block <- candidates) {
+            if (block.segmentId < 0) {
+                val blockScope = block._parentScope
+
+                stacksMap.get(blockScope._mapId).push(block)
+                if (currentScope._contains(blockScope)) {
+                    candidateScope = blockScope
+                }
+            }
+        }
+
+        if (candidateScope != null && currentScope != candidateScope) {
+            currentScope = candidateScope
+            currentStack = stacksMap.get(candidateScope._mapId)
+            scopeStack.push(currentScope)
+        }
     }
 }
 
@@ -565,10 +824,9 @@ object CodeSection {
 
         var result = new CodeSection(owner, null)
         result.pc = 0
-        result._endPc = ops.elementAt(ops.size() -1).pc + 1
+        result._endPc = ops.lastElement().pc + 5 // fake it
 
-        // handler pc -> exception entry
-        var handlerSection = _createExceptionSubsections(exceptions, result)
+        _createExceptionSubsections(exceptions, result)
 
         var pcBlockMap = new TreeMap[Int, CodeBlock]()
 
@@ -578,35 +836,30 @@ object CodeSection {
             if (jumpTargets.contains(op.pc)) {
                 if (prevBlock != null) {
                     prevBlock.implicitGoto = currBlock
-                    prevBlock._endPc = op.pc
+                    prevBlock._endPc = currBlock.pc
                 }
                 prevBlock = currBlock
 
                 var section = result._getMostSpecificSection(op.pc)
-
-                val exceptions = handlerSection.get(op.pc)
-                if (exceptions != null) {
-                    section = section.newSubSection()
-                    section.pc = op.pc
-                    for (entry <- exceptions) {
-                        entry._tmpSection.shareExceptionHandle(
-                                entry.className(),
-                                section)
-                    }
-                }
-
                 currBlock = section.newBlock()
                 currBlock.pc = op.pc
+                pcBlockMap.put(op.pc, currBlock)
 
                 if (op.pc == 0) {
                     currBlock.isEntryPoint = true
                 }
-
-                pcBlockMap.put(op.pc, currBlock)
             }
-
             currBlock._add(op)
         }
+        if (currBlock != null) {
+            if (prevBlock != null) {
+                prevBlock.implicitGoto = currBlock
+                prevBlock._endPc = currBlock.pc
+            }
+            currBlock._endPc = currBlock.pc + 5  // fake it
+        }
+
+        result._fixPcs()
 
         for (op <- ops) {
             op.bindBlockRefs(pcBlockMap)
@@ -623,9 +876,8 @@ object CodeSection {
 
     def _createExceptionSubsections(
             exceptions: Vector[ExceptionEntry],
-            global: CodeSection): HashMap[Int, Vector[ExceptionEntry]] = {
-        var handlerSection = new HashMap[Int, Vector[ExceptionEntry]]()
-
+            global: CodeSection) {
+        // create try sections
         for (i <- (exceptions.size() - 1).to(0, -1)) {
             var entry = exceptions.elementAt(i)
 
@@ -636,22 +888,24 @@ object CodeSection {
                 section._endPc = entry.endPc
             }
             entry._tmpSection = section
-
-            if (!handlerSection.containsKey(entry.handlerPc)) {
-                handlerSection.put(
-                        entry.handlerPc,
-                        new Vector[ExceptionEntry]())
-            }
-            handlerSection.get(entry.handlerPc).add(entry)
         }
 
-        return handlerSection
+        // create catch sections.
+        for (entry <- exceptions) {
+            var section = global._getMostSpecificSection(entry.handlerPc)
+            if (section.pc < entry.handlerPc) {
+                section = section.newSubSection()
+                section.pc = entry.handlerPc
+                section._endPc = entry.handlerPc + 1  // fake it
+            }
+            entry._tmpSection.shareExceptionHandle(entry.className(), section)
+        }
     }
 
     def _collectJumpTargets(
             exceptions: Vector[ExceptionEntry],
-            ops: Vector[Operation]): HashSet[Int] = {
-        var jumpTargets = new HashSet[Int]()
+            ops: Vector[Operation]): TreeSet[Int] = {
+        var jumpTargets = new TreeSet[Int]()
 
         for (ex <- exceptions) {
             jumpTargets.add(ex.startPc)
@@ -669,7 +923,7 @@ object CodeSection {
                 case g: Goto => jumpTargets.add(g.pc + g._tmpOffset)
                 case i: IfBaseOp => {
                     jumpTargets.add(i.pc + i._tmpOffset)  // if branch
-                    jumpTargets.add(i.pc + 1)  // else branch
+                    jumpTargets.add(i.pc + 3)  // else branch
                 }
                 case s: Switch => {
                     jumpTargets.add(s.pc + s._tmpDefaultOffset)

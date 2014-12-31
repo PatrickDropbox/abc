@@ -23,7 +23,7 @@ class Goto(owner: AttributeOwner,
     var _tmpOffset = 0
 
     def serialize(output: DataOutputStream) {
-        if (_currentBlock.segmentNumber + 1 == _targetBlock.segmentNumber) {
+        if (_currentBlock.segmentId + 1 == _targetBlock.segmentId) {
             // skip writing goto since the two code block are next to each other
             return
         }
