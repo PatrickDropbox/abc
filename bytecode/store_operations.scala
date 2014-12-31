@@ -1,5 +1,5 @@
 import java.io.DataInputStream
-import java.io.DataOutputStream
+import java.io.DataOutput
 
 abstract class Store(
         owner: AttributeOwner,
@@ -12,7 +12,7 @@ abstract class Store(
     val _shortOpCodeStart = shortOpCodeStart
     var index = v
 
-    def serialize(output: DataOutputStream) {
+    def serialize(output: DataOutput) {
         index match {
             case 0 => output.writeByte(_shortOpCodeStart)
             case 1 => output.writeByte(_shortOpCodeStart + 1)

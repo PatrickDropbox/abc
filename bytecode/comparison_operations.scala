@@ -1,5 +1,5 @@
 import java.io.DataInputStream
-import java.io.DataOutputStream
+import java.io.DataOutput
 import java.util.TreeMap
 
 
@@ -44,7 +44,7 @@ abstract class IfBaseOp(
     // only used during deserialization
     var _tmpOffset = 0
 
-    def serialize(output: DataOutputStream) {
+    def serialize(output: DataOutput) {
         output.writeByte(_opCode)
         output.writeShort(_ifBranch.pc - pc)
     }

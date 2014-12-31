@@ -1,5 +1,5 @@
 import java.io.DataInputStream
-import java.io.DataOutputStream
+import java.io.DataOutput
 import java.util.TreeMap
 
 import scala.collection.JavaConversions._
@@ -22,7 +22,7 @@ class Goto(owner: AttributeOwner,
     // only used during deserialization
     var _tmpOffset = 0
 
-    def serialize(output: DataOutputStream) {
+    def serialize(output: DataOutput) {
         if (_currentBlock.segmentId + 1 == _targetBlock.segmentId) {
             // skip writing goto since the two code block are next to each other
             return
@@ -76,7 +76,7 @@ class Jsr(owner: AttributeOwner, pc: Int)
         extends ShortOperandOp(owner, OpCode.JSR, "jsr", false, pc) {
     def this(owner: AttributeOwner) = this(owner, -1)
 
-    override def serialize(output: DataOutputStream) {
+    override def serialize(output: DataOutput) {
         throw new Exception("jsr deprecated")
     }
 }
@@ -87,7 +87,7 @@ class JsrW(owner: AttributeOwner, pc: Int)
         extends IntOperandOp(owner, OpCode.JSR, "jsr_w", pc) {
     def this(owner: AttributeOwner) = this(owner, -1)
 
-    override def serialize(output: DataOutputStream) {
+    override def serialize(output: DataOutput) {
         throw new Exception("jsr_w deprecated")
     }
 
@@ -101,7 +101,7 @@ class Ret(owner: AttributeOwner, index: Int)
         extends ByteOperandOp(owner, OpCode.RET, "ret", false, index) {
     def this(owner: AttributeOwner) = this(owner, -1)
 
-    override def serialize(output: DataOutputStream) {
+    override def serialize(output: DataOutput) {
         throw new Exception("ret deprecated")
     }
 }
@@ -175,7 +175,7 @@ class Switch(owner: AttributeOwner, defaultBranch: CodeBlock)
         return (4 - ((startAddress + 1) % 4)) % 4
     }
 
-    def serialize(output: DataOutputStream) {
+    def serialize(output: DataOutput) {
         if (_useTableSwitch()) {
             _serializeTableSwitch(output)
         } else {
@@ -183,7 +183,7 @@ class Switch(owner: AttributeOwner, defaultBranch: CodeBlock)
         }
     }
 
-    def _serializeLookupSwitch(output: DataOutputStream) {
+    def _serializeLookupSwitch(output: DataOutput) {
         output.writeByte(OpCode.TABLESWITCH)
         for (_ <- 1 to _paddingSize(pc)) {
             output.writeByte(0)
@@ -198,7 +198,7 @@ class Switch(owner: AttributeOwner, defaultBranch: CodeBlock)
         }
     }
 
-    def _serializeTableSwitch(output: DataOutputStream) {
+    def _serializeTableSwitch(output: DataOutput) {
         output.writeByte(OpCode.TABLESWITCH)
         for (_ <- 1 to _paddingSize(pc)) {
             output.writeByte(0)

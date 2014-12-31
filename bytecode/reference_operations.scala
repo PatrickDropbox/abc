@@ -1,5 +1,5 @@
 import java.io.DataInputStream
-import java.io.DataOutputStream
+import java.io.DataOutput
 
 
 class ClassOp(
@@ -25,7 +25,7 @@ class ClassOp(
         _constClass = _owner.constants().getClass(className)
     }
 
-    def serialize(output: DataOutputStream) {
+    def serialize(output: DataOutput) {
         output.writeByte(_opCode)
         output.writeShort(_constClass.index)
     }
@@ -69,7 +69,7 @@ class FieldOp(
                 fieldType)
     }
 
-    def serialize(output: DataOutputStream) {
+    def serialize(output: DataOutput) {
         output.writeByte(_opCode)
         output.writeShort(_constFieldRef.index)
     }
@@ -118,7 +118,7 @@ class MethodOp(
         }
     }
 
-    def serialize(output: DataOutputStream) {
+    def serialize(output: DataOutput) {
         output.writeByte(_opCode)
         output.writeShort(_constMethodRef.index)
     }
@@ -216,7 +216,7 @@ class Invokeinterface(
                 true) {  // use interface method ref
     def this(owner: AttributeOwner) = this(owner, null, null, null)
 
-    override def serialize(output: DataOutputStream) {
+    override def serialize(output: DataOutput) {
         super.serialize(output)
         val methodType = _constMethodRef.methodDescriptor()
         output.writeByte(1 + methodType.parameters.size())
@@ -302,7 +302,7 @@ class Newarray(owner: AttributeOwner, arrayType: BaseType)
 
     var _arrayType = arrayType
 
-    def serialize(output: DataOutputStream) {
+    def serialize(output: DataOutput) {
         output.writeByte(OpCode.NEWARRAY)
         output.writeByte(_arrayType.arrayType())
     }
@@ -355,7 +355,7 @@ class Multianewarray(
 
     var _dimensions = dimensions
 
-    override def serialize(output: DataOutputStream) {
+    override def serialize(output: DataOutput) {
         super.serialize(output)
         output.writeByte(_dimensions)
     }

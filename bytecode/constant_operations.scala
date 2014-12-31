@@ -1,5 +1,5 @@
 import java.io.DataInputStream
-import java.io.DataOutputStream
+import java.io.DataOutput
 
 
 //
@@ -31,7 +31,7 @@ class PushI(owner: AttributeOwner, v: Int) extends Operation(owner) {
         _constInt = owner.constants().getInteger(value)
     }
 
-    def serialize(output: DataOutputStream) {
+    def serialize(output: DataOutput) {
         value match {
             case -1 => output.write(OpCode.ICONST_M1)
             case 0 => output.write(OpCode.ICONST_0)
@@ -95,7 +95,7 @@ class PushL(owner: AttributeOwner, v: Long) extends Operation(owner) {
         _constLong = owner.constants().getLong(value)
     }
 
-    def serialize(output: DataOutputStream) {
+    def serialize(output: DataOutput) {
         if (value == 0) {
             output.write(OpCode.LCONST_0)
         } else if (value == 1) {
@@ -133,7 +133,7 @@ class PushF(owner: AttributeOwner, v: Float) extends Operation(owner) {
         _constFloat = owner.constants().getFloat(value)
     }
 
-    def serialize(output: DataOutputStream) {
+    def serialize(output: DataOutput) {
         if (value == 0) {
             output.write(OpCode.FCONST_0)
         } else if (value == 1) {
@@ -179,7 +179,7 @@ class PushD(owner: AttributeOwner, v: Double) extends Operation(owner) {
         _constDouble = owner.constants().getDouble(value)
     }
 
-    def serialize(output: DataOutputStream) {
+    def serialize(output: DataOutput) {
         if (value == 0) {
             output.write(OpCode.DCONST_0)
         } else if (value == 1) {
@@ -216,7 +216,7 @@ class PushString(owner: AttributeOwner, v: String) extends Operation(owner) {
 
     def value(): String = _constString.value()
 
-    def serialize(output: DataOutputStream) {
+    def serialize(output: DataOutput) {
         if (_constString.index <= Const.UINT8_MAX) {
             output.write(OpCode.LDC)
             output.writeByte(_constString.index)
@@ -245,7 +245,7 @@ class Ldc(owner: AttributeOwner, v: ConstInfo) extends ByteOperandOp(
 
     var _const = v
 
-    override def serialize(output: DataOutputStream) {
+    override def serialize(output: DataOutput) {
         operand = _const.index
         super.serialize(output)
     }
@@ -279,7 +279,7 @@ class LdcW(owner: AttributeOwner, v: ConstInfo) extends ShortOperandOp(
 
     var _const = v
 
-    override def serialize(output: DataOutputStream) {
+    override def serialize(output: DataOutput) {
         operand = _const.index
         super.serialize(output)
     }
@@ -313,7 +313,7 @@ class Ldc2W(owner: AttributeOwner, v: ConstInfo) extends ShortOperandOp(
 
     var _const = v
 
-    override def serialize(output: DataOutputStream) {
+    override def serialize(output: DataOutput) {
         operand = _const.index
         super.serialize(output)
     }

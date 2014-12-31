@@ -1,5 +1,5 @@
 import java.io.DataInputStream
-import java.io.DataOutputStream
+import java.io.DataOutput
 import java.util.Collections
 import java.util.HashMap
 import java.util.HashSet
@@ -373,7 +373,7 @@ class CodeBlock(owner: AttributeOwner)
         segmentId = -1
     }
 
-    def serialize(output: DataOutputStream) {
+    def serialize(output: DataOutput) {
         throw new Exception("TODO")
     }
 
@@ -617,7 +617,7 @@ class CodeSection(
         }
     }
 
-    def serialize(output: DataOutputStream) {
+    def serialize(output: DataOutput) {
         _resetPcIds()
 
         _insertImplicitGoto()

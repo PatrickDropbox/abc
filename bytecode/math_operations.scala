@@ -1,5 +1,5 @@
 import java.io.DataInputStream
-import java.io.DataOutputStream
+import java.io.DataOutput
 
 
 // stack: ..., value1, value2 -> ..., result
@@ -111,7 +111,7 @@ class Iinc(owner: AttributeOwner, index: Int, v: Int)
                 v) {
     def this(owner: AttributeOwner) = this(owner, -1, 0)
 
-    override def serialize(output: DataOutputStream) {
+    override def serialize(output: DataOutput) {
         if (operand1 <= Const.UINT8_MAX &&
             (Const.INT8_MIN <= operand2 && operand2 <= Const.INT8_MAX)) {
             super.serialize(output)

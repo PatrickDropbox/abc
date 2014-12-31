@@ -1,6 +1,6 @@
 import java.io.ByteArrayInputStream
 import java.io.DataInputStream
-import java.io.DataOutputStream
+import java.io.DataOutput
 import java.util.TreeMap
 import java.util.Vector
 
@@ -12,7 +12,7 @@ abstract class Operation(o: AttributeOwner) {
 
     def canonicalForm(): Operation = this
 
-    def serialize(output: DataOutputStream)
+    def serialize(output: DataOutput)
 
     def deserialize(startAddress: Int, opCode: Int, input: DataInputStream)
 
@@ -32,7 +32,7 @@ abstract class NoOperandOp(
     val _opCode = opCode
     val _mnemonic = mnemonic
 
-    def serialize(output: DataOutputStream) {
+    def serialize(output: DataOutput) {
         output.writeByte(_opCode)
     }
 
@@ -59,7 +59,7 @@ abstract class ByteOperandOp(
     var isSigned = signed
     var operand = v
 
-    def serialize(output: DataOutputStream) {
+    def serialize(output: DataOutput) {
         output.writeByte(_opCode)
         output.writeByte(operand)
     }
@@ -97,7 +97,7 @@ abstract class TwoByteOperandsOp(
     var isSigned2 = signed2
     var operand2 = v2
 
-    def serialize(output: DataOutputStream) {
+    def serialize(output: DataOutput) {
         output.writeByte(_opCode)
         output.writeByte(operand1)
         output.writeByte(operand2)
@@ -139,7 +139,7 @@ class ShortOperandOp(
     var isSigned = signed
     var operand = v
 
-    def serialize(output: DataOutputStream) {
+    def serialize(output: DataOutput) {
         output.writeByte(_opCode)
         output.writeShort(operand)
     }
@@ -171,7 +171,7 @@ class IntOperandOp(
     val _mnemonic = mnemonic
     var operand = v
 
-    def serialize(output: DataOutputStream) {
+    def serialize(output: DataOutput) {
         output.writeByte(_opCode)
         output.writeInt(operand)
     }
