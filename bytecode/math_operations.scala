@@ -112,7 +112,8 @@ class Iinc(owner: AttributeOwner, index: Int, v: Int)
     def this(owner: AttributeOwner) = this(owner, -1, 0)
 
     override def serialize(output: DataOutputStream) {
-        if (operand1 < 256 && (-128 <= operand2 && operand2 <= 127)) {
+        if (operand1 <= Const.UINT8_MAX &&
+            (Const.INT8_MIN <= operand2 && operand2 <= Const.INT8_MAX)) {
             super.serialize(output)
         } else {
             output.writeByte(OpCode.WIDE)

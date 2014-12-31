@@ -19,7 +19,7 @@ abstract class Store(
             case 2 => output.writeByte(_shortOpCodeStart + 2)
             case 3 => output.writeByte(_shortOpCodeStart + 3)
             case _ => {
-                if (index < 256) {
+                if (index <= Const.UINT8_MAX) {
                     output.writeByte(_opCode)
                     output.writeByte(index)
                 } else {

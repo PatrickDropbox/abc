@@ -135,7 +135,7 @@ class ConstUtf8Info(o: ClassInfo, v: String) extends ConstInfo(o) {
         (new DataOutputStream(buffer)).writeUTF(_value)
         val utf8Value = buffer.toByteArray()
 
-        if (utf8Value.length > 65535) {
+        if (utf8Value.length > Const.UINT16_MAX) {
             throw new Exception("utf8 string too long")
         }
 

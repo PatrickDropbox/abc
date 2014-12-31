@@ -41,14 +41,15 @@ class PushI(owner: AttributeOwner, v: Int) extends Operation(owner) {
             case 4 => output.write(OpCode.ICONST_4)
             case 5 => output.write(OpCode.ICONST_5)
             case _ => {
-                if (-128 <= value && value <= 127) {
+                if (Const.INT8_MIN <= value && value <= Const.INT8_MAX) {
                     output.write(OpCode.BIPUSH)
                     output.writeByte(value)
-                } else if (-32768 <= value && value <= 32767) {
+                } else if (Const.INT16_MIN <= value &&
+                           value <= Const.INT16_MAX) {
                     output.write(OpCode.SIPUSH)
                     output.writeShort(value)
                 } else {
-                    if (_constInt.index < 256) {
+                    if (_constInt.index <= Const.INT8_MAX) {
                         output.write(OpCode.LDC)
                         output.writeShort(_constInt.index)
                     } else {
@@ -140,7 +141,7 @@ class PushF(owner: AttributeOwner, v: Float) extends Operation(owner) {
         } else if (value == 2) {
             output.write(OpCode.FCONST_2)
         } else {
-            if (_constFloat.index < 256) {
+            if (_constFloat.index <= Const.UINT8_MAX) {
                 output.write(OpCode.LDC)
                 output.writeByte(_constFloat.index)
             } else {
@@ -216,7 +217,7 @@ class PushString(owner: AttributeOwner, v: String) extends Operation(owner) {
     def value(): String = _constString.value()
 
     def serialize(output: DataOutputStream) {
-        if (_constString.index < 256) {
+        if (_constString.index <= Const.UINT8_MAX) {
             output.write(OpCode.LDC)
             output.writeByte(_constString.index)
         } else {
