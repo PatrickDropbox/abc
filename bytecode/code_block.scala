@@ -349,6 +349,7 @@ class CodeBlock(owner: AttributeOwner)
             // condition operation.
             case i: IfBaseOp => {
                 var indirection = new CodeBlock(_owner)
+                indirection.lineContext = i.line
                 indirection.goto(i._elseBranch)
                 i._elseBranch = indirection
                 return indirection

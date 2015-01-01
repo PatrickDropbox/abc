@@ -21,6 +21,14 @@ abstract class Operation(o: AttributeOwner) {
 
     def debugString(indent: String): String
 
+    def _writeShortOffset(target: CodeBlock, output: DataOutput) {
+        val offset = target.pc - pc
+        if (offset < Const.INT16_MIN || offset > Const.INT16_MAX) {
+            throw new Exception("code too large (goto_w not supported)")
+        }
+        output.writeShort(offset)
+    }
+
     def _pcLine(): String = "" + pc + "(" + line + ")"
 }
 

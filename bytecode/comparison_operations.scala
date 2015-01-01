@@ -46,7 +46,7 @@ abstract class IfBaseOp(
 
     def serialize(output: DataOutput) {
         output.writeByte(_opCode)
-        output.writeShort(_ifBranch.pc - pc)
+        _writeShortOffset(_ifBranch, output)
     }
 
     def deserialize(startAddress: Int, opCode: Int, input: DataInputStream) {

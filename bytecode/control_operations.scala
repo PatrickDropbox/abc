@@ -27,12 +27,9 @@ class Goto(owner: AttributeOwner,
             // skip writing goto since the two code block are next to each other
             return
         }
-        val offset = _targetBlock.pc - pc
-        if (offset > Const.UINT16_MAX) {
-            throw new Exception("code too large (goto_w not supported)")
-        }
+
         output.writeByte(OpCode.GOTO)
-        output.writeShort(offset)
+        _writeShortOffset(_targetBlock, output)
     }
 
     def deserialize(startAddress: Int, opCode: Int, input: DataInputStream) {
