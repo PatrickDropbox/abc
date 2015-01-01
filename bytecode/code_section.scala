@@ -261,6 +261,11 @@ class CodeSection(
 
         var blocks = PcAssigner.assignSegmentIdsAndPcs(this)
 
+        if (_endPc > Const.UINT16_MAX) {
+            // code attributes can't handle code length > 64K ...
+            throw new Exception("code too large")
+        }
+
         output.writeInt(_endPc)
         for (block <- blocks) {
             block.serialize(output)
