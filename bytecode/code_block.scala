@@ -22,8 +22,6 @@ abstract class CodeSegment(
 
     var segmentId = -1
 
-    def _assignAddress(startAddress: Int): Int
-
     def _insertImplicitGoto(): CodeBlock
 
     def _resetPcIds()
@@ -359,10 +357,6 @@ class CodeBlock(owner: AttributeOwner)
         }
 
         return null
-    }
-
-    def _assignAddress(startAddress: Int): Int = {
-        throw new Exception("TODO")
     }
 
     def _resetPcIds() {

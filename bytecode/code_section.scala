@@ -209,10 +209,6 @@ class CodeSection(
         _mapId = -1
     }
 
-    def _assignAddress(startAddress: Int): Int = {
-        throw new Exception("TODO")
-    }
-
     // only used for reconstruction
     def _fixPcs() {
         for (s <- _subsections) {
