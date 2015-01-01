@@ -97,6 +97,32 @@ class CodeSection(
         _exceptionTargets.add(new ExceptionTarget(exception, target))
     }
 
+    def generateLineNumberTable(): LineNumberTableAttribute = {
+        var table = new TreeMap[Int, Int]()
+
+        var blocks = new Vector[CodeBlock]()
+        _collectBlocks(blocks)
+        Collections.sort(blocks)
+
+        var currLine = -1
+        for (block <- blocks) {
+            for (op <- block._ops) {
+                if (op.line >= 0 && op.line != currLine) {
+                    table.put(op.pc, op.line)
+                    currLine = op.line
+                }
+            }
+        }
+
+        if (table.isEmpty()) {
+            return null
+        }
+
+        var attr = new LineNumberTableAttribute(_owner)
+        attr.table = table
+        return attr
+    }
+
     // this assumes pc are assigned and segments are sorted
     def _collectExceptionEntries(result: Vector[ExceptionEntry]) {
         for (section <- _subsections) {
@@ -335,7 +361,7 @@ object CodeSection {
     // 1. ensure there are no partial overlaps
     // 2. ensure more specific scope is before less specific scope
     def _checkExceptionOverlaps(exceptions: Vector[ExceptionEntry]) {
-        // TODO
+        // TODO check exception scope bounds
     }
 
     def _createExceptionSubsections(

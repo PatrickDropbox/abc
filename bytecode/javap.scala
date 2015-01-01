@@ -22,14 +22,6 @@ object Javap {
             input.close()
         }
 
-// TODO: REMOVE HACK
-for (m <- classInfo.methods.methods()) {
-    var code = m.attributes().code.code
-    code.serialize(null)
-}
-
-
-
         println("Classfile " + file.getAbsolutePath())
         println("  Minor version: " + classInfo.minorVersion())
         println("  Major version: " + classInfo.majorVersion())

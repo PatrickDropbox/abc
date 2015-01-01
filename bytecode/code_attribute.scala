@@ -81,7 +81,14 @@ class CodeAttribute(o: AttributeOwner)
     def constants(): ConstantPool = _owner.constants()
 
     def serialize(output: DataOutputStream) {
-        // TODO
+        output.writeShort(maxStack)  // TODO compute max stack
+        output.writeShort(maxLocals)  // TODO compute max locals
+
+        code.serialize(output)
+
+        attributes.lineNumberTable = code.generateLineNumberTable()
+
+        attributes.serialize(output)
     }
 
     def _populateLineNumber(operations: Vector[Operation]) {
