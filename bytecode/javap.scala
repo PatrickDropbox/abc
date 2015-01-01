@@ -27,6 +27,21 @@ object Javap {
         println("  Major version: " + classInfo.majorVersion())
         println("  Flags: " + classInfo.access.debugString())
 
+        println("  Class name: " + classInfo._thisClass.debugString())
+        if (classInfo._superClass == null) {
+            println("  Super class: (NULL) ")
+        } else {
+            println("  Super name: " + classInfo._superClass.debugString())
+        }
+        if (classInfo._interfaces.isEmpty()) {
+            println("  Interfaces: (NONE)")
+        } else {
+            println("  Interfaces:")
+            for (iface <- classInfo._interfaces) {
+                println("    " + iface.debugString())
+            }
+        }
+
         println("\nAttributes:")
         println(classInfo.attributes().debugString("  "))
 
