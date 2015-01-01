@@ -1,3 +1,4 @@
+import java.io.ByteArrayOutputStream
 import java.io.DataInputStream
 import java.io.DataOutput
 import java.io.DataOutputStream
@@ -81,14 +82,25 @@ class CodeAttribute(o: AttributeOwner)
     def constants(): ConstantPool = _owner.constants()
 
     def serialize(output: DataOutputStream) {
-        output.writeShort(maxStack)  // TODO compute max stack
-        output.writeShort(maxLocals)  // TODO compute max locals
+        var buffer = new ByteArrayOutputStream()
+        var codeWriter = new DataOutputStream(buffer)
 
-        code.serialize(output)
+        codeWriter.writeShort(maxStack)  // TODO compute max stack
+        codeWriter.writeShort(maxLocals)  // TODO compute max locals
+
+        code.serialize(codeWriter)
 
         attributes.lineNumberTable = code.generateLineNumberTable()
 
-        attributes.serialize(output)
+        attributes.serialize(codeWriter)
+
+        // finally write the real result
+
+        val bytes = buffer.toByteArray()
+
+        output.writeShort(_name.index)
+        output.writeInt(bytes.length)
+        output.write(bytes)
     }
 
     def _populateLineNumber(operations: Vector[Operation]) {
