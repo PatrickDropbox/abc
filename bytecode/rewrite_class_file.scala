@@ -31,5 +31,7 @@ object RewriteClassFile {
         } finally {
             output.close()
         }
+
+        //Javap.javap(classInfo)
     }
 }

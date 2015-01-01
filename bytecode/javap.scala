@@ -9,22 +9,23 @@ object Javap {
     def main(args: Array[String]) {
         for (filename <- args) {
             println("Parsing: " + filename)
-            javap(filename)
+
+            var file = new File(filename)
+            var input = new DataInputStream(new FileInputStream(file))
+
+            var classInfo = new ClassInfo()
+            try {
+                classInfo.deserialize(input)
+            } finally {
+                input.close()
+            }
+
+            println("Classfile " + file.getAbsolutePath())
+            javap(classInfo)
         }
     }
 
-    def javap(filename: String) {
-        var file = new File(filename)
-        var input = new DataInputStream(new FileInputStream(file))
-
-        var classInfo = new ClassInfo()
-        try {
-            classInfo.deserialize(input)
-        } finally {
-            input.close()
-        }
-
-        println("Classfile " + file.getAbsolutePath())
+    def javap(classInfo: ClassInfo) {
         println("  Minor version: " + classInfo.minorVersion())
         println("  Major version: " + classInfo.majorVersion())
         println("  Flags: " + classInfo.access.debugString())
