@@ -201,7 +201,11 @@ class EnclosingMethodAttribute(
         output.writeShort(_name.index)
         output.writeInt(4)
         output.writeShort(_enclosingClass.index)
-        output.writeShort(_methodNameAndType.index)
+        if (_methodNameAndType == null) {
+            output.writeShort(0)
+        } else {
+            output.writeShort(_methodNameAndType.index)
+        }
     }
 
     def deserialize(n: ConstUtf8Info, attrLength: Int, input: DataInputStream) {

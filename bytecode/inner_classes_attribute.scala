@@ -36,10 +36,14 @@ class InnerClassInfo(
         output.writeShort(_innerClass.index)
 
         if (_outerClass == null) {
+            output.writeShort(0)
+        } else {
             output.writeShort(_outerClass.index)
         }
 
         if (_innerName == null) {
+            output.writeShort(0)
+        } else {
             output.writeShort(_innerName.index)
         }
 

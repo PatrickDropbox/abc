@@ -38,7 +38,7 @@ object Javap {
         } else {
             println("  Interfaces:")
             for (iface <- classInfo._interfaces) {
-                println("    " + iface.debugString())
+                println(iface.debugString())
             }
         }
 
