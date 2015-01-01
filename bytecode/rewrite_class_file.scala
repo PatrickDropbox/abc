@@ -10,12 +10,12 @@ import scala.collection.JavaConversions._
 object RewriteClassFile {
     def main(args: Array[String]) {
         for (filename <- args) {
+            println("rewriting class file: " + filename)
             rewriteClass(filename)
         }
     }
 
     def rewriteClass(filename: String) {
-        println("rewriting class file: " + filename)
         var input = new DataInputStream(new FileInputStream(filename))
 
         var classInfo = new ClassInfo()

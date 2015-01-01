@@ -8,6 +8,7 @@ import scala.collection.JavaConversions._
 object Javap {
     def main(args: Array[String]) {
         for (filename <- args) {
+            println("Parsing: " + filename)
             javap(filename)
         }
     }
