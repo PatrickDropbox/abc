@@ -360,10 +360,8 @@ class CodeBlock(owner: AttributeOwner)
     }
 
     def _resetPcIds() {
-        /* TODO
         pc = -1
         _endPc = -1
-        */
         segmentId = -1
     }
 

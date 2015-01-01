@@ -168,3 +168,95 @@ class SegmentIdAssigner(root: CodeSection) {
     }
 }
 
+class AddressCounter extends DataOutput {
+    var pos = 0
+
+    def write(b: Array[Byte]) {
+        pos += b.length
+    }
+
+    def write(b: Array[Byte], off: Int, len: Int) {
+        if (len < 0) {
+            throw new Exception("bad len")
+        }
+        if (len < 0 || (off + len) > b.length) {
+            throw new Exception("bad offset/len")
+        }
+        pos += len
+    }
+
+    def write(b: Int) {
+        pos += 1
+    }
+
+    def writeByte(v: Int) {
+        pos += 1
+    }
+
+    def writeInt(v: Int) {
+        pos += 4
+    }
+
+    def writeShort(v: Int) {
+        pos += 2
+    }
+
+    def writeBoolean(v: Boolean) {
+        throw new Exception("Not supported")
+    }
+
+    def writeBytes(v: String) {
+        throw new Exception("Not supported")
+    }
+
+    def writeChar(v: Int) {
+        throw new Exception("Not supported")
+    }
+
+    def writeChars(v: String) {
+        throw new Exception("Not supported")
+    }
+
+    def writeDouble(v: Double) {
+        throw new Exception("Not supported")
+    }
+
+    def writeFloat(v: Float) {
+        throw new Exception("Not supported")
+    }
+
+    def writeLong(v: Long) {
+        throw new Exception("Not supported")
+    }
+
+    def writeUTF(v: String) {
+        throw new Exception("Not supported")
+    }
+}
+
+object PcAssigner {
+    def assignSegmentIdsAndPcs(root: CodeSection): Vector[CodeBlock] = {
+        root._resetPcIds()
+
+        var segmentIdAssigner = new SegmentIdAssigner(root)
+        segmentIdAssigner.assignIds()
+
+        var blocks = new Vector[CodeBlock]()
+        root._collectBlocks(blocks)
+        Collections.sort(blocks)
+
+        var counter = new AddressCounter()
+        for (block <- blocks) {
+            block.pc = counter.pos
+            for (op <- block._ops) {
+                op.pc = counter.pos
+                op.serialize(counter)
+            }
+            block._endPc = counter.pos
+        }
+
+        root._fixPcs()
+
+        return blocks
+    }
+}

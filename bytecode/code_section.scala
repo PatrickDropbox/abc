@@ -201,15 +201,12 @@ class CodeSection(
             seg._resetPcIds()
         }
 
-        /* TODO
         pc = -1
         _endPc = -1
-        */
         segmentId = -1
         _mapId = -1
     }
 
-    // only used for reconstruction
     def _fixPcs() {
         for (s <- _subsections) {
             s._fixPcs()
@@ -234,13 +231,9 @@ class CodeSection(
     }
 
     def serialize(output: DataOutput) {
-        _resetPcIds()
-
         _insertImplicitGoto()
 
-        var segmentIdAssigner = new SegmentIdAssigner(this)
-        segmentIdAssigner.assignIds()
-
+        var blocks = PcAssigner.assignSegmentIdsAndPcs(this)
         // TODO
     }
 

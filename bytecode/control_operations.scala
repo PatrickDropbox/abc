@@ -57,7 +57,12 @@ class Goto(owner: AttributeOwner,
     }
 
     def debugString(indent: String): String = {
-        return indent + _pcLine() + ": goto " + _targetBlock.pc + "\n"
+        var hidden = ""
+        if (_currentBlock.segmentId + 1 == _targetBlock.segmentId) {
+            hidden = " (not written)"
+        }
+        return indent + _pcLine() + ": goto " + _targetBlock.pc + " " +
+                hidden + "\n"
     }
 }
 
