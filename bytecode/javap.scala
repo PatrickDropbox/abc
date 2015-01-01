@@ -7,12 +7,13 @@ import scala.collection.JavaConversions._
 
 object Javap {
     def main(args: Array[String]) {
-        if (args.length != 1) {
-            println("USAGE: Javap <class file>")
-            System.exit(1)
+        for (filename <- args) {
+            javap(filename)
         }
+    }
 
-        var file = new File(args(0))
+    def javap(filename: String) {
+        var file = new File(filename)
         var input = new DataInputStream(new FileInputStream(file))
 
         var classInfo = new ClassInfo()

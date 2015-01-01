@@ -455,7 +455,6 @@ class MethodAttributes(m: MethodInfo) extends AttributeGroup(m) {
         var allAttributes = new Vector[Attribute]()
 
         // TODO add more attributes
-
         if (_signature != null) {
             allAttributes.add(_signature)
         }
