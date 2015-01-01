@@ -49,9 +49,9 @@ class PushI(owner: AttributeOwner, v: Int) extends Operation(owner) {
                     output.write(OpCode.SIPUSH)
                     output.writeShort(value)
                 } else {
-                    if (_constInt.index <= Const.INT8_MAX) {
+                    if (_constInt.index <= Const.UINT8_MAX) {
                         output.write(OpCode.LDC)
-                        output.writeShort(_constInt.index)
+                        output.writeByte(_constInt.index)
                     } else {
                         output.write(OpCode.LDC_W)
                         output.writeShort(_constInt.index)
