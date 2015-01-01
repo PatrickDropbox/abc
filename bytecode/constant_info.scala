@@ -226,7 +226,7 @@ class ConstIntegerInfo(o: ClassInfo, v: Int) extends ConstInfo(o) {
 class ConstLongInfo(o: ClassInfo, v: Long) extends ConstInfo(o) {
     def this(o: ClassInfo) = this(o, 0)
 
-    var _value: Long = 0
+    var _value: Long = v
 
     def tag(): Int = ConstInfo.LONG
 
@@ -276,7 +276,7 @@ class ConstLongInfo(o: ClassInfo, v: Long) extends ConstInfo(o) {
 class ConstFloatInfo(o: ClassInfo, v: Float) extends ConstInfo(o) {
     def this(o: ClassInfo) = this(o, 0)
 
-    var _value: Float = 0
+    var _value: Float = v
 
     def tag(): Int = ConstInfo.FLOAT
 
@@ -324,7 +324,7 @@ class ConstFloatInfo(o: ClassInfo, v: Float) extends ConstInfo(o) {
 class ConstDoubleInfo(o: ClassInfo, v: Double) extends ConstInfo(o) {
     def this(o: ClassInfo) = this(o, 0)
 
-    var _value: Double = 0
+    var _value: Double = v
 
     def tag(): Int = ConstInfo.DOUBLE
 
