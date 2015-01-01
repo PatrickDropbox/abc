@@ -245,6 +245,8 @@ object PcAssigner {
         root._collectBlocks(blocks)
         Collections.sort(blocks)
 
+        // NOTE: this single pass approach does not work if we need to support
+        // goto_w
         var counter = new AddressCounter()
         for (block <- blocks) {
             block.pc = counter.pos
