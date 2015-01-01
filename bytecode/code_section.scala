@@ -188,7 +188,7 @@ class CodeSection(
         for (seg <- _segments) {
             seg match {
                 case b: CodeBlock => result.add(b)
-                case s: CodeSection => s._collectEntryPoints(result)
+                case s: CodeSection => s._collectBlocks(result)
             }
         }
     }
