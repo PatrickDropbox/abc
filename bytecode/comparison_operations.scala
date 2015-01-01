@@ -71,8 +71,16 @@ abstract class IfBaseOp(
     }
 
     def debugString(indent: String): String = {
-        return indent + _pcLine() + ": " + _mnemonic + " " + _ifBranch.pc +
-                " " + _elseBranch.pc + "\n"
+        var ifPc = "???"
+        if (_ifBranch != null) {
+            ifPc = "" + _ifBranch.pc
+        }
+        var elsePc = "???"
+        if (_elseBranch != null) {
+            elsePc = "" + _elseBranch.pc
+        }
+        return indent + _pcLine() + ": " + _mnemonic + " " + ifPc +
+                " " + elsePc + "\n"
     }
 }
 

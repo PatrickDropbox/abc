@@ -55,11 +55,17 @@ class Goto(owner: AttributeOwner,
 
     def debugString(indent: String): String = {
         var hidden = ""
-        if (_currentBlock.segmentId + 1 == _targetBlock.segmentId) {
+        if (_currentBlock != null &&
+                _currentBlock.segmentId + 1 == _targetBlock.segmentId) {
             hidden = " (not written)"
         }
-        return indent + _pcLine() + ": goto " + _targetBlock.pc + " " +
-                hidden + "\n"
+
+        var targetPc = "???"
+        if (_targetBlock != null) {
+            targetPc = "" + _targetBlock.pc
+        }
+
+        return indent + _pcLine() + ": goto " + targetPc + " " + hidden + "\n"
     }
 }
 
@@ -289,6 +295,10 @@ class Switch(owner: AttributeOwner, defaultBranch: CodeBlock)
     }
 
     def debugString(indent: String): String = {
+        if (_defaultBranch == null) {
+            return indent + _pcLine() + ": switch (pc not resolved) \n"
+        }
+
         var result = indent + _pcLine() + ": switch\n"
         result += indent + "  default: " + _defaultBranch.pc + "\n"
         for (entry <- _table.entrySet()) {
