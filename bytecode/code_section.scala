@@ -98,9 +98,9 @@ class CodeSection(
     }
 
     // this assumes pc are assigned and segments are sorted
-    def collectExceptionEntries(result: Vector[ExceptionEntry]) {
+    def _collectExceptionEntries(result: Vector[ExceptionEntry]) {
         for (section <- _subsections) {
-            section.collectExceptionEntries(result)
+            section._collectExceptionEntries(result)
         }
 
         for (entry <- _exceptionTargets) {
@@ -234,7 +234,19 @@ class CodeSection(
         _insertImplicitGoto()
 
         var blocks = PcAssigner.assignSegmentIdsAndPcs(this)
-        // TODO
+
+        output.writeInt(_endPc)
+        for (block <- blocks) {
+            block.serialize(output)
+        }
+
+        var exceptions = new Vector[ExceptionEntry]()
+        _collectExceptionEntries(exceptions)
+
+        output.writeShort(exceptions.size())
+        for (entry <- exceptions) {
+            entry.serialize(output)
+        }
     }
 
     def deserialize(startAddress: Int, opCode: Int, input: DataInputStream) {

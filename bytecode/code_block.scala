@@ -371,7 +371,9 @@ class CodeBlock(owner: AttributeOwner)
     }
 
     def serialize(output: DataOutput) {
-        throw new Exception("TODO")
+        for (op <- _ops) {
+            op.serialize(output)
+        }
     }
 
     def deserialize(startAddress: Int, opCode: Int, input: DataInputStream) {

@@ -1,4 +1,5 @@
 import java.io.DataInputStream
+import java.io.DataOutput
 import java.io.DataOutputStream
 import java.util.Vector
 
@@ -30,7 +31,7 @@ class ExceptionEntry(
         return classType.className()
     }
 
-    def serialize(output: DataOutputStream) {
+    def serialize(output: DataOutput) {
         output.writeShort(startPc)
         output.writeShort(endPc)
         output.writeShort(handlerPc)
@@ -134,7 +135,7 @@ class CodeAttribute(o: AttributeOwner)
         result += code.debugString(subIndent)
         result += indent + "  Exceptions:\n"
         var exceptions = new Vector[ExceptionEntry]()
-        code.collectExceptionEntries(exceptions)
+        code._collectExceptionEntries(exceptions)
         for (entry <- exceptions) {
             result += entry.debugString(subIndent)
         }
