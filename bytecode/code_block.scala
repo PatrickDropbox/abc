@@ -266,8 +266,6 @@ class CodeBlock(owner: AttributeOwner)
     def enterMonitor() { _add(new Monitorenter(_owner)) }
     def exitMonitor() { _add(new Monitorexit(_owner)) }
 
-    // TODO table / lookup switch
-
     //
     // Control operations
     //
@@ -322,6 +320,12 @@ class CodeBlock(owner: AttributeOwner)
     }
 
     def goto(target: CodeBlock) { _add(new Goto(_owner, this, target)) }
+
+    def switch(defaultBranch: CodeBlock): Switch = {
+        val switch = new Switch(_owner, defaultBranch)
+        _add(switch)
+        return switch
+    }
 
     // XXX: maybe infer return type from method signature?
     def returnI() { _add(new Ireturn(_owner)) }
