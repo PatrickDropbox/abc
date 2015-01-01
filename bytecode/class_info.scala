@@ -47,6 +47,9 @@ class ClassInfo extends AttributeOwner {
     def attributes(): ClassAttributes = _attributes
 
     def serialize(output: DataOutputStream) {
+        // TODO: prune unused code blocks
+        // TODO: prune unused constants (must happen last)
+
         output.writeInt(ClassInfo.MAGIC)
 
         output.writeShort(_minorVersion)
