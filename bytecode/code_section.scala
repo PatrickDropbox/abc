@@ -238,7 +238,7 @@ class CodeSection(
     }
 
     def deserialize(startAddress: Int, opCode: Int, input: DataInputStream) {
-        throw new Exception("TODO")
+        throw new Exception("cannot directly deserialize code section")
     }
 
     def sort() {
