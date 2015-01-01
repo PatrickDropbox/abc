@@ -49,8 +49,6 @@ abstract class AttributeGroup(o: AttributeOwner) {
 /* TODO implement more attributes
 AnnotationDefault
 MethodParameters
-LocalVariableTable
-LocalVariableTypeTable
 StackMapTable
 
 RuntimeVisibleParameterAnnotations
@@ -68,6 +66,10 @@ RuntimeInvisibleTypeAnnotations
                 case "Exceptions" => new ExceptionsAttribute(_owner)
                 case "InnerClasses" => new InnerClassesAttribute(_owner)
                 case "LineNumberTable" => new LineNumberTableAttribute(_owner)
+                case "LocalVariableTable" =>
+                        new LocalVariableTableAttribute(_owner)
+                case "LocalVariableTypeTable" =>
+                        new LocalVariableTypeTableAttribute(_owner)
                 case "Signature" => new SignatureAttribute(_owner)
                 case "SourceDebugExtension" =>
                         new SourceDebugExtensionAttribute(_owner)
@@ -160,7 +162,7 @@ class ClassAttributes(c: ClassInfo) extends AttributeGroup(c) {
 
     def bootstrapMethods(): BootstrapMethodsAttribute = _bootstrapMethods
     def addBootstrapMethods(
-            mh: ConstMethodHandleInfo): BootstrapMethodInfo = {
+            mh: ConstMethodHandleInfo): BootstrapMethodEntry = {
         if (_bootstrapMethods == null) {
             _bootstrapMethods = new BootstrapMethodsAttribute(_owner)
         }
@@ -523,6 +525,8 @@ class MethodAttributes(m: MethodInfo) extends AttributeGroup(m) {
 class CodeAttributes(c: CodeAttribute) extends AttributeGroup(c) {
     var lineNumberTable: LineNumberTableAttribute = null
 
+    var localVariableTable: LocalVariableTableBaseAttribute = null
+
     def allAttributes(): Vector[Attribute] = {
         var allAttributes = new Vector[Attribute]()
 
@@ -530,6 +534,10 @@ class CodeAttributes(c: CodeAttribute) extends AttributeGroup(c) {
 
         if (lineNumberTable != null) {
             allAttributes.add(lineNumberTable)
+        }
+
+        if (localVariableTable != null) {
+            allAttributes.add(localVariableTable)
         }
 
         for (attr <- _unsupported) {
@@ -549,6 +557,13 @@ class CodeAttributes(c: CodeAttribute) extends AttributeGroup(c) {
                     } else {
                         lineNumberTable = attr
                     }
+                }
+                case attr: LocalVariableTableBaseAttribute => {
+                    if (localVariableTable != null) {
+                        throw new Exception(
+                                "multiple local variable table attribute")
+                    }
+                    localVariableTable = attr
                 }
                 case attr: UnsupportedAttribute => _unsupported.add(attr)
                 case _ => throw new Exception(

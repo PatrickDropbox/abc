@@ -298,8 +298,8 @@ class ExceptionsAttribute(
     }
 }
 
-class LineNumberTableAttribute(
-        o: AttributeOwner) extends Attribute(o, "LineNumberTable") {
+class LineNumberTableAttribute(o: AttributeOwner)
+        extends Attribute(o, "LineNumberTable") {
     // pc -> line #
     var table = new TreeMap[Int, Int]()
 
@@ -337,3 +337,4 @@ class LineNumberTableAttribute(
         return result
     }
 }
+

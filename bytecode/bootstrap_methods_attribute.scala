@@ -7,7 +7,7 @@ import scala.collection.JavaConversions._
 
 
 // see 154-156 for details
-class BootstrapMethodInfo(o: AttributeOwner, mh: ConstMethodHandleInfo) {
+class BootstrapMethodEntry(o: AttributeOwner, mh: ConstMethodHandleInfo) {
     def this(o: AttributeOwner) = this(o, null)
 
     var _owner = o
@@ -80,12 +80,12 @@ class BootstrapMethodInfo(o: AttributeOwner, mh: ConstMethodHandleInfo) {
 class BootstrapMethodsAttribute(
         o: AttributeOwner) extends Attribute(o, "BootstrapMethods") {
 
-    var _methods = new Vector[BootstrapMethodInfo]()
+    var _methods = new Vector[BootstrapMethodEntry]()
 
-    def methods(): Vector[BootstrapMethodInfo] = _methods
+    def methods(): Vector[BootstrapMethodEntry] = _methods
 
-    def add(mh: ConstMethodHandleInfo): BootstrapMethodInfo = {
-        val m = new BootstrapMethodInfo(_owner, mh)
+    def add(mh: ConstMethodHandleInfo): BootstrapMethodEntry = {
+        val m = new BootstrapMethodEntry(_owner, mh)
         _methods.add(m)
         return m
     }
@@ -118,7 +118,7 @@ class BootstrapMethodsAttribute(
         var totalRead = 2
 
         for (_ <- 1 to numMethods) {
-            var m = new BootstrapMethodInfo(_owner)
+            var m = new BootstrapMethodEntry(_owner)
             totalRead += m.deserialize(input)
             _methods.append(m)
         }
