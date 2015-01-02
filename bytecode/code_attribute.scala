@@ -23,7 +23,7 @@ class ExceptionEntry(
     var classType: ConstClassInfo = c  // null means catch all
 
     // only used for deserialization
-    var _tmpSection: CodeSection = null
+    var _tmpSection: CodeScope = null
 
     def className(): String = {
         if (classType == null) {
@@ -75,7 +75,7 @@ class CodeAttribute(o: AttributeOwner)
     var maxStack = 0
     var maxLocals = 0
 
-    var code = new CodeSection(this, null)
+    var code = new CodeScope(this, null)
 
     var attributes = new CodeAttributes(this)
 
@@ -140,7 +140,7 @@ class CodeAttribute(o: AttributeOwner)
 
         _populateLineNumber(operations)
 
-        code = CodeSection.reconstructFlowGraph(
+        code = CodeScope.reconstructFlowGraph(
                 this,
                 exceptionEntries,
                 operations)

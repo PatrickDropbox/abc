@@ -13,7 +13,7 @@ import scala.collection.JavaConversions._
 
 // NOTE/WARNING: the algorithm extremely inefficient/naive, but should be ok
 // since # segment << # of ops.  Fix/optimize later as needed.
-class SegmentIdAssigner(root: CodeSection) {
+class SegmentIdAssigner(root: CodeScope) {
     if (root._parentScope != null) {
         throw new Exception("not root ...")
     }
@@ -21,23 +21,23 @@ class SegmentIdAssigner(root: CodeSection) {
     var rootSection = root
 
     // section's map id -> section
-    var sectionMap: HashMap[Int, CodeSection] = null
+    var sectionMap: HashMap[Int, CodeScope] = null
 
     // section's map id -> stack
     var stacksMap: HashMap[Int, Stack[CodeBlock]] = null
 
-    var scopeStack: Stack[CodeSection] = null
+    var scopeStack: Stack[CodeScope] = null
 
-    var currentScope: CodeSection = null
+    var currentScope: CodeScope = null
     var currentStack: Stack[CodeBlock] = null
 
     var nextSegmentId = 1
 
     def _init() {
-        sectionMap = new HashMap[Int, CodeSection]()
+        sectionMap = new HashMap[Int, CodeScope]()
         rootSection._assignMapId(0, sectionMap)
 
-        scopeStack = new Stack[CodeSection]()
+        scopeStack = new Stack[CodeScope]()
 
         var entryBlock = rootSection.getEntryPoint()
         var tmp = entryBlock._parentScope
@@ -148,7 +148,7 @@ class SegmentIdAssigner(root: CodeSection) {
             case _ => {}
         }
 
-        var candidateScope: CodeSection = null
+        var candidateScope: CodeScope = null
         for (block <- candidates) {
             if (block.segmentId < 0) {
                 val blockScope = block._parentScope
@@ -235,7 +235,7 @@ class AddressCounter extends DataOutput {
 }
 
 object PcAssigner {
-    def assignSegmentIdsAndPcs(root: CodeSection): Vector[CodeBlock] = {
+    def assignSegmentIdsAndPcs(root: CodeScope): Vector[CodeBlock] = {
         root._resetPcIds()
 
         var segmentIdAssigner = new SegmentIdAssigner(root)

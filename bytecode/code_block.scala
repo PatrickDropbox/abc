@@ -13,9 +13,9 @@ import scala.collection.JavaConversions._
 
 abstract class CodeSegment(
         owner: AttributeOwner,
-        parent: CodeSection)
+        parent: CodeScope)
         extends Operation(owner) with Comparable[CodeSegment] {
-    var _parentScope: CodeSection = parent
+    var _parentScope: CodeScope = parent
 
     // not inclusive.
     var _endPc = -1

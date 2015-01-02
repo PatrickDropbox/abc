@@ -11,23 +11,25 @@ import java.util.Vector
 import scala.collection.JavaConversions._
 
 
-class ExceptionTarget(e: ConstClassInfo, t: CodeSection) {
+class ExceptionTarget(e: ConstClassInfo, t: CodeScope) {
     var exception: ConstClassInfo = e
-    var target: CodeSection = t
+    var target: CodeScope = t
 }
 
 // a group of code segments which will be written out as a single continuous
 // unit.
-class CodeSection(
+//
+// Also acts as lexical / exception try scope
+class CodeScope(
         owner: AttributeOwner,
-        parent: CodeSection) extends CodeSegment(owner, parent) {
+        parent: CodeScope) extends CodeSegment(owner, parent) {
     var _mapId = -1  // unique unordered id
 
-    def this(parent: CodeSection) = this(parent._owner, parent)
+    def this(parent: CodeScope) = this(parent._owner, parent)
 
     var _segments = new Vector[CodeSegment]()
     var _blocks = new Vector[CodeBlock]()
-    var _subsections = new Vector[CodeSection]()
+    var _subsections = new Vector[CodeScope]()
 
     var _exceptionTargets = new Vector[ExceptionTarget]()
 
@@ -42,15 +44,15 @@ class CodeSection(
         return block
     }
 
-    def newSubSection(): CodeSection = {
-        val section = new CodeSection(this)
+    def newSubSection(): CodeScope = {
+        val section = new CodeScope(this)
         _segments.add(section)
         _subsections.add(section)
         return section
     }
 
     // only used for reconstruction
-    def _getMostSpecificSection(pc: Int): CodeSection = {
+    def _getMostSpecificSection(pc: Int): CodeScope = {
         for (s <- _subsections) {
             if (s.pc <= pc && pc < s._endPc) {
                 return s._getMostSpecificSection(pc)
@@ -65,7 +67,7 @@ class CodeSection(
     //   - call order matters.
     //   - pass in null to catch all
     //   - cannot use this on top scope
-    def newExceptionHandle(exceptionClassName: String): CodeSection = {
+    def newExceptionHandle(exceptionClassName: String): CodeScope = {
         if (_parentScope == null) {
             throw new Exception(
                     "cannot create exception handle for top level scope")
@@ -83,7 +85,7 @@ class CodeSection(
     }
 
     // For sharing exception section (needed for javac)
-    def shareExceptionHandle(exceptionClassName: String, target: CodeSection) {
+    def shareExceptionHandle(exceptionClassName: String, target: CodeScope) {
         if (_parentScope == null) {
             throw new Exception(
                     "cannot create exception handle for top level scope")
@@ -140,7 +142,7 @@ class CodeSection(
     }
 
     // returns true if this equals, or contains, the other section
-    def _contains(other: CodeSection): Boolean = {
+    def _contains(other: CodeScope): Boolean = {
         if (this == other) {
             return true
         }
@@ -179,7 +181,7 @@ class CodeSection(
                         entries.add(b)
                     }
                 }
-                case s: CodeSection => s._collectEntryPoints(entries)
+                case s: CodeScope => s._collectEntryPoints(entries)
             }
         }
     }
@@ -188,7 +190,7 @@ class CodeSection(
         for (seg <- _segments) {
             seg match {
                 case b: CodeBlock => result.add(b)
-                case s: CodeSection => s._collectBlocks(result)
+                case s: CodeScope => s._collectBlocks(result)
             }
         }
     }
@@ -209,7 +211,7 @@ class CodeSection(
 
     def _assignMapId(
             startNumber: Int,
-            mapping: HashMap[Int, CodeSection]): Int = {
+            mapping: HashMap[Int, CodeScope]): Int = {
         var number = startNumber
         for (seg <- _subsections) {
             number = seg._assignMapId(number, mapping)
@@ -307,17 +309,17 @@ class CodeSection(
     }
 }
 
-object CodeSection {
+object CodeScope {
     def reconstructFlowGraph(
             owner: AttributeOwner,
             exceptions: Vector[ExceptionEntry],
-            ops: Vector[Operation]): CodeSection = {
+            ops: Vector[Operation]): CodeScope = {
 
         _checkExceptionOverlaps(exceptions)
 
         val jumpTargets = _collectJumpTargets(exceptions, ops)
 
-        var result = new CodeSection(owner, null)
+        var result = new CodeScope(owner, null)
         result.pc = 0
         result._endPc = ops.lastElement().pc + 5 // fake it
 
@@ -371,7 +373,7 @@ object CodeSection {
 
     def _createExceptionSubsections(
             exceptions: Vector[ExceptionEntry],
-            global: CodeSection) {
+            global: CodeScope) {
         // create try sections
         for (i <- (exceptions.size() - 1).to(0, -1)) {
             var entry = exceptions.elementAt(i)
