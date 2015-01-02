@@ -140,7 +140,7 @@ class CodeAttribute(o: AttributeOwner)
 
         _populateLineNumber(operations)
 
-        code = CodeScope.reconstructFlowGraph(
+        code = CodeScopeReconstructor.reconstruct(
                 this,
                 exceptionEntries,
                 operations)
