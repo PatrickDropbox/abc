@@ -33,8 +33,14 @@ class CodeScope(
 
     var _exceptionTargets = new Vector[ExceptionTarget]()
 
+    var _entryPoint: CodeSegment = null
+
     def newBlock(): CodeBlock = {
-        return _addBlock(new CodeBlock(_owner))
+        var block = new CodeBlock(_owner)
+        if (_entryPoint == null) {
+            _entryPoint = block
+        }
+        return _addBlock(block)
     }
 
     def _addBlock(block: CodeBlock): CodeBlock = {
@@ -46,6 +52,9 @@ class CodeScope(
 
     def newSubSection(): CodeScope = {
         val section = new CodeScope(this)
+        if (_entryPoint == null) {
+            _entryPoint = section
+        }
         _segments.add(section)
         _subsections.add(section)
         return section
@@ -159,30 +168,22 @@ class CodeScope(
     }
 
     def getEntryPoint(): CodeBlock = {
-        var results = new Vector[CodeBlock]
-        _collectEntryPoints(results)
-
-        if (results.isEmpty()) {
-            throw new Exception("no entry point")
+        if (_entryPoint == null) {
+            return null
         }
 
-        if (results.size() > 1) {
-            throw new Exception("multiple entry points")
+        _entryPoint match {
+            case b: CodeBlock => return b
+            case s: CodeScope => return s.getEntryPoint()
         }
-
-        return results.firstElement()
     }
 
-    def _collectEntryPoints(entries: Vector[CodeBlock]) {
-        for (seg <- _segments) {
-            seg match {
-                case b: CodeBlock => {
-                    if (b.isEntryPoint) {
-                        entries.add(b)
-                    }
-                }
-                case s: CodeScope => s._collectEntryPoints(entries)
-            }
+    // only for deserialization (assume scope is sorted)
+    def _fixEntryPoints() {
+        _entryPoint = _segments.elementAt(0)
+
+        for (section <- _subsections) {
+            section._fixEntryPoints()
         }
     }
 

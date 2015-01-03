@@ -52,9 +52,6 @@ abstract class CodeSegment(
 // and goto is inserted to the end of the block during verification.
 class CodeBlock(owner: AttributeOwner)
         extends CodeSegment(owner, null) {
-
-    var isEntryPoint = false  // for the method.  there can only be one.
-
     var lineContext = -1
 
     var _ops = new Vector[Operation]()

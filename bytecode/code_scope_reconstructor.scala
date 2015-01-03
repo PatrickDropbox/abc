@@ -43,10 +43,6 @@ object CodeScopeReconstructor {
                 currBlock = section.newBlock()
                 currBlock.pc = op.pc
                 pcBlockMap.put(op.pc, currBlock)
-
-                if (op.pc == 0) {
-                    currBlock.isEntryPoint = true
-                }
             }
             currBlock._add(op)
         }
@@ -63,6 +59,9 @@ object CodeScopeReconstructor {
         for (op <- ops) {
             op.bindBlockRefs(pcBlockMap)
         }
+
+        result.sort()
+        result._fixEntryPoints()
 
         return result
     }
