@@ -35,6 +35,17 @@ class CodeScope(
 
     var _entryPoint: CodeSegment = null
 
+    def getEntryBlock(): CodeBlock = {
+        if (_entryPoint == null) {
+            return newBlock()
+        }
+
+        _entryPoint match {
+            case b: CodeBlock => return b
+            case s: CodeScope => return s.getEntryBlock()
+        }
+    }
+
     def newBlock(): CodeBlock = {
         var block = new CodeBlock(_owner)
         return _addBlock(block)
@@ -167,17 +178,6 @@ class CodeScope(
         }
 
         return false
-    }
-
-    def getEntryBlock(): CodeBlock = {
-        if (_entryPoint == null) {
-            return null
-        }
-
-        _entryPoint match {
-            case b: CodeBlock => return b
-            case s: CodeScope => return s.getEntryBlock()
-        }
     }
 
     // only for deserialization (assume scope is sorted)
