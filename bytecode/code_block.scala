@@ -22,11 +22,13 @@ abstract class CodeSegment(
 
     var segmentId = -1
 
-    var implicitGoto: CodeBlock = null
+    var implicitGoto: CodeSegment = null
 
     def _insertImplicitGoto(): CodeBlock
 
     def _resetPcIds()
+
+    def getEntryBlock(): CodeBlock
 
     def compareTo(other: CodeSegment): Int = {
         if (segmentId < other.segmentId) {
@@ -267,58 +269,58 @@ class CodeBlock(owner: AttributeOwner)
     // Control operations
     //
 
-    def ifEq(ifScope: CodeScope, elseScope: CodeScope) {
+    def ifEq(ifScope: CodeSegment, elseScope: CodeSegment) {
         _add(new Ifeq(_owner, ifScope, elseScope))
     }
-    def ifNe(ifScope: CodeScope, elseScope: CodeScope) {
+    def ifNe(ifScope: CodeSegment, elseScope: CodeSegment) {
         _add(new Ifne(_owner, ifScope, elseScope))
     }
-    def ifLt(ifScope: CodeScope, elseScope: CodeScope) {
+    def ifLt(ifScope: CodeSegment, elseScope: CodeSegment) {
         _add(new Iflt(_owner, ifScope, elseScope))
     }
-    def ifGe(ifScope: CodeScope, elseScope: CodeScope) {
+    def ifGe(ifScope: CodeSegment, elseScope: CodeSegment) {
         _add(new Ifge(_owner, ifScope, elseScope))
     }
-    def ifGt(ifScope: CodeScope, elseScope: CodeScope) {
+    def ifGt(ifScope: CodeSegment, elseScope: CodeSegment) {
         _add(new Ifgt(_owner, ifScope, elseScope))
     }
-    def ifLe(ifScope: CodeScope, elseScope: CodeScope) {
+    def ifLe(ifScope: CodeSegment, elseScope: CodeSegment) {
         _add(new Ifle(_owner, ifScope, elseScope))
     }
-    def ifICmpEq(ifScope: CodeScope, elseScope: CodeScope) {
+    def ifICmpEq(ifScope: CodeSegment, elseScope: CodeSegment) {
         _add(new IfIcmpeq(_owner, ifScope, elseScope))
     }
-    def ifICmpNe(ifScope: CodeScope, elseScope: CodeScope) {
+    def ifICmpNe(ifScope: CodeSegment, elseScope: CodeSegment) {
         _add(new IfIcmpne(_owner, ifScope, elseScope))
     }
-    def ifICmpLt(ifScope: CodeScope, elseScope: CodeScope) {
+    def ifICmpLt(ifScope: CodeSegment, elseScope: CodeSegment) {
         _add(new IfIcmplt(_owner, ifScope, elseScope))
     }
-    def ifICmpGe(ifScope: CodeScope, elseScope: CodeScope) {
+    def ifICmpGe(ifScope: CodeSegment, elseScope: CodeSegment) {
         _add(new IfIcmpge(_owner, ifScope, elseScope))
     }
-    def ifICmpGt(ifScope: CodeScope, elseScope: CodeScope) {
+    def ifICmpGt(ifScope: CodeSegment, elseScope: CodeSegment) {
         _add(new IfIcmpgt(_owner, ifScope, elseScope))
     }
-    def ifICmpLe(ifScope: CodeScope, elseScope: CodeScope) {
+    def ifICmpLe(ifScope: CodeSegment, elseScope: CodeSegment) {
         _add(new IfIcmple(_owner, ifScope, elseScope))
     }
-    def ifACmpEq(ifScope: CodeScope, elseScope: CodeScope) {
+    def ifACmpEq(ifScope: CodeSegment, elseScope: CodeSegment) {
         _add(new IfAcmpeq(_owner, ifScope, elseScope))
     }
-    def ifACmpNe(ifScope: CodeScope, elseScope: CodeScope) {
+    def ifACmpNe(ifScope: CodeSegment, elseScope: CodeSegment) {
         _add(new IfAcmpne(_owner, ifScope, elseScope))
     }
-    def ifNull(ifScope: CodeScope, elseScope: CodeScope) {
+    def ifNull(ifScope: CodeSegment, elseScope: CodeSegment) {
         _add(new Ifnull(_owner, ifScope, elseScope))
     }
-    def ifNonNull(ifScope: CodeScope, elseScope: CodeScope) {
+    def ifNonNull(ifScope: CodeSegment, elseScope: CodeSegment) {
         _add(new Ifnonnull(_owner, ifScope, elseScope))
     }
 
-    def goto(target: CodeBlock) { _add(new Goto(_owner, this, target)) }
+    def goto(target: CodeSegment) { _add(new Goto(_owner, this, target)) }
 
-    def switch(defaultBranch: CodeScope): Switch = {
+    def switch(defaultBranch: CodeSegment): Switch = {
         val switch = new Switch(_owner, defaultBranch)
         _add(switch)
         return switch
@@ -339,7 +341,7 @@ class CodeBlock(owner: AttributeOwner)
             if (implicitGoto == null) {
                 throw new Exception("no implicit goto - pc: " + pc)
             }
-            goto(implicitGoto)
+            goto(implicitGoto.getEntryBlock())
             return null
         }
 
@@ -366,6 +368,8 @@ class CodeBlock(owner: AttributeOwner)
         _endPc = -1
         segmentId = -1
     }
+
+    def getEntryBlock(): CodeBlock = this
 
     def serialize(output: DataOutput) {
         for (op <- _ops) {

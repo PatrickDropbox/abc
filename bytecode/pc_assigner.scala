@@ -39,21 +39,13 @@ class SegmentIdAssigner(root: CodeScope) {
 
         scopeStack = new Stack[CodeScope]()
 
-        var entryBlock = rootSection.getEntryBlock()
-        var tmp = entryBlock._parentScope
-        while (tmp != null) {
-            scopeStack.add(0, tmp)
-            tmp = tmp._parentScope
-        }
-
         stacksMap = new HashMap[Int, Stack[CodeBlock]]()
         for (i <- sectionMap.keySet()) {
             stacksMap.put(i, new Stack[CodeBlock]())
         }
 
-        currentScope = entryBlock._parentScope
-        currentStack = stacksMap.get(entryBlock._parentScope._mapId)
-        currentStack.push(entryBlock)
+        val entryBlock = rootSection.getEntryBlock()
+        _pushScopeStack(entryBlock._parentScope)
     }
 
     def assignIds() {

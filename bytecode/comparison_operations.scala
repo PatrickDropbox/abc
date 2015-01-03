@@ -34,8 +34,8 @@ abstract class IfBaseOp(
         owner: AttributeOwner,
         opCode: Int,
         mnemonic: String,
-        ifBranch: CodeScope,
-        elseBranch: CodeScope) extends Operation(owner) {
+        ifBranch: CodeSegment,
+        elseBranch: CodeSegment) extends Operation(owner) {
     val _opCode = opCode
     val _mnemonic = mnemonic
     var _ifBranch: CodeBlock = null
@@ -95,8 +95,8 @@ abstract class IfIOp(
         owner: AttributeOwner,
         opCode: Int,
         mnemonic: String,
-        ifBranch: CodeScope,
-        elseBranch: CodeScope) extends IfBaseOp(
+        ifBranch: CodeSegment,
+        elseBranch: CodeSegment) extends IfBaseOp(
                 owner,
                 opCode,
                 mnemonic,
@@ -109,8 +109,8 @@ abstract class IfCmpIOp(
         owner: AttributeOwner,
         opCode: Int,
         mnemonic: String,
-        ifBranch: CodeScope,
-        elseBranch: CodeScope) extends IfBaseOp(
+        ifBranch: CodeSegment,
+        elseBranch: CodeSegment) extends IfBaseOp(
                 owner,
                 opCode,
                 mnemonic,
@@ -123,8 +123,8 @@ abstract class IfAOp(
         owner: AttributeOwner,
         opCode: Int,
         mnemonic: String,
-        ifBranch: CodeScope,
-        elseBranch: CodeScope) extends IfBaseOp(
+        ifBranch: CodeSegment,
+        elseBranch: CodeSegment) extends IfBaseOp(
                 owner,
                 opCode,
                 mnemonic,
@@ -137,8 +137,8 @@ abstract class IfCmpAOp(
         owner: AttributeOwner,
         opCode: Int,
         mnemonic: String,
-        ifBranch: CodeScope,
-        elseBranch: CodeScope) extends IfBaseOp(
+        ifBranch: CodeSegment,
+        elseBranch: CodeSegment) extends IfBaseOp(
                 owner,
                 opCode,
                 mnemonic,
@@ -150,40 +150,88 @@ abstract class IfCmpAOp(
 // int conditional branching
 //
 
-class Ifeq(owner: AttributeOwner, ifBranch: CodeScope, elseBranch: CodeScope)
-        extends IfIOp(owner, OpCode.IFEQ, "ifeq", ifBranch, elseBranch) {
+class Ifeq(
+        owner: AttributeOwner,
+        ifBranch: CodeSegment,
+        elseBranch: CodeSegment)
+        extends IfIOp(
+                owner,
+                OpCode.IFEQ,
+                "ifeq",
+                ifBranch,
+                elseBranch) {
     def this(owner: AttributeOwner) = this(owner, null, null)
 }
 
-class Ifne(owner: AttributeOwner, ifBranch: CodeScope, elseBranch: CodeScope)
-        extends IfIOp(owner, OpCode.IFNE, "ifne", ifBranch, elseBranch) {
+class Ifne(
+        owner: AttributeOwner,
+        ifBranch: CodeSegment,
+        elseBranch: CodeSegment)
+        extends IfIOp(
+                owner,
+                OpCode.IFNE,
+                "ifne",
+                ifBranch,
+                elseBranch) {
     def this(owner: AttributeOwner) = this(owner, null, null)
 }
 
-class Iflt(owner: AttributeOwner, ifBranch: CodeScope, elseBranch: CodeScope)
-        extends IfIOp(owner, OpCode.IFLT, "iflt", ifBranch, elseBranch) {
+class Iflt(
+        owner: AttributeOwner,
+        ifBranch: CodeSegment,
+        elseBranch: CodeSegment)
+        extends IfIOp(
+                owner,
+                OpCode.IFLT,
+                "iflt",
+                ifBranch,
+                elseBranch) {
     def this(owner: AttributeOwner) = this(owner, null, null)
 }
 
-class Ifle(owner: AttributeOwner, ifBranch: CodeScope, elseBranch: CodeScope)
-        extends IfIOp(owner, OpCode.IFLE, "ifle", ifBranch, elseBranch) {
+class Ifle(
+        owner: AttributeOwner,
+        ifBranch: CodeSegment,
+        elseBranch: CodeSegment)
+        extends IfIOp(
+                owner,
+                OpCode.IFLE,
+                "ifle",
+                ifBranch,
+                elseBranch) {
     def this(owner: AttributeOwner) = this(owner, null, null)
 }
 
-class Ifgt(owner: AttributeOwner, ifBranch: CodeScope, elseBranch: CodeScope)
-        extends IfIOp(owner, OpCode.IFGT, "ifgt", ifBranch, elseBranch) {
+class Ifgt(
+        owner: AttributeOwner,
+        ifBranch: CodeSegment,
+        elseBranch: CodeSegment)
+        extends IfIOp(
+                owner,
+                OpCode.IFGT,
+                "ifgt",
+                ifBranch,
+                elseBranch) {
     def this(owner: AttributeOwner) = this(owner, null, null)
 }
 
-class Ifge(owner: AttributeOwner, ifBranch: CodeScope, elseBranch: CodeScope)
-        extends IfIOp(owner, OpCode.IFGE, "ifge", ifBranch, elseBranch) {
+class Ifge(
+        owner: AttributeOwner,
+        ifBranch: CodeSegment,
+        elseBranch: CodeSegment)
+        extends IfIOp(
+                owner,
+                OpCode.IFGE,
+                "ifge",
+                ifBranch,
+                elseBranch) {
     def this(owner: AttributeOwner) = this(owner, null, null)
 }
 
 class IfIcmpeq(
         owner: AttributeOwner,
-        ifBranch: CodeScope,
-        elseBranch: CodeScope) extends IfCmpIOp(
+        ifBranch: CodeSegment,
+        elseBranch: CodeSegment) extends IfCmpIOp(
                 owner,
                 OpCode.IF_ICMPEQ,
                 "if_icmpeq",
@@ -194,8 +242,8 @@ class IfIcmpeq(
 
 class IfIcmpne(
         owner: AttributeOwner,
-        ifBranch: CodeScope,
-        elseBranch: CodeScope) extends IfCmpIOp(
+        ifBranch: CodeSegment,
+        elseBranch: CodeSegment) extends IfCmpIOp(
                 owner,
                 OpCode.IF_ICMPNE,
                 "if_icmpne",
@@ -206,8 +254,8 @@ class IfIcmpne(
 
 class IfIcmplt(
         owner: AttributeOwner,
-        ifBranch: CodeScope,
-        elseBranch: CodeScope) extends IfCmpIOp(
+        ifBranch: CodeSegment,
+        elseBranch: CodeSegment) extends IfCmpIOp(
                 owner,
                 OpCode.IF_ICMPLT,
                 "if_icmplt",
@@ -218,8 +266,8 @@ class IfIcmplt(
 
 class IfIcmpge(
         owner: AttributeOwner,
-        ifBranch: CodeScope,
-        elseBranch: CodeScope) extends IfCmpIOp(
+        ifBranch: CodeSegment,
+        elseBranch: CodeSegment) extends IfCmpIOp(
                 owner,
                 OpCode.IF_ICMPGE,
                 "if_icmpge",
@@ -230,8 +278,8 @@ class IfIcmpge(
 
 class IfIcmpgt(
         owner: AttributeOwner,
-        ifBranch: CodeScope,
-        elseBranch: CodeScope) extends IfCmpIOp(
+        ifBranch: CodeSegment,
+        elseBranch: CodeSegment) extends IfCmpIOp(
                 owner,
                 OpCode.IF_ICMPGT,
                 "if_icmpgt",
@@ -242,8 +290,8 @@ class IfIcmpgt(
 
 class IfIcmple(
         owner: AttributeOwner,
-        ifBranch: CodeScope,
-        elseBranch: CodeScope) extends IfCmpIOp(
+        ifBranch: CodeSegment,
+        elseBranch: CodeSegment) extends IfCmpIOp(
                 owner,
                 OpCode.IF_ICMPLE,
                 "if_icmple",
@@ -258,8 +306,8 @@ class IfIcmple(
 
 class IfAcmpeq(
         owner: AttributeOwner,
-        ifBranch: CodeScope,
-        elseBranch: CodeScope) extends IfCmpAOp(
+        ifBranch: CodeSegment,
+        elseBranch: CodeSegment) extends IfCmpAOp(
                 owner,
                 OpCode.IF_ACMPEQ,
                 "if_acmpeq",
@@ -270,8 +318,8 @@ class IfAcmpeq(
 
 class IfAcmpne(
         owner: AttributeOwner,
-        ifBranch: CodeScope,
-        elseBranch: CodeScope) extends IfCmpAOp(
+        ifBranch: CodeSegment,
+        elseBranch: CodeSegment) extends IfCmpAOp(
                 owner,
                 OpCode.IF_ACMPNE,
                 "if_acmpne",
@@ -282,8 +330,8 @@ class IfAcmpne(
 
 class Ifnonnull(
         owner: AttributeOwner,
-        ifBranch: CodeScope,
-        elseBranch: CodeScope) extends IfAOp(
+        ifBranch: CodeSegment,
+        elseBranch: CodeSegment) extends IfAOp(
                 owner,
                 OpCode.IFNONNULL,
                 "ifnonnull",
@@ -292,7 +340,15 @@ class Ifnonnull(
     def this(owner: AttributeOwner) = this(owner, null, null)
 }
 
-class Ifnull(owner: AttributeOwner, ifBranch: CodeScope, elseBranch: CodeScope)
-        extends IfAOp(owner, OpCode.IFNULL, "ifnull", ifBranch, elseBranch) {
+class Ifnull(
+        owner: AttributeOwner,
+        ifBranch: CodeSegment,
+        elseBranch: CodeSegment)
+        extends IfAOp(
+                owner,
+                OpCode.IFNULL,
+                "ifnull",
+                ifBranch,
+                elseBranch) {
     def this(owner: AttributeOwner) = this(owner, null, null)
 }

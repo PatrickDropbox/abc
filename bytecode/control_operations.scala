@@ -7,7 +7,7 @@ import scala.collection.JavaConversions._
 
 class Goto(owner: AttributeOwner,
            current: CodeBlock,
-           target: CodeBlock)
+           target: CodeSegment)
         extends Operation(owner) {
     def this(owner: AttributeOwner, offset: Int) = {
         this(owner, null, null)
@@ -17,13 +17,21 @@ class Goto(owner: AttributeOwner,
     def this(owner: AttributeOwner) = this(owner, 0)
 
     var _currentBlock = current
-    var _targetBlock = target
+    var _targetBlock: CodeBlock = null
+    if (target != null) {
+        _targetBlock = target.getEntryBlock()
+    }
 
     // only used during deserialization
     var _tmpOffset = 0
 
+    def isAdjacent(): Boolean = {
+        // TODO handle chain of goto blocks
+        return (_currentBlock.segmentId + 1) == _targetBlock.segmentId
+    }
+
     def serialize(output: DataOutput) {
-        if (_currentBlock.segmentId + 1 == _targetBlock.segmentId) {
+        if (isAdjacent()) {
             // skip writing goto since the two code block are next to each other
             return
         }
@@ -55,8 +63,7 @@ class Goto(owner: AttributeOwner,
 
     def debugString(indent: String): String = {
         var hidden = ""
-        if (_currentBlock != null &&
-                _currentBlock.segmentId + 1 == _targetBlock.segmentId) {
+        if (_currentBlock != null && isAdjacent()) {
             hidden = " (not written)"
         }
 
@@ -146,7 +153,7 @@ class Areturn(owner: AttributeOwner)
         extends ReturnValue(owner, OpCode.ARETURN, "areturn") {
 }
 
-class Switch(owner: AttributeOwner, defaultBranch: CodeScope)
+class Switch(owner: AttributeOwner, defaultBranch: CodeSegment)
         extends Operation(owner) {
     def this(owner: AttributeOwner) = this(owner, null)
 
@@ -161,7 +168,7 @@ class Switch(owner: AttributeOwner, defaultBranch: CodeScope)
     var _tmpDefaultOffset = 0
     var _tmpOffset: TreeMap[Int, Int] = null
 
-    def add(i: Int, branch: CodeScope) {
+    def add(i: Int, branch: CodeSegment) {
         val block = branch.getEntryBlock()
         if (block != _defaultBranch) {
             _table.put(i, block)
