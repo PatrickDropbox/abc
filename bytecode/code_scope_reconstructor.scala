@@ -29,6 +29,8 @@ object CodeScopeReconstructor {
 
         var pcBlockMap = new TreeMap[Int, CodeBlock]()
 
+        var ifBranches = new HashMap[Int, CodeScope]()
+
         var prevBlock: CodeBlock = null
         var currBlock: CodeBlock = null
         for (op <- ops) {
@@ -40,6 +42,30 @@ object CodeScopeReconstructor {
                 prevBlock = currBlock
 
                 var section = result._getMostSpecificSection(op.pc)
+                if (prevBlock != null) {
+                    val prevScope = prevBlock._parentScope
+                    var candidate = ifBranches.get(op.pc)
+                    if (candidate != null) {  // is if branch
+                        if (candidate._contains(prevScope) &&
+                                section._contains(candidate)) {
+                            section = candidate
+                        }
+                    } else {
+                        prevBlock._ops.lastElement() match {
+                            case i: IfBaseOp => {
+                                // make the else branch sit next to the
+                                // condition
+                                if (section._contains(prevScope)) {
+                                    section = prevScope
+                                    ifBranches.put(i._tmpOffset + i.pc,
+                                                   prevScope)
+                                }
+                            }
+                            case _ => {}
+                        }
+                    }
+                }
+
                 currBlock = section.newBlock()
                 currBlock.pc = op.pc
                 pcBlockMap.put(op.pc, currBlock)
