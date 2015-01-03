@@ -36,10 +36,6 @@ abstract class CodeSegment(
         return _parentScope.getImplicitGoto()
     }
 
-    def _insertImplicitGoto(): CodeBlock
-
-    def _resetPcIds()
-
     def getEntryBlock(): CodeBlock
 
     def compareTo(other: CodeSegment): Int = {
@@ -66,8 +62,8 @@ abstract class CodeSegment(
 //
 // if implicitGoto is set and the last ops is not a jump/return, then
 // and goto is inserted to the end of the block during verification.
-class CodeBlock(owner: AttributeOwner)
-        extends CodeSegment(owner, null) {
+class CodeBlock(owner: AttributeOwner, parent: CodeScope)
+        extends CodeSegment(owner, parent) {
     var lineContext = -1
 
     var _ops = new Vector[Operation]()
@@ -347,40 +343,6 @@ class CodeBlock(owner: AttributeOwner)
     def returnVoid() { _add(new Return(_owner)) }
 
     def throwA() { _add(new Athrow(_owner)) }
-
-    def _insertImplicitGoto(): CodeBlock = {
-        if (!_hasControlOp) {
-            val target = getImplicitGoto()
-            if (target == null) {
-                throw new Exception("no implicit goto - pc: " + pc)
-            }
-            goto(target.getEntryBlock())
-            return null
-        }
-
-        var lastOp = _ops.lastElement()
-        lastOp match {
-            // this simplifies control flow flattening since we no
-            // longer need to pair the else branch immediately after the
-            // condition operation.
-            case i: IfBaseOp => {
-                var indirection = new CodeBlock(_owner)
-                indirection.lineContext = i.line
-                indirection.goto(i._elseBranch)
-                i._elseBranch = indirection
-                return indirection
-            }
-            case _ => {}
-        }
-
-        return null
-    }
-
-    def _resetPcIds() {
-        pc = -1
-        _endPc = -1
-        segmentId = -1
-    }
 
     def getEntryBlock(): CodeBlock = this
 

@@ -27,7 +27,7 @@ class ExceptionTarget(e: ConstClassInfo, t: CodeScope) {
 class CodeScope(
         owner: AttributeOwner,
         parent: CodeScope) extends CodeSegment(owner, parent) {
-    var _mapId = -1  // unique unordered id
+    var _scopeId = -1  // unique unordered id
 
     def this(parent: CodeScope) = this(parent._owner, parent)
 
@@ -51,7 +51,7 @@ class CodeScope(
     }
 
     def newBlock(): CodeBlock = {
-        var block = new CodeBlock(_owner)
+        var block = new CodeBlock(_owner, this)
         return _addBlock(block)
     }
 
@@ -69,7 +69,6 @@ class CodeScope(
     }
 
     def _addBlock(block: CodeBlock): CodeBlock = {
-        block._parentScope = this
         _addSegment(block)
         _blocks.add(block)
         return block
@@ -189,15 +188,6 @@ class CodeScope(
         return false
     }
 
-    // only for deserialization (assume scope is sorted)
-    def _fixEntryPoints() {
-        _entryPoint = _segments.elementAt(0)
-
-        for (section <- _subsections) {
-            section._fixEntryPoints()
-        }
-    }
-
     def _collectBlocks(result: Vector[CodeBlock]) {
         for (seg <- _segments) {
             seg match {
@@ -207,71 +197,8 @@ class CodeScope(
         }
     }
 
-    def _insertImplicitGoto(): CodeBlock = {
-        var indirections = new Vector[CodeBlock]()
-        for (seg <- _segments) {
-            val block = seg._insertImplicitGoto()
-            if (block != null) {
-                indirections.add(block)
-            }
-        }
-        for (block <- indirections) {
-            _addBlock(block)
-        }
-        return null
-    }
-
-    def _assignMapId(
-            startNumber: Int,
-            mapping: HashMap[Int, CodeScope]): Int = {
-        var number = startNumber
-        for (seg <- _subsections) {
-            number = seg._assignMapId(number, mapping)
-        }
-
-        _mapId = number
-        mapping.put(number, this)
-
-        number += 1
-        return number
-    }
-
-    def _resetPcIds() {
-        for (seg <- _subsections) {
-            seg._resetPcIds()
-        }
-
-        pc = -1
-        _endPc = -1
-        segmentId = -1
-        _mapId = -1
-    }
-
-    def _fixPcs() {
-        for (s <- _subsections) {
-            s._fixPcs()
-        }
-
-        pc = -1
-        _endPc = -1
-        for (seg <- _segments) {
-            if (pc == -1) {
-                pc = seg.pc
-                _endPc = seg._endPc
-            } else {
-                if (seg.pc < pc) {
-                    pc = seg.pc
-                }
-
-                if (seg._endPc > _endPc) {
-                    _endPc = seg._endPc
-                }
-            }
-        }
-    }
-
     def serialize(output: DataOutput) {
-        _insertImplicitGoto()
+        (new ImplicitGotoInserter(this)).apply()
 
         var blocks = PcAssigner.assignSegmentIdsAndPcs(this)
 

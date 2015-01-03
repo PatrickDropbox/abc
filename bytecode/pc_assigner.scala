@@ -35,7 +35,7 @@ class SegmentIdAssigner(root: CodeScope) {
 
     def _init() {
         sectionMap = new HashMap[Int, CodeScope]()
-        rootSection._assignMapId(0, sectionMap)
+        (new PcIdResetter(rootSection, sectionMap)).apply()
 
         scopeStack = new Stack[CodeScope]()
 
@@ -68,7 +68,7 @@ class SegmentIdAssigner(root: CodeScope) {
         }
 
         currentScope = s
-        currentStack = stacksMap.get(s._mapId)
+        currentStack = stacksMap.get(s._scopeId)
 
         while (!nestedScopes.isEmpty()) {
             scopeStack.push(nestedScopes.pop())
@@ -108,7 +108,7 @@ class SegmentIdAssigner(root: CodeScope) {
             currentStack = null
         } else {
             currentScope = scopeStack.peek()
-            currentStack = stacksMap.get(currentScope._mapId)
+            currentStack = stacksMap.get(currentScope._scopeId)
         }
     }
 
@@ -157,7 +157,7 @@ class SegmentIdAssigner(root: CodeScope) {
         for (block <- candidates) {
             if (block.segmentId < 0) {
                 val blockScope = block._parentScope
-                stacksMap.get(blockScope._mapId).push(block)
+                stacksMap.get(blockScope._scopeId).push(block)
                 if (currentScope._contains(blockScope)) {
                     candidateScope = blockScope
                 }
@@ -238,8 +238,6 @@ class AddressCounter extends DataOutput {
 
 object PcAssigner {
     def assignSegmentIdsAndPcs(root: CodeScope): Vector[CodeBlock] = {
-        root._resetPcIds()
-
         var segmentIdAssigner = new SegmentIdAssigner(root)
         segmentIdAssigner.assignIds()
 
@@ -259,7 +257,7 @@ object PcAssigner {
             block._endPc = counter.pos
         }
 
-        root._fixPcs()
+        (new ScopePcUpdater(root)).apply()
 
         return blocks
     }

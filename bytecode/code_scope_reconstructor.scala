@@ -80,14 +80,13 @@ object CodeScopeReconstructor {
             currBlock._endPc = currBlock.pc + 5  // fake it
         }
 
-        result._fixPcs()
+        (new ScopePcUpdater(result)).apply()
 
         for (op <- ops) {
             op.bindBlockRefs(pcBlockMap)
         }
 
-        result.sort()
-        result._fixEntryPoints()
+        (new EntryPointSetter(result)).apply()
 
         return result
     }
