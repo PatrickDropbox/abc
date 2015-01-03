@@ -3,11 +3,11 @@ all:
 	python gen_access_flags.py
 	scalac *.scala
 
-test-rewrite: all
+test-rewrite: clean all
 	mkdir test_rewrite
 	cp *.class test_rewrite
 	scala RewriteClassFile test_rewrite/*.class
 
 clean:
-	rm *.class
+	rm -f *.class
 	rm -rf test_rewrite
