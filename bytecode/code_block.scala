@@ -22,6 +22,8 @@ abstract class CodeSegment(
 
     var segmentId = -1
 
+    var implicitGoto: CodeBlock = null
+
     def _insertImplicitGoto(): CodeBlock
 
     def _resetPcIds()
@@ -57,8 +59,6 @@ class CodeBlock(owner: AttributeOwner)
     var _ops = new Vector[Operation]()
 
     var _hasControlOp = false
-
-    var implicitGoto: CodeBlock = null
 
     def _add(op: Operation) {
         if (_hasControlOp) {

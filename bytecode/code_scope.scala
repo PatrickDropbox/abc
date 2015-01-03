@@ -37,14 +37,15 @@ class CodeScope(
 
     def newBlock(): CodeBlock = {
         var block = new CodeBlock(_owner)
-        if (_entryPoint == null) {
-            _entryPoint = block
-        }
         return _addBlock(block)
     }
 
     def _addBlock(block: CodeBlock): CodeBlock = {
+        if (_entryPoint == null) {
+            _entryPoint = block
+        }
         block._parentScope = this
+        block.implicitGoto = implicitGoto
         _segments.add(block)
         _blocks.add(block)
         return block
@@ -52,6 +53,7 @@ class CodeScope(
 
     def newSubSection(): CodeScope = {
         val section = new CodeScope(this)
+        section.implicitGoto = implicitGoto
         if (_entryPoint == null) {
             _entryPoint = section
         }
