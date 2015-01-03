@@ -39,7 +39,7 @@ class SegmentIdAssigner(root: CodeScope) {
 
         scopeStack = new Stack[CodeScope]()
 
-        var entryBlock = rootSection.getEntryPoint()
+        var entryBlock = rootSection.getEntryBlock()
         var tmp = entryBlock._parentScope
         while (tmp != null) {
             scopeStack.add(0, tmp)
@@ -152,7 +152,6 @@ class SegmentIdAssigner(root: CodeScope) {
         for (block <- candidates) {
             if (block.segmentId < 0) {
                 val blockScope = block._parentScope
-
                 stacksMap.get(blockScope._mapId).push(block)
                 if (currentScope._contains(blockScope)) {
                     candidateScope = blockScope
@@ -161,9 +160,19 @@ class SegmentIdAssigner(root: CodeScope) {
         }
 
         if (candidateScope != null && currentScope != candidateScope) {
+            var nestedScopes = new Stack[CodeScope]()
+            var tmp = candidateScope
+            while (tmp != currentScope) {
+                nestedScopes.push(tmp)
+                tmp = tmp._parentScope
+            }
+
             currentScope = candidateScope
             currentStack = stacksMap.get(candidateScope._mapId)
-            scopeStack.push(currentScope)
+
+            while (!nestedScopes.isEmpty()) {
+                scopeStack.push(nestedScopes.pop())
+            }
         }
     }
 }

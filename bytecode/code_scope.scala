@@ -169,14 +169,14 @@ class CodeScope(
         return false
     }
 
-    def getEntryPoint(): CodeBlock = {
+    def getEntryBlock(): CodeBlock = {
         if (_entryPoint == null) {
             return null
         }
 
         _entryPoint match {
             case b: CodeBlock => return b
-            case s: CodeScope => return s.getEntryPoint()
+            case s: CodeScope => return s.getEntryBlock()
         }
     }
 
