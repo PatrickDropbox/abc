@@ -267,53 +267,53 @@ class CodeBlock(owner: AttributeOwner)
     // Control operations
     //
 
-    def ifEq(ifBlock: CodeBlock, elseBlock: CodeBlock) {
-        _add(new Ifeq(_owner, ifBlock, elseBlock))
+    def ifEq(ifScope: CodeScope, elseScope: CodeScope) {
+        _add(new Ifeq(_owner, ifScope, elseScope))
     }
-    def ifNe(ifBlock: CodeBlock, elseBlock: CodeBlock) {
-        _add(new Ifne(_owner, ifBlock, elseBlock))
+    def ifNe(ifScope: CodeScope, elseScope: CodeScope) {
+        _add(new Ifne(_owner, ifScope, elseScope))
     }
-    def ifLt(ifBlock: CodeBlock, elseBlock: CodeBlock) {
-        _add(new Iflt(_owner, ifBlock, elseBlock))
+    def ifLt(ifScope: CodeScope, elseScope: CodeScope) {
+        _add(new Iflt(_owner, ifScope, elseScope))
     }
-    def ifGe(ifBlock: CodeBlock, elseBlock: CodeBlock) {
-        _add(new Ifge(_owner, ifBlock, elseBlock))
+    def ifGe(ifScope: CodeScope, elseScope: CodeScope) {
+        _add(new Ifge(_owner, ifScope, elseScope))
     }
-    def ifGt(ifBlock: CodeBlock, elseBlock: CodeBlock) {
-        _add(new Ifgt(_owner, ifBlock, elseBlock))
+    def ifGt(ifScope: CodeScope, elseScope: CodeScope) {
+        _add(new Ifgt(_owner, ifScope, elseScope))
     }
-    def ifLe(ifBlock: CodeBlock, elseBlock: CodeBlock) {
-        _add(new Ifle(_owner, ifBlock, elseBlock))
+    def ifLe(ifScope: CodeScope, elseScope: CodeScope) {
+        _add(new Ifle(_owner, ifScope, elseScope))
     }
-    def ifICmpEq(ifBlock: CodeBlock, elseBlock: CodeBlock) {
-        _add(new IfIcmpeq(_owner, ifBlock, elseBlock))
+    def ifICmpEq(ifScope: CodeScope, elseScope: CodeScope) {
+        _add(new IfIcmpeq(_owner, ifScope, elseScope))
     }
-    def ifICmpNe(ifBlock: CodeBlock, elseBlock: CodeBlock) {
-        _add(new IfIcmpne(_owner, ifBlock, elseBlock))
+    def ifICmpNe(ifScope: CodeScope, elseScope: CodeScope) {
+        _add(new IfIcmpne(_owner, ifScope, elseScope))
     }
-    def ifICmpLt(ifBlock: CodeBlock, elseBlock: CodeBlock) {
-        _add(new IfIcmplt(_owner, ifBlock, elseBlock))
+    def ifICmpLt(ifScope: CodeScope, elseScope: CodeScope) {
+        _add(new IfIcmplt(_owner, ifScope, elseScope))
     }
-    def ifICmpGe(ifBlock: CodeBlock, elseBlock: CodeBlock) {
-        _add(new IfIcmpge(_owner, ifBlock, elseBlock))
+    def ifICmpGe(ifScope: CodeScope, elseScope: CodeScope) {
+        _add(new IfIcmpge(_owner, ifScope, elseScope))
     }
-    def ifICmpGt(ifBlock: CodeBlock, elseBlock: CodeBlock) {
-        _add(new IfIcmpgt(_owner, ifBlock, elseBlock))
+    def ifICmpGt(ifScope: CodeScope, elseScope: CodeScope) {
+        _add(new IfIcmpgt(_owner, ifScope, elseScope))
     }
-    def ifICmpLe(ifBlock: CodeBlock, elseBlock: CodeBlock) {
-        _add(new IfIcmple(_owner, ifBlock, elseBlock))
+    def ifICmpLe(ifScope: CodeScope, elseScope: CodeScope) {
+        _add(new IfIcmple(_owner, ifScope, elseScope))
     }
-    def ifACmpEq(ifBlock: CodeBlock, elseBlock: CodeBlock) {
-        _add(new IfAcmpeq(_owner, ifBlock, elseBlock))
+    def ifACmpEq(ifScope: CodeScope, elseScope: CodeScope) {
+        _add(new IfAcmpeq(_owner, ifScope, elseScope))
     }
-    def ifACmpNe(ifBlock: CodeBlock, elseBlock: CodeBlock) {
-        _add(new IfAcmpne(_owner, ifBlock, elseBlock))
+    def ifACmpNe(ifScope: CodeScope, elseScope: CodeScope) {
+        _add(new IfAcmpne(_owner, ifScope, elseScope))
     }
-    def ifNull(ifBlock: CodeBlock, elseBlock: CodeBlock) {
-        _add(new Ifnull(_owner, ifBlock, elseBlock))
+    def ifNull(ifScope: CodeScope, elseScope: CodeScope) {
+        _add(new Ifnull(_owner, ifScope, elseScope))
     }
-    def ifNonNull(ifBlock: CodeBlock, elseBlock: CodeBlock) {
-        _add(new Ifnonnull(_owner, ifBlock, elseBlock))
+    def ifNonNull(ifScope: CodeScope, elseScope: CodeScope) {
+        _add(new Ifnonnull(_owner, ifScope, elseScope))
     }
 
     def goto(target: CodeBlock) { _add(new Goto(_owner, this, target)) }
