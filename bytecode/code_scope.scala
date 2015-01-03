@@ -20,6 +20,10 @@ class ExceptionTarget(e: ConstClassInfo, t: CodeScope) {
 // unit.
 //
 // Also acts as lexical / exception try scope
+//
+// NOTE: scope's implicit goto is only used by the last segment. All other
+// segments will implicitly goto the next segment in the scope (useless
+// implicitGoto is explicitly set)
 class CodeScope(
         owner: AttributeOwner,
         parent: CodeScope) extends CodeSegment(owner, parent) {
@@ -51,24 +55,29 @@ class CodeScope(
         return _addBlock(block)
     }
 
-    def _addBlock(block: CodeBlock): CodeBlock = {
+    def _addSegment(seg: CodeSegment) {
         if (_entryPoint == null) {
-            _entryPoint = block
+            _entryPoint = seg
+        } else {
+            var last = _segments.lastElement()
+            if (last.implicitGoto == null) {
+                last.implicitGoto = seg
+            }
         }
+
+        _segments.add(seg)
+    }
+
+    def _addBlock(block: CodeBlock): CodeBlock = {
         block._parentScope = this
-        block.implicitGoto = implicitGoto
-        _segments.add(block)
+        _addSegment(block)
         _blocks.add(block)
         return block
     }
 
     def newSubSection(): CodeScope = {
         val section = new CodeScope(this)
-        section.implicitGoto = implicitGoto
-        if (_entryPoint == null) {
-            _entryPoint = section
-        }
-        _segments.add(section)
+        _addSegment(section)
         _subsections.add(section)
         return section
     }

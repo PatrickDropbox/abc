@@ -24,6 +24,18 @@ abstract class CodeSegment(
 
     var implicitGoto: CodeSegment = null
 
+    def getImplicitGoto(): CodeSegment = {
+        if (implicitGoto != null) {
+            return implicitGoto
+        }
+
+        if (_parentScope == null) {
+            return null
+        }
+
+        return _parentScope.getImplicitGoto()
+    }
+
     def _insertImplicitGoto(): CodeBlock
 
     def _resetPcIds()
@@ -338,10 +350,11 @@ class CodeBlock(owner: AttributeOwner)
 
     def _insertImplicitGoto(): CodeBlock = {
         if (!_hasControlOp) {
-            if (implicitGoto == null) {
+            val target = getImplicitGoto()
+            if (target == null) {
                 throw new Exception("no implicit goto - pc: " + pc)
             }
-            goto(implicitGoto.getEntryBlock())
+            goto(target.getEntryBlock())
             return null
         }
 
