@@ -67,31 +67,44 @@ class SegmentIdAssigner(root: CodeScope) {
         }
     }
 
-    def _updateStacks() {
-
-        var minId = nextSegmentId
-
-        // try assigning blocks in current scope first, since subsections tend
-        // to be exceptions related.
-        for (block <- currentScope._blocks) {
-            if (block.segmentId < 0) {
-                currentStack.push(block)
-                return
-            }
-            if (minId > block.segmentId) {
-                minId = block.segmentId
-            }
+    def _pushScopeStack(s: CodeScope) {
+        var nestedScopes = new Stack[CodeScope]()
+        var tmp = s
+        while (tmp != currentScope) {
+            nestedScopes.push(tmp)
+            tmp = tmp._parentScope
         }
 
-        for (section <- currentScope._subsections) {
-            if (section.segmentId < 0) {
-                currentScope = section
-                currentStack = stacksMap.get(section._mapId)
-                scopeStack.push(section)
+        currentScope = s
+        currentStack = stacksMap.get(s._mapId)
+
+        while (!nestedScopes.isEmpty()) {
+            scopeStack.push(nestedScopes.pop())
+        }
+    }
+
+    def _pushSegment(seg: CodeSegment) {
+        seg match {
+            case b: CodeBlock => currentStack.push(b)
+            case s: CodeScope => _pushScopeStack(s)
+        }
+    }
+
+    def _updateStacks() {
+        var minId = nextSegmentId
+
+        if (currentScope._entryPoint.segmentId < 0) {
+            _pushSegment(currentScope._entryPoint)
+            return
+        }
+
+        for (seg <- currentScope._segments) {
+            if (seg.segmentId < 0) {
+                _pushSegment(seg)
                 return
             }
-            if (minId > section.segmentId) {
-                minId = section.segmentId
+            if (minId > seg.segmentId) {
+                minId = seg.segmentId
             }
         }
 
@@ -160,19 +173,7 @@ class SegmentIdAssigner(root: CodeScope) {
         }
 
         if (candidateScope != null && currentScope != candidateScope) {
-            var nestedScopes = new Stack[CodeScope]()
-            var tmp = candidateScope
-            while (tmp != currentScope) {
-                nestedScopes.push(tmp)
-                tmp = tmp._parentScope
-            }
-
-            currentScope = candidateScope
-            currentStack = stacksMap.get(candidateScope._mapId)
-
-            while (!nestedScopes.isEmpty()) {
-                scopeStack.push(nestedScopes.pop())
-            }
+            _pushScopeStack(candidateScope)
         }
     }
 }
