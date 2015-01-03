@@ -167,7 +167,7 @@ class CodeScope(
                     _owner,
                     pc,
                     _endPc,
-                    entry.target.pc,
+                    entry.target.getEntryBlock().pc,
                     entry.exception))
         }
     }
