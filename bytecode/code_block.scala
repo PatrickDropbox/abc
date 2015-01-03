@@ -318,7 +318,7 @@ class CodeBlock(owner: AttributeOwner)
 
     def goto(target: CodeBlock) { _add(new Goto(_owner, this, target)) }
 
-    def switch(defaultBranch: CodeBlock): Switch = {
+    def switch(defaultBranch: CodeScope): Switch = {
         val switch = new Switch(_owner, defaultBranch)
         _add(switch)
         return switch

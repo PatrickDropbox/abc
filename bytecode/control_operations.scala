@@ -146,20 +146,25 @@ class Areturn(owner: AttributeOwner)
         extends ReturnValue(owner, OpCode.ARETURN, "areturn") {
 }
 
-class Switch(owner: AttributeOwner, defaultBranch: CodeBlock)
+class Switch(owner: AttributeOwner, defaultBranch: CodeScope)
         extends Operation(owner) {
     def this(owner: AttributeOwner) = this(owner, null)
 
-    var _defaultBranch = defaultBranch
+    var _defaultBranch: CodeBlock = null
+    if (defaultBranch != null) {
+        _defaultBranch = defaultBranch.getEntryBlock()
+    }
+
     var _table = new TreeMap[Int, CodeBlock]()
 
     // only used during deserialization
     var _tmpDefaultOffset = 0
     var _tmpOffset: TreeMap[Int, Int] = null
 
-    def add(i: Int, branch: CodeBlock) {
-        if (branch != _defaultBranch) {
-            _table.put(i, branch)
+    def add(i: Int, branch: CodeScope) {
+        val block = branch.getEntryBlock()
+        if (block != _defaultBranch) {
+            _table.put(i, block)
         }
     }
 
