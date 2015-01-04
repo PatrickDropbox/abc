@@ -32,6 +32,14 @@ class FieldInfo(
     override def fieldType(): FieldType = _fieldType
     def attributes(): FieldAttributes = _attributes
 
+    def analyze() {
+        // TODO
+        // _attributes.analyze()
+
+        _name.markUsed()
+        _fieldTypeString.markUsed()
+    }
+
     def serialize(output: DataOutputStream) {
         _access.serialize(output)
         output.writeShort(_name.index)

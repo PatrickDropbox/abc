@@ -51,8 +51,9 @@ class ClassInfo extends AttributeOwner {
     def analyze() {
         _constants.setAllToUnused()
 
-        /* TODO
         _fields.analyze()
+
+        /* TODO
         _methods.analyze()
         _attributes.analyze()
         */
