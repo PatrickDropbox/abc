@@ -16,6 +16,12 @@ class ExceptionTarget(e: ConstClassInfo, t: CodeScope) {
     var target: CodeScope = t
 }
 
+class NamedLocalEntry(n: String, t: FieldType, i: Int) {
+    val name = n
+    val fieldType = t
+    val index = i
+}
+
 // a group of code segments which will be written out as a single continuous
 // unit.
 //
@@ -26,10 +32,14 @@ class ExceptionTarget(e: ConstClassInfo, t: CodeScope) {
 // implicitGoto is explicitly set)
 class CodeScope(
         owner: AttributeOwner,
-        parent: CodeScope) extends CodeSegment(owner, parent) {
+        parent: CodeScope,
+        nextNamedLocal: Int) extends CodeSegment(owner, parent) {
     var _scopeId = -1  // unique unordered id
 
-    def this(parent: CodeScope) = this(parent._owner, parent)
+    def this(parent: CodeScope) = this(
+            parent._owner,
+            parent,
+            parent._nextNamedLocal)
 
     var _segments = new Vector[CodeSegment]()
     var _blocks = new Vector[CodeBlock]()
@@ -38,6 +48,50 @@ class CodeScope(
     var _exceptionTargets = new Vector[ExceptionTarget]()
 
     var _entryPoint: CodeSegment = null
+
+    var _nextNamedLocal = nextNamedLocal  // disable if -1
+    var _namedLocals = new HashMap[String, NamedLocalEntry]()
+
+    def _disableNamedLocals() {
+        if (_nextNamedLocal >= 0) {
+            for (s <- _subsections) {
+                s._disableNamedLocals()
+            }
+            _nextNamedLocal = -1
+        }
+    }
+
+    def defineLocal(name: String, fieldType: FieldType) {
+        if (_nextNamedLocal < 0) {
+            throw new Exception("named local variable disabled")
+        }
+
+        if (_namedLocals.containsKey(name)) {
+            throw new Exception(name + " declared multiple times in same scope")
+        }
+
+        _namedLocals.put(
+                name,
+                new NamedLocalEntry(name, fieldType, _nextNamedLocal))
+        _nextNamedLocal += fieldType.categorySize()
+    }
+
+    def getLocal(name: String): NamedLocalEntry = {
+        if (_nextNamedLocal < 0) {
+            throw new Exception("named local variable disabled")
+        }
+
+        val entry = _namedLocals.get(name)
+        if (entry != null) {
+            return entry
+        }
+
+        if (_parentScope == null) {
+            throw new Exception(name + " not defined")
+        }
+
+        return _parentScope.getLocal(name)
+    }
 
     def getEntryBlock(): CodeBlock = {
         if (_entryPoint == null) {

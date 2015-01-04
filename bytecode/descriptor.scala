@@ -13,7 +13,7 @@ trait DescriptorType extends Comparable[DescriptorType] {
 
 trait FieldType extends DescriptorType {
     // see table 2.3 / page 29
-    def category(): Int = 1
+    def categorySize(): Int = 1
 }
 
 trait BaseType extends FieldType {
@@ -40,7 +40,7 @@ class DoubleType extends BaseType {
 
     def arrayType(): Int = 7
 
-    override def category(): Int = 2
+    override def categorySize(): Int = 2
 }
 
 class FloatType extends BaseType {
@@ -60,7 +60,7 @@ class LongType extends BaseType {
 
     def arrayType(): Int = 11
 
-    override def category(): Int = 2
+    override def categorySize(): Int = 2
 }
 
 class ShortType extends BaseType {

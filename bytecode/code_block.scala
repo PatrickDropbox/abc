@@ -36,6 +36,16 @@ abstract class CodeSegment(
         return _parentScope.getImplicitGoto()
     }
 
+    def getRootScope(): CodeScope = {
+        if (_parentScope != null) {
+            return _parentScope.getRootScope()
+        }
+
+        this match {
+            case s: CodeScope => return s
+        }
+    }
+
     def getEntryBlock(): CodeBlock
 
     def compareTo(other: CodeSegment): Int = {
@@ -105,17 +115,79 @@ class CodeBlock(owner: AttributeOwner, parent: CodeScope)
     def pushString(v: String) { _add(new PushString(_owner, v)) }
     // TODO: support other ldc constant types
 
-    def loadI(index: Int) { _add(new LoadI(_owner, index)) }
-    def loadL(index: Int) { _add(new LoadL(_owner, index)) }
-    def loadF(index: Int) { _add(new LoadF(_owner, index)) }
-    def loadD(index: Int) { _add(new LoadD(_owner, index)) }
-    def loadA(index: Int) { _add(new LoadA(_owner, index)) }
+    def load(name: String) {
+        val entry = _parentScope.getLocal(name)
+        val op = entry.fieldType match {
+            case _: BoolType => new LoadI(_owner, entry.index)
+            case _: ByteType => new LoadI(_owner, entry.index)
+            case _: CharType => new LoadI(_owner, entry.index)
+            case _: ShortType => new LoadI(_owner, entry.index)
+            case _: IntType => new LoadI(_owner, entry.index)
+            case _: FloatType => new LoadF(_owner, entry.index)
+            case _: LongType => new LoadL(_owner, entry.index)
+            case _: DoubleType => new LoadD(_owner, entry.index)
+            case _: RefType => new LoadA(_owner, entry.index)
+        }
+        _add(op)
+    }
 
-    def storeI(index: Int) { _add(new StoreI(_owner, index)) }
-    def storeL(index: Int) { _add(new StoreL(_owner, index)) }
-    def storeF(index: Int) { _add(new StoreF(_owner, index)) }
-    def storeD(index: Int) { _add(new StoreD(_owner, index)) }
-    def storeA(index: Int) { _add(new StoreA(_owner, index)) }
+    def loadI(index: Int) {
+        getRootScope()._disableNamedLocals()
+        _add(new LoadI(_owner, index))
+    }
+    def loadL(index: Int) {
+        getRootScope()._disableNamedLocals()
+        _add(new LoadL(_owner, index))
+    }
+    def loadF(index: Int) {
+        getRootScope()._disableNamedLocals()
+        _add(new LoadF(_owner, index))
+    }
+    def loadD(index: Int) {
+        getRootScope()._disableNamedLocals()
+        _add(new LoadD(_owner, index))
+    }
+    def loadA(index: Int) {
+        getRootScope()._disableNamedLocals()
+        _add(new LoadA(_owner, index))
+    }
+
+    def store(name: String) {
+        val entry = _parentScope.getLocal(name)
+        val op = entry.fieldType match {
+            case _: BoolType => new StoreI(_owner, entry.index)
+            case _: ByteType => new StoreI(_owner, entry.index)
+            case _: CharType => new StoreI(_owner, entry.index)
+            case _: ShortType => new StoreI(_owner, entry.index)
+            case _: IntType => new StoreI(_owner, entry.index)
+            case _: FloatType => new StoreF(_owner, entry.index)
+            case _: LongType => new StoreL(_owner, entry.index)
+            case _: DoubleType => new StoreD(_owner, entry.index)
+            case _: RefType => new StoreA(_owner, entry.index)
+        }
+        _add(op)
+    }
+
+    def storeI(index: Int) {
+        getRootScope()._disableNamedLocals()
+        _add(new StoreI(_owner, index))
+    }
+    def storeL(index: Int) {
+        getRootScope()._disableNamedLocals()
+        _add(new StoreL(_owner, index))
+    }
+    def storeF(index: Int) {
+        getRootScope()._disableNamedLocals()
+        _add(new StoreF(_owner, index))
+    }
+    def storeD(index: Int) {
+        getRootScope()._disableNamedLocals()
+        _add(new StoreD(_owner, index))
+    }
+    def storeA(index: Int) {
+        getRootScope()._disableNamedLocals()
+        _add(new StoreA(_owner, index))
+    }
 
     def loadFromIArray() { _add(new LoadFromIArray(_owner)) }
     def loadFromLArray() { _add(new LoadFromLArray(_owner)) }

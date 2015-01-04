@@ -75,7 +75,7 @@ class CodeAttribute(o: AttributeOwner)
     var maxStack = 0
     var maxLocals = 0
 
-    var code = new CodeScope(this, null)
+    var code = new CodeScope(this, null, 0)
 
     var attributes = new CodeAttributes(this)
 

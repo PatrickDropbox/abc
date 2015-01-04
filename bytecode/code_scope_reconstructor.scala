@@ -21,7 +21,7 @@ object CodeScopeReconstructor {
 
         val jumpTargets = _collectJumpTargets(exceptions, ops)
 
-        var result = new CodeScope(owner, null)
+        var result = new CodeScope(owner, null, -1)
         result.pc = 0
         result._endPc = ops.lastElement().pc + 5 // fake it
 
