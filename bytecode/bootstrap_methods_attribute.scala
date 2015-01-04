@@ -38,6 +38,13 @@ class BootstrapMethodEntry(o: AttributeOwner, mh: ConstMethodHandleInfo) {
         }
     }
 
+    def analyze() {
+        _methodHandle.markUsed()
+        for (arg <- _arguments) {
+            arg.markUsed()
+        }
+    }
+
     def serialize(output: DataOutputStream) {
         output.writeShort(_methodHandle.index)
         output.writeShort(_arguments.size())
@@ -88,6 +95,13 @@ class BootstrapMethodsAttribute(
         val m = new BootstrapMethodEntry(_owner, mh)
         _methods.add(m)
         return m
+    }
+
+    def analyze() {
+        _name.markUsed()
+        for (m <- _methods) {
+            m.analyze()
+        }
     }
 
     def serialize(output: DataOutputStream) {

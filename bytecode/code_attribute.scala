@@ -81,6 +81,11 @@ class CodeAttribute(o: AttributeOwner)
 
     def constants(): ConstantPool = _owner.constants()
 
+    def analyze() {
+        // TODO
+        _name.markUsed()
+    }
+
     def serialize(output: DataOutputStream) {
         var buffer = new ByteArrayOutputStream()
         var codeWriter = new DataOutputStream(buffer)

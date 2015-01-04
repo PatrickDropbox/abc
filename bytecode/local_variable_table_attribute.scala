@@ -38,6 +38,11 @@ class LocalVariableEntry(
 
     def fieldType(): FieldType = _fieldType
 
+    def analyze() {
+        _fieldName.markUsed()
+        _fieldDescriptor.markUsed()
+    }
+
     def serialize(output: DataOutputStream) {
         output.writeShort(startPc)
         output.writeShort(endPc - startPc)
@@ -68,6 +73,13 @@ class LocalVariableEntry(
 abstract class LocalVariableTableBaseAttribute(o: AttributeOwner, name: String)
         extends Attribute(o, name) {
     var table = new Vector[LocalVariableEntry]()
+
+    def analyze() {
+        _name.markUsed()
+        for (entry <- table) {
+            entry.analyze()
+        }
+    }
 
     def serialize(output: DataOutputStream) {
         output.writeShort(_name.index)

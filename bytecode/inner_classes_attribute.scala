@@ -6,7 +6,7 @@ import scala.collection.JavaConversions._
 
 
 // see page 114- 116 for details
-class InnerClassInfo(
+class InnerClassEntry(
         o: AttributeOwner,
         ic: String,
         oc: String,
@@ -31,6 +31,16 @@ class InnerClassInfo(
     }
 
     var _access = new InnerClassAccessFlags(this)
+
+    def analyze() {
+        _innerClass.markUsed()
+        if (_outerClass != null) {
+            _outerClass.markUsed()
+        }
+        if (_innerName != null) {
+            _innerName.markUsed()
+        }
+    }
 
     def serialize(output: DataOutputStream) {
         output.writeShort(_innerClass.index)
@@ -108,16 +118,23 @@ class InnerClassInfo(
 
 class InnerClassesAttribute(
         o: AttributeOwner) extends Attribute(o, "InnerClasses") {
-    var _innerClasses = new Vector[InnerClassInfo]()
+    var _innerClasses = new Vector[InnerClassEntry]()
 
     def _attrSize(numClasses: Int): Int = {
         return 2 + 8 * numClasses
     }
 
-    def classes(): Vector[InnerClassInfo] = _innerClasses
+    def classes(): Vector[InnerClassEntry] = _innerClasses
 
-    def add(c: InnerClassInfo) {
+    def add(c: InnerClassEntry) {
         _innerClasses.add(c)
+    }
+
+    def analyze() {
+        _name.markUsed()
+        for (inner <- _innerClasses) {
+            inner.analyze()
+        }
     }
 
     def serialize(output: DataOutputStream) {
@@ -143,7 +160,7 @@ class InnerClassesAttribute(
         }
 
         for (_ <- 1 to numClasses) {
-            var inner = new InnerClassInfo(_owner)
+            var inner = new InnerClassEntry(_owner)
             inner.deserialize(input)
             add(inner)
         }

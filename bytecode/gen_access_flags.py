@@ -52,7 +52,7 @@ ACCESS_FLAGS = {
                     'synthetic':    0x1000,
                 }),
         'InnerClassAccessFlags': (
-                'InnerClassInfo',
+                'InnerClassEntry',
                 'see table 4.7.6-A / page 114-118',
                 {
                     'public':     0x0001,

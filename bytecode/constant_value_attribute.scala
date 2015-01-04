@@ -143,6 +143,11 @@ class ConstantValueAttribute(
         _constant = _owner.constants().getString(v)
     }
 
+    def analyze() {
+        _name.markUsed()
+        _constant.markUsed()
+    }
+
     def serialize(output: DataOutputStream) {
         output.writeShort(_name.index)
         output.writeInt(2)

@@ -26,6 +26,8 @@ abstract class Attribute(o: AttributeOwner, attributeName: String) {
 
     def name(): String = _name.value()
 
+    def analyze()
+
     def serialize(output: DataOutputStream)
 
     def deserialize(name: ConstUtf8Info,
@@ -43,6 +45,10 @@ abstract class RawBytesAttribute(
 
     def bytes(): Array[Byte] = _bytes
 
+    def analyze() {
+        _name.markUsed()
+    }
+
     def serialize(output: DataOutputStream) {
         output.writeShort(_name.index)
         output.writeInt(_bytes.length)
@@ -59,6 +65,10 @@ abstract class RawBytesAttribute(
 class NoValueAttribute(
         o: AttributeOwner,
         attributeName: String) extends Attribute(o, attributeName) {
+
+    def analyze() {
+        _name.markUsed()
+    }
 
     def serialize(output: DataOutputStream) {
         output.writeShort(_name.index)
@@ -88,6 +98,12 @@ class StringValueAttribute(
     }
 
     def value(): String = _value.value()
+
+    def analyze() {
+        _name.markUsed()
+        _value.markUsed()
+    }
+
 
     def serialize(output: DataOutputStream) {
         output.writeShort(_name.index)
@@ -197,6 +213,14 @@ class EnclosingMethodAttribute(
 
     def enclosingMethodType(): MethodType = return _enclosingMethodType
 
+    def analyze() {
+        _name.markUsed()
+        _enclosingClass.markUsed()
+        if (_methodNameAndType != null) {
+            _methodNameAndType.markUsed()
+        }
+    }
+
     def serialize(output: DataOutputStream) {
         output.writeShort(_name.index)
         output.writeInt(4)
@@ -255,6 +279,13 @@ class ExceptionsAttribute(
         _exceptions.add(_owner.constants().getClass(exceptionName))
     }
 
+    def analyze() {
+        _name.markUsed()
+        for (c <- _exceptions) {
+            c.markUsed()
+        }
+    }
+
     def serialize(output: DataOutputStream) {
         output.writeShort(_name.index)
         output.writeInt(2 + 2 * _exceptions.size())
@@ -307,6 +338,10 @@ class LineNumberTableAttribute(o: AttributeOwner)
         for (entry <- table.entrySet()) {
             table.put(entry.getKey(), entry.getValue())
         }
+    }
+
+    def analyze() {
+        _name.markUsed()
     }
 
     def serialize(output: DataOutputStream) {

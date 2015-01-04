@@ -31,8 +31,7 @@ abstract class AttributeGroup(o: AttributeOwner) {
 
     def analyze() {
         for (attr <- allAttributes()) {
-            // TODO
-            //attr.analyze()
+            attr.analyze()
         }
     }
 
@@ -137,8 +136,8 @@ class ClassAttributes(c: ClassInfo) extends AttributeGroup(c) {
     def addInnerClass(
             innerClass: String,
             outerClass: String,
-            innerName: String): InnerClassInfo = {
-        val inner = new InnerClassInfo(
+            innerName: String): InnerClassEntry = {
+        val inner = new InnerClassEntry(
                 _owner,
                 innerClass,
                 outerClass,

@@ -137,7 +137,7 @@ class MethodAccessFlags(o: MethodInfo) {
 }
 
 // see table 4.7.6-A / page 114-118
-class InnerClassAccessFlags(o: InnerClassInfo) {
+class InnerClassAccessFlags(o: InnerClassEntry) {
 
     var _owner = o
 
