@@ -33,8 +33,7 @@ class FieldInfo(
     def attributes(): FieldAttributes = _attributes
 
     def analyze() {
-        // TODO
-        // _attributes.analyze()
+        _attributes.analyze()
 
         _name.markUsed()
         _fieldTypeString.markUsed()

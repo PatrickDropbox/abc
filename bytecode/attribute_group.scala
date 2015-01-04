@@ -29,6 +29,13 @@ abstract class AttributeGroup(o: AttributeOwner) {
         return result
     }
 
+    def analyze() {
+        for (attr <- allAttributes()) {
+            // TODO
+            //attr.analyze()
+        }
+    }
+
     def serialize(output: DataOutputStream) {
         val attributes = allAttributes()
 

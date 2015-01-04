@@ -66,6 +66,13 @@ class MethodInfo(
     override def methodType(): MethodType = _methodType
     def attributes(): MethodAttributes = _attributes
 
+    def analyze() {
+        _attributes.analyze()
+
+        _name.markUsed()
+        _methodTypeString.markUsed()
+    }
+
     def serialize(output: DataOutputStream) {
         _access.serialize(output)
         output.writeShort(_name.index)

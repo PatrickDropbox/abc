@@ -52,11 +52,8 @@ class ClassInfo extends AttributeOwner {
         _constants.setAllToUnused()
 
         _fields.analyze()
-
-        /* TODO
         _methods.analyze()
         _attributes.analyze()
-        */
 
         _thisClass.markUsed()
         if (_superClass != null) {
