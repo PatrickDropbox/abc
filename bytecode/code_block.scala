@@ -20,6 +20,8 @@ abstract class CodeSegment(
     // not inclusive.
     var _endPc = -1
 
+    var _unorderedId = -1  // used for map lookup when segmentId is unavailable
+
     var segmentId = -1
 
     var implicitGoto: CodeSegment = null

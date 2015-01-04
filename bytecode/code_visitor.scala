@@ -72,13 +72,16 @@ class ImplicitGotoInserter(root: CodeScope) extends CodeVisitor(root) {
 
 class PcIdResetter(root: CodeScope, m: HashMap[Int, CodeScope])
         extends CodeVisitor(root) {
-    var nextScopeId = 1
+    var nextId = 1
     var mapping = m
 
     override def visitBlock(block: CodeBlock) {
         block.pc = -1
         block._endPc = -1
         block.segmentId = -1
+
+        block._unorderedId = nextId
+        nextId += 1
     }
 
     override def visitScope(scope: CodeScope) {
@@ -88,9 +91,9 @@ class PcIdResetter(root: CodeScope, m: HashMap[Int, CodeScope])
         scope._endPc = -1
         scope.segmentId = -1
 
-        mapping.put(nextScopeId, scope)
-        scope._scopeId = nextScopeId
-        nextScopeId += 1
+        mapping.put(nextId, scope)
+        scope._unorderedId = nextId
+        nextId += 1
     }
 }
 

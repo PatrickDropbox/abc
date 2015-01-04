@@ -34,8 +34,6 @@ class CodeScope(
         owner: AttributeOwner,
         parent: CodeScope,
         nextNamedLocal: Int) extends CodeSegment(owner, parent) {
-    var _scopeId = -1  // unique unordered id
-
     def this(parent: CodeScope) = this(
             parent._owner,
             parent,

@@ -68,7 +68,7 @@ class SegmentIdAssigner(root: CodeScope) {
         }
 
         currentScope = s
-        currentStack = stacksMap.get(s._scopeId)
+        currentStack = stacksMap.get(s._unorderedId)
 
         while (!nestedScopes.isEmpty()) {
             scopeStack.push(nestedScopes.pop())
@@ -108,7 +108,7 @@ class SegmentIdAssigner(root: CodeScope) {
             currentStack = null
         } else {
             currentScope = scopeStack.peek()
-            currentStack = stacksMap.get(currentScope._scopeId)
+            currentStack = stacksMap.get(currentScope._unorderedId)
         }
     }
 
@@ -157,7 +157,7 @@ class SegmentIdAssigner(root: CodeScope) {
         for (block <- candidates) {
             if (block.segmentId < 0) {
                 val blockScope = block._parentScope
-                stacksMap.get(blockScope._scopeId).push(block)
+                stacksMap.get(blockScope._unorderedId).push(block)
                 if (currentScope._contains(blockScope)) {
                     candidateScope = blockScope
                 }
