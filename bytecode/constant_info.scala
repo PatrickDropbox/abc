@@ -62,6 +62,8 @@ object ConstInfo {
 abstract class ConstInfo(c: ClassInfo) extends Comparable[ConstInfo] {
     var _owner = c
 
+    var _used = false
+
     var index = 0
 
     def indexSize(): Int = 1
@@ -91,6 +93,10 @@ abstract class ConstInfo(c: ClassInfo) extends Comparable[ConstInfo] {
     def _debugIndexValue(): String = ""
 
     def debugValue(): String
+
+    def markUsed() {
+        _used = true
+    }
 
     def serialize(output: DataOutputStream)
 
@@ -393,6 +399,11 @@ class ConstStringInfo(o: ClassInfo, v: ConstUtf8Info) extends ConstInfo(o) {
         return _utf8String.debugValue()
     }
 
+    override def markUsed() {
+        _used = true
+        _utf8String.markUsed()
+    }
+
     def serialize(output: DataOutputStream) {
         output.writeByte(tag())
         output.writeShort(_utf8String.index)
@@ -440,6 +451,11 @@ class ConstClassInfo(o: ClassInfo, n: ConstUtf8Info) extends ConstInfo(o) {
 
     def debugValue(): String = {
         return _className.debugValue()
+    }
+
+    override def markUsed() {
+        _used = true
+        _className.markUsed()
     }
 
     def serialize(output: DataOutputStream) {
@@ -495,6 +511,11 @@ class ConstMethodTypeInfo(o: ClassInfo, d: MethodType) extends ConstInfo(o) {
 
     def debugValue(): String = {
         return _descriptorString.debugValue()
+    }
+
+    override def markUsed() {
+        _used = true
+        _descriptorString.markUsed()
     }
 
     def serialize(output: DataOutputStream) {
@@ -555,6 +576,12 @@ class ConstNameAndTypeInfo(
 
     def debugValue(): String = {
         return _name.debugValue() + ":" + _descriptorString.debugValue()
+    }
+
+    override def markUsed() {
+        _used = true
+        _name.markUsed()
+        _descriptorString.markUsed()
     }
 
     def serialize(output: DataOutputStream) {
@@ -634,6 +661,12 @@ abstract class ConstRefInfo(
 
     def debugValue(): String = {
         return _classInfo.debugValue() + "." + _nameAndType.debugValue()
+    }
+
+    override def markUsed() {
+        _used = true
+        _classInfo.markUsed()
+        _nameAndType.markUsed()
     }
 
     def serialize(output: DataOutputStream) {
@@ -793,6 +826,11 @@ class ConstMethodHandleInfo(
         }
     }
 
+    override def markUsed() {
+        _used = true
+        _reference.markUsed()
+    }
+
     def serialize(output: DataOutputStream) {
         _referenceKind match {
             case 1 => _checkIsFieldRef()
@@ -939,6 +977,11 @@ class ConstInvokeDynamicInfo(
 
     def debugValue(): String = {
         return "" + _bootstrapMethodAttrIndex + " " + _nameAndType.debugValue()
+    }
+
+    override def markUsed() {
+        _used = true
+        _nameAndType.markUsed()
     }
 
     def serialize(output: DataOutputStream) {

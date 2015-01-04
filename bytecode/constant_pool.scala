@@ -319,9 +319,35 @@ class ConstantPool(owner: ClassInfo) {
         return nextIndex
     }
 
+    def setAllToUnused() {
+        for (info <- _constInfos.keySet()) {
+            info._used = false
+        }
+    }
+
+    def _sweepUnused() {
+        var toRemove = new Vector[ConstInfo]()
+        for (info <- _constInfos.keySet()) {
+            if (!info._used) {
+                toRemove.add(info)
+            }
+        }
+
+        for (info <- toRemove) {
+            // TODO uncomment once used all consts are marked.
+            //_constInfos.remove(info)
+            println("UNUSED: " + info.debugString())
+        }
+    }
+
+    def analyze() {
+        _sweepUnused()
+        _assignIndex()
+    }
+
     def serialize(output: DataOutputStream) {
-        val count = _assignIndex()
-        output.writeShort(count)
+        val last = _constInfos.lastEntry().getValue()
+        output.writeShort(last.index + last.indexSize())
 
         for (info <- _constInfos.keySet()) {
             info.serialize(output)

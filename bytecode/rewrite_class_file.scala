@@ -25,6 +25,8 @@ object RewriteClassFile {
             input.close()
         }
 
+        classInfo.analyze()
+
         var output = new DataOutputStream(new FileOutputStream(filename))
         try {
             classInfo.serialize(output)
