@@ -12,6 +12,8 @@ import scala.reflect.ClassTag
 class ConstantPool(owner: ClassInfo) {
     var _owner = owner
 
+    var _finalized = false
+
     // using TreeMap instead of TreeSet to simplify deduplication / lookup.
     var _constInfos = new TreeMap[ConstInfo, ConstInfo]()
 
@@ -25,6 +27,10 @@ class ConstantPool(owner: ClassInfo) {
                 case t: T if cls.isInstance(t) => return t
                 case _ => throw new Exception("unexpected const info type")
             }
+        }
+
+        if (_finalized) {
+            throw new Exception("Cannot add more constants to finalized pool")
         }
 
         // invalidate only when we actually mutated the pool.
@@ -319,7 +325,7 @@ class ConstantPool(owner: ClassInfo) {
         return nextIndex
     }
 
-    def setAllToUnused() {
+    def _setAllToUnused() {
         for (info <- _constInfos.keySet()) {
             info._used = false
         }
@@ -336,6 +342,10 @@ class ConstantPool(owner: ClassInfo) {
         for (info <- toRemove) {
             _constInfos.remove(info)
         }
+    }
+
+    def finalize() {
+        _finalized = true
     }
 
     def serialize(output: DataOutputStream) {
