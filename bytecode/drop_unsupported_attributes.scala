@@ -1,7 +1,7 @@
 import scala.collection.JavaConversions._
 
 
-class DropUnsupportedAttributes() extends AnalysisPass {
+class DropUnsupportedAttributes extends AnalysisPass {
     def apply(c: ClassInfo) {
         _clearUnsupported(c._attributes)
         for (field <- c.fields()) {

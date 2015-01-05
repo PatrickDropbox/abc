@@ -250,8 +250,6 @@ class CodeScope(
     }
 
     def serialize(output: DataOutput) {
-        (new ImplicitGotoInserter(this)).apply()
-
         var blocks = PcAssigner.assignSegmentIdsAndPcs(this)
 
         if (_endPc > Const.UINT16_MAX) {

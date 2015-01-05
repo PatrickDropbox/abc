@@ -5,7 +5,7 @@ import java.util.Vector
 import scala.collection.JavaConversions._
 
 
-class MarkAndSweepConstants() extends AnalysisPass {
+class MarkAndSweepConstants extends AnalysisPass {
     var _classInfo: ClassInfo = null
     var _constInfos: TreeMap[ConstInfo, ConstInfo] = null
 

@@ -7,10 +7,6 @@ import java.util.Vector
 import scala.collection.JavaConversions._
 
 
-trait AnalysisPass {
-    def apply(c: ClassInfo)
-}
-
 object ClassInfo {
     val MAGIC = 0xcafebabe
 }
@@ -54,6 +50,8 @@ class ClassInfo extends AttributeOwner {
     // performs various analysis / optimizaton.  NOTE: each subsection should
     // mark used constants as the last step.
     def analyze() {
+        new InsertImplicitGotos().apply(this)
+
         new DropUnsupportedAttributes().apply(this)
         new MarkAndSweepConstants().apply(this)
     }
