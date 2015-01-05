@@ -49,22 +49,6 @@ class ClassInfo extends AttributeOwner {
     // performs various analysis / optimizaton.  NOTE: each subsection should
     // mark used constants as the last step.
     def analyze() {
-        _constants.setAllToUnused()
-
-        _fields.analyze()
-        _methods.analyze()
-        _attributes.analyze()
-
-        _thisClass.markUsed()
-        if (_superClass != null) {
-            _superClass.markUsed()
-        }
-        for (entry <- interfaces) {
-            entry.markUsed()
-        }
-
-        // NOTE: constants must be analyze last.
-        _constants.analyze()
     }
 
     def serialize(output: DataOutputStream) {

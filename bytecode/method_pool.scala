@@ -56,12 +56,6 @@ class MethodPool(c: ClassInfo) {
 
     def methods(): Collection[MethodInfo] = _methods.values()
 
-    def analyze() {
-        for (method <- _methods.values()) {
-            method.analyze()
-        }
-    }
-
     def serialize(output: DataOutputStream) {
         output.writeShort(_methods.size())
         for (method <- _methods.values()) {

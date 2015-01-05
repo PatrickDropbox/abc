@@ -334,18 +334,12 @@ class ConstantPool(owner: ClassInfo) {
         }
 
         for (info <- toRemove) {
-            // TODO uncomment once used all consts are marked.
-            //_constInfos.remove(info)
-            println("UNUSED: " + info.debugString())
+            _constInfos.remove(info)
         }
     }
 
-    def analyze() {
-        _sweepUnused()
-        _assignIndex()
-    }
-
     def serialize(output: DataOutputStream) {
+        _assignIndex()
         val last = _constInfos.lastEntry().getValue()
         output.writeShort(last.index + last.indexSize())
 

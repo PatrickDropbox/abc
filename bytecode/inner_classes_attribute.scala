@@ -32,16 +32,6 @@ class InnerClassEntry(
 
     var _access = new InnerClassAccessFlags(this)
 
-    def analyze() {
-        _innerClass.markUsed()
-        if (_outerClass != null) {
-            _outerClass.markUsed()
-        }
-        if (_innerName != null) {
-            _innerName.markUsed()
-        }
-    }
-
     def serialize(output: DataOutputStream) {
         output.writeShort(_innerClass.index)
 
@@ -128,13 +118,6 @@ class InnerClassesAttribute(
 
     def add(c: InnerClassEntry) {
         _innerClasses.add(c)
-    }
-
-    def analyze() {
-        _name.markUsed()
-        for (inner <- _innerClasses) {
-            inner.analyze()
-        }
     }
 
     def serialize(output: DataOutputStream) {

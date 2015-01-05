@@ -36,12 +36,6 @@ class FieldPool(c: ClassInfo) {
         return f
     }
 
-    def analyze() {
-        for (field <- fields()) {
-            field.analyze()
-        }
-    }
-
     def serialize(output: DataOutputStream) {
         output.writeShort(_fields.size())
         for (field <- fields()) {
