@@ -1,10 +1,15 @@
 import java.io.DataInputStream
 import java.io.DataOutputStream
 import java.io.EOFException
+import java.util.Collection
 import java.util.Vector
 
 import scala.collection.JavaConversions._
 
+
+trait AnalysisPass {
+    def apply(c: ClassInfo)
+}
 
 object ClassInfo {
     val MAGIC = 0xcafebabe
@@ -42,13 +47,15 @@ class ClassInfo extends AttributeOwner {
     }
     def interfaces(): Vector[ConstClassInfo] = _interfaces
 
-    def fields(): FieldPool = _fields
-    def methods(): MethodPool = _methods
+    def fields(): Collection[FieldInfo] = _fields.fields()
+    def methods(): Collection[MethodInfo] = _methods.methods()
     def attributes(): ClassAttributes = _attributes
 
     // performs various analysis / optimizaton.  NOTE: each subsection should
     // mark used constants as the last step.
     def analyze() {
+        new DropUnsupportedAttributes().apply(this)
+        new MarkAndSweepConstants().apply(this)
     }
 
     def serialize(output: DataOutputStream) {
