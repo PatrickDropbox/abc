@@ -26,11 +26,11 @@ object ConstInfo {
     var tagTopoOrder = new Vector[Int]()
 
     // no dependencies
-    tagTopoOrder.add(UTF8)
     tagTopoOrder.add(INTEGER)
     tagTopoOrder.add(LONG)
     tagTopoOrder.add(FLOAT)
     tagTopoOrder.add(DOUBLE)
+    tagTopoOrder.add(UTF8)
     // depends on utf8
     tagTopoOrder.add(STRING)
     tagTopoOrder.add(CLASS)
