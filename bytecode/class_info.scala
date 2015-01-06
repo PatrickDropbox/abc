@@ -60,14 +60,15 @@ class ClassInfo(name: String) extends AttributeOwner {
         new AdjustEntryPoints().apply(this)
         new CheckJumpTargets().apply(this)
 
+        // TODO: prune unused code blocks
+
         new DropUnsupportedAttributes().apply(this)
         new MarkAndSweepConstants().apply(this)
+
+        // TODO: fix constant info index assignment (must be two pass)
     }
 
     def serialize(output: DataOutputStream) {
-        // TODO: prune unused code blocks
-        // TODO: prune unused constants (must happen last)
-
         output.writeInt(ClassInfo.MAGIC)
 
         output.writeShort(_minorVersion)
