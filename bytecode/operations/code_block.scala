@@ -24,6 +24,8 @@ abstract class CodeSegment(
 
     var segmentId = -1
 
+    var _reachable = false
+
     var implicitGoto: CodeSegment = null
 
     def getImplicitGoto(): CodeSegment = {

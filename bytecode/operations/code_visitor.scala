@@ -40,6 +40,7 @@ class PcIdResetter(root: CodeScope, m: HashMap[Int, CodeScope])
         block.pc = -1
         block._endPc = -1
         block.segmentId = -1
+        block._reachable = false
 
         block._unorderedId = nextId
         nextId += 1
@@ -51,6 +52,7 @@ class PcIdResetter(root: CodeScope, m: HashMap[Int, CodeScope])
         scope.pc = -1
         scope._endPc = -1
         scope.segmentId = -1
+        scope._reachable = false
 
         mapping.put(nextId, scope)
         scope._unorderedId = nextId
