@@ -11,7 +11,9 @@ object ClassInfo {
     val MAGIC = 0xcafebabe
 }
 
-class ClassInfo extends AttributeOwner {
+class ClassInfo(name: String) extends AttributeOwner {
+    def this() = this(null)
+
     var _minorVersion = 0
     var _majorVersion = 51  // jvm7
 
@@ -20,6 +22,9 @@ class ClassInfo extends AttributeOwner {
     var _access = new ClassAccessFlags(this)
 
     var _thisClass: ConstClassInfo = null  // the current class
+    if (name != null) {
+        _thisClass = _constants.getClass(name)
+    }
     var _superClass: ConstClassInfo = null  // if null then Object
     var _interfaces = new Vector[ConstClassInfo]()
 
@@ -51,6 +56,7 @@ class ClassInfo extends AttributeOwner {
     // mark used constants as the last step.
     def analyze() {
         new InsertImplicitGotos().apply(this)
+        new ShortenSimpleGotoChains().apply(this)
         new CheckJumpTargets().apply(this)
 
         new DropUnsupportedAttributes().apply(this)
