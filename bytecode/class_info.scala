@@ -51,6 +51,7 @@ class ClassInfo extends AttributeOwner {
     // mark used constants as the last step.
     def analyze() {
         new InsertImplicitGotos().apply(this)
+        new CheckJumpTargets().apply(this)
 
         new DropUnsupportedAttributes().apply(this)
         new MarkAndSweepConstants().apply(this)
