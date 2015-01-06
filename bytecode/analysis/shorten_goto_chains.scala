@@ -4,7 +4,6 @@ import scala.collection.JavaConversions._
 class ShortenSimpleGotoChains extends CodeAnalysisPass {
     def analyze(root: CodeScope) {
         new SimpleGotoChainShortener(root).apply()
-        new EntryPointAdjuster(root).apply()
     }
 }
 
@@ -53,6 +52,12 @@ class SimpleGotoChainShortener(root: CodeScope) extends CodeVisitor(root) {
         }
     }
 
+}
+
+class AdjustEntryPoints extends CodeAnalysisPass {
+    def analyze(root: CodeScope) {
+        new EntryPointAdjuster(root).apply()
+    }
 }
 
 class EntryPointAdjuster(root: CodeScope) extends CodeVisitor(root) {

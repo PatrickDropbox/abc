@@ -57,6 +57,7 @@ class ClassInfo(name: String) extends AttributeOwner {
     def analyze() {
         new InsertImplicitGotos().apply(this)
         new ShortenSimpleGotoChains().apply(this)
+        new AdjustEntryPoints().apply(this)
         new CheckJumpTargets().apply(this)
 
         new DropUnsupportedAttributes().apply(this)
