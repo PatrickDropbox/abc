@@ -4,32 +4,15 @@ import scala.collection.JavaConversions._
 class ShortenSimpleGotoChains extends CodeAnalysisPass {
     def analyze(root: CodeScope) {
         new SimpleGotoChainShortener(root).apply()
+        new EntryPointAdjuster(root).apply()
     }
 }
 
-class SimpleGotoChainShortener(root: CodeScope) extends CodeVisitor(root) {
-    override def visitBlock(block: CodeBlock) {
-        block._ops.lastElement() match {
-            case g: Goto => {
-                g._targetBlock = shorten(g._targetBlock)
-            }
-            case i: IfBaseOp => {
-                i._ifBranch = shorten(i._ifBranch)
-            }
-            case s: Switch => {
-                s._defaultBranch = shorten(s._defaultBranch)
-                for (c <- s._table.entrySet()) {
-                    c.setValue(shorten(c.getValue()))
-                }
-            }
-            case _ => {}
-        }
-    }
-
+object SimpleGotoChain {
     def shorten(block: CodeBlock): CodeBlock = {
         var target = block
         while (true) {
-            var newTarget = followSimpleGoto(target)
+            var newTarget = _followSimpleGoto(target)
             if (newTarget == null) {
                 return target
             } else {
@@ -39,7 +22,7 @@ class SimpleGotoChainShortener(root: CodeScope) extends CodeVisitor(root) {
         return null
     }
 
-    def followSimpleGoto(block: CodeBlock): CodeBlock = {
+    def _followSimpleGoto(block: CodeBlock): CodeBlock = {
         if (block._ops.size() != 1) {
             return null
         }
@@ -51,3 +34,55 @@ class SimpleGotoChainShortener(root: CodeScope) extends CodeVisitor(root) {
     }
 }
 
+class SimpleGotoChainShortener(root: CodeScope) extends CodeVisitor(root) {
+    override def visitBlock(block: CodeBlock) {
+        block._ops.lastElement() match {
+            case g: Goto => {
+                g._targetBlock = SimpleGotoChain.shorten(g._targetBlock)
+            }
+            case i: IfBaseOp => {
+                i._ifBranch = SimpleGotoChain.shorten(i._ifBranch)
+            }
+            case s: Switch => {
+                s._defaultBranch = SimpleGotoChain.shorten(s._defaultBranch)
+                for (c <- s._table.entrySet()) {
+                    c.setValue(SimpleGotoChain.shorten(c.getValue()))
+                }
+            }
+            case _ => {}
+        }
+    }
+
+}
+
+class EntryPointAdjuster(root: CodeScope) extends CodeVisitor(root) {
+    override def visitScope(scope: CodeScope) {
+        super.visitScope(scope)
+
+        var target = SimpleGotoChain.shorten(scope.getEntryBlock())
+        if (!scope._contains(target._parentScope)) {
+            // This scope is useless.  do nothing.
+            return
+        }
+
+        val subScope = findSubScope(scope, target._parentScope)
+        if (subScope == null) {  // i.e. block in same scope
+            scope._entryPoint = target
+        } else {
+            scope._entryPoint = subScope
+        }
+    }
+
+    def findSubScope(current: CodeScope, other: CodeScope): CodeScope = {
+        if (current == other) {
+            return null
+        }
+
+        var tmp = other
+        while (tmp._parentScope != current) {
+            tmp = tmp._parentScope
+        }
+
+        return tmp
+    }
+}

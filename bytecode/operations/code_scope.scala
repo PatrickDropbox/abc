@@ -289,7 +289,8 @@ class CodeScope(
         sort()
 
         var result = indent + "Section (pc: [" + pc + ", " + _endPc +
-                ") segment: " + segmentId + ")\n"
+                ") segment: " + segmentId + " entry pt: " +
+                _entryPoint.segmentId + ")\n"
         for (segment <- _segments) {
             result += segment.debugString(indent + "  ")
         }
