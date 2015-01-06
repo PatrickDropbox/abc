@@ -19,6 +19,7 @@ class ImplicitGotoInserter(root: CodeScope) extends CodeVisitor(root) {
                 throw new Exception("no implicit goto - pc: " + block.pc)
             }
             block.goto(target.getEntryBlock())
+            return
         }
 
         var lastOp = block._ops.lastElement()

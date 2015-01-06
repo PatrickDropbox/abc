@@ -1,6 +1,9 @@
+import scala.collection.JavaConversions._
+
+
 class ShortenSimpleGotoChains extends CodeAnalysisPass {
     def analyze(root: CodeScope) {
-        new GotoChainShortener(root).apply()
+        new SimpleGotoChainShortener(root).apply()
     }
 }
 
@@ -8,14 +11,32 @@ class SimpleGotoChainShortener(root: CodeScope) extends CodeVisitor(root) {
     override def visitBlock(block: CodeBlock) {
         block._ops.lastElement() match {
             case g: Goto => {
-                var target = followSimpleGoto(g._targetBlock)
-                while (target != null) {
-                    g._targetBlock = target
-                    target = followSimpleGoto(target)
+                g._targetBlock = shorten(g._targetBlock)
+            }
+            case i: IfBaseOp => {
+                i._ifBranch = shorten(i._ifBranch)
+            }
+            case s: Switch => {
+                s._defaultBranch = shorten(s._defaultBranch)
+                for (c <- s._table.entrySet()) {
+                    c.setValue(shorten(c.getValue()))
                 }
             }
             case _ => {}
         }
+    }
+
+    def shorten(block: CodeBlock): CodeBlock = {
+        var target = block
+        while (true) {
+            var newTarget = followSimpleGoto(target)
+            if (newTarget == null) {
+                return target
+            } else {
+                target = newTarget
+            }
+        }
+        return null
     }
 
     def followSimpleGoto(block: CodeBlock): CodeBlock = {
