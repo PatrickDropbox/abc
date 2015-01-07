@@ -143,7 +143,10 @@ object CodeScopeReconstructor {
                 case _: Return => jumpTargets.add(op.pc + 1)
                 case _: ReturnValue => jumpTargets.add(op.pc + 1)
                 case _: Athrow => jumpTargets.add(op.pc + 1)
-                case g: Goto => jumpTargets.add(g.pc + g._tmpOffset)
+                case g: Goto => {
+                    jumpTargets.add(g.pc + g._tmpOffset)
+                    jumpTargets.add(g.pc + 3)  // next op
+                }
                 case i: IfBaseOp => {
                     jumpTargets.add(i.pc + i._tmpOffset)  // if branch
                     jumpTargets.add(i.pc + 3)  // else branch
