@@ -58,6 +58,7 @@ class ClassInfo(name: String) extends AttributeOwner {
         new InsertImplicitGotos().apply(this)
         new ShortenSimpleGotoChains().apply(this)
         new AdjustEntryPoints().apply(this)
+        new RemoveUnreachableSegments().apply(this)
         new CheckJumpTargets().apply(this)
 
         // TODO: prune unused code blocks

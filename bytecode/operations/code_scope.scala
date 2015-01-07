@@ -290,7 +290,7 @@ class CodeScope(
 
         var result = indent + "Section (pc: [" + pc + ", " + _endPc +
                 ") segment: " + segmentId + " entry pt: " +
-                _entryPoint.segmentId + ")\n"
+                _entryPoint.segmentId + " reachable: " + _reachable + ")\n"
         for (segment <- _segments) {
             result += segment.debugString(indent + "  ")
         }

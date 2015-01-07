@@ -434,7 +434,7 @@ class CodeBlock(owner: AttributeOwner, parent: CodeScope)
 
     def debugString(indent: String): String = {
         var result = indent + "Block (pc: [" + pc + ", " + _endPc +
-                ") segment: " + segmentId + ")\n"
+                ") segment: " + segmentId + " reachable: " + _reachable + ")\n"
         for (op <- _ops) {
             result += op.debugString(indent + "  ")
         }
