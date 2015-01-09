@@ -7,4 +7,7 @@ object Const {
 
     val UINT8_MAX: Int   = (1 << 8) - 1
     val UINT16_MAX: Int  = (1 << 16) - 1
+
+    val JAVA_STRING = "java/lang/String"
+    val JAVA_OBJECT = "java/lang/Object"
 }

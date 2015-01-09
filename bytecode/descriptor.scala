@@ -97,9 +97,9 @@ class ObjectType(i: Boolean, s: String) extends RefType {
 
     def descriptorString(): String = "L" + name + ";"
 
-    def isJavaString(): Boolean = name == "java/lang/String"
+    def isJavaString(): Boolean = name == Const.JAVA_STRING
 
-    def isJavaObject(): Boolean = name == "java/lang/Object"
+    def isJavaObject(): Boolean = name == Const.JAVA_OBJECT
 }
 
 class ParameterTypes extends Comparable[ParameterTypes] {
