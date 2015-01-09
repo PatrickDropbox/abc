@@ -146,10 +146,11 @@ class MethodType extends DescriptorType {
 // Only usable for stack frame verification
 //
 
-// aka unusable type in local variable array
-class TopType extends FieldType {
+class UnusableType extends FieldType {
+    var isTop = true  // only true for double / long
+
     def descriptorString(): String = {
-        throw new Exception("Top type does not support descriptor string")
+        throw new Exception("Unusable type does not support descriptor string")
     }
 }
 
