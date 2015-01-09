@@ -14,92 +14,137 @@ trait DescriptorType extends Comparable[DescriptorType] {
 trait FieldType extends DescriptorType {
     // see table 2.3 / page 29
     def categorySize(): Int = 1
+
+    def cloneType(): FieldType
 }
 
-trait BaseType extends FieldType {
-    var isConstant = false
+abstract class BaseType(c: Boolean) extends FieldType {
+    var isConstant = c
 
     def arrayType(): Int
 }
 
 trait RefType extends FieldType {
-    var isUninitialized = false
 }
 
-trait BaseIntType extends BaseType {
-    var constValue = 0
+abstract class BaseIntType(c: Boolean, v: Int) extends BaseType(c) {
+    var constValue = v
 }
 
-class ByteType extends BaseIntType {
-    def descriptorString(): String = "B"
-
-    def arrayType(): Int = 8
-}
-
-class CharType extends BaseIntType {
-    def descriptorString(): String = "C"
-
-    def arrayType(): Int = 5
-}
-
-class IntType extends BaseIntType {
-    def descriptorString(): String = "I"
-
-    def arrayType(): Int = 10
-}
-
-class ShortType extends BaseIntType {
-    def descriptorString(): String = "S"
-
-    def arrayType(): Int = 9
-}
-
-class BoolType extends BaseIntType {
+class BoolType extends BaseIntType(false, 0) {
     def descriptorString(): String = "Z"
 
     def arrayType(): Int = 4
+
+    def cloneType(): FieldType = { return new BoolType() }
 }
 
-class DoubleType extends BaseType {
-    var constValue: Double = 0
+class ByteType extends BaseIntType(false, 0) {
+    def descriptorString(): String = "B"
+
+    def arrayType(): Int = 8
+
+    def cloneType(): FieldType = { return new ByteType() }
+}
+
+class CharType extends BaseIntType(false, 0) {
+    def descriptorString(): String = "C"
+
+    def arrayType(): Int = 5
+
+    def cloneType(): FieldType = { return new CharType() }
+}
+
+class ShortType extends BaseIntType(false, 0) {
+    def descriptorString(): String = "S"
+
+    def arrayType(): Int = 9
+
+    def cloneType(): FieldType = { return new ShortType() }
+}
+
+class IntType(c: Boolean, v: Int) extends BaseIntType(c, v) {
+    def this() = this(false, 0)
+    def this(v: Int) = this(true, v)
+
+    def descriptorString(): String = "I"
+
+    def arrayType(): Int = 10
+
+    def cloneType(): FieldType = { return new IntType(isConstant, constValue) }
+}
+
+class DoubleType(c: Boolean, v: Double) extends BaseType(c) {
+    def this() = this(false, 0)
+    def this(v: Double) = this(true, v)
+
+    var constValue: Double = v
 
     def descriptorString(): String = "D"
 
     def arrayType(): Int = 7
 
     override def categorySize(): Int = 2
+
+    def cloneType(): FieldType = {
+        return new DoubleType(isConstant, constValue)
+    }
 }
 
-class FloatType extends BaseType {
-    var constValue: Float = 0
+class FloatType(c: Boolean, v: Float) extends BaseType(c) {
+    def this() = this(false, 0)
+    def this(v: Float) = this(true, v)
+
+    var constValue: Float = v
 
     def descriptorString(): String = "F"
 
     def arrayType(): Int = 6
+
+    def cloneType(): FieldType = {
+        return new FloatType(isConstant, constValue)
+    }
 }
 
-class LongType extends BaseType {
-    var constValue: Long = 0
+class LongType(c: Boolean, v: Long) extends BaseType(c) {
+    def this() = this(false, 0)
+    def this(v: Long) = this(true, v)
+
+    var constValue: Long = v
 
     def descriptorString(): String = "J"
 
     def arrayType(): Int = 11
 
     override def categorySize(): Int = 2
+
+    def cloneType(): FieldType = { return new LongType(isConstant, constValue) }
 }
 
 class ArrayType(t: FieldType) extends RefType {
     val itemType = t
 
     def descriptorString(): String = "[" + itemType.descriptorString()
+
+    def cloneType(): FieldType = { return new ArrayType(t.cloneType()) }
 }
 
-class ObjectType(s: String) extends RefType {
+class ObjectType(i: Boolean, s: String) extends RefType {
+    def this(s: String) = this(false, s)
+
+    var isUninitialized = i
+
     val name = s
 
     def descriptorString(): String = "L" + name + ";"
 
     def isJavaString(): Boolean = name == "java/lang/String"
+
+    def isJavaObject(): Boolean = name == "java/lang/Object"
+
+    def cloneType(): FieldType = {
+        return new ObjectType(isUninitialized, name)
+    }
 }
 
 class ParameterTypes extends Comparable[ParameterTypes] {
@@ -149,15 +194,15 @@ class MethodType extends DescriptorType {
 class UnusableType(t: Boolean) extends FieldType {
     var isTop = t  // only true for double / long
 
-    def descriptorString(): String = {
-        throw new Exception("Unusable type does not support descriptor string")
-    }
+    def descriptorString(): String = "__top__"  // fake type
+
+    def cloneType(): FieldType = { return new UnusableType(isTop) }
 }
 
 class NullType extends RefType {
-    def descriptorString(): String = {
-        throw new Exception("Null type does not support descriptor string")
-    }
+    def descriptorString(): String = "__null__"  // fake type
+
+    def cloneType(): FieldType = { return new NullType() }
 }
 
 //
