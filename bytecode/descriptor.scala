@@ -146,9 +146,8 @@ class MethodType extends DescriptorType {
 // Only usable for stack frame verification
 //
 
+// aka unusable type in local variable array
 class TopType extends FieldType {
-    override def categorySize(): Int = 0
-
     def descriptorString(): String = {
         throw new Exception("Top type does not support descriptor string")
     }
