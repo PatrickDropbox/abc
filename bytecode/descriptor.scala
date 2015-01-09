@@ -17,25 +17,53 @@ trait FieldType extends DescriptorType {
 }
 
 trait BaseType extends FieldType {
+    var isConstant = false
+
     def arrayType(): Int
 }
 
 trait RefType extends FieldType {
+    var isNull = false
+    var isUninitialized = false
 }
 
-class ByteType extends BaseType {
+trait BaseIntType extends BaseType {
+    var constValue = 0
+}
+
+class ByteType extends BaseIntType {
     def descriptorString(): String = "B"
 
     def arrayType(): Int = 8
 }
 
-class CharType extends BaseType {
+class CharType extends BaseIntType {
     def descriptorString(): String = "C"
 
     def arrayType(): Int = 5
 }
 
+class IntType extends BaseIntType {
+    def descriptorString(): String = "I"
+
+    def arrayType(): Int = 10
+}
+
+class ShortType extends BaseIntType {
+    def descriptorString(): String = "S"
+
+    def arrayType(): Int = 9
+}
+
+class BoolType extends BaseIntType {
+    def descriptorString(): String = "Z"
+
+    def arrayType(): Int = 4
+}
+
 class DoubleType extends BaseType {
+    var constValue: Double = 0
+
     def descriptorString(): String = "D"
 
     def arrayType(): Int = 7
@@ -44,35 +72,21 @@ class DoubleType extends BaseType {
 }
 
 class FloatType extends BaseType {
+    var constValue: Float = 0
+
     def descriptorString(): String = "F"
 
     def arrayType(): Int = 6
 }
 
-class IntType extends BaseType {
-    def descriptorString(): String = "I"
-
-    def arrayType(): Int = 10
-}
-
 class LongType extends BaseType {
+    var constValue: Long = 0
+
     def descriptorString(): String = "J"
 
     def arrayType(): Int = 11
 
     override def categorySize(): Int = 2
-}
-
-class ShortType extends BaseType {
-    def descriptorString(): String = "S"
-
-    def arrayType(): Int = 9
-}
-
-class BoolType extends BaseType {
-    def descriptorString(): String = "Z"
-
-    def arrayType(): Int = 4
 }
 
 class ArrayType(t: FieldType) extends RefType {
@@ -126,6 +140,15 @@ class MethodType extends DescriptorType {
             result += "V"
         }
         return result
+    }
+}
+
+// Only usable for stack frame verification
+class TopType extends FieldType {
+    override def categorySize(): Int = 0
+
+    def descriptorString(): String = {
+        throw new Exception("Top type does not support descriptor string")
     }
 }
 
