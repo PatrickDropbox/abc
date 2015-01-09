@@ -146,17 +146,13 @@ class MethodType extends DescriptorType {
 // Only usable for stack frame verification
 //
 
-class UnusableType(t: Boolean) extends FieldType {
-    var isTop = t  // only true for double / long
+// NOTE: will write unusable type as top type in stack map table attribute
+class UnusableType extends FieldType {
+    def descriptorString(): String = "__unusable__"
+}
 
-    def descriptorString(): String = {
-        // fake type
-        if (isTop) {
-            return "__top__"
-        } else {
-            return "__unusable__"
-        }
-    }
+class TopType extends FieldType {
+    def descriptorString(): String = "__top__"
 }
 
 class NullType extends RefType {
