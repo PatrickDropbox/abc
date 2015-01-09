@@ -23,7 +23,6 @@ trait BaseType extends FieldType {
 }
 
 trait RefType extends FieldType {
-    var isNull = false
     var isUninitialized = false
 }
 
@@ -143,12 +142,21 @@ class MethodType extends DescriptorType {
     }
 }
 
+//
 // Only usable for stack frame verification
+//
+
 class TopType extends FieldType {
     override def categorySize(): Int = 0
 
     def descriptorString(): String = {
         throw new Exception("Top type does not support descriptor string")
+    }
+}
+
+class NullType extends RefType {
+    def descriptorString(): String = {
+        throw new Exception("Null type does not support descriptor string")
     }
 }
 
