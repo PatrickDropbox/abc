@@ -26,6 +26,18 @@ abstract class CodeSegment(
 
     var _reachable = false
 
+    // max stack / locals in current segment
+    var maxStack = 0
+    var maxLocals = 0
+
+    // the stack frame state before executing operations in the current segment
+    var startState: StackFrame = null
+
+    // the local variable types that remain "stable" throughout the execution of
+    // the current segment.  Unstable variables are either chopped off from
+    // the tail, or are set to UnusableType.
+    var stableLocals: StackFrame = null
+
     var implicitGoto: CodeSegment = null
 
     def getImplicitGoto(): CodeSegment = {
