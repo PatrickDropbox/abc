@@ -119,3 +119,14 @@ class UnreachableSegmentsRemover(root: CodeScope) extends CodeVisitor(root) {
         super.visitScope(scope)
     }
 }
+
+class ReachableResetter(root: CodeScope) extends CodeVisitor(root) {
+    override def visitBlock(block: CodeBlock) {
+        block._reachable = false
+    }
+
+    override def visitScope(scope: CodeScope) {
+        super.visitScope(scope)
+        scope._reachable = false
+    }
+}

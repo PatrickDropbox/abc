@@ -31,18 +31,6 @@ class CodeVisitor(root: CodeScope) {
     }
 }
 
-
-class ReachableResetter(root: CodeScope) extends CodeVisitor(root) {
-    override def visitBlock(block: CodeBlock) {
-        block._reachable = false
-    }
-
-    override def visitScope(scope: CodeScope) {
-        super.visitScope(scope)
-        scope._reachable = false
-    }
-}
-
 class PcIdResetter(root: CodeScope, m: HashMap[Int, CodeScope])
         extends CodeVisitor(root) {
     var nextId = 1
