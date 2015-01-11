@@ -11,8 +11,22 @@ class StackFrame {
     var stack = new Stack[FieldType]()
     var locals = new Vector[FieldType]()
 
-    def mergeFrom(other: StackFrame): Boolean = {
-        return _mergeStackFrom(other) || mergeLocalsFrom(other)
+    def mergeFrom(other: StackFrame, mergeStack: Boolean): Boolean = {
+        if (other.maxStack > maxStack) {
+            maxStack = other.maxStack
+        }
+        if (other.maxLocals > maxLocals) {
+            maxLocals = other.maxLocals
+        }
+
+        var modified = false
+        if (mergeStack) {
+            modified = _mergeStackFrom(other)
+        }
+
+        modified |= _mergeLocalsFrom(other)
+
+        return modified
     }
 
     def _mergeStackFrom(other: StackFrame): Boolean = {
@@ -35,7 +49,7 @@ class StackFrame {
         return modified
     }
 
-    def mergeLocalsFrom(other: StackFrame): Boolean = {
+    def _mergeLocalsFrom(other: StackFrame): Boolean = {
         var modified = locals.size() != other.locals.size()
         var updatedLocals = new Vector[FieldType]()
 
