@@ -5,6 +5,9 @@ import scala.collection.JavaConversions._
 
 
 class StackFrame {
+    var maxStack = 0
+    var maxLocals = 0
+
     var stack = new Stack[FieldType]()
     var locals = new Vector[FieldType]()
 
