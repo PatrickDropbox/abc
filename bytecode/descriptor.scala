@@ -159,6 +159,16 @@ class NullType extends RefType {
     def descriptorString(): String = "__null__"  // fake type
 }
 
+// only used for expected type
+class CheckRefType extends RefType {
+    def descriptorString(): String = "__ref__"  // fake type
+}
+
+// only used for expected type
+class CheckArrayType extends ArrayType(null) {
+    override def descriptorString(): String = "__array__"  // fake type
+}
+
 //
 // maybe use a real lexer/parser ...
 //

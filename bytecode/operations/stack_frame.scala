@@ -2,6 +2,7 @@ import java.util.Stack
 import java.util.Vector
 
 import scala.collection.JavaConversions._
+import scala.reflect.ClassTag
 
 
 class StackFrame {
@@ -81,11 +82,157 @@ class StackFrame {
 
     def cloneLocals(): StackFrame = {
         var frame = new StackFrame()
+        frame.maxStack = maxStack
+        frame.maxLocals = maxLocals
         for (field <- locals) {
             frame.locals.add(field)
         }
         return frame
     }
+
+    def push(f: FieldType) {
+        f match {
+            case _: UnusableType => {
+                throw new Exception("cannot push unusable type")
+            }
+            case _: TopType => {
+                throw new Exception("cannot directly push top type")
+            }
+            case _: LongType => {
+                stack.push(f)
+                stack.push(new TopType())
+            }
+            case _: DoubleType => {
+                stack.push(f)
+                stack.push(new TopType())
+            }
+            case _ => {
+                stack.push(f)
+            }
+        }
+
+        if (stack.size() > maxStack) {
+            maxStack = stack.size()
+        }
+    }
+
+    def pop(expected: FieldType): FieldType = {
+        expected match {
+            case _: UnusableType => {
+                throw new Exception("cannot push unusable type")
+            }
+            case _: TopType => {
+                throw new Exception("cannot directly push top type")
+            }
+            case _: IntType => return _pop[IntType]()
+            case _: FloatType => return _pop[FloatType]()
+            case _: LongType => {
+                _pop[TopType]()
+                return _pop[LongType]()
+            }
+            case _: DoubleType => {
+                _pop[TopType]()
+                return _pop[DoubleType]()
+            }
+            case _: ArrayType => return _pop[ArrayType]()
+            case _: RefType => return _pop[RefType]()
+            case _ => throw new Exception(
+                    "Pop-ing unexpected type: " + expected.descriptorString())
+        }
+    }
+
+    def _pop[T <: FieldType: ClassTag](): FieldType = {
+        val f = stack.pop()
+
+        val cls = implicitly[ClassTag[T]].runtimeClass
+        f match {
+            case t: T if cls.isInstance(t) => return t
+            case _ => throw new Exception(
+                    "Unexpected type: " + f.descriptorString())
+        }
+    }
+
+    def store(f: FieldType, i: Int) {
+        val needed = i + f.categorySize()
+        while (needed > locals.size()) {
+            locals.add(new UnusableType())
+        }
+
+        locals.elementAt(i) match {
+            case _: TopType => {
+                // invalidate previous long / double
+                locals.setElementAt(new UnusableType(), i - 1)
+            }
+            case _: DoubleType => {
+                // invalidate top
+                locals.setElementAt(new UnusableType(), i + 1)
+            }
+            case _: LongType => {
+                // invalidate top
+                locals.setElementAt(new UnusableType(), i + 1)
+            }
+        }
+
+        f match {
+            case _: UnusableType => {
+                throw new Exception("cannot store unusable type")
+            }
+            case _: TopType => {
+                throw new Exception("cannot directly store top type")
+            }
+            case _: LongType => {
+                locals.setElementAt(f, i)
+                locals.setElementAt(new TopType(), i + 1)
+            }
+            case _: DoubleType => {
+                locals.setElementAt(f, i)
+                locals.setElementAt(new TopType(), i + 1)
+            }
+            case _ => {
+                locals.setElementAt(f, i)
+            }
+        }
+
+        if (locals.size() > maxLocals) {
+            maxLocals = locals.size()
+        }
+    }
+
+    def load(expected: FieldType, i: Int): FieldType = {
+        val f = locals.elementAt(i)
+        f match {
+            case _: UnusableType => {
+                throw new Exception("cannot load unusable type")
+            }
+            case _: TopType => {
+                throw new Exception("cannot load top type")
+            }
+            case _ => {}  // continue
+        }
+
+        expected match {
+            case _: IntType => _check[IntType](f)
+            case _: FloatType => _check[FloatType](f)
+            case _: LongType => _check[LongType](f)
+            case _: DoubleType => _check[DoubleType](f)
+            case _: ArrayType => _check[ArrayType](f)
+            case _: RefType => _check[RefType](f)
+            case _ => throw new Exception(
+                    "unexpected load type: " + expected.descriptorString())
+        }
+
+        return f
+    }
+
+    def _check[T <: FieldType: ClassTag](f: FieldType) {
+        val cls = implicitly[ClassTag[T]].runtimeClass
+        f match {
+            case t: T if cls.isInstance(t) => {}
+            case _ => throw new Exception(
+                    "Unexpected type: " + f.descriptorString())
+        }
+    }
+
 
     def _mergeTypes(
             v1: FieldType,
