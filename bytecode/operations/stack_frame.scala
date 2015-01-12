@@ -152,7 +152,9 @@ class StackFrame {
         }
     }
 
-    def store(f: FieldType, i: Int) {
+    def store(expected: FieldType, i: Int) {
+        val f = pop(expected)
+
         val needed = i + f.categorySize()
         while (needed > locals.size()) {
             locals.add(new UnusableType())
@@ -198,7 +200,7 @@ class StackFrame {
         }
     }
 
-    def load(expected: FieldType, i: Int): FieldType = {
+    def load(expected: FieldType, i: Int) {
         val f = locals.elementAt(i)
         f match {
             case _: UnusableType => {
@@ -221,7 +223,7 @@ class StackFrame {
                     "unexpected load type: " + expected.descriptorString())
         }
 
-        return f
+        push(f)
     }
 
     def _check[T <: FieldType: ClassTag](f: FieldType) {
@@ -301,4 +303,112 @@ class StackFrame {
         return new ArrayType(commonItemType)
     }
 
+    def apply(op: Operation) {
+        if (_applyConstantOp(op)) {
+            return
+        }
+        if (_applyLoadOp(op)) {
+            return
+        }
+        if (_applyStoreOp(op)) {
+            return
+        }
+        throw new Exception(
+                "op not implemented in stack frame: " + op.debugString(""))
+    }
+
+    def _applyConstantOp(op: Operation): Boolean = {
+        op match {
+            case o: PushI => push(new IntType())
+            case o: PushL => push(new LongType())
+            case o: PushF => push(new FloatType())
+            case o: PushD => push(new DoubleType())
+            case o: PushString => push(new ObjectType(Const.JAVA_STRING))
+            case o: Ldc => {
+                // TODO: support class / method type / method handle ...
+                throw new Exception("raw ldc unsupported")
+            }
+            case o: LdcW => {
+                // TODO: support class / method type / method handle ...
+                throw new Exception("raw ldc_w unsupported")
+            }
+            case _ => return false
+        }
+
+        return true
+    }
+
+    def _applyLoadOp(op: Operation): Boolean = {
+        op match {
+            case o: LoadI => load(new IntType(), o.index)
+            case o: LoadL => load(new LongType(), o.index)
+            case o: LoadF => load(new FloatType(), o.index)
+            case o: LoadD => load(new DoubleType(), o.index)
+            case o: LoadA => load(new CheckRefType(), o.index)
+            case o: LoadFromIArray => {
+                throw new Exception("TODO")
+            }
+            case o: LoadFromBArray => {  // byte (or bool) array
+                throw new Exception("TODO")
+            }
+            case o: LoadFromCArray => {  // char array
+                throw new Exception("TODO")
+            }
+            case o: LoadFromSArray => {  // short array
+                throw new Exception("TODO")
+            }
+            case o: LoadFromLArray => {
+                throw new Exception("TODO")
+            }
+            case o: LoadFromFArray => {
+                throw new Exception("TODO")
+            }
+            case o: LoadFromDArray => {
+                throw new Exception("TODO")
+            }
+            case o: LoadFromAArray => {
+                throw new Exception("TODO")
+            }
+            case _ => return false
+        }
+
+        return true
+    }
+
+    def _applyStoreOp(op: Operation): Boolean = {
+        op match {
+            case o: StoreI => store(new IntType(), o.index)
+            case o: StoreL => store(new LongType(), o.index)
+            case o: StoreF => store(new FloatType(), o.index)
+            case o: StoreD => store(new DoubleType(), o.index)
+            case o: StoreA => store(new CheckRefType(), o.index)
+            case o: StoreIntoIArray => {
+                throw new Exception("TODO")
+            }
+            case o: StoreIntoBArray => {  // byte (or bool) array
+                throw new Exception("TODO")
+            }
+            case o: StoreIntoCArray => {  // char array
+                throw new Exception("TODO")
+            }
+            case o: StoreIntoSArray => {  // short array
+                throw new Exception("TODO")
+            }
+            case o: StoreIntoLArray => {
+                throw new Exception("TODO")
+            }
+            case o: StoreIntoFArray => {
+                throw new Exception("TODO")
+            }
+            case o: StoreIntoDArray => {
+                throw new Exception("TODO")
+            }
+            case o: StoreIntoAArray => {
+                throw new Exception("TODO")
+            }
+            case _ => return false
+        }
+
+        return true
+    }
 }
