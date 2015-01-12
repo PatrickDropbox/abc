@@ -319,6 +319,9 @@ class StackFrame {
         if (_applyStackOp(op)) {
             return
         }
+        if (_applyMathOp(op)) {
+            return
+        }
         throw new Exception(
                 "op not implemented in stack frame: " + op.debugString(""))
     }
@@ -585,5 +588,58 @@ class StackFrame {
         throw new Exception(
                 "Invalid. pop-ing: " + value2.descriptorString() +
                         " & " + value1.descriptorString())
+    }
+
+    def _applyMathOp(op: Operation): Boolean = {
+        op match {
+            case _: BinaryIOp => {
+                pop(new IntType())
+                pop(new IntType())
+                push(new IntType())
+            }
+            case _: UnaryIOp => {
+                pop(new IntType())
+                push(new IntType())
+            }
+            case o: Iinc => {
+                load(new IntType(), o.operand1)
+                pop(new IntType())
+            }
+            case _: BinaryLOp => {
+                pop(new LongType())
+                pop(new LongType())
+                push(new LongType())
+            }
+            case _: UnaryLOp => {
+                pop(new LongType())
+                push(new LongType())
+            }
+            case _: ShiftLOp => {
+                pop(new IntType())
+                pop(new LongType())
+                push(new LongType())
+            }
+            case _: BinaryFOp => {
+                pop(new FloatType())
+                pop(new FloatType())
+                push(new FloatType())
+            }
+            case _: UnaryFOp => {
+                pop(new FloatType())
+                push(new FloatType())
+            }
+            case _: BinaryDOp => {
+                pop(new DoubleType())
+                pop(new DoubleType())
+                push(new DoubleType())
+            }
+            case _: UnaryDOp => {
+                pop(new DoubleType())
+                push(new DoubleType())
+            }
+            case _ => return false
+        }
+
+        return true
     }
 }
