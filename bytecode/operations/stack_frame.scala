@@ -322,6 +322,12 @@ class StackFrame {
         if (_applyMathOp(op)) {
             return
         }
+        if (_applyComparisonOp(op)) {
+            return
+        }
+        if (_applyControlOp(op)) {
+            return
+        }
         throw new Exception(
                 "op not implemented in stack frame: " + op.debugString(""))
     }
@@ -637,6 +643,59 @@ class StackFrame {
                 pop(new DoubleType())
                 push(new DoubleType())
             }
+            case _ => return false
+        }
+
+        return true
+    }
+
+    def _applyComparisonOp(op: Operation): Boolean = {
+        op match {
+            case _: Lcmp => {
+                pop(new LongType())
+                pop(new LongType())
+                push(new IntType())
+            }
+            case _: Fcmp => {
+                pop(new FloatType())
+                pop(new FloatType())
+                push(new IntType())
+            }
+            case _: Dcmp => {
+                pop(new DoubleType())
+                pop(new DoubleType())
+                push(new IntType())
+            }
+            case _: IfIOp => pop(new IntType())
+            case _: IfCmpIOp => {
+                pop(new IntType())
+                pop(new IntType())
+            }
+            case _: IfAOp => pop(new CheckRefType())
+            case _: IfCmpAOp => {
+                pop(new CheckRefType())
+                pop(new CheckRefType())
+            }
+            case _ => return false
+        }
+
+        return true
+    }
+
+    def _applyControlOp(op: Operation): Boolean = {
+        op match {
+            case _: Goto => {}
+            case _: GotoW => {}
+            case _: Jsr => throw new Exception("jsr deprecated")
+            case _: JsrW => throw new Exception("jsr_w deprecated")
+            case _: Ret => throw new Exception("ret deprecated")
+            case _: Return => {}
+            case _: Ireturn => pop(new IntType())
+            case _: Lreturn => pop(new LongType())
+            case _: Freturn => pop(new FloatType())
+            case _: Dreturn => pop(new DoubleType())
+            case _: Areturn => pop(new CheckRefType())
+            case _: Switch => pop(new IntType())
             case _ => return false
         }
 
