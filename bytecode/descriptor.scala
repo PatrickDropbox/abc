@@ -12,8 +12,20 @@ trait DescriptorType extends Comparable[DescriptorType] {
 }
 
 trait FieldType extends DescriptorType {
+    // see table 2.3 / section 2.11.1
+    def isCat1(): Boolean
+    def isCat2(): Boolean
+
     // see table 2.3 / page 29
-    def categorySize(): Int = 1
+    def categorySize(): Int = {
+        if (isCat1()) {
+            return 1
+        }
+        if (isCat2()) {
+            return 2
+        }
+        return 0
+    }
 }
 
 trait BaseType extends FieldType {
@@ -21,9 +33,13 @@ trait BaseType extends FieldType {
 }
 
 trait RefType extends FieldType {
+    def isCat1(): Boolean = true
+    def isCat2(): Boolean = false
 }
 
 trait BaseIntType extends BaseType {
+    def isCat1(): Boolean = true
+    def isCat2(): Boolean = false
 }
 
 // NOTE: BoolType is not used for stack frame computation.
@@ -61,25 +77,30 @@ class IntType extends BaseIntType {
 }
 
 class DoubleType extends BaseType {
+    def isCat1(): Boolean = false
+    def isCat2(): Boolean = true
+
     def descriptorString(): String = "D"
 
     def arrayType(): Int = 7
-
-    override def categorySize(): Int = 2
 }
 
 class FloatType extends BaseType {
+    def isCat1(): Boolean = true
+    def isCat2(): Boolean = false
+
     def descriptorString(): String = "F"
 
     def arrayType(): Int = 6
 }
 
 class LongType extends BaseType {
+    def isCat1(): Boolean = false
+    def isCat2(): Boolean = true
+
     def descriptorString(): String = "J"
 
     def arrayType(): Int = 11
-
-    override def categorySize(): Int = 2
 }
 
 class ArrayType(t: FieldType) extends RefType {
@@ -148,10 +169,16 @@ class MethodType extends DescriptorType {
 
 // NOTE: will write unusable type as top type in stack map table attribute
 class UnusableType extends FieldType {
+    def isCat1(): Boolean = false
+    def isCat2(): Boolean = false
+
     def descriptorString(): String = "__unusable__"
 }
 
 class TopType extends FieldType {
+    def isCat1(): Boolean = false
+    def isCat2(): Boolean = false
+
     def descriptorString(): String = "__top__"
 }
 

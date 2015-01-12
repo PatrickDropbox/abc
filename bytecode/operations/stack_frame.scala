@@ -316,6 +316,9 @@ class StackFrame {
         if (_applyConversionOp(op)) {
             return
         }
+        if (_applyStackOp(op)) {
+            return
+        }
         throw new Exception(
                 "op not implemented in stack frame: " + op.debugString(""))
     }
@@ -473,5 +476,114 @@ class StackFrame {
         }
 
         return true
+    }
+
+    def _applyStackOp(op: Operation): Boolean = {
+        op match {
+            case _: Pop => {
+                _assertCat1(stack.pop())
+            }
+            case _: Pop2 => {
+                val value1 = stack.pop()
+                val value2 = stack.pop()
+                _assertTwoCat1sOrOneCat2(value2, value1)
+            }
+            case _: Dup => {
+                val value = stack.pop()
+                _assertCat1(value)
+                push(value)
+                push(value)
+            }
+            case _: DupX1 => {
+                val value1 = stack.pop()
+                val value2 = stack.pop()
+                _assertCat1(value1)
+                _assertCat1(value2)
+                push(value1)
+                push(value2)
+                push(value1)
+            }
+            case _: DupX2 => {
+                val value1 = stack.pop()
+                val value2 = stack.pop()
+                val value3 = stack.pop()
+                _assertCat1(value1)
+                _assertTwoCat1sOrOneCat2(value3, value2)
+                push(value1)
+                push(value3)
+                push(value2)
+                push(value1)
+            }
+            case _: Dup2 => {
+                val value1 = stack.pop()
+                val value2 = stack.pop()
+                _assertTwoCat1sOrOneCat2(value2, value1)
+                push(value2)
+                push(value1)
+                push(value2)
+                push(value1)
+            }
+            case _: Dup2X1 => {
+                val value1 = stack.pop()
+                val value2 = stack.pop()
+                val value3 = stack.pop()
+                _assertTwoCat1sOrOneCat2(value2, value1)
+                _assertCat1(value3)
+                push(value2)
+                push(value1)
+                push(value3)
+                push(value2)
+                push(value1)
+            }
+            case _: Dup2X2 => {
+                val value1 = stack.pop()
+                val value2 = stack.pop()
+                val value3 = stack.pop()
+                val value4 = stack.pop()
+                _assertTwoCat1sOrOneCat2(value2, value1)
+                _assertTwoCat1sOrOneCat2(value4, value3)
+                push(value2)
+                push(value1)
+                push(value4)
+                push(value3)
+                push(value2)
+                push(value1)
+            }
+            case _: Swap => {
+                val value1 = stack.pop()
+                val value2 = stack.pop()
+                _assertCat1(value1)
+                _assertCat1(value2)
+                push(value1)
+                push(value2)
+            }
+            case _ => return false
+        }
+
+        return true
+    }
+
+    def _assertCat1(f: FieldType) {
+        if (!f.isCat1()) {
+            throw new Exception(
+                    "given type is not category 1: " + f.descriptorString())
+        }
+    }
+
+    // value2 before value1 to match semantics in jvm spec
+    def _assertTwoCat1sOrOneCat2(value2: FieldType, value1: FieldType) {
+        if (value1.isCat1() && value2.isCat1()) {
+            return
+        }
+        if (value2.isCat2()) {
+            // sanity check
+            value1 match {
+                case _: TopType => return
+                case _ => throw new Exception("Unexpected")
+            }
+        }
+        throw new Exception(
+                "Invalid. pop-ing: " + value2.descriptorString() +
+                        " & " + value1.descriptorString())
     }
 }
