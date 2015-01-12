@@ -313,22 +313,25 @@ class StackFrame {
         if (_applyStoreOp(op)) {
             return
         }
+        if (_applyConversionOp(op)) {
+            return
+        }
         throw new Exception(
                 "op not implemented in stack frame: " + op.debugString(""))
     }
 
     def _applyConstantOp(op: Operation): Boolean = {
         op match {
-            case o: PushI => push(new IntType())
-            case o: PushL => push(new LongType())
-            case o: PushF => push(new FloatType())
-            case o: PushD => push(new DoubleType())
-            case o: PushString => push(new ObjectType(Const.JAVA_STRING))
-            case o: Ldc => {
+            case _: PushI => push(new IntType())
+            case _: PushL => push(new LongType())
+            case _: PushF => push(new FloatType())
+            case _: PushD => push(new DoubleType())
+            case _: PushString => push(new ObjectType(Const.JAVA_STRING))
+            case _: Ldc => {
                 // TODO: support class / method type / method handle ...
                 throw new Exception("raw ldc unsupported")
             }
-            case o: LdcW => {
+            case _: LdcW => {
                 // TODO: support class / method type / method handle ...
                 throw new Exception("raw ldc_w unsupported")
             }
@@ -405,6 +408,66 @@ class StackFrame {
             }
             case o: StoreIntoAArray => {
                 throw new Exception("TODO")
+            }
+            case _ => return false
+        }
+
+        return true
+    }
+
+    def _applyConversionOp(op: Operation): Boolean = {
+        op match {
+            case _: I2l => {
+                pop(new IntType())
+                push(new LongType())
+            }
+            case _: I2f => {
+                pop(new IntType())
+                push(new FloatType())
+            }
+            case _: I2d => {
+                pop(new IntType())
+                push(new DoubleType())
+            }
+            case _: TruncateI => {
+                pop(new IntType())
+                push(new IntType())
+            }
+            case _: L2i => {
+                pop(new LongType())
+                push(new IntType())
+            }
+            case _: L2f => {
+                pop(new LongType())
+                push(new FloatType())
+            }
+            case _: L2d => {
+                pop(new LongType())
+                push(new DoubleType())
+            }
+            case _: F2i => {
+                pop(new FloatType())
+                push(new IntType())
+            }
+            case _: F2l => {
+                pop(new FloatType())
+                push(new LongType())
+            }
+            case _: F2d => {
+                pop(new FloatType())
+                push(new DoubleType())
+            }
+            case _: D2i => {
+                pop(new DoubleType())
+                push(new IntType())
+            }
+            case _: D2l => {
+                pop(new DoubleType())
+                push(new LongType())
+            }
+            case _: D2f => {
+                pop(new DoubleType())
+                push(new FloatType())
             }
             case _ => return false
         }

@@ -2,6 +2,12 @@ import java.io.DataInputStream
 import java.io.DataOutputStream
 
 
+abstract class TruncateI(
+        owner: AttributeOwner,
+        opCode: Int,
+        mnemonic: String) extends NoOperandOp(owner, opCode, mnemonic) {
+}
+
 class I2l(owner: AttributeOwner) extends NoOperandOp(owner, OpCode.I2L, "i2l") {
 }
 
@@ -11,13 +17,13 @@ class I2f(owner: AttributeOwner) extends NoOperandOp(owner, OpCode.I2F, "i2f") {
 class I2d(owner: AttributeOwner) extends NoOperandOp(owner, OpCode.I2D, "i2d") {
 }
 
-class I2b(owner: AttributeOwner) extends NoOperandOp(owner, OpCode.I2B, "i2b") {
+class I2b(owner: AttributeOwner) extends TruncateI(owner, OpCode.I2B, "i2b") {
 }
 
-class I2c(owner: AttributeOwner) extends NoOperandOp(owner, OpCode.I2C, "i2c") {
+class I2c(owner: AttributeOwner) extends TruncateI(owner, OpCode.I2C, "i2c") {
 }
 
-class I2s(owner: AttributeOwner) extends NoOperandOp(owner, OpCode.I2S, "i2s") {
+class I2s(owner: AttributeOwner) extends TruncateI(owner, OpCode.I2S, "i2s") {
 }
 
 class L2i(owner: AttributeOwner) extends NoOperandOp(owner, OpCode.L2I, "l2i") {
