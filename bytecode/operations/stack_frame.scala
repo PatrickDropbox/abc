@@ -134,7 +134,9 @@ class StackFrame {
                 _pop[TopType]()
                 return _pop[DoubleType]()
             }
+            // TODO: check matching array type
             case _: ArrayType => return _pop[ArrayType]()
+            // TODO: check matching (or subclass of) ref type
             case _: RefType => return _pop[RefType]()
             case _ => throw new Exception(
                     "Pop-ing unexpected type: " + expected.descriptorString())
@@ -217,7 +219,9 @@ class StackFrame {
             case _: FloatType => _check[FloatType](f)
             case _: LongType => _check[LongType](f)
             case _: DoubleType => _check[DoubleType](f)
+            // TODO: check matching array type
             case _: ArrayType => _check[ArrayType](f)
+            // TODO: check matching (or subclass of) ref type
             case _: RefType => _check[RefType](f)
             case _ => throw new Exception(
                     "unexpected load type: " + expected.descriptorString())
@@ -304,28 +308,31 @@ class StackFrame {
     }
 
     def apply(op: Operation) {
+        if (_applyComparisonOp(op)) {
+            return
+        }
         if (_applyConstantOp(op)) {
             return
         }
-        if (_applyLoadOp(op)) {
-            return
-        }
-        if (_applyStoreOp(op)) {
+        if (_applyControlOp(op)) {
             return
         }
         if (_applyConversionOp(op)) {
             return
         }
-        if (_applyStackOp(op)) {
+        if (_applyLoadOp(op)) {
             return
         }
         if (_applyMathOp(op)) {
             return
         }
-        if (_applyComparisonOp(op)) {
+        if (_applyReferenceOp(op)) {
             return
         }
-        if (_applyControlOp(op)) {
+        if (_applyStackOp(op)) {
+            return
+        }
+        if (_applyStoreOp(op)) {
             return
         }
         throw new Exception(
@@ -700,5 +707,85 @@ class StackFrame {
         }
 
         return true
+    }
+
+    def _applyReferenceOp(op: Operation): Boolean = {
+        op match {
+            case o: Getstatic => push(o._constFieldRef.fieldDescriptor())
+            case o: Putstatic => pop(o._constFieldRef.fieldDescriptor())
+            case o: Getfield => {
+                pop(new CheckRefType())
+                push(o._constFieldRef.fieldDescriptor())
+            }
+            case o: Putfield => {
+                pop(o._constFieldRef.fieldDescriptor())
+                pop(new CheckRefType())
+            }
+            case o: Invokeinterface => _applyMethod(
+                    o._constMethodRef.methodDescriptor(),
+                    true)  // on obj ref
+            case o: Invokespecial => _applyMethod(
+                    o._constMethodRef.methodDescriptor(),
+                    true)  // on obj ref
+            case o: Invokestatic => _applyMethod(
+                    o._constMethodRef.methodDescriptor(),
+                    false)  // on obj ref
+            case o: Invokevirtual => _applyMethod(
+                    o._constMethodRef.methodDescriptor(),
+                    true)  // on obj ref
+            case o: New => push(o._classType)
+            case o: Checkcast => {
+                pop(new CheckRefType())
+                push(o._classType)
+            }
+            case o: Instanceof => {
+                pop(new CheckRefType())
+                push(new IntType())
+            }
+            case o: Newarray => {
+                pop(new IntType())
+                push(new ArrayType(o._arrayType))
+            }
+            case o: Anewarray => {
+                pop(new IntType())
+                push(new ArrayType(o._classType))
+            }
+            case o: Multianewarray => {
+                for (_ <- 1 to o._dimensions) {
+                    pop(new IntType())
+                }
+                push(o._classType)
+            }
+            case _: Arraylength => {
+                pop(new CheckArrayType())
+                push(new IntType())
+            }
+            case _: Athrow => {
+                pop(new CheckRefType())
+            }
+            case _: Monitorenter => {
+                pop(new CheckRefType())
+            }
+            case _: Monitorexit => {
+                pop(new CheckRefType())
+            }
+            case _ => return false
+        }
+
+        return true
+    }
+
+    def _applyMethod(m: MethodType, onObjRef: Boolean) {
+        if (onObjRef) {
+            pop(new CheckRefType())
+        }
+
+        for (p <- m.parameters._parameters) {
+            pop(p)
+        }
+
+        if (m.returnType != null) {
+            push(m.returnType)
+        }
     }
 }
