@@ -98,12 +98,18 @@ abstract class LoadFromArray(
         mnemonic: String) extends NoOperandOp(owner, opCode, mnemonic) {
 }
 
+abstract class LoadFromBaseIntArray(
+        owner: AttributeOwner,
+        opCode: Int,
+        mnemonic: String) extends LoadFromArray(owner, opCode, mnemonic) {
+}
+
 //
 // iaload
 // stack: ..., arrayref, index -> ..., value
 //
 class LoadFromIArray(owner: AttributeOwner)
-        extends LoadFromArray(owner, OpCode.IALOAD, "iaload") {
+        extends LoadFromBaseIntArray(owner, OpCode.IALOAD, "iaload") {
 }
 
 //
@@ -143,7 +149,7 @@ class LoadFromAArray(owner: AttributeOwner)
 // stack: ..., arrayref, index -> ..., value
 //
 class LoadFromBArray(owner: AttributeOwner)
-        extends LoadFromArray(owner, OpCode.BALOAD, "baload") {
+        extends LoadFromBaseIntArray(owner, OpCode.BALOAD, "baload") {
 }
 
 //
@@ -151,7 +157,7 @@ class LoadFromBArray(owner: AttributeOwner)
 // stack: ..., arrayref, index -> ..., value
 //
 class LoadFromCArray(owner: AttributeOwner)
-        extends LoadFromArray(owner, OpCode.CALOAD, "caload") {
+        extends LoadFromBaseIntArray(owner, OpCode.CALOAD, "caload") {
 }
 
 //
@@ -159,5 +165,5 @@ class LoadFromCArray(owner: AttributeOwner)
 // stack: ..., arrayref, index -> ..., value
 //
 class LoadFromSArray(owner: AttributeOwner)
-        extends LoadFromArray(owner, OpCode.SALOAD, "saload") {
+        extends LoadFromBaseIntArray(owner, OpCode.SALOAD, "saload") {
 }

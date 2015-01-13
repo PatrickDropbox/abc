@@ -367,29 +367,50 @@ class StackFrame {
             case o: LoadF => load(new FloatType(), o.index)
             case o: LoadD => load(new DoubleType(), o.index)
             case o: LoadA => load(new CheckRefType(), o.index)
-            case o: LoadFromIArray => {
-                throw new Exception("TODO")
-            }
-            case o: LoadFromBArray => {  // byte (or bool) array
-                throw new Exception("TODO")
-            }
-            case o: LoadFromCArray => {  // char array
-                throw new Exception("TODO")
-            }
-            case o: LoadFromSArray => {  // short array
-                throw new Exception("TODO")
+            case o: LoadFromBaseIntArray => {
+                pop(new IntType())
+                pop(new CheckArrayType()) match {
+                    case arrType: ArrayType => {
+                        _check[BaseIntType](arrType.itemType)
+                        push(new IntType())
+                    }
+                }
             }
             case o: LoadFromLArray => {
-                throw new Exception("TODO")
+                pop(new IntType())
+                pop(new CheckArrayType()) match {
+                    case arrType: ArrayType => {
+                        _check[LongType](arrType.itemType)
+                        push(new LongType())
+                    }
+                }
             }
             case o: LoadFromFArray => {
-                throw new Exception("TODO")
+                pop(new IntType())
+                pop(new CheckArrayType()) match {
+                    case arrType: ArrayType => {
+                        _check[FloatType](arrType.itemType)
+                        push(new FloatType())
+                    }
+                }
             }
             case o: LoadFromDArray => {
-                throw new Exception("TODO")
+                pop(new IntType())
+                pop(new CheckArrayType()) match {
+                    case arrType: ArrayType => {
+                        _check[DoubleType](arrType.itemType)
+                        push(new DoubleType())
+                    }
+                }
             }
             case o: LoadFromAArray => {
-                throw new Exception("TODO")
+                pop(new IntType())
+                pop(new CheckArrayType()) match {
+                    case arrType: ArrayType => {
+                        _check[RefType](arrType.itemType)
+                        push(arrType.itemType)
+                    }
+                }
             }
             case _ => return false
         }
@@ -404,29 +425,47 @@ class StackFrame {
             case o: StoreF => store(new FloatType(), o.index)
             case o: StoreD => store(new DoubleType(), o.index)
             case o: StoreA => store(new CheckRefType(), o.index)
-            case o: StoreIntoIArray => {
-                throw new Exception("TODO")
-            }
-            case o: StoreIntoBArray => {  // byte (or bool) array
-                throw new Exception("TODO")
-            }
-            case o: StoreIntoCArray => {  // char array
-                throw new Exception("TODO")
-            }
-            case o: StoreIntoSArray => {  // short array
-                throw new Exception("TODO")
+            case o: StoreIntoBaseIntArray => {
+                pop(new IntType())
+                pop(new IntType())
+                pop(new CheckArrayType()) match {
+                    case arrType: ArrayType => _check[BaseIntType](
+                            arrType.itemType)
+                }
             }
             case o: StoreIntoLArray => {
-                throw new Exception("TODO")
+                pop(new LongType())
+                pop(new IntType())
+                pop(new CheckArrayType()) match {
+                    case arrType: ArrayType => _check[LongType](
+                            arrType.itemType)
+                }
             }
             case o: StoreIntoFArray => {
-                throw new Exception("TODO")
+                pop(new FloatType())
+                pop(new IntType())
+                pop(new CheckArrayType()) match {
+                    case arrType: ArrayType => _check[FloatType](
+                            arrType.itemType)
+                }
             }
             case o: StoreIntoDArray => {
-                throw new Exception("TODO")
+                pop(new DoubleType())
+                pop(new IntType())
+                pop(new CheckArrayType()) match {
+                    case arrType: ArrayType => _check[DoubleType](
+                            arrType.itemType)
+                }
             }
             case o: StoreIntoAArray => {
-                throw new Exception("TODO")
+                val item = pop(new CheckRefType())
+                pop(new IntType())
+                pop(new CheckArrayType()) match {
+                    case arrType: ArrayType => {
+                        _check[RefType](arrType.itemType)
+                        // TODO check arrType.itemType is supertype of item
+                    }
+                }
             }
             case _ => return false
         }
@@ -761,6 +800,7 @@ class StackFrame {
                 push(new IntType())
             }
             case _: Athrow => {
+                // TODO check is subtype of throwable
                 pop(new CheckRefType())
             }
             case _: Monitorenter => {
@@ -776,12 +816,13 @@ class StackFrame {
     }
 
     def _applyMethod(m: MethodType, onObjRef: Boolean) {
-        if (onObjRef) {
-            pop(new CheckRefType())
+        val params = m.parameters._parameters
+        for (i <- 1 to params.size()) {
+            pop(params.elementAt(params.size() - i))
         }
 
-        for (p <- m.parameters._parameters) {
-            pop(p)
+        if (onObjRef) {
+            pop(new CheckRefType())
         }
 
         if (m.returnType != null) {

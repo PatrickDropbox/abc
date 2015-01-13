@@ -97,12 +97,18 @@ abstract class StoreIntoArray(
         mnemonic: String) extends NoOperandOp(owner, opCode, mnemonic) {
 }
 
+abstract class StoreIntoBaseIntArray(
+        owner: AttributeOwner,
+        opCode: Int,
+        mnemonic: String) extends StoreIntoArray(owner, opCode, mnemonic) {
+}
+
 //
 // iastore
 // stack: ..., arrayref, index, value -> ...
 //
 class StoreIntoIArray(owner: AttributeOwner)
-        extends StoreIntoArray(owner, OpCode.IASTORE, "iastore") {
+        extends StoreIntoBaseIntArray(owner, OpCode.IASTORE, "iastore") {
 }
 
 //
@@ -142,7 +148,7 @@ class StoreIntoAArray(owner: AttributeOwner)
 // stack: ..., arrayref, index, value -> ...
 //
 class StoreIntoBArray(owner: AttributeOwner)
-        extends StoreIntoArray(owner, OpCode.BASTORE, "bastore") {
+        extends StoreIntoBaseIntArray(owner, OpCode.BASTORE, "bastore") {
 }
 
 //
@@ -150,7 +156,7 @@ class StoreIntoBArray(owner: AttributeOwner)
 // stack: ..., arrayref, index, value -> ...
 //
 class StoreIntoCArray(owner: AttributeOwner)
-        extends StoreIntoArray(owner, OpCode.CASTORE, "castore") {
+        extends StoreIntoBaseIntArray(owner, OpCode.CASTORE, "castore") {
 }
 
 //
@@ -158,5 +164,5 @@ class StoreIntoCArray(owner: AttributeOwner)
 // stack: ..., arrayref, index, value -> ...
 //
 class StoreIntoSArray(owner: AttributeOwner)
-        extends StoreIntoArray(owner, OpCode.SASTORE, "sastore") {
+        extends StoreIntoBaseIntArray(owner, OpCode.SASTORE, "sastore") {
 }
