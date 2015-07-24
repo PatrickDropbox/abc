@@ -1,0 +1,127 @@
+# target pattern (a subset of blaze syntax)
+#
+# unless blaze, target must be a rule.  Does not support file and :* syntax;
+# use filegroup instead.
+#
+# relative to project root:
+#
+# //foo/bar:zzz a specific rule in foo/bar
+# //foo/bar:all all rules in foo/bar
+# //foo/bar/... all targets recursively beneath foo/bar
+# //:all all targets in project root
+# //... all targets
+#
+# relative to current directory.  for example assume we're in foo
+#
+# bar:zzz a specific
+# bar:all
+# bar/... all targets recursively beneath foo/bar
+# :zzz a specific target in foo
+# :all all targets in foo
+# ... all targets recursively beneath foo
+#
+# subtractive pattern:
+#
+# //... -//foo/bar:all all targets except foo/bar
+import re
+
+from buildutil.util import pkg_name_join, validate_target_pattern
+
+
+class TargetPatterns(object):
+  def __init__(
+      self,
+      current_pkg_abs_path):
+    self.current_pkg = current_pkg_abs_path
+
+    self.additive_patterns = []
+    self.subtractive_patterns = []
+
+  def set_patterns(self, pattern_strs):
+    self.additive_patterns = []
+    self.subtractive_patterns = []
+
+    for pattern_str in pattern_strs:
+      group = self.additive_patterns
+      if pattern_str.startswith('-'):
+        pattern_str = pattern_str[1:]
+        group = self.subtractive_patterns
+
+      assert validate_target_pattern(pattern_str), pattern_str
+      pattern_str = pkg_name_join(self.current_pkg, pattern_str)
+
+      if pattern_str == '...' or pattern_str == '//...':
+        pattern = RecursiveTargetPattern(pattern_str[:-3])
+      elif pattern_str.endswith('/...'):
+        pattern = RecursiveTargetPattern(pattern_str[:-4])
+      elif pattern_str.endswith(':all'):
+        pattern = AllTargetPattern(pattern_str[:-4])
+      else:
+        pattern = SingleTargetPattern(pattern_str)
+      group.append(pattern)
+
+  def matches(self, target):
+    for pattern in self.subtractive_patterns:
+      if pattern.matches(target):
+        return False
+
+    for pattern in self.additive_patterns:
+      if pattern.matches(target):
+        return True
+
+    return False
+
+  def get_matching_targets(self, packages):
+    candidates = []
+    for pattern in self.additive_patterns:
+      candidates.extend(pattern.get_matching_targets(packages))
+
+    result = []
+    for target in candidates:
+      for pattern in self.subtractive_patterns:
+        if pattern.matches(target):
+          break
+      else:
+        result.append(target)
+
+    return result
+
+
+class SingleTargetPattern(object):
+  def __init__(self, target_full_path):
+    self.target_path = target_full_path
+
+  def matches(self, target):
+    return self.target_path == target.full_name()
+
+  def get_matching_targets(self, packages):
+    return [packages.get_or_load_target(self.target_path)]
+
+
+class AllTargetPattern(object):
+  def __init__(self, pkg_full_path):
+    self.pkg_path = pkg_full_path
+
+  def matches(self, target):
+    return self.pkg_path == target.package_path
+
+  def get_matching_targets(self, packages):
+    return packages.get_or_load_package(self.pkg_path).get_all_targets()
+
+
+class RecursiveTargetPattern(object):
+  def __init__(self, pkg_full_path):
+    self.pkg_path = pkg_full_path
+
+  def matches(self, target):
+    if self.pkg_path == target.package_path:
+      return True
+
+    return target.package_path.startswith(self.pkg_path + '/')
+
+  def get_matching_targets(self, packages):
+    targets = []
+    for pkg in packages.get_or_load_all_subpackages(self.pkg_path):
+      targets.extend(pkg.get_all_targets())
+    return targets
+

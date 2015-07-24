@@ -1,0 +1,51 @@
+class Node(object):
+  def __init__(self, target):
+    self.target = target
+    self.edges = set(target.dependencies)
+
+class TopoSorter(object):
+  def __init__(self):
+    pass
+
+  def sort(self, seed_target):
+    nodes = self._collect_nodes(seed_target)
+
+    result = []
+
+    while nodes:
+      no_edges = []
+      next_nodes = {}
+      for name, node in nodes.iteritems():
+        if not node.edges:
+          no_edges.append(node.target)
+        else:
+          next_nodes[name] = node
+
+      assert no_edges, 'Cycle found ...'
+      result.append(no_edges)
+
+      for node in next_nodes.values():
+        for target in no_edges:
+          node.edges.discard(target.full_name())
+
+      nodes = next_nodes
+
+    return result
+
+  def _collect_nodes(self, seed_target):
+    nodes = {}
+
+    frontier = [seed_target]
+    while frontier:
+      next_frontier = []
+      for t in frontier:
+        if t.full_name() in nodes:
+          continue
+
+        nodes[t.full_name()] = Node(t)
+        next_frontier.extend(t.dependencies.values())
+
+      frontier = next_frontier
+
+    return nodes
+
