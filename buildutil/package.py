@@ -75,21 +75,19 @@ class Package(object):
   def path():
     return self.full_path
 
+  def register(self, target):
+    assert target.name not in self.targets, (
+        'Duplicate target name: %s (pkg: %s)' % (
+            target.name,
+            self.full_path))
+    self.targets[target.name] = target
+
   def load(self, pkg_dir_abs_path):
     # TODO add package func to globals
     globals_dict = {}
     for rule in RULES:
-      def func(**kwargs):
-        target = rule(pkg=self, **kwargs)
-        assert target.name not in self.targets, (
-            'Duplicate target name: %s (pkg: %s)' % (
-                target.name,
-                self.full_path))
-        self.targets[target.name] = target
-      func.__name__ = rule.rule_name()
-
       assert rule.rule_name() not in globals_dict
-      globals_dict[rule.rule_name()] = func
+      globals_dict[rule.rule_name()] = partial(rule.register, pkg=self)
 
     config_file = os.path.join(pkg_dir_abs_path, CONFIG_FILE_NAME)
     try:

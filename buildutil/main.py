@@ -37,9 +37,7 @@ def main():
   for target in targets:
     for p in passes:
       p.run(target)
-    order = sorter.sort(target)
     print target.full_name()
-    print '   ', [[t.full_name() for t in l] for l in order]
 
   """
   pkg = pkgs.get_or_load_package('//buildutil/rules')

@@ -4,9 +4,9 @@ import re
 
 # XXX: maybe allow % and $
 TARGET_PATTERN_REGEX = re.compile(
-    '^(?:(?:(?://)?(?:\w+/)*\.\.\.)|(?:(?://)?(?:(?:\w+/)*\w+)?:\w+))$')
+    '^(?:(?:(?://)?(?:\w+/)*\.\.\.)|(?:(?://)?(?:(?:\w+/)*\w+)?:\w+(\.\w+)*))$')
 FULL_PKG_NAME_REGEX = re.compile('^//((?:\w+/)*\w+)?$')
-TARGE_NAME_REGEX = re.compile('^\w+$')
+TARGE_NAME_REGEX = re.compile('^\w+(\.\w+)*$')
 
 def validate_target_pattern(pattern):
   return TARGET_PATTERN_REGEX.match(pattern) is not None

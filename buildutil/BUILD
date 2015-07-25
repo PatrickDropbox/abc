@@ -3,6 +3,7 @@ py_library(
     srcs=['analysis_passes.py'],
     deps=[
       ':package',
+      ':topo_sorter',
     ])
 
 py_library(

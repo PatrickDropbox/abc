@@ -22,7 +22,7 @@ class TopoSorter(object):
           next_nodes[name] = node
 
       assert no_edges, 'Cycle found ...'
-      result.append(no_edges)
+      result.extend(no_edges)
 
       for node in next_nodes.values():
         for target in no_edges:

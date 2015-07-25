@@ -20,6 +20,10 @@ class TargetRule(object):
     assert validate_target_name(name), (
         'Invalid target name: %s (pkg: %s)' % (name, pkg.full_path))
 
+    assert artifacts, 'Target must have at least one artifact: %s (pkg: %s)' % (
+        name,
+        pkg.full_path)
+
     self.package_path = pkg.full_path
     self.name = name
     self.sources = sources
@@ -35,11 +39,18 @@ class TargetRule(object):
 
     # The following are initialized in later analysis passes.
 
-    self.binded = False
+    self.deps_binded = False
     self.dependencies = {}
 
     # None for not checked, False for no cycle, True for cycle.
     self.in_cycle = None
+
+    # NOTE: If this was implemented as a server (like blaze), then we should
+    # check source content hashes/size instead of sources/artifacts mtime
+    self.soruces_max_mtime = None
+    self.artifacts_max_mtime = None
+    # None for not checked, True if has build, False if build was unnecessary.
+    self.has_modified = None
 
   def full_name(self):
     return self.package_path + ':' + self.name
@@ -51,6 +62,10 @@ class TargetRule(object):
     return self.visibility_patterns.matches(target)
 
   @classmethod
+  def register(cls, pkg, **kwargs):
+    pkg.register(cls(pkg=pkg, **kwargs))
+
+  @classmethod
   def rule_name(cls):
     raise NotImplemented
 
@@ -58,3 +73,6 @@ class TargetRule(object):
   @classmethod
   def is_test_rule(cls):
     return False
+
+  def build(self, file_locator):
+    raise NotImplemented

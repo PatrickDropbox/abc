@@ -1,3 +1,8 @@
+import os
+
+from buildutil.topo_sorter import TopoSorter
+
+
 class BindDependencies(object):
   def __init__(self, pkgs):
     self.pkgs = pkgs
@@ -7,7 +12,7 @@ class BindDependencies(object):
     while frontier:
       next_frontier = []
       for target in frontier:
-        if target.binded:
+        if target.deps_binded:
           continue
 
         deps = target.dependency_patterns.get_matching_targets(self.pkgs)
@@ -20,7 +25,7 @@ class BindDependencies(object):
           assert t.is_visible_to(target), (
               '%s is not visible to %s' % (t.full_name(), target.full_name()))
         target.dependencies = {t.full_name(): t for t in deps}
-        target.binded = True
+        target.deps_binded = True
 
         next_frontier.extend(deps)
       frontier = next_frontier
@@ -50,3 +55,78 @@ class CheckCycles(object):
         break
       else:
         stack.pop().in_cycle = False
+
+class BuildTargets(object):
+  def __init__(self, file_locator):
+    self.sorter = TopoSorter()
+    self.file_locator = file_locator
+
+  def run(self, seed_target):
+    order = self.sorter.sort(seed_target)
+
+    for target in order:
+      if self._should_build(target):
+        target.build(self.file_locator)
+
+        target.artifacts_max_mtime = self._get_largeest_mtime(
+            target,
+            target.artifacts,
+            verify_existence=True)
+
+        target.has_modified = True
+      else:
+        if target.has_modified is None:
+          target.has_modified = False
+
+  def _should_build(self, target):
+    if target.has_modified is not None:
+      # No need to rebuild previously checked target.
+      return False
+
+    if not target.sources and not target.dependencies:
+      return True
+
+    target.artifacts_max_mtime = self._get_largeest_mtime(
+        target,
+        target.artifacts,
+        verify_existence=False)
+
+    if target.artifacts_max_mtime is None:
+      return True
+
+    if target.sources:
+      target.sources_max_mtime = self._get_max_mtime(
+          target,
+          target.sources,
+          verify_existence=True)
+      assert target.sources_max_mtime
+
+      if target.artifacts_largest_time < target.sources_max_mtime:
+        return True
+
+    for dep in target.dependencies.values():
+      assert dep.has_modified is not None
+      if dep.has_modified:
+        return True
+
+      assert dep.artifacts_max_mtime is not None
+      if target.artifacts_max_mtime < dep.artifacts_max_mtime:
+        return True
+
+    return False
+
+  def _get_max_mtime(self, target, files, verify_existence=False):
+    max_mtime = None
+    for f in files:
+      abs_path = self.file_locator.find(target, f)
+      if abs_path is None:
+        assert not verify_existence, (
+            'Failed to locate: %s (target: %s)' % (f, target.full_path()))
+        continue
+
+      mtime = os.lstat(abs_path).st_mtime
+      if max_mtime is None or max_mtime < mtime:
+        max_mtime = mtime
+
+    return max_mtime
+
