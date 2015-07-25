@@ -37,7 +37,7 @@ def main():
   for target in targets:
     for p in passes:
       p.run(target)
-    print target.full_name()
+    print target.full_name(), target.__class__
 
   """
   pkg = pkgs.get_or_load_package('//buildutil/rules')

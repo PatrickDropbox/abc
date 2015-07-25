@@ -3,7 +3,12 @@ import os
 from buildutil.topo_sorter import TopoSorter
 
 
-class BindDependencies(object):
+class AnalysisPass(object):
+  def run(self, seed_target):
+    raise NotImplemented
+
+
+class BindDependencies(AnalysisPass):
   def __init__(self, pkgs):
     self.pkgs = pkgs
 
@@ -31,7 +36,7 @@ class BindDependencies(object):
       frontier = next_frontier
 
 
-class CheckCycles(object):
+class CheckCycles(AnalysisPass):
   def __init__(self):
     pass
 
@@ -56,7 +61,7 @@ class CheckCycles(object):
       else:
         stack.pop().in_cycle = False
 
-class BuildTargets(object):
+class BuildTargets(AnalysisPass):
   def __init__(self, file_locator):
     self.sorter = TopoSorter()
     self.file_locator = file_locator
@@ -83,6 +88,7 @@ class BuildTargets(object):
       # No need to rebuild previously checked target.
       return False
 
+    # Artifacts are created without source and dependencies.
     if not target.sources and not target.dependencies:
       return True
 
@@ -91,6 +97,7 @@ class BuildTargets(object):
         target.artifacts,
         verify_existence=False)
 
+    # First time building the artifacts.
     if target.artifacts_max_mtime is None:
       return True
 
@@ -101,15 +108,20 @@ class BuildTargets(object):
           verify_existence=True)
       assert target.sources_max_mtime
 
+      # Sources are newer than the artifacts.
       if target.artifacts_largest_time < target.sources_max_mtime:
         return True
 
     for dep in target.dependencies.values():
       assert dep.has_modified is not None
+      # A dependency changed within the same session (i.e., when multiple
+      # targets are specified in the same build command).  This is more
+      # accurate than the mtime check.
       if dep.has_modified:
         return True
 
       assert dep.artifacts_max_mtime is not None
+      # The dependency changed from a previous session.
       if target.artifacts_max_mtime < dep.artifacts_max_mtime:
         return True
 
@@ -122,11 +134,23 @@ class BuildTargets(object):
       if abs_path is None:
         assert not verify_existence, (
             'Failed to locate: %s (target: %s)' % (f, target.full_path()))
-        continue
+        return None
 
       mtime = os.lstat(abs_path).st_mtime
       if max_mtime is None or max_mtime < mtime:
         max_mtime = mtime
 
     return max_mtime
+
+class TestTargets(AnalysisPass):
+  def __init__(self, file_locator):
+    self.sorter = TopoSorter()
+    self.file_locator = file_locator
+
+  def run(self, seed_target):
+    order = self.sorter.sort(seed_target)
+
+    for target in order:
+      if target.is_test_rule():
+        target.test(self.file_locator)
 

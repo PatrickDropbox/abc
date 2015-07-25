@@ -53,9 +53,11 @@ class TargetRule(object):
     self.has_modified = None
 
   def full_name(self):
+    """DO NOT OVERRIDE"""
     return self.package_path + ':' + self.name
 
   def is_visible_to(self, target):
+    """DO NOT OVERRIDE"""
     if self.package_path == target.package_path:
       return True
 
@@ -63,16 +65,26 @@ class TargetRule(object):
 
   @classmethod
   def register(cls, pkg, **kwargs):
+    """Override to customize target registration (see PyBinaryTargetRule for
+    example)."""
     pkg.register(cls(pkg=pkg, **kwargs))
 
   @classmethod
   def rule_name(cls):
+    """The function name used in config file, e.g., cc_library"""
     raise NotImplemented
 
-  # When building libraries / binaries, test targets are ignored.
   @classmethod
   def is_test_rule(cls):
+    """When building libraries / binaries, test targets are ignored.  When
+    true, must implement test"""
     return False
 
   def build(self, file_locator):
+    """How the target should be build"""
     raise NotImplemented
+
+  def test(self, file_locator):
+    """How the target should be tested"""
+    raise NotImplemented
+
