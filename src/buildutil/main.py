@@ -4,7 +4,6 @@ from buildutil.analysis_passes import (
     BindDependencies,
     BuildTargets,
     CheckCycles,
-    TestTargets,
     )
 from buildutil.config import Config
 from buildutil.package import PackageSet
@@ -13,7 +12,7 @@ from buildutil.topo_sorter import TopoSorter
 
 
 def main():
-  config = Config(os.getcwd() + '/..', 'src', 'genrule', 'build')
+  config = Config(os.getcwd() + '/..', 'src', 'genfile', 'build')
 
   pkgs = PackageSet(config)
   pkgs.get_or_load_all_subpackages('//')
@@ -35,7 +34,6 @@ def main():
       BindDependencies(pkgs),
       CheckCycles(),
       BuildTargets(),
-      TestTargets(),
       ]
 
   sorter = TopoSorter()

@@ -66,17 +66,26 @@ class BuildTargets(AnalysisPass):
     self.sorter = TopoSorter()
 
   def run(self, seed_target):
+    print 'Building', seed_target.full_name()
+    print '=' * 80
     order = self.sorter.sort(seed_target)
 
-    for target in order:
+    for i, target in enumerate(order):
+      print 'Triggered', target.full_name(), '(%s of %s)' % (i, len(order) - 1)
       if self._should_build(target):
-        target.build()
+        print "SHIT", target.pkg_build_dir(), target.pkg_genfile_dir()
+        # TODO make genfile / build dir
+        # TODO clean up artifacts in genfile / build dir.
+        succeeded = target.build()
+        assert succeeded, 'Failed to build %s' % target.full_name()
 
         target.update_artifacts_max_mtime(verify_existence=True)
         target.has_modified = True
       else:
+        print 'Target is up-to-date.'
         if target.has_modified is None:
           target.has_modified = False
+      print '-' * 80
 
   def _should_build(self, target):
     if target.has_modified is not None:
@@ -87,16 +96,4 @@ class BuildTargets(AnalysisPass):
     target.update_artifacts_max_mtime(verify_existence=False)
 
     return target.should_build()
-
-
-class TestTargets(AnalysisPass):
-  def __init__(self):
-    self.sorter = TopoSorter()
-
-  def run(self, seed_target):
-    order = self.sorter.sort(seed_target)
-
-    for target in order:
-      if target.is_test_rule():
-        target.test()
 

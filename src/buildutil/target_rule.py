@@ -93,6 +93,18 @@ class TargetRule(object):
         self.artifacts,
         verify_existence=verify_existence)
 
+  def pkg_src_dir(self):
+    """DO NOT OVERRIDE"""
+    return self.config.pkg_name_to_pkg_src_dir(self.package_path)
+
+  def pkg_genfile_dir(self):
+    """DO NOT OVERRIDE"""
+    return self.config.pkg_name_to_pkg_genfile_dir(self.package_path)
+
+  def pkg_build_dir(self):
+    """DO NOT OVERRIDE"""
+    return self.config.pkg_name_to_pkg_build_dir(self.package_path)
+
   @classmethod
   def register(cls, pkg, **kwargs):
     """Override to customize target registration (see PyBinaryTargetRule for
@@ -142,12 +154,16 @@ class TargetRule(object):
     return False
 
   def build(self):
-    """How the target should be build"""
+    """How the target should be build.  Returns true if build succeeded, false
+    otherwise."""
     print 'BUILD', self.name
     #raise NotImplemented
+    return True
 
   def test(self):
-    """How the target should be tested"""
+    """How the target should be tested.  Returns true if test succeeded, false
+    otherwise."""
     print 'TEST', self.name
     #raise NotImplemented
+    return True
 
