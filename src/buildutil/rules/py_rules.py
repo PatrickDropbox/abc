@@ -72,15 +72,15 @@ class PyLibraryTargetRule(TargetRule):
     return "py_library"
 
   def build(self):
-    for src_file_name in sources:
+    for src_file_name in self.sources:
       abs_path = self.locate_file(src_file_name)
       assert abs_path
 
       r = self.execute_cmd('touch %s' % abs_path)
-      if not r:
+      if r != 0:
         return False
 
-  return True
+    return True
 
 
 class PyBinaryTargetRule(TargetRule):
