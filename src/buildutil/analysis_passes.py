@@ -65,6 +65,7 @@ class CheckCycles(AnalysisPass):
       else:
         stack.pop().in_cycle = False
 
+
 class BuildTargets(AnalysisPass):
   def __init__(self):
     self.sorter = TopoSorter()
@@ -72,10 +73,12 @@ class BuildTargets(AnalysisPass):
   def run(self, seed_targets):
     order = self.sorter.sort(seed_targets)
 
+    self._make_dirs([t.pkg_genfile_dir() for t in order])
+    self._make_dirs([t.pkg_build_dir() for t in order])
+
     for i, target in enumerate(order):
       print 'Building', target.full_name(), '(%s of %s)' % (i, len(order) - 1)
       if self._should_build(target):
-        # TODO make genfile / build dir
         # TODO clean up artifacts in genfile / build dir.
         succeeded = target.build()
         assert succeeded, 'Failed to build %s' % target.full_name()
@@ -88,6 +91,16 @@ class BuildTargets(AnalysisPass):
           target.has_modified = False
       print '-' * 80
 
+  def _make_dirs(self, dirs):
+    for d in set(dirs):
+      try:
+        os.makedirs(d)
+      except OSError as e:
+        if e.errno == 17:  # i.e., file exists
+          assert os.path.isdir(d), d
+        else:
+          raise
+
   def _should_build(self, target):
     if target.has_modified is not None:
       # No need to rebuild previously checked target.
@@ -97,6 +110,7 @@ class BuildTargets(AnalysisPass):
     target.update_artifacts_max_mtime(verify_existence=False)
 
     return target.should_build()
+
 
 class TestTargets(AnalysisPass):
   def __init__(self):
