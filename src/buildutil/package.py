@@ -24,7 +24,7 @@ class PackageSet(object):
     if pkg_full_name in self.pkgs:
       return self.pkgs[pkg_full_name]
 
-    pkg = Package(pkg_full_name)
+    pkg = Package(pkg_full_name, self.config)
     pkg.load(self.config.pkg_name_to_pkg_src_dir(pkg_full_name))
     self.pkgs[pkg_full_name] = pkg
     return pkg
@@ -48,11 +48,12 @@ class PackageSet(object):
 
 
 class Package(object):
-  def __init__(self, pkg_full_path):
+  def __init__(self, pkg_full_path, config):
     assert validate_pkg_full_path(pkg_full_path), (
         'Invalid package full path: %s' % pkg_full_path)
 
     self.full_path = pkg_full_path
+    self.config = config
     self.targets = {}
     self.visibility_patterns = TargetPatterns(self.full_path)
 

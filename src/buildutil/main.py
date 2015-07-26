@@ -34,8 +34,8 @@ def main():
   passes = [
       BindDependencies(pkgs),
       CheckCycles(),
-      BuildTargets(config),
-      TestTargets(config),
+      BuildTargets(),
+      TestTargets(),
       ]
 
   sorter = TopoSorter()

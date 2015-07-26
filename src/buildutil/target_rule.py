@@ -1,5 +1,8 @@
+import os
+
 from buildutil.target_patterns import TargetPatterns
 from buildutil.util import validate_target_name
+
 
 class TargetRule(object):
   def __init__(
@@ -26,6 +29,7 @@ class TargetRule(object):
 
     self.package_path = pkg.full_path
     self.name = name
+    self.config = pkg.config
     self.sources = sources
     self.dependency_patterns = TargetPatterns(pkg.full_path)
     self.dependency_patterns.set_patterns(dependencies)
@@ -63,6 +67,32 @@ class TargetRule(object):
 
     return self.visibility_patterns.matches(target)
 
+  def _get_max_mtime(self, files, verify_existence=False):
+    """DO NOT OVERRIDE"""
+    max_mtime = None
+    for f in files:
+      abs_path = self.config.locate_file(self.package_path, f)
+      if abs_path is None:
+        assert not verify_existence, (
+            'Failed to locate: %s (target: %s)' % (f, self.full_path()))
+        return None
+
+      mtime = os.lstat(abs_path).st_mtime
+      if max_mtime is None or max_mtime < mtime:
+        max_mtime = mtime
+
+  def update_sources_max_mtime(self):
+    """DO NOT OVERRIDE"""
+    self.sources_max_mtime = self._get_max_mtime(
+        self.sources,
+        verify_existence=True)
+
+  def update_artifacts_max_mtime(self, verify_existence=True):
+    """DO NOT OVERRIDE"""
+    self.artifacts_max_mtime = self._get_max_mtime(
+        self.artifacts,
+        verify_existence=verify_existence)
+
   @classmethod
   def register(cls, pkg, **kwargs):
     """Override to customize target registration (see PyBinaryTargetRule for
@@ -71,7 +101,7 @@ class TargetRule(object):
 
   @classmethod
   def rule_name(cls):
-    """The function name used in config file, e.g., cc_library"""
+    """The function name used in BUILD file, e.g., cc_library"""
     raise NotImplemented
 
   @classmethod
@@ -80,12 +110,43 @@ class TargetRule(object):
     true, must implement test"""
     return False
 
-  def build(self, config):
+  def should_build(self):
+    # Artifacts are created without source and dependencies.
+    if not self.sources and not self.dependencies:
+      return True
+
+    # First time building the artifacts.
+    if self.artifacts_max_mtime is None:
+      return True
+
+    if self.sources:
+      assert self.sources_max_mtime
+
+      # Sources are newer than the artifacts.
+      if self.artifacts_max_mtime < self.sources_max_mtime:
+        return True
+
+    for dep in self.dependencies.values():
+      assert dep.has_modified is not None
+      # A dependency changed within the same session (i.e., when multiple
+      # targets are specified in the same build command).  This is more
+      # accurate than the mtime check.
+      if dep.has_modified:
+        return True
+
+      assert dep.artifacts_max_mtime is not None
+      # The dependency changed from a previous session.
+      if self.artifacts_max_mtime < dep.artifacts_max_mtime:
+        return True
+
+    return False
+
+  def build(self):
     """How the target should be build"""
     print 'BUILD', self.name
     #raise NotImplemented
 
-  def test(self, config):
+  def test(self):
     """How the target should be tested"""
     print 'TEST', self.name
     #raise NotImplemented

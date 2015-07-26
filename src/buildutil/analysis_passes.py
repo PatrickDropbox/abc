@@ -62,22 +62,17 @@ class CheckCycles(AnalysisPass):
         stack.pop().in_cycle = False
 
 class BuildTargets(AnalysisPass):
-  def __init__(self, config):
+  def __init__(self):
     self.sorter = TopoSorter()
-    self.config = config
 
   def run(self, seed_target):
     order = self.sorter.sort(seed_target)
 
     for target in order:
       if self._should_build(target):
-        target.build(self.config)
+        target.build()
 
-        target.artifacts_max_mtime = self._get_max_mtime(
-            target,
-            target.artifacts,
-            verify_existence=True)
-
+        target.update_artifacts_max_mtime(verify_existence=True)
         target.has_modified = True
       else:
         if target.has_modified is None:
@@ -88,69 +83,20 @@ class BuildTargets(AnalysisPass):
       # No need to rebuild previously checked target.
       return False
 
-    # Artifacts are created without source and dependencies.
-    if not target.sources and not target.dependencies:
-      return True
+    target.update_sources_max_mtime()
+    target.update_artifacts_max_mtime(verify_existence=False)
 
-    target.artifacts_max_mtime = self._get_max_mtime(
-        target,
-        target.artifacts,
-        verify_existence=False)
+    return target.should_build()
 
-    # First time building the artifacts.
-    if target.artifacts_max_mtime is None:
-      return True
-
-    if target.sources:
-      target.sources_max_mtime = self._get_max_mtime(
-          target,
-          target.sources,
-          verify_existence=True)
-      assert target.sources_max_mtime
-
-      # Sources are newer than the artifacts.
-      if target.artifacts_max_mtime < target.sources_max_mtime:
-        return True
-
-    for dep in target.dependencies.values():
-      assert dep.has_modified is not None
-      # A dependency changed within the same session (i.e., when multiple
-      # targets are specified in the same build command).  This is more
-      # accurate than the mtime check.
-      if dep.has_modified:
-        return True
-
-      assert dep.artifacts_max_mtime is not None
-      # The dependency changed from a previous session.
-      if target.artifacts_max_mtime < dep.artifacts_max_mtime:
-        return True
-
-    return False
-
-  def _get_max_mtime(self, target, files, verify_existence=False):
-    max_mtime = None
-    for f in files:
-      abs_path = self.config.locate_file(target.package_path, f)
-      if abs_path is None:
-        assert not verify_existence, (
-            'Failed to locate: %s (target: %s)' % (f, target.full_path()))
-        return None
-
-      mtime = os.lstat(abs_path).st_mtime
-      if max_mtime is None or max_mtime < mtime:
-        max_mtime = mtime
-
-    return max_mtime
 
 class TestTargets(AnalysisPass):
-  def __init__(self, config):
+  def __init__(self):
     self.sorter = TopoSorter()
-    self.config = config
 
   def run(self, seed_target):
     order = self.sorter.sort(seed_target)
 
     for target in order:
       if target.is_test_rule():
-        target.test(self.config)
+        target.test()
 
