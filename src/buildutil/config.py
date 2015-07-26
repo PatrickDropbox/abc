@@ -48,6 +48,25 @@ class Config(object):
     assert pkg_name.startswith('//'), pkg_name
     return os.path.join(self.build_dir, pkg_name[2:])
 
+  def src_file_path(self, pkg_name, file_name):
+    assert not file_name.startswith('/')
+    assert '../' not in file_name
+
+    return os.path.join(self.pkg_name_to_pkg_src_dir(pkg_name), file_name)
+
+  def genfile_file_path(self, pkg_name, file_name):
+    assert not file_name.startswith('/')
+    assert '../' not in file_name
+
+    return os.path.join(self.pkg_name_to_pkg_genfile_dir(pkg_name), file_name)
+
+
+  def build_file_path(self, pkg_name, file_name):
+    assert not file_name.startswith('/')
+    assert '../' not in file_name
+
+    return os.path.join(self.pkg_name_to_pkg_build_dir(pkg_name), file_name)
+
   def locate_file(
       self,
       package_name,
@@ -55,27 +74,18 @@ class Config(object):
       include_src_dir=True,
       include_genfile_dir=True,
       include_build_dir=True):
-    assert not file_name.startswith('/')
-    assert '../' not in file_name
-
     if include_src_dir:
-      src_path = os.path.join(
-          self.pkg_name_to_pkg_src_dir(package_name),
-          file_name)
+      src_path = self.src_file_path(package_name, file_name)
       if os.path.exists(src_path):
         return src_path
 
     if include_genfile_dir:
-      genfile_path = os.path.join(
-          self.pkg_name_to_pkg_genfile_dir(package_name),
-          file_name)
+      genfile_path = self.genfile_file_path(package_name, file_name)
       if os.path.exists(genfile_path):
         return genfile_path
 
     if include_build_dir:
-      build_path = os.path.join(
-          self.pkg_name_to_pkg_build_dir(package_name),
-          file_name)
+      build_path = self.build_file_path(package_name, file_name)
       if os.path.exists(build_path):
         return build_path
 

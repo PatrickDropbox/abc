@@ -71,7 +71,7 @@ class TargetRule(object):
     """DO NOT OVERRIDE"""
     max_mtime = None
     for f in files:
-      abs_path = self.config.locate_file(self.package_path, f)
+      abs_path = self.locate_file(f)
       if abs_path is None:
         assert not verify_existence, (
             'Failed to locate: %s (target: %s)' % (f, self.full_path()))
@@ -104,6 +104,32 @@ class TargetRule(object):
   def pkg_build_dir(self):
     """DO NOT OVERRIDE"""
     return self.config.pkg_name_to_pkg_build_dir(self.package_path)
+
+  def src_file_path(self, file_name):
+    """DO NOT OVERRIDE"""
+    return self.config.src_file_path(self.package_path, file_name)
+
+  def genfile_file_path(self, file_name):
+    """DO NOT OVERRIDE"""
+    return self.config.genfile_file_path(self.package_path, file_name)
+
+  def build_file_path(self, file_name):
+    """DO NOT OVERRIDE"""
+    return self.config.build_file_path(self.package_path, file_name)
+
+  def locate_file(
+      self,
+      file_name,
+      include_src_dir=True,
+      include_genfile_dir=True,
+      include_build_dir=True):
+    """DO NOT OVERRIDE"""
+    return self.config.locate_file(
+        self.package_path,
+        file_name,
+        include_src_dir=include_src_dir,
+        include_genfile_dir=include_genfile_dir,
+        include_build_dir=include_build_dir)
 
   @classmethod
   def register(cls, pkg, **kwargs):

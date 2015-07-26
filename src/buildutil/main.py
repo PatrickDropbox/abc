@@ -34,6 +34,7 @@ def main():
       BindDependencies(pkgs),
       CheckCycles(),
       BuildTargets(),
+      TestTargets(),
       ]
 
   targets = p.get_matching_targets(pkgs)
