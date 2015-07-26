@@ -1,4 +1,5 @@
 import os
+import subprocess
 
 from buildutil.target_patterns import TargetPatterns
 from buildutil.util import validate_target_name
@@ -67,25 +68,32 @@ class TargetRule(object):
 
     return self.visibility_patterns.matches(target)
 
-  def _get_max_mtime(self, files, verify_existence=False):
+  def _get_max_mtime(
+      self,
+      files,
+      verify_existence=False,
+      include_build_dir=True):
     """DO NOT OVERRIDE"""
     max_mtime = None
     for f in files:
-      abs_path = self.locate_file(f)
+      abs_path = self.locate_file(f, include_build_dir=include_build_dir)
       if abs_path is None:
         assert not verify_existence, (
             'Failed to locate: %s (target: %s)' % (f, self.full_path()))
         return None
 
-      mtime = os.lstat(abs_path).st_mtime
+      mtime = os.lstat(abs_path).st_mtime  # Don't follow links
       if max_mtime is None or max_mtime < mtime:
         max_mtime = mtime
+
+      return max_mtime
 
   def update_sources_max_mtime(self):
     """DO NOT OVERRIDE"""
     self.sources_max_mtime = self._get_max_mtime(
         self.sources,
-        verify_existence=True)
+        verify_existence=True,
+        include_build_dir=False)  # maybe allow this to be true?
 
   def update_artifacts_max_mtime(self, verify_existence=True):
     """DO NOT OVERRIDE"""
@@ -117,6 +125,24 @@ class TargetRule(object):
     """DO NOT OVERRIDE"""
     return self.config.build_file_path(self.package_path, file_name)
 
+  def execute_cmd(self, cmd_str, additional_env=None):
+    """DO NOT OVERRIDE.  Use this for shelling out commands for building /
+    testing."""
+    env = {
+      'PROJECT_ROOT_DIR' : self.config.project_dir,
+      'SRC_DIR' : self.config.src_dir,
+      'GENFILE_DIR' : self.config.genfile_dir,
+      'BUILD_DIR': self.config.build_dir,
+      'PACKAGE': self.package_path[2:],
+      'TARGET': self.name,
+    }
+    if additional_env:
+      env.update(additional_env)
+
+    print 'Executing:', cmd_str
+    p = subprocess.Popen(cmd_str, shell=True, env=env)
+    return p.wait()
+
   def locate_file(
       self,
       file_name,
@@ -147,6 +173,25 @@ class TargetRule(object):
     """When building libraries / binaries, test targets are ignored.  When
     true, must implement test"""
     return False
+
+  @classmethod
+  def include_dependencies_artifacts(cls):
+    """Controls list_artifact_files behavior.  Useful for stopping artifacts
+    from propagating beyond a certain target."""
+    return True
+
+  def list_artifact_files(self):
+    result = set()
+    for f in self.artifacts:
+      path = self.locate_file(f)
+      if path:
+        result.add(path)
+
+    if self.include_dependencies_artifacts():
+      for d in self.dependencies.values():
+        result = result.union(d.list_artifact_files())
+
+    return result
 
   def should_build(self):
     # Artifacts are created without source and dependencies.
@@ -189,7 +234,5 @@ class TargetRule(object):
   def test(self):
     """How the target should be tested.  Returns true if test succeeded, false
     otherwise."""
-    print 'TEST', self.name
-    #raise NotImplemented
-    return True
+    raise NotImplemented
 

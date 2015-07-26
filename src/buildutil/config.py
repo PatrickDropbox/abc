@@ -76,17 +76,17 @@ class Config(object):
       include_build_dir=True):
     if include_src_dir:
       src_path = self.src_file_path(package_name, file_name)
-      if os.path.exists(src_path):
+      if os.path.isfile(src_path):
         return src_path
 
     if include_genfile_dir:
       genfile_path = self.genfile_file_path(package_name, file_name)
-      if os.path.exists(genfile_path):
+      if os.path.isfile(genfile_path):
         return genfile_path
 
     if include_build_dir:
       build_path = self.build_file_path(package_name, file_name)
-      if os.path.exists(build_path):
+      if os.path.isfile(build_path):
         return build_path
 
     return None

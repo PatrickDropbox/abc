@@ -69,11 +69,12 @@ class Package(object):
   def path():
     return self.full_path
 
-  def register(self, target):
-    assert target.name not in self.targets, (
-        'Duplicate target name: %s (pkg: %s)' % (
-            target.name,
-            self.full_path))
+  def register(self, target, ignore_duplicate=False):
+    if not ignore_duplicate:
+      assert target.name not in self.targets, (
+          'Duplicate target name: %s (pkg: %s)' % (
+              target.name,
+              self.full_path))
     self.targets[target.name] = target
 
   def load(self, pkg_dir_abs_path):

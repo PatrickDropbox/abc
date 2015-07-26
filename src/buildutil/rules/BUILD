@@ -10,7 +10,10 @@ py_library(
 py_library(
     name='py_rules',
     srcs=['py_rules.py'],
-    deps=['//buildutil:target_rule'],
+    deps=[
+        '//buildutil:target_patterns',
+        '//buildutil:target_rule',
+        ],
     visibility=[])
 
 py_library(

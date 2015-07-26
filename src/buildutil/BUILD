@@ -25,7 +25,8 @@ py_library(
 py_library(
     name='target_patterns',
     srcs=['target_patterns.py'],
-    deps=[':util'])
+    deps=[':util'],
+    visibility=['//buildutil/...'])
 
 py_library(
     name='target_rule',

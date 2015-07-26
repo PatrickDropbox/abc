@@ -79,13 +79,13 @@ class BuildTargets(AnalysisPass):
     for i, target in enumerate(order):
       print 'Building', target.full_name(), '(%s of %s)' % (i, len(order) - 1)
       if self._should_build(target):
-        self._remove_generated_artifacts(target)
-
         succeeded = target.build()
         assert succeeded, 'Failed to build %s' % target.full_name()
 
         target.update_artifacts_max_mtime(verify_existence=True)
         target.has_modified = True
+
+        print 'Done'
       else:
         print 'Target is up-to-date.'
         if target.has_modified is None:
@@ -100,19 +100,6 @@ class BuildTargets(AnalysisPass):
         if e.errno == 17:  # i.e., file exists
           assert os.path.isdir(d), d
         else:
-          raise
-
-  def _remove_generated_artifacts(self, target):
-    for f in target.artifacts:
-      try:
-        os.remove(target.genfile_file_path(f))
-      except OSError as e:
-        if e.errno != 2:  # 2 = "no such file"
-          raise
-      try:
-        os.remove(target.build_file_path(f))
-      except OSError as e:
-        if e.errno != 2:  # 2 = "no such file"
           raise
 
   def _should_build(self, target):
@@ -139,6 +126,7 @@ class TestTargets(AnalysisPass):
       succeeded = target.test()
       if succeeded:
         passed += 1
+      print 'Done'
       print '-' * 80
 
     print '%s of %s test targets passed.' % (passed, len(tests))
