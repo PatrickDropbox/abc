@@ -27,9 +27,10 @@ class BindDependencies(AnalysisPass):
           deps = [t for t in deps if not t.is_test_rule()]
 
         for t in deps:
-          assert t.is_visible_to(target), (
-              '%s is not visible to %s' % (t.full_name(), target.full_name()))
-        target.dependencies = {t.full_name(): t for t in deps}
+          assert t.is_visible_to(target), '%s is not visible to %s' % (
+              t.target_path(),
+              target.target_path())
+        target.dependencies = {t.target_path(): t for t in deps}
         target.deps_binded = True
 
         next_frontier.extend(deps)
@@ -59,7 +60,7 @@ class CheckCycles(AnalysisPass):
           for t in cycle:
             t.in_cycle = True
           assert False, ('Cycle detected: %s -> ...' %
-              ' -> '.join([t.full_name() for t in cycle]))
+              ' -> '.join([t.target_path() for t in cycle]))
         stack.append(d)
         break
       else:
@@ -73,16 +74,18 @@ class BuildTargets(AnalysisPass):
   def run(self, seed_targets):
     order = self.sorter.sort(seed_targets)
 
-    self._make_dirs([t.pkg_genfile_dir() for t in order])
-    self._make_dirs([t.pkg_build_dir() for t in order])
+    self._make_dirs([t.genfile_abs_path() for t in order])
+    self._make_dirs([t.build_abs_path() for t in order])
 
     for i, target in enumerate(order):
-      print 'Building', target.full_name(), '(%s of %s)' % (i, len(order) - 1)
+      print 'Building', target.target_path(), '(%s of %s)' % (i, len(order) - 1)
       if self._should_build(target):
         succeeded = target.build()
-        assert succeeded, 'Failed to build %s' % target.full_name()
+        assert succeeded, 'Failed to build %s' % target.target_path()
 
-        target.update_artifacts_max_mtime(verify_existence=True)
+        target.update_artifacts_max_mtime(verify_existence=False)
+        # TODO undo
+        #target.update_artifacts_max_mtime(verify_existence=True)
         target.has_modified = True
 
         print 'Done'
@@ -122,7 +125,7 @@ class TestTargets(AnalysisPass):
 
     passed = 0
     for i, target in enumerate(tests):
-      print 'Testing',  target.full_name(), '(%s of %s)' % (i, len(tests) - 1)
+      print 'Testing',  target.target_path(), '(%s of %s)' % (i, len(tests) - 1)
       succeeded = target.test()
       if succeeded:
         passed += 1

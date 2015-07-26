@@ -31,8 +31,8 @@ from buildutil.util import pkg_name_join, validate_target_pattern
 class TargetPatterns(object):
   def __init__(
       self,
-      current_pkg_abs_path):
-    self.current_pkg = current_pkg_abs_path
+      current_pkg_path):
+    self.current_pkg_path = current_pkg_path
 
     self.additive_patterns = []
     self.subtractive_patterns = []
@@ -48,7 +48,7 @@ class TargetPatterns(object):
         group = self.subtractive_patterns
 
       assert validate_target_pattern(pattern_str), pattern_str
-      pattern_str = pkg_name_join(self.current_pkg, pattern_str)
+      pattern_str = pkg_name_join(self.current_pkg_path, pattern_str)
 
       if pattern_str == '...' or pattern_str == '//...':
         pattern = RecursiveTargetPattern(pattern_str[:-3])
@@ -88,36 +88,36 @@ class TargetPatterns(object):
 
 
 class SingleTargetPattern(object):
-  def __init__(self, target_full_path):
-    self.target_path = target_full_path
+  def __init__(self, target_path):
+    self.target_path = target_path
 
   def matches(self, target):
-    return self.target_path == target.full_name()
+    return self.target_path == target.target_path()
 
   def get_matching_targets(self, packages):
     return [packages.get_or_load_target(self.target_path)]
 
 
 class AllTargetPattern(object):
-  def __init__(self, pkg_full_path):
-    self.pkg_path = pkg_full_path
+  def __init__(self, pkg_path):
+    self.pkg_path = pkg_path
 
   def matches(self, target):
-    return self.pkg_path == target.package_path
+    return self.pkg_path == target.pkg_path
 
   def get_matching_targets(self, packages):
     return packages.get_or_load_package(self.pkg_path).get_all_targets()
 
 
 class RecursiveTargetPattern(object):
-  def __init__(self, pkg_full_path):
-    self.pkg_path = pkg_full_path
+  def __init__(self, pkg_path):
+    self.pkg_path = pkg_path
 
   def matches(self, target):
-    if self.pkg_path == target.package_path:
+    if self.pkg_path == target.pkg_path:
       return True
 
-    return target.package_path.startswith(self.pkg_path + '/')
+    return target.pkg_path.startswith(self.pkg_path + '/')
 
   def get_matching_targets(self, packages):
     targets = []

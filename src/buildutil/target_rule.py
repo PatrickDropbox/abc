@@ -22,22 +22,18 @@ class TargetRule(object):
     visibility_set: list of visibility targets (None means use package default)
     """
     assert validate_target_name(name), (
-        'Invalid target name: %s (pkg: %s)' % (name, pkg.full_path))
+        'Invalid target name: %s (pkg: %s)' % (name, pkg.pkg_path))
 
-    assert artifacts, 'Target must have at least one artifact: %s (pkg: %s)' % (
-        name,
-        pkg.full_path)
-
-    self.package_path = pkg.full_path
+    self.pkg_path = pkg.pkg_path
     self.name = name
     self.config = pkg.config
     self.sources = sources
-    self.dependency_patterns = TargetPatterns(pkg.full_path)
+    self.dependency_patterns = TargetPatterns(pkg.pkg_path)
     self.dependency_patterns.set_patterns(dependencies)
-    self.artifacts = artifacts
+    self._artifacts = artifacts
 
     if visibility_set is not None:
-      self.visibility_patterns = TargetPatterns(pkg.full_path)
+      self.visibility_patterns = TargetPatterns(pkg.pkg_path)
       self.visibility_patterns.set_patterns(visibility_set)
     else:
       self.visibility_patterns = pkg.visibility_patterns
@@ -57,13 +53,13 @@ class TargetRule(object):
     # None for not checked, True if has build, False if build was unnecessary.
     self.has_modified = None
 
-  def full_name(self):
+  def target_path(self):
     """DO NOT OVERRIDE"""
-    return self.package_path + ':' + self.name
+    return self.pkg_path + ':' + self.name
 
   def is_visible_to(self, target):
     """DO NOT OVERRIDE"""
-    if self.package_path == target.package_path:
+    if self.pkg_path == target.pkg_path:
       return True
 
     return self.visibility_patterns.matches(target)
@@ -72,14 +68,14 @@ class TargetRule(object):
       self,
       files,
       verify_existence=False,
-      include_build_dir=True):
+      include_build=True):
     """DO NOT OVERRIDE"""
     max_mtime = None
     for f in files:
-      abs_path = self.locate_file(f, include_build_dir=include_build_dir)
+      abs_path = self.locate_file(f, include_build=include_build)
       if abs_path is None:
         assert not verify_existence, (
-            'Failed to locate: %s (target: %s)' % (f, self.full_path()))
+            'Failed to locate: %s (target: %s)' % (f, self.target_path()))
         return None
 
       mtime = os.lstat(abs_path).st_mtime  # Don't follow links
@@ -93,47 +89,44 @@ class TargetRule(object):
     self.sources_max_mtime = self._get_max_mtime(
         self.sources,
         verify_existence=True,
-        include_build_dir=False)  # maybe allow this to be true?
+        include_build=False)  # maybe allow this to be true?
 
   def update_artifacts_max_mtime(self, verify_existence=True):
     """DO NOT OVERRIDE"""
+    artifacts = self.artifacts()
+
+    assert artifacts, 'Target must have at least one artifact: %s (pkg: %s)' % (
+        name,
+        pkg.pkg_path)
+
     self.artifacts_max_mtime = self._get_max_mtime(
-        self.artifacts,
+        artifacts,
         verify_existence=verify_existence)
 
-  def pkg_src_dir(self):
+  def src_abs_path(self, name=''):
     """DO NOT OVERRIDE"""
-    return self.config.pkg_name_to_pkg_src_dir(self.package_path)
+    return self.config.pkg_path_to_src_abs_path(
+        os.path.join(self.pkg_path, name))
 
-  def pkg_genfile_dir(self):
+  def genfile_abs_path(self, name=''):
     """DO NOT OVERRIDE"""
-    return self.config.pkg_name_to_pkg_genfile_dir(self.package_path)
+    return self.config.pkg_path_to_genfile_abs_path(
+        os.path.join(self.pkg_path, name))
 
-  def pkg_build_dir(self):
+  def build_abs_path(self, name=''):
     """DO NOT OVERRIDE"""
-    return self.config.pkg_name_to_pkg_build_dir(self.package_path)
-
-  def src_file_path(self, file_name):
-    """DO NOT OVERRIDE"""
-    return self.config.src_file_path(self.package_path, file_name)
-
-  def genfile_file_path(self, file_name):
-    """DO NOT OVERRIDE"""
-    return self.config.genfile_file_path(self.package_path, file_name)
-
-  def build_file_path(self, file_name):
-    """DO NOT OVERRIDE"""
-    return self.config.build_file_path(self.package_path, file_name)
+    return self.config.pkg_path_to_build_abs_path(
+        os.path.join(self.pkg_path, name))
 
   def execute_cmd(self, cmd_str, additional_env=None):
     """DO NOT OVERRIDE.  Use this for shelling out commands for building /
     testing."""
     env = {
-      'PROJECT_ROOT_DIR' : self.config.project_dir,
-      'SRC_DIR' : self.config.src_dir,
-      'GENFILE_DIR' : self.config.genfile_dir,
-      'BUILD_DIR': self.config.build_dir,
-      'PACKAGE': self.package_path[2:],
+      'PROJECT_ROOT_DIR' : self.config.project_dir_abs_path,
+      'SRC_DIR' : self.config.src_dir_abs_path,
+      'GENFILE_DIR' : self.config.genfile_dir_abs_path,
+      'BUILD_DIR': self.config.build_dir_abs_path,
+      'PACKAGE': self.pkg_path[2:],
       'TARGET': self.name,
     }
     if additional_env:
@@ -146,16 +139,15 @@ class TargetRule(object):
   def locate_file(
       self,
       file_name,
-      include_src_dir=True,
-      include_genfile_dir=True,
-      include_build_dir=True):
+      include_src=True,
+      include_genfile=True,
+      include_build=True):
     """DO NOT OVERRIDE"""
     return self.config.locate_file(
-        self.package_path,
-        file_name,
-        include_src_dir=include_src_dir,
-        include_genfile_dir=include_genfile_dir,
-        include_build_dir=include_build_dir)
+        os.path.join(self.pkg_path, file_name),
+        include_src=include_src,
+        include_genfile=include_genfile,
+        include_build=include_build)
 
   @classmethod
   def register(cls, pkg, **kwargs):
@@ -174,22 +166,32 @@ class TargetRule(object):
     true, must implement test"""
     return False
 
+  def artifacts(self):
+    """Override if the artifact list cannot be computed statically during
+    initialization. Can assume dependencies are binded when overriding (but
+    should assert anyways)."""
+    return self._artifacts
+
+  def list_dependencies_artifacts(self):
+    result = set()
+    for d in self.dependencies.values():
+      result = result.union(d.list_artifacts())
+
+    return result
+
   @classmethod
   def include_dependencies_artifacts(cls):
-    """Controls list_artifact_files behavior.  Useful for stopping artifacts
+    """Controls list_artifacts default behavior.  Useful for stopping artifacts
     from propagating beyond a certain target."""
     return True
 
-  def list_artifact_files(self):
+  def list_artifacts(self):
     result = set()
-    for f in self.artifacts:
-      path = self.locate_file(f)
-      if path:
-        result.add(path)
+    for f in self.artifacts():
+      result.add(os.path.join(self.pkg_path, f))
 
     if self.include_dependencies_artifacts():
-      for d in self.dependencies.values():
-        result = result.union(d.list_artifact_files())
+      result = result.union(self.list_dependencies_artifacts())
 
     return result
 

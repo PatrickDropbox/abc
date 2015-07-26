@@ -1,10 +1,15 @@
+# Convention ...
+# *pkg_path = relative to project root
+# *target_path = relative to project root
+# *abs_path = relative to filesystem's root
+# *name = relative to local context
 import os.path
 
 
 class Config(object):
   def __init__(
       self,
-      project_root_dir_path,
+      project_root_dir_abs_path,
       src_dir_name,
       genfile_dir_name,
       build_dir_name):
@@ -15,77 +20,74 @@ class Config(object):
     assert src_dir_name != build_dir_name
     assert genfile_dir_name != build_dir_name
 
-    self.project_dir = os.path.abspath(project_root_dir_path)
-    self.src_dir = os.path.normpath(
-        os.path.join(self.project_dir, src_dir_name))
-    self.genfile_dir = os.path.normpath(
-        os.path.join(self.project_dir, genfile_dir_name))
-    self.build_dir = os.path.normpath(
-        os.path.join(self.project_dir, build_dir_name))
+    self.project_dir_abs_path = os.path.abspath(project_root_dir_abs_path)
+    self.src_dir_abs_path = os.path.normpath(
+        os.path.join(self.project_dir_abs_path, src_dir_name))
+    self.genfile_dir_abs_path = os.path.normpath(
+        os.path.join(self.project_dir_abs_path, genfile_dir_name))
+    self.build_dir_abs_path = os.path.normpath(
+        os.path.join(self.project_dir_abs_path, build_dir_name))
 
-    assert os.path.isdir(self.project_dir)
-    assert os.path.isdir(self.src_dir)
+    assert os.path.isdir(self.project_dir_abs_path)
+    assert os.path.isdir(self.src_dir_abs_path)
 
+  """
   def pkg_src_dir_to_pkg_name(self, pkg_dir):
-    pkg_dir = os.path.normpath(pkg_dir)
-    if pkg_dir == self.src_dir:
+  """
+  def src_abs_path_to_pkg_path(self, abs_path):
+    abs_path = os.path.normpath(abs_path)
+    if abs_path == self.src_dir_abs_path:
       return '//'
 
-    src_dir = self.src_dir + '/'
+    src_dir_abs_path = self.src_dir_abs_path + '/'
 
-    assert pkg_dir.startswith(src_dir)
-    return '//' + pkg_dir[len(src_dir):]
+    assert abs_path.startswith(src_dir_abs_path)
+    return '//' + abs_path[len(src_dir_abs_path):]
 
+  """
   def pkg_name_to_pkg_src_dir(self, pkg_name):
-    assert pkg_name.startswith('//'), pkg_name
-    return os.path.join(self.src_dir, pkg_name[2:])
+  """
+  def pkg_path_to_src_abs_path(self, pkg_path):
+    assert pkg_path.startswith('//'), pkg_path
+    assert '../' not in pkg_path
+    return os.path.normpath(os.path.join(self.src_dir_abs_path, pkg_path[2:]))
 
-  def pkg_name_to_pkg_genfile_dir(self, pkg_name):
-    assert pkg_name.startswith('//'), pkg_name
-    return os.path.join(self.genfile_dir, pkg_name[2:])
+  """
+  def pkg_name_to_pkg_genfile_dir(self, pkg_path):
+  """
+  def pkg_path_to_genfile_abs_path(self, pkg_path):
+    assert pkg_path.startswith('//'), pkg_path
+    assert '../' not in pkg_path
+    return os.path.normpath(
+        os.path.join(self.genfile_dir_abs_path, pkg_path[2:]))
 
-  def pkg_name_to_pkg_build_dir(self, pkg_name):
-    assert pkg_name.startswith('//'), pkg_name
-    return os.path.join(self.build_dir, pkg_name[2:])
-
-  def src_file_path(self, pkg_name, file_name):
-    assert not file_name.startswith('/')
-    assert '../' not in file_name
-
-    return os.path.join(self.pkg_name_to_pkg_src_dir(pkg_name), file_name)
-
-  def genfile_file_path(self, pkg_name, file_name):
-    assert not file_name.startswith('/')
-    assert '../' not in file_name
-
-    return os.path.join(self.pkg_name_to_pkg_genfile_dir(pkg_name), file_name)
-
-
-  def build_file_path(self, pkg_name, file_name):
-    assert not file_name.startswith('/')
-    assert '../' not in file_name
-
-    return os.path.join(self.pkg_name_to_pkg_build_dir(pkg_name), file_name)
+  """
+  def pkg_name_to_pkg_build_dir(self, pkg_path):
+  """
+  def pkg_path_to_build_abs_path(self, pkg_path):
+    assert pkg_path.startswith('//'), pkg_path
+    assert '../' not in pkg_path
+    return os.path.normpath(
+        os.path.join(self.build_dir_abs_path, pkg_path[2:]))
 
   def locate_file(
       self,
-      package_name,
-      file_name,
-      include_src_dir=True,
-      include_genfile_dir=True,
-      include_build_dir=True):
-    if include_src_dir:
-      src_path = self.src_file_path(package_name, file_name)
+      file_pkg_path,
+      include_src=True,
+      include_genfile=True,
+      include_build=True):
+    if include_src:
+      src_path = self.pkg_path_to_src_abs_path(file_pkg_path)
       if os.path.isfile(src_path):
         return src_path
 
-    if include_genfile_dir:
-      genfile_path = self.genfile_file_path(package_name, file_name)
+    if include_genfile:
+      genfile_path = self.pkg_path_to_genfile_abs_path(file_pkg_path)
       if os.path.isfile(genfile_path):
         return genfile_path
 
-    if include_build_dir:
-      build_path = self.build_file_path(package_name, file_name)
+    if include_build:
+      build_path = self.pkg_path_to_build_abs_path(file_pkg_path)
       if os.path.isfile(build_path):
         return build_path
 

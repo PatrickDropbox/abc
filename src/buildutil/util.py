@@ -5,15 +5,15 @@ import re
 # XXX: maybe allow % and $
 TARGET_PATTERN_REGEX = re.compile(
     '^(?:(?:(?://)?(?:\w+/)*\.\.\.)|(?:(?://)?(?:(?:\w+/)*\w+)?:\w+(\.\w+)*))$')
-FULL_PKG_PATH_REGEX = re.compile('^//((?:\w+/)*\w+)?$')
+PKG_PATH_REGEX = re.compile('^//((?:\w+/)*\w+)?$')
 TARGE_NAME_REGEX = re.compile('^\w+(\.\w+)*$')
 
 def validate_target_pattern(pattern):
   return TARGET_PATTERN_REGEX.match(pattern) is not None
 
 
-def validate_pkg_full_path(path):
-  return FULL_PKG_PATH_REGEX.match(path) is not None
+def validate_pkg_path(path):
+  return PKG_PATH_REGEX.match(path) is not None
 
 
 def validate_target_name(name):

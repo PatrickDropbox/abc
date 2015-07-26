@@ -26,7 +26,7 @@ class TopoSorter(object):
 
       for node in next_nodes.values():
         for target in no_edges:
-          node.edges.discard(target.full_name())
+          node.edges.discard(target.target_path())
 
       nodes = next_nodes
 
@@ -39,10 +39,10 @@ class TopoSorter(object):
     while frontier:
       next_frontier = []
       for t in frontier:
-        if t.full_name() in nodes:
+        if t.target_path() in nodes:
           continue
 
-        nodes[t.full_name()] = Node(t)
+        nodes[t.target_path()] = Node(t)
         next_frontier.extend(t.dependencies.values())
 
       frontier = next_frontier

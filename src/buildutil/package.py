@@ -6,7 +6,7 @@ from functools import partial
 
 from buildutil.util import (
     split_target_path,
-    validate_pkg_full_path,
+    validate_pkg_path,
     )
 from buildutil.target_patterns import TargetPatterns
 from buildutil.rules.rules import RULES
@@ -20,42 +20,42 @@ class PackageSet(object):
     self.config = config
     self.pkgs = {}
 
-  def get_or_load_package(self, pkg_full_name):
-    if pkg_full_name in self.pkgs:
-      return self.pkgs[pkg_full_name]
+  def get_or_load_package(self, pkg_path):
+    if pkg_path in self.pkgs:
+      return self.pkgs[pkg_path]
 
-    pkg = Package(pkg_full_name, self.config)
-    pkg.load(self.config.pkg_name_to_pkg_src_dir(pkg_full_name))
-    self.pkgs[pkg_full_name] = pkg
+    pkg = Package(pkg_path, self.config)
+    pkg.load(self.config.pkg_path_to_src_abs_path(pkg_path))
+    self.pkgs[pkg_path] = pkg
     return pkg
 
-  def get_or_load_all_subpackages(self, pkg_full_name):
+  def get_or_load_all_subpackages(self, pkg_path):
     pkgs = []
 
-    pkg_dir = self.config.pkg_name_to_pkg_src_dir(pkg_full_name)
+    pkg_dir = self.config.pkg_path_to_src_abs_path(pkg_path)
     for dir_name, _, file_names in os.walk(pkg_dir):
       if CONFIG_FILE_NAME not in file_names:
         continue
 
-      subpkg_name = self.config.pkg_src_dir_to_pkg_name(dir_name)
-      pkgs.append(self.get_or_load_package(subpkg_name))
+      sub_pkg_path = self.config.src_abs_path_to_pkg_path(dir_name)
+      pkgs.append(self.get_or_load_package(sub_pkg_path))
 
     return pkgs
 
-  def get_or_load_target(self, target_full_name):
-    pkg_full_name, target_name = split_target_path(target_full_name)
-    return self.get_or_load_package(pkg_full_name).get_target(target_name)
+  def get_or_load_target(self, target_path):
+    pkg_path, target_name = split_target_path(target_path)
+    return self.get_or_load_package(pkg_path).get_target(target_name)
 
 
 class Package(object):
-  def __init__(self, pkg_full_path, config):
-    assert validate_pkg_full_path(pkg_full_path), (
-        'Invalid package full path: %s' % pkg_full_path)
+  def __init__(self, pkg_path, config):
+    assert validate_pkg_path(pkg_path), (
+        'Invalid package full path: %s' % pkg_path)
 
-    self.full_path = pkg_full_path
+    self.pkg_path = pkg_path
     self.config = config
     self.targets = {}
-    self.visibility_patterns = TargetPatterns(self.full_path)
+    self.visibility_patterns = TargetPatterns(self.pkg_path)
 
   def set_visibility(self, visibilty_patterns):
     self.visibility_patterns.set_patterns(visibility_set)
@@ -66,15 +66,12 @@ class Package(object):
   def get_all_targets(self):
     return self.targets.values()
 
-  def path():
-    return self.full_path
-
   def register(self, target, ignore_duplicate=False):
     if not ignore_duplicate:
       assert target.name not in self.targets, (
           'Duplicate target name: %s (pkg: %s)' % (
               target.name,
-              self.full_path))
+              self.pkg_path))
     self.targets[target.name] = target
 
   def load(self, pkg_dir_abs_path):

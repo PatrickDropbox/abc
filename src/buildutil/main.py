@@ -20,7 +20,7 @@ def main():
   for name, pkg in pkgs.pkgs.items():
     print name
     for target in pkg.targets.values():
-      print ' ', target.full_name()
+      print ' ', target.target_path()
 
   print '-' * 80
 
@@ -41,15 +41,18 @@ def main():
   for p in passes:
     p.run(targets)
 
+  for t in targets:
+    print t.target_path(), t.list_artifacts()
+
   """
   pkg = pkgs.get_or_load_package('//buildutil/rules')
   for target in pkg.targets.values():
-    print target.full_name()
+    print target.target_path()
   """
 
   """
   target = pkgs.get_or_load_target('//buildutil/rules:py_rules')
-  print target.full_name()
+  print target.target_path()
   """
 
 

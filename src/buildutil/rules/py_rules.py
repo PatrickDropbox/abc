@@ -21,9 +21,9 @@ class PyInitTargetRule(TargetRule):
 
   def should_build(self):
     init = '__init__.py'
-    src_init = self.src_file_path(init)
-    genfile_init = self.genfile_file_path(init)
-    build_init = self.build_file_path(init)
+    src_init = self.src_abs_path(name=init)
+    genfile_init = self.genfile_abs_path(name=init)
+    build_init = self.build_abs_path(name=init)
 
     assert not os.path.exists(build_init)
 
@@ -36,8 +36,8 @@ class PyInitTargetRule(TargetRule):
 
   def build(self):
     init = '__init__.py'
-    src_init = self.src_file_path(init)
-    genfile_init = self.genfile_file_path(init)
+    src_init = self.src_abs_path(name=init)
+    genfile_init = self.genfile_abs_path(name=init)
 
     assert not os.path.isfile(src_init)
 
@@ -58,7 +58,7 @@ class PyLibraryTargetRule(TargetRule):
         pkg,
         name,
         sources=srcs,
-        dependencies=deps,
+        dependencies=list(deps) + [':__init__.py'],
         artifacts=srcs,
         visibility_set=visibility)
 
@@ -89,14 +89,12 @@ class PyBinaryTargetRule(TargetRule):
       deps=(),
       visibility=None):
 
-    # TODO
-    # TODO include __init__.py implicitly
     super(PyBinaryTargetRule, self).__init__(
         pkg,
         name,
         sources=srcs,
-        dependencies=deps,
-        artifacts=srcs,
+        dependencies=list(deps) + [':__init__.py'],
+        artifacts=[],  # compute dynamically
         visibility_set=visibility)
 
   @classmethod
@@ -107,34 +105,49 @@ class PyBinaryTargetRule(TargetRule):
   def register(cls, pkg, **kwargs):
     pkg.register(PyInitTargetRule(pkg), ignore_duplicate=True)
     pkg.register(cls(pkg=pkg, **kwargs))
-    kwargs['name'] = kwargs['name'] + '.par'
-    pkg.register(PyParTargetRule(pkg=pkg, **kwargs))
 
+    name = kwargs['name']
+    visibility = None
+    if 'visibility' in kwargs:
+      visibility = kwargs['visibility']
+    pkg.register(PyParTargetRule(pkg=pkg, name=name, visibility=visibility))
+
+  def artifacts(self):
+    assert self.deps_binded
+
+    result = set()
+    for artifact in self.list_dependencies_artifacts():
+      result.add(
+        os.path.join(self.name + '.runtime', artifact[2:]))
+
+    return result
+
+  @classmethod
+  def include_dependencies_artifacts(cls):
+    return False
 
 # TODO
 class PyParTargetRule(TargetRule):
-  def __init__(
-      self,
-      pkg,
-      name,
-      srcs=(),
-      deps=(),
-      visibility=None):
+  def __init__(self, pkg, name, visibility=None):
 
     super(PyParTargetRule, self).__init__(
         pkg,
-        name,
-        sources=srcs,
-        dependencies=deps,
-        artifacts=srcs,
+        name + '.par',
+        sources=(),
+        dependencies=[':%s' % name],
+        artifacts=[name + '.par'],
         visibility_set=visibility)
 
   @classmethod
   def rule_name(cls):
     assert False, 'Should never be called directly'
 
+  @classmethod
+  def include_dependencies_artifacts(cls):
+    return False
 
-class PyTestTargetRule(TargetRule):
+
+class PyTestTargetRule(PyBinaryTargetRule):
   def __init__(
       self,
       pkg,
@@ -143,15 +156,12 @@ class PyTestTargetRule(TargetRule):
       deps=(),
       visibility=None):
 
-    # TODO
-    # TODO include __init__.py implicitly
     super(PyTestTargetRule, self).__init__(
         pkg,
         name,
-        sources=srcs,
-        dependencies=deps,
-        artifacts=srcs,
-        visibility_set=visibility)
+        srcs=srcs,
+        deps=deps,
+        visibility=visibility)
 
   @classmethod
   def register(cls, pkg, **kwargs):
