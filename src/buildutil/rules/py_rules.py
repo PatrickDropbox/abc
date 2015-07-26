@@ -71,13 +71,16 @@ class PyLibraryTargetRule(TargetRule):
   def rule_name(cls):
     return "py_library"
 
-  def should_build(self):
-    # Never build since python "binary creation" is done via symlinks
-    return False
-
   def build(self):
-    # Do nothing
-    assert False, 'This should never execute'
+    for src_file_name in sources:
+      abs_path = self.locate_file(src_file_name)
+      assert abs_path
+
+      r = self.execute_cmd('touch %s' % abs_path)
+      if not r:
+        return False
+
+  return True
 
 
 class PyBinaryTargetRule(TargetRule):
