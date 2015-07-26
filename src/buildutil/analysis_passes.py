@@ -4,7 +4,7 @@ from buildutil.topo_sorter import TopoSorter
 
 
 class AnalysisPass(object):
-  def run(self, seed_target):
+  def run(self, seed_targets):
     raise NotImplemented
 
 
@@ -12,8 +12,8 @@ class BindDependencies(AnalysisPass):
   def __init__(self, pkgs):
     self.pkgs = pkgs
 
-  def run(self, seed_target):
-    frontier = [seed_target]
+  def run(self, seed_targets):
+    frontier = seed_targets
     while frontier:
       next_frontier = []
       for target in frontier:
@@ -40,7 +40,11 @@ class CheckCycles(AnalysisPass):
   def __init__(self):
     pass
 
-  def run(self, seed_target):
+  def run(self, seed_targets):
+    for target in seed_targets:
+      self._check(target)
+
+  def _check(self, seed_target):
     stack = [seed_target]
 
     # NOTE: use DFS instead of topo sort for checking since I want to know the
@@ -65,15 +69,12 @@ class BuildTargets(AnalysisPass):
   def __init__(self):
     self.sorter = TopoSorter()
 
-  def run(self, seed_target):
-    print 'Building', seed_target.full_name()
-    print '=' * 80
-    order = self.sorter.sort(seed_target)
+  def run(self, seed_targets):
+    order = self.sorter.sort(seed_targets)
 
     for i, target in enumerate(order):
-      print 'Triggered', target.full_name(), '(%s of %s)' % (i, len(order) - 1)
+      print 'Building', target.full_name(), '(%s of %s)' % (i, len(order) - 1)
       if self._should_build(target):
-        print "SHIT", target.pkg_build_dir(), target.pkg_genfile_dir()
         # TODO make genfile / build dir
         # TODO clean up artifacts in genfile / build dir.
         succeeded = target.build()
@@ -97,3 +98,20 @@ class BuildTargets(AnalysisPass):
 
     return target.should_build()
 
+class TestTargets(AnalysisPass):
+  def __init__(self):
+    pass
+
+  def run(self, seed_targets):
+    tests = [t for t in seed_targets if t.is_test_rule()]
+
+    passed = 0
+    for i, target in enumerate(tests):
+      print 'Testing',  target.full_name(), '(%s of %s)' % (i, len(tests) - 1)
+      succeeded = target.test()
+      if succeeded:
+        passed += 1
+      print '-' * 80
+
+    print '%s of %s test targets passed.' % (passed, len(tests))
+    assert passed == len(tests)

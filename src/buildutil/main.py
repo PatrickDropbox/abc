@@ -4,11 +4,11 @@ from buildutil.analysis_passes import (
     BindDependencies,
     BuildTargets,
     CheckCycles,
+    TestTargets,
     )
 from buildutil.config import Config
 from buildutil.package import PackageSet
 from buildutil.target_patterns import TargetPatterns
-from buildutil.topo_sorter import TopoSorter
 
 
 def main():
@@ -36,13 +36,9 @@ def main():
       BuildTargets(),
       ]
 
-  sorter = TopoSorter()
-
   targets = p.get_matching_targets(pkgs)
-  for target in targets:
-    for p in passes:
-      p.run(target)
-    print target.full_name(), target.__class__
+  for p in passes:
+    p.run(targets)
 
   """
   pkg = pkgs.get_or_load_package('//buildutil/rules')

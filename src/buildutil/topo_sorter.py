@@ -7,8 +7,8 @@ class TopoSorter(object):
   def __init__(self):
     pass
 
-  def sort(self, seed_target):
-    nodes = self._collect_nodes(seed_target)
+  def sort(self, seed_targets):
+    nodes = self._collect_nodes(seed_targets)
 
     result = []
 
@@ -32,10 +32,10 @@ class TopoSorter(object):
 
     return result
 
-  def _collect_nodes(self, seed_target):
+  def _collect_nodes(self, seed_targets):
     nodes = {}
 
-    frontier = [seed_target]
+    frontier = seed_targets
     while frontier:
       next_frontier = []
       for t in frontier:
