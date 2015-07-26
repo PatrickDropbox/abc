@@ -28,22 +28,6 @@ def split_target_path(target_path):
   return pkg_name, target_name
 
 
-def pkg_dir_to_pkg_name(pkg_dir, root_dir):
-  if pkg_dir == root_dir:
-    return '//'
-
-  if not root_dir.endswith('/'):
-    root_dir += '/'
-
-  assert pkg_dir.startswith(root_dir)
-  return '//' + pkg_dir[len(root_dir):]
-
-
-def pkg_name_to_pkg_dir(pkg_name, root_dir):
-  assert pkg_name.startswith('//'), pkg_name
-  return os.path.join(root_dir, pkg_name[2:])
-
-
 def pkg_name_join(curr_pkg, rel_pkg):
   if rel_pkg.startswith('//'):
     return rel_pkg

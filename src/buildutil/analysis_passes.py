@@ -62,18 +62,18 @@ class CheckCycles(AnalysisPass):
         stack.pop().in_cycle = False
 
 class BuildTargets(AnalysisPass):
-  def __init__(self, file_locator):
+  def __init__(self, config):
     self.sorter = TopoSorter()
-    self.file_locator = file_locator
+    self.config = config
 
   def run(self, seed_target):
     order = self.sorter.sort(seed_target)
 
     for target in order:
       if self._should_build(target):
-        target.build(self.file_locator)
+        target.build(self.config)
 
-        target.artifacts_max_mtime = self._get_largeest_mtime(
+        target.artifacts_max_mtime = self._get_max_mtime(
             target,
             target.artifacts,
             verify_existence=True)
@@ -92,7 +92,7 @@ class BuildTargets(AnalysisPass):
     if not target.sources and not target.dependencies:
       return True
 
-    target.artifacts_max_mtime = self._get_largeest_mtime(
+    target.artifacts_max_mtime = self._get_max_mtime(
         target,
         target.artifacts,
         verify_existence=False)
@@ -109,7 +109,7 @@ class BuildTargets(AnalysisPass):
       assert target.sources_max_mtime
 
       # Sources are newer than the artifacts.
-      if target.artifacts_largest_time < target.sources_max_mtime:
+      if target.artifacts_max_mtime < target.sources_max_mtime:
         return True
 
     for dep in target.dependencies.values():
@@ -130,7 +130,7 @@ class BuildTargets(AnalysisPass):
   def _get_max_mtime(self, target, files, verify_existence=False):
     max_mtime = None
     for f in files:
-      abs_path = self.file_locator.find(target, f)
+      abs_path = self.config.locate_file(target.package_path, f)
       if abs_path is None:
         assert not verify_existence, (
             'Failed to locate: %s (target: %s)' % (f, target.full_path()))
@@ -143,14 +143,14 @@ class BuildTargets(AnalysisPass):
     return max_mtime
 
 class TestTargets(AnalysisPass):
-  def __init__(self, file_locator):
+  def __init__(self, config):
     self.sorter = TopoSorter()
-    self.file_locator = file_locator
+    self.config = config
 
   def run(self, seed_target):
     order = self.sorter.sort(seed_target)
 
     for target in order:
       if target.is_test_rule():
-        target.test(self.file_locator)
+        target.test(self.config)
 

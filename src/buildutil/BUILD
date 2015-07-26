@@ -2,14 +2,20 @@ py_library(
     name='analysis_passes',
     srcs=['analysis_passes.py'],
     deps=[
-      ':package',
-      ':topo_sorter',
-    ])
+        ':config',
+        ':package',
+        ':topo_sorter',
+        ])
+
+py_library(
+    name='config',
+    srcs=['config.py'])
 
 py_library(
     name='package',
     srcs=['package.py'],
     deps=[
+        ':config',
         ':target_patterns',
         ':target_rule',
         ':util',
@@ -25,6 +31,7 @@ py_library(
     name='target_rule',
     srcs=['target_rule.py'],
     deps=[
+        ':config',
         ':target_patterns',
         ':util',
         ],

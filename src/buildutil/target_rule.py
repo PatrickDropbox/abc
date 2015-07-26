@@ -80,11 +80,13 @@ class TargetRule(object):
     true, must implement test"""
     return False
 
-  def build(self, file_locator):
+  def build(self, config):
     """How the target should be build"""
-    raise NotImplemented
+    print 'BUILD', self.name
+    #raise NotImplemented
 
-  def test(self, file_locator):
+  def test(self, config):
     """How the target should be tested"""
-    raise NotImplemented
+    print 'TEST', self.name
+    #raise NotImplemented
 

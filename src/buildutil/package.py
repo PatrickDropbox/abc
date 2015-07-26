@@ -5,8 +5,6 @@ import re
 from functools import partial
 
 from buildutil.util import (
-    pkg_dir_to_pkg_name,
-    pkg_name_to_pkg_dir,
     split_target_path,
     validate_pkg_full_path,
     )
@@ -18,13 +16,8 @@ CONFIG_FILE_NAME = 'BUILD'
 
 
 class PackageSet(object):
-  def __init__(self, root_dir_abs_path):
-    root_dir_abs_path = os.path.abspath(root_dir_abs_path)
-    assert os.path.isdir(root_dir_abs_path)
-
-    self.root_dir = root_dir_abs_path
-
-
+  def __init__(self, config):
+    self.config = config
     self.pkgs = {}
 
   def get_or_load_package(self, pkg_full_name):
@@ -32,19 +25,19 @@ class PackageSet(object):
       return self.pkgs[pkg_full_name]
 
     pkg = Package(pkg_full_name)
-    pkg.load(pkg_name_to_pkg_dir(pkg_full_name, self.root_dir))
+    pkg.load(self.config.pkg_name_to_pkg_src_dir(pkg_full_name))
     self.pkgs[pkg_full_name] = pkg
     return pkg
 
   def get_or_load_all_subpackages(self, pkg_full_name):
     pkgs = []
 
-    pkg_dir = pkg_name_to_pkg_dir(pkg_full_name, self.root_dir)
+    pkg_dir = self.config.pkg_name_to_pkg_src_dir(pkg_full_name)
     for dir_name, _, file_names in os.walk(pkg_dir):
       if CONFIG_FILE_NAME not in file_names:
         continue
 
-      subpkg_name = pkg_dir_to_pkg_name(dir_name, self.root_dir)
+      subpkg_name = self.config.pkg_src_dir_to_pkg_name(dir_name)
       pkgs.append(self.get_or_load_package(subpkg_name))
 
     return pkgs

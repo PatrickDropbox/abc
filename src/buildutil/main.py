@@ -2,15 +2,20 @@ import os
 
 from buildutil.analysis_passes import (
     BindDependencies,
+    BuildTargets,
     CheckCycles,
+    TestTargets,
     )
+from buildutil.config import Config
 from buildutil.package import PackageSet
 from buildutil.target_patterns import TargetPatterns
 from buildutil.topo_sorter import TopoSorter
 
 
 def main():
-  pkgs = PackageSet(os.getcwd())
+  config = Config(os.getcwd() + '/..', 'src', 'genrule', 'build')
+
+  pkgs = PackageSet(config)
   pkgs.get_or_load_all_subpackages('//')
 
   for name, pkg in pkgs.pkgs.items():
@@ -20,7 +25,7 @@ def main():
 
   print '-' * 80
 
-  pkgs = PackageSet(os.getcwd())
+  pkgs = PackageSet(config)
 
   p = TargetPatterns('//buildutil')
   p.set_patterns(['//...'])
@@ -29,6 +34,8 @@ def main():
   passes = [
       BindDependencies(pkgs),
       CheckCycles(),
+      BuildTargets(config),
+      TestTargets(config),
       ]
 
   sorter = TopoSorter()
