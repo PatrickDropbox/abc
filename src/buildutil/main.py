@@ -41,8 +41,8 @@ def main():
   for p in passes:
     p.run(targets)
 
-  for t in targets:
-    print t.target_path(), t.list_artifacts()
+  #for t in targets:
+  #  print t.target_path(), t.list_artifacts()
 
   """
   pkg = pkgs.get_or_load_package('//buildutil/rules')
