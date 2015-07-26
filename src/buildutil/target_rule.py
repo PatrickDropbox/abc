@@ -24,7 +24,7 @@ class TargetRule(object):
     assert validate_target_name(name), (
         'Invalid target name: %s (pkg: %s)' % (name, pkg.pkg_path))
 
-    self.pkg_path = pkg.pkg_path
+    self._pkg_path = pkg.pkg_path
     self.name = name
     self.config = pkg.config
     self.sources = sources
@@ -53,13 +53,32 @@ class TargetRule(object):
     # None for not checked, True if has build, False if build was unnecessary.
     self.has_modified = None
 
+
   def target_path(self):
     """DO NOT OVERRIDE"""
-    return self.pkg_path + ':' + self.name
+    return self._pkg_path + ':' + self.name
+
+  def pkg_path(self, name=''):
+    if not name:
+      return self._pkg_path
+
+    return os.path.join(self._pkg_path, name)
+
+  def src_abs_path(self, name=''):
+    """DO NOT OVERRIDE"""
+    return self.config.pkg_path_to_src_abs_path(self.pkg_path(name=name))
+
+  def genfile_abs_path(self, name=''):
+    """DO NOT OVERRIDE"""
+    return self.config.pkg_path_to_genfile_abs_path(self.pkg_path(name=name))
+
+  def build_abs_path(self, name=''):
+    """DO NOT OVERRIDE"""
+    return self.config.pkg_path_to_build_abs_path(self.pkg_path(name=name))
 
   def is_visible_to(self, target):
     """DO NOT OVERRIDE"""
-    if self.pkg_path == target.pkg_path:
+    if self.pkg_path() == target.pkg_path():
       return True
 
     return self.visibility_patterns.matches(target)
@@ -103,21 +122,6 @@ class TargetRule(object):
         artifacts,
         verify_existence=verify_existence)
 
-  def src_abs_path(self, name=''):
-    """DO NOT OVERRIDE"""
-    return self.config.pkg_path_to_src_abs_path(
-        os.path.join(self.pkg_path, name))
-
-  def genfile_abs_path(self, name=''):
-    """DO NOT OVERRIDE"""
-    return self.config.pkg_path_to_genfile_abs_path(
-        os.path.join(self.pkg_path, name))
-
-  def build_abs_path(self, name=''):
-    """DO NOT OVERRIDE"""
-    return self.config.pkg_path_to_build_abs_path(
-        os.path.join(self.pkg_path, name))
-
   def execute_cmd(self, cmd_str, additional_env=None):
     """DO NOT OVERRIDE.  Use this for shelling out commands for building /
     testing."""
@@ -126,7 +130,7 @@ class TargetRule(object):
       'SRC_DIR' : self.config.src_dir_abs_path,
       'GENFILE_DIR' : self.config.genfile_dir_abs_path,
       'BUILD_DIR': self.config.build_dir_abs_path,
-      'PACKAGE': self.pkg_path[2:],
+      'PACKAGE': self.pkg_path()[2:],
       'TARGET': self.name,
     }
     if additional_env:
@@ -144,7 +148,7 @@ class TargetRule(object):
       include_build=True):
     """DO NOT OVERRIDE"""
     return self.config.locate_file(
-        os.path.join(self.pkg_path, file_name),
+        self.pkg_path(name=file_name),
         include_src=include_src,
         include_genfile=include_genfile,
         include_build=include_build)
@@ -187,8 +191,8 @@ class TargetRule(object):
 
   def list_artifacts(self):
     result = set()
-    for f in self.artifacts():
-      result.add(os.path.join(self.pkg_path, f))
+    for name in self.artifacts():
+      result.add(self.pkg_path(name=name))
 
     if self.include_dependencies_artifacts():
       result = result.union(self.list_dependencies_artifacts())

@@ -12,7 +12,8 @@ from buildutil.target_patterns import TargetPatterns
 
 
 def main():
-  config = Config(os.getcwd() + '/..', 'src', 'genfile', 'build')
+  #config = Config(os.getcwd() + '/..', 'src', 'genfile', 'build')
+  config = Config('/Users/patrick/git/abc', 'src', 'genfile', 'build')
 
   pkgs = PackageSet(config)
   pkgs.get_or_load_all_subpackages('//')

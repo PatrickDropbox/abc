@@ -103,7 +103,7 @@ class AllTargetPattern(object):
     self.pkg_path = pkg_path
 
   def matches(self, target):
-    return self.pkg_path == target.pkg_path
+    return self.pkg_path == target.pkg_path()
 
   def get_matching_targets(self, packages):
     return packages.get_or_load_package(self.pkg_path).get_all_targets()
@@ -114,10 +114,10 @@ class RecursiveTargetPattern(object):
     self.pkg_path = pkg_path
 
   def matches(self, target):
-    if self.pkg_path == target.pkg_path:
+    if self.pkg_path == target.pkg_path():
       return True
 
-    return target.pkg_path.startswith(self.pkg_path + '/')
+    return target.pkg_path().startswith(self.pkg_path + '/')
 
   def get_matching_targets(self, packages):
     targets = []
