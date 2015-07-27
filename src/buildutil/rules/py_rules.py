@@ -65,6 +65,8 @@ class PyLibraryTargetRule(TargetRule):
 
   @classmethod
   def register(cls, pkg, **kwargs):
+    # TODO fix this.  should recursively add init all every directory between
+    # project root dir and package dir.
     pkg.register(PyInitTargetRule(pkg), ignore_duplicate=True)
     pkg.register(cls(pkg=pkg, **kwargs))
 
