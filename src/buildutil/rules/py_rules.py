@@ -28,6 +28,7 @@ class PyInitTargetRule(TargetRule):
     assert not os.path.exists(build_init)
 
     if os.path.isfile(src_init):
+      # TODO: disallow __init__.py in src
       return False
     elif os.path.isfile(genfile_init):
       return False
