@@ -144,6 +144,8 @@ class PyBinaryTargetRule(TargetRule):
       deps=(),
       visibility=None):
 
+    assert len(srcs) == 1, 'Must have exactly one .py src file'
+
     deps = list(deps) + PyInitTargetRule.list_dep_target_paths(pkg_path)
 
     super(PyBinaryTargetRule, self).__init__(
@@ -231,6 +233,7 @@ class PyBinaryTargetRule(TargetRule):
         return False
     return True
 
+
 # TODO
 class PyParTargetRule(TargetRule):
   def __init__(self, config, pkg_path, name, visibility=None):
@@ -252,7 +255,7 @@ class PyParTargetRule(TargetRule):
     return False
 
 
-# TODO
+# TODO don't subclass ByBinary cuz it's limits to a single src file ...
 class PyTestTargetRule(PyBinaryTargetRule):
   def __init__(
       self,
