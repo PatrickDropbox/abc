@@ -4,7 +4,8 @@ from buildutil.target_rule import TargetRule
 class CcLibraryTargetRule(TargetRule):
   def __init__(
       self,
-      pkg,
+      config,
+      pkg_path,
       name,
       srcs=(),
       hdrs=(),
@@ -14,7 +15,8 @@ class CcLibraryTargetRule(TargetRule):
     # TODO
     artifiacts = () + hdrs
     super(CcLibraryTargetRule, self).__init__(
-        pkg,
+        config,
+        pkg_path,
         name,
         sources=srcs+hdrs,
         dependencies=deps,

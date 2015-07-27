@@ -2,13 +2,14 @@ import os
 import subprocess
 
 from buildutil.target_patterns import TargetPatterns
-from buildutil.util import validate_target_name
+from buildutil.util import validate_pkg_path, validate_target_name
 
 
 class TargetRule(object):
   def __init__(
       self,
-      pkg,
+      config,
+      pkg_path,
       name,
       sources=(),
       dependencies=(),
@@ -21,22 +22,24 @@ class TargetRule(object):
     artifacts: list of "output" files (in relative path form).
     visibility_set: list of visibility targets (None means use package default)
     """
+    assert validate_pkg_path(pkg_path), 'Invalid package path: %s' % pkg_path
     assert validate_target_name(name), (
-        'Invalid target name: %s (pkg: %s)' % (name, pkg.pkg_path))
+        'Invalid target name: %s (pkg: %s)' % (name, pkg_path))
 
-    self._pkg_path = pkg.pkg_path
+    self._pkg_path = pkg_path
     self.name = name
-    self.config = pkg.config
+    self.config = config
     self.sources = sources
-    self.dependency_patterns = TargetPatterns(pkg.pkg_path)
+    self.dependency_patterns = TargetPatterns(pkg_path)
     self.dependency_patterns.set_patterns(dependencies)
     self._artifacts = artifacts
 
     if visibility_set is not None:
-      self.visibility_patterns = TargetPatterns(pkg.pkg_path)
+      self.visibility_patterns = TargetPatterns(pkg_path)
       self.visibility_patterns.set_patterns(visibility_set)
     else:
-      self.visibility_patterns = pkg.visibility_patterns
+      # bind when the target is added to a package during registration.
+      self.visibility_patterns = None
 
     # The following are initialized in later analysis passes.
 
@@ -154,10 +157,22 @@ class TargetRule(object):
         include_build=include_build)
 
   @classmethod
-  def register(cls, pkg, **kwargs):
+  def is_unique_target(cls):
+    """Return false if the target can be register multiple times into the
+    same package (The first entry is used; the rest are ignored)."""
+    return True
+
+  @classmethod
+  def generate_targets(
+      cls,
+      targets_accumulator,
+      config,
+      current_pkg_path,
+      **kwargs):
     """Override to customize target registration (see PyBinaryTargetRule for
     example)."""
-    pkg.register(cls(pkg=pkg, **kwargs))
+    target_accumulator.append(
+        cls(config=config, pkg_path=current_pkg_path, **kwargs))
 
   @classmethod
   def rule_name(cls):

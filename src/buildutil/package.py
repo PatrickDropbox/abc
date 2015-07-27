@@ -20,13 +20,22 @@ class PackageSet(object):
     self.config = config
     self.pkgs = {}
 
-  def get_or_load_package(self, pkg_path):
+  def _get_package(self, pkg_path):
     if pkg_path in self.pkgs:
-      return self.pkgs[pkg_path]
+      pkg = self.pkgs[pkg_path]
+    else:
+      pkg = Package(pkg_path, self.config)
+      self.pkgs[pkg_path] = pkg
 
-    pkg = Package(pkg_path, self.config)
-    pkg.load(self.config.pkg_path_to_src_abs_path(pkg_path))
-    self.pkgs[pkg_path] = pkg
+    return pkg
+
+  def get_or_load_package(self, pkg_path):
+    pkg = self._get_package(pkg_path)
+
+    if pkg.done_loading:
+      return pkg
+
+    self._load(pkg)
     return pkg
 
   def get_or_load_all_subpackages(self, pkg_path):
@@ -46,6 +55,33 @@ class PackageSet(object):
     pkg_path, target_name = split_target_path(target_path)
     return self.get_or_load_package(pkg_path).get_target(target_name)
 
+  def _load(self, pkg):
+    # TODO add package func to globals
+    generated_targets = []
+
+    globals_dict = {}
+    for rule in RULES:
+      assert rule.rule_name() not in globals_dict
+      globals_dict[rule.rule_name()] = partial(
+          rule.generate_targets,
+          targets_accumulator=generated_targets,
+          config=self.config,
+          current_pkg_path=pkg.pkg_path)
+
+    pkg_dir_abs_path = self.config.pkg_path_to_src_abs_path(pkg.pkg_path)
+    config_file = os.path.join(pkg_dir_abs_path, CONFIG_FILE_NAME)
+    try:
+      # XXX: probably should restrict python exec here, but o well ...
+      execfile(config_file, globals_dict, {})
+    except Exception as e:
+      print 'Failed to load', config_file, '-', e
+      raise
+
+    for target in generated_targets:
+      self._get_package(target.pkg_path()).register(target)
+
+    pkg.done_loading = True
+
 
 class Package(object):
   def __init__(self, pkg_path, config):
@@ -57,6 +93,8 @@ class Package(object):
     self.targets = {}
     self.visibility_patterns = TargetPatterns(self.pkg_path)
 
+    self.done_loading = False
+
   def set_visibility(self, visibilty_patterns):
     self.visibility_patterns.set_patterns(visibility_set)
 
@@ -66,26 +104,17 @@ class Package(object):
   def get_all_targets(self):
     return self.targets.values()
 
-  def register(self, target, ignore_duplicate=False):
-    if not ignore_duplicate:
-      assert target.name not in self.targets, (
+  def register(self, target):
+    assert target.pkg_path() == self.pkg_path
+
+    # Bind default package visibility.
+    if target.visibility_patterns is None:
+      target.visibility_patterns = self.visibility_patterns
+
+    if target.name in self.targets:
+      assert not target.is_unique_target(), (
           'Duplicate target name: %s (pkg: %s)' % (
               target.name,
               self.pkg_path))
-    self.targets[target.name] = target
-
-  def load(self, pkg_dir_abs_path):
-    # TODO add package func to globals
-    globals_dict = {}
-    for rule in RULES:
-      assert rule.rule_name() not in globals_dict
-      globals_dict[rule.rule_name()] = partial(rule.register, pkg=self)
-
-    config_file = os.path.join(pkg_dir_abs_path, CONFIG_FILE_NAME)
-    try:
-      # XXX: probably should restrict python exec here, but o well ...
-      execfile(config_file, globals_dict, {})
-    except Exception as e:
-      print 'Failed to load', config_file, '-', e
-      raise
-
+    else:
+      self.targets[target.name] = target

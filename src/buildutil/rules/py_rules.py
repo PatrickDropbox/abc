@@ -6,14 +6,30 @@ from buildutil.target_patterns import TargetPatterns
 
 
 class PyInitTargetRule(TargetRule):
-  def __init__(self, pkg):
+  def __init__(self, config, pkg_path):
     super(PyInitTargetRule, self).__init__(
-        pkg,
-        '__init__.py',
+        config=config,
+        pkg_path=pkg_path,
+        name='__init__.py',
         sources=[],
         dependencies=[],
         artifacts=['__init__.py'],
-        visibility_set=[])  # private
+        visibility_set=['//...'])  # public to all
+
+  @classmethod
+  def is_unique_target(cls):
+    return False
+
+  @classmethod
+  def generate_targets(
+      cls,
+      targets_accumulator,
+      config,
+      current_pkg_path,
+      **kwargs):
+    for pkg_path in PyInitTargetRule.list_dep_pkg_paths(current_pkg_path):
+      targets_accumulator.append(
+          PyInitTargetRule(config=config, pkg_path=pkg_path))
 
   @classmethod
   def rule_name(cls):
@@ -45,30 +61,62 @@ class PyInitTargetRule(TargetRule):
     r = self.execute_cmd('touch %s' % genfile_init)
     return r == 0
 
+  @staticmethod
+  def list_dep_pkg_paths(pkg_path):
+    result = []
+
+    while True:
+      assert pkg_path.startswith('//')
+      result.append(pkg_path)
+
+      if pkg_path == '//':
+        return result
+
+      pkg_path, _ = os.path.split(pkg_path)
+
+  @staticmethod
+  def list_dep_target_paths(pkg_path):
+    result = []
+    for path in PyInitTargetRule.list_dep_pkg_paths(pkg_path):
+      result.append(path + ':__init__.py')
+
+    return result
+
 
 class PyLibraryTargetRule(TargetRule):
   def __init__(
       self,
-      pkg,
+      config,
+      pkg_path,
       name,
       srcs=(),
       deps=(),
       visibility=None):
 
+    deps = list(deps) + PyInitTargetRule.list_dep_target_paths(pkg_path)
+
     super(PyLibraryTargetRule, self).__init__(
-        pkg,
-        name,
+        config=config,
+        pkg_path=pkg_path,
+        name=name,
         sources=srcs,
-        dependencies=list(deps) + [':__init__.py'],
+        dependencies=deps,
         artifacts=srcs,
         visibility_set=visibility)
 
   @classmethod
-  def register(cls, pkg, **kwargs):
-    # TODO fix this.  should recursively add init all every directory between
-    # project root dir and package dir.
-    pkg.register(PyInitTargetRule(pkg), ignore_duplicate=True)
-    pkg.register(cls(pkg=pkg, **kwargs))
+  def generate_targets(
+      cls,
+      targets_accumulator,
+      config,
+      current_pkg_path,
+      **kwargs):
+    PyInitTargetRule.generate_targets(
+        targets_accumulator=targets_accumulator,
+        config=config,
+        current_pkg_path=current_pkg_path)
+    targets_accumulator.append(
+        cls(config=config, pkg_path=current_pkg_path, **kwargs))
 
   @classmethod
   def rule_name(cls):
@@ -89,30 +137,49 @@ class PyLibraryTargetRule(TargetRule):
 class PyBinaryTargetRule(TargetRule):
   def __init__(
       self,
-      pkg,
+      config,
+      pkg_path,
       name,
       srcs=(),
       deps=(),
       visibility=None):
 
+    deps = list(deps) + PyInitTargetRule.list_dep_target_paths(pkg_path)
+
     super(PyBinaryTargetRule, self).__init__(
-        pkg,
-        name,
+        config=config,
+        pkg_path=pkg_path,
+        name=name,
         sources=srcs,
-        dependencies=list(deps) + [':__init__.py'],
+        dependencies=deps,
         artifacts=[],  # compute dynamically
         visibility_set=visibility)
 
   @classmethod
-  def register(cls, pkg, **kwargs):
-    pkg.register(PyInitTargetRule(pkg), ignore_duplicate=True)
-    pkg.register(cls(pkg=pkg, **kwargs))
+  def generate_targets(
+      cls,
+      targets_accumulator,
+      config,
+      current_pkg_path,
+      **kwargs):
+    PyInitTargetRule.generate_targets(
+        targets_accumulator,
+        config,
+        current_pkg_path)
+    targets_accumulator.append(
+        cls(config=config, pkg_path=current_pkg_path, **kwargs))
 
     name = kwargs['name']
     visibility = None
     if 'visibility' in kwargs:
       visibility = kwargs['visibility']
-    pkg.register(PyParTargetRule(pkg=pkg, name=name, visibility=visibility))
+
+    targets_accumulator.append(
+        PyParTargetRule(
+            config=config,
+            pkg_path=current_pkg_path,
+            name=name,
+            visibility=visibility))
 
   @classmethod
   def rule_name(cls):
@@ -166,11 +233,11 @@ class PyBinaryTargetRule(TargetRule):
 
 # TODO
 class PyParTargetRule(TargetRule):
-  def __init__(self, pkg, name, visibility=None):
-
+  def __init__(self, config, pkg_path, name, visibility=None):
     super(PyParTargetRule, self).__init__(
-        pkg,
-        name + '.par',
+        config=config,
+        pkg_path=pkg_path,
+        name=name + '.par',
         sources=(),
         dependencies=[':%s' % name],
         artifacts=[name + '.par'],
@@ -185,26 +252,23 @@ class PyParTargetRule(TargetRule):
     return False
 
 
+# TODO
 class PyTestTargetRule(PyBinaryTargetRule):
   def __init__(
       self,
-      pkg,
+      config,
+      pkg_path,
       name,
       srcs=(),
       deps=(),
       visibility=None):
-
     super(PyTestTargetRule, self).__init__(
-        pkg,
-        name,
+        config=config,
+        pkg_path=pkg_path,
+        name=name,
         srcs=srcs,
         deps=deps,
         visibility=visibility)
-
-  @classmethod
-  def register(cls, pkg, **kwargs):
-    pkg.register(PyInitTargetRule(pkg), ignore_duplicate=True)
-    pkg.register(cls(pkg=pkg, **kwargs))
 
   @classmethod
   def rule_name(cls):

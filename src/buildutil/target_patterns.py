@@ -23,6 +23,10 @@
 # subtractive pattern:
 #
 # //... -//foo/bar:all all targets except foo/bar
+#
+# NOTE: buildutil becomes a server, and persistently tracks
+# content hash/size/mtime, then convert src files into implicit target rules
+# and support file pattern.
 import re
 
 from buildutil.util import pkg_name_join, validate_target_pattern
@@ -115,6 +119,9 @@ class RecursiveTargetPattern(object):
 
   def matches(self, target):
     if self.pkg_path == target.pkg_path():
+      return True
+
+    if self.pkg_path == '//':
       return True
 
     return target.pkg_path().startswith(self.pkg_path + '/')
