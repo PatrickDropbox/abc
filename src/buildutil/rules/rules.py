@@ -5,7 +5,7 @@ from buildutil.rules.py_rules import (
     PyTestTargetRule,
     )
 
-# list of TargetRule subclasses.  Each subclass must take pkg as argument.
+# list of TargetRule subclasses.
 RULES = [
     CcLibraryTargetRule,
     PyBinaryTargetRule,
