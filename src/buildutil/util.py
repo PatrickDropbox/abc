@@ -4,7 +4,8 @@ import re
 
 # XXX: maybe allow % and $
 TARGET_PATTERN_REGEX = re.compile(
-    '^(?:(?:(?://)?(?:\w+/)*\.\.\.)|(?:(?://)?(?:(?:\w+/)*\w+)?:\w+(\.\w+)*))$')
+    '^(?:-?(?:(?://)?(?:\w+/)*\.\.\.)|'
+    '(?:-?(?://)?(?:(?:\w+/)*\w+)?:\w+(\.\w+)*))$')
 PKG_PATH_REGEX = re.compile('^//((?:\w+/)*\w+)?$')
 TARGE_NAME_REGEX = re.compile('^\w+(\.\w+)*$')
 

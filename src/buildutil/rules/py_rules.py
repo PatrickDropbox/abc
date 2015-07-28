@@ -32,6 +32,10 @@ class PyInitTargetRule(TargetRule):
           PyInitTargetRule(config=config, pkg_path=pkg_path))
 
   @classmethod
+  def include_in_all_targets(cls):
+    return False
+
+  @classmethod
   def rule_name(cls):
     assert False, 'Should never be called directly'
 
@@ -189,7 +193,8 @@ class PyBinaryTargetRule(TargetRule):
             config=config,
             pkg_path=current_pkg_path,
             name=name,
-            visibility=visibility))
+            visibility=visibility,
+            is_test_par=cls.is_test_rule()))
 
   @classmethod
   def rule_name(cls):
@@ -260,7 +265,7 @@ class PyBinaryTargetRule(TargetRule):
         'main_py': self.pkg_path(name=self.sources[0])[2:],
         }
 
-    print 'Writing:', script_abs_path, tmpl_vals
+    print 'Writing:', script_abs_path
     with open(script_abs_path, 'w') as f:
       f.write(RUNNER_TEMPLATE % tmpl_vals)
 
@@ -270,7 +275,13 @@ class PyBinaryTargetRule(TargetRule):
 
 # TODO
 class PyParTargetRule(TargetRule):
-  def __init__(self, config, pkg_path, name, visibility=None):
+  def __init__(
+      self,
+      config,
+      pkg_path,
+      name,
+      visibility=None,
+      is_test_par=False):
     super(PyParTargetRule, self).__init__(
         config=config,
         pkg_path=pkg_path,
@@ -280,9 +291,18 @@ class PyParTargetRule(TargetRule):
         artifacts=[name + '.par'],
         visibility_set=visibility)
 
+    self.is_test_par = is_test_par
+
   @classmethod
   def rule_name(cls):
     assert False, 'Should never be called directly'
+
+  @classmethod
+  def include_in_all_targets(cls):
+    return False
+
+  def ignore_test_deps(self):
+    return not self.is_test_par
 
   @classmethod
   def include_dependencies_artifacts(cls):

@@ -83,9 +83,7 @@ class BuildTargets(AnalysisPass):
         succeeded = target.build()
         assert succeeded, 'Failed to build %s' % target.target_path()
 
-        target.update_artifacts_max_mtime(verify_existence=False)
-        # TODO undo
-        #target.update_artifacts_max_mtime(verify_existence=True)
+        target.update_artifacts_max_mtime(verify_existence=True)
         target.has_modified = True
 
         print 'Done'

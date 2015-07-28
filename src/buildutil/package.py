@@ -102,7 +102,7 @@ class Package(object):
     return self.targets[target_name]
 
   def get_all_targets(self):
-    return self.targets.values()
+    return [t for t in self.targets.values() if t.include_in_all_targets()]
 
   def register(self, target):
     assert target.pkg_path() == self.pkg_path

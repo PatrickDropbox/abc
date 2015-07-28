@@ -19,13 +19,20 @@ from buildutil.util import validate_target_pattern
 
 def sanitize_pattern_strs(config, cwd_abs_path, args):
   pattern_strs = []
-  for arg in args:
-    if arg.startswith('//'):
+  for orig_arg in args:
+    if orig_arg.startswith('//') or orig_arg.startswith('-//'):
       # target name must be valid if given in full form
-      assert validate_target_pattern(arg), (
-          'Invalid target pattern: %s' % arg)
-      pattern_strs.append(arg)
+      assert validate_target_pattern(orig_arg), (
+          'Invalid target pattern: %s' % orig_arg)
+      pattern_strs.append(orig_arg)
       continue
+
+    if orig_arg.startswith('-'):
+      subtractive = True
+      arg = orig_arg[1:]
+    else:
+      subtractive = False
+      arg = orig_arg
 
     if arg.endswith('...'):
       pkg_name = arg[:-3]
@@ -41,7 +48,7 @@ def sanitize_pattern_strs(config, cwd_abs_path, args):
 
     if pkg_abs_path != config.src_dir_abs_path:
       assert pkg_abs_path.startswith(config.src_dir_abs_path + '/'), (
-          'Invalid target pattern: %s' % arg)
+          'Invalid target pattern: %s' % orig_arg)
 
     pkg_path = '//' + pkg_abs_path[(len(config.src_dir_abs_path) + 1):]
 
@@ -53,9 +60,12 @@ def sanitize_pattern_strs(config, cwd_abs_path, args):
     else:
       pattern_str = pkg_path + ':' + target_name
 
+    if subtractive:
+      pattern_str = '-' + pattern_str
+
     assert validate_target_pattern(pattern_str), (
         'Invalid target pattern: %s (expansion: %s)' % (
-            arg,
+            orig_arg,
             pattern_str))
     pattern_strs.append(pattern_str)
 

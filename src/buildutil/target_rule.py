@@ -179,6 +179,16 @@ class TargetRule(object):
     """The function name used in BUILD file, e.g., cc_library"""
     raise NotImplemented
 
+  def ignore_test_deps(self):
+    """Should dependencies binding include on test targets"""
+    return False
+
+  @classmethod
+  def include_in_all_targets(cls):
+    """When true, return the target as part of pkg.get_all_targets(), which
+    is used for :all or ... target expansion"""
+    return True
+
   @classmethod
   def is_test_rule(cls):
     """When building libraries / binaries, test targets are ignored.  When
