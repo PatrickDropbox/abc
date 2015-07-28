@@ -134,6 +134,15 @@ class PyLibraryTargetRule(TargetRule):
     return True
 
 
+DEFAULT_BASH_ABS_PATH = '/bin/bash'
+DEFAULT_PYTHON_ABS_PATH = '/usr/bin/python'
+
+RUNNER_TEMPLATE = """#!%(bash_abs_path)s
+cd %(runtime_dir_abs_path)s
+PYTHONPATH=. %(python_abs_path)s %(main_py)s $@
+"""
+
+
 class PyBinaryTargetRule(TargetRule):
   def __init__(
       self,
@@ -195,6 +204,7 @@ class PyBinaryTargetRule(TargetRule):
       result.add(
         os.path.join(self.name + '.runtime', artifact[2:]))
 
+    result.add(self.name)
     return result
 
   @classmethod
@@ -231,6 +241,31 @@ class PyBinaryTargetRule(TargetRule):
           os.path.join(runtime_abs_path, pkg_path[2:])))
       if r != 0:
         return False
+
+    return self.write_runner_script()
+
+  def write_runner_script(self):
+    script_abs_path = self.build_abs_path(name=self.name)
+
+    section = 'py_binary'
+    tmpl_vals ={
+        'bash_abs_path': self.config.get(
+            section,
+            'bash_location',
+            DEFAULT_BASH_ABS_PATH),
+        'runtime_dir_abs_path': script_abs_path + '.runtime',
+        'python_abs_path': self.config.get(
+            section,
+            'python_location',
+            DEFAULT_PYTHON_ABS_PATH),
+        'main_py': self.pkg_path(name=self.sources[0])[2:],
+        }
+
+    print 'Writing:', script_abs_path
+    with open(script_abs_path, 'w') as f:
+      f.write(RUNNER_TEMPLATE % tmpl_vals)
+
+    os.chmod(script_abs_path, 0755)
     return True
 
 

@@ -1,4 +1,6 @@
+import ConfigParser
 import os
+import os.path
 
 from buildutil.analysis_passes import (
     BindDependencies,
@@ -12,8 +14,13 @@ from buildutil.target_patterns import TargetPatterns
 
 
 def main():
-  #config = Config(os.getcwd() + '/..', 'src', 'genfile', 'build')
-  config = Config('/Users/patrick/git/abc', 'src', 'genfile', 'build')
+  ini_config = ConfigParser.ConfigParser()
+
+  cfg_abs_path = os.path.expanduser('~/.buildutil_config.ini')
+  if os.path.isfile(cfg_abs_path):
+    ini_config.read(cfg_abs_path)
+
+  config = Config(ini_config)
 
   pkgs = PackageSet(config)
   pkgs.get_or_load_all_subpackages('//')
