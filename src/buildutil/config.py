@@ -9,7 +9,7 @@ import os.path
 
 
 class Config(object):
-  def __init__(self, ini_config):
+  def __init__(self, cwd_abs_path, ini_config):
     self.ini_config = ini_config
 
     section = 'buildutil'
@@ -33,11 +33,12 @@ class Config(object):
     assert src_dir_name != build_dir_name
     assert genfile_dir_name != build_dir_name
 
-    cwd = os.getcwd() + '/'
+    if not cwd_abs_path.endswith('/'):
+      cwd_abs_path += '/'
 
     sep = '/%s/' % project_dir_name
-    assert sep in cwd
-    base_abs_path, _, _ = cwd.partition(sep)
+    assert sep in cwd_abs_path
+    base_abs_path, _, _ = cwd_abs_path.partition(sep)
 
     self.project_dir_abs_path = os.path.normpath(
         base_abs_path + '/' + project_dir_name)
@@ -60,8 +61,8 @@ class Config(object):
 
     return default_value
 
-  def src_abs_path_to_pkg_path(self, abs_path):
-    abs_path = os.path.normpath(abs_path)
+  def src_abs_path_to_pkg_path(self, orig_abs_path):
+    abs_path = os.path.normpath(orig_abs_path)
     if abs_path == self.src_dir_abs_path:
       return '//'
 

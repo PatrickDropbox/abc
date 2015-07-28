@@ -134,3 +134,16 @@ class TestTargets(AnalysisPass):
 
     print '%s of %s test targets passed.' % (passed, len(tests))
     assert passed == len(tests)
+
+
+class PrintBuildOrder(AnalysisPass):
+  def __init__(self):
+    self.sorter = TopoSorter()
+
+  def run(self, seed_targets):
+    order = self.sorter.sort(seed_targets)
+
+    print 'Build order:'
+    for target in order:
+      print ' ', target.target_path()
+

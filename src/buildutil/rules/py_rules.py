@@ -137,9 +137,8 @@ class PyLibraryTargetRule(TargetRule):
 DEFAULT_BASH_ABS_PATH = '/bin/bash'
 DEFAULT_PYTHON_ABS_PATH = '/usr/bin/python'
 
-RUNNER_TEMPLATE = """#!%(bash_abs_path)s
-cd %(runtime_dir_abs_path)s
-PYTHONPATH=. %(python_abs_path)s %(main_py)s $@
+RUNNER_TEMPLATE = """#!%(bash)s
+PYTHONPATH=%(runtime_dir)s %(python)s %(runtime_dir)s/%(main_py)s $@
 """
 
 
@@ -249,19 +248,19 @@ class PyBinaryTargetRule(TargetRule):
 
     section = 'py_binary'
     tmpl_vals ={
-        'bash_abs_path': self.config.get(
+        'bash': self.config.get(
             section,
             'bash_location',
             DEFAULT_BASH_ABS_PATH),
-        'runtime_dir_abs_path': script_abs_path + '.runtime',
-        'python_abs_path': self.config.get(
+        'runtime_dir': script_abs_path + '.runtime',
+        'python': self.config.get(
             section,
             'python_location',
             DEFAULT_PYTHON_ABS_PATH),
         'main_py': self.pkg_path(name=self.sources[0])[2:],
         }
 
-    print 'Writing:', script_abs_path
+    print 'Writing:', script_abs_path, tmpl_vals
     with open(script_abs_path, 'w') as f:
       f.write(RUNNER_TEMPLATE % tmpl_vals)
 
