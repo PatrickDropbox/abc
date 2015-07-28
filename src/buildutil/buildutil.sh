@@ -1,3 +1,2 @@
 #/usr/bin/bash
-cd ~/git/abc/src
-PYTHONPATH=~/git/abc/src python buildutil/main.py $@
+PYTHONPATH=$HOME/git/abc/src python $HOME/git/abc/src/buildutil/main.py $@
