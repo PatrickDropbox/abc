@@ -80,10 +80,9 @@ class PyInitTargetRule(TargetRule):
 
     assert not os.path.exists(build_init)
 
-    if os.path.isfile(src_init):
-      # TODO: disallow __init__.py in src
-      return False
-    elif os.path.isfile(genfile_init):
+    assert not os.path.isfile(src_init), (
+        'Cannot have __init__.py in src directory. pkg: %s' % self.pkg_path())
+    if os.path.isfile(genfile_init):
       return False
 
     return True
