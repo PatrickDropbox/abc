@@ -2,7 +2,7 @@ import ConfigParser
 import optparse
 import os
 import os.path
-import subprocess
+import shutil
 
 from buildutil.analysis_passes import (
     BindDependencies,
@@ -99,8 +99,7 @@ def main():
 
     def remove(x):
       print 'Removing %s' % x
-      r = subprocess.call(['rm', '-rf', x])
-      assert r == 0
+      shutil.rmtree(x)
 
     remove(config.build_dir_abs_path)
     remove(config.genfile_dir_abs_path)
