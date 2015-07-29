@@ -2,7 +2,7 @@ import ConfigParser
 import optparse
 import os
 import os.path
-import shutil
+import subprocess
 
 from buildutil.analysis_passes import (
     BindDependencies,
@@ -98,8 +98,9 @@ def main():
       args_parser.error('Should not specify targets for clean command')
 
     def remove(x):
-      print 'Removing %s' % x
-      shutil.rmtree(x)
+      print 'Removing', x
+      r = subprocess.call('rm -rf %s' % x, shell=True)
+      assert r == 0
 
     remove(config.build_dir_abs_path)
     remove(config.genfile_dir_abs_path)

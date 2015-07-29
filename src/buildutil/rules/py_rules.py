@@ -15,7 +15,7 @@ DEFAULT_UNZIP_ABS_PATH = '/usr/bin/unzip'
 DEFAULT_PAR_EXTRACTION_DIR = '/tmp'
 
 RUNNER_TEMPLATE = """#!%(bash)s
-PYTHONPATH=%(runtime_dir)s %(python)s %(runtime_dir)s/%(main_py)s $@
+env PYTHONPATH=%(runtime_dir)s %(python)s %(runtime_dir)s/%(main_py)s $@
 """
 
 SELF_EXTRACTOR_TEMPLATE = """#!%(bash)s
@@ -26,7 +26,7 @@ TEMP_DIR=`mktemp -d %(extract_dir)s/%(target_name)s.XXXXXXXX`
 # does not properly handle non-py files (e.g., cmodules).
 %(unzip)s -d $TEMP_DIR $0 > /dev/null
 
-`PYTHONPATH=$TEMP_DIR/%(target_name)s.runtime %(python)s $TEMP_DIR/%(target_name)s.runtime/%(main_py)s $@`
+env PYTHONPATH=$TEMP_DIR/%(target_name)s.runtime %(python)s $TEMP_DIR/%(target_name)s.runtime/%(main_py)s $@
 
 EXIT_CODE=$?
 
