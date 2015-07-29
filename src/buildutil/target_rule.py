@@ -104,7 +104,7 @@ class TargetRule(object):
       if max_mtime is None or max_mtime < mtime:
         max_mtime = mtime
 
-      return max_mtime
+    return max_mtime
 
   def update_sources_max_mtime(self):
     """DO NOT OVERRIDE"""
