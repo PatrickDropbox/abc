@@ -1,8 +1,41 @@
 import os
 import os.path
+import shutil
+import tempfile
 
 from buildutil.target_rule import TargetRule
 from buildutil.target_patterns import TargetPatterns
+
+
+PY_SECTION = 'py_rules'
+
+DEFAULT_BASH_ABS_PATH = '/bin/bash'
+DEFAULT_PYTHON_ABS_PATH = '/usr/bin/python'
+DEFAULT_UNZIP_ABS_PATH = '/usr/bin/unzip'
+DEFAULT_PAR_EXTRACTION_DIR = '/tmp'
+
+RUNNER_TEMPLATE = """#!%(bash)s
+PYTHONPATH=%(runtime_dir)s %(python)s %(runtime_dir)s/%(main_py)s $@
+"""
+
+SELF_EXTRACTOR_TEMPLATE = """#!%(bash)s
+
+TEMP_DIR=`mktemp -d %(extract_dir)s/%(target_name)s.XXXXXXXX`
+
+# Unzipping instead of running using python zipimport because zipimport
+# does not properly handle non-py files (e.g., cmodules).
+%(unzip)s -d $TEMP_DIR $0 > /dev/null
+
+`PYTHONPATH=$TEMP_DIR/%(target_name)s.runtime %(python)s $TEMP_DIR/%(target_name)s.runtime/%(main_py)s $@`
+
+EXIT_CODE=$?
+
+rm -rf $TEMP_DIR
+
+exit $EXIT_CODE
+
+____ARCHIVE_BELOW____
+"""
 
 
 class PyInitTargetRule(TargetRule):
@@ -62,8 +95,8 @@ class PyInitTargetRule(TargetRule):
 
     assert not os.path.isfile(src_init)
 
-    r = self.execute_cmd('touch %s' % genfile_init)
-    return r == 0
+    self.execute_cmd('touch %s' % genfile_init)
+    return True
 
   @staticmethod
   def list_dep_pkg_paths(pkg_path):
@@ -131,19 +164,9 @@ class PyLibraryTargetRule(TargetRule):
       abs_path = self.locate_file(src_file_name)
       assert abs_path
 
-      r = self.execute_cmd('touch %s' % abs_path)
-      if r != 0:
-        return False
+      self.execute_cmd('touch %s' % abs_path)
 
     return True
-
-
-DEFAULT_BASH_ABS_PATH = '/bin/bash'
-DEFAULT_PYTHON_ABS_PATH = '/usr/bin/python'
-
-RUNNER_TEMPLATE = """#!%(bash)s
-PYTHONPATH=%(runtime_dir)s %(python)s %(runtime_dir)s/%(main_py)s $@
-"""
 
 
 class PyBinaryTargetRule(TargetRule):
@@ -208,7 +231,12 @@ class PyBinaryTargetRule(TargetRule):
       result.add(
         os.path.join(self.name + '.runtime', artifact[2:]))
 
+    for src in self.sources:
+      result.add(
+          os.path.join(self.name + '.runtime', self.pkg_path(src)[2:]))
+
     result.add(self.name)
+
     return result
 
   @classmethod
@@ -221,9 +249,7 @@ class PyBinaryTargetRule(TargetRule):
       src_pkg_paths.add(self.pkg_path(name=name))
 
     runtime_abs_path = self.build_abs_path(name=self.name + '.runtime')
-    r = self.execute_cmd('rm -rf %s' % runtime_abs_path)
-    if r != 0:
-      return False
+    self.execute_cmd('rm -rf %s' % runtime_abs_path)
 
     dir_abs_paths = set()
     for pkg_path in src_pkg_paths:
@@ -232,34 +258,29 @@ class PyBinaryTargetRule(TargetRule):
       dir_abs_paths.add(os.path.join(runtime_abs_path, pkg_path[2:]))
 
     for abs_path in dir_abs_paths:
-      r = self.execute_cmd('mkdir -p %s' % abs_path)
-      if r != 0:
-        return False
+      self.execute_cmd('mkdir -p %s' % abs_path)
 
     for pkg_path in src_pkg_paths:
       abs_path = self.config.locate_file(pkg_path, include_build=False)
       assert abs_path, 'Failed to locate: %s' % pkg_path
 
-      r = self.execute_cmd('ln -s %s %s' % (
+      self.execute_cmd('ln -s %s %s' % (
           abs_path,
           os.path.join(runtime_abs_path, pkg_path[2:])))
-      if r != 0:
-        return False
 
     return self.write_runner_script()
 
   def write_runner_script(self):
     script_abs_path = self.build_abs_path(name=self.name)
 
-    section = 'py_binary'
     tmpl_vals ={
         'bash': self.config.get(
-            section,
+            PY_SECTION,
             'bash_location',
             DEFAULT_BASH_ABS_PATH),
         'runtime_dir': script_abs_path + '.runtime',
         'python': self.config.get(
-            section,
+            PY_SECTION,
             'python_location',
             DEFAULT_PYTHON_ABS_PATH),
         'main_py': self.pkg_path(name=self.sources[0])[2:],
@@ -273,7 +294,6 @@ class PyBinaryTargetRule(TargetRule):
     return True
 
 
-# TODO
 class PyParTargetRule(TargetRule):
   def __init__(
       self,
@@ -292,6 +312,7 @@ class PyParTargetRule(TargetRule):
         visibility_set=visibility)
 
     self.is_test_par = is_test_par
+    self.original_target_name = name
 
   @classmethod
   def rule_name(cls):
@@ -308,8 +329,88 @@ class PyParTargetRule(TargetRule):
   def include_dependencies_artifacts(cls):
     return False
 
+  def build(self):
+    tmp_dir = tempfile.mkdtemp(
+        prefix=self.name + '.tmp.',
+        dir=self.build_abs_path())
+    print 'Created temp dir:', tmp_dir
 
-# TODO don't subclass ByBinary cuz it's limits to a single src file ...
+    runtime_dir_name = self.original_target_name + '.runtime'
+    self.execute_cmd('ln -s %s %s' % (
+        self.build_abs_path(name=runtime_dir_name),
+        os.path.join(tmp_dir, runtime_dir_name)))
+
+    file_pkg_paths = self.list_dependencies_artifacts()
+    runner_script_pkg_path = self.pkg_path(name=self.original_target_name)
+
+    file_relative_paths = []
+    for f in file_pkg_paths:
+      if f == runner_script_pkg_path:
+        continue
+
+      _, _, f = f.partition(runtime_dir_name)
+      assert f
+      file_relative_paths.append(runtime_dir_name + f)
+
+    self.execute_cmd('cd %s ; zip pkg.zip %s' % (
+        tmp_dir,
+        ' '.join(file_relative_paths)))
+
+    extractor_path = os.path.join(tmp_dir, 'extractor.sh')
+    print 'Writing extractor script:', extractor_path
+    self.write_extractor_script(extractor_path)
+
+    self.execute_cmd('cd %s ; cat extractor.sh pkg.zip >> %s' % (
+        tmp_dir,
+        self.name))
+
+    par_tmp_path = os.path.join(tmp_dir, self.name)
+
+    self.execute_cmd('zip -A %s' % par_tmp_path)
+
+    self.execute_cmd('chmod 755 %s' % par_tmp_path)
+
+    self.execute_cmd('mv %s %s' % (
+        par_tmp_path,
+        self.build_abs_path(name=self.name)))
+
+    print 'Removing temp dir:', tmp_dir
+    shutil.rmtree(tmp_dir)
+
+    return True
+
+  def write_extractor_script(self, extractor_path):
+    assert len(self.dependencies) == 1
+    dep = self.dependencies[self.pkg_path() + ':' + self.original_target_name]
+    assert isinstance(dep, PyBinaryTargetRule)
+    assert len(dep.sources) == 1
+
+    tmpl_vals ={
+        'bash': self.config.get(
+            PY_SECTION,
+            'bash_location',
+            DEFAULT_BASH_ABS_PATH),
+        'extract_dir': self.config.get(
+            PY_SECTION,
+            'par_extraction_location',
+            DEFAULT_PAR_EXTRACTION_DIR),
+        'target_name': self.original_target_name,
+        'unzip': self.config.get(
+            PY_SECTION,
+            'unzip_location',
+            DEFAULT_UNZIP_ABS_PATH),
+        'python': self.config.get(
+            PY_SECTION,
+            'python_location',
+            DEFAULT_PYTHON_ABS_PATH),
+        'main_py': self.pkg_path(name=dep.sources[0])[2:],
+        }
+
+    with open(extractor_path, 'w') as f:
+      f.write(SELF_EXTRACTOR_TEMPLATE % tmpl_vals)
+
+
+# XXX maybe don't subclass ByBinary cuz it's limits to a single src file ...
 class PyTestTargetRule(PyBinaryTargetRule):
   def __init__(
       self,

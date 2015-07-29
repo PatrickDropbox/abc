@@ -141,7 +141,9 @@ class TargetRule(object):
 
     print 'Executing:', cmd_str
     p = subprocess.Popen(cmd_str, shell=True, env=env)
-    return p.wait()
+
+    r = p.wait()
+    assert r == 0, 'Failed to execute: %s' % cmd_str
 
   def locate_file(
       self,
