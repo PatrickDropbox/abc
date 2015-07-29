@@ -202,8 +202,9 @@ class PyBinaryTargetRule(TargetRule):
         targets_accumulator,
         config,
         current_pkg_path)
-    targets_accumulator.append(
-        cls(config=config, pkg_path=current_pkg_path, **kwargs))
+
+    bin_target = cls(config=config, pkg_path=current_pkg_path, **kwargs)
+    targets_accumulator.append(bin_target)
 
     name = kwargs['name']
     visibility = None
@@ -216,7 +217,7 @@ class PyBinaryTargetRule(TargetRule):
             pkg_path=current_pkg_path,
             name=name,
             visibility=visibility,
-            is_test_par=cls.is_test_rule()))
+            is_test_par=bin_target.is_test_rule()))
 
   @classmethod
   def rule_name(cls):
@@ -321,8 +322,8 @@ class PyParTargetRule(TargetRule):
   def include_in_all_targets(cls):
     return False
 
-  def ignore_test_deps(self):
-    return not self.is_test_par
+  def is_test_rule(self):
+    return self.is_test_par
 
   @classmethod
   def include_dependencies_artifacts(cls):
@@ -408,6 +409,13 @@ class PyParTargetRule(TargetRule):
     with open(extractor_path, 'w') as f:
       f.write(SELF_EXTRACTOR_TEMPLATE % tmpl_vals)
 
+  def test(self):
+    try:
+      self.execute_cmd(self.build_abs_path(self.name))
+    except AssertionError:
+      return False
+    return True
+
 
 # XXX maybe don't subclass ByBinary cuz it's limits to a single src file ...
 class PyTestTargetRule(PyBinaryTargetRule):
@@ -431,10 +439,12 @@ class PyTestTargetRule(PyBinaryTargetRule):
   def rule_name(cls):
     return "py_test"
 
-  @classmethod
-  def is_test_rule(cls):
+  def is_test_rule(self):
     return True
 
   def test(self):
-    print 'TEST', self.name
+    try:
+      self.execute_cmd(self.build_abs_path(self.name))
+    except AssertionError:
+      return False
     return True
