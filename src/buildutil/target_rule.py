@@ -262,5 +262,9 @@ class TargetRule(object):
   def test(self):
     """How the target should be tested.  Returns true if test succeeded, false
     otherwise."""
-    raise NotImplemented
+    try:
+      self.execute_cmd(self.build_abs_path(self.name))
+    except AssertionError:
+      return False
+    return True
 

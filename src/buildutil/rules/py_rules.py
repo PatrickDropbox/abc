@@ -409,13 +409,6 @@ class PyParTargetRule(TargetRule):
     with open(extractor_path, 'w') as f:
       f.write(SELF_EXTRACTOR_TEMPLATE % tmpl_vals)
 
-  def test(self):
-    try:
-      self.execute_cmd(self.build_abs_path(self.name))
-    except AssertionError:
-      return False
-    return True
-
 
 # XXX maybe don't subclass ByBinary cuz it's limits to a single src file ...
 class PyTestTargetRule(PyBinaryTargetRule):
@@ -442,9 +435,3 @@ class PyTestTargetRule(PyBinaryTargetRule):
   def is_test_rule(self):
     return True
 
-  def test(self):
-    try:
-      self.execute_cmd(self.build_abs_path(self.name))
-    except AssertionError:
-      return False
-    return True

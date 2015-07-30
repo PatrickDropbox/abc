@@ -9,8 +9,8 @@ SRC_EXTS = ('.c', '.cc', '.cpp')
 CC_SECTION = 'cc_rules'
 
 DEFAULT_CC = 'g++'
-DEFAULT_CFLAGS = '-Wall -pthread'
-DEFAULT_LFLAGS = '-pthread'
+DEFAULT_CFLAGS = '-Wall'
+DEFAULT_LFLAGS = ''
 
 
 class CcLibraryTargetRule(TargetRule):
@@ -175,6 +175,3 @@ class CcTestTargetRule(CcBinaryTargetRule):
   def is_test_rule(self):
     return True
 
-  def test(self):
-    self.execute_cmd(self.build_abs_path(name=self.name))
-    return True
