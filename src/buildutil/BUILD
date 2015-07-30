@@ -49,7 +49,7 @@ py_library(
 
 py_binary(
     name='buildutil',
-    srcs=['buildutil.py'],
+    srcs=['main.py'],
     deps=[
         ':analysis_passes',
         ':package',
