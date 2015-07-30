@@ -13,6 +13,50 @@ DEFAULT_CFLAGS = '-Wall'
 
 
 class CcBaseTargetRule(TargetRule):
+  def __init__(
+      self,
+      config,
+      pkg_path,
+      name,
+      srcs=(),
+      hdrs=(),
+      deps=(),
+      visibility=None):
+
+    sources = []
+    artifacts = []
+
+    for hdr in set(hdrs):
+      _, ext = os.path.splitext(hdr)
+      assert ext in HDR_EXTS, (
+          'Unexpected header extension: %s (target: %s:%s)' % (
+              hdr,
+              pkg_path,
+              name))
+
+      sources.append(hdr)
+      artifacts.append(hdr)
+
+    for src in set(srcs):
+      src_name, ext = os.path.splitext(src)
+      assert ext in SRC_EXTS, (
+          'Unexpected src extension: %s (target: %s:%s)' % (
+              src,
+              pkg_path,
+              name))
+
+      sources.append(src)
+      artifacts.append(src_name + '.o')
+
+    super(CcBaseTargetRule, self).__init__(
+        config,
+        pkg_path,
+        name,
+        sources=sources,
+        dependencies=deps,
+        artifacts=artifacts,
+        visibility_set=visibility)
+
   def build(self):
     cc = self.config.get(CC_SECTION, 'cc_location', DEFAULT_CC)
     cflags = self.config.get(CC_SECTION, 'cflags', DEFAULT_CFLAGS)
@@ -43,41 +87,15 @@ class CcLibraryTargetRule(CcBaseTargetRule):
       srcs=(),
       hdrs=(),
       deps=(),
-      visibilty=None):
-
-    sources = []
-    artifacts = []
-
-    for hdr in hdrs:
-      _, ext = os.path.splitext(hdr)
-      assert ext in HDR_EXTS, (
-          'Unexpected header extension: %s (target: %s:%s)' % (
-              hdr,
-              pkg_path,
-              name))
-
-      sources.append(hdr)
-      artifacts.append(hdr)
-
-    for src in srcs:
-      src_name, ext = os.path.splitext(src)
-      assert ext in SRC_EXTS, (
-          'Unexpected src extension: %s (target: %s:%s)' % (
-              src,
-              pkg_path,
-              name))
-
-      sources.append(src)
-      artifacts.append(src_name + '.o')
-
+      visibility=None):
     super(CcLibraryTargetRule, self).__init__(
         config,
         pkg_path,
         name,
-        sources=sources,
-        dependencies=deps,
-        artifacts=artifacts,
-        visibility_set=visibility)
+        srcs=srcs,
+        hdrs=hdrs,
+        deps=deps,
+        visibility=visibility)
 
   @classmethod
   def rule_name(cls):

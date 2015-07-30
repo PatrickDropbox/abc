@@ -173,7 +173,7 @@ class TargetRule(object):
       **kwargs):
     """Override to customize target registration (see PyBinaryTargetRule for
     example)."""
-    target_accumulator.append(
+    targets_accumulator.append(
         cls(config=config, pkg_path=current_pkg_path, **kwargs))
 
   @classmethod

@@ -2,7 +2,7 @@ cc_library(
     name='lib1',
     srcs=[
         'lib1a.cc',
-        'lib1a.cc',
+        'lib1b.cc',
         ],
     hdrs=['lib1.h'])
 
