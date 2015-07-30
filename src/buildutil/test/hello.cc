@@ -5,4 +5,6 @@
 
 int main(int argc, char** argv) {
   printf("hello %s! %d\n", world().c_str(), h());
+
+  return 0;
 }

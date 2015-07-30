@@ -9,10 +9,11 @@ SRC_EXTS = ('.c', '.cc', '.cpp')
 CC_SECTION = 'cc_rules'
 
 DEFAULT_CC = 'g++'
-DEFAULT_CFLAGS = '-Wall'
+DEFAULT_CFLAGS = '-Wall -pthread'
+DEFAULT_LFLAGS = '-pthread'
 
 
-class CcBaseTargetRule(TargetRule):
+class CcLibraryTargetRule(TargetRule):
   def __init__(
       self,
       config,
@@ -48,7 +49,7 @@ class CcBaseTargetRule(TargetRule):
       sources.append(src)
       artifacts.append(src_name + '.o')
 
-    super(CcBaseTargetRule, self).__init__(
+    super(CcLibraryTargetRule, self).__init__(
         config,
         pkg_path,
         name,
@@ -56,6 +57,10 @@ class CcBaseTargetRule(TargetRule):
         dependencies=deps,
         artifacts=artifacts,
         visibility_set=visibility)
+
+  @classmethod
+  def rule_name(cls):
+    return "cc_library"
 
   def build(self):
     cc = self.config.get(CC_SECTION, 'cc_location', DEFAULT_CC)
@@ -78,26 +83,98 @@ class CcBaseTargetRule(TargetRule):
     return True
 
 
-class CcLibraryTargetRule(CcBaseTargetRule):
+class CcBinaryTargetRule(TargetRule):
   def __init__(
       self,
       config,
       pkg_path,
       name,
-      srcs=(),
-      hdrs=(),
-      deps=(),
       visibility=None):
-    super(CcLibraryTargetRule, self).__init__(
+    super(CcBinaryTargetRule, self).__init__(
         config,
         pkg_path,
         name,
-        srcs=srcs,
-        hdrs=hdrs,
-        deps=deps,
+        sources=(),
+        dependencies=[':%s.objs' % name],
+        artifacts=[name],
+        visibility_set=visibility)
+
+  @classmethod
+  def generate_targets(
+      cls,
+      targets_accumulator,
+      config,
+      current_pkg_path,
+      **kwargs):
+
+    name = kwargs['name']
+    kwargs['name'] = name + '.objs'
+
+    visibility = None
+    if 'visibility' in kwargs:
+      visibility = kwargs['visibility']
+
+    targets_accumulator.append(
+        CcLibraryTargetRule(config, current_pkg_path, **kwargs))
+
+    targets_accumulator.append(
+        cls(config,
+            current_pkg_path,
+            name,
+            visibility=visibility))
+
+  @classmethod
+  def rule_name(cls):
+    return "cc_binary"
+
+  @classmethod
+  def include_dependencies_artifacts(cls):
+    return False
+
+  def build(self):
+    cc = self.config.get(CC_SECTION, 'cc_location', DEFAULT_CC)
+    lflags = self.config.get(CC_SECTION, 'lflags', DEFAULT_CFLAGS)
+
+    # TODO handle static / dynamical libs (-L & -l options)
+    obj_files = []
+    for artifact in self.list_dependencies_artifacts():
+      if not artifact.endswith('.o'):
+        continue
+
+      abs_path = self.config.locate_file(artifact)
+      assert abs_path
+      obj_files.append(abs_path)
+
+    self.execute_cmd(
+        '%s %s -o %s %s' % (
+            cc,
+            lflags,
+            self.build_abs_path(name=self.name),
+            ' '.join(obj_files)))
+
+    return True
+
+
+class CcTestTargetRule(CcBinaryTargetRule):
+  def __init__(
+      self,
+      config,
+      pkg_path,
+      name,
+      visibility=None):
+    super(CcTestTargetRule, self).__init__(
+        config,
+        pkg_path,
+        name,
         visibility=visibility)
 
   @classmethod
   def rule_name(cls):
-    return "cc_library"
+    return "cc_test"
 
+  def is_test_rule(self):
+    return True
+
+  def test(self):
+    self.execute_cmd(self.build_abs_path(name=self.name))
+    return True

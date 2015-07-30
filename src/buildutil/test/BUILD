@@ -20,7 +20,7 @@ cc_library(
     name='tmpl',
     hdrs=['tmpl_inl.h'])
 
-cc_binary(
+cc_test(
     name='hello_world',
     srcs=[
         'hello.cc',

@@ -211,13 +211,14 @@ class PyBinaryTargetRule(TargetRule):
     if 'visibility' in kwargs:
       visibility = kwargs['visibility']
 
-    targets_accumulator.append(
-        PyParTargetRule(
-            config=config,
-            pkg_path=current_pkg_path,
-            name=name,
-            visibility=visibility,
-            is_test_par=bin_target.is_test_rule()))
+    par_target = PyParTargetRule(
+        config=config,
+        pkg_path=current_pkg_path,
+        name=name,
+        visibility=visibility)
+    par_target.is_test_par = True
+
+    targets_accumulator.append(par_target)
 
   @classmethod
   def rule_name(cls):
@@ -300,8 +301,7 @@ class PyParTargetRule(TargetRule):
       config,
       pkg_path,
       name,
-      visibility=None,
-      is_test_par=False):
+      visibility=None):
     super(PyParTargetRule, self).__init__(
         config=config,
         pkg_path=pkg_path,
@@ -311,7 +311,7 @@ class PyParTargetRule(TargetRule):
         artifacts=[name + '.par'],
         visibility_set=visibility)
 
-    self.is_test_par = is_test_par
+    self.is_test_par = False
     self.original_target_name = name
 
   @classmethod
