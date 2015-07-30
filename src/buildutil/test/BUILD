@@ -20,7 +20,7 @@ cc_library(
     name='tmpl',
     hdrs=['tmpl_inl.h'])
 
-cc_test(
+cc_binary(
     name='hello_world',
     srcs=[
         'hello.cc',
@@ -28,3 +28,8 @@ cc_test(
         ],
     hdrs=['hello_world.h'],
     deps=[':lib2'])
+
+cc_test(
+    name='foo_unittest',
+    srcs=['foo_unittest.cc'],
+    deps=['//gtest:gtest'])
