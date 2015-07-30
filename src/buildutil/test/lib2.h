@@ -1,0 +1,6 @@
+#ifndef BUILDUTIL_TEST_LIB2_H_
+#define BUILDUTIL_TEST_LIB2_H_
+
+int h();
+
+#endif  // BUILDUTIL_TEST_LIB2_H_
