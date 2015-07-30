@@ -1,4 +1,5 @@
 import os
+import sys
 
 from buildutil.topo_sorter import TopoSorter
 
@@ -131,7 +132,11 @@ class TestTargets(AnalysisPass):
       print '-' * 80
 
     print '%s of %s test targets passed.' % (passed, len(tests))
-    assert passed == len(tests)
+    if passed != len(tests):
+      print 'FAILED'
+      sys.exit(1)
+    else:
+      print 'PASSED'
 
 
 class PrintBuildOrder(AnalysisPass):

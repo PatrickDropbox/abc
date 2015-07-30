@@ -9,8 +9,8 @@ SRC_EXTS = ('.c', '.cc', '.cpp')
 CC_SECTION = 'cc_rules'
 
 DEFAULT_CC = 'g++'
-DEFAULT_CFLAGS = '-Wall'
-DEFAULT_LFLAGS = ''
+DEFAULT_CFLAGS = '-Wall -pthread'
+DEFAULT_LFLAGS = '-pthread'
 
 
 class CcLibraryTargetRule(TargetRule):
