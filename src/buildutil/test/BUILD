@@ -18,4 +18,13 @@ cc_library(
 
 cc_library(
     name='tmpl',
-    hdrs=['tmpl-inl.h'])
+    hdrs=['tmpl_inl.h'])
+
+cc_binary(
+    name='hello_world',
+    srcs=[
+        'hello.cc',
+        'world.cc',
+        ],
+    hdrs=['hello_world.h'],
+    deps=[':lib2'])
