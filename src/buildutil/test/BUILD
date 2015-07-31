@@ -1,5 +1,4 @@
-cc_library(
-    name='lib1',
+cc_library( name='lib1',
     srcs=[
         'lib1a.cc',
         'lib1b.cc',
@@ -35,10 +34,38 @@ cc_test(
     deps=['//gtest:gtest'])
 
 gen_lex(
-    name='scanner_lex',
-    srcs=['scanner.l'])
+    name='basic_scanner.l',
+    srcs=['basic_scanner.l'])
 
 cc_binary(
-    name='scanner',
-    srcs=['scanner.yy.c'],
-    deps=[':scanner_lex'])
+    name='basic_scanner',
+    srcs=['basic_scanner.yy.c'],
+    deps=[':basic_scanner.l'])
+
+gen_yacc(
+    name='test_parser.y',
+    srcs=['test_parser.y'])
+
+gen_lex(
+    name='test_scanner.l',
+    srcs=['test_scanner.l'],
+    deps=[':test_parser.y'])
+
+cc_binary(
+    name='test_parser',
+    srcs=[
+        'test_scanner.yy.c',
+        'test_parser.tab.cc',
+        'test_parser.cc',
+        ],
+    hdrs=[
+        'location.hh',
+        'stack.hh',
+        'position.hh',
+        'test_parser.tab.hh',
+        'test_scanner.h'
+        ],
+    deps=[
+        ':test_parser.y',
+        ':test_scanner.l',
+        ])
