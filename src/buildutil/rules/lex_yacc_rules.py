@@ -88,7 +88,7 @@ class YaccTargetRule(TargetRule):
     src = self.sources[0]
     name, _ = os.path.splitext(src)
 
-    self.execute_cmd('%s -o %s %s' % (
+    self.execute_cmd('%s -v -o %s %s' % (
         yacc,
         self.genfile_abs_path(name + '.tab.cc'),
         self.locate_file(src)))
