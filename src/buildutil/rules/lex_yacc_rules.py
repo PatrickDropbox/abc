@@ -65,7 +65,8 @@ class YaccTargetRule(TargetRule):
     assert ext == '.y'
 
     # NOTE: additional files (e.g., location.hh, position.hh, stack.hh)
-    # may also be generate, however, tracking .tab.c and .tab.h should
+    # may also be generated.  However, since we don't propagate the
+    # artifacts up the dependency china, tracking .tab.c and .tab.h should
     # be sufficient to determine if the artifacts are out of date.
     artifacts = [file_name + '.tab.cc', file_name + '.tab.hh']
 
