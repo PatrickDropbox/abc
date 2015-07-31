@@ -3,6 +3,9 @@ from buildutil.rules.cc_rules import (
     CcLibraryTargetRule,
     CcTestTargetRule,
     )
+from buildutil.rules.lex_yacc_rules import (
+    LexTargetRule,
+    )
 from buildutil.rules.py_rules import (
     PyBinaryTargetRule,
     PyLibraryTargetRule,
@@ -14,6 +17,8 @@ RULES = [
     CcBinaryTargetRule,
     CcLibraryTargetRule,
     CcTestTargetRule,
+
+    LexTargetRule,
 
     PyBinaryTargetRule,
     PyLibraryTargetRule,

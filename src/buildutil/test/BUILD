@@ -33,3 +33,12 @@ cc_test(
     name='foo_unittest',
     srcs=['foo_unittest.cc'],
     deps=['//gtest:gtest'])
+
+gen_lex(
+    name='scanner_lex',
+    srcs=['scanner.l'])
+
+cc_binary(
+    name='scanner',
+    srcs=['scanner.yy.c'],
+    deps=[':scanner_lex'])
