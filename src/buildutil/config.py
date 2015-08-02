@@ -8,6 +8,25 @@ import os
 import os.path
 
 
+LOCATE_IN_SRC_DIR = 1
+LOCATE_IN_GENFILE_DIR = 2
+LOCATE_IN_BUILD_DIR = 3
+
+LOCATE_SOURCE_ORDER = (
+    LOCATE_IN_SRC_DIR,
+    LOCATE_IN_GENFILE_DIR,
+    LOCATE_IN_BUILD_DIR,
+    )
+
+LOCATE_ARTIFACT_ORDER = (
+    LOCATE_IN_BUILD_DIR,
+    LOCATE_IN_GENFILE_DIR,
+    LOCATE_IN_SRC_DIR,
+    )
+
+DEFAULT_LOCATE_ORDER = LOCATE_SOURCE_ORDER
+
+
 class Config(object):
   def __init__(self, cwd_abs_path, ini_config):
     self.ini_config = ini_config
@@ -91,23 +110,25 @@ class Config(object):
   def locate_file(
       self,
       file_pkg_path,
-      include_src=True,
-      include_genfile=True,
-      include_build=True):
-    if include_src:
-      src_path = self.pkg_path_to_src_abs_path(file_pkg_path)
-      if os.path.isfile(src_path):
-        return src_path
+      locate_order=DEFAULT_LOCATE_ORDER):
+    for val in locate_order:
+      if val == LOCATE_IN_SRC_DIR:
+        src_path = self.pkg_path_to_src_abs_path(file_pkg_path)
+        if os.path.isfile(src_path):
+          return src_path
 
-    if include_genfile:
-      genfile_path = self.pkg_path_to_genfile_abs_path(file_pkg_path)
-      if os.path.isfile(genfile_path):
-        return genfile_path
+      elif val == LOCATE_IN_GENFILE_DIR:
+        genfile_path = self.pkg_path_to_genfile_abs_path(file_pkg_path)
+        if os.path.isfile(genfile_path):
+          return genfile_path
 
-    if include_build:
-      build_path = self.pkg_path_to_build_abs_path(file_pkg_path)
-      if os.path.isfile(build_path):
-        return build_path
+      elif val == LOCATE_IN_BUILD_DIR:
+        build_path = self.pkg_path_to_build_abs_path(file_pkg_path)
+        if os.path.isfile(build_path):
+          return build_path
+
+      else:
+        assert False, 'Unknown val: %s' % val
 
     return None
 

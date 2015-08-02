@@ -1,6 +1,11 @@
 import os
 import subprocess
 
+from buildutil.config import (
+    DEFAULT_LOCATE_ORDER,
+    LOCATE_ARTIFACT_ORDER,
+    LOCATE_SOURCE_ORDER,
+    )
 from buildutil.target_patterns import TargetPatterns
 from buildutil.util import validate_pkg_path, validate_target_name
 
@@ -89,12 +94,12 @@ class TargetRule(object):
   def _get_max_mtime(
       self,
       files,
-      verify_existence=False,
-      include_build=True):
+      locate_order,
+      verify_existence=False):
     """DO NOT OVERRIDE"""
     max_mtime = None
     for f in files:
-      abs_path = self.locate_file(f, include_build=include_build)
+      abs_path = self.locate_file(f, locate_order=locate_order)
       if abs_path is None:
         assert not verify_existence, (
             'Failed to locate: %s (target: %s)' % (f, self.target_path()))
@@ -110,8 +115,8 @@ class TargetRule(object):
     """DO NOT OVERRIDE"""
     self.sources_max_mtime = self._get_max_mtime(
         self.sources(),
-        verify_existence=True,
-        include_build=False)  # maybe allow this to be true?
+        LOCATE_SOURCE_ORDER,
+        verify_existence=True)
 
   def update_artifacts_max_mtime(self, verify_existence=True):
     """DO NOT OVERRIDE"""
@@ -123,6 +128,7 @@ class TargetRule(object):
 
     self.artifacts_max_mtime = self._get_max_mtime(
         artifacts,
+        LOCATE_ARTIFACT_ORDER,
         verify_existence=verify_existence)
 
   def execute_cmd(self, cmd_str, additional_env=None):
@@ -148,15 +154,11 @@ class TargetRule(object):
   def locate_file(
       self,
       file_name,
-      include_src=True,
-      include_genfile=True,
-      include_build=True):
+      locate_order=DEFAULT_LOCATE_ORDER):
     """DO NOT OVERRIDE"""
     return self.config.locate_file(
         self.pkg_path(name=file_name),
-        include_src=include_src,
-        include_genfile=include_genfile,
-        include_build=include_build)
+        locate_order=locate_order)
 
   @classmethod
   def is_unique_target(cls):

@@ -3,6 +3,7 @@ import os.path
 import shutil
 import tempfile
 
+from buildutil.config import LOCATE_IN_GENFILE_DIR, LOCATE_IN_SRC_DIR
 from buildutil.target_rule import TargetRule
 from buildutil.target_patterns import TargetPatterns
 
@@ -262,7 +263,9 @@ class PyBinaryTargetRule(TargetRule):
       self.execute_cmd('mkdir -p %s' % abs_path)
 
     for pkg_path in src_pkg_paths:
-      abs_path = self.config.locate_file(pkg_path, include_build=False)
+      abs_path = self.config.locate_file(
+          pkg_path,
+          locate_order=(LOCATE_IN_SRC_DIR, LOCATE_IN_GENFILE_DIR))
       assert abs_path, 'Failed to locate: %s' % pkg_path
 
       self.execute_cmd('ln -s %s %s' % (

@@ -1,5 +1,6 @@
 import os.path
 
+from buildutil.config import LOCATE_ARTIFACT_ORDER
 from buildutil.target_rule import TargetRule
 
 
@@ -141,7 +142,9 @@ class CcBinaryTargetRule(TargetRule):
       if not artifact.endswith('.o'):
         continue
 
-      abs_path = self.config.locate_file(artifact)
+      abs_path = self.config.locate_file(
+          artifact,
+          locate_order=LOCATE_ARTIFACT_ORDER)
       assert abs_path
       obj_files.append(abs_path)
 

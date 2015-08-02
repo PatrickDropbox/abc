@@ -61,7 +61,7 @@ class PackageSet(object):
 
     globals_dict = {}
     for rule in RULES:
-      assert rule.rule_name() not in globals_dict
+      assert rule.rule_name() not in globals_dict, rule.rule_name()
       globals_dict[rule.rule_name()] = partial(
           rule.generate_targets,
           targets_accumulator=generated_targets,

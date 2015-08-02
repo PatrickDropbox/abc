@@ -30,5 +30,8 @@ class GoLibraryTargetRule(TargetRule):
   def is_test_rule(self):
     return True
 
-class GoMainTargetRule(GoLibTargetRule):
-  pass
+class GoBinaryTargetRule(GoLibraryTargetRule):
+  @classmethod
+  def rule_name(cls):
+    return "go_binary"
+
