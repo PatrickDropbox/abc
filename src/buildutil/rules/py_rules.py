@@ -159,7 +159,7 @@ class PyLibraryTargetRule(TargetRule):
     return "py_library"
 
   def build(self):
-    for src_file_name in self.sources:
+    for src_file_name in self.sources():
       abs_path = self.locate_file(src_file_name)
       assert abs_path
 
@@ -232,7 +232,7 @@ class PyBinaryTargetRule(TargetRule):
       result.add(
         os.path.join(self.name + '.runtime', artifact[2:]))
 
-    for src in self.sources:
+    for src in self.sources():
       result.add(
           os.path.join(self.name + '.runtime', self.pkg_path(src)[2:]))
 
@@ -246,7 +246,7 @@ class PyBinaryTargetRule(TargetRule):
 
   def build(self):
     src_pkg_paths = self.list_dependencies_artifacts()
-    for name in self.sources:
+    for name in self.sources():
       src_pkg_paths.add(self.pkg_path(name=name))
 
     runtime_abs_path = self.build_abs_path(name=self.name + '.runtime')
@@ -284,7 +284,7 @@ class PyBinaryTargetRule(TargetRule):
             PY_SECTION,
             'python_location',
             DEFAULT_PYTHON_ABS_PATH),
-        'main_py': self.pkg_path(name=self.sources[0])[2:],
+        'main_py': self.pkg_path(name=self.sources()[0])[2:],
         }
 
     print 'Writing:', script_abs_path
@@ -383,7 +383,7 @@ class PyParTargetRule(TargetRule):
     assert len(self.dependencies) == 1
     dep = self.dependencies[self.pkg_path() + ':' + self.original_target_name]
     assert isinstance(dep, PyBinaryTargetRule)
-    assert len(dep.sources) == 1
+    assert len(dep.sources()) == 1
 
     tmpl_vals ={
         'bash': self.config.get(
@@ -403,7 +403,7 @@ class PyParTargetRule(TargetRule):
             PY_SECTION,
             'python_location',
             DEFAULT_PYTHON_ABS_PATH),
-        'main_py': self.pkg_path(name=dep.sources[0])[2:],
+        'main_py': self.pkg_path(name=dep.sources()[0])[2:],
         }
 
     with open(extractor_path, 'w') as f:

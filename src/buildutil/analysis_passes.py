@@ -94,6 +94,8 @@ class BuildTargets(AnalysisPass):
           target.has_modified = False
       print '-' * 80
 
+    print 'BUILD DONE'
+
   def _make_dirs(self, dirs):
     for d in set(dirs):
       try:
@@ -133,10 +135,10 @@ class TestTargets(AnalysisPass):
 
     print '%s of %s test targets passed.' % (passed, len(tests))
     if passed != len(tests):
-      print 'FAILED'
+      print 'TEST FAILED'
       sys.exit(1)
     else:
-      print 'PASSED'
+      print 'TEST PASSED'
 
 
 class PrintBuildOrder(AnalysisPass):

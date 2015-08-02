@@ -5,6 +5,12 @@ py_library(
     visibility=[])
 
 py_library(
+    name='go_rules',
+    srcs=['go_rules.py'],
+    deps=['//buildutil:target_rule'],
+    visibility=[])
+
+py_library(
     name='lex_yacc_rules',
     srcs=['lex_yacc_rules.py'],
     deps=[
@@ -26,6 +32,7 @@ py_library(
     srcs=['rules.py'],
     deps=[
         ':cc_rules',
+        ':go_rules',
         ':lex_yacc_rules',
         ':py_rules',
         ],

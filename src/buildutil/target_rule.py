@@ -29,7 +29,7 @@ class TargetRule(object):
     self._pkg_path = pkg_path
     self.name = name
     self.config = config
-    self.sources = sources
+    self._sources = sources
     self.dependency_patterns = TargetPatterns(pkg_path)
     self.dependency_patterns.set_patterns(dependencies)
     self._artifacts = artifacts
@@ -109,7 +109,7 @@ class TargetRule(object):
   def update_sources_max_mtime(self):
     """DO NOT OVERRIDE"""
     self.sources_max_mtime = self._get_max_mtime(
-        self.sources,
+        self.sources(),
         verify_existence=True,
         include_build=False)  # maybe allow this to be true?
 
@@ -192,10 +192,16 @@ class TargetRule(object):
     true, must implement test"""
     return False
 
+  def sources(self):
+    """Override if the source list cannot be computed statically during
+    initialization.  Can assume dependencies are binded and built when
+    overriding"""
+    return self._sources
+
   def artifacts(self):
     """Override if the artifact list cannot be computed statically during
-    initialization. Can assume dependencies are binded when overriding (but
-    should assert anyways)."""
+    initialization. Can assume dependencies are binded and built when
+    overriding."""
     return self._artifacts
 
   def list_dependencies_artifacts(self):
@@ -223,14 +229,14 @@ class TargetRule(object):
 
   def should_build(self):
     # Artifacts are created without source and dependencies.
-    if not self.sources and not self.dependencies:
+    if not self.sources() and not self.dependencies:
       return True
 
     # First time building the artifacts.
     if self.artifacts_max_mtime is None:
       return True
 
-    if self.sources:
+    if self.sources():
       assert self.sources_max_mtime
 
       # Sources are newer than the artifacts.

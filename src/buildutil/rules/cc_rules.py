@@ -67,7 +67,7 @@ class CcLibraryTargetRule(TargetRule):
     cflags = self.config.get(CC_SECTION, 'cflags', DEFAULT_CFLAGS)
     hdr_dirs = (self.config.src_dir_abs_path, self.config.genfile_dir_abs_path)
 
-    for src in self.sources:
+    for src in self.sources():
       name, ext = os.path.splitext(src)
       if ext in HDR_EXTS:
         continue

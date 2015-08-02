@@ -36,7 +36,7 @@ class LexTargetRule(TargetRule):
   def build(self):
     lex = self.config.get(LEX_YACC_SECTION, 'lex_location', DEFAULT_LEX)
 
-    src = self.sources[0]
+    src = self.sources()[0]
     name, _ = os.path.splitext(src)
 
     self.execute_cmd('%s -o %s %s' % (
@@ -86,7 +86,7 @@ class YaccTargetRule(TargetRule):
   def build(self):
     yacc = self.config.get(LEX_YACC_SECTION, 'yacc_location', DEFAULT_YACC)
 
-    src = self.sources[0]
+    src = self.sources()[0]
     name, _ = os.path.splitext(src)
 
     self.execute_cmd('%s -v -o %s %s' % (

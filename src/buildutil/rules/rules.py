@@ -3,6 +3,10 @@ from buildutil.rules.cc_rules import (
     CcLibraryTargetRule,
     CcTestTargetRule,
     )
+from buildutil.rules.go_rules import (
+    GoBinaryTargetRule,
+    GoLibraryTargetRule,
+    )
 from buildutil.rules.lex_yacc_rules import (
     LexTargetRule,
     YaccTargetRule,
@@ -18,6 +22,9 @@ RULES = [
     CcBinaryTargetRule,
     CcLibraryTargetRule,
     CcTestTargetRule,
+
+    GoBinaryTargetRule,
+    GoLibraryTargetRule,
 
     LexTargetRule,
     YaccTargetRule,
