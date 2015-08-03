@@ -1,6 +1,5 @@
 import os.path
 
-from buildutil.config import LOCATE_ARTIFACT_ORDER
 from buildutil.target_rule import TargetRule
 
 
@@ -144,7 +143,7 @@ class CcBinaryTargetRule(TargetRule):
 
       abs_path = self.config.locate_file(
           artifact,
-          locate_order=LOCATE_ARTIFACT_ORDER)
+          locate_order=self.locate_artifact_order())
       assert abs_path
       obj_files.append(abs_path)
 

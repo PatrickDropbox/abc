@@ -115,7 +115,7 @@ class TargetRule(object):
     """DO NOT OVERRIDE"""
     self.sources_max_mtime = self._get_max_mtime(
         self.sources(),
-        LOCATE_SOURCE_ORDER,
+        self.locate_source_order(),
         verify_existence=True)
 
   def update_artifacts_max_mtime(self, verify_existence=True):
@@ -128,7 +128,7 @@ class TargetRule(object):
 
     self.artifacts_max_mtime = self._get_max_mtime(
         artifacts,
-        LOCATE_ARTIFACT_ORDER,
+        self.locate_artifact_order(),
         verify_existence=verify_existence)
 
   def execute_cmd(self, cmd_str, additional_env=None):
@@ -159,6 +159,12 @@ class TargetRule(object):
     return self.config.locate_file(
         self.pkg_path(name=file_name),
         locate_order=locate_order)
+
+  def locate_source_order(self):
+    return LOCATE_SOURCE_ORDER
+
+  def locate_artifact_order(self):
+    return LOCATE_ARTIFACT_ORDER
 
   @classmethod
   def is_unique_target(cls):
