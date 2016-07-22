@@ -69,3 +69,8 @@ cc_binary(
         ':test_parser.y',
         ':test_scanner.l',
         ])
+
+gen_nasm(
+    name='boot',
+    src='boot.asm',
+    includes=['print_string.asm'])

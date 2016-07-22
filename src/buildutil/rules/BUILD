@@ -19,6 +19,14 @@ py_library(
     visibility=[])
 
 py_library(
+    name='nasm_rules',
+    srcs=['nasm_rules.py'],
+    deps=[
+        '//buildutil:target_rule',
+        ],
+    visibility=[])
+
+py_library(
     name='py_rules',
     srcs=['py_rules.py'],
     deps=[
@@ -34,6 +42,7 @@ py_library(
         ':cc_rules',
         ':go_rules',
         ':lex_yacc_rules',
+        ':nasm_rules',
         ':py_rules',
         ],
     visibility=['//buildutil:package'])

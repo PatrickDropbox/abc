@@ -146,7 +146,11 @@ class TargetRule(object):
       env.update(additional_env)
 
     print 'Executing:', cmd_str
-    p = subprocess.Popen(cmd_str, shell=True, env=env)
+    p = subprocess.Popen(
+        cmd_str,
+        shell=True,
+        cwd=self.config.project_dir_abs_path,
+        env=env)
 
     r = p.wait()
     assert r == 0, 'Failed to execute: %s' % cmd_str

@@ -10,6 +10,9 @@ from buildutil.rules.lex_yacc_rules import (
     LexTargetRule,
     YaccTargetRule,
     )
+from buildutil.rules.nasm_rules import (
+    NasmTargetRule,
+    )
 from buildutil.rules.py_rules import (
     PyBinaryTargetRule,
     PyLibraryTargetRule,
@@ -26,6 +29,8 @@ RULES = [
 
     LexTargetRule,
     YaccTargetRule,
+
+    NasmTargetRule,
 
     PyBinaryTargetRule,
     PyLibraryTargetRule,
