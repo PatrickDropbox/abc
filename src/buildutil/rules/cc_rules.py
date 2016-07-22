@@ -65,7 +65,9 @@ class CcLibraryTargetRule(TargetRule):
   def build(self):
     cc = self.config.get(CC_SECTION, 'cc_location', DEFAULT_CC)
     cflags = self.config.get(CC_SECTION, 'cflags', DEFAULT_CFLAGS)
-    hdr_dirs = (self.config.src_dir_abs_path, self.config.genfile_dir_abs_path)
+    hdr_dirs = list(self.config.get(CC_SECTION, 'hdr_dirs', '').split(':'))
+    hdr_dirs.append(self.config.src_dir_abs_path)
+    hdr_dirs.append(self.config.genfile_dir_abs_path)
 
     for src in self.sources():
       name, ext = os.path.splitext(src)
