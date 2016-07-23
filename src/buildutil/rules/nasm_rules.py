@@ -62,7 +62,7 @@ class NasmTargetRule(TargetRule):
 
     src = self.sources()[0]
 
-    self.execute_cmd('%s %s -f %s -o %s' % (
+    self.execute_cmd('%s -w+orphan-labels %s -f %s -o %s' % (
         nasm,
         self.locate_file(src),
         self.output_format,
