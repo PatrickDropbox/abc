@@ -1,0 +1,127 @@
+%define MAX_BOOT_DRIVE_READ_ATTEMPTS 3
+
+;
+; Save which drive number did the BIOS boot from.
+;
+save_boot_drive_id:
+  push dx
+  push si
+
+  mov [_boot_drive_id], dl  ; BIOS stores the drive id in dl on startup
+
+  mov si, .msg
+  call print_str16
+
+  xor dh, dh
+  call print_hex16
+
+  mov si, _crlf
+  call print_str16
+
+  pop si
+  pop dx
+  ret
+
+.msg:
+  db 'Boot drive: ', 0
+
+;
+; load sectors [2, 2 + dh) from the boot drive (cylinder 0, head 0) into
+; memory at es:bx.  This assumes that save_boot_drive_id is already called.
+; (The first sector, i.e., the boot sector, is ignored since it's already
+; loaded)
+;
+load_boot_data:
+  push ax
+  push cx
+  push si
+  push dx
+
+  ; XXX maybe add retry loop
+
+  ; Reset the boot drive via int=0x13,ah=0x00 to ensure the drive is positioned
+  ; correctly.
+  ; http://www.ctyme.com/intr/rb-0605.htm
+  mov ah, 0x00
+  mov dl, [_boot_drive_id]
+
+  int 0x13
+  jc .reset_error
+
+  ; Perform read via int=0x13,ah=0x02
+  ; http://www.ctyme.com/intr/rb-0607.htm
+  mov ah, 0x02
+  mov al, dh  ; number of sectors to read
+  mov ch, 0  ; cylinder 0
+  mov cl, 0x02  ; starting from the 2nd sector
+  mov dh, 0x00  ; head 0
+  ; dl is already set to [_boot_drive_id]
+
+  int 0x13
+  jc .read_error
+
+  pop dx
+  push dx
+
+  mov dl, dh
+  xor dh, dh
+
+  ; Extra check to ensure number of sectors read is expected
+  cmp al, dl
+  jne .read_error
+
+  mov si, ._ok_msg
+  call print_str16
+
+  call print_hex16
+
+  mov si, _crlf
+  call print_str16
+
+  pop dx
+  pop si
+  pop cx
+  pop ax
+  ret
+
+.reset_error:
+  mov si, ._reset_err_msg
+  call print_str16
+
+  mov dh, ah
+  xor dl, dl
+  call print_hex16
+
+  mov si, _crlf
+  call print_str16
+
+  jmp halt
+
+.read_error:
+  mov si, ._read_err_msg
+  call print_str16
+
+  mov dx, ax
+  call print_hex16
+
+  mov si, _crlf
+  call print_str16
+
+  jmp halt
+
+._ok_msg:
+  db "Sectors read from boot drive: ", 0
+
+._reset_err_msg:
+  db "Failed to reset boot drive: ", 0
+
+._read_err_msg:
+  db "Failed to read boot drive: ", 0
+
+;
+; global variable
+;
+
+_boot_drive_id:
+  db 0
+

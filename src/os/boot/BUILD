@@ -1,0 +1,12 @@
+gen_nasm(
+    name='boot',
+    src='boot.asm',
+    includes=[
+        'boot_disk.asm',
+        'halt.asm',
+        'init_registers.asm',
+        'print_hex16.asm',
+        'print_str16.asm',
+        'real_mode_memory_check.asm',
+    ]
+)
