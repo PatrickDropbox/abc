@@ -18,9 +18,9 @@ call save_boot_drive_id
 ; Make sure we have space to load additional boot data.
 call real_mode_memory_check
 
-; Read 2 sectors from boot disk, and load that into 0x7e00.
+; Read 4 sectors from boot disk, and load that into 0x7e00.
 ; [0x7e00, 0x9fc00) is free for use. See http://wiki.osdev.org/Memory_Map_(x86)
-mov dh, 2
+mov dh, 4
 mov bx, 0x7e00
 call load_boot_data
 
@@ -69,6 +69,8 @@ second_sector:
 ; Code
 ;
 
+%include "src/os/boot/a20.asm"
+
 ;
 ; Shared global variables
 ;
@@ -81,6 +83,9 @@ _second_stage_msg:
 second_stage_entry_point:
   mov si, _second_stage_msg
   call print_str16
+
+; We want to use more than 1MB of memory ...
+call enable_a20
 
 ;
 ; To be continue ...
