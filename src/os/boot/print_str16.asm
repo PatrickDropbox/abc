@@ -1,5 +1,8 @@
+; bits 16
+
 ; print null-terminated string stored in si
 print_str16:
+  pushf
   push ax
   push bx
   push si
@@ -20,4 +23,5 @@ print_str16:
   pop si
   pop bx
   pop ax
+  popf
   ret

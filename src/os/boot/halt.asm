@@ -1,3 +1,5 @@
+; bits 16
+
 halt:
   mov si, ._halt_msg
   call print_str16

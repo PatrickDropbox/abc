@@ -1,9 +1,14 @@
+; bits 16
+
 ;
 ; Check to ensure we have enough low/conventional memory to load everything.
 ; Here we assume we're working on a modern system with plenty (>> 1MB) of ram.
 ;
 real_mode_memory_check:
+  pushf
   push ax
+  push dx
+  push si
 
   ; http://wiki.osdev.org/Detecting_Memory_(x86)#Detecting_Low_Memory
   ; suggest checking the carry flag, but http://www.ctyme.com/intr/rb-0598.htm
@@ -24,7 +29,10 @@ real_mode_memory_check:
   mov si, _crlf
   call print_str16
 
+  pop si
+  pop dx
   pop ax
+  popf
   ret
 
 .error:

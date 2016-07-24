@@ -1,5 +1,8 @@
+; bits 16
+
 ; print dx's value via BIOS
 print_hex16:
+  pushf
   push ax
   push bx
   push dx
@@ -21,6 +24,7 @@ print_hex16:
 
   pop bx
   pop ax
+  popf
   ret
 
 .print_char:

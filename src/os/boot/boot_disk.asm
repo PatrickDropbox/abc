@@ -1,9 +1,10 @@
-%define MAX_BOOT_DRIVE_READ_ATTEMPTS 3
+; bits 16
 
 ;
 ; Save which drive number did the BIOS boot from.
 ;
 save_boot_drive_id:
+  pushf
   push dx
   push si
 
@@ -20,6 +21,7 @@ save_boot_drive_id:
 
   pop si
   pop dx
+  popf
   ret
 
 .msg:
@@ -32,6 +34,7 @@ save_boot_drive_id:
 ; loaded)
 ;
 load_boot_data:
+  pushf
   push ax
   push cx
   push si
@@ -82,6 +85,7 @@ load_boot_data:
   pop si
   pop cx
   pop ax
+  popf
   ret
 
 .reset_error:

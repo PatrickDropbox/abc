@@ -1,3 +1,5 @@
+; bits 16
+
 ;
 ; Initialize code segment register to zero.  Some BIOS load the boot sector
 ; at 0x07c0:0x0000, while others load the boot sector at 0x0000:0x7c00.
