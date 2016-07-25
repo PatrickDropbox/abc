@@ -3,7 +3,7 @@
 ;
 ; Detect memory via int 0x15, ax=0xe820.  The memory map is saved to the
 ; address stored in [_memory_map_addr], and the length of the map is save
-; into _memory_map_len.
+; into _memory_map_count.
 ;
 ; For additional detail, see:
 ;   http://wiki.osdev.org/Detecting_Memory_(x86)
@@ -72,12 +72,12 @@ detect_memory:
   cmp si, 0
   je .no_entry
 
-  mov [_memory_map_len], si
+  mov [_memory_map_count], si
 
   mov si, ._found_msg
   call print_str
 
-  mov dx, [_memory_map_len]
+  mov dx, [_memory_map_count]
   call print_hex16
 
   mov si, _crlf
@@ -126,3 +126,76 @@ detect_memory:
 
 ._int_error_msg:
   db 'Failed to detect memory.  Interrupt error: ', 0
+
+
+print_memory_map:
+  pushf
+  pusha
+
+  mov si, ._msg
+  call print_str
+
+  mov di, [_memory_map_addr]
+  mov bx, 0
+
+.iter:
+  cmp bx, [_memory_map_count]
+  jge .done
+
+  mov si, _space
+  call print_str
+  call print_str
+
+  ; print addr
+
+  mov si, di
+  mov cx, 8
+  call print_hex_number
+
+  mov si, _space
+  call print_str
+
+  ; print len
+
+  mov si, di
+  add si, 8
+  call print_hex_number
+
+
+  mov si, _space
+  call print_str
+
+  ; print type
+
+  mov si, di
+  add si, 16
+  mov cx, 4
+  call print_hex_number
+
+  mov si, _space
+  call print_str
+
+  ; print flag
+
+  mov si, di
+  add si, 20
+  call print_hex_number
+
+  mov si, _crlf
+  call print_str
+
+  add bx, 1
+  add di, MEMORY_MAP_ENTRY_SIZE
+
+  jmp .iter
+
+.done:
+  popa
+  popf
+  ret
+
+._msg:
+  db 'Memory Map:', 13, 10, 0
+
+._0x:
+  db '0x', 0

@@ -77,7 +77,7 @@ _boot_drive_id:
 
 ; Num entries (not byte count) in the memory map.  Initialized by detect_memory
 ; call.
-_memory_map_len:
+_memory_map_count:
   dw 0  ; initialized by detect_memory call
 
 ; Where to save the memory map.  The map itself is initialized by call to
@@ -101,6 +101,9 @@ _space:
 
 _crlf:
   db 13, 10, 0  ; BIOS printing requires explicit \r
+
+_0x:
+  db '0x', 0
 
 ;
 ; End of boot sector.  The last two bytes on the boot sector must end with
@@ -142,6 +145,7 @@ call enable_a20
 
 ; Find out how much memory do we have.
 call detect_memory
+call print_memory_map
 
 ;
 ; To be continue ...

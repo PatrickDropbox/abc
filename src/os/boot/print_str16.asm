@@ -5,6 +5,8 @@ print_str:
   pushf
   pusha
 
+  cld  ; make sure we're incrementing on lodsb
+
   mov bx, 0
 
 .iter:

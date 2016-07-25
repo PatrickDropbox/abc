@@ -2,6 +2,7 @@ print_reg16:
   pushf
   pusha
 
+  push si
   push dx
 
   mov dx, ax
@@ -19,10 +20,21 @@ print_reg16:
   mov si, _space
   call print_str
 
-  pop dx
+  pop dx  ; print dx
+  call print_hex16
+  mov si, _space
+  call print_str
+
+  pop dx  ; print si
+  call print_hex16
+  mov si, _space
+  call print_str
+
+  mov dx, di
   call print_hex16
   mov si, _crlf
   call print_str
+
 
   popa
   popf

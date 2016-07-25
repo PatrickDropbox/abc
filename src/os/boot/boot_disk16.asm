@@ -33,9 +33,7 @@ save_boot_drive_id:
 ;
 load_boot_data:
   pushf
-  push ax
-  push cx
-  push si
+  pusha
   push dx
 
   ; XXX maybe add retry loop
@@ -62,7 +60,6 @@ load_boot_data:
   jc .read_error
 
   pop dx
-  push dx
 
   mov dl, dh
   xor dh, dh
@@ -79,10 +76,7 @@ load_boot_data:
   mov si, _crlf
   call print_str
 
-  pop dx
-  pop si
-  pop cx
-  pop ax
+  popa
   popf
   ret
 
@@ -112,7 +106,7 @@ load_boot_data:
   jmp halt
 
 ._ok_msg:
-  db "Boot sectors read: ", 0
+  db "Sectors read: ", 0
 
 ._reset_err_msg:
   db "Reset drive failed: ", 0
