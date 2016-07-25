@@ -120,10 +120,3 @@ load_boot_data:
 ._read_err_msg:
   db "Failed to read boot drive: ", 0
 
-;
-; global variable
-;
-
-_boot_drive_id:
-  db 0
-

@@ -4,6 +4,7 @@ gen_nasm(
     includes=[
         'a20_16.asm',
         'boot_disk16.asm',
+        'detect_memory16.asm',
         'halt16.asm',
         'init_registers16.asm',
         'print_hex16.asm',
