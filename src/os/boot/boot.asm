@@ -3,6 +3,8 @@
 org 0x7c00
 bits 16  ; x86 always boots in real mode
 
+%define SECOND_STAGE_SECTORS 4
+
 ; Boot loader's entry point is just the first byte of the sector.
 boot_sector_entry_point:
 
@@ -18,9 +20,9 @@ call save_boot_drive_id
 ; Make sure we have space to load additional boot data.
 call real_mode_memory_check
 
-; Read 4 sectors from boot disk, and load that into 0x7e00.
+; Read SECOND_STAGE_SECTORS from boot disk, and load that into 0x7e00.
 ; [0x7e00, 0x9fc00) is free for use. See http://wiki.osdev.org/Memory_Map_(x86)
-mov dh, 4
+mov dh, SECOND_STAGE_SECTORS
 mov bx, 0x7e00
 call load_boot_data
 
@@ -99,5 +101,5 @@ call enable_a20
 jmp halt
 
 ; VBoxManage requires the generate bin file to be multiples of 512 bytes ...
-times 4096-($-$$) db 0
+times (512*(SECOND_STAGE_SECTORS+1))-($-$$) db 0
 

@@ -26,7 +26,7 @@ busy_sleep:
 
   jmp halt
 
-.input_ok
+.input_ok:
   ; ax = (ax * 100 + 54) / 55
   mov cx, 100
   mul cx
