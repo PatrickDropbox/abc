@@ -1,5 +1,5 @@
 ; BIOS loads the boot sector at 0x7c00.
-; See http://wiki.osdev.org/Memory_Map_(x86)
+; See http://wiki.osdev.org/Memory_Map_(x86) for basic layout
 org 0x7c00
 bits 16  ; x86 always boots in real mode
 
@@ -11,14 +11,18 @@ bits 16  ; x86 always boots in real mode
 ; [0x0400, 0x0500)
 ;     BIOS data area (unusable)
 ; [0x0500, 0x????]
-;     memory map (via detect_memory); should use boot sector's len/addr global
-;     variables to refer to the map, in case it's moved.
+;     memory map (via detect_memory); should use boot sector's global variables
+;     _memory_map_addr and _memory_map_count to access the table.
 ; [0x????, 0x7c00)
 ;     stack (grows down)
 ; [0x7c00, 0x7e00)
 ;     boot sector
 ; [0x7e00, 0x7e00 + 512 * SECOND_STAGE_SECTORS)
 ;     second-stage boot sectors
+; [0x????, 0x9fc00)
+;     free for use
+;
+; For memory beyond 0x9fc00, use memory map table (via detect memory).
 ;
 
 
@@ -61,8 +65,7 @@ jmp second_stage_entry_point  ; can also use "0x0000:0x7e00"
 
 %include "src/os/boot/boot_disk16.asm"
 %include "src/os/boot/halt16.asm"
-%include "src/os/boot/print_hex16.asm"
-%include "src/os/boot/print_str16.asm"
+%include "src/os/boot/print_basic16.asm"
 %include "src/os/boot/real_mode_memory_check16.asm"
 
 ;
@@ -123,8 +126,9 @@ second_sector:
 ;
 
 %include "src/os/boot/a20_16.asm"
+%include "src/os/boot/check_64bit_support16.asm"
 %include "src/os/boot/detect_memory16.asm"
-%include "src/os/boot/print_reg16.asm"
+%include "src/os/boot/print_extended16.asm"
 %include "src/os/boot/sleep16.asm"
 
 ;
@@ -146,6 +150,10 @@ call enable_a20
 ; Find out how much memory do we have.
 call detect_memory
 call print_memory_map
+
+; Assert 64 bit mode is available.  The kernel will be in 64 bit.
+call check_cpuid_available
+call check_64bit_support
 
 ;
 ; To be continue ...
