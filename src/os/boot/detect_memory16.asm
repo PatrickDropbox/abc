@@ -75,13 +75,13 @@ detect_memory:
   mov [_memory_map_len], si
 
   mov si, ._found_msg
-  call print_str16
+  call print_str
 
   mov dx, [_memory_map_len]
   call print_hex16
 
   mov si, _crlf
-  call print_str16
+  call print_str
 
   popa
   popf
@@ -90,13 +90,13 @@ detect_memory:
 
 .no_entry:
   mov si, ._no_entry_msg
-  call print_str16
+  call print_str
 
   jmp halt
 
 .invalid_entry:
   mov si, ._invalid_entry_msg
-  call print_str16
+  call print_str
 
   ; printing out eax, ebx, ecx is a pain in real mode ...
 
@@ -104,14 +104,14 @@ detect_memory:
 
 .int_error:
   mov si, ._int_error_msg
-  call print_str16
+  call print_str
 
   mov dh, ah
   mov dl, 0
   call print_hex16
 
   mov si, _crlf
-  call print_str16
+  call print_str
 
   jmp halt
 

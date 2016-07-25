@@ -2,7 +2,7 @@
 
 halt:
   mov si, ._halt_msg
-  call print_str16
+  call print_str
 
 .halt_loop:
   hlt  ; halt

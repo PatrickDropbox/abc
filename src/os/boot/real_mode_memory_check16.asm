@@ -19,13 +19,13 @@ real_mode_memory_check:
   jl .error
 
   mov si, ._ok_msg
-  call print_str16
+  call print_str
 
   mov dx, ax
   call print_hex16
 
   mov si, _crlf
-  call print_str16
+  call print_str
 
   popa
   popf
@@ -33,18 +33,18 @@ real_mode_memory_check:
 
 .error:
   mov si, ._err_msg
-  call print_str16
+  call print_str
 
   mov dx, ax
   call print_hex16
 
   mov si, _crlf
-  call print_str16
+  call print_str
 
   jmp halt
 
 ._ok_msg:
-  db "Base mem size: ", 0
+  db "Base mem: ", 0
 
 ._err_msg:
-  db "Failed mem size check: ", 0
+  db "Failed mem check: ", 0

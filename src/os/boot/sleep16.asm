@@ -14,7 +14,7 @@ busy_sleep:
 
 .input_error:
   mov si, ._msg
-  call print_str16
+  call print_str
 
   mov si, _crlf
 
@@ -22,7 +22,7 @@ busy_sleep:
   call print_hex16
 
   mov si, _crlf
-  call print_str16
+  call print_str
 
   jmp halt
 

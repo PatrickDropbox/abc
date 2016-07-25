@@ -46,7 +46,6 @@ mov bx, 0x7e00
 call load_boot_data
 
 ;
-; At this point, we can only fit another 30 bytes or so into the boot sector.
 ; Time to move off the boot sector.
 ;
 ; Since the boot sector is in [0x7c00, 0x7e00), and the newly loaded sectors
@@ -136,7 +135,7 @@ _second_stage_msg:
 ; anywhere.
 second_stage_entry_point:
   mov si, _second_stage_msg
-  call print_str16
+  call print_str
 
 ; We want to use more than 1MB of memory ...
 call enable_a20

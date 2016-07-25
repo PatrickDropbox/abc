@@ -10,13 +10,13 @@ save_boot_drive_id:
   mov [_boot_drive_id], dl  ; BIOS stores the drive id in dl on startup
 
   mov si, .msg
-  call print_str16
+  call print_str
 
   xor dh, dh
   call print_hex16
 
   mov si, _crlf
-  call print_str16
+  call print_str
 
   popa
   popf
@@ -72,12 +72,12 @@ load_boot_data:
   jne .read_error
 
   mov si, ._ok_msg
-  call print_str16
+  call print_str
 
   call print_hex16
 
   mov si, _crlf
-  call print_str16
+  call print_str
 
   pop dx
   pop si
@@ -88,35 +88,35 @@ load_boot_data:
 
 .reset_error:
   mov si, ._reset_err_msg
-  call print_str16
+  call print_str
 
   mov dh, ah
   xor dl, dl
   call print_hex16
 
   mov si, _crlf
-  call print_str16
+  call print_str
 
   jmp halt
 
 .read_error:
   mov si, ._read_err_msg
-  call print_str16
+  call print_str
 
   mov dx, ax
   call print_hex16
 
   mov si, _crlf
-  call print_str16
+  call print_str
 
   jmp halt
 
 ._ok_msg:
-  db "Sectors read from boot drive: ", 0
+  db "Boot sectors read: ", 0
 
 ._reset_err_msg:
-  db "Failed to reset boot drive: ", 0
+  db "Reset drive failed: ", 0
 
 ._read_err_msg:
-  db "Failed to read boot drive: ", 0
+  db "Read failed: ", 0
 

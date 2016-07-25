@@ -1,7 +1,7 @@
 ; bits 16
 
 ; print null-terminated string stored in si
-print_str16:
+print_str:
   pushf
   pusha
 

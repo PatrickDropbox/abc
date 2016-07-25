@@ -67,7 +67,7 @@ enable_a20:
 
 .error:
   mov si, ._err_msg
-  call print_str16
+  call print_str
 
   jmp halt
 
@@ -144,13 +144,13 @@ print_a20_status:
   call is_a20_enabled
 
   mov si, ._msg
-  call print_str16
+  call print_str
 
   mov dx, ax
   call print_hex16
 
   mov si, _crlf
-  call print_str16
+  call print_str
 
   pop si
   pop dx
@@ -179,7 +179,7 @@ enable_a20_bios:
   jc .error
 
   mov si, ._ok_msg
-  call print_str16
+  call print_str
 
 .done:
   mov dh, ah
@@ -187,7 +187,7 @@ enable_a20_bios:
   call print_hex16
 
   mov si, _crlf
-  call print_str16
+  call print_str
 
   pop si
   pop dx
@@ -198,7 +198,7 @@ enable_a20_bios:
 
 .error:
   mov si, ._err_msg
-  call print_str16
+  call print_str
 
   jmp .done
 
@@ -221,7 +221,7 @@ disable_a20_bios:
   jc .error
 
   mov si, ._ok_msg
-  call print_str16
+  call print_str
 
 .done:
   mov dh, ah
@@ -229,7 +229,7 @@ disable_a20_bios:
   call print_hex16
 
   mov si, _crlf
-  call print_str16
+  call print_str
 
   pop si
   pop dx
@@ -240,7 +240,7 @@ disable_a20_bios:
 
 .error:
   mov si, ._err_msg
-  call print_str16
+  call print_str
 
   jmp .done
 
@@ -264,14 +264,14 @@ print_a20_bios_status:
   jc .error
 
   mov si, ._ok_msg
-  call print_str16
+  call print_str
 
 .done:
   mov dx, ax
   call print_hex16
 
   mov si, _crlf
-  call print_str16
+  call print_str
 
   pop si
   pop dx
@@ -282,7 +282,7 @@ print_a20_bios_status:
 
 .error:
   mov si, ._err_msg
-  call print_str16
+  call print_str
 
   jmp .done
 
@@ -320,7 +320,7 @@ enable_a20_fast:
 
 .done:
   mov si, ._msg
-  call print_str16
+  call print_str
 
   pop si
   pop ax
@@ -352,7 +352,7 @@ disable_a20_fast:
 
 .done:
   mov si, ._msg
-  call print_str16
+  call print_str
 
   pop si
   pop ax
@@ -377,14 +377,14 @@ print_a20_fast_status:
   and al, 0x02 ; 2nd bit is the A20 status
 
   mov si, ._msg
-  call print_str16
+  call print_str
 
   mov dl, al
   mov dh, 0
   call print_hex16
 
   mov si, _crlf
-  call print_str16
+  call print_str
 
   pop si
   pop dx
@@ -445,7 +445,7 @@ enable_a20_keyboard:
   sti  ; re-enable interrupts
 
   mov si, ._msg
-  call print_str16
+  call print_str
 
   pop si
   pop ax
@@ -496,7 +496,7 @@ disable_a20_keyboard:
   sti  ; re-enable interrupts
 
   mov si, ._msg
-  call print_str16
+  call print_str
 
   pop si
   pop ax
@@ -541,14 +541,14 @@ print_a20_keyboard_status:
   and al, 0x02 ; 2nd bit is the A20 status
 
   mov si, ._msg
-  call print_str16
+  call print_str
 
   mov dl, al
   mov dh, 0
   call print_hex16
 
   mov si, _crlf
-  call print_str16
+  call print_str
 
   pop si
   pop dx
