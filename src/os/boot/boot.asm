@@ -6,7 +6,7 @@ bits 16  ; x86 always boots in real mode
 ; Boot loader's entry point is just the first byte of the sector.
 boot_sector_entry_point:
 
-%include "src/os/boot/init_registers.asm"
+%include "src/os/boot/init_registers16.asm"
 
 ;
 ; Now that the stack have been setup, we can make calls
@@ -39,15 +39,18 @@ jmp second_stage_entry_point  ; can also use "0x0000:0x7e00"
 ; Code
 ;
 
-%include "src/os/boot/boot_disk.asm"
-%include "src/os/boot/halt.asm"
+%include "src/os/boot/boot_disk16.asm"
+%include "src/os/boot/halt16.asm"
 %include "src/os/boot/print_hex16.asm"
 %include "src/os/boot/print_str16.asm"
-%include "src/os/boot/real_mode_memory_check.asm"
+%include "src/os/boot/real_mode_memory_check16.asm"
 
 ;
 ; Shared global variables
 ;
+
+_space:
+  db ' ', 0
 
 _crlf:
   db 13, 10, 0  ; BIOS printing requires explicit \r
@@ -69,7 +72,9 @@ second_sector:
 ; Code
 ;
 
-%include "src/os/boot/a20.asm"
+%include "src/os/boot/a20_16.asm"
+%include "src/os/boot/print_reg16.asm"
+%include "src/os/boot/sleep16.asm"
 
 ;
 ; Shared global variables

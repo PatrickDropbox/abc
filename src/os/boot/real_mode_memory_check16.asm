@@ -6,9 +6,7 @@
 ;
 real_mode_memory_check:
   pushf
-  push ax
-  push dx
-  push si
+  pusha
 
   ; http://wiki.osdev.org/Detecting_Memory_(x86)#Detecting_Low_Memory
   ; suggest checking the carry flag, but http://www.ctyme.com/intr/rb-0598.htm
@@ -29,9 +27,7 @@ real_mode_memory_check:
   mov si, _crlf
   call print_str16
 
-  pop si
-  pop dx
-  pop ax
+  popa
   popf
   ret
 
@@ -51,4 +47,4 @@ real_mode_memory_check:
   db "Base mem size: ", 0
 
 ._err_msg:
-  db "Failed base mem size check: ", 0
+  db "Failed mem size check: ", 0

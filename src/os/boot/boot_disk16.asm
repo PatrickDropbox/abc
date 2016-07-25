@@ -5,8 +5,7 @@
 ;
 save_boot_drive_id:
   pushf
-  push dx
-  push si
+  pusha
 
   mov [_boot_drive_id], dl  ; BIOS stores the drive id in dl on startup
 
@@ -19,8 +18,7 @@ save_boot_drive_id:
   mov si, _crlf
   call print_str16
 
-  pop si
-  pop dx
+  popa
   popf
   ret
 

@@ -1,3 +1,5 @@
+; bits 16
+
 ;
 ; Due to historical reasons, we need to ensure A20 line is enabled in order
 ; to use unlock upper memory ...
@@ -21,7 +23,9 @@ enable_a20:
   ; try to enable a20 via bios first
   call enable_a20_bios
 
-  ; TODO sleep a bit before checking
+  ; 100ms
+  mov ax, 1
+  call busy_sleep
 
   call is_a20_enabled
   test ax, 1
@@ -30,7 +34,9 @@ enable_a20:
   ; bios failed, try to enable a20 via keyboard controller
   call enable_a20_keyboard
 
-  ; TODO sleep a bit before checking
+  ; 200ms
+  mov ax, 2
+  call busy_sleep
 
   call is_a20_enabled
   test ax, 1
@@ -39,7 +45,9 @@ enable_a20:
   ; keyboard controller also failed, finally try to enable a20 via fast gate
   call enable_a20_fast
 
-  ; TODO sleep a bit before checking
+  ; 200ms
+  mov ax, 2
+  call busy_sleep
 
   call is_a20_enabled
   test ax, 1

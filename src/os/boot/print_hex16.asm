@@ -3,8 +3,7 @@
 ; print dx's value via BIOS
 print_hex16:
   pushf
-  push ax
-  push bx
+  pusha
   push dx
 
   mov ah, 0x0e
@@ -22,8 +21,7 @@ print_hex16:
   pop dx
   call .print_char
 
-  pop bx
-  pop ax
+  popa
   popf
   ret
 
