@@ -80,12 +80,6 @@ print_hex_bytes:
   pushf
   pusha
 
-  push si
-
-  mov si, _0x
-  call print_str
-
-  pop si
   mov ax, 0
 
 .iter:

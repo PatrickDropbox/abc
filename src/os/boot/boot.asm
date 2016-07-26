@@ -37,7 +37,10 @@ boot_sector_entry_point:
 ; Now that the stack have been setup, we can make calls
 ;
 
-; This should be first call in case dl gets clobbered.
+; Virtualbox defaults to this already, but setting it never hurts
+call setup_vga_text_mode
+
+; This should be early in the boot process in case dl gets clobbered.
 call save_boot_drive_id
 
 ; Make sure we have space to load additional boot data.
@@ -67,6 +70,7 @@ jmp second_stage_entry_point  ; can also use "0x0000:0x7e00"
 %include "src/os/boot/halt16.asm"
 %include "src/os/boot/print_basic16.asm"
 %include "src/os/boot/real_mode_memory_check16.asm"
+%include "src/os/boot/setup_vga_text_mode.asm"
 
 ;
 ; Shared global variables
