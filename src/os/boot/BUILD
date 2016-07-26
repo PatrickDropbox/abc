@@ -11,7 +11,7 @@ gen_nasm(
         'print_basic16.asm',
         'print_extended16.asm',
         'real_mode_memory_check16.asm',
-        'setup_vga_text_mode16.asm'
+        'setup_vga_text_mode16.asm',
         'sleep16.asm',
     ]
 )
