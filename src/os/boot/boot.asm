@@ -70,7 +70,7 @@ jmp second_stage_entry_point  ; can also use "0x0000:0x7e00"
 %include "src/os/boot/halt16.asm"
 %include "src/os/boot/print_basic16.asm"
 %include "src/os/boot/real_mode_memory_check16.asm"
-%include "src/os/boot/setup_vga_text_mode.asm"
+%include "src/os/boot/setup_vga_text_mode16.asm"
 
 ;
 ; Shared global variables
@@ -162,6 +162,12 @@ call check_64bit_support
 ;
 ; To be continue ...
 ;
+
+; TODO: switch to graphics mode.  For now, stick to vga text mode at 0xb8000.
+; Info:
+;   http://wiki.osdev.org/Getting_VBE_Mode_Info
+;   http://wiki.osdev.org/User:Omarrx024/VESA_Tutorial
+;   http://wiki.osdev.org/Drawing_In_Protected_Mode
 
 jmp halt
 
