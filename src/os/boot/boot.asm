@@ -10,9 +10,12 @@ bits 16  ; x86 always boots in real mode
 ;     real mode interrupt vector table (unusable)
 ; [0x0400, 0x0500)
 ;     BIOS data area (unusable)
-; [0x0500, 0x????]
+; [0x0500, _gbt_addr)
 ;     memory map (via detect_memory); should use boot sector's global variables
 ;     _memory_map_addr and _memory_map_count to access the table.
+; [_gdt_addr, 0x????)
+;     gdt
+; [_page_table, 0x????)  - _page_table should be 4k aligned
 ; [0x????, 0x7c00)
 ;     stack (grows down)
 ; [0x7c00, 0x7e00)
@@ -82,27 +85,6 @@ _boot_drive_id:
 
 %define MEMORY_MAP_ENTRY_SIZE 24
 
-; Num entries (not byte count) in the memory map.  Initialized by detect_memory
-; call.
-_memory_map_count:
-  dw 0  ; initialized by detect_memory call
-
-; Where to save the memory map.  The map itself is initialized by call to
-; detect_memory.  Each entry is a packed struct
-;
-; struct MemoryMapEntry {
-;   uint64 base_addr;
-;   uint64 len;  // in bytes
-;   uint32 type;
-;   unint32 flags;
-; };
-;
-; See http://wiki.osdev.org/Detecting_Memory_(x86) and
-; http://www.ctyme.com/intr/rb-1741.htm
-_memory_map_addr:
-  dw 0x0500
-
-
 _space:
   db ' ', 0
 
@@ -142,6 +124,38 @@ second_sector:
 _second_stage_msg:
   db "Entered second stage booting", 13, 10, 0
 
+align 4
+
+; Num entries (not byte count) in the memory map.  Initialized by detect_memory
+; call.
+_memory_map_count:
+  dw 0  ; initialized by detect_memory call
+
+; Where to save the memory map.  The map itself is initialized by call to
+; detect_memory.  Each entry is a packed struct
+;
+; struct MemoryMapEntry {
+;   uint64 base_addr;
+;   uint64 len;  // in bytes
+;   uint32 type;
+;   unint32 flags;
+; };
+;
+; See http://wiki.osdev.org/Detecting_Memory_(x86) and
+; http://www.ctyme.com/intr/rb-1741.htm
+_memory_map_addr:
+  dd 0x0500  ; 8 byte pointer
+  dd 0
+
+; gdt description structure.  See
+; http://wiki.osdev.org/Global_Descriptor_Table
+_gdt_size:
+  dw 0  ; in bytes.  Initialized by setup_gdt
+
+_gdt_addr:
+  dd 0  ; 8 byte pointer.  Initialized by setup_gdt call
+  dd 0
+
 ; Unlike the boot sector entry point, the second stage entry point can be
 ; anywhere.
 second_stage_entry_point:
@@ -158,6 +172,27 @@ call print_memory_map
 ; Assert 64 bit mode is available.  The kernel will be in 64 bit.
 call check_cpuid_available
 call check_64bit_support
+
+;call setup_gdt
+
+;; jumping into long mode follows the same procedure as jumping into protected
+;; mode.
+;; http://wiki.osdev.org/Journey_To_The_Protected_Land
+;; http://wiki.osdev.org/Setting_Up_Long_Mode
+;switch_to_long_mode:
+;  ; Disable paging.  We don't really need to do this since we never setup
+;  ; paging for protected mode, but it doesn't hurt to run a few instructions.
+;  ; See https://en.wikipedia.org/wiki/Control_register
+;  mov eax, cr0
+;  and eax 0x7ffffff  ; set bit 31 to zero
+;  mov cr0, eax
+;
+;  cli  ; disable interrupt
+;  ; load gdt
+;  ; set cr0
+;  ; jump to new long mode code
+;
+
 
 ;
 ; To be continue ...
