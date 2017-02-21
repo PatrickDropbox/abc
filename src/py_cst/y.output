@@ -1,0 +1,8453 @@
+
+state 0
+	$accept: .file_input $end 
+	file_input: .    (1)
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	NEWLINE  shift 8
+	ASSERT  shift 48
+	BREAK  shift 39
+	CLASS  shift 33
+	CONTINUE  shift 40
+	DEF  shift 32
+	DEL  shift 38
+	EXEC  shift 47
+	FOR  shift 29
+	FROM  shift 55
+	GLOBAL  shift 46
+	IF  shift 27
+	IMPORT  shift 54
+	LAMBDA  shift 62
+	NONE  shift 81
+	NOT  shift 65
+	PASS  shift 21
+	PRINT  shift 37
+	RAISE  shift 52
+	RETURN  shift 51
+	TRY  shift 30
+	WHILE  shift 28
+	WITH  shift 31
+	YIELD  shift 58
+	ADD  shift 86
+	AT  shift 56
+	BACK_QUOTE  shift 80
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	.  reduce 1 (src line 278)
+
+	file_input  goto 1
+	import_from  goto 45
+	import_name  goto 44
+	import_stmt  goto 23
+	simple_stmt  goto 6
+	small_stmt  goto 9
+	stmt  goto 4
+	stmt_or_newline  goto 3
+	stmts  goto 2
+	assert_stmt  goto 26
+	classdef  goto 16
+	compound_stmt  goto 7
+	decorated  goto 17
+	del_stmt  goto 20
+	exec_stmt  goto 25
+	expr_stmt  goto 18
+	flow_stmt  goto 22
+	for_stmt  goto 12
+	funcdef  goto 15
+	global_stmt  goto 24
+	if_stmt  goto 10
+	newline  goto 5
+	print_stmt  goto 19
+	raise_stmt  goto 42
+	return_stmt  goto 41
+	try_stmt  goto 13
+	while_stmt  goto 11
+	with_stmt  goto 14
+	yield_stmt  goto 43
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	and_expr  goto 68
+	arith_expr  goto 70
+	assign_expr  goto 35
+	atom  goto 75
+	comparison  goto 64
+	expr  goto 66
+	factor  goto 72
+	lambdadef  goto 60
+	or_test  goto 59
+	and_test  goto 61
+	not_test  goto 63
+	power  goto 73
+	shift_expr  goto 69
+	term  goto 71
+	test  goto 57
+	xor_expr  goto 67
+	yield_expr  goto 53
+	testlist  goto 36
+	testlist_strict  goto 50
+	decorator  goto 49
+	decorators  goto 34
+
+state 1
+	$accept:  file_input.$end 
+
+	$end  accept
+	.  error
+
+
+state 2
+	file_input:  stmts.    (2)
+	stmts:  stmts.stmt_or_newline 
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	NEWLINE  shift 8
+	ASSERT  shift 48
+	BREAK  shift 39
+	CLASS  shift 33
+	CONTINUE  shift 40
+	DEF  shift 32
+	DEL  shift 38
+	EXEC  shift 47
+	FOR  shift 29
+	FROM  shift 55
+	GLOBAL  shift 46
+	IF  shift 27
+	IMPORT  shift 54
+	LAMBDA  shift 62
+	NONE  shift 81
+	NOT  shift 65
+	PASS  shift 21
+	PRINT  shift 37
+	RAISE  shift 52
+	RETURN  shift 51
+	TRY  shift 30
+	WHILE  shift 28
+	WITH  shift 31
+	YIELD  shift 58
+	ADD  shift 86
+	AT  shift 56
+	BACK_QUOTE  shift 80
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	.  reduce 2 (src line 282)
+
+	import_from  goto 45
+	import_name  goto 44
+	import_stmt  goto 23
+	simple_stmt  goto 6
+	small_stmt  goto 9
+	stmt  goto 4
+	stmt_or_newline  goto 90
+	assert_stmt  goto 26
+	classdef  goto 16
+	compound_stmt  goto 7
+	decorated  goto 17
+	del_stmt  goto 20
+	exec_stmt  goto 25
+	expr_stmt  goto 18
+	flow_stmt  goto 22
+	for_stmt  goto 12
+	funcdef  goto 15
+	global_stmt  goto 24
+	if_stmt  goto 10
+	newline  goto 5
+	print_stmt  goto 19
+	raise_stmt  goto 42
+	return_stmt  goto 41
+	try_stmt  goto 13
+	while_stmt  goto 11
+	with_stmt  goto 14
+	yield_stmt  goto 43
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	and_expr  goto 68
+	arith_expr  goto 70
+	assign_expr  goto 35
+	atom  goto 75
+	comparison  goto 64
+	expr  goto 66
+	factor  goto 72
+	lambdadef  goto 60
+	or_test  goto 59
+	and_test  goto 61
+	not_test  goto 63
+	power  goto 73
+	shift_expr  goto 69
+	term  goto 71
+	test  goto 57
+	xor_expr  goto 67
+	yield_expr  goto 53
+	testlist  goto 36
+	testlist_strict  goto 50
+	decorator  goto 49
+	decorators  goto 34
+
+state 3
+	stmts:  stmt_or_newline.    (6)
+
+	.  reduce 6 (src line 303)
+
+
+state 4
+	stmt_or_newline:  stmt.    (4)
+
+	.  reduce 4 (src line 294)
+
+
+state 5
+	stmt_or_newline:  newline.    (5)
+
+	.  reduce 5 (src line 298)
+
+
+state 6
+	stmt:  simple_stmt.    (42)
+
+	.  reduce 42 (src line 485)
+
+
+state 7
+	stmt:  compound_stmt.    (43)
+
+	.  reduce 43 (src line 489)
+
+
+state 8
+	newline:  NEWLINE.    (3)
+
+	.  reduce 3 (src line 288)
+
+
+state 9
+	simple_stmt:  small_stmt.NEWLINE 
+	simple_stmt:  small_stmt.SEMI_COLON NEWLINE 
+	simple_stmt:  small_stmt.SEMI_COLON simple_stmt 
+
+	NEWLINE  shift 91
+	SEMI_COLON  shift 92
+	.  error
+
+
+state 10
+	compound_stmt:  if_stmt.    (122)
+
+	.  reduce 122 (src line 852)
+
+
+state 11
+	compound_stmt:  while_stmt.    (123)
+
+	.  reduce 123 (src line 856)
+
+
+state 12
+	compound_stmt:  for_stmt.    (124)
+
+	.  reduce 124 (src line 859)
+
+
+state 13
+	compound_stmt:  try_stmt.    (125)
+
+	.  reduce 125 (src line 862)
+
+
+state 14
+	compound_stmt:  with_stmt.    (126)
+
+	.  reduce 126 (src line 865)
+
+
+state 15
+	compound_stmt:  funcdef.    (127)
+
+	.  reduce 127 (src line 868)
+
+
+state 16
+	compound_stmt:  classdef.    (128)
+
+	.  reduce 128 (src line 871)
+
+
+state 17
+	compound_stmt:  decorated.    (129)
+
+	.  reduce 129 (src line 874)
+
+
+state 18
+	small_stmt:  expr_stmt.    (47)
+
+	.  reduce 47 (src line 509)
+
+
+state 19
+	small_stmt:  print_stmt.    (48)
+
+	.  reduce 48 (src line 513)
+
+
+state 20
+	small_stmt:  del_stmt.    (49)
+
+	.  reduce 49 (src line 516)
+
+
+state 21
+	small_stmt:  PASS.    (50)
+
+	.  reduce 50 (src line 519)
+
+
+state 22
+	small_stmt:  flow_stmt.    (51)
+
+	.  reduce 51 (src line 522)
+
+
+state 23
+	small_stmt:  import_stmt.    (52)
+
+	.  reduce 52 (src line 525)
+
+
+state 24
+	small_stmt:  global_stmt.    (53)
+
+	.  reduce 53 (src line 528)
+
+
+state 25
+	small_stmt:  exec_stmt.    (54)
+
+	.  reduce 54 (src line 531)
+
+
+state 26
+	small_stmt:  assert_stmt.    (55)
+
+	.  reduce 55 (src line 534)
+
+
+state 27
+	if_stmt:  IF.test COLON suite 
+	if_stmt:  IF.test COLON suite elif_list 
+	if_stmt:  IF.test COLON suite elif_list ELSE COLON suite 
+	if_stmt:  IF.test COLON suite ELSE COLON suite 
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	LAMBDA  shift 62
+	NONE  shift 81
+	NOT  shift 65
+	ADD  shift 86
+	BACK_QUOTE  shift 80
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	.  error
+
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	and_expr  goto 68
+	arith_expr  goto 70
+	atom  goto 75
+	comparison  goto 64
+	expr  goto 66
+	factor  goto 72
+	lambdadef  goto 60
+	or_test  goto 59
+	and_test  goto 61
+	not_test  goto 63
+	power  goto 73
+	shift_expr  goto 69
+	term  goto 71
+	test  goto 93
+	xor_expr  goto 67
+
+state 28
+	while_stmt:  WHILE.test COLON suite 
+	while_stmt:  WHILE.test COLON suite ELSE COLON suite 
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	LAMBDA  shift 62
+	NONE  shift 81
+	NOT  shift 65
+	ADD  shift 86
+	BACK_QUOTE  shift 80
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	.  error
+
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	and_expr  goto 68
+	arith_expr  goto 70
+	atom  goto 75
+	comparison  goto 64
+	expr  goto 66
+	factor  goto 72
+	lambdadef  goto 60
+	or_test  goto 59
+	and_test  goto 61
+	not_test  goto 63
+	power  goto 73
+	shift_expr  goto 69
+	term  goto 71
+	test  goto 94
+	xor_expr  goto 67
+
+state 29
+	for_stmt:  FOR.exprlist IN testlist COLON suite 
+	for_stmt:  FOR.exprlist IN testlist COLON suite ELSE COLON suite 
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	NONE  shift 81
+	ADD  shift 86
+	BACK_QUOTE  shift 80
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	.  error
+
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	and_expr  goto 68
+	arith_expr  goto 70
+	atom  goto 75
+	expr  goto 97
+	factor  goto 72
+	power  goto 73
+	shift_expr  goto 69
+	term  goto 71
+	xor_expr  goto 67
+	exprlist  goto 95
+	exprlist_strict  goto 96
+
+state 30
+	try_stmt:  TRY.COLON suite except_list 
+	try_stmt:  TRY.COLON suite except_list ELSE COLON suite 
+	try_stmt:  TRY.COLON suite except_list FINALLY COLON suite 
+	try_stmt:  TRY.COLON suite except_list ELSE COLON suite FINALLY COLON suite 
+	try_stmt:  TRY.COLON suite FINALLY COLON suite 
+
+	COLON  shift 98
+	.  error
+
+
+state 31
+	with_stmt:  WITH.with_item_list COLON suite 
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	LAMBDA  shift 62
+	NONE  shift 81
+	NOT  shift 65
+	ADD  shift 86
+	BACK_QUOTE  shift 80
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	.  error
+
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	and_expr  goto 68
+	arith_expr  goto 70
+	atom  goto 75
+	comparison  goto 64
+	expr  goto 66
+	factor  goto 72
+	lambdadef  goto 60
+	or_test  goto 59
+	and_test  goto 61
+	not_test  goto 63
+	power  goto 73
+	shift_expr  goto 69
+	term  goto 71
+	test  goto 101
+	xor_expr  goto 67
+	with_item  goto 100
+	with_item_list  goto 99
+
+state 32
+	funcdef:  DEF.NAME parameters COLON suite 
+
+	NAME  shift 102
+	.  error
+
+
+state 33
+	classdef:  CLASS.NAME COLON suite 
+	classdef:  CLASS.NAME LEFT_PARENTHESIS RIGHT_PARENTHESIS COLON suite 
+	classdef:  CLASS.NAME LEFT_PARENTHESIS testlist RIGHT_PARENTHESIS COLON suite 
+
+	NAME  shift 103
+	.  error
+
+
+state 34
+	decorators:  decorators.decorator 
+	decorated:  decorators.funcdef 
+	decorated:  decorators.classdef 
+
+	CLASS  shift 33
+	DEF  shift 32
+	AT  shift 56
+	.  error
+
+	classdef  goto 106
+	funcdef  goto 105
+	decorator  goto 104
+
+state 35
+	assign_expr:  assign_expr.ASSIGN yield_expr_or_testlist 
+	expr_stmt:  assign_expr.    (60)
+
+	ASSIGN  shift 107
+	.  reduce 60 (src line 559)
+
+
+state 36
+	assign_expr:  testlist.    (56)
+	expr_stmt:  testlist.augassign yield_expr_or_testlist 
+
+	ADD_ASSIGN  shift 109
+	AND_ASSIGN  shift 114
+	DIV_ASSIGN  shift 112
+	IDIV_ASSIGN  shift 120
+	LEFT_SHIFT_ASSIGN  shift 117
+	MOD_ASSIGN  shift 113
+	MULT_ASSIGN  shift 111
+	OR_ASSIGN  shift 115
+	POWER_ASSIGN  shift 119
+	RIGHT_SHIFT_ASSIGN  shift 118
+	SUB_ASSIGN  shift 110
+	XOR_ASSIGN  shift 116
+	.  reduce 56 (src line 540)
+
+	augassign  goto 108
+
+state 37
+	print_stmt:  PRINT.    (74)
+	print_stmt:  PRINT.testlist 
+	print_stmt:  PRINT.RIGHT_SHIFT test 
+	print_stmt:  PRINT.RIGHT_SHIFT test COMMA testlist 
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	LAMBDA  shift 62
+	NONE  shift 81
+	NOT  shift 65
+	ADD  shift 86
+	BACK_QUOTE  shift 80
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	RIGHT_SHIFT  shift 122
+	.  reduce 74 (src line 608)
+
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	and_expr  goto 68
+	arith_expr  goto 70
+	atom  goto 75
+	comparison  goto 64
+	expr  goto 66
+	factor  goto 72
+	lambdadef  goto 60
+	or_test  goto 59
+	and_test  goto 61
+	not_test  goto 63
+	power  goto 73
+	shift_expr  goto 69
+	term  goto 71
+	test  goto 57
+	xor_expr  goto 67
+	testlist  goto 121
+	testlist_strict  goto 50
+
+state 38
+	del_stmt:  DEL.exprlist 
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	NONE  shift 81
+	ADD  shift 86
+	BACK_QUOTE  shift 80
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	.  error
+
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	and_expr  goto 68
+	arith_expr  goto 70
+	atom  goto 75
+	expr  goto 97
+	factor  goto 72
+	power  goto 73
+	shift_expr  goto 69
+	term  goto 71
+	xor_expr  goto 67
+	exprlist  goto 123
+	exprlist_strict  goto 96
+
+state 39
+	flow_stmt:  BREAK.    (79)
+
+	.  reduce 79 (src line 630)
+
+
+state 40
+	flow_stmt:  CONTINUE.    (80)
+
+	.  reduce 80 (src line 634)
+
+
+state 41
+	flow_stmt:  return_stmt.    (81)
+
+	.  reduce 81 (src line 637)
+
+
+state 42
+	flow_stmt:  raise_stmt.    (82)
+
+	.  reduce 82 (src line 640)
+
+
+state 43
+	flow_stmt:  yield_stmt.    (83)
+
+	.  reduce 83 (src line 643)
+
+
+state 44
+	import_stmt:  import_name.    (91)
+
+	.  reduce 91 (src line 678)
+
+
+state 45
+	import_stmt:  import_from.    (92)
+
+	.  reduce 92 (src line 682)
+
+
+state 46
+	global_stmt:  GLOBAL.namelist 
+
+	NAME  shift 125
+	.  error
+
+	namelist  goto 124
+
+state 47
+	exec_stmt:  EXEC.expr 
+	exec_stmt:  EXEC.expr IN test 
+	exec_stmt:  EXEC.expr IN test COMMA test 
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	NONE  shift 81
+	ADD  shift 86
+	BACK_QUOTE  shift 80
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	.  error
+
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	and_expr  goto 68
+	arith_expr  goto 70
+	atom  goto 75
+	expr  goto 126
+	factor  goto 72
+	power  goto 73
+	shift_expr  goto 69
+	term  goto 71
+	xor_expr  goto 67
+
+state 48
+	assert_stmt:  ASSERT.test 
+	assert_stmt:  ASSERT.test COMMA test 
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	LAMBDA  shift 62
+	NONE  shift 81
+	NOT  shift 65
+	ADD  shift 86
+	BACK_QUOTE  shift 80
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	.  error
+
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	and_expr  goto 68
+	arith_expr  goto 70
+	atom  goto 75
+	comparison  goto 64
+	expr  goto 66
+	factor  goto 72
+	lambdadef  goto 60
+	or_test  goto 59
+	and_test  goto 61
+	not_test  goto 63
+	power  goto 73
+	shift_expr  goto 69
+	term  goto 71
+	test  goto 127
+	xor_expr  goto 67
+
+state 49
+	decorators:  decorator.    (16)
+
+	.  reduce 16 (src line 348)
+
+
+state 50
+	testlist_strict:  testlist_strict.COMMA test 
+	testlist:  testlist_strict.    (264)
+	testlist:  testlist_strict.COMMA 
+
+	COMMA  shift 128
+	.  reduce 264 (src line 1574)
+
+
+state 51
+	return_stmt:  RETURN.    (84)
+	return_stmt:  RETURN.testlist 
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	LAMBDA  shift 62
+	NONE  shift 81
+	NOT  shift 65
+	ADD  shift 86
+	BACK_QUOTE  shift 80
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	.  reduce 84 (src line 648)
+
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	and_expr  goto 68
+	arith_expr  goto 70
+	atom  goto 75
+	comparison  goto 64
+	expr  goto 66
+	factor  goto 72
+	lambdadef  goto 60
+	or_test  goto 59
+	and_test  goto 61
+	not_test  goto 63
+	power  goto 73
+	shift_expr  goto 69
+	term  goto 71
+	test  goto 57
+	xor_expr  goto 67
+	testlist  goto 129
+	testlist_strict  goto 50
+
+state 52
+	raise_stmt:  RAISE.    (87)
+	raise_stmt:  RAISE.test 
+	raise_stmt:  RAISE.test COMMA test 
+	raise_stmt:  RAISE.test COMMA test COMMA test 
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	LAMBDA  shift 62
+	NONE  shift 81
+	NOT  shift 65
+	ADD  shift 86
+	BACK_QUOTE  shift 80
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	.  reduce 87 (src line 663)
+
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	and_expr  goto 68
+	arith_expr  goto 70
+	atom  goto 75
+	comparison  goto 64
+	expr  goto 66
+	factor  goto 72
+	lambdadef  goto 60
+	or_test  goto 59
+	and_test  goto 61
+	not_test  goto 63
+	power  goto 73
+	shift_expr  goto 69
+	term  goto 71
+	test  goto 130
+	xor_expr  goto 67
+
+state 53
+	yield_stmt:  yield_expr.    (86)
+
+	.  reduce 86 (src line 657)
+
+
+state 54
+	import_name:  IMPORT.dotted_as_names 
+
+	NAME  shift 134
+	.  error
+
+	dotted_as_names  goto 131
+	dotted_as_name  goto 132
+	dotted_name  goto 133
+
+state 55
+	import_from:  FROM.dotted_name IMPORT from_clause 
+	import_from:  FROM.dots IMPORT from_clause 
+	import_from:  FROM.dots dotted_name IMPORT from_clause 
+
+	NAME  shift 134
+	DOT  shift 137
+	.  error
+
+	dotted_name  goto 135
+	dots  goto 136
+
+state 56
+	decorator:  AT.dotted_name NEWLINE 
+	decorator:  AT.dotted_name LEFT_PARENTHESIS RIGHT_PARENTHESIS NEWLINE 
+	decorator:  AT.dotted_name LEFT_PARENTHESIS arglist RIGHT_PARENTHESIS NEWLINE 
+
+	NAME  shift 134
+	.  error
+
+	dotted_name  goto 138
+
+state 57
+	testlist_strict:  test.    (262)
+
+	.  reduce 262 (src line 1562)
+
+
+state 58
+	yield_expr:  YIELD.    (305)
+	yield_expr:  YIELD.testlist 
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	LAMBDA  shift 62
+	NONE  shift 81
+	NOT  shift 65
+	ADD  shift 86
+	BACK_QUOTE  shift 80
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	.  reduce 305 (src line 1836)
+
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	and_expr  goto 68
+	arith_expr  goto 70
+	atom  goto 75
+	comparison  goto 64
+	expr  goto 66
+	factor  goto 72
+	lambdadef  goto 60
+	or_test  goto 59
+	and_test  goto 61
+	not_test  goto 63
+	power  goto 73
+	shift_expr  goto 69
+	term  goto 71
+	test  goto 57
+	xor_expr  goto 67
+	testlist  goto 139
+	testlist_strict  goto 50
+
+state 59
+	test:  or_test.    (162)
+	test:  or_test.IF or_test ELSE test 
+	or_test:  or_test.OR and_test 
+
+	IF  shift 140
+	OR  shift 141
+	.  reduce 162 (src line 1113)
+
+
+state 60
+	test:  lambdadef.    (164)
+
+	.  reduce 164 (src line 1124)
+
+
+state 61
+	or_test:  and_test.    (165)
+	and_test:  and_test.AND not_test 
+
+	AND  shift 142
+	.  reduce 165 (src line 1129)
+
+
+state 62
+	lambdadef:  LAMBDA.COLON test 
+	lambdadef:  LAMBDA.vararglist COLON test 
+
+	NAME  shift 151
+	COLON  shift 143
+	LEFT_PARENTHESIS  shift 152
+	STAR  shift 145
+	STAR_STAR  shift 146
+	.  error
+
+	fpdef  goto 150
+	fpdef_test  goto 149
+	vararglist  goto 144
+	fpdef_test_list  goto 147
+	fpdef_test_list_strict  goto 148
+
+state 63
+	and_test:  not_test.    (167)
+
+	.  reduce 167 (src line 1138)
+
+
+state 64
+	not_test:  comparison.    (169)
+	comparison:  comparison.comp_op expr 
+
+	IN  shift 160
+	IS  shift 161
+	NOT  shift 162
+	EQUALS  shift 156
+	GREATER_THAN  shift 155
+	GT_EQ  shift 157
+	LESS_THAN  shift 154
+	LT_EQ  shift 158
+	NOT_EQUAL  shift 159
+	.  reduce 169 (src line 1147)
+
+	comp_op  goto 153
+
+state 65
+	not_test:  NOT.not_test 
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	NONE  shift 81
+	NOT  shift 65
+	ADD  shift 86
+	BACK_QUOTE  shift 80
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	.  error
+
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	and_expr  goto 68
+	arith_expr  goto 70
+	atom  goto 75
+	comparison  goto 64
+	expr  goto 66
+	factor  goto 72
+	not_test  goto 163
+	power  goto 73
+	shift_expr  goto 69
+	term  goto 71
+	xor_expr  goto 67
+
+state 66
+	comparison:  expr.    (171)
+	expr:  expr.OR_OP xor_expr 
+
+	OR_OP  shift 164
+	.  reduce 171 (src line 1159)
+
+
+state 67
+	expr:  xor_expr.    (183)
+	xor_expr:  xor_expr.XOR and_expr 
+
+	XOR  shift 165
+	.  reduce 183 (src line 1205)
+
+
+state 68
+	xor_expr:  and_expr.    (185)
+	and_expr:  and_expr.AND_OP shift_expr 
+
+	AND_OP  shift 166
+	.  reduce 185 (src line 1214)
+
+
+state 69
+	and_expr:  shift_expr.    (187)
+	shift_expr:  shift_expr.LEFT_SHIFT arith_expr 
+	shift_expr:  shift_expr.RIGHT_SHIFT arith_expr 
+
+	LEFT_SHIFT  shift 167
+	RIGHT_SHIFT  shift 168
+	.  reduce 187 (src line 1223)
+
+
+state 70
+	shift_expr:  arith_expr.    (189)
+	arith_expr:  arith_expr.ADD term 
+	arith_expr:  arith_expr.MINUS term 
+
+	ADD  shift 169
+	MINUS  shift 170
+	.  reduce 189 (src line 1232)
+
+
+state 71
+	arith_expr:  term.    (192)
+	term:  term.STAR factor 
+	term:  term.DIV factor 
+	term:  term.MOD factor 
+	term:  term.IDIV factor 
+
+	DIV  shift 172
+	IDIV  shift 174
+	MOD  shift 173
+	STAR  shift 171
+	.  reduce 192 (src line 1244)
+
+
+state 72
+	term:  factor.    (195)
+
+	.  reduce 195 (src line 1256)
+
+
+state 73
+	factor:  power.    (205)
+
+	.  reduce 205 (src line 1295)
+
+
+state 74
+	factor_signs:  factor_signs.factor_sign 
+	factor:  factor_signs.power 
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	NONE  shift 81
+	ADD  shift 86
+	BACK_QUOTE  shift 80
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	.  error
+
+	factor_sign  goto 175
+	strings  goto 85
+	atom  goto 75
+	power  goto 176
+
+state 75
+	power:  atom.    (207)
+	power:  atom.STAR_STAR factor 
+	power:  atom.trailers 
+	power:  atom.trailers STAR_STAR factor 
+
+	DOT  shift 182
+	LEFT_BRACKET  shift 181
+	LEFT_PARENTHESIS  shift 180
+	STAR_STAR  shift 177
+	.  reduce 207 (src line 1304)
+
+	trailer  goto 179
+	trailers  goto 178
+
+state 76
+	factor_signs:  factor_sign.    (203)
+
+	.  reduce 203 (src line 1286)
+
+
+state 77
+	atom:  LEFT_PARENTHESIS.RIGHT_PARENTHESIS 
+	atom:  LEFT_PARENTHESIS.yield_expr RIGHT_PARENTHESIS 
+	atom:  LEFT_PARENTHESIS.testlist_comp RIGHT_PARENTHESIS 
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	LAMBDA  shift 62
+	NONE  shift 81
+	NOT  shift 65
+	YIELD  shift 58
+	ADD  shift 86
+	BACK_QUOTE  shift 80
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	RIGHT_PARENTHESIS  shift 183
+	.  error
+
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	and_expr  goto 68
+	arith_expr  goto 70
+	atom  goto 75
+	comparison  goto 64
+	expr  goto 66
+	factor  goto 72
+	lambdadef  goto 60
+	or_test  goto 59
+	and_test  goto 61
+	not_test  goto 63
+	power  goto 73
+	shift_expr  goto 69
+	term  goto 71
+	test  goto 187
+	testlist_comp  goto 185
+	xor_expr  goto 67
+	yield_expr  goto 184
+	testlist  goto 186
+	testlist_strict  goto 50
+
+state 78
+	atom:  LEFT_BRACKET.RIGHT_BRACKET 
+	atom:  LEFT_BRACKET.list_maker RIGHT_BRACKET 
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	LAMBDA  shift 62
+	NONE  shift 81
+	NOT  shift 65
+	ADD  shift 86
+	BACK_QUOTE  shift 80
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	RIGHT_BRACKET  shift 188
+	.  error
+
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	and_expr  goto 68
+	arith_expr  goto 70
+	atom  goto 75
+	comparison  goto 64
+	expr  goto 66
+	factor  goto 72
+	lambdadef  goto 60
+	list_maker  goto 189
+	or_test  goto 59
+	and_test  goto 61
+	not_test  goto 63
+	power  goto 73
+	shift_expr  goto 69
+	term  goto 71
+	test  goto 191
+	xor_expr  goto 67
+	testlist  goto 190
+	testlist_strict  goto 50
+
+state 79
+	atom:  LEFT_BRACE.RIGHT_BRACE 
+	atom:  LEFT_BRACE.dict_or_set_maker RIGHT_BRACE 
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	LAMBDA  shift 62
+	NONE  shift 81
+	NOT  shift 65
+	ADD  shift 86
+	BACK_QUOTE  shift 80
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	RIGHT_BRACE  shift 192
+	.  error
+
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	and_expr  goto 68
+	arith_expr  goto 70
+	atom  goto 75
+	comparison  goto 64
+	dict_or_set_maker  goto 193
+	expr  goto 66
+	factor  goto 72
+	lambdadef  goto 60
+	or_test  goto 59
+	and_test  goto 61
+	not_test  goto 63
+	power  goto 73
+	shift_expr  goto 69
+	term  goto 71
+	test  goto 195
+	xor_expr  goto 67
+	dictlist  goto 194
+	dictlist_strict  goto 197
+	testlist  goto 196
+	testlist_strict  goto 50
+
+state 80
+	atom:  BACK_QUOTE.testlist_strict BACK_QUOTE 
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	LAMBDA  shift 62
+	NONE  shift 81
+	NOT  shift 65
+	ADD  shift 86
+	BACK_QUOTE  shift 80
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	.  error
+
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	and_expr  goto 68
+	arith_expr  goto 70
+	atom  goto 75
+	comparison  goto 64
+	expr  goto 66
+	factor  goto 72
+	lambdadef  goto 60
+	or_test  goto 59
+	and_test  goto 61
+	not_test  goto 63
+	power  goto 73
+	shift_expr  goto 69
+	term  goto 71
+	test  goto 57
+	xor_expr  goto 67
+	testlist_strict  goto 198
+
+state 81
+	atom:  NONE.    (221)
+
+	.  reduce 221 (src line 1361)
+
+
+state 82
+	atom:  NAME.    (222)
+
+	.  reduce 222 (src line 1364)
+
+
+state 83
+	atom:  INTEGER.    (223)
+
+	.  reduce 223 (src line 1373)
+
+
+state 84
+	atom:  FLOAT.    (224)
+
+	.  reduce 224 (src line 1376)
+
+
+state 85
+	atom:  strings.    (225)
+	strings:  strings.STRING 
+
+	STRING  shift 199
+	.  reduce 225 (src line 1379)
+
+
+state 86
+	factor_sign:  ADD.    (200)
+
+	.  reduce 200 (src line 1274)
+
+
+state 87
+	factor_sign:  MINUS.    (201)
+
+	.  reduce 201 (src line 1278)
+
+
+state 88
+	factor_sign:  NOT_OP.    (202)
+
+	.  reduce 202 (src line 1281)
+
+
+state 89
+	strings:  STRING.    (226)
+
+	.  reduce 226 (src line 1386)
+
+
+state 90
+	stmts:  stmts stmt_or_newline.    (7)
+
+	.  reduce 7 (src line 307)
+
+
+state 91
+	simple_stmt:  small_stmt NEWLINE.    (44)
+
+	.  reduce 44 (src line 494)
+
+
+state 92
+	simple_stmt:  small_stmt SEMI_COLON.NEWLINE 
+	simple_stmt:  small_stmt SEMI_COLON.simple_stmt 
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	NEWLINE  shift 200
+	ASSERT  shift 48
+	BREAK  shift 39
+	CONTINUE  shift 40
+	DEL  shift 38
+	EXEC  shift 47
+	FROM  shift 55
+	GLOBAL  shift 46
+	IMPORT  shift 54
+	LAMBDA  shift 62
+	NONE  shift 81
+	NOT  shift 65
+	PASS  shift 21
+	PRINT  shift 37
+	RAISE  shift 52
+	RETURN  shift 51
+	YIELD  shift 58
+	ADD  shift 86
+	BACK_QUOTE  shift 80
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	.  error
+
+	import_from  goto 45
+	import_name  goto 44
+	import_stmt  goto 23
+	simple_stmt  goto 201
+	small_stmt  goto 9
+	assert_stmt  goto 26
+	del_stmt  goto 20
+	exec_stmt  goto 25
+	expr_stmt  goto 18
+	flow_stmt  goto 22
+	global_stmt  goto 24
+	print_stmt  goto 19
+	raise_stmt  goto 42
+	return_stmt  goto 41
+	yield_stmt  goto 43
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	and_expr  goto 68
+	arith_expr  goto 70
+	assign_expr  goto 35
+	atom  goto 75
+	comparison  goto 64
+	expr  goto 66
+	factor  goto 72
+	lambdadef  goto 60
+	or_test  goto 59
+	and_test  goto 61
+	not_test  goto 63
+	power  goto 73
+	shift_expr  goto 69
+	term  goto 71
+	test  goto 57
+	xor_expr  goto 67
+	yield_expr  goto 53
+	testlist  goto 36
+	testlist_strict  goto 50
+
+state 93
+	if_stmt:  IF test.COLON suite 
+	if_stmt:  IF test.COLON suite elif_list 
+	if_stmt:  IF test.COLON suite elif_list ELSE COLON suite 
+	if_stmt:  IF test.COLON suite ELSE COLON suite 
+
+	COLON  shift 202
+	.  error
+
+
+state 94
+	while_stmt:  WHILE test.COLON suite 
+	while_stmt:  WHILE test.COLON suite ELSE COLON suite 
+
+	COLON  shift 203
+	.  error
+
+
+state 95
+	for_stmt:  FOR exprlist.IN testlist COLON suite 
+	for_stmt:  FOR exprlist.IN testlist COLON suite ELSE COLON suite 
+
+	IN  shift 204
+	.  error
+
+
+state 96
+	exprlist_strict:  exprlist_strict.COMMA expr 
+	exprlist:  exprlist_strict.    (260)
+	exprlist:  exprlist_strict.COMMA 
+
+	COMMA  shift 205
+	.  reduce 260 (src line 1551)
+
+
+state 97
+	expr:  expr.OR_OP xor_expr 
+	exprlist_strict:  expr.    (258)
+
+	OR_OP  shift 164
+	.  reduce 258 (src line 1538)
+
+
+state 98
+	try_stmt:  TRY COLON.suite except_list 
+	try_stmt:  TRY COLON.suite except_list ELSE COLON suite 
+	try_stmt:  TRY COLON.suite except_list FINALLY COLON suite 
+	try_stmt:  TRY COLON.suite except_list ELSE COLON suite FINALLY COLON suite 
+	try_stmt:  TRY COLON.suite FINALLY COLON suite 
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	NEWLINE  shift 208
+	ASSERT  shift 48
+	BREAK  shift 39
+	CONTINUE  shift 40
+	DEL  shift 38
+	EXEC  shift 47
+	FROM  shift 55
+	GLOBAL  shift 46
+	IMPORT  shift 54
+	LAMBDA  shift 62
+	NONE  shift 81
+	NOT  shift 65
+	PASS  shift 21
+	PRINT  shift 37
+	RAISE  shift 52
+	RETURN  shift 51
+	YIELD  shift 58
+	ADD  shift 86
+	BACK_QUOTE  shift 80
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	.  error
+
+	import_from  goto 45
+	import_name  goto 44
+	import_stmt  goto 23
+	simple_stmt  goto 207
+	small_stmt  goto 9
+	suite  goto 206
+	assert_stmt  goto 26
+	del_stmt  goto 20
+	exec_stmt  goto 25
+	expr_stmt  goto 18
+	flow_stmt  goto 22
+	global_stmt  goto 24
+	print_stmt  goto 19
+	raise_stmt  goto 42
+	return_stmt  goto 41
+	yield_stmt  goto 43
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	and_expr  goto 68
+	arith_expr  goto 70
+	assign_expr  goto 35
+	atom  goto 75
+	comparison  goto 64
+	expr  goto 66
+	factor  goto 72
+	lambdadef  goto 60
+	or_test  goto 59
+	and_test  goto 61
+	not_test  goto 63
+	power  goto 73
+	shift_expr  goto 69
+	term  goto 71
+	test  goto 57
+	xor_expr  goto 67
+	yield_expr  goto 53
+	testlist  goto 36
+	testlist_strict  goto 50
+
+state 99
+	with_stmt:  WITH with_item_list.COLON suite 
+	with_item_list:  with_item_list.COMMA with_item 
+
+	COLON  shift 209
+	COMMA  shift 210
+	.  error
+
+
+state 100
+	with_item_list:  with_item.    (148)
+
+	.  reduce 148 (src line 1035)
+
+
+state 101
+	with_item:  test.    (150)
+	with_item:  test.AS expr 
+
+	AS  shift 211
+	.  reduce 150 (src line 1044)
+
+
+state 102
+	funcdef:  DEF NAME.parameters COLON suite 
+
+	LEFT_PARENTHESIS  shift 213
+	.  error
+
+	parameters  goto 212
+
+state 103
+	classdef:  CLASS NAME.COLON suite 
+	classdef:  CLASS NAME.LEFT_PARENTHESIS RIGHT_PARENTHESIS COLON suite 
+	classdef:  CLASS NAME.LEFT_PARENTHESIS testlist RIGHT_PARENTHESIS COLON suite 
+
+	COLON  shift 214
+	LEFT_PARENTHESIS  shift 215
+	.  error
+
+
+state 104
+	decorators:  decorators decorator.    (17)
+
+	.  reduce 17 (src line 352)
+
+
+state 105
+	decorated:  decorators funcdef.    (18)
+
+	.  reduce 18 (src line 357)
+
+
+state 106
+	decorated:  decorators classdef.    (19)
+
+	.  reduce 19 (src line 362)
+
+
+state 107
+	assign_expr:  assign_expr ASSIGN.yield_expr_or_testlist 
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	LAMBDA  shift 62
+	NONE  shift 81
+	NOT  shift 65
+	YIELD  shift 58
+	ADD  shift 86
+	BACK_QUOTE  shift 80
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	.  error
+
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	and_expr  goto 68
+	arith_expr  goto 70
+	atom  goto 75
+	comparison  goto 64
+	expr  goto 66
+	factor  goto 72
+	lambdadef  goto 60
+	or_test  goto 59
+	and_test  goto 61
+	not_test  goto 63
+	power  goto 73
+	shift_expr  goto 69
+	term  goto 71
+	test  goto 57
+	xor_expr  goto 67
+	yield_expr  goto 217
+	yield_expr_or_testlist  goto 216
+	testlist  goto 218
+	testlist_strict  goto 50
+
+state 108
+	expr_stmt:  testlist augassign.yield_expr_or_testlist 
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	LAMBDA  shift 62
+	NONE  shift 81
+	NOT  shift 65
+	YIELD  shift 58
+	ADD  shift 86
+	BACK_QUOTE  shift 80
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	.  error
+
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	and_expr  goto 68
+	arith_expr  goto 70
+	atom  goto 75
+	comparison  goto 64
+	expr  goto 66
+	factor  goto 72
+	lambdadef  goto 60
+	or_test  goto 59
+	and_test  goto 61
+	not_test  goto 63
+	power  goto 73
+	shift_expr  goto 69
+	term  goto 71
+	test  goto 57
+	xor_expr  goto 67
+	yield_expr  goto 217
+	yield_expr_or_testlist  goto 219
+	testlist  goto 218
+	testlist_strict  goto 50
+
+state 109
+	augassign:  ADD_ASSIGN.    (62)
+
+	.  reduce 62 (src line 569)
+
+
+state 110
+	augassign:  SUB_ASSIGN.    (63)
+
+	.  reduce 63 (src line 573)
+
+
+state 111
+	augassign:  MULT_ASSIGN.    (64)
+
+	.  reduce 64 (src line 576)
+
+
+state 112
+	augassign:  DIV_ASSIGN.    (65)
+
+	.  reduce 65 (src line 579)
+
+
+state 113
+	augassign:  MOD_ASSIGN.    (66)
+
+	.  reduce 66 (src line 582)
+
+
+state 114
+	augassign:  AND_ASSIGN.    (67)
+
+	.  reduce 67 (src line 585)
+
+
+state 115
+	augassign:  OR_ASSIGN.    (68)
+
+	.  reduce 68 (src line 588)
+
+
+state 116
+	augassign:  XOR_ASSIGN.    (69)
+
+	.  reduce 69 (src line 591)
+
+
+state 117
+	augassign:  LEFT_SHIFT_ASSIGN.    (70)
+
+	.  reduce 70 (src line 594)
+
+
+state 118
+	augassign:  RIGHT_SHIFT_ASSIGN.    (71)
+
+	.  reduce 71 (src line 597)
+
+
+state 119
+	augassign:  POWER_ASSIGN.    (72)
+
+	.  reduce 72 (src line 600)
+
+
+state 120
+	augassign:  IDIV_ASSIGN.    (73)
+
+	.  reduce 73 (src line 603)
+
+
+state 121
+	print_stmt:  PRINT testlist.    (75)
+
+	.  reduce 75 (src line 612)
+
+
+state 122
+	print_stmt:  PRINT RIGHT_SHIFT.test 
+	print_stmt:  PRINT RIGHT_SHIFT.test COMMA testlist 
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	LAMBDA  shift 62
+	NONE  shift 81
+	NOT  shift 65
+	ADD  shift 86
+	BACK_QUOTE  shift 80
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	.  error
+
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	and_expr  goto 68
+	arith_expr  goto 70
+	atom  goto 75
+	comparison  goto 64
+	expr  goto 66
+	factor  goto 72
+	lambdadef  goto 60
+	or_test  goto 59
+	and_test  goto 61
+	not_test  goto 63
+	power  goto 73
+	shift_expr  goto 69
+	term  goto 71
+	test  goto 220
+	xor_expr  goto 67
+
+state 123
+	del_stmt:  DEL exprlist.    (78)
+
+	.  reduce 78 (src line 624)
+
+
+state 124
+	namelist:  namelist.COMMA NAME 
+	global_stmt:  GLOBAL namelist.    (116)
+
+	COMMA  shift 221
+	.  reduce 116 (src line 820)
+
+
+state 125
+	namelist:  NAME.    (114)
+
+	.  reduce 114 (src line 812)
+
+
+state 126
+	exec_stmt:  EXEC expr.    (117)
+	exec_stmt:  EXEC expr.IN test 
+	exec_stmt:  EXEC expr.IN test COMMA test 
+	expr:  expr.OR_OP xor_expr 
+
+	IN  shift 222
+	OR_OP  shift 164
+	.  reduce 117 (src line 826)
+
+
+state 127
+	assert_stmt:  ASSERT test.    (120)
+	assert_stmt:  ASSERT test.COMMA test 
+
+	COMMA  shift 223
+	.  reduce 120 (src line 838)
+
+
+state 128
+	testlist_strict:  testlist_strict COMMA.test 
+	testlist:  testlist_strict COMMA.    (265)
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	LAMBDA  shift 62
+	NONE  shift 81
+	NOT  shift 65
+	ADD  shift 86
+	BACK_QUOTE  shift 80
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	.  reduce 265 (src line 1578)
+
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	and_expr  goto 68
+	arith_expr  goto 70
+	atom  goto 75
+	comparison  goto 64
+	expr  goto 66
+	factor  goto 72
+	lambdadef  goto 60
+	or_test  goto 59
+	and_test  goto 61
+	not_test  goto 63
+	power  goto 73
+	shift_expr  goto 69
+	term  goto 71
+	test  goto 224
+	xor_expr  goto 67
+
+state 129
+	return_stmt:  RETURN testlist.    (85)
+
+	.  reduce 85 (src line 652)
+
+
+state 130
+	raise_stmt:  RAISE test.    (88)
+	raise_stmt:  RAISE test.COMMA test 
+	raise_stmt:  RAISE test.COMMA test COMMA test 
+
+	COMMA  shift 225
+	.  reduce 88 (src line 667)
+
+
+state 131
+	import_name:  IMPORT dotted_as_names.    (93)
+	dotted_as_names:  dotted_as_names.COMMA dotted_as_name 
+
+	COMMA  shift 226
+	.  reduce 93 (src line 687)
+
+
+state 132
+	dotted_as_names:  dotted_as_name.    (110)
+
+	.  reduce 110 (src line 794)
+
+
+state 133
+	dotted_as_name:  dotted_name.    (104)
+	dotted_as_name:  dotted_name.AS NAME 
+	dotted_name:  dotted_name.DOT NAME 
+
+	AS  shift 227
+	DOT  shift 228
+	.  reduce 104 (src line 767)
+
+
+state 134
+	dotted_name:  NAME.    (112)
+
+	.  reduce 112 (src line 803)
+
+
+state 135
+	import_from:  FROM dotted_name.IMPORT from_clause 
+	dotted_name:  dotted_name.DOT NAME 
+
+	IMPORT  shift 229
+	DOT  shift 228
+	.  error
+
+
+state 136
+	dots:  dots.DOT 
+	import_from:  FROM dots.IMPORT from_clause 
+	import_from:  FROM dots.dotted_name IMPORT from_clause 
+
+	NAME  shift 134
+	IMPORT  shift 231
+	DOT  shift 230
+	.  error
+
+	dotted_name  goto 232
+
+state 137
+	dots:  DOT.    (97)
+
+	.  reduce 97 (src line 715)
+
+
+state 138
+	decorator:  AT dotted_name.NEWLINE 
+	decorator:  AT dotted_name.LEFT_PARENTHESIS RIGHT_PARENTHESIS NEWLINE 
+	decorator:  AT dotted_name.LEFT_PARENTHESIS arglist RIGHT_PARENTHESIS NEWLINE 
+	dotted_name:  dotted_name.DOT NAME 
+
+	NEWLINE  shift 233
+	DOT  shift 228
+	LEFT_PARENTHESIS  shift 234
+	.  error
+
+
+state 139
+	yield_expr:  YIELD testlist.    (306)
+
+	.  reduce 306 (src line 1840)
+
+
+state 140
+	test:  or_test IF.or_test ELSE test 
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	NONE  shift 81
+	NOT  shift 65
+	ADD  shift 86
+	BACK_QUOTE  shift 80
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	.  error
+
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	and_expr  goto 68
+	arith_expr  goto 70
+	atom  goto 75
+	comparison  goto 64
+	expr  goto 66
+	factor  goto 72
+	or_test  goto 235
+	and_test  goto 61
+	not_test  goto 63
+	power  goto 73
+	shift_expr  goto 69
+	term  goto 71
+	xor_expr  goto 67
+
+state 141
+	or_test:  or_test OR.and_test 
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	NONE  shift 81
+	NOT  shift 65
+	ADD  shift 86
+	BACK_QUOTE  shift 80
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	.  error
+
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	and_expr  goto 68
+	arith_expr  goto 70
+	atom  goto 75
+	comparison  goto 64
+	expr  goto 66
+	factor  goto 72
+	and_test  goto 236
+	not_test  goto 63
+	power  goto 73
+	shift_expr  goto 69
+	term  goto 71
+	xor_expr  goto 67
+
+state 142
+	and_test:  and_test AND.not_test 
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	NONE  shift 81
+	NOT  shift 65
+	ADD  shift 86
+	BACK_QUOTE  shift 80
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	.  error
+
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	and_expr  goto 68
+	arith_expr  goto 70
+	atom  goto 75
+	comparison  goto 64
+	expr  goto 66
+	factor  goto 72
+	not_test  goto 237
+	power  goto 73
+	shift_expr  goto 69
+	term  goto 71
+	xor_expr  goto 67
+
+state 143
+	lambdadef:  LAMBDA COLON.test 
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	LAMBDA  shift 62
+	NONE  shift 81
+	NOT  shift 65
+	ADD  shift 86
+	BACK_QUOTE  shift 80
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	.  error
+
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	and_expr  goto 68
+	arith_expr  goto 70
+	atom  goto 75
+	comparison  goto 64
+	expr  goto 66
+	factor  goto 72
+	lambdadef  goto 60
+	or_test  goto 59
+	and_test  goto 61
+	not_test  goto 63
+	power  goto 73
+	shift_expr  goto 69
+	term  goto 71
+	test  goto 238
+	xor_expr  goto 67
+
+state 144
+	lambdadef:  LAMBDA vararglist.COLON test 
+
+	COLON  shift 239
+	.  error
+
+
+state 145
+	vararglist:  STAR.NAME 
+	vararglist:  STAR.NAME COMMA STAR_STAR NAME 
+
+	NAME  shift 240
+	.  error
+
+
+state 146
+	vararglist:  STAR_STAR.NAME 
+
+	NAME  shift 241
+	.  error
+
+
+state 147
+	vararglist:  fpdef_test_list.    (32)
+
+	.  reduce 32 (src line 425)
+
+
+state 148
+	fpdef_test_list_strict:  fpdef_test_list_strict.COMMA fpdef_test 
+	fpdef_test_list:  fpdef_test_list_strict.    (27)
+	fpdef_test_list:  fpdef_test_list_strict.COMMA 
+	vararglist:  fpdef_test_list_strict.COMMA STAR NAME 
+	vararglist:  fpdef_test_list_strict.COMMA STAR_STAR NAME 
+	vararglist:  fpdef_test_list_strict.COMMA STAR NAME COMMA STAR_STAR NAME 
+
+	COMMA  shift 242
+	.  reduce 27 (src line 402)
+
+
+state 149
+	fpdef_test_list_strict:  fpdef_test.    (25)
+
+	.  reduce 25 (src line 392)
+
+
+state 150
+	fpdef_test:  fpdef.    (23)
+	fpdef_test:  fpdef.ASSIGN test 
+
+	ASSIGN  shift 243
+	.  reduce 23 (src line 383)
+
+
+state 151
+	fpdef:  NAME.    (36)
+
+	.  reduce 36 (src line 449)
+
+
+state 152
+	fpdef:  LEFT_PARENTHESIS.fplist RIGHT_PARENTHESIS 
+
+	NAME  shift 151
+	LEFT_PARENTHESIS  shift 152
+	.  error
+
+	fpdef  goto 246
+	fplist  goto 244
+	fplist_strict  goto 245
+
+state 153
+	comparison:  comparison comp_op.expr 
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	NONE  shift 81
+	ADD  shift 86
+	BACK_QUOTE  shift 80
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	.  error
+
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	and_expr  goto 68
+	arith_expr  goto 70
+	atom  goto 75
+	expr  goto 247
+	factor  goto 72
+	power  goto 73
+	shift_expr  goto 69
+	term  goto 71
+	xor_expr  goto 67
+
+state 154
+	comp_op:  LESS_THAN.    (173)
+
+	.  reduce 173 (src line 1168)
+
+
+state 155
+	comp_op:  GREATER_THAN.    (174)
+
+	.  reduce 174 (src line 1172)
+
+
+state 156
+	comp_op:  EQUALS.    (175)
+
+	.  reduce 175 (src line 1175)
+
+
+state 157
+	comp_op:  GT_EQ.    (176)
+
+	.  reduce 176 (src line 1178)
+
+
+state 158
+	comp_op:  LT_EQ.    (177)
+
+	.  reduce 177 (src line 1181)
+
+
+state 159
+	comp_op:  NOT_EQUAL.    (178)
+
+	.  reduce 178 (src line 1184)
+
+
+state 160
+	comp_op:  IN.    (179)
+
+	.  reduce 179 (src line 1187)
+
+
+state 161
+	comp_op:  IS.    (180)
+	comp_op:  IS.NOT 
+
+	NOT  shift 248
+	.  reduce 180 (src line 1190)
+
+
+state 162
+	comp_op:  NOT.IN 
+
+	IN  shift 249
+	.  error
+
+
+state 163
+	not_test:  NOT not_test.    (170)
+
+	.  reduce 170 (src line 1151)
+
+
+state 164
+	expr:  expr OR_OP.xor_expr 
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	NONE  shift 81
+	ADD  shift 86
+	BACK_QUOTE  shift 80
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	.  error
+
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	and_expr  goto 68
+	arith_expr  goto 70
+	atom  goto 75
+	factor  goto 72
+	power  goto 73
+	shift_expr  goto 69
+	term  goto 71
+	xor_expr  goto 250
+
+state 165
+	xor_expr:  xor_expr XOR.and_expr 
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	NONE  shift 81
+	ADD  shift 86
+	BACK_QUOTE  shift 80
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	.  error
+
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	and_expr  goto 251
+	arith_expr  goto 70
+	atom  goto 75
+	factor  goto 72
+	power  goto 73
+	shift_expr  goto 69
+	term  goto 71
+
+state 166
+	and_expr:  and_expr AND_OP.shift_expr 
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	NONE  shift 81
+	ADD  shift 86
+	BACK_QUOTE  shift 80
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	.  error
+
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	arith_expr  goto 70
+	atom  goto 75
+	factor  goto 72
+	power  goto 73
+	shift_expr  goto 252
+	term  goto 71
+
+state 167
+	shift_expr:  shift_expr LEFT_SHIFT.arith_expr 
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	NONE  shift 81
+	ADD  shift 86
+	BACK_QUOTE  shift 80
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	.  error
+
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	arith_expr  goto 253
+	atom  goto 75
+	factor  goto 72
+	power  goto 73
+	term  goto 71
+
+state 168
+	shift_expr:  shift_expr RIGHT_SHIFT.arith_expr 
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	NONE  shift 81
+	ADD  shift 86
+	BACK_QUOTE  shift 80
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	.  error
+
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	arith_expr  goto 254
+	atom  goto 75
+	factor  goto 72
+	power  goto 73
+	term  goto 71
+
+state 169
+	arith_expr:  arith_expr ADD.term 
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	NONE  shift 81
+	ADD  shift 86
+	BACK_QUOTE  shift 80
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	.  error
+
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	atom  goto 75
+	factor  goto 72
+	power  goto 73
+	term  goto 255
+
+state 170
+	arith_expr:  arith_expr MINUS.term 
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	NONE  shift 81
+	ADD  shift 86
+	BACK_QUOTE  shift 80
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	.  error
+
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	atom  goto 75
+	factor  goto 72
+	power  goto 73
+	term  goto 256
+
+state 171
+	term:  term STAR.factor 
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	NONE  shift 81
+	ADD  shift 86
+	BACK_QUOTE  shift 80
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	.  error
+
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	atom  goto 75
+	factor  goto 257
+	power  goto 73
+
+state 172
+	term:  term DIV.factor 
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	NONE  shift 81
+	ADD  shift 86
+	BACK_QUOTE  shift 80
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	.  error
+
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	atom  goto 75
+	factor  goto 258
+	power  goto 73
+
+state 173
+	term:  term MOD.factor 
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	NONE  shift 81
+	ADD  shift 86
+	BACK_QUOTE  shift 80
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	.  error
+
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	atom  goto 75
+	factor  goto 259
+	power  goto 73
+
+state 174
+	term:  term IDIV.factor 
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	NONE  shift 81
+	ADD  shift 86
+	BACK_QUOTE  shift 80
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	.  error
+
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	atom  goto 75
+	factor  goto 260
+	power  goto 73
+
+state 175
+	factor_signs:  factor_signs factor_sign.    (204)
+
+	.  reduce 204 (src line 1290)
+
+
+state 176
+	factor:  factor_signs power.    (206)
+
+	.  reduce 206 (src line 1299)
+
+
+state 177
+	power:  atom STAR_STAR.factor 
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	NONE  shift 81
+	ADD  shift 86
+	BACK_QUOTE  shift 80
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	.  error
+
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	atom  goto 75
+	factor  goto 261
+	power  goto 73
+
+state 178
+	power:  atom trailers.    (209)
+	power:  atom trailers.STAR_STAR factor 
+	trailers:  trailers.trailer 
+
+	DOT  shift 182
+	LEFT_BRACKET  shift 181
+	LEFT_PARENTHESIS  shift 180
+	STAR_STAR  shift 262
+	.  reduce 209 (src line 1311)
+
+	trailer  goto 263
+
+state 179
+	trailers:  trailer.    (211)
+
+	.  reduce 211 (src line 1319)
+
+
+state 180
+	trailer:  LEFT_PARENTHESIS.RIGHT_PARENTHESIS 
+	trailer:  LEFT_PARENTHESIS.arglist RIGHT_PARENTHESIS 
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	LAMBDA  shift 62
+	NONE  shift 81
+	NOT  shift 65
+	ADD  shift 86
+	BACK_QUOTE  shift 80
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	RIGHT_PARENTHESIS  shift 264
+	STAR  shift 268
+	STAR_STAR  shift 269
+	.  error
+
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	and_expr  goto 68
+	arith_expr  goto 70
+	atom  goto 75
+	comparison  goto 64
+	expr  goto 66
+	factor  goto 72
+	lambdadef  goto 60
+	or_test  goto 59
+	and_test  goto 61
+	not_test  goto 63
+	power  goto 73
+	shift_expr  goto 69
+	term  goto 71
+	test  goto 271
+	xor_expr  goto 67
+	argument  goto 270
+	argumentlist  goto 266
+	argumentlist_strict  goto 267
+	arglist  goto 265
+
+state 181
+	trailer:  LEFT_BRACKET.subscriptlist RIGHT_BRACKET 
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	LAMBDA  shift 62
+	NONE  shift 81
+	NOT  shift 65
+	ADD  shift 86
+	BACK_QUOTE  shift 80
+	COLON  shift 277
+	DOT  shift 275
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	.  error
+
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	and_expr  goto 68
+	arith_expr  goto 70
+	atom  goto 75
+	comparison  goto 64
+	expr  goto 66
+	factor  goto 72
+	lambdadef  goto 60
+	or_test  goto 59
+	and_test  goto 61
+	not_test  goto 63
+	power  goto 73
+	shift_expr  goto 69
+	term  goto 71
+	test  goto 276
+	xor_expr  goto 67
+	subscript  goto 274
+	subscriptlist  goto 272
+	subscriptlist_strict  goto 273
+
+state 182
+	trailer:  DOT.NAME 
+
+	NAME  shift 278
+	.  error
+
+
+state 183
+	atom:  LEFT_PARENTHESIS RIGHT_PARENTHESIS.    (213)
+
+	.  reduce 213 (src line 1328)
+
+
+state 184
+	atom:  LEFT_PARENTHESIS yield_expr.RIGHT_PARENTHESIS 
+
+	RIGHT_PARENTHESIS  shift 279
+	.  error
+
+
+state 185
+	atom:  LEFT_PARENTHESIS testlist_comp.RIGHT_PARENTHESIS 
+
+	RIGHT_PARENTHESIS  shift 280
+	.  error
+
+
+state 186
+	testlist_comp:  testlist.    (230)
+
+	.  reduce 230 (src line 1410)
+
+
+state 187
+	testlist_comp:  test.comp_for_list 
+	testlist_strict:  test.    (262)
+
+	FOR  shift 283
+	.  reduce 262 (src line 1562)
+
+	comp_for  goto 282
+	comp_for_list  goto 281
+
+state 188
+	atom:  LEFT_BRACKET RIGHT_BRACKET.    (216)
+
+	.  reduce 216 (src line 1340)
+
+
+state 189
+	atom:  LEFT_BRACKET list_maker.RIGHT_BRACKET 
+
+	RIGHT_BRACKET  shift 284
+	.  error
+
+
+state 190
+	list_maker:  testlist.    (228)
+
+	.  reduce 228 (src line 1395)
+
+
+state 191
+	list_maker:  test.list_for_list 
+	testlist_strict:  test.    (262)
+
+	FOR  shift 287
+	.  reduce 262 (src line 1562)
+
+	list_for  goto 286
+	list_for_list  goto 285
+
+state 192
+	atom:  LEFT_BRACE RIGHT_BRACE.    (218)
+
+	.  reduce 218 (src line 1348)
+
+
+state 193
+	atom:  LEFT_BRACE dict_or_set_maker.RIGHT_BRACE 
+
+	RIGHT_BRACE  shift 288
+	.  error
+
+
+state 194
+	dict_or_set_maker:  dictlist.    (270)
+
+	.  reduce 270 (src line 1615)
+
+
+state 195
+	testlist_strict:  test.    (262)
+	dictlist_strict:  test.COLON test 
+	dict_or_set_maker:  test.COLON test comp_for_list 
+	dict_or_set_maker:  test.comp_for_list 
+
+	FOR  shift 283
+	COLON  shift 289
+	.  reduce 262 (src line 1562)
+
+	comp_for  goto 282
+	comp_for_list  goto 290
+
+state 196
+	dict_or_set_maker:  testlist.    (272)
+
+	.  reduce 272 (src line 1628)
+
+
+state 197
+	dictlist_strict:  dictlist_strict.COMMA test COLON test 
+	dictlist:  dictlist_strict.    (268)
+	dictlist:  dictlist_strict.COMMA 
+
+	COMMA  shift 291
+	.  reduce 268 (src line 1606)
+
+
+state 198
+	atom:  BACK_QUOTE testlist_strict.BACK_QUOTE 
+	testlist_strict:  testlist_strict.COMMA test 
+
+	BACK_QUOTE  shift 292
+	COMMA  shift 293
+	.  error
+
+
+state 199
+	strings:  strings STRING.    (227)
+
+	.  reduce 227 (src line 1390)
+
+
+state 200
+	simple_stmt:  small_stmt SEMI_COLON NEWLINE.    (45)
+
+	.  reduce 45 (src line 499)
+
+
+state 201
+	simple_stmt:  small_stmt SEMI_COLON simple_stmt.    (46)
+
+	.  reduce 46 (src line 504)
+
+
+state 202
+	if_stmt:  IF test COLON.suite 
+	if_stmt:  IF test COLON.suite elif_list 
+	if_stmt:  IF test COLON.suite elif_list ELSE COLON suite 
+	if_stmt:  IF test COLON.suite ELSE COLON suite 
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	NEWLINE  shift 208
+	ASSERT  shift 48
+	BREAK  shift 39
+	CONTINUE  shift 40
+	DEL  shift 38
+	EXEC  shift 47
+	FROM  shift 55
+	GLOBAL  shift 46
+	IMPORT  shift 54
+	LAMBDA  shift 62
+	NONE  shift 81
+	NOT  shift 65
+	PASS  shift 21
+	PRINT  shift 37
+	RAISE  shift 52
+	RETURN  shift 51
+	YIELD  shift 58
+	ADD  shift 86
+	BACK_QUOTE  shift 80
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	.  error
+
+	import_from  goto 45
+	import_name  goto 44
+	import_stmt  goto 23
+	simple_stmt  goto 207
+	small_stmt  goto 9
+	suite  goto 294
+	assert_stmt  goto 26
+	del_stmt  goto 20
+	exec_stmt  goto 25
+	expr_stmt  goto 18
+	flow_stmt  goto 22
+	global_stmt  goto 24
+	print_stmt  goto 19
+	raise_stmt  goto 42
+	return_stmt  goto 41
+	yield_stmt  goto 43
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	and_expr  goto 68
+	arith_expr  goto 70
+	assign_expr  goto 35
+	atom  goto 75
+	comparison  goto 64
+	expr  goto 66
+	factor  goto 72
+	lambdadef  goto 60
+	or_test  goto 59
+	and_test  goto 61
+	not_test  goto 63
+	power  goto 73
+	shift_expr  goto 69
+	term  goto 71
+	test  goto 57
+	xor_expr  goto 67
+	yield_expr  goto 53
+	testlist  goto 36
+	testlist_strict  goto 50
+
+state 203
+	while_stmt:  WHILE test COLON.suite 
+	while_stmt:  WHILE test COLON.suite ELSE COLON suite 
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	NEWLINE  shift 208
+	ASSERT  shift 48
+	BREAK  shift 39
+	CONTINUE  shift 40
+	DEL  shift 38
+	EXEC  shift 47
+	FROM  shift 55
+	GLOBAL  shift 46
+	IMPORT  shift 54
+	LAMBDA  shift 62
+	NONE  shift 81
+	NOT  shift 65
+	PASS  shift 21
+	PRINT  shift 37
+	RAISE  shift 52
+	RETURN  shift 51
+	YIELD  shift 58
+	ADD  shift 86
+	BACK_QUOTE  shift 80
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	.  error
+
+	import_from  goto 45
+	import_name  goto 44
+	import_stmt  goto 23
+	simple_stmt  goto 207
+	small_stmt  goto 9
+	suite  goto 295
+	assert_stmt  goto 26
+	del_stmt  goto 20
+	exec_stmt  goto 25
+	expr_stmt  goto 18
+	flow_stmt  goto 22
+	global_stmt  goto 24
+	print_stmt  goto 19
+	raise_stmt  goto 42
+	return_stmt  goto 41
+	yield_stmt  goto 43
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	and_expr  goto 68
+	arith_expr  goto 70
+	assign_expr  goto 35
+	atom  goto 75
+	comparison  goto 64
+	expr  goto 66
+	factor  goto 72
+	lambdadef  goto 60
+	or_test  goto 59
+	and_test  goto 61
+	not_test  goto 63
+	power  goto 73
+	shift_expr  goto 69
+	term  goto 71
+	test  goto 57
+	xor_expr  goto 67
+	yield_expr  goto 53
+	testlist  goto 36
+	testlist_strict  goto 50
+
+state 204
+	for_stmt:  FOR exprlist IN.testlist COLON suite 
+	for_stmt:  FOR exprlist IN.testlist COLON suite ELSE COLON suite 
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	LAMBDA  shift 62
+	NONE  shift 81
+	NOT  shift 65
+	ADD  shift 86
+	BACK_QUOTE  shift 80
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	.  error
+
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	and_expr  goto 68
+	arith_expr  goto 70
+	atom  goto 75
+	comparison  goto 64
+	expr  goto 66
+	factor  goto 72
+	lambdadef  goto 60
+	or_test  goto 59
+	and_test  goto 61
+	not_test  goto 63
+	power  goto 73
+	shift_expr  goto 69
+	term  goto 71
+	test  goto 57
+	xor_expr  goto 67
+	testlist  goto 296
+	testlist_strict  goto 50
+
+state 205
+	exprlist_strict:  exprlist_strict COMMA.expr 
+	exprlist:  exprlist_strict COMMA.    (261)
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	NONE  shift 81
+	ADD  shift 86
+	BACK_QUOTE  shift 80
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	.  reduce 261 (src line 1555)
+
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	and_expr  goto 68
+	arith_expr  goto 70
+	atom  goto 75
+	expr  goto 297
+	factor  goto 72
+	power  goto 73
+	shift_expr  goto 69
+	term  goto 71
+	xor_expr  goto 67
+
+state 206
+	try_stmt:  TRY COLON suite.except_list 
+	try_stmt:  TRY COLON suite.except_list ELSE COLON suite 
+	try_stmt:  TRY COLON suite.except_list FINALLY COLON suite 
+	try_stmt:  TRY COLON suite.except_list ELSE COLON suite FINALLY COLON suite 
+	try_stmt:  TRY COLON suite.FINALLY COLON suite 
+
+	EXCEPT  shift 301
+	FINALLY  shift 299
+	.  error
+
+	except_clause  goto 300
+	except_list  goto 298
+
+state 207
+	suite:  simple_stmt.    (156)
+
+	.  reduce 156 (src line 1081)
+
+
+state 208
+	suite:  NEWLINE.INDENT real_stmts DEDENT 
+
+	INDENT  shift 302
+	.  error
+
+
+state 209
+	with_stmt:  WITH with_item_list COLON.suite 
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	NEWLINE  shift 208
+	ASSERT  shift 48
+	BREAK  shift 39
+	CONTINUE  shift 40
+	DEL  shift 38
+	EXEC  shift 47
+	FROM  shift 55
+	GLOBAL  shift 46
+	IMPORT  shift 54
+	LAMBDA  shift 62
+	NONE  shift 81
+	NOT  shift 65
+	PASS  shift 21
+	PRINT  shift 37
+	RAISE  shift 52
+	RETURN  shift 51
+	YIELD  shift 58
+	ADD  shift 86
+	BACK_QUOTE  shift 80
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	.  error
+
+	import_from  goto 45
+	import_name  goto 44
+	import_stmt  goto 23
+	simple_stmt  goto 207
+	small_stmt  goto 9
+	suite  goto 303
+	assert_stmt  goto 26
+	del_stmt  goto 20
+	exec_stmt  goto 25
+	expr_stmt  goto 18
+	flow_stmt  goto 22
+	global_stmt  goto 24
+	print_stmt  goto 19
+	raise_stmt  goto 42
+	return_stmt  goto 41
+	yield_stmt  goto 43
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	and_expr  goto 68
+	arith_expr  goto 70
+	assign_expr  goto 35
+	atom  goto 75
+	comparison  goto 64
+	expr  goto 66
+	factor  goto 72
+	lambdadef  goto 60
+	or_test  goto 59
+	and_test  goto 61
+	not_test  goto 63
+	power  goto 73
+	shift_expr  goto 69
+	term  goto 71
+	test  goto 57
+	xor_expr  goto 67
+	yield_expr  goto 53
+	testlist  goto 36
+	testlist_strict  goto 50
+
+state 210
+	with_item_list:  with_item_list COMMA.with_item 
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	LAMBDA  shift 62
+	NONE  shift 81
+	NOT  shift 65
+	ADD  shift 86
+	BACK_QUOTE  shift 80
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	.  error
+
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	and_expr  goto 68
+	arith_expr  goto 70
+	atom  goto 75
+	comparison  goto 64
+	expr  goto 66
+	factor  goto 72
+	lambdadef  goto 60
+	or_test  goto 59
+	and_test  goto 61
+	not_test  goto 63
+	power  goto 73
+	shift_expr  goto 69
+	term  goto 71
+	test  goto 101
+	xor_expr  goto 67
+	with_item  goto 304
+
+state 211
+	with_item:  test AS.expr 
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	NONE  shift 81
+	ADD  shift 86
+	BACK_QUOTE  shift 80
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	.  error
+
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	and_expr  goto 68
+	arith_expr  goto 70
+	atom  goto 75
+	expr  goto 305
+	factor  goto 72
+	power  goto 73
+	shift_expr  goto 69
+	term  goto 71
+	xor_expr  goto 67
+
+state 212
+	funcdef:  DEF NAME parameters.COLON suite 
+
+	COLON  shift 306
+	.  error
+
+
+state 213
+	parameters:  LEFT_PARENTHESIS.RIGHT_PARENTHESIS 
+	parameters:  LEFT_PARENTHESIS.vararglist RIGHT_PARENTHESIS 
+
+	NAME  shift 151
+	LEFT_PARENTHESIS  shift 152
+	RIGHT_PARENTHESIS  shift 307
+	STAR  shift 145
+	STAR_STAR  shift 146
+	.  error
+
+	fpdef  goto 150
+	fpdef_test  goto 149
+	vararglist  goto 308
+	fpdef_test_list  goto 147
+	fpdef_test_list_strict  goto 148
+
+state 214
+	classdef:  CLASS NAME COLON.suite 
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	NEWLINE  shift 208
+	ASSERT  shift 48
+	BREAK  shift 39
+	CONTINUE  shift 40
+	DEL  shift 38
+	EXEC  shift 47
+	FROM  shift 55
+	GLOBAL  shift 46
+	IMPORT  shift 54
+	LAMBDA  shift 62
+	NONE  shift 81
+	NOT  shift 65
+	PASS  shift 21
+	PRINT  shift 37
+	RAISE  shift 52
+	RETURN  shift 51
+	YIELD  shift 58
+	ADD  shift 86
+	BACK_QUOTE  shift 80
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	.  error
+
+	import_from  goto 45
+	import_name  goto 44
+	import_stmt  goto 23
+	simple_stmt  goto 207
+	small_stmt  goto 9
+	suite  goto 309
+	assert_stmt  goto 26
+	del_stmt  goto 20
+	exec_stmt  goto 25
+	expr_stmt  goto 18
+	flow_stmt  goto 22
+	global_stmt  goto 24
+	print_stmt  goto 19
+	raise_stmt  goto 42
+	return_stmt  goto 41
+	yield_stmt  goto 43
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	and_expr  goto 68
+	arith_expr  goto 70
+	assign_expr  goto 35
+	atom  goto 75
+	comparison  goto 64
+	expr  goto 66
+	factor  goto 72
+	lambdadef  goto 60
+	or_test  goto 59
+	and_test  goto 61
+	not_test  goto 63
+	power  goto 73
+	shift_expr  goto 69
+	term  goto 71
+	test  goto 57
+	xor_expr  goto 67
+	yield_expr  goto 53
+	testlist  goto 36
+	testlist_strict  goto 50
+
+state 215
+	classdef:  CLASS NAME LEFT_PARENTHESIS.RIGHT_PARENTHESIS COLON suite 
+	classdef:  CLASS NAME LEFT_PARENTHESIS.testlist RIGHT_PARENTHESIS COLON suite 
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	LAMBDA  shift 62
+	NONE  shift 81
+	NOT  shift 65
+	ADD  shift 86
+	BACK_QUOTE  shift 80
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	RIGHT_PARENTHESIS  shift 310
+	.  error
+
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	and_expr  goto 68
+	arith_expr  goto 70
+	atom  goto 75
+	comparison  goto 64
+	expr  goto 66
+	factor  goto 72
+	lambdadef  goto 60
+	or_test  goto 59
+	and_test  goto 61
+	not_test  goto 63
+	power  goto 73
+	shift_expr  goto 69
+	term  goto 71
+	test  goto 57
+	xor_expr  goto 67
+	testlist  goto 311
+	testlist_strict  goto 50
+
+state 216
+	assign_expr:  assign_expr ASSIGN yield_expr_or_testlist.    (57)
+
+	.  reduce 57 (src line 544)
+
+
+state 217
+	yield_expr_or_testlist:  yield_expr.    (58)
+
+	.  reduce 58 (src line 550)
+
+
+state 218
+	yield_expr_or_testlist:  testlist.    (59)
+
+	.  reduce 59 (src line 554)
+
+
+state 219
+	expr_stmt:  testlist augassign yield_expr_or_testlist.    (61)
+
+	.  reduce 61 (src line 563)
+
+
+state 220
+	print_stmt:  PRINT RIGHT_SHIFT test.    (76)
+	print_stmt:  PRINT RIGHT_SHIFT test.COMMA testlist 
+
+	COMMA  shift 312
+	.  reduce 76 (src line 615)
+
+
+state 221
+	namelist:  namelist COMMA.NAME 
+
+	NAME  shift 313
+	.  error
+
+
+state 222
+	exec_stmt:  EXEC expr IN.test 
+	exec_stmt:  EXEC expr IN.test COMMA test 
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	LAMBDA  shift 62
+	NONE  shift 81
+	NOT  shift 65
+	ADD  shift 86
+	BACK_QUOTE  shift 80
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	.  error
+
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	and_expr  goto 68
+	arith_expr  goto 70
+	atom  goto 75
+	comparison  goto 64
+	expr  goto 66
+	factor  goto 72
+	lambdadef  goto 60
+	or_test  goto 59
+	and_test  goto 61
+	not_test  goto 63
+	power  goto 73
+	shift_expr  goto 69
+	term  goto 71
+	test  goto 314
+	xor_expr  goto 67
+
+state 223
+	assert_stmt:  ASSERT test COMMA.test 
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	LAMBDA  shift 62
+	NONE  shift 81
+	NOT  shift 65
+	ADD  shift 86
+	BACK_QUOTE  shift 80
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	.  error
+
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	and_expr  goto 68
+	arith_expr  goto 70
+	atom  goto 75
+	comparison  goto 64
+	expr  goto 66
+	factor  goto 72
+	lambdadef  goto 60
+	or_test  goto 59
+	and_test  goto 61
+	not_test  goto 63
+	power  goto 73
+	shift_expr  goto 69
+	term  goto 71
+	test  goto 315
+	xor_expr  goto 67
+
+state 224
+	testlist_strict:  testlist_strict COMMA test.    (263)
+
+	.  reduce 263 (src line 1568)
+
+
+state 225
+	raise_stmt:  RAISE test COMMA.test 
+	raise_stmt:  RAISE test COMMA.test COMMA test 
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	LAMBDA  shift 62
+	NONE  shift 81
+	NOT  shift 65
+	ADD  shift 86
+	BACK_QUOTE  shift 80
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	.  error
+
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	and_expr  goto 68
+	arith_expr  goto 70
+	atom  goto 75
+	comparison  goto 64
+	expr  goto 66
+	factor  goto 72
+	lambdadef  goto 60
+	or_test  goto 59
+	and_test  goto 61
+	not_test  goto 63
+	power  goto 73
+	shift_expr  goto 69
+	term  goto 71
+	test  goto 316
+	xor_expr  goto 67
+
+state 226
+	dotted_as_names:  dotted_as_names COMMA.dotted_as_name 
+
+	NAME  shift 134
+	.  error
+
+	dotted_as_name  goto 317
+	dotted_name  goto 133
+
+state 227
+	dotted_as_name:  dotted_name AS.NAME 
+
+	NAME  shift 318
+	.  error
+
+
+state 228
+	dotted_name:  dotted_name DOT.NAME 
+
+	NAME  shift 319
+	.  error
+
+
+state 229
+	import_from:  FROM dotted_name IMPORT.from_clause 
+
+	NAME  shift 326
+	LEFT_PARENTHESIS  shift 322
+	STAR  shift 321
+	.  error
+
+	import_as_name  goto 325
+	from_clause  goto 320
+	import_as_names  goto 323
+	import_as_names_strict  goto 324
+
+state 230
+	dots:  dots DOT.    (98)
+
+	.  reduce 98 (src line 719)
+
+
+state 231
+	import_from:  FROM dots IMPORT.from_clause 
+
+	NAME  shift 326
+	LEFT_PARENTHESIS  shift 322
+	STAR  shift 321
+	.  error
+
+	import_as_name  goto 325
+	from_clause  goto 327
+	import_as_names  goto 323
+	import_as_names_strict  goto 324
+
+state 232
+	import_from:  FROM dots dotted_name.IMPORT from_clause 
+	dotted_name:  dotted_name.DOT NAME 
+
+	IMPORT  shift 328
+	DOT  shift 228
+	.  error
+
+
+state 233
+	decorator:  AT dotted_name NEWLINE.    (13)
+
+	.  reduce 13 (src line 332)
+
+
+state 234
+	decorator:  AT dotted_name LEFT_PARENTHESIS.RIGHT_PARENTHESIS NEWLINE 
+	decorator:  AT dotted_name LEFT_PARENTHESIS.arglist RIGHT_PARENTHESIS NEWLINE 
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	LAMBDA  shift 62
+	NONE  shift 81
+	NOT  shift 65
+	ADD  shift 86
+	BACK_QUOTE  shift 80
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	RIGHT_PARENTHESIS  shift 329
+	STAR  shift 268
+	STAR_STAR  shift 269
+	.  error
+
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	and_expr  goto 68
+	arith_expr  goto 70
+	atom  goto 75
+	comparison  goto 64
+	expr  goto 66
+	factor  goto 72
+	lambdadef  goto 60
+	or_test  goto 59
+	and_test  goto 61
+	not_test  goto 63
+	power  goto 73
+	shift_expr  goto 69
+	term  goto 71
+	test  goto 271
+	xor_expr  goto 67
+	argument  goto 270
+	argumentlist  goto 266
+	argumentlist_strict  goto 267
+	arglist  goto 330
+
+state 235
+	test:  or_test IF or_test.ELSE test 
+	or_test:  or_test.OR and_test 
+
+	ELSE  shift 331
+	OR  shift 141
+	.  error
+
+
+state 236
+	or_test:  or_test OR and_test.    (166)
+	and_test:  and_test.AND not_test 
+
+	AND  shift 142
+	.  reduce 166 (src line 1133)
+
+
+state 237
+	and_test:  and_test AND not_test.    (168)
+
+	.  reduce 168 (src line 1142)
+
+
+state 238
+	lambdadef:  LAMBDA COLON test.    (232)
+
+	.  reduce 232 (src line 1423)
+
+
+state 239
+	lambdadef:  LAMBDA vararglist COLON.test 
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	LAMBDA  shift 62
+	NONE  shift 81
+	NOT  shift 65
+	ADD  shift 86
+	BACK_QUOTE  shift 80
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	.  error
+
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	and_expr  goto 68
+	arith_expr  goto 70
+	atom  goto 75
+	comparison  goto 64
+	expr  goto 66
+	factor  goto 72
+	lambdadef  goto 60
+	or_test  goto 59
+	and_test  goto 61
+	not_test  goto 63
+	power  goto 73
+	shift_expr  goto 69
+	term  goto 71
+	test  goto 332
+	xor_expr  goto 67
+
+state 240
+	vararglist:  STAR NAME.    (29)
+	vararglist:  STAR NAME.COMMA STAR_STAR NAME 
+
+	COMMA  shift 333
+	.  reduce 29 (src line 412)
+
+
+state 241
+	vararglist:  STAR_STAR NAME.    (30)
+
+	.  reduce 30 (src line 416)
+
+
+state 242
+	fpdef_test_list_strict:  fpdef_test_list_strict COMMA.fpdef_test 
+	fpdef_test_list:  fpdef_test_list_strict COMMA.    (28)
+	vararglist:  fpdef_test_list_strict COMMA.STAR NAME 
+	vararglist:  fpdef_test_list_strict COMMA.STAR_STAR NAME 
+	vararglist:  fpdef_test_list_strict COMMA.STAR NAME COMMA STAR_STAR NAME 
+
+	NAME  shift 151
+	LEFT_PARENTHESIS  shift 152
+	STAR  shift 335
+	STAR_STAR  shift 336
+	.  reduce 28 (src line 406)
+
+	fpdef  goto 150
+	fpdef_test  goto 334
+
+state 243
+	fpdef_test:  fpdef ASSIGN.test 
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	LAMBDA  shift 62
+	NONE  shift 81
+	NOT  shift 65
+	ADD  shift 86
+	BACK_QUOTE  shift 80
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	.  error
+
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	and_expr  goto 68
+	arith_expr  goto 70
+	atom  goto 75
+	comparison  goto 64
+	expr  goto 66
+	factor  goto 72
+	lambdadef  goto 60
+	or_test  goto 59
+	and_test  goto 61
+	not_test  goto 63
+	power  goto 73
+	shift_expr  goto 69
+	term  goto 71
+	test  goto 337
+	xor_expr  goto 67
+
+state 244
+	fpdef:  LEFT_PARENTHESIS fplist.RIGHT_PARENTHESIS 
+
+	RIGHT_PARENTHESIS  shift 338
+	.  error
+
+
+state 245
+	fplist_strict:  fplist_strict.COMMA fpdef 
+	fplist:  fplist_strict.    (40)
+	fplist:  fplist_strict.COMMA 
+
+	COMMA  shift 339
+	.  reduce 40 (src line 474)
+
+
+state 246
+	fplist_strict:  fpdef.    (38)
+
+	.  reduce 38 (src line 463)
+
+
+state 247
+	comparison:  comparison comp_op expr.    (172)
+	expr:  expr.OR_OP xor_expr 
+
+	OR_OP  shift 164
+	.  reduce 172 (src line 1163)
+
+
+state 248
+	comp_op:  IS NOT.    (182)
+
+	.  reduce 182 (src line 1198)
+
+
+state 249
+	comp_op:  NOT IN.    (181)
+
+	.  reduce 181 (src line 1193)
+
+
+state 250
+	expr:  expr OR_OP xor_expr.    (184)
+	xor_expr:  xor_expr.XOR and_expr 
+
+	XOR  shift 165
+	.  reduce 184 (src line 1209)
+
+
+state 251
+	xor_expr:  xor_expr XOR and_expr.    (186)
+	and_expr:  and_expr.AND_OP shift_expr 
+
+	AND_OP  shift 166
+	.  reduce 186 (src line 1218)
+
+
+state 252
+	and_expr:  and_expr AND_OP shift_expr.    (188)
+	shift_expr:  shift_expr.LEFT_SHIFT arith_expr 
+	shift_expr:  shift_expr.RIGHT_SHIFT arith_expr 
+
+	LEFT_SHIFT  shift 167
+	RIGHT_SHIFT  shift 168
+	.  reduce 188 (src line 1227)
+
+
+state 253
+	shift_expr:  shift_expr LEFT_SHIFT arith_expr.    (190)
+	arith_expr:  arith_expr.ADD term 
+	arith_expr:  arith_expr.MINUS term 
+
+	ADD  shift 169
+	MINUS  shift 170
+	.  reduce 190 (src line 1236)
+
+
+state 254
+	shift_expr:  shift_expr RIGHT_SHIFT arith_expr.    (191)
+	arith_expr:  arith_expr.ADD term 
+	arith_expr:  arith_expr.MINUS term 
+
+	ADD  shift 169
+	MINUS  shift 170
+	.  reduce 191 (src line 1239)
+
+
+state 255
+	arith_expr:  arith_expr ADD term.    (193)
+	term:  term.STAR factor 
+	term:  term.DIV factor 
+	term:  term.MOD factor 
+	term:  term.IDIV factor 
+
+	DIV  shift 172
+	IDIV  shift 174
+	MOD  shift 173
+	STAR  shift 171
+	.  reduce 193 (src line 1248)
+
+
+state 256
+	arith_expr:  arith_expr MINUS term.    (194)
+	term:  term.STAR factor 
+	term:  term.DIV factor 
+	term:  term.MOD factor 
+	term:  term.IDIV factor 
+
+	DIV  shift 172
+	IDIV  shift 174
+	MOD  shift 173
+	STAR  shift 171
+	.  reduce 194 (src line 1251)
+
+
+state 257
+	term:  term STAR factor.    (196)
+
+	.  reduce 196 (src line 1260)
+
+
+state 258
+	term:  term DIV factor.    (197)
+
+	.  reduce 197 (src line 1263)
+
+
+state 259
+	term:  term MOD factor.    (198)
+
+	.  reduce 198 (src line 1266)
+
+
+state 260
+	term:  term IDIV factor.    (199)
+
+	.  reduce 199 (src line 1269)
+
+
+state 261
+	power:  atom STAR_STAR factor.    (208)
+
+	.  reduce 208 (src line 1308)
+
+
+state 262
+	power:  atom trailers STAR_STAR.factor 
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	NONE  shift 81
+	ADD  shift 86
+	BACK_QUOTE  shift 80
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	.  error
+
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	atom  goto 75
+	factor  goto 340
+	power  goto 73
+
+state 263
+	trailers:  trailers trailer.    (212)
+
+	.  reduce 212 (src line 1323)
+
+
+state 264
+	trailer:  LEFT_PARENTHESIS RIGHT_PARENTHESIS.    (234)
+
+	.  reduce 234 (src line 1437)
+
+
+state 265
+	trailer:  LEFT_PARENTHESIS arglist.RIGHT_PARENTHESIS 
+
+	RIGHT_PARENTHESIS  shift 341
+	.  error
+
+
+state 266
+	arglist:  argumentlist.    (281)
+
+	.  reduce 281 (src line 1683)
+
+
+state 267
+	argumentlist_strict:  argumentlist_strict.COMMA argument 
+	argumentlist:  argumentlist_strict.    (279)
+	argumentlist:  argumentlist_strict.COMMA 
+	arglist:  argumentlist_strict.COMMA STAR test 
+	arglist:  argumentlist_strict.COMMA STAR test COMMA argumentlist_strict 
+	arglist:  argumentlist_strict.COMMA STAR test COMMA STAR_STAR test 
+	arglist:  argumentlist_strict.COMMA STAR test COMMA argumentlist_strict COMMA STAR_STAR test 
+	arglist:  argumentlist_strict.COMMA STAR_STAR test 
+
+	COMMA  shift 342
+	.  reduce 279 (src line 1674)
+
+
+state 268
+	arglist:  STAR.test 
+	arglist:  STAR.test COMMA argumentlist_strict 
+	arglist:  STAR.test COMMA STAR_STAR test 
+	arglist:  STAR.test COMMA argumentlist_strict COMMA STAR_STAR test 
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	LAMBDA  shift 62
+	NONE  shift 81
+	NOT  shift 65
+	ADD  shift 86
+	BACK_QUOTE  shift 80
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	.  error
+
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	and_expr  goto 68
+	arith_expr  goto 70
+	atom  goto 75
+	comparison  goto 64
+	expr  goto 66
+	factor  goto 72
+	lambdadef  goto 60
+	or_test  goto 59
+	and_test  goto 61
+	not_test  goto 63
+	power  goto 73
+	shift_expr  goto 69
+	term  goto 71
+	test  goto 343
+	xor_expr  goto 67
+
+state 269
+	arglist:  STAR_STAR.test 
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	LAMBDA  shift 62
+	NONE  shift 81
+	NOT  shift 65
+	ADD  shift 86
+	BACK_QUOTE  shift 80
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	.  error
+
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	and_expr  goto 68
+	arith_expr  goto 70
+	atom  goto 75
+	comparison  goto 64
+	expr  goto 66
+	factor  goto 72
+	lambdadef  goto 60
+	or_test  goto 59
+	and_test  goto 61
+	not_test  goto 63
+	power  goto 73
+	shift_expr  goto 69
+	term  goto 71
+	test  goto 344
+	xor_expr  goto 67
+
+state 270
+	argumentlist_strict:  argument.    (277)
+
+	.  reduce 277 (src line 1665)
+
+
+state 271
+	argument:  test.    (292)
+	argument:  test.comp_for_list 
+	argument:  test.ASSIGN test 
+
+	FOR  shift 283
+	ASSIGN  shift 346
+	.  reduce 292 (src line 1757)
+
+	comp_for  goto 282
+	comp_for_list  goto 345
+
+state 272
+	trailer:  LEFT_BRACKET subscriptlist.RIGHT_BRACKET 
+
+	RIGHT_BRACKET  shift 347
+	.  error
+
+
+state 273
+	subscriptlist_strict:  subscriptlist_strict.COMMA subscript 
+	subscriptlist:  subscriptlist_strict.    (240)
+	subscriptlist:  subscriptlist_strict.COMMA 
+
+	COMMA  shift 348
+	.  reduce 240 (src line 1461)
+
+
+state 274
+	subscriptlist_strict:  subscript.    (238)
+
+	.  reduce 238 (src line 1452)
+
+
+state 275
+	subscript:  DOT.DOT DOT 
+
+	DOT  shift 349
+	.  error
+
+
+state 276
+	subscript:  test.    (243)
+	subscript:  test.COLON 
+	subscript:  test.COLON test 
+	subscript:  test.COLON sliceop 
+	subscript:  test.COLON test sliceop 
+
+	COLON  shift 350
+	.  reduce 243 (src line 1474)
+
+
+state 277
+	subscript:  COLON.    (244)
+	subscript:  COLON.test 
+	subscript:  COLON.sliceop 
+	subscript:  COLON.test sliceop 
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	LAMBDA  shift 62
+	NONE  shift 81
+	NOT  shift 65
+	ADD  shift 86
+	BACK_QUOTE  shift 80
+	COLON  shift 353
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	.  reduce 244 (src line 1477)
+
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	and_expr  goto 68
+	arith_expr  goto 70
+	atom  goto 75
+	comparison  goto 64
+	expr  goto 66
+	factor  goto 72
+	lambdadef  goto 60
+	or_test  goto 59
+	and_test  goto 61
+	not_test  goto 63
+	power  goto 73
+	shift_expr  goto 69
+	term  goto 71
+	test  goto 351
+	xor_expr  goto 67
+	sliceop  goto 352
+
+state 278
+	trailer:  DOT NAME.    (237)
+
+	.  reduce 237 (src line 1447)
+
+
+state 279
+	atom:  LEFT_PARENTHESIS yield_expr RIGHT_PARENTHESIS.    (214)
+
+	.  reduce 214 (src line 1334)
+
+
+state 280
+	atom:  LEFT_PARENTHESIS testlist_comp RIGHT_PARENTHESIS.    (215)
+
+	.  reduce 215 (src line 1337)
+
+
+state 281
+	testlist_comp:  test comp_for_list.    (231)
+	comp_for_list:  comp_for_list.comp_for 
+	comp_for_list:  comp_for_list.IF old_test 
+
+	FOR  shift 283
+	IF  shift 355
+	.  reduce 231 (src line 1414)
+
+	comp_for  goto 354
+
+state 282
+	comp_for_list:  comp_for.    (302)
+
+	.  reduce 302 (src line 1822)
+
+
+state 283
+	comp_for:  FOR.exprlist IN or_test 
+	comp_for:  FOR.exprlist IN or_test IF old_test 
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	NONE  shift 81
+	ADD  shift 86
+	BACK_QUOTE  shift 80
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	.  error
+
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	and_expr  goto 68
+	arith_expr  goto 70
+	atom  goto 75
+	expr  goto 97
+	factor  goto 72
+	power  goto 73
+	shift_expr  goto 69
+	term  goto 71
+	xor_expr  goto 67
+	exprlist  goto 356
+	exprlist_strict  goto 96
+
+state 284
+	atom:  LEFT_BRACKET list_maker RIGHT_BRACKET.    (217)
+
+	.  reduce 217 (src line 1345)
+
+
+state 285
+	list_maker:  test list_for_list.    (229)
+	list_for_list:  list_for_list.list_for 
+	list_for_list:  list_for_list.IF old_test 
+
+	FOR  shift 287
+	IF  shift 358
+	.  reduce 229 (src line 1401)
+
+	list_for  goto 357
+
+state 286
+	list_for_list:  list_for.    (297)
+
+	.  reduce 297 (src line 1792)
+
+
+state 287
+	list_for:  FOR.exprlist IN old_testlist 
+	list_for:  FOR.exprlist IN old_testlist IF old_test 
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	NONE  shift 81
+	ADD  shift 86
+	BACK_QUOTE  shift 80
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	.  error
+
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	and_expr  goto 68
+	arith_expr  goto 70
+	atom  goto 75
+	expr  goto 97
+	factor  goto 72
+	power  goto 73
+	shift_expr  goto 69
+	term  goto 71
+	xor_expr  goto 67
+	exprlist  goto 359
+	exprlist_strict  goto 96
+
+state 288
+	atom:  LEFT_BRACE dict_or_set_maker RIGHT_BRACE.    (219)
+
+	.  reduce 219 (src line 1353)
+
+
+state 289
+	dictlist_strict:  test COLON.test 
+	dict_or_set_maker:  test COLON.test comp_for_list 
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	LAMBDA  shift 62
+	NONE  shift 81
+	NOT  shift 65
+	ADD  shift 86
+	BACK_QUOTE  shift 80
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	.  error
+
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	and_expr  goto 68
+	arith_expr  goto 70
+	atom  goto 75
+	comparison  goto 64
+	expr  goto 66
+	factor  goto 72
+	lambdadef  goto 60
+	or_test  goto 59
+	and_test  goto 61
+	not_test  goto 63
+	power  goto 73
+	shift_expr  goto 69
+	term  goto 71
+	test  goto 360
+	xor_expr  goto 67
+
+state 290
+	dict_or_set_maker:  test comp_for_list.    (273)
+	comp_for_list:  comp_for_list.comp_for 
+	comp_for_list:  comp_for_list.IF old_test 
+
+	FOR  shift 283
+	IF  shift 355
+	.  reduce 273 (src line 1634)
+
+	comp_for  goto 354
+
+state 291
+	dictlist_strict:  dictlist_strict COMMA.test COLON test 
+	dictlist:  dictlist_strict COMMA.    (269)
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	LAMBDA  shift 62
+	NONE  shift 81
+	NOT  shift 65
+	ADD  shift 86
+	BACK_QUOTE  shift 80
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	.  reduce 269 (src line 1610)
+
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	and_expr  goto 68
+	arith_expr  goto 70
+	atom  goto 75
+	comparison  goto 64
+	expr  goto 66
+	factor  goto 72
+	lambdadef  goto 60
+	or_test  goto 59
+	and_test  goto 61
+	not_test  goto 63
+	power  goto 73
+	shift_expr  goto 69
+	term  goto 71
+	test  goto 361
+	xor_expr  goto 67
+
+state 292
+	atom:  BACK_QUOTE testlist_strict BACK_QUOTE.    (220)
+
+	.  reduce 220 (src line 1356)
+
+
+state 293
+	testlist_strict:  testlist_strict COMMA.test 
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	LAMBDA  shift 62
+	NONE  shift 81
+	NOT  shift 65
+	ADD  shift 86
+	BACK_QUOTE  shift 80
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	.  error
+
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	and_expr  goto 68
+	arith_expr  goto 70
+	atom  goto 75
+	comparison  goto 64
+	expr  goto 66
+	factor  goto 72
+	lambdadef  goto 60
+	or_test  goto 59
+	and_test  goto 61
+	not_test  goto 63
+	power  goto 73
+	shift_expr  goto 69
+	term  goto 71
+	test  goto 224
+	xor_expr  goto 67
+
+state 294
+	if_stmt:  IF test COLON suite.    (132)
+	if_stmt:  IF test COLON suite.elif_list 
+	if_stmt:  IF test COLON suite.elif_list ELSE COLON suite 
+	if_stmt:  IF test COLON suite.ELSE COLON suite 
+
+	ELIF  shift 364
+	ELSE  shift 363
+	.  reduce 132 (src line 898)
+
+	elif_list  goto 362
+
+state 295
+	while_stmt:  WHILE test COLON suite.    (136)
+	while_stmt:  WHILE test COLON suite.ELSE COLON suite 
+
+	ELSE  shift 365
+	.  reduce 136 (src line 937)
+
+
+state 296
+	for_stmt:  FOR exprlist IN testlist.COLON suite 
+	for_stmt:  FOR exprlist IN testlist.COLON suite ELSE COLON suite 
+
+	COLON  shift 366
+	.  error
+
+
+state 297
+	expr:  expr.OR_OP xor_expr 
+	exprlist_strict:  exprlist_strict COMMA expr.    (259)
+
+	OR_OP  shift 164
+	.  reduce 259 (src line 1544)
+
+
+state 298
+	except_list:  except_list.except_clause COLON suite 
+	try_stmt:  TRY COLON suite except_list.    (142)
+	try_stmt:  TRY COLON suite except_list.ELSE COLON suite 
+	try_stmt:  TRY COLON suite except_list.FINALLY COLON suite 
+	try_stmt:  TRY COLON suite except_list.ELSE COLON suite FINALLY COLON suite 
+
+	ELSE  shift 368
+	EXCEPT  shift 301
+	FINALLY  shift 369
+	.  reduce 142 (src line 989)
+
+	except_clause  goto 367
+
+state 299
+	try_stmt:  TRY COLON suite FINALLY.COLON suite 
+
+	COLON  shift 370
+	.  error
+
+
+state 300
+	except_list:  except_clause.COLON suite 
+
+	COLON  shift 371
+	.  error
+
+
+state 301
+	except_clause:  EXCEPT.    (152)
+	except_clause:  EXCEPT.test 
+	except_clause:  EXCEPT.test AS test 
+	except_clause:  EXCEPT.test COMMA test 
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	LAMBDA  shift 62
+	NONE  shift 81
+	NOT  shift 65
+	ADD  shift 86
+	BACK_QUOTE  shift 80
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	.  reduce 152 (src line 1058)
+
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	and_expr  goto 68
+	arith_expr  goto 70
+	atom  goto 75
+	comparison  goto 64
+	expr  goto 66
+	factor  goto 72
+	lambdadef  goto 60
+	or_test  goto 59
+	and_test  goto 61
+	not_test  goto 63
+	power  goto 73
+	shift_expr  goto 69
+	term  goto 71
+	test  goto 372
+	xor_expr  goto 67
+
+state 302
+	suite:  NEWLINE INDENT.real_stmts DEDENT 
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	NEWLINE  shift 8
+	ASSERT  shift 48
+	BREAK  shift 39
+	CLASS  shift 33
+	CONTINUE  shift 40
+	DEF  shift 32
+	DEL  shift 38
+	EXEC  shift 47
+	FOR  shift 29
+	FROM  shift 55
+	GLOBAL  shift 46
+	IF  shift 27
+	IMPORT  shift 54
+	LAMBDA  shift 62
+	NONE  shift 81
+	NOT  shift 65
+	PASS  shift 21
+	PRINT  shift 37
+	RAISE  shift 52
+	RETURN  shift 51
+	TRY  shift 30
+	WHILE  shift 28
+	WITH  shift 31
+	YIELD  shift 58
+	ADD  shift 86
+	AT  shift 56
+	BACK_QUOTE  shift 80
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	.  error
+
+	import_from  goto 45
+	import_name  goto 44
+	import_stmt  goto 23
+	newlines  goto 375
+	real_stmts  goto 373
+	simple_stmt  goto 6
+	small_stmt  goto 9
+	stmt  goto 374
+	assert_stmt  goto 26
+	classdef  goto 16
+	compound_stmt  goto 7
+	decorated  goto 17
+	del_stmt  goto 20
+	exec_stmt  goto 25
+	expr_stmt  goto 18
+	flow_stmt  goto 22
+	for_stmt  goto 12
+	funcdef  goto 15
+	global_stmt  goto 24
+	if_stmt  goto 10
+	newline  goto 376
+	print_stmt  goto 19
+	raise_stmt  goto 42
+	return_stmt  goto 41
+	try_stmt  goto 13
+	while_stmt  goto 11
+	with_stmt  goto 14
+	yield_stmt  goto 43
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	and_expr  goto 68
+	arith_expr  goto 70
+	assign_expr  goto 35
+	atom  goto 75
+	comparison  goto 64
+	expr  goto 66
+	factor  goto 72
+	lambdadef  goto 60
+	or_test  goto 59
+	and_test  goto 61
+	not_test  goto 63
+	power  goto 73
+	shift_expr  goto 69
+	term  goto 71
+	test  goto 57
+	xor_expr  goto 67
+	yield_expr  goto 53
+	testlist  goto 36
+	testlist_strict  goto 50
+	decorator  goto 49
+	decorators  goto 34
+
+state 303
+	with_stmt:  WITH with_item_list COLON suite.    (147)
+
+	.  reduce 147 (src line 1026)
+
+
+state 304
+	with_item_list:  with_item_list COMMA with_item.    (149)
+
+	.  reduce 149 (src line 1039)
+
+
+state 305
+	with_item:  test AS expr.    (151)
+	expr:  expr.OR_OP xor_expr 
+
+	OR_OP  shift 164
+	.  reduce 151 (src line 1050)
+
+
+state 306
+	funcdef:  DEF NAME parameters COLON.suite 
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	NEWLINE  shift 208
+	ASSERT  shift 48
+	BREAK  shift 39
+	CONTINUE  shift 40
+	DEL  shift 38
+	EXEC  shift 47
+	FROM  shift 55
+	GLOBAL  shift 46
+	IMPORT  shift 54
+	LAMBDA  shift 62
+	NONE  shift 81
+	NOT  shift 65
+	PASS  shift 21
+	PRINT  shift 37
+	RAISE  shift 52
+	RETURN  shift 51
+	YIELD  shift 58
+	ADD  shift 86
+	BACK_QUOTE  shift 80
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	.  error
+
+	import_from  goto 45
+	import_name  goto 44
+	import_stmt  goto 23
+	simple_stmt  goto 207
+	small_stmt  goto 9
+	suite  goto 377
+	assert_stmt  goto 26
+	del_stmt  goto 20
+	exec_stmt  goto 25
+	expr_stmt  goto 18
+	flow_stmt  goto 22
+	global_stmt  goto 24
+	print_stmt  goto 19
+	raise_stmt  goto 42
+	return_stmt  goto 41
+	yield_stmt  goto 43
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	and_expr  goto 68
+	arith_expr  goto 70
+	assign_expr  goto 35
+	atom  goto 75
+	comparison  goto 64
+	expr  goto 66
+	factor  goto 72
+	lambdadef  goto 60
+	or_test  goto 59
+	and_test  goto 61
+	not_test  goto 63
+	power  goto 73
+	shift_expr  goto 69
+	term  goto 71
+	test  goto 57
+	xor_expr  goto 67
+	yield_expr  goto 53
+	testlist  goto 36
+	testlist_strict  goto 50
+
+state 307
+	parameters:  LEFT_PARENTHESIS RIGHT_PARENTHESIS.    (21)
+
+	.  reduce 21 (src line 374)
+
+
+state 308
+	parameters:  LEFT_PARENTHESIS vararglist.RIGHT_PARENTHESIS 
+
+	RIGHT_PARENTHESIS  shift 378
+	.  error
+
+
+state 309
+	classdef:  CLASS NAME COLON suite.    (274)
+
+	.  reduce 274 (src line 1643)
+
+
+state 310
+	classdef:  CLASS NAME LEFT_PARENTHESIS RIGHT_PARENTHESIS.COLON suite 
+
+	COLON  shift 379
+	.  error
+
+
+state 311
+	classdef:  CLASS NAME LEFT_PARENTHESIS testlist.RIGHT_PARENTHESIS COLON suite 
+
+	RIGHT_PARENTHESIS  shift 380
+	.  error
+
+
+state 312
+	print_stmt:  PRINT RIGHT_SHIFT test COMMA.testlist 
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	LAMBDA  shift 62
+	NONE  shift 81
+	NOT  shift 65
+	ADD  shift 86
+	BACK_QUOTE  shift 80
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	.  error
+
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	and_expr  goto 68
+	arith_expr  goto 70
+	atom  goto 75
+	comparison  goto 64
+	expr  goto 66
+	factor  goto 72
+	lambdadef  goto 60
+	or_test  goto 59
+	and_test  goto 61
+	not_test  goto 63
+	power  goto 73
+	shift_expr  goto 69
+	term  goto 71
+	test  goto 57
+	xor_expr  goto 67
+	testlist  goto 381
+	testlist_strict  goto 50
+
+state 313
+	namelist:  namelist COMMA NAME.    (115)
+
+	.  reduce 115 (src line 816)
+
+
+state 314
+	exec_stmt:  EXEC expr IN test.    (118)
+	exec_stmt:  EXEC expr IN test.COMMA test 
+
+	COMMA  shift 382
+	.  reduce 118 (src line 830)
+
+
+state 315
+	assert_stmt:  ASSERT test COMMA test.    (121)
+
+	.  reduce 121 (src line 844)
+
+
+state 316
+	raise_stmt:  RAISE test COMMA test.    (89)
+	raise_stmt:  RAISE test COMMA test.COMMA test 
+
+	COMMA  shift 383
+	.  reduce 89 (src line 670)
+
+
+state 317
+	dotted_as_names:  dotted_as_names COMMA dotted_as_name.    (111)
+
+	.  reduce 111 (src line 798)
+
+
+state 318
+	dotted_as_name:  dotted_name AS NAME.    (105)
+
+	.  reduce 105 (src line 771)
+
+
+state 319
+	dotted_name:  dotted_name DOT NAME.    (113)
+
+	.  reduce 113 (src line 807)
+
+
+state 320
+	import_from:  FROM dotted_name IMPORT from_clause.    (99)
+
+	.  reduce 99 (src line 724)
+
+
+state 321
+	from_clause:  STAR.    (94)
+
+	.  reduce 94 (src line 703)
+
+
+state 322
+	from_clause:  LEFT_PARENTHESIS.import_as_names RIGHT_PARENTHESIS 
+
+	NAME  shift 326
+	.  error
+
+	import_as_name  goto 325
+	import_as_names  goto 384
+	import_as_names_strict  goto 324
+
+state 323
+	from_clause:  import_as_names.    (96)
+
+	.  reduce 96 (src line 710)
+
+
+state 324
+	import_as_names_strict:  import_as_names_strict.COMMA import_as_name 
+	import_as_names:  import_as_names_strict.    (108)
+	import_as_names:  import_as_names_strict.COMMA 
+
+	COMMA  shift 385
+	.  reduce 108 (src line 785)
+
+
+state 325
+	import_as_names_strict:  import_as_name.    (106)
+
+	.  reduce 106 (src line 776)
+
+
+state 326
+	import_as_name:  NAME.    (102)
+	import_as_name:  NAME.AS NAME 
+
+	AS  shift 386
+	.  reduce 102 (src line 753)
+
+
+state 327
+	import_from:  FROM dots IMPORT from_clause.    (100)
+
+	.  reduce 100 (src line 734)
+
+
+state 328
+	import_from:  FROM dots dotted_name IMPORT.from_clause 
+
+	NAME  shift 326
+	LEFT_PARENTHESIS  shift 322
+	STAR  shift 321
+	.  error
+
+	import_as_name  goto 325
+	from_clause  goto 387
+	import_as_names  goto 323
+	import_as_names_strict  goto 324
+
+state 329
+	decorator:  AT dotted_name LEFT_PARENTHESIS RIGHT_PARENTHESIS.NEWLINE 
+
+	NEWLINE  shift 388
+	.  error
+
+
+state 330
+	decorator:  AT dotted_name LEFT_PARENTHESIS arglist.RIGHT_PARENTHESIS NEWLINE 
+
+	RIGHT_PARENTHESIS  shift 389
+	.  error
+
+
+state 331
+	test:  or_test IF or_test ELSE.test 
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	LAMBDA  shift 62
+	NONE  shift 81
+	NOT  shift 65
+	ADD  shift 86
+	BACK_QUOTE  shift 80
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	.  error
+
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	and_expr  goto 68
+	arith_expr  goto 70
+	atom  goto 75
+	comparison  goto 64
+	expr  goto 66
+	factor  goto 72
+	lambdadef  goto 60
+	or_test  goto 59
+	and_test  goto 61
+	not_test  goto 63
+	power  goto 73
+	shift_expr  goto 69
+	term  goto 71
+	test  goto 390
+	xor_expr  goto 67
+
+state 332
+	lambdadef:  LAMBDA vararglist COLON test.    (233)
+
+	.  reduce 233 (src line 1429)
+
+
+state 333
+	vararglist:  STAR NAME COMMA.STAR_STAR NAME 
+
+	STAR_STAR  shift 391
+	.  error
+
+
+state 334
+	fpdef_test_list_strict:  fpdef_test_list_strict COMMA fpdef_test.    (26)
+
+	.  reduce 26 (src line 396)
+
+
+state 335
+	vararglist:  fpdef_test_list_strict COMMA STAR.NAME 
+	vararglist:  fpdef_test_list_strict COMMA STAR.NAME COMMA STAR_STAR NAME 
+
+	NAME  shift 392
+	.  error
+
+
+state 336
+	vararglist:  fpdef_test_list_strict COMMA STAR_STAR.NAME 
+
+	NAME  shift 393
+	.  error
+
+
+state 337
+	fpdef_test:  fpdef ASSIGN test.    (24)
+
+	.  reduce 24 (src line 387)
+
+
+state 338
+	fpdef:  LEFT_PARENTHESIS fplist RIGHT_PARENTHESIS.    (37)
+
+	.  reduce 37 (src line 453)
+
+
+state 339
+	fplist_strict:  fplist_strict COMMA.fpdef 
+	fplist:  fplist_strict COMMA.    (41)
+
+	NAME  shift 151
+	LEFT_PARENTHESIS  shift 152
+	.  reduce 41 (src line 478)
+
+	fpdef  goto 394
+
+state 340
+	power:  atom trailers STAR_STAR factor.    (210)
+
+	.  reduce 210 (src line 1314)
+
+
+state 341
+	trailer:  LEFT_PARENTHESIS arglist RIGHT_PARENTHESIS.    (235)
+
+	.  reduce 235 (src line 1441)
+
+
+state 342
+	argumentlist_strict:  argumentlist_strict COMMA.argument 
+	argumentlist:  argumentlist_strict COMMA.    (280)
+	arglist:  argumentlist_strict COMMA.STAR test 
+	arglist:  argumentlist_strict COMMA.STAR test COMMA argumentlist_strict 
+	arglist:  argumentlist_strict COMMA.STAR test COMMA STAR_STAR test 
+	arglist:  argumentlist_strict COMMA.STAR test COMMA argumentlist_strict COMMA STAR_STAR test 
+	arglist:  argumentlist_strict COMMA.STAR_STAR test 
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	LAMBDA  shift 62
+	NONE  shift 81
+	NOT  shift 65
+	ADD  shift 86
+	BACK_QUOTE  shift 80
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	STAR  shift 396
+	STAR_STAR  shift 397
+	.  reduce 280 (src line 1678)
+
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	and_expr  goto 68
+	arith_expr  goto 70
+	atom  goto 75
+	comparison  goto 64
+	expr  goto 66
+	factor  goto 72
+	lambdadef  goto 60
+	or_test  goto 59
+	and_test  goto 61
+	not_test  goto 63
+	power  goto 73
+	shift_expr  goto 69
+	term  goto 71
+	test  goto 271
+	xor_expr  goto 67
+	argument  goto 395
+
+state 343
+	arglist:  STAR test.    (287)
+	arglist:  STAR test.COMMA argumentlist_strict 
+	arglist:  STAR test.COMMA STAR_STAR test 
+	arglist:  STAR test.COMMA argumentlist_strict COMMA STAR_STAR test 
+
+	COMMA  shift 398
+	.  reduce 287 (src line 1727)
+
+
+state 344
+	arglist:  STAR_STAR test.    (291)
+
+	.  reduce 291 (src line 1751)
+
+
+state 345
+	argument:  test comp_for_list.    (293)
+	comp_for_list:  comp_for_list.comp_for 
+	comp_for_list:  comp_for_list.IF old_test 
+
+	FOR  shift 283
+	IF  shift 355
+	.  reduce 293 (src line 1761)
+
+	comp_for  goto 354
+
+state 346
+	argument:  test ASSIGN.test 
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	LAMBDA  shift 62
+	NONE  shift 81
+	NOT  shift 65
+	ADD  shift 86
+	BACK_QUOTE  shift 80
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	.  error
+
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	and_expr  goto 68
+	arith_expr  goto 70
+	atom  goto 75
+	comparison  goto 64
+	expr  goto 66
+	factor  goto 72
+	lambdadef  goto 60
+	or_test  goto 59
+	and_test  goto 61
+	not_test  goto 63
+	power  goto 73
+	shift_expr  goto 69
+	term  goto 71
+	test  goto 399
+	xor_expr  goto 67
+
+state 347
+	trailer:  LEFT_BRACKET subscriptlist RIGHT_BRACKET.    (236)
+
+	.  reduce 236 (src line 1444)
+
+
+state 348
+	subscriptlist_strict:  subscriptlist_strict COMMA.subscript 
+	subscriptlist:  subscriptlist_strict COMMA.    (241)
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	LAMBDA  shift 62
+	NONE  shift 81
+	NOT  shift 65
+	ADD  shift 86
+	BACK_QUOTE  shift 80
+	COLON  shift 277
+	DOT  shift 275
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	.  reduce 241 (src line 1465)
+
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	and_expr  goto 68
+	arith_expr  goto 70
+	atom  goto 75
+	comparison  goto 64
+	expr  goto 66
+	factor  goto 72
+	lambdadef  goto 60
+	or_test  goto 59
+	and_test  goto 61
+	not_test  goto 63
+	power  goto 73
+	shift_expr  goto 69
+	term  goto 71
+	test  goto 276
+	xor_expr  goto 67
+	subscript  goto 400
+
+state 349
+	subscript:  DOT DOT.DOT 
+
+	DOT  shift 401
+	.  error
+
+
+state 350
+	subscript:  test COLON.    (245)
+	subscript:  test COLON.test 
+	subscript:  test COLON.sliceop 
+	subscript:  test COLON.test sliceop 
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	LAMBDA  shift 62
+	NONE  shift 81
+	NOT  shift 65
+	ADD  shift 86
+	BACK_QUOTE  shift 80
+	COLON  shift 353
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	.  reduce 245 (src line 1480)
+
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	and_expr  goto 68
+	arith_expr  goto 70
+	atom  goto 75
+	comparison  goto 64
+	expr  goto 66
+	factor  goto 72
+	lambdadef  goto 60
+	or_test  goto 59
+	and_test  goto 61
+	not_test  goto 63
+	power  goto 73
+	shift_expr  goto 69
+	term  goto 71
+	test  goto 402
+	xor_expr  goto 67
+	sliceop  goto 403
+
+state 351
+	subscript:  COLON test.    (246)
+	subscript:  COLON test.sliceop 
+
+	COLON  shift 353
+	.  reduce 246 (src line 1483)
+
+	sliceop  goto 404
+
+state 352
+	subscript:  COLON sliceop.    (248)
+
+	.  reduce 248 (src line 1489)
+
+
+state 353
+	sliceop:  COLON.    (252)
+	sliceop:  COLON.test 
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	LAMBDA  shift 62
+	NONE  shift 81
+	NOT  shift 65
+	ADD  shift 86
+	BACK_QUOTE  shift 80
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	.  reduce 252 (src line 1507)
+
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	and_expr  goto 68
+	arith_expr  goto 70
+	atom  goto 75
+	comparison  goto 64
+	expr  goto 66
+	factor  goto 72
+	lambdadef  goto 60
+	or_test  goto 59
+	and_test  goto 61
+	not_test  goto 63
+	power  goto 73
+	shift_expr  goto 69
+	term  goto 71
+	test  goto 405
+	xor_expr  goto 67
+
+state 354
+	comp_for_list:  comp_for_list comp_for.    (303)
+
+	.  reduce 303 (src line 1826)
+
+
+state 355
+	comp_for_list:  comp_for_list IF.old_test 
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	LAMBDA  shift 409
+	NONE  shift 81
+	NOT  shift 65
+	ADD  shift 86
+	BACK_QUOTE  shift 80
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	.  error
+
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	and_expr  goto 68
+	arith_expr  goto 70
+	atom  goto 75
+	comparison  goto 64
+	expr  goto 66
+	factor  goto 72
+	old_lambda  goto 408
+	old_test  goto 406
+	or_test  goto 407
+	and_test  goto 61
+	not_test  goto 63
+	power  goto 73
+	shift_expr  goto 69
+	term  goto 71
+	xor_expr  goto 67
+
+state 356
+	comp_for:  FOR exprlist.IN or_test 
+	comp_for:  FOR exprlist.IN or_test IF old_test 
+
+	IN  shift 410
+	.  error
+
+
+state 357
+	list_for_list:  list_for_list list_for.    (298)
+
+	.  reduce 298 (src line 1796)
+
+
+state 358
+	list_for_list:  list_for_list IF.old_test 
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	LAMBDA  shift 409
+	NONE  shift 81
+	NOT  shift 65
+	ADD  shift 86
+	BACK_QUOTE  shift 80
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	.  error
+
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	and_expr  goto 68
+	arith_expr  goto 70
+	atom  goto 75
+	comparison  goto 64
+	expr  goto 66
+	factor  goto 72
+	old_lambda  goto 408
+	old_test  goto 411
+	or_test  goto 407
+	and_test  goto 61
+	not_test  goto 63
+	power  goto 73
+	shift_expr  goto 69
+	term  goto 71
+	xor_expr  goto 67
+
+state 359
+	list_for:  FOR exprlist.IN old_testlist 
+	list_for:  FOR exprlist.IN old_testlist IF old_test 
+
+	IN  shift 412
+	.  error
+
+
+state 360
+	dictlist_strict:  test COLON test.    (266)
+	dict_or_set_maker:  test COLON test.comp_for_list 
+
+	FOR  shift 283
+	.  reduce 266 (src line 1584)
+
+	comp_for  goto 282
+	comp_for_list  goto 413
+
+state 361
+	dictlist_strict:  dictlist_strict COMMA test.COLON test 
+
+	COLON  shift 414
+	.  error
+
+
+state 362
+	elif_list:  elif_list.ELIF test COLON suite 
+	if_stmt:  IF test COLON suite elif_list.    (133)
+	if_stmt:  IF test COLON suite elif_list.ELSE COLON suite 
+
+	ELIF  shift 415
+	ELSE  shift 416
+	.  reduce 133 (src line 907)
+
+
+state 363
+	if_stmt:  IF test COLON suite ELSE.COLON suite 
+
+	COLON  shift 417
+	.  error
+
+
+state 364
+	elif_list:  ELIF.test COLON suite 
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	LAMBDA  shift 62
+	NONE  shift 81
+	NOT  shift 65
+	ADD  shift 86
+	BACK_QUOTE  shift 80
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	.  error
+
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	and_expr  goto 68
+	arith_expr  goto 70
+	atom  goto 75
+	comparison  goto 64
+	expr  goto 66
+	factor  goto 72
+	lambdadef  goto 60
+	or_test  goto 59
+	and_test  goto 61
+	not_test  goto 63
+	power  goto 73
+	shift_expr  goto 69
+	term  goto 71
+	test  goto 418
+	xor_expr  goto 67
+
+state 365
+	while_stmt:  WHILE test COLON suite ELSE.COLON suite 
+
+	COLON  shift 419
+	.  error
+
+
+state 366
+	for_stmt:  FOR exprlist IN testlist COLON.suite 
+	for_stmt:  FOR exprlist IN testlist COLON.suite ELSE COLON suite 
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	NEWLINE  shift 208
+	ASSERT  shift 48
+	BREAK  shift 39
+	CONTINUE  shift 40
+	DEL  shift 38
+	EXEC  shift 47
+	FROM  shift 55
+	GLOBAL  shift 46
+	IMPORT  shift 54
+	LAMBDA  shift 62
+	NONE  shift 81
+	NOT  shift 65
+	PASS  shift 21
+	PRINT  shift 37
+	RAISE  shift 52
+	RETURN  shift 51
+	YIELD  shift 58
+	ADD  shift 86
+	BACK_QUOTE  shift 80
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	.  error
+
+	import_from  goto 45
+	import_name  goto 44
+	import_stmt  goto 23
+	simple_stmt  goto 207
+	small_stmt  goto 9
+	suite  goto 420
+	assert_stmt  goto 26
+	del_stmt  goto 20
+	exec_stmt  goto 25
+	expr_stmt  goto 18
+	flow_stmt  goto 22
+	global_stmt  goto 24
+	print_stmt  goto 19
+	raise_stmt  goto 42
+	return_stmt  goto 41
+	yield_stmt  goto 43
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	and_expr  goto 68
+	arith_expr  goto 70
+	assign_expr  goto 35
+	atom  goto 75
+	comparison  goto 64
+	expr  goto 66
+	factor  goto 72
+	lambdadef  goto 60
+	or_test  goto 59
+	and_test  goto 61
+	not_test  goto 63
+	power  goto 73
+	shift_expr  goto 69
+	term  goto 71
+	test  goto 57
+	xor_expr  goto 67
+	yield_expr  goto 53
+	testlist  goto 36
+	testlist_strict  goto 50
+
+state 367
+	except_list:  except_list except_clause.COLON suite 
+
+	COLON  shift 421
+	.  error
+
+
+state 368
+	try_stmt:  TRY COLON suite except_list ELSE.COLON suite 
+	try_stmt:  TRY COLON suite except_list ELSE.COLON suite FINALLY COLON suite 
+
+	COLON  shift 422
+	.  error
+
+
+state 369
+	try_stmt:  TRY COLON suite except_list FINALLY.COLON suite 
+
+	COLON  shift 423
+	.  error
+
+
+state 370
+	try_stmt:  TRY COLON suite FINALLY COLON.suite 
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	NEWLINE  shift 208
+	ASSERT  shift 48
+	BREAK  shift 39
+	CONTINUE  shift 40
+	DEL  shift 38
+	EXEC  shift 47
+	FROM  shift 55
+	GLOBAL  shift 46
+	IMPORT  shift 54
+	LAMBDA  shift 62
+	NONE  shift 81
+	NOT  shift 65
+	PASS  shift 21
+	PRINT  shift 37
+	RAISE  shift 52
+	RETURN  shift 51
+	YIELD  shift 58
+	ADD  shift 86
+	BACK_QUOTE  shift 80
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	.  error
+
+	import_from  goto 45
+	import_name  goto 44
+	import_stmt  goto 23
+	simple_stmt  goto 207
+	small_stmt  goto 9
+	suite  goto 424
+	assert_stmt  goto 26
+	del_stmt  goto 20
+	exec_stmt  goto 25
+	expr_stmt  goto 18
+	flow_stmt  goto 22
+	global_stmt  goto 24
+	print_stmt  goto 19
+	raise_stmt  goto 42
+	return_stmt  goto 41
+	yield_stmt  goto 43
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	and_expr  goto 68
+	arith_expr  goto 70
+	assign_expr  goto 35
+	atom  goto 75
+	comparison  goto 64
+	expr  goto 66
+	factor  goto 72
+	lambdadef  goto 60
+	or_test  goto 59
+	and_test  goto 61
+	not_test  goto 63
+	power  goto 73
+	shift_expr  goto 69
+	term  goto 71
+	test  goto 57
+	xor_expr  goto 67
+	yield_expr  goto 53
+	testlist  goto 36
+	testlist_strict  goto 50
+
+state 371
+	except_list:  except_clause COLON.suite 
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	NEWLINE  shift 208
+	ASSERT  shift 48
+	BREAK  shift 39
+	CONTINUE  shift 40
+	DEL  shift 38
+	EXEC  shift 47
+	FROM  shift 55
+	GLOBAL  shift 46
+	IMPORT  shift 54
+	LAMBDA  shift 62
+	NONE  shift 81
+	NOT  shift 65
+	PASS  shift 21
+	PRINT  shift 37
+	RAISE  shift 52
+	RETURN  shift 51
+	YIELD  shift 58
+	ADD  shift 86
+	BACK_QUOTE  shift 80
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	.  error
+
+	import_from  goto 45
+	import_name  goto 44
+	import_stmt  goto 23
+	simple_stmt  goto 207
+	small_stmt  goto 9
+	suite  goto 425
+	assert_stmt  goto 26
+	del_stmt  goto 20
+	exec_stmt  goto 25
+	expr_stmt  goto 18
+	flow_stmt  goto 22
+	global_stmt  goto 24
+	print_stmt  goto 19
+	raise_stmt  goto 42
+	return_stmt  goto 41
+	yield_stmt  goto 43
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	and_expr  goto 68
+	arith_expr  goto 70
+	assign_expr  goto 35
+	atom  goto 75
+	comparison  goto 64
+	expr  goto 66
+	factor  goto 72
+	lambdadef  goto 60
+	or_test  goto 59
+	and_test  goto 61
+	not_test  goto 63
+	power  goto 73
+	shift_expr  goto 69
+	term  goto 71
+	test  goto 57
+	xor_expr  goto 67
+	yield_expr  goto 53
+	testlist  goto 36
+	testlist_strict  goto 50
+
+state 372
+	except_clause:  EXCEPT test.    (153)
+	except_clause:  EXCEPT test.AS test 
+	except_clause:  EXCEPT test.COMMA test 
+
+	AS  shift 426
+	COMMA  shift 427
+	.  reduce 153 (src line 1062)
+
+
+state 373
+	real_stmts:  real_stmts.stmts 
+	suite:  NEWLINE INDENT real_stmts.DEDENT 
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	NEWLINE  shift 8
+	DEDENT  shift 429
+	ASSERT  shift 48
+	BREAK  shift 39
+	CLASS  shift 33
+	CONTINUE  shift 40
+	DEF  shift 32
+	DEL  shift 38
+	EXEC  shift 47
+	FOR  shift 29
+	FROM  shift 55
+	GLOBAL  shift 46
+	IF  shift 27
+	IMPORT  shift 54
+	LAMBDA  shift 62
+	NONE  shift 81
+	NOT  shift 65
+	PASS  shift 21
+	PRINT  shift 37
+	RAISE  shift 52
+	RETURN  shift 51
+	TRY  shift 30
+	WHILE  shift 28
+	WITH  shift 31
+	YIELD  shift 58
+	ADD  shift 86
+	AT  shift 56
+	BACK_QUOTE  shift 80
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	.  error
+
+	import_from  goto 45
+	import_name  goto 44
+	import_stmt  goto 23
+	simple_stmt  goto 6
+	small_stmt  goto 9
+	stmt  goto 4
+	stmt_or_newline  goto 3
+	stmts  goto 428
+	assert_stmt  goto 26
+	classdef  goto 16
+	compound_stmt  goto 7
+	decorated  goto 17
+	del_stmt  goto 20
+	exec_stmt  goto 25
+	expr_stmt  goto 18
+	flow_stmt  goto 22
+	for_stmt  goto 12
+	funcdef  goto 15
+	global_stmt  goto 24
+	if_stmt  goto 10
+	newline  goto 5
+	print_stmt  goto 19
+	raise_stmt  goto 42
+	return_stmt  goto 41
+	try_stmt  goto 13
+	while_stmt  goto 11
+	with_stmt  goto 14
+	yield_stmt  goto 43
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	and_expr  goto 68
+	arith_expr  goto 70
+	assign_expr  goto 35
+	atom  goto 75
+	comparison  goto 64
+	expr  goto 66
+	factor  goto 72
+	lambdadef  goto 60
+	or_test  goto 59
+	and_test  goto 61
+	not_test  goto 63
+	power  goto 73
+	shift_expr  goto 69
+	term  goto 71
+	test  goto 57
+	xor_expr  goto 67
+	yield_expr  goto 53
+	testlist  goto 36
+	testlist_strict  goto 50
+	decorator  goto 49
+	decorators  goto 34
+
+state 374
+	real_stmts:  stmt.    (10)
+
+	.  reduce 10 (src line 320)
+
+
+state 375
+	newlines:  newlines.newline 
+	real_stmts:  newlines.stmt 
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	NEWLINE  shift 8
+	ASSERT  shift 48
+	BREAK  shift 39
+	CLASS  shift 33
+	CONTINUE  shift 40
+	DEF  shift 32
+	DEL  shift 38
+	EXEC  shift 47
+	FOR  shift 29
+	FROM  shift 55
+	GLOBAL  shift 46
+	IF  shift 27
+	IMPORT  shift 54
+	LAMBDA  shift 62
+	NONE  shift 81
+	NOT  shift 65
+	PASS  shift 21
+	PRINT  shift 37
+	RAISE  shift 52
+	RETURN  shift 51
+	TRY  shift 30
+	WHILE  shift 28
+	WITH  shift 31
+	YIELD  shift 58
+	ADD  shift 86
+	AT  shift 56
+	BACK_QUOTE  shift 80
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	.  error
+
+	import_from  goto 45
+	import_name  goto 44
+	import_stmt  goto 23
+	simple_stmt  goto 6
+	small_stmt  goto 9
+	stmt  goto 431
+	assert_stmt  goto 26
+	classdef  goto 16
+	compound_stmt  goto 7
+	decorated  goto 17
+	del_stmt  goto 20
+	exec_stmt  goto 25
+	expr_stmt  goto 18
+	flow_stmt  goto 22
+	for_stmt  goto 12
+	funcdef  goto 15
+	global_stmt  goto 24
+	if_stmt  goto 10
+	newline  goto 430
+	print_stmt  goto 19
+	raise_stmt  goto 42
+	return_stmt  goto 41
+	try_stmt  goto 13
+	while_stmt  goto 11
+	with_stmt  goto 14
+	yield_stmt  goto 43
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	and_expr  goto 68
+	arith_expr  goto 70
+	assign_expr  goto 35
+	atom  goto 75
+	comparison  goto 64
+	expr  goto 66
+	factor  goto 72
+	lambdadef  goto 60
+	or_test  goto 59
+	and_test  goto 61
+	not_test  goto 63
+	power  goto 73
+	shift_expr  goto 69
+	term  goto 71
+	test  goto 57
+	xor_expr  goto 67
+	yield_expr  goto 53
+	testlist  goto 36
+	testlist_strict  goto 50
+	decorator  goto 49
+	decorators  goto 34
+
+state 376
+	newlines:  newline.    (8)
+
+	.  reduce 8 (src line 311)
+
+
+state 377
+	funcdef:  DEF NAME parameters COLON suite.    (20)
+
+	.  reduce 20 (src line 368)
+
+
+state 378
+	parameters:  LEFT_PARENTHESIS vararglist RIGHT_PARENTHESIS.    (22)
+
+	.  reduce 22 (src line 378)
+
+
+state 379
+	classdef:  CLASS NAME LEFT_PARENTHESIS RIGHT_PARENTHESIS COLON.suite 
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	NEWLINE  shift 208
+	ASSERT  shift 48
+	BREAK  shift 39
+	CONTINUE  shift 40
+	DEL  shift 38
+	EXEC  shift 47
+	FROM  shift 55
+	GLOBAL  shift 46
+	IMPORT  shift 54
+	LAMBDA  shift 62
+	NONE  shift 81
+	NOT  shift 65
+	PASS  shift 21
+	PRINT  shift 37
+	RAISE  shift 52
+	RETURN  shift 51
+	YIELD  shift 58
+	ADD  shift 86
+	BACK_QUOTE  shift 80
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	.  error
+
+	import_from  goto 45
+	import_name  goto 44
+	import_stmt  goto 23
+	simple_stmt  goto 207
+	small_stmt  goto 9
+	suite  goto 432
+	assert_stmt  goto 26
+	del_stmt  goto 20
+	exec_stmt  goto 25
+	expr_stmt  goto 18
+	flow_stmt  goto 22
+	global_stmt  goto 24
+	print_stmt  goto 19
+	raise_stmt  goto 42
+	return_stmt  goto 41
+	yield_stmt  goto 43
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	and_expr  goto 68
+	arith_expr  goto 70
+	assign_expr  goto 35
+	atom  goto 75
+	comparison  goto 64
+	expr  goto 66
+	factor  goto 72
+	lambdadef  goto 60
+	or_test  goto 59
+	and_test  goto 61
+	not_test  goto 63
+	power  goto 73
+	shift_expr  goto 69
+	term  goto 71
+	test  goto 57
+	xor_expr  goto 67
+	yield_expr  goto 53
+	testlist  goto 36
+	testlist_strict  goto 50
+
+state 380
+	classdef:  CLASS NAME LEFT_PARENTHESIS testlist RIGHT_PARENTHESIS.COLON suite 
+
+	COLON  shift 433
+	.  error
+
+
+state 381
+	print_stmt:  PRINT RIGHT_SHIFT test COMMA testlist.    (77)
+
+	.  reduce 77 (src line 618)
+
+
+state 382
+	exec_stmt:  EXEC expr IN test COMMA.test 
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	LAMBDA  shift 62
+	NONE  shift 81
+	NOT  shift 65
+	ADD  shift 86
+	BACK_QUOTE  shift 80
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	.  error
+
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	and_expr  goto 68
+	arith_expr  goto 70
+	atom  goto 75
+	comparison  goto 64
+	expr  goto 66
+	factor  goto 72
+	lambdadef  goto 60
+	or_test  goto 59
+	and_test  goto 61
+	not_test  goto 63
+	power  goto 73
+	shift_expr  goto 69
+	term  goto 71
+	test  goto 434
+	xor_expr  goto 67
+
+state 383
+	raise_stmt:  RAISE test COMMA test COMMA.test 
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	LAMBDA  shift 62
+	NONE  shift 81
+	NOT  shift 65
+	ADD  shift 86
+	BACK_QUOTE  shift 80
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	.  error
+
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	and_expr  goto 68
+	arith_expr  goto 70
+	atom  goto 75
+	comparison  goto 64
+	expr  goto 66
+	factor  goto 72
+	lambdadef  goto 60
+	or_test  goto 59
+	and_test  goto 61
+	not_test  goto 63
+	power  goto 73
+	shift_expr  goto 69
+	term  goto 71
+	test  goto 435
+	xor_expr  goto 67
+
+state 384
+	from_clause:  LEFT_PARENTHESIS import_as_names.RIGHT_PARENTHESIS 
+
+	RIGHT_PARENTHESIS  shift 436
+	.  error
+
+
+state 385
+	import_as_names_strict:  import_as_names_strict COMMA.import_as_name 
+	import_as_names:  import_as_names_strict COMMA.    (109)
+
+	NAME  shift 326
+	.  reduce 109 (src line 789)
+
+	import_as_name  goto 437
+
+state 386
+	import_as_name:  NAME AS.NAME 
+
+	NAME  shift 438
+	.  error
+
+
+state 387
+	import_from:  FROM dots dotted_name IMPORT from_clause.    (101)
+
+	.  reduce 101 (src line 742)
+
+
+state 388
+	decorator:  AT dotted_name LEFT_PARENTHESIS RIGHT_PARENTHESIS NEWLINE.    (14)
+
+	.  reduce 14 (src line 336)
+
+
+state 389
+	decorator:  AT dotted_name LEFT_PARENTHESIS arglist RIGHT_PARENTHESIS.NEWLINE 
+
+	NEWLINE  shift 439
+	.  error
+
+
+state 390
+	test:  or_test IF or_test ELSE test.    (163)
+
+	.  reduce 163 (src line 1117)
+
+
+state 391
+	vararglist:  STAR NAME COMMA STAR_STAR.NAME 
+
+	NAME  shift 440
+	.  error
+
+
+state 392
+	vararglist:  fpdef_test_list_strict COMMA STAR NAME.    (33)
+	vararglist:  fpdef_test_list_strict COMMA STAR NAME.COMMA STAR_STAR NAME 
+
+	COMMA  shift 441
+	.  reduce 33 (src line 428)
+
+
+state 393
+	vararglist:  fpdef_test_list_strict COMMA STAR_STAR NAME.    (34)
+
+	.  reduce 34 (src line 433)
+
+
+state 394
+	fplist_strict:  fplist_strict COMMA fpdef.    (39)
+
+	.  reduce 39 (src line 467)
+
+
+state 395
+	argumentlist_strict:  argumentlist_strict COMMA argument.    (278)
+
+	.  reduce 278 (src line 1669)
+
+
+state 396
+	arglist:  argumentlist_strict COMMA STAR.test 
+	arglist:  argumentlist_strict COMMA STAR.test COMMA argumentlist_strict 
+	arglist:  argumentlist_strict COMMA STAR.test COMMA STAR_STAR test 
+	arglist:  argumentlist_strict COMMA STAR.test COMMA argumentlist_strict COMMA STAR_STAR test 
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	LAMBDA  shift 62
+	NONE  shift 81
+	NOT  shift 65
+	ADD  shift 86
+	BACK_QUOTE  shift 80
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	.  error
+
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	and_expr  goto 68
+	arith_expr  goto 70
+	atom  goto 75
+	comparison  goto 64
+	expr  goto 66
+	factor  goto 72
+	lambdadef  goto 60
+	or_test  goto 59
+	and_test  goto 61
+	not_test  goto 63
+	power  goto 73
+	shift_expr  goto 69
+	term  goto 71
+	test  goto 442
+	xor_expr  goto 67
+
+state 397
+	arglist:  argumentlist_strict COMMA STAR_STAR.test 
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	LAMBDA  shift 62
+	NONE  shift 81
+	NOT  shift 65
+	ADD  shift 86
+	BACK_QUOTE  shift 80
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	.  error
+
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	and_expr  goto 68
+	arith_expr  goto 70
+	atom  goto 75
+	comparison  goto 64
+	expr  goto 66
+	factor  goto 72
+	lambdadef  goto 60
+	or_test  goto 59
+	and_test  goto 61
+	not_test  goto 63
+	power  goto 73
+	shift_expr  goto 69
+	term  goto 71
+	test  goto 443
+	xor_expr  goto 67
+
+state 398
+	arglist:  STAR test COMMA.argumentlist_strict 
+	arglist:  STAR test COMMA.STAR_STAR test 
+	arglist:  STAR test COMMA.argumentlist_strict COMMA STAR_STAR test 
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	LAMBDA  shift 62
+	NONE  shift 81
+	NOT  shift 65
+	ADD  shift 86
+	BACK_QUOTE  shift 80
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	STAR_STAR  shift 445
+	.  error
+
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	and_expr  goto 68
+	arith_expr  goto 70
+	atom  goto 75
+	comparison  goto 64
+	expr  goto 66
+	factor  goto 72
+	lambdadef  goto 60
+	or_test  goto 59
+	and_test  goto 61
+	not_test  goto 63
+	power  goto 73
+	shift_expr  goto 69
+	term  goto 71
+	test  goto 271
+	xor_expr  goto 67
+	argument  goto 270
+	argumentlist_strict  goto 444
+
+state 399
+	argument:  test ASSIGN test.    (294)
+
+	.  reduce 294 (src line 1771)
+
+
+state 400
+	subscriptlist_strict:  subscriptlist_strict COMMA subscript.    (239)
+
+	.  reduce 239 (src line 1456)
+
+
+state 401
+	subscript:  DOT DOT DOT.    (242)
+
+	.  reduce 242 (src line 1470)
+
+
+state 402
+	subscript:  test COLON test.    (247)
+	subscript:  test COLON test.sliceop 
+
+	COLON  shift 353
+	.  reduce 247 (src line 1486)
+
+	sliceop  goto 446
+
+state 403
+	subscript:  test COLON sliceop.    (249)
+
+	.  reduce 249 (src line 1492)
+
+
+state 404
+	subscript:  COLON test sliceop.    (250)
+
+	.  reduce 250 (src line 1496)
+
+
+state 405
+	sliceop:  COLON test.    (253)
+
+	.  reduce 253 (src line 1511)
+
+
+state 406
+	comp_for_list:  comp_for_list IF old_test.    (304)
+
+	.  reduce 304 (src line 1829)
+
+
+state 407
+	old_test:  or_test.    (158)
+	or_test:  or_test.OR and_test 
+
+	OR  shift 141
+	.  reduce 158 (src line 1090)
+
+
+state 408
+	old_test:  old_lambda.    (159)
+
+	.  reduce 159 (src line 1094)
+
+
+state 409
+	old_lambda:  LAMBDA.COLON old_test 
+	old_lambda:  LAMBDA.vararglist COLON old_test 
+
+	NAME  shift 151
+	COLON  shift 447
+	LEFT_PARENTHESIS  shift 152
+	STAR  shift 145
+	STAR_STAR  shift 146
+	.  error
+
+	fpdef  goto 150
+	fpdef_test  goto 149
+	vararglist  goto 448
+	fpdef_test_list  goto 147
+	fpdef_test_list_strict  goto 148
+
+state 410
+	comp_for:  FOR exprlist IN.or_test 
+	comp_for:  FOR exprlist IN.or_test IF old_test 
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	NONE  shift 81
+	NOT  shift 65
+	ADD  shift 86
+	BACK_QUOTE  shift 80
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	.  error
+
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	and_expr  goto 68
+	arith_expr  goto 70
+	atom  goto 75
+	comparison  goto 64
+	expr  goto 66
+	factor  goto 72
+	or_test  goto 449
+	and_test  goto 61
+	not_test  goto 63
+	power  goto 73
+	shift_expr  goto 69
+	term  goto 71
+	xor_expr  goto 67
+
+state 411
+	list_for_list:  list_for_list IF old_test.    (299)
+
+	.  reduce 299 (src line 1799)
+
+
+state 412
+	list_for:  FOR exprlist IN.old_testlist 
+	list_for:  FOR exprlist IN.old_testlist IF old_test 
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	LAMBDA  shift 409
+	NONE  shift 81
+	NOT  shift 65
+	ADD  shift 86
+	BACK_QUOTE  shift 80
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	.  error
+
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	and_expr  goto 68
+	arith_expr  goto 70
+	atom  goto 75
+	comparison  goto 64
+	expr  goto 66
+	factor  goto 72
+	old_lambda  goto 408
+	old_test  goto 452
+	or_test  goto 407
+	and_test  goto 61
+	not_test  goto 63
+	power  goto 73
+	shift_expr  goto 69
+	term  goto 71
+	xor_expr  goto 67
+	old_testlist  goto 450
+	old_testlist_strict  goto 451
+
+state 413
+	dict_or_set_maker:  test COLON test comp_for_list.    (271)
+	comp_for_list:  comp_for_list.comp_for 
+	comp_for_list:  comp_for_list.IF old_test 
+
+	FOR  shift 283
+	IF  shift 355
+	.  reduce 271 (src line 1620)
+
+	comp_for  goto 354
+
+state 414
+	dictlist_strict:  dictlist_strict COMMA test COLON.test 
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	LAMBDA  shift 62
+	NONE  shift 81
+	NOT  shift 65
+	ADD  shift 86
+	BACK_QUOTE  shift 80
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	.  error
+
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	and_expr  goto 68
+	arith_expr  goto 70
+	atom  goto 75
+	comparison  goto 64
+	expr  goto 66
+	factor  goto 72
+	lambdadef  goto 60
+	or_test  goto 59
+	and_test  goto 61
+	not_test  goto 63
+	power  goto 73
+	shift_expr  goto 69
+	term  goto 71
+	test  goto 453
+	xor_expr  goto 67
+
+state 415
+	elif_list:  elif_list ELIF.test COLON suite 
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	LAMBDA  shift 62
+	NONE  shift 81
+	NOT  shift 65
+	ADD  shift 86
+	BACK_QUOTE  shift 80
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	.  error
+
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	and_expr  goto 68
+	arith_expr  goto 70
+	atom  goto 75
+	comparison  goto 64
+	expr  goto 66
+	factor  goto 72
+	lambdadef  goto 60
+	or_test  goto 59
+	and_test  goto 61
+	not_test  goto 63
+	power  goto 73
+	shift_expr  goto 69
+	term  goto 71
+	test  goto 454
+	xor_expr  goto 67
+
+state 416
+	if_stmt:  IF test COLON suite elif_list ELSE.COLON suite 
+
+	COLON  shift 455
+	.  error
+
+
+state 417
+	if_stmt:  IF test COLON suite ELSE COLON.suite 
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	NEWLINE  shift 208
+	ASSERT  shift 48
+	BREAK  shift 39
+	CONTINUE  shift 40
+	DEL  shift 38
+	EXEC  shift 47
+	FROM  shift 55
+	GLOBAL  shift 46
+	IMPORT  shift 54
+	LAMBDA  shift 62
+	NONE  shift 81
+	NOT  shift 65
+	PASS  shift 21
+	PRINT  shift 37
+	RAISE  shift 52
+	RETURN  shift 51
+	YIELD  shift 58
+	ADD  shift 86
+	BACK_QUOTE  shift 80
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	.  error
+
+	import_from  goto 45
+	import_name  goto 44
+	import_stmt  goto 23
+	simple_stmt  goto 207
+	small_stmt  goto 9
+	suite  goto 456
+	assert_stmt  goto 26
+	del_stmt  goto 20
+	exec_stmt  goto 25
+	expr_stmt  goto 18
+	flow_stmt  goto 22
+	global_stmt  goto 24
+	print_stmt  goto 19
+	raise_stmt  goto 42
+	return_stmt  goto 41
+	yield_stmt  goto 43
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	and_expr  goto 68
+	arith_expr  goto 70
+	assign_expr  goto 35
+	atom  goto 75
+	comparison  goto 64
+	expr  goto 66
+	factor  goto 72
+	lambdadef  goto 60
+	or_test  goto 59
+	and_test  goto 61
+	not_test  goto 63
+	power  goto 73
+	shift_expr  goto 69
+	term  goto 71
+	test  goto 57
+	xor_expr  goto 67
+	yield_expr  goto 53
+	testlist  goto 36
+	testlist_strict  goto 50
+
+state 418
+	elif_list:  ELIF test.COLON suite 
+
+	COLON  shift 457
+	.  error
+
+
+state 419
+	while_stmt:  WHILE test COLON suite ELSE COLON.suite 
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	NEWLINE  shift 208
+	ASSERT  shift 48
+	BREAK  shift 39
+	CONTINUE  shift 40
+	DEL  shift 38
+	EXEC  shift 47
+	FROM  shift 55
+	GLOBAL  shift 46
+	IMPORT  shift 54
+	LAMBDA  shift 62
+	NONE  shift 81
+	NOT  shift 65
+	PASS  shift 21
+	PRINT  shift 37
+	RAISE  shift 52
+	RETURN  shift 51
+	YIELD  shift 58
+	ADD  shift 86
+	BACK_QUOTE  shift 80
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	.  error
+
+	import_from  goto 45
+	import_name  goto 44
+	import_stmt  goto 23
+	simple_stmt  goto 207
+	small_stmt  goto 9
+	suite  goto 458
+	assert_stmt  goto 26
+	del_stmt  goto 20
+	exec_stmt  goto 25
+	expr_stmt  goto 18
+	flow_stmt  goto 22
+	global_stmt  goto 24
+	print_stmt  goto 19
+	raise_stmt  goto 42
+	return_stmt  goto 41
+	yield_stmt  goto 43
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	and_expr  goto 68
+	arith_expr  goto 70
+	assign_expr  goto 35
+	atom  goto 75
+	comparison  goto 64
+	expr  goto 66
+	factor  goto 72
+	lambdadef  goto 60
+	or_test  goto 59
+	and_test  goto 61
+	not_test  goto 63
+	power  goto 73
+	shift_expr  goto 69
+	term  goto 71
+	test  goto 57
+	xor_expr  goto 67
+	yield_expr  goto 53
+	testlist  goto 36
+	testlist_strict  goto 50
+
+state 420
+	for_stmt:  FOR exprlist IN testlist COLON suite.    (138)
+	for_stmt:  FOR exprlist IN testlist COLON suite.ELSE COLON suite 
+
+	ELSE  shift 459
+	.  reduce 138 (src line 957)
+
+
+state 421
+	except_list:  except_list except_clause COLON.suite 
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	NEWLINE  shift 208
+	ASSERT  shift 48
+	BREAK  shift 39
+	CONTINUE  shift 40
+	DEL  shift 38
+	EXEC  shift 47
+	FROM  shift 55
+	GLOBAL  shift 46
+	IMPORT  shift 54
+	LAMBDA  shift 62
+	NONE  shift 81
+	NOT  shift 65
+	PASS  shift 21
+	PRINT  shift 37
+	RAISE  shift 52
+	RETURN  shift 51
+	YIELD  shift 58
+	ADD  shift 86
+	BACK_QUOTE  shift 80
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	.  error
+
+	import_from  goto 45
+	import_name  goto 44
+	import_stmt  goto 23
+	simple_stmt  goto 207
+	small_stmt  goto 9
+	suite  goto 460
+	assert_stmt  goto 26
+	del_stmt  goto 20
+	exec_stmt  goto 25
+	expr_stmt  goto 18
+	flow_stmt  goto 22
+	global_stmt  goto 24
+	print_stmt  goto 19
+	raise_stmt  goto 42
+	return_stmt  goto 41
+	yield_stmt  goto 43
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	and_expr  goto 68
+	arith_expr  goto 70
+	assign_expr  goto 35
+	atom  goto 75
+	comparison  goto 64
+	expr  goto 66
+	factor  goto 72
+	lambdadef  goto 60
+	or_test  goto 59
+	and_test  goto 61
+	not_test  goto 63
+	power  goto 73
+	shift_expr  goto 69
+	term  goto 71
+	test  goto 57
+	xor_expr  goto 67
+	yield_expr  goto 53
+	testlist  goto 36
+	testlist_strict  goto 50
+
+state 422
+	try_stmt:  TRY COLON suite except_list ELSE COLON.suite 
+	try_stmt:  TRY COLON suite except_list ELSE COLON.suite FINALLY COLON suite 
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	NEWLINE  shift 208
+	ASSERT  shift 48
+	BREAK  shift 39
+	CONTINUE  shift 40
+	DEL  shift 38
+	EXEC  shift 47
+	FROM  shift 55
+	GLOBAL  shift 46
+	IMPORT  shift 54
+	LAMBDA  shift 62
+	NONE  shift 81
+	NOT  shift 65
+	PASS  shift 21
+	PRINT  shift 37
+	RAISE  shift 52
+	RETURN  shift 51
+	YIELD  shift 58
+	ADD  shift 86
+	BACK_QUOTE  shift 80
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	.  error
+
+	import_from  goto 45
+	import_name  goto 44
+	import_stmt  goto 23
+	simple_stmt  goto 207
+	small_stmt  goto 9
+	suite  goto 461
+	assert_stmt  goto 26
+	del_stmt  goto 20
+	exec_stmt  goto 25
+	expr_stmt  goto 18
+	flow_stmt  goto 22
+	global_stmt  goto 24
+	print_stmt  goto 19
+	raise_stmt  goto 42
+	return_stmt  goto 41
+	yield_stmt  goto 43
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	and_expr  goto 68
+	arith_expr  goto 70
+	assign_expr  goto 35
+	atom  goto 75
+	comparison  goto 64
+	expr  goto 66
+	factor  goto 72
+	lambdadef  goto 60
+	or_test  goto 59
+	and_test  goto 61
+	not_test  goto 63
+	power  goto 73
+	shift_expr  goto 69
+	term  goto 71
+	test  goto 57
+	xor_expr  goto 67
+	yield_expr  goto 53
+	testlist  goto 36
+	testlist_strict  goto 50
+
+state 423
+	try_stmt:  TRY COLON suite except_list FINALLY COLON.suite 
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	NEWLINE  shift 208
+	ASSERT  shift 48
+	BREAK  shift 39
+	CONTINUE  shift 40
+	DEL  shift 38
+	EXEC  shift 47
+	FROM  shift 55
+	GLOBAL  shift 46
+	IMPORT  shift 54
+	LAMBDA  shift 62
+	NONE  shift 81
+	NOT  shift 65
+	PASS  shift 21
+	PRINT  shift 37
+	RAISE  shift 52
+	RETURN  shift 51
+	YIELD  shift 58
+	ADD  shift 86
+	BACK_QUOTE  shift 80
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	.  error
+
+	import_from  goto 45
+	import_name  goto 44
+	import_stmt  goto 23
+	simple_stmt  goto 207
+	small_stmt  goto 9
+	suite  goto 462
+	assert_stmt  goto 26
+	del_stmt  goto 20
+	exec_stmt  goto 25
+	expr_stmt  goto 18
+	flow_stmt  goto 22
+	global_stmt  goto 24
+	print_stmt  goto 19
+	raise_stmt  goto 42
+	return_stmt  goto 41
+	yield_stmt  goto 43
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	and_expr  goto 68
+	arith_expr  goto 70
+	assign_expr  goto 35
+	atom  goto 75
+	comparison  goto 64
+	expr  goto 66
+	factor  goto 72
+	lambdadef  goto 60
+	or_test  goto 59
+	and_test  goto 61
+	not_test  goto 63
+	power  goto 73
+	shift_expr  goto 69
+	term  goto 71
+	test  goto 57
+	xor_expr  goto 67
+	yield_expr  goto 53
+	testlist  goto 36
+	testlist_strict  goto 50
+
+state 424
+	try_stmt:  TRY COLON suite FINALLY COLON suite.    (146)
+
+	.  reduce 146 (src line 1018)
+
+
+state 425
+	except_list:  except_clause COLON suite.    (140)
+
+	.  reduce 140 (src line 979)
+
+
+state 426
+	except_clause:  EXCEPT test AS.test 
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	LAMBDA  shift 62
+	NONE  shift 81
+	NOT  shift 65
+	ADD  shift 86
+	BACK_QUOTE  shift 80
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	.  error
+
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	and_expr  goto 68
+	arith_expr  goto 70
+	atom  goto 75
+	comparison  goto 64
+	expr  goto 66
+	factor  goto 72
+	lambdadef  goto 60
+	or_test  goto 59
+	and_test  goto 61
+	not_test  goto 63
+	power  goto 73
+	shift_expr  goto 69
+	term  goto 71
+	test  goto 463
+	xor_expr  goto 67
+
+state 427
+	except_clause:  EXCEPT test COMMA.test 
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	LAMBDA  shift 62
+	NONE  shift 81
+	NOT  shift 65
+	ADD  shift 86
+	BACK_QUOTE  shift 80
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	.  error
+
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	and_expr  goto 68
+	arith_expr  goto 70
+	atom  goto 75
+	comparison  goto 64
+	expr  goto 66
+	factor  goto 72
+	lambdadef  goto 60
+	or_test  goto 59
+	and_test  goto 61
+	not_test  goto 63
+	power  goto 73
+	shift_expr  goto 69
+	term  goto 71
+	test  goto 464
+	xor_expr  goto 67
+
+428: shift/reduce conflict (shift 84(0), red'n 12(0)) on FLOAT
+428: shift/reduce conflict (shift 83(0), red'n 12(0)) on INTEGER
+428: shift/reduce conflict (shift 89(0), red'n 12(0)) on STRING
+428: shift/reduce conflict (shift 82(0), red'n 12(0)) on NAME
+428: shift/reduce conflict (shift 8(0), red'n 12(0)) on NEWLINE
+428: shift/reduce conflict (shift 48(0), red'n 12(0)) on ASSERT
+428: shift/reduce conflict (shift 39(0), red'n 12(0)) on BREAK
+428: shift/reduce conflict (shift 33(0), red'n 12(0)) on CLASS
+428: shift/reduce conflict (shift 40(0), red'n 12(0)) on CONTINUE
+428: shift/reduce conflict (shift 32(0), red'n 12(0)) on DEF
+428: shift/reduce conflict (shift 38(0), red'n 12(0)) on DEL
+428: shift/reduce conflict (shift 47(0), red'n 12(0)) on EXEC
+428: shift/reduce conflict (shift 29(0), red'n 12(0)) on FOR
+428: shift/reduce conflict (shift 55(0), red'n 12(0)) on FROM
+428: shift/reduce conflict (shift 46(0), red'n 12(0)) on GLOBAL
+428: shift/reduce conflict (shift 27(0), red'n 12(0)) on IF
+428: shift/reduce conflict (shift 54(0), red'n 12(0)) on IMPORT
+428: shift/reduce conflict (shift 62(0), red'n 12(0)) on LAMBDA
+428: shift/reduce conflict (shift 81(0), red'n 12(0)) on NONE
+428: shift/reduce conflict (shift 65(0), red'n 12(0)) on NOT
+428: shift/reduce conflict (shift 21(0), red'n 12(0)) on PASS
+428: shift/reduce conflict (shift 37(0), red'n 12(0)) on PRINT
+428: shift/reduce conflict (shift 52(0), red'n 12(0)) on RAISE
+428: shift/reduce conflict (shift 51(0), red'n 12(0)) on RETURN
+428: shift/reduce conflict (shift 30(0), red'n 12(0)) on TRY
+428: shift/reduce conflict (shift 28(0), red'n 12(0)) on WHILE
+428: shift/reduce conflict (shift 31(0), red'n 12(0)) on WITH
+428: shift/reduce conflict (shift 58(0), red'n 12(0)) on YIELD
+428: shift/reduce conflict (shift 86(0), red'n 12(0)) on ADD
+428: shift/reduce conflict (shift 56(0), red'n 12(0)) on AT
+428: shift/reduce conflict (shift 80(0), red'n 12(0)) on BACK_QUOTE
+428: shift/reduce conflict (shift 79(0), red'n 12(0)) on LEFT_BRACE
+428: shift/reduce conflict (shift 78(0), red'n 12(0)) on LEFT_BRACKET
+428: shift/reduce conflict (shift 77(0), red'n 12(0)) on LEFT_PARENTHESIS
+428: shift/reduce conflict (shift 87(0), red'n 12(0)) on MINUS
+428: shift/reduce conflict (shift 88(0), red'n 12(0)) on NOT_OP
+state 428
+	stmts:  stmts.stmt_or_newline 
+	real_stmts:  real_stmts stmts.    (12)
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	NEWLINE  shift 8
+	ASSERT  shift 48
+	BREAK  shift 39
+	CLASS  shift 33
+	CONTINUE  shift 40
+	DEF  shift 32
+	DEL  shift 38
+	EXEC  shift 47
+	FOR  shift 29
+	FROM  shift 55
+	GLOBAL  shift 46
+	IF  shift 27
+	IMPORT  shift 54
+	LAMBDA  shift 62
+	NONE  shift 81
+	NOT  shift 65
+	PASS  shift 21
+	PRINT  shift 37
+	RAISE  shift 52
+	RETURN  shift 51
+	TRY  shift 30
+	WHILE  shift 28
+	WITH  shift 31
+	YIELD  shift 58
+	ADD  shift 86
+	AT  shift 56
+	BACK_QUOTE  shift 80
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	.  reduce 12 (src line 327)
+
+	import_from  goto 45
+	import_name  goto 44
+	import_stmt  goto 23
+	simple_stmt  goto 6
+	small_stmt  goto 9
+	stmt  goto 4
+	stmt_or_newline  goto 90
+	assert_stmt  goto 26
+	classdef  goto 16
+	compound_stmt  goto 7
+	decorated  goto 17
+	del_stmt  goto 20
+	exec_stmt  goto 25
+	expr_stmt  goto 18
+	flow_stmt  goto 22
+	for_stmt  goto 12
+	funcdef  goto 15
+	global_stmt  goto 24
+	if_stmt  goto 10
+	newline  goto 5
+	print_stmt  goto 19
+	raise_stmt  goto 42
+	return_stmt  goto 41
+	try_stmt  goto 13
+	while_stmt  goto 11
+	with_stmt  goto 14
+	yield_stmt  goto 43
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	and_expr  goto 68
+	arith_expr  goto 70
+	assign_expr  goto 35
+	atom  goto 75
+	comparison  goto 64
+	expr  goto 66
+	factor  goto 72
+	lambdadef  goto 60
+	or_test  goto 59
+	and_test  goto 61
+	not_test  goto 63
+	power  goto 73
+	shift_expr  goto 69
+	term  goto 71
+	test  goto 57
+	xor_expr  goto 67
+	yield_expr  goto 53
+	testlist  goto 36
+	testlist_strict  goto 50
+	decorator  goto 49
+	decorators  goto 34
+
+state 429
+	suite:  NEWLINE INDENT real_stmts DEDENT.    (157)
+
+	.  reduce 157 (src line 1085)
+
+
+state 430
+	newlines:  newlines newline.    (9)
+
+	.  reduce 9 (src line 315)
+
+
+state 431
+	real_stmts:  newlines stmt.    (11)
+
+	.  reduce 11 (src line 324)
+
+
+state 432
+	classdef:  CLASS NAME LEFT_PARENTHESIS RIGHT_PARENTHESIS COLON suite.    (275)
+
+	.  reduce 275 (src line 1650)
+
+
+state 433
+	classdef:  CLASS NAME LEFT_PARENTHESIS testlist RIGHT_PARENTHESIS COLON.suite 
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	NEWLINE  shift 208
+	ASSERT  shift 48
+	BREAK  shift 39
+	CONTINUE  shift 40
+	DEL  shift 38
+	EXEC  shift 47
+	FROM  shift 55
+	GLOBAL  shift 46
+	IMPORT  shift 54
+	LAMBDA  shift 62
+	NONE  shift 81
+	NOT  shift 65
+	PASS  shift 21
+	PRINT  shift 37
+	RAISE  shift 52
+	RETURN  shift 51
+	YIELD  shift 58
+	ADD  shift 86
+	BACK_QUOTE  shift 80
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	.  error
+
+	import_from  goto 45
+	import_name  goto 44
+	import_stmt  goto 23
+	simple_stmt  goto 207
+	small_stmt  goto 9
+	suite  goto 465
+	assert_stmt  goto 26
+	del_stmt  goto 20
+	exec_stmt  goto 25
+	expr_stmt  goto 18
+	flow_stmt  goto 22
+	global_stmt  goto 24
+	print_stmt  goto 19
+	raise_stmt  goto 42
+	return_stmt  goto 41
+	yield_stmt  goto 43
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	and_expr  goto 68
+	arith_expr  goto 70
+	assign_expr  goto 35
+	atom  goto 75
+	comparison  goto 64
+	expr  goto 66
+	factor  goto 72
+	lambdadef  goto 60
+	or_test  goto 59
+	and_test  goto 61
+	not_test  goto 63
+	power  goto 73
+	shift_expr  goto 69
+	term  goto 71
+	test  goto 57
+	xor_expr  goto 67
+	yield_expr  goto 53
+	testlist  goto 36
+	testlist_strict  goto 50
+
+state 434
+	exec_stmt:  EXEC expr IN test COMMA test.    (119)
+
+	.  reduce 119 (src line 833)
+
+
+state 435
+	raise_stmt:  RAISE test COMMA test COMMA test.    (90)
+
+	.  reduce 90 (src line 673)
+
+
+state 436
+	from_clause:  LEFT_PARENTHESIS import_as_names RIGHT_PARENTHESIS.    (95)
+
+	.  reduce 95 (src line 707)
+
+
+state 437
+	import_as_names_strict:  import_as_names_strict COMMA import_as_name.    (107)
+
+	.  reduce 107 (src line 780)
+
+
+state 438
+	import_as_name:  NAME AS NAME.    (103)
+
+	.  reduce 103 (src line 759)
+
+
+state 439
+	decorator:  AT dotted_name LEFT_PARENTHESIS arglist RIGHT_PARENTHESIS NEWLINE.    (15)
+
+	.  reduce 15 (src line 341)
+
+
+state 440
+	vararglist:  STAR NAME COMMA STAR_STAR NAME.    (31)
+
+	.  reduce 31 (src line 419)
+
+
+state 441
+	vararglist:  fpdef_test_list_strict COMMA STAR NAME COMMA.STAR_STAR NAME 
+
+	STAR_STAR  shift 466
+	.  error
+
+
+state 442
+	arglist:  argumentlist_strict COMMA STAR test.    (282)
+	arglist:  argumentlist_strict COMMA STAR test.COMMA argumentlist_strict 
+	arglist:  argumentlist_strict COMMA STAR test.COMMA STAR_STAR test 
+	arglist:  argumentlist_strict COMMA STAR test.COMMA argumentlist_strict COMMA STAR_STAR test 
+
+	COMMA  shift 467
+	.  reduce 282 (src line 1687)
+
+
+state 443
+	arglist:  argumentlist_strict COMMA STAR_STAR test.    (286)
+
+	.  reduce 286 (src line 1723)
+
+
+state 444
+	argumentlist_strict:  argumentlist_strict.COMMA argument 
+	arglist:  STAR test COMMA argumentlist_strict.    (288)
+	arglist:  STAR test COMMA argumentlist_strict.COMMA STAR_STAR test 
+
+	COMMA  shift 468
+	.  reduce 288 (src line 1730)
+
+
+state 445
+	arglist:  STAR test COMMA STAR_STAR.test 
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	LAMBDA  shift 62
+	NONE  shift 81
+	NOT  shift 65
+	ADD  shift 86
+	BACK_QUOTE  shift 80
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	.  error
+
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	and_expr  goto 68
+	arith_expr  goto 70
+	atom  goto 75
+	comparison  goto 64
+	expr  goto 66
+	factor  goto 72
+	lambdadef  goto 60
+	or_test  goto 59
+	and_test  goto 61
+	not_test  goto 63
+	power  goto 73
+	shift_expr  goto 69
+	term  goto 71
+	test  goto 469
+	xor_expr  goto 67
+
+state 446
+	subscript:  test COLON test sliceop.    (251)
+
+	.  reduce 251 (src line 1500)
+
+
+state 447
+	old_lambda:  LAMBDA COLON.old_test 
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	LAMBDA  shift 409
+	NONE  shift 81
+	NOT  shift 65
+	ADD  shift 86
+	BACK_QUOTE  shift 80
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	.  error
+
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	and_expr  goto 68
+	arith_expr  goto 70
+	atom  goto 75
+	comparison  goto 64
+	expr  goto 66
+	factor  goto 72
+	old_lambda  goto 408
+	old_test  goto 470
+	or_test  goto 407
+	and_test  goto 61
+	not_test  goto 63
+	power  goto 73
+	shift_expr  goto 69
+	term  goto 71
+	xor_expr  goto 67
+
+state 448
+	old_lambda:  LAMBDA vararglist.COLON old_test 
+
+	COLON  shift 471
+	.  error
+
+
+449: shift/reduce conflict (shift 472(0), red'n 300(0)) on IF
+state 449
+	or_test:  or_test.OR and_test 
+	comp_for:  FOR exprlist IN or_test.    (300)
+	comp_for:  FOR exprlist IN or_test.IF old_test 
+
+	IF  shift 472
+	OR  shift 141
+	.  reduce 300 (src line 1806)
+
+
+450: shift/reduce conflict (shift 473(0), red'n 295(0)) on IF
+state 450
+	list_for:  FOR exprlist IN old_testlist.    (295)
+	list_for:  FOR exprlist IN old_testlist.IF old_test 
+
+	IF  shift 473
+	.  reduce 295 (src line 1776)
+
+
+state 451
+	old_testlist_strict:  old_testlist_strict.COMMA old_test 
+	old_testlist:  old_testlist_strict.    (256)
+	old_testlist:  old_testlist_strict.COMMA 
+
+	COMMA  shift 474
+	.  reduce 256 (src line 1529)
+
+
+state 452
+	old_testlist_strict:  old_test.    (254)
+
+	.  reduce 254 (src line 1516)
+
+
+state 453
+	dictlist_strict:  dictlist_strict COMMA test COLON test.    (267)
+
+	.  reduce 267 (src line 1596)
+
+
+state 454
+	elif_list:  elif_list ELIF test.COLON suite 
+
+	COLON  shift 475
+	.  error
+
+
+state 455
+	if_stmt:  IF test COLON suite elif_list ELSE COLON.suite 
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	NEWLINE  shift 208
+	ASSERT  shift 48
+	BREAK  shift 39
+	CONTINUE  shift 40
+	DEL  shift 38
+	EXEC  shift 47
+	FROM  shift 55
+	GLOBAL  shift 46
+	IMPORT  shift 54
+	LAMBDA  shift 62
+	NONE  shift 81
+	NOT  shift 65
+	PASS  shift 21
+	PRINT  shift 37
+	RAISE  shift 52
+	RETURN  shift 51
+	YIELD  shift 58
+	ADD  shift 86
+	BACK_QUOTE  shift 80
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	.  error
+
+	import_from  goto 45
+	import_name  goto 44
+	import_stmt  goto 23
+	simple_stmt  goto 207
+	small_stmt  goto 9
+	suite  goto 476
+	assert_stmt  goto 26
+	del_stmt  goto 20
+	exec_stmt  goto 25
+	expr_stmt  goto 18
+	flow_stmt  goto 22
+	global_stmt  goto 24
+	print_stmt  goto 19
+	raise_stmt  goto 42
+	return_stmt  goto 41
+	yield_stmt  goto 43
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	and_expr  goto 68
+	arith_expr  goto 70
+	assign_expr  goto 35
+	atom  goto 75
+	comparison  goto 64
+	expr  goto 66
+	factor  goto 72
+	lambdadef  goto 60
+	or_test  goto 59
+	and_test  goto 61
+	not_test  goto 63
+	power  goto 73
+	shift_expr  goto 69
+	term  goto 71
+	test  goto 57
+	xor_expr  goto 67
+	yield_expr  goto 53
+	testlist  goto 36
+	testlist_strict  goto 50
+
+state 456
+	if_stmt:  IF test COLON suite ELSE COLON suite.    (135)
+
+	.  reduce 135 (src line 926)
+
+
+state 457
+	elif_list:  ELIF test COLON.suite 
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	NEWLINE  shift 208
+	ASSERT  shift 48
+	BREAK  shift 39
+	CONTINUE  shift 40
+	DEL  shift 38
+	EXEC  shift 47
+	FROM  shift 55
+	GLOBAL  shift 46
+	IMPORT  shift 54
+	LAMBDA  shift 62
+	NONE  shift 81
+	NOT  shift 65
+	PASS  shift 21
+	PRINT  shift 37
+	RAISE  shift 52
+	RETURN  shift 51
+	YIELD  shift 58
+	ADD  shift 86
+	BACK_QUOTE  shift 80
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	.  error
+
+	import_from  goto 45
+	import_name  goto 44
+	import_stmt  goto 23
+	simple_stmt  goto 207
+	small_stmt  goto 9
+	suite  goto 477
+	assert_stmt  goto 26
+	del_stmt  goto 20
+	exec_stmt  goto 25
+	expr_stmt  goto 18
+	flow_stmt  goto 22
+	global_stmt  goto 24
+	print_stmt  goto 19
+	raise_stmt  goto 42
+	return_stmt  goto 41
+	yield_stmt  goto 43
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	and_expr  goto 68
+	arith_expr  goto 70
+	assign_expr  goto 35
+	atom  goto 75
+	comparison  goto 64
+	expr  goto 66
+	factor  goto 72
+	lambdadef  goto 60
+	or_test  goto 59
+	and_test  goto 61
+	not_test  goto 63
+	power  goto 73
+	shift_expr  goto 69
+	term  goto 71
+	test  goto 57
+	xor_expr  goto 67
+	yield_expr  goto 53
+	testlist  goto 36
+	testlist_strict  goto 50
+
+state 458
+	while_stmt:  WHILE test COLON suite ELSE COLON suite.    (137)
+
+	.  reduce 137 (src line 946)
+
+
+state 459
+	for_stmt:  FOR exprlist IN testlist COLON suite ELSE.COLON suite 
+
+	COLON  shift 478
+	.  error
+
+
+state 460
+	except_list:  except_list except_clause COLON suite.    (141)
+
+	.  reduce 141 (src line 984)
+
+
+state 461
+	try_stmt:  TRY COLON suite except_list ELSE COLON suite.    (143)
+	try_stmt:  TRY COLON suite except_list ELSE COLON suite.FINALLY COLON suite 
+
+	FINALLY  shift 479
+	.  reduce 143 (src line 996)
+
+
+state 462
+	try_stmt:  TRY COLON suite except_list FINALLY COLON suite.    (144)
+
+	.  reduce 144 (src line 1003)
+
+
+state 463
+	except_clause:  EXCEPT test AS test.    (154)
+
+	.  reduce 154 (src line 1067)
+
+
+state 464
+	except_clause:  EXCEPT test COMMA test.    (155)
+
+	.  reduce 155 (src line 1073)
+
+
+state 465
+	classdef:  CLASS NAME LEFT_PARENTHESIS testlist RIGHT_PARENTHESIS COLON suite.    (276)
+
+	.  reduce 276 (src line 1656)
+
+
+state 466
+	vararglist:  fpdef_test_list_strict COMMA STAR NAME COMMA STAR_STAR.NAME 
+
+	NAME  shift 480
+	.  error
+
+
+state 467
+	arglist:  argumentlist_strict COMMA STAR test COMMA.argumentlist_strict 
+	arglist:  argumentlist_strict COMMA STAR test COMMA.STAR_STAR test 
+	arglist:  argumentlist_strict COMMA STAR test COMMA.argumentlist_strict COMMA STAR_STAR test 
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	LAMBDA  shift 62
+	NONE  shift 81
+	NOT  shift 65
+	ADD  shift 86
+	BACK_QUOTE  shift 80
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	STAR_STAR  shift 482
+	.  error
+
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	and_expr  goto 68
+	arith_expr  goto 70
+	atom  goto 75
+	comparison  goto 64
+	expr  goto 66
+	factor  goto 72
+	lambdadef  goto 60
+	or_test  goto 59
+	and_test  goto 61
+	not_test  goto 63
+	power  goto 73
+	shift_expr  goto 69
+	term  goto 71
+	test  goto 271
+	xor_expr  goto 67
+	argument  goto 270
+	argumentlist_strict  goto 481
+
+state 468
+	argumentlist_strict:  argumentlist_strict COMMA.argument 
+	arglist:  STAR test COMMA argumentlist_strict COMMA.STAR_STAR test 
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	LAMBDA  shift 62
+	NONE  shift 81
+	NOT  shift 65
+	ADD  shift 86
+	BACK_QUOTE  shift 80
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	STAR_STAR  shift 483
+	.  error
+
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	and_expr  goto 68
+	arith_expr  goto 70
+	atom  goto 75
+	comparison  goto 64
+	expr  goto 66
+	factor  goto 72
+	lambdadef  goto 60
+	or_test  goto 59
+	and_test  goto 61
+	not_test  goto 63
+	power  goto 73
+	shift_expr  goto 69
+	term  goto 71
+	test  goto 271
+	xor_expr  goto 67
+	argument  goto 395
+
+state 469
+	arglist:  STAR test COMMA STAR_STAR test.    (289)
+
+	.  reduce 289 (src line 1736)
+
+
+state 470
+	old_lambda:  LAMBDA COLON old_test.    (160)
+
+	.  reduce 160 (src line 1099)
+
+
+state 471
+	old_lambda:  LAMBDA vararglist COLON.old_test 
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	LAMBDA  shift 409
+	NONE  shift 81
+	NOT  shift 65
+	ADD  shift 86
+	BACK_QUOTE  shift 80
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	.  error
+
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	and_expr  goto 68
+	arith_expr  goto 70
+	atom  goto 75
+	comparison  goto 64
+	expr  goto 66
+	factor  goto 72
+	old_lambda  goto 408
+	old_test  goto 484
+	or_test  goto 407
+	and_test  goto 61
+	not_test  goto 63
+	power  goto 73
+	shift_expr  goto 69
+	term  goto 71
+	xor_expr  goto 67
+
+state 472
+	comp_for:  FOR exprlist IN or_test IF.old_test 
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	LAMBDA  shift 409
+	NONE  shift 81
+	NOT  shift 65
+	ADD  shift 86
+	BACK_QUOTE  shift 80
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	.  error
+
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	and_expr  goto 68
+	arith_expr  goto 70
+	atom  goto 75
+	comparison  goto 64
+	expr  goto 66
+	factor  goto 72
+	old_lambda  goto 408
+	old_test  goto 485
+	or_test  goto 407
+	and_test  goto 61
+	not_test  goto 63
+	power  goto 73
+	shift_expr  goto 69
+	term  goto 71
+	xor_expr  goto 67
+
+state 473
+	list_for:  FOR exprlist IN old_testlist IF.old_test 
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	LAMBDA  shift 409
+	NONE  shift 81
+	NOT  shift 65
+	ADD  shift 86
+	BACK_QUOTE  shift 80
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	.  error
+
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	and_expr  goto 68
+	arith_expr  goto 70
+	atom  goto 75
+	comparison  goto 64
+	expr  goto 66
+	factor  goto 72
+	old_lambda  goto 408
+	old_test  goto 486
+	or_test  goto 407
+	and_test  goto 61
+	not_test  goto 63
+	power  goto 73
+	shift_expr  goto 69
+	term  goto 71
+	xor_expr  goto 67
+
+state 474
+	old_testlist_strict:  old_testlist_strict COMMA.old_test 
+	old_testlist:  old_testlist_strict COMMA.    (257)
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	LAMBDA  shift 409
+	NONE  shift 81
+	NOT  shift 65
+	ADD  shift 86
+	BACK_QUOTE  shift 80
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	.  reduce 257 (src line 1533)
+
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	and_expr  goto 68
+	arith_expr  goto 70
+	atom  goto 75
+	comparison  goto 64
+	expr  goto 66
+	factor  goto 72
+	old_lambda  goto 408
+	old_test  goto 487
+	or_test  goto 407
+	and_test  goto 61
+	not_test  goto 63
+	power  goto 73
+	shift_expr  goto 69
+	term  goto 71
+	xor_expr  goto 67
+
+state 475
+	elif_list:  elif_list ELIF test COLON.suite 
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	NEWLINE  shift 208
+	ASSERT  shift 48
+	BREAK  shift 39
+	CONTINUE  shift 40
+	DEL  shift 38
+	EXEC  shift 47
+	FROM  shift 55
+	GLOBAL  shift 46
+	IMPORT  shift 54
+	LAMBDA  shift 62
+	NONE  shift 81
+	NOT  shift 65
+	PASS  shift 21
+	PRINT  shift 37
+	RAISE  shift 52
+	RETURN  shift 51
+	YIELD  shift 58
+	ADD  shift 86
+	BACK_QUOTE  shift 80
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	.  error
+
+	import_from  goto 45
+	import_name  goto 44
+	import_stmt  goto 23
+	simple_stmt  goto 207
+	small_stmt  goto 9
+	suite  goto 488
+	assert_stmt  goto 26
+	del_stmt  goto 20
+	exec_stmt  goto 25
+	expr_stmt  goto 18
+	flow_stmt  goto 22
+	global_stmt  goto 24
+	print_stmt  goto 19
+	raise_stmt  goto 42
+	return_stmt  goto 41
+	yield_stmt  goto 43
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	and_expr  goto 68
+	arith_expr  goto 70
+	assign_expr  goto 35
+	atom  goto 75
+	comparison  goto 64
+	expr  goto 66
+	factor  goto 72
+	lambdadef  goto 60
+	or_test  goto 59
+	and_test  goto 61
+	not_test  goto 63
+	power  goto 73
+	shift_expr  goto 69
+	term  goto 71
+	test  goto 57
+	xor_expr  goto 67
+	yield_expr  goto 53
+	testlist  goto 36
+	testlist_strict  goto 50
+
+state 476
+	if_stmt:  IF test COLON suite elif_list ELSE COLON suite.    (134)
+
+	.  reduce 134 (src line 916)
+
+
+state 477
+	elif_list:  ELIF test COLON suite.    (130)
+
+	.  reduce 130 (src line 879)
+
+
+state 478
+	for_stmt:  FOR exprlist IN testlist COLON suite ELSE COLON.suite 
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	NEWLINE  shift 208
+	ASSERT  shift 48
+	BREAK  shift 39
+	CONTINUE  shift 40
+	DEL  shift 38
+	EXEC  shift 47
+	FROM  shift 55
+	GLOBAL  shift 46
+	IMPORT  shift 54
+	LAMBDA  shift 62
+	NONE  shift 81
+	NOT  shift 65
+	PASS  shift 21
+	PRINT  shift 37
+	RAISE  shift 52
+	RETURN  shift 51
+	YIELD  shift 58
+	ADD  shift 86
+	BACK_QUOTE  shift 80
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	.  error
+
+	import_from  goto 45
+	import_name  goto 44
+	import_stmt  goto 23
+	simple_stmt  goto 207
+	small_stmt  goto 9
+	suite  goto 489
+	assert_stmt  goto 26
+	del_stmt  goto 20
+	exec_stmt  goto 25
+	expr_stmt  goto 18
+	flow_stmt  goto 22
+	global_stmt  goto 24
+	print_stmt  goto 19
+	raise_stmt  goto 42
+	return_stmt  goto 41
+	yield_stmt  goto 43
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	and_expr  goto 68
+	arith_expr  goto 70
+	assign_expr  goto 35
+	atom  goto 75
+	comparison  goto 64
+	expr  goto 66
+	factor  goto 72
+	lambdadef  goto 60
+	or_test  goto 59
+	and_test  goto 61
+	not_test  goto 63
+	power  goto 73
+	shift_expr  goto 69
+	term  goto 71
+	test  goto 57
+	xor_expr  goto 67
+	yield_expr  goto 53
+	testlist  goto 36
+	testlist_strict  goto 50
+
+state 479
+	try_stmt:  TRY COLON suite except_list ELSE COLON suite FINALLY.COLON suite 
+
+	COLON  shift 490
+	.  error
+
+
+state 480
+	vararglist:  fpdef_test_list_strict COMMA STAR NAME COMMA STAR_STAR NAME.    (35)
+
+	.  reduce 35 (src line 438)
+
+
+state 481
+	argumentlist_strict:  argumentlist_strict.COMMA argument 
+	arglist:  argumentlist_strict COMMA STAR test COMMA argumentlist_strict.    (283)
+	arglist:  argumentlist_strict COMMA STAR test COMMA argumentlist_strict.COMMA STAR_STAR test 
+
+	COMMA  shift 491
+	.  reduce 283 (src line 1692)
+
+
+state 482
+	arglist:  argumentlist_strict COMMA STAR test COMMA STAR_STAR.test 
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	LAMBDA  shift 62
+	NONE  shift 81
+	NOT  shift 65
+	ADD  shift 86
+	BACK_QUOTE  shift 80
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	.  error
+
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	and_expr  goto 68
+	arith_expr  goto 70
+	atom  goto 75
+	comparison  goto 64
+	expr  goto 66
+	factor  goto 72
+	lambdadef  goto 60
+	or_test  goto 59
+	and_test  goto 61
+	not_test  goto 63
+	power  goto 73
+	shift_expr  goto 69
+	term  goto 71
+	test  goto 492
+	xor_expr  goto 67
+
+state 483
+	arglist:  STAR test COMMA argumentlist_strict COMMA STAR_STAR.test 
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	LAMBDA  shift 62
+	NONE  shift 81
+	NOT  shift 65
+	ADD  shift 86
+	BACK_QUOTE  shift 80
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	.  error
+
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	and_expr  goto 68
+	arith_expr  goto 70
+	atom  goto 75
+	comparison  goto 64
+	expr  goto 66
+	factor  goto 72
+	lambdadef  goto 60
+	or_test  goto 59
+	and_test  goto 61
+	not_test  goto 63
+	power  goto 73
+	shift_expr  goto 69
+	term  goto 71
+	test  goto 493
+	xor_expr  goto 67
+
+state 484
+	old_lambda:  LAMBDA vararglist COLON old_test.    (161)
+
+	.  reduce 161 (src line 1105)
+
+
+state 485
+	comp_for:  FOR exprlist IN or_test IF old_test.    (301)
+
+	.  reduce 301 (src line 1813)
+
+
+state 486
+	list_for:  FOR exprlist IN old_testlist IF old_test.    (296)
+
+	.  reduce 296 (src line 1783)
+
+
+state 487
+	old_testlist_strict:  old_testlist_strict COMMA old_test.    (255)
+
+	.  reduce 255 (src line 1522)
+
+
+state 488
+	elif_list:  elif_list ELIF test COLON suite.    (131)
+
+	.  reduce 131 (src line 888)
+
+
+state 489
+	for_stmt:  FOR exprlist IN testlist COLON suite ELSE COLON suite.    (139)
+
+	.  reduce 139 (src line 967)
+
+
+state 490
+	try_stmt:  TRY COLON suite except_list ELSE COLON suite FINALLY COLON.suite 
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	NEWLINE  shift 208
+	ASSERT  shift 48
+	BREAK  shift 39
+	CONTINUE  shift 40
+	DEL  shift 38
+	EXEC  shift 47
+	FROM  shift 55
+	GLOBAL  shift 46
+	IMPORT  shift 54
+	LAMBDA  shift 62
+	NONE  shift 81
+	NOT  shift 65
+	PASS  shift 21
+	PRINT  shift 37
+	RAISE  shift 52
+	RETURN  shift 51
+	YIELD  shift 58
+	ADD  shift 86
+	BACK_QUOTE  shift 80
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	.  error
+
+	import_from  goto 45
+	import_name  goto 44
+	import_stmt  goto 23
+	simple_stmt  goto 207
+	small_stmt  goto 9
+	suite  goto 494
+	assert_stmt  goto 26
+	del_stmt  goto 20
+	exec_stmt  goto 25
+	expr_stmt  goto 18
+	flow_stmt  goto 22
+	global_stmt  goto 24
+	print_stmt  goto 19
+	raise_stmt  goto 42
+	return_stmt  goto 41
+	yield_stmt  goto 43
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	and_expr  goto 68
+	arith_expr  goto 70
+	assign_expr  goto 35
+	atom  goto 75
+	comparison  goto 64
+	expr  goto 66
+	factor  goto 72
+	lambdadef  goto 60
+	or_test  goto 59
+	and_test  goto 61
+	not_test  goto 63
+	power  goto 73
+	shift_expr  goto 69
+	term  goto 71
+	test  goto 57
+	xor_expr  goto 67
+	yield_expr  goto 53
+	testlist  goto 36
+	testlist_strict  goto 50
+
+state 491
+	argumentlist_strict:  argumentlist_strict COMMA.argument 
+	arglist:  argumentlist_strict COMMA STAR test COMMA argumentlist_strict COMMA.STAR_STAR test 
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	LAMBDA  shift 62
+	NONE  shift 81
+	NOT  shift 65
+	ADD  shift 86
+	BACK_QUOTE  shift 80
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	STAR_STAR  shift 495
+	.  error
+
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	and_expr  goto 68
+	arith_expr  goto 70
+	atom  goto 75
+	comparison  goto 64
+	expr  goto 66
+	factor  goto 72
+	lambdadef  goto 60
+	or_test  goto 59
+	and_test  goto 61
+	not_test  goto 63
+	power  goto 73
+	shift_expr  goto 69
+	term  goto 71
+	test  goto 271
+	xor_expr  goto 67
+	argument  goto 395
+
+state 492
+	arglist:  argumentlist_strict COMMA STAR test COMMA STAR_STAR test.    (284)
+
+	.  reduce 284 (src line 1701)
+
+
+state 493
+	arglist:  STAR test COMMA argumentlist_strict COMMA STAR_STAR test.    (290)
+
+	.  reduce 290 (src line 1742)
+
+
+state 494
+	try_stmt:  TRY COLON suite except_list ELSE COLON suite FINALLY COLON suite.    (145)
+
+	.  reduce 145 (src line 1010)
+
+
+state 495
+	arglist:  argumentlist_strict COMMA STAR test COMMA argumentlist_strict COMMA STAR_STAR.test 
+
+	FLOAT  shift 84
+	INTEGER  shift 83
+	STRING  shift 89
+	NAME  shift 82
+	LAMBDA  shift 62
+	NONE  shift 81
+	NOT  shift 65
+	ADD  shift 86
+	BACK_QUOTE  shift 80
+	LEFT_BRACE  shift 79
+	LEFT_BRACKET  shift 78
+	LEFT_PARENTHESIS  shift 77
+	MINUS  shift 87
+	NOT_OP  shift 88
+	.  error
+
+	factor_sign  goto 76
+	factor_signs  goto 74
+	strings  goto 85
+	and_expr  goto 68
+	arith_expr  goto 70
+	atom  goto 75
+	comparison  goto 64
+	expr  goto 66
+	factor  goto 72
+	lambdadef  goto 60
+	or_test  goto 59
+	and_test  goto 61
+	not_test  goto 63
+	power  goto 73
+	shift_expr  goto 69
+	term  goto 71
+	test  goto 496
+	xor_expr  goto 67
+
+state 496
+	arglist:  argumentlist_strict COMMA STAR test COMMA argumentlist_strict COMMA STAR_STAR test.    (285)
+
+	.  reduce 285 (src line 1710)
+
+
+90 terminals, 107 nonterminals
+307 grammar rules, 497/2000 states
+38 shift/reduce, 0 reduce/reduce conflicts reported
+156 working sets used
+memory: parser 4108/30000
+234 extra closures
+2381 shift entries, 1 exceptions
+289 goto entries
+2476 entries saved by goto default
+Optimizer space used: output 1297/30000
+1297 table entries, 379 zero
+maximum spread: 90, maximum offset: 495
