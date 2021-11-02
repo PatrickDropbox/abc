@@ -1,0 +1,267 @@
+
+state 0
+	$accept: .grammar $end 
+
+	TOKEN  shift 7
+	TYPE  shift 8
+	START  shift 5
+	RULE_DEF  shift 9
+	.  error
+
+	rword  goto 4
+	def  goto 3
+	defs  goto 2
+	rule  goto 6
+	grammar  goto 1
+
+state 1
+	$accept:  grammar.$end 
+
+	$end  accept
+	.  error
+
+
+state 2
+	grammar:  defs.additional_sections 
+	defs:  defs.def 
+	defs:  defs.def SEMICOLON 
+	additional_sections: .    (3)
+
+	TOKEN  shift 7
+	TYPE  shift 8
+	START  shift 5
+	RULE_DEF  shift 9
+	.  reduce 3 (src line 81)
+
+	rword  goto 4
+	def  goto 11
+	rule  goto 6
+	additional_sections  goto 10
+
+state 3
+	defs:  def.    (7)
+	defs:  def.SEMICOLON 
+
+	SEMICOLON  shift 12
+	.  reduce 7 (src line 101)
+
+
+state 4
+	def:  rword.LT IDENTIFIER GT nonempty_ident_list 
+
+	LT  shift 13
+	.  error
+
+
+state 5
+	def:  START.IDENTIFIER 
+
+	IDENTIFIER  shift 14
+	.  error
+
+
+state 6
+	def:  rule.    (11)
+
+	.  reduce 11 (src line 122)
+
+
+state 7
+	rword:  TOKEN.    (12)
+
+	.  reduce 12 (src line 127)
+
+
+state 8
+	rword:  TYPE.    (13)
+
+	.  reduce 13 (src line 131)
+
+
+state 9
+	rule:  RULE_DEF.ident_list 
+	rule:  RULE_DEF.labeled_clauses 
+	ident_list: .    (17)
+
+	LABEL  shift 20
+	IDENTIFIER  shift 19
+	.  reduce 17 (src line 151)
+
+	nonempty_ident_list  goto 17
+	ident_list  goto 15
+	labeled_clause  goto 18
+	labeled_clauses  goto 16
+
+state 10
+	grammar:  defs additional_sections.    (1)
+	additional_sections:  additional_sections.additional_section 
+
+	SECTION_MARKER  shift 22
+	.  reduce 1 (src line 71)
+
+	additional_section  goto 21
+
+state 11
+	defs:  defs def.    (5)
+	defs:  defs def.SEMICOLON 
+
+	SEMICOLON  shift 23
+	.  reduce 5 (src line 93)
+
+
+state 12
+	defs:  def SEMICOLON.    (8)
+
+	.  reduce 8 (src line 105)
+
+
+state 13
+	def:  rword LT.IDENTIFIER GT nonempty_ident_list 
+
+	IDENTIFIER  shift 24
+	.  error
+
+
+state 14
+	def:  START IDENTIFIER.    (10)
+
+	.  reduce 10 (src line 117)
+
+
+state 15
+	rule:  RULE_DEF ident_list.    (18)
+
+	.  reduce 18 (src line 156)
+
+
+state 16
+	rule:  RULE_DEF labeled_clauses.    (19)
+	labeled_clauses:  labeled_clauses.OR labeled_clause 
+
+	OR  shift 25
+	.  reduce 19 (src line 160)
+
+
+state 17
+	nonempty_ident_list:  nonempty_ident_list.IDENTIFIER 
+	ident_list:  nonempty_ident_list.    (16)
+
+	IDENTIFIER  shift 26
+	.  reduce 16 (src line 147)
+
+
+state 18
+	labeled_clauses:  labeled_clause.    (21)
+
+	.  reduce 21 (src line 170)
+
+
+state 19
+	nonempty_ident_list:  IDENTIFIER.    (15)
+
+	.  reduce 15 (src line 141)
+
+
+state 20
+	labeled_clause:  LABEL.ident_list 
+	ident_list: .    (17)
+
+	IDENTIFIER  shift 19
+	.  reduce 17 (src line 151)
+
+	nonempty_ident_list  goto 17
+	ident_list  goto 27
+
+state 21
+	additional_sections:  additional_sections additional_section.    (2)
+
+	.  reduce 2 (src line 77)
+
+
+state 22
+	additional_section:  SECTION_MARKER.IDENTIFIER SECTION_CONTENT 
+
+	IDENTIFIER  shift 28
+	.  error
+
+
+state 23
+	defs:  defs def SEMICOLON.    (6)
+
+	.  reduce 6 (src line 97)
+
+
+state 24
+	def:  rword LT IDENTIFIER.GT nonempty_ident_list 
+
+	GT  shift 29
+	.  error
+
+
+state 25
+	labeled_clauses:  labeled_clauses OR.labeled_clause 
+
+	LABEL  shift 20
+	.  error
+
+	labeled_clause  goto 30
+
+state 26
+	nonempty_ident_list:  nonempty_ident_list IDENTIFIER.    (14)
+
+	.  reduce 14 (src line 137)
+
+
+state 27
+	labeled_clause:  LABEL ident_list.    (22)
+
+	.  reduce 22 (src line 176)
+
+
+state 28
+	additional_section:  SECTION_MARKER IDENTIFIER.SECTION_CONTENT 
+
+	SECTION_CONTENT  shift 31
+	.  error
+
+
+state 29
+	def:  rword LT IDENTIFIER GT.nonempty_ident_list 
+
+	IDENTIFIER  shift 19
+	.  error
+
+	nonempty_ident_list  goto 32
+
+state 30
+	labeled_clauses:  labeled_clauses OR labeled_clause.    (20)
+
+	.  reduce 20 (src line 166)
+
+
+state 31
+	additional_section:  SECTION_MARKER IDENTIFIER SECTION_CONTENT.    (4)
+
+	.  reduce 4 (src line 87)
+
+
+state 32
+	def:  rword LT IDENTIFIER GT nonempty_ident_list.    (9)
+	nonempty_ident_list:  nonempty_ident_list.IDENTIFIER 
+
+	IDENTIFIER  shift 26
+	.  reduce 9 (src line 112)
+
+
+17 terminals, 12 nonterminals
+23 grammar rules, 33/8000 states
+0 shift/reduce, 0 reduce/reduce conflicts reported
+61 working sets used
+memory: parser 17/120000
+3 extra closures
+25 shift entries, 1 exceptions
+15 goto entries
+3 entries saved by goto default
+Optimizer space used: output 34/120000
+34 table entries, 0 zero
+maximum spread: 17, maximum offset: 29
