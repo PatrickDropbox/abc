@@ -1,0 +1,11 @@
+// Classic example of canonical LR(1) grammar that's not in LALR
+%token<Token> a b c
+%type<Token> A B S
+
+S ->
+    a: a A a |
+    b: b A b |
+    c: a B b |
+    d: b B a
+A -> c
+B -> c

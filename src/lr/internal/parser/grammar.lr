@@ -1,0 +1,112 @@
+// NOTE:
+// - there's section separator between term and rule declaration.
+// - line terminator ';' is optional
+// - all language specific declaration are specified at the end of the file
+
+// XXX: maybe add LEFT / RIGHT / NONASSOC?
+%token <Token> TOKEN TYPE START // %<identifier>
+
+// <identifier> followed by -> (ignoring whitespace and comment), tokenized as a
+// single token by the lexer.  Equivalent to C_IDENTIFIER in yacc
+%token <Token> RULE_DEF
+
+// <identifier> followed by : (ignoring whitespace and comment), tokenized as
+// a single token by the lexer.
+%token <Token> LABEL
+
+%token <Token> LT GT OR SEMICOLON
+%token <Token> IDENTIFIER
+
+%token <Token> SECTION_MARKER SECTION_CONTENT
+
+%type <Token> rword
+%type <Tokens> nonempty_ident_list ident_list
+
+%type <Definition> def
+%type <Definitions> defs
+
+%type <Rule> rule
+
+%type <Clause> labeled_clause
+%type <Clauses> labeled_clauses
+
+%type <AdditionalSection> additional_section
+%type <AdditionalSections> additional_sections
+
+%type <Grammar>  grammar
+
+%start grammar
+
+// NOTE: there's no tail and section separator, line terminator ';' is optional
+
+grammar -> defs additional_sections
+
+additional_sections ->
+    add : additional_sections additional_section |
+    nil :
+
+additional_section -> SECTION_MARKER IDENTIFIER SECTION_CONTENT
+
+defs ->
+    add          : defs def |
+    add_explicit : defs def SEMICOLON |
+    def          : def |
+    explicit_def : def SEMICOLON
+
+// TODO: handle language specific boiler plate, union/struct
+def ->
+    // type / token declaration
+    term_decl  : rword LT IDENTIFIER GT nonempty_ident_list |
+    // start declaration
+    start_decl : START IDENTIFIER |
+    rule       : rule
+
+rword ->
+    token : TOKEN |
+    type  : TYPE
+
+nonempty_ident_list ->
+    add   : nonempty_ident_list IDENTIFIER |
+    ident : IDENTIFIER
+
+ident_list ->
+    non_empty_list : nonempty_ident_list |
+    nil   :
+
+rule ->
+    unlabeled_clause : RULE_DEF ident_list |
+    clauses          : RULE_DEF labeled_clauses
+
+labeled_clauses ->
+    add    : labeled_clauses OR labeled_clause |
+    clause : labeled_clause
+
+labeled_clause -> LABEL ident_list
+
+%%lang_specs{
+# The additional lang_specs section is specified in yaml
+go:
+    # This replaces yacc head section boilerplate
+    # %{
+    # package parser
+    # %}
+    package: parser
+
+    # This replaces goyacc's -p option
+    prefix: LR
+
+    # This replaces %union{}
+    value_types:
+        Token:              "*Token"
+        Tokens:             "[]*Token"
+        Definition:         "Definition"
+        Definitions:        "[]Definition"
+        Rule:               "*Rule"
+        Clause:             "*Clause"
+        Clauses:            "[]*Clause"
+        AdditionalSection:  "*AdditionalSection"
+        AdditionalSections: "[]*AdditionalSection"
+        Grammar:            "*Grammar"
+java:
+    some other yet to be determined spec, etc.
+}%%
