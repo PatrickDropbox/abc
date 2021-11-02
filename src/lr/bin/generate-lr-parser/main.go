@@ -18,7 +18,7 @@ import (
 func main() {
 	useYacc := flag.Bool(
 		"use-yacc",
-		true,
+		false,
 		"Use yacc generated parser instead of bootstrap parser")
 
 	shouldPrintTokens := flag.Bool("print-tokens", false, "For testing only")
