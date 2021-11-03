@@ -123,7 +123,7 @@ type LRParseErrorHandler interface {
 type LRDefaultParseErrorHandler struct{}
 
 func (LRDefaultParseErrorHandler) Error(nextToken LRSymbol, stack _LRStack) error {
-	return fmt.Errorf("Syntax error: unexpected %v (%v)", nextToken.Id(), nextToken.Location())
+	return fmt.Errorf("Syntax error: unexpected symbol %v. Expecting: %v (%v)", nextToken.Id(), _LRExpectedTerminals[stack[len(stack)-1].StateId], nextToken.Location())
 }
 
 func LRParse(lexer LRLexer, reducer LRReducer) (*Grammar, error) {
@@ -270,7 +270,6 @@ const (
 	_LRState30 = _LRStateId("State 30")
 	_LRState31 = _LRStateId("State 31")
 	_LRState32 = _LRStateId("State 32")
-	_LRState33 = _LRStateId("State 33")
 )
 
 type _LRSymbol struct {
@@ -589,26 +588,25 @@ var _LRActionTable = _LRActionTableType{
 	{_LRState7, _LRRuleSymbol}:               {_LRShiftAction, _LRState8, ""},
 	{_LRState9, LRLtSymbol}:                  {_LRShiftAction, _LRState20, ""},
 	{_LRState11, LRIdentifierSymbol}:         {_LRShiftAction, _LRState10, ""},
-	{_LRState11, _LRNonemptyIdentListSymbol}: {_LRShiftAction, _LRState22, ""},
+	{_LRState11, _LRNonemptyIdentListSymbol}: {_LRShiftAction, _LRState15, ""},
 	{_LRState11, _LRIdentListSymbol}:         {_LRShiftAction, _LRState21, ""},
-	{_LRState14, LROrSymbol}:                 {_LRShiftAction, _LRState23, ""},
-	{_LRState15, LRIdentifierSymbol}:         {_LRShiftAction, _LRState24, ""},
-	{_LRState18, LRSectionMarkerSymbol}:      {_LRShiftAction, _LRState25, ""},
-	{_LRState18, _LRAdditionalSectionSymbol}: {_LRShiftAction, _LRState26, ""},
-	{_LRState19, LRSemicolonSymbol}:          {_LRShiftAction, _LRState27, ""},
-	{_LRState20, LRIdentifierSymbol}:         {_LRShiftAction, _LRState28, ""},
-	{_LRState22, LRIdentifierSymbol}:         {_LRShiftAction, _LRState24, ""},
-	{_LRState23, LRLabelSymbol}:              {_LRShiftAction, _LRState11, ""},
-	{_LRState23, _LRLabeledClauseSymbol}:     {_LRShiftAction, _LRState29, ""},
-	{_LRState25, LRIdentifierSymbol}:         {_LRShiftAction, _LRState30, ""},
-	{_LRState28, LRGtSymbol}:                 {_LRShiftAction, _LRState31, ""},
-	{_LRState30, LRSectionContentSymbol}:     {_LRShiftAction, _LRState32, ""},
-	{_LRState31, LRIdentifierSymbol}:         {_LRShiftAction, _LRState10, ""},
-	{_LRState31, _LRNonemptyIdentListSymbol}: {_LRShiftAction, _LRState33, ""},
-	{_LRState33, LRIdentifierSymbol}:         {_LRShiftAction, _LRState24, ""},
+	{_LRState14, LROrSymbol}:                 {_LRShiftAction, _LRState22, ""},
+	{_LRState15, LRIdentifierSymbol}:         {_LRShiftAction, _LRState23, ""},
+	{_LRState18, LRSectionMarkerSymbol}:      {_LRShiftAction, _LRState24, ""},
+	{_LRState18, _LRAdditionalSectionSymbol}: {_LRShiftAction, _LRState25, ""},
+	{_LRState19, LRSemicolonSymbol}:          {_LRShiftAction, _LRState26, ""},
+	{_LRState20, LRIdentifierSymbol}:         {_LRShiftAction, _LRState27, ""},
+	{_LRState22, LRLabelSymbol}:              {_LRShiftAction, _LRState11, ""},
+	{_LRState22, _LRLabeledClauseSymbol}:     {_LRShiftAction, _LRState28, ""},
+	{_LRState24, LRIdentifierSymbol}:         {_LRShiftAction, _LRState29, ""},
+	{_LRState27, LRGtSymbol}:                 {_LRShiftAction, _LRState30, ""},
+	{_LRState29, LRSectionContentSymbol}:     {_LRShiftAction, _LRState31, ""},
+	{_LRState30, LRIdentifierSymbol}:         {_LRShiftAction, _LRState10, ""},
+	{_LRState30, _LRNonemptyIdentListSymbol}: {_LRShiftAction, _LRState32, ""},
+	{_LRState32, LRIdentifierSymbol}:         {_LRShiftAction, _LRState23, ""},
 	{_LRState2, _LRWildcardMarker}:           {_LRReduceAction, "", _LRReduceNilToIdentList},
-	{_LRState4, _LRWildcardMarker}:           {_LRReduceAction, "", _LRReduceTokenToRword},
-	{_LRState5, _LRWildcardMarker}:           {_LRReduceAction, "", _LRReduceTypeToRword},
+	{_LRState4, LRLtSymbol}:                  {_LRReduceAction, "", _LRReduceTokenToRword},
+	{_LRState5, LRLtSymbol}:                  {_LRReduceAction, "", _LRReduceTypeToRword},
 	{_LRState6, _LRWildcardMarker}:           {_LRReduceAction, "", _LRReduceDefToDefs},
 	{_LRState7, _LRWildcardMarker}:           {_LRReduceAction, "", _LRReduceNilToAdditionalSections},
 	{_LRState8, _LRWildcardMarker}:           {_LRReduceAction, "", _LRReduceRuleToDef},
@@ -620,86 +618,59 @@ var _LRActionTable = _LRActionTableType{
 	{_LRState15, _LRWildcardMarker}:          {_LRReduceAction, "", _LRReduceNonEmptyListToIdentList},
 	{_LRState16, _LRWildcardMarker}:          {_LRReduceAction, "", _LRReduceStartDeclToDef},
 	{_LRState17, _LRWildcardMarker}:          {_LRReduceAction, "", _LRReduceExplicitDefToDefs},
-	{_LRState18, _LRWildcardMarker}:          {_LRReduceAction, "", _LRReduceToGrammar},
+	{_LRState18, _LREndMarker}:               {_LRReduceAction, "", _LRReduceToGrammar},
 	{_LRState19, _LRWildcardMarker}:          {_LRReduceAction, "", _LRReduceAddToDefs},
 	{_LRState21, _LRWildcardMarker}:          {_LRReduceAction, "", _LRReduceToLabeledClause},
-	{_LRState22, _LRWildcardMarker}:          {_LRReduceAction, "", _LRReduceNonEmptyListToIdentList},
-	{_LRState24, _LRWildcardMarker}:          {_LRReduceAction, "", _LRReduceAddToNonemptyIdentList},
-	{_LRState26, _LRWildcardMarker}:          {_LRReduceAction, "", _LRReduceAddToAdditionalSections},
-	{_LRState27, _LRWildcardMarker}:          {_LRReduceAction, "", _LRReduceAddExplicitToDefs},
-	{_LRState29, _LRWildcardMarker}:          {_LRReduceAction, "", _LRReduceAddToLabeledClauses},
-	{_LRState32, _LRWildcardMarker}:          {_LRReduceAction, "", _LRReduceToAdditionalSection},
-	{_LRState33, _LRWildcardMarker}:          {_LRReduceAction, "", _LRReduceTermDeclToDef},
+	{_LRState23, _LRWildcardMarker}:          {_LRReduceAction, "", _LRReduceAddToNonemptyIdentList},
+	{_LRState25, _LRWildcardMarker}:          {_LRReduceAction, "", _LRReduceAddToAdditionalSections},
+	{_LRState26, _LRWildcardMarker}:          {_LRReduceAction, "", _LRReduceAddExplicitToDefs},
+	{_LRState28, _LRWildcardMarker}:          {_LRReduceAction, "", _LRReduceAddToLabeledClauses},
+	{_LRState31, _LRWildcardMarker}:          {_LRReduceAction, "", _LRReduceToAdditionalSection},
+	{_LRState32, _LRWildcardMarker}:          {_LRReduceAction, "", _LRReduceTermDeclToDef},
+}
+
+var _LRExpectedTerminals = map[_LRStateId][]LRSymbolId{
+	_LRState0:  []LRSymbolId{LRTokenSymbol, LRTypeSymbol, LRStartSymbol, LRRuleDefSymbol},
+	_LRState1:  []LRSymbolId{_LREndMarker},
+	_LRState2:  []LRSymbolId{LRLabelSymbol, LRIdentifierSymbol},
+	_LRState3:  []LRSymbolId{LRIdentifierSymbol},
+	_LRState4:  []LRSymbolId{LRLtSymbol},
+	_LRState5:  []LRSymbolId{LRLtSymbol},
+	_LRState6:  []LRSymbolId{LRSemicolonSymbol},
+	_LRState7:  []LRSymbolId{LRTokenSymbol, LRTypeSymbol, LRStartSymbol, LRRuleDefSymbol},
+	_LRState9:  []LRSymbolId{LRLtSymbol},
+	_LRState11: []LRSymbolId{LRIdentifierSymbol},
+	_LRState14: []LRSymbolId{LROrSymbol},
+	_LRState15: []LRSymbolId{LRIdentifierSymbol},
+	_LRState18: []LRSymbolId{LRSectionMarkerSymbol, _LREndMarker},
+	_LRState19: []LRSymbolId{LRSemicolonSymbol},
+	_LRState20: []LRSymbolId{LRIdentifierSymbol},
+	_LRState22: []LRSymbolId{LRLabelSymbol},
+	_LRState24: []LRSymbolId{LRIdentifierSymbol},
+	_LRState27: []LRSymbolId{LRGtSymbol},
+	_LRState29: []LRSymbolId{LRSectionContentSymbol},
+	_LRState30: []LRSymbolId{LRIdentifierSymbol},
+	_LRState32: []LRSymbolId{LRIdentifierSymbol},
 }
 
 /*
 Parser Debug States:
   State 0:
     Kernel Items:
-      #accept:^.grammar,$
+      #accept:^.grammar
     Non-kernel Items:
-      def:.START IDENTIFIER,$
-      def:.START IDENTIFIER,RULE_DEF
-      def:.START IDENTIFIER,SECTION_MARKER
-      def:.START IDENTIFIER,SEMICOLON
-      def:.START IDENTIFIER,START
-      def:.START IDENTIFIER,TOKEN
-      def:.START IDENTIFIER,TYPE
-      def:.rule,$
-      def:.rule,RULE_DEF
-      def:.rule,SECTION_MARKER
-      def:.rule,SEMICOLON
-      def:.rule,START
-      def:.rule,TOKEN
-      def:.rule,TYPE
-      def:.rword LT IDENTIFIER GT nonempty_ident_list,$
-      def:.rword LT IDENTIFIER GT nonempty_ident_list,RULE_DEF
-      def:.rword LT IDENTIFIER GT nonempty_ident_list,SECTION_MARKER
-      def:.rword LT IDENTIFIER GT nonempty_ident_list,SEMICOLON
-      def:.rword LT IDENTIFIER GT nonempty_ident_list,START
-      def:.rword LT IDENTIFIER GT nonempty_ident_list,TOKEN
-      def:.rword LT IDENTIFIER GT nonempty_ident_list,TYPE
-      defs:.def,$
-      defs:.def,RULE_DEF
-      defs:.def,SECTION_MARKER
-      defs:.def,START
-      defs:.def,TOKEN
-      defs:.def,TYPE
-      defs:.def SEMICOLON,$
-      defs:.def SEMICOLON,RULE_DEF
-      defs:.def SEMICOLON,SECTION_MARKER
-      defs:.def SEMICOLON,START
-      defs:.def SEMICOLON,TOKEN
-      defs:.def SEMICOLON,TYPE
-      defs:.defs def,$
-      defs:.defs def,RULE_DEF
-      defs:.defs def,SECTION_MARKER
-      defs:.defs def,START
-      defs:.defs def,TOKEN
-      defs:.defs def,TYPE
-      defs:.defs def SEMICOLON,$
-      defs:.defs def SEMICOLON,RULE_DEF
-      defs:.defs def SEMICOLON,SECTION_MARKER
-      defs:.defs def SEMICOLON,START
-      defs:.defs def SEMICOLON,TOKEN
-      defs:.defs def SEMICOLON,TYPE
-      grammar:.defs additional_sections,$
-      rule:.RULE_DEF ident_list,$
-      rule:.RULE_DEF ident_list,RULE_DEF
-      rule:.RULE_DEF ident_list,SECTION_MARKER
-      rule:.RULE_DEF ident_list,SEMICOLON
-      rule:.RULE_DEF ident_list,START
-      rule:.RULE_DEF ident_list,TOKEN
-      rule:.RULE_DEF ident_list,TYPE
-      rule:.RULE_DEF labeled_clauses,$
-      rule:.RULE_DEF labeled_clauses,RULE_DEF
-      rule:.RULE_DEF labeled_clauses,SECTION_MARKER
-      rule:.RULE_DEF labeled_clauses,SEMICOLON
-      rule:.RULE_DEF labeled_clauses,START
-      rule:.RULE_DEF labeled_clauses,TOKEN
-      rule:.RULE_DEF labeled_clauses,TYPE
-      rword:.TOKEN,LT
-      rword:.TYPE,LT
+      def:.START IDENTIFIER
+      def:.rule
+      def:.rword LT IDENTIFIER GT nonempty_ident_list
+      defs:.def
+      defs:.def SEMICOLON
+      defs:.defs def
+      defs:.defs def SEMICOLON
+      grammar:.defs additional_sections
+      rule:.RULE_DEF ident_list
+      rule:.RULE_DEF labeled_clauses
+      rword:.TOKEN
+      rword:.TYPE
     Reduce:
       (nil)
     Goto:
@@ -723,69 +694,16 @@ Parser Debug States:
 
   State 2:
     Kernel Items:
-      rule:RULE_DEF.ident_list,$
-      rule:RULE_DEF.ident_list,RULE_DEF
-      rule:RULE_DEF.ident_list,SECTION_MARKER
-      rule:RULE_DEF.ident_list,SEMICOLON
-      rule:RULE_DEF.ident_list,START
-      rule:RULE_DEF.ident_list,TOKEN
-      rule:RULE_DEF.ident_list,TYPE
-      rule:RULE_DEF.labeled_clauses,$
-      rule:RULE_DEF.labeled_clauses,RULE_DEF
-      rule:RULE_DEF.labeled_clauses,SECTION_MARKER
-      rule:RULE_DEF.labeled_clauses,SEMICOLON
-      rule:RULE_DEF.labeled_clauses,START
-      rule:RULE_DEF.labeled_clauses,TOKEN
-      rule:RULE_DEF.labeled_clauses,TYPE
+      rule:RULE_DEF.ident_list
+      rule:RULE_DEF.labeled_clauses
     Non-kernel Items:
       ident_list:.,*
-      ident_list:.nonempty_ident_list,$
-      ident_list:.nonempty_ident_list,RULE_DEF
-      ident_list:.nonempty_ident_list,SECTION_MARKER
-      ident_list:.nonempty_ident_list,SEMICOLON
-      ident_list:.nonempty_ident_list,START
-      ident_list:.nonempty_ident_list,TOKEN
-      ident_list:.nonempty_ident_list,TYPE
-      labeled_clause:.LABEL ident_list,$
-      labeled_clause:.LABEL ident_list,OR
-      labeled_clause:.LABEL ident_list,RULE_DEF
-      labeled_clause:.LABEL ident_list,SECTION_MARKER
-      labeled_clause:.LABEL ident_list,SEMICOLON
-      labeled_clause:.LABEL ident_list,START
-      labeled_clause:.LABEL ident_list,TOKEN
-      labeled_clause:.LABEL ident_list,TYPE
-      labeled_clauses:.labeled_clause,$
-      labeled_clauses:.labeled_clause,OR
-      labeled_clauses:.labeled_clause,RULE_DEF
-      labeled_clauses:.labeled_clause,SECTION_MARKER
-      labeled_clauses:.labeled_clause,SEMICOLON
-      labeled_clauses:.labeled_clause,START
-      labeled_clauses:.labeled_clause,TOKEN
-      labeled_clauses:.labeled_clause,TYPE
-      labeled_clauses:.labeled_clauses OR labeled_clause,$
-      labeled_clauses:.labeled_clauses OR labeled_clause,OR
-      labeled_clauses:.labeled_clauses OR labeled_clause,RULE_DEF
-      labeled_clauses:.labeled_clauses OR labeled_clause,SECTION_MARKER
-      labeled_clauses:.labeled_clauses OR labeled_clause,SEMICOLON
-      labeled_clauses:.labeled_clauses OR labeled_clause,START
-      labeled_clauses:.labeled_clauses OR labeled_clause,TOKEN
-      labeled_clauses:.labeled_clauses OR labeled_clause,TYPE
-      nonempty_ident_list:.IDENTIFIER,$
-      nonempty_ident_list:.IDENTIFIER,IDENTIFIER
-      nonempty_ident_list:.IDENTIFIER,RULE_DEF
-      nonempty_ident_list:.IDENTIFIER,SECTION_MARKER
-      nonempty_ident_list:.IDENTIFIER,SEMICOLON
-      nonempty_ident_list:.IDENTIFIER,START
-      nonempty_ident_list:.IDENTIFIER,TOKEN
-      nonempty_ident_list:.IDENTIFIER,TYPE
-      nonempty_ident_list:.nonempty_ident_list IDENTIFIER,$
-      nonempty_ident_list:.nonempty_ident_list IDENTIFIER,IDENTIFIER
-      nonempty_ident_list:.nonempty_ident_list IDENTIFIER,RULE_DEF
-      nonempty_ident_list:.nonempty_ident_list IDENTIFIER,SECTION_MARKER
-      nonempty_ident_list:.nonempty_ident_list IDENTIFIER,SEMICOLON
-      nonempty_ident_list:.nonempty_ident_list IDENTIFIER,START
-      nonempty_ident_list:.nonempty_ident_list IDENTIFIER,TOKEN
-      nonempty_ident_list:.nonempty_ident_list IDENTIFIER,TYPE
+      ident_list:.nonempty_ident_list
+      labeled_clause:.LABEL ident_list
+      labeled_clauses:.labeled_clause
+      labeled_clauses:.labeled_clauses OR labeled_clause
+      nonempty_ident_list:.IDENTIFIER
+      nonempty_ident_list:.nonempty_ident_list IDENTIFIER
     Reduce:
       * -> [ident_list]
     Goto:
@@ -798,13 +716,7 @@ Parser Debug States:
 
   State 3:
     Kernel Items:
-      def:START.IDENTIFIER,$
-      def:START.IDENTIFIER,RULE_DEF
-      def:START.IDENTIFIER,SECTION_MARKER
-      def:START.IDENTIFIER,SEMICOLON
-      def:START.IDENTIFIER,START
-      def:START.IDENTIFIER,TOKEN
-      def:START.IDENTIFIER,TYPE
+      def:START.IDENTIFIER
     Reduce:
       (nil)
     Goto:
@@ -812,29 +724,24 @@ Parser Debug States:
 
   State 4:
     Kernel Items:
-      rword:TOKEN.,*
+      rword:TOKEN.,LT
     Reduce:
-      * -> [rword]
+      LT -> [rword]
     Goto:
       (nil)
 
   State 5:
     Kernel Items:
-      rword:TYPE.,*
+      rword:TYPE.,LT
     Reduce:
-      * -> [rword]
+      LT -> [rword]
     Goto:
       (nil)
 
   State 6:
     Kernel Items:
       defs:def.,*
-      defs:def.SEMICOLON,$
-      defs:def.SEMICOLON,RULE_DEF
-      defs:def.SEMICOLON,SECTION_MARKER
-      defs:def.SEMICOLON,START
-      defs:def.SEMICOLON,TOKEN
-      defs:def.SEMICOLON,TYPE
+      defs:def.SEMICOLON
     Reduce:
       * -> [defs]
     Goto:
@@ -842,60 +749,19 @@ Parser Debug States:
 
   State 7:
     Kernel Items:
-      defs:defs.def,$
-      defs:defs.def,RULE_DEF
-      defs:defs.def,SECTION_MARKER
-      defs:defs.def,START
-      defs:defs.def,TOKEN
-      defs:defs.def,TYPE
-      defs:defs.def SEMICOLON,$
-      defs:defs.def SEMICOLON,RULE_DEF
-      defs:defs.def SEMICOLON,SECTION_MARKER
-      defs:defs.def SEMICOLON,START
-      defs:defs.def SEMICOLON,TOKEN
-      defs:defs.def SEMICOLON,TYPE
-      grammar:defs.additional_sections,$
+      defs:defs.def
+      defs:defs.def SEMICOLON
+      grammar:defs.additional_sections
     Non-kernel Items:
       additional_sections:.,*
-      additional_sections:.additional_sections additional_section,$
-      additional_sections:.additional_sections additional_section,SECTION_MARKER
-      def:.START IDENTIFIER,$
-      def:.START IDENTIFIER,RULE_DEF
-      def:.START IDENTIFIER,SECTION_MARKER
-      def:.START IDENTIFIER,SEMICOLON
-      def:.START IDENTIFIER,START
-      def:.START IDENTIFIER,TOKEN
-      def:.START IDENTIFIER,TYPE
-      def:.rule,$
-      def:.rule,RULE_DEF
-      def:.rule,SECTION_MARKER
-      def:.rule,SEMICOLON
-      def:.rule,START
-      def:.rule,TOKEN
-      def:.rule,TYPE
-      def:.rword LT IDENTIFIER GT nonempty_ident_list,$
-      def:.rword LT IDENTIFIER GT nonempty_ident_list,RULE_DEF
-      def:.rword LT IDENTIFIER GT nonempty_ident_list,SECTION_MARKER
-      def:.rword LT IDENTIFIER GT nonempty_ident_list,SEMICOLON
-      def:.rword LT IDENTIFIER GT nonempty_ident_list,START
-      def:.rword LT IDENTIFIER GT nonempty_ident_list,TOKEN
-      def:.rword LT IDENTIFIER GT nonempty_ident_list,TYPE
-      rule:.RULE_DEF ident_list,$
-      rule:.RULE_DEF ident_list,RULE_DEF
-      rule:.RULE_DEF ident_list,SECTION_MARKER
-      rule:.RULE_DEF ident_list,SEMICOLON
-      rule:.RULE_DEF ident_list,START
-      rule:.RULE_DEF ident_list,TOKEN
-      rule:.RULE_DEF ident_list,TYPE
-      rule:.RULE_DEF labeled_clauses,$
-      rule:.RULE_DEF labeled_clauses,RULE_DEF
-      rule:.RULE_DEF labeled_clauses,SECTION_MARKER
-      rule:.RULE_DEF labeled_clauses,SEMICOLON
-      rule:.RULE_DEF labeled_clauses,START
-      rule:.RULE_DEF labeled_clauses,TOKEN
-      rule:.RULE_DEF labeled_clauses,TYPE
-      rword:.TOKEN,LT
-      rword:.TYPE,LT
+      additional_sections:.additional_sections additional_section
+      def:.START IDENTIFIER
+      def:.rule
+      def:.rword LT IDENTIFIER GT nonempty_ident_list
+      rule:.RULE_DEF ident_list
+      rule:.RULE_DEF labeled_clauses
+      rword:.TOKEN
+      rword:.TYPE
     Reduce:
       * -> [additional_sections]
     Goto:
@@ -918,13 +784,7 @@ Parser Debug States:
 
   State 9:
     Kernel Items:
-      def:rword.LT IDENTIFIER GT nonempty_ident_list,$
-      def:rword.LT IDENTIFIER GT nonempty_ident_list,RULE_DEF
-      def:rword.LT IDENTIFIER GT nonempty_ident_list,SECTION_MARKER
-      def:rword.LT IDENTIFIER GT nonempty_ident_list,SEMICOLON
-      def:rword.LT IDENTIFIER GT nonempty_ident_list,START
-      def:rword.LT IDENTIFIER GT nonempty_ident_list,TOKEN
-      def:rword.LT IDENTIFIER GT nonempty_ident_list,TYPE
+      def:rword.LT IDENTIFIER GT nonempty_ident_list
     Reduce:
       (nil)
     Goto:
@@ -940,47 +800,17 @@ Parser Debug States:
 
   State 11:
     Kernel Items:
-      labeled_clause:LABEL.ident_list,$
-      labeled_clause:LABEL.ident_list,OR
-      labeled_clause:LABEL.ident_list,RULE_DEF
-      labeled_clause:LABEL.ident_list,SECTION_MARKER
-      labeled_clause:LABEL.ident_list,SEMICOLON
-      labeled_clause:LABEL.ident_list,START
-      labeled_clause:LABEL.ident_list,TOKEN
-      labeled_clause:LABEL.ident_list,TYPE
+      labeled_clause:LABEL.ident_list
     Non-kernel Items:
       ident_list:.,*
-      ident_list:.nonempty_ident_list,$
-      ident_list:.nonempty_ident_list,OR
-      ident_list:.nonempty_ident_list,RULE_DEF
-      ident_list:.nonempty_ident_list,SECTION_MARKER
-      ident_list:.nonempty_ident_list,SEMICOLON
-      ident_list:.nonempty_ident_list,START
-      ident_list:.nonempty_ident_list,TOKEN
-      ident_list:.nonempty_ident_list,TYPE
-      nonempty_ident_list:.IDENTIFIER,$
-      nonempty_ident_list:.IDENTIFIER,IDENTIFIER
-      nonempty_ident_list:.IDENTIFIER,OR
-      nonempty_ident_list:.IDENTIFIER,RULE_DEF
-      nonempty_ident_list:.IDENTIFIER,SECTION_MARKER
-      nonempty_ident_list:.IDENTIFIER,SEMICOLON
-      nonempty_ident_list:.IDENTIFIER,START
-      nonempty_ident_list:.IDENTIFIER,TOKEN
-      nonempty_ident_list:.IDENTIFIER,TYPE
-      nonempty_ident_list:.nonempty_ident_list IDENTIFIER,$
-      nonempty_ident_list:.nonempty_ident_list IDENTIFIER,IDENTIFIER
-      nonempty_ident_list:.nonempty_ident_list IDENTIFIER,OR
-      nonempty_ident_list:.nonempty_ident_list IDENTIFIER,RULE_DEF
-      nonempty_ident_list:.nonempty_ident_list IDENTIFIER,SECTION_MARKER
-      nonempty_ident_list:.nonempty_ident_list IDENTIFIER,SEMICOLON
-      nonempty_ident_list:.nonempty_ident_list IDENTIFIER,START
-      nonempty_ident_list:.nonempty_ident_list IDENTIFIER,TOKEN
-      nonempty_ident_list:.nonempty_ident_list IDENTIFIER,TYPE
+      ident_list:.nonempty_ident_list
+      nonempty_ident_list:.IDENTIFIER
+      nonempty_ident_list:.nonempty_ident_list IDENTIFIER
     Reduce:
       * -> [ident_list]
     Goto:
       IDENTIFIER -> State 10
-      nonempty_ident_list -> State 22
+      nonempty_ident_list -> State 15
       ident_list -> State 21
 
   State 12:
@@ -1001,35 +831,21 @@ Parser Debug States:
 
   State 14:
     Kernel Items:
-      labeled_clauses:labeled_clauses.OR labeled_clause,$
-      labeled_clauses:labeled_clauses.OR labeled_clause,OR
-      labeled_clauses:labeled_clauses.OR labeled_clause,RULE_DEF
-      labeled_clauses:labeled_clauses.OR labeled_clause,SECTION_MARKER
-      labeled_clauses:labeled_clauses.OR labeled_clause,SEMICOLON
-      labeled_clauses:labeled_clauses.OR labeled_clause,START
-      labeled_clauses:labeled_clauses.OR labeled_clause,TOKEN
-      labeled_clauses:labeled_clauses.OR labeled_clause,TYPE
+      labeled_clauses:labeled_clauses.OR labeled_clause
       rule:RULE_DEF labeled_clauses.,*
     Reduce:
       * -> [rule]
     Goto:
-      OR -> State 23
+      OR -> State 22
 
   State 15:
     Kernel Items:
       ident_list:nonempty_ident_list.,*
-      nonempty_ident_list:nonempty_ident_list.IDENTIFIER,$
-      nonempty_ident_list:nonempty_ident_list.IDENTIFIER,IDENTIFIER
-      nonempty_ident_list:nonempty_ident_list.IDENTIFIER,RULE_DEF
-      nonempty_ident_list:nonempty_ident_list.IDENTIFIER,SECTION_MARKER
-      nonempty_ident_list:nonempty_ident_list.IDENTIFIER,SEMICOLON
-      nonempty_ident_list:nonempty_ident_list.IDENTIFIER,START
-      nonempty_ident_list:nonempty_ident_list.IDENTIFIER,TOKEN
-      nonempty_ident_list:nonempty_ident_list.IDENTIFIER,TYPE
+      nonempty_ident_list:nonempty_ident_list.IDENTIFIER
     Reduce:
       * -> [ident_list]
     Goto:
-      IDENTIFIER -> State 24
+      IDENTIFIER -> State 23
 
   State 16:
     Kernel Items:
@@ -1049,45 +865,32 @@ Parser Debug States:
 
   State 18:
     Kernel Items:
-      additional_sections:additional_sections.additional_section,$
-      additional_sections:additional_sections.additional_section,SECTION_MARKER
-      grammar:defs additional_sections.,*
+      additional_sections:additional_sections.additional_section
+      grammar:defs additional_sections.,$
     Non-kernel Items:
-      additional_section:.SECTION_MARKER IDENTIFIER SECTION_CONTENT,$
-      additional_section:.SECTION_MARKER IDENTIFIER SECTION_CONTENT,SECTION_MARKER
+      additional_section:.SECTION_MARKER IDENTIFIER SECTION_CONTENT
     Reduce:
-      * -> [grammar]
+      $ -> [grammar]
     Goto:
-      SECTION_MARKER -> State 25
-      additional_section -> State 26
+      SECTION_MARKER -> State 24
+      additional_section -> State 25
 
   State 19:
     Kernel Items:
       defs:defs def.,*
-      defs:defs def.SEMICOLON,$
-      defs:defs def.SEMICOLON,RULE_DEF
-      defs:defs def.SEMICOLON,SECTION_MARKER
-      defs:defs def.SEMICOLON,START
-      defs:defs def.SEMICOLON,TOKEN
-      defs:defs def.SEMICOLON,TYPE
+      defs:defs def.SEMICOLON
     Reduce:
       * -> [defs]
     Goto:
-      SEMICOLON -> State 27
+      SEMICOLON -> State 26
 
   State 20:
     Kernel Items:
-      def:rword LT.IDENTIFIER GT nonempty_ident_list,$
-      def:rword LT.IDENTIFIER GT nonempty_ident_list,RULE_DEF
-      def:rword LT.IDENTIFIER GT nonempty_ident_list,SECTION_MARKER
-      def:rword LT.IDENTIFIER GT nonempty_ident_list,SEMICOLON
-      def:rword LT.IDENTIFIER GT nonempty_ident_list,START
-      def:rword LT.IDENTIFIER GT nonempty_ident_list,TOKEN
-      def:rword LT.IDENTIFIER GT nonempty_ident_list,TYPE
+      def:rword LT.IDENTIFIER GT nonempty_ident_list
     Reduce:
       (nil)
     Goto:
-      IDENTIFIER -> State 28
+      IDENTIFIER -> State 27
 
   State 21:
     Kernel Items:
@@ -1099,47 +902,16 @@ Parser Debug States:
 
   State 22:
     Kernel Items:
-      ident_list:nonempty_ident_list.,*
-      nonempty_ident_list:nonempty_ident_list.IDENTIFIER,$
-      nonempty_ident_list:nonempty_ident_list.IDENTIFIER,IDENTIFIER
-      nonempty_ident_list:nonempty_ident_list.IDENTIFIER,OR
-      nonempty_ident_list:nonempty_ident_list.IDENTIFIER,RULE_DEF
-      nonempty_ident_list:nonempty_ident_list.IDENTIFIER,SECTION_MARKER
-      nonempty_ident_list:nonempty_ident_list.IDENTIFIER,SEMICOLON
-      nonempty_ident_list:nonempty_ident_list.IDENTIFIER,START
-      nonempty_ident_list:nonempty_ident_list.IDENTIFIER,TOKEN
-      nonempty_ident_list:nonempty_ident_list.IDENTIFIER,TYPE
-    Reduce:
-      * -> [ident_list]
-    Goto:
-      IDENTIFIER -> State 24
-
-  State 23:
-    Kernel Items:
-      labeled_clauses:labeled_clauses OR.labeled_clause,$
-      labeled_clauses:labeled_clauses OR.labeled_clause,OR
-      labeled_clauses:labeled_clauses OR.labeled_clause,RULE_DEF
-      labeled_clauses:labeled_clauses OR.labeled_clause,SECTION_MARKER
-      labeled_clauses:labeled_clauses OR.labeled_clause,SEMICOLON
-      labeled_clauses:labeled_clauses OR.labeled_clause,START
-      labeled_clauses:labeled_clauses OR.labeled_clause,TOKEN
-      labeled_clauses:labeled_clauses OR.labeled_clause,TYPE
+      labeled_clauses:labeled_clauses OR.labeled_clause
     Non-kernel Items:
-      labeled_clause:.LABEL ident_list,$
-      labeled_clause:.LABEL ident_list,OR
-      labeled_clause:.LABEL ident_list,RULE_DEF
-      labeled_clause:.LABEL ident_list,SECTION_MARKER
-      labeled_clause:.LABEL ident_list,SEMICOLON
-      labeled_clause:.LABEL ident_list,START
-      labeled_clause:.LABEL ident_list,TOKEN
-      labeled_clause:.LABEL ident_list,TYPE
+      labeled_clause:.LABEL ident_list
     Reduce:
       (nil)
     Goto:
       LABEL -> State 11
-      labeled_clause -> State 29
+      labeled_clause -> State 28
 
-  State 24:
+  State 23:
     Kernel Items:
       nonempty_ident_list:nonempty_ident_list IDENTIFIER.,*
     Reduce:
@@ -1147,16 +919,15 @@ Parser Debug States:
     Goto:
       (nil)
 
-  State 25:
+  State 24:
     Kernel Items:
-      additional_section:SECTION_MARKER.IDENTIFIER SECTION_CONTENT,$
-      additional_section:SECTION_MARKER.IDENTIFIER SECTION_CONTENT,SECTION_MARKER
+      additional_section:SECTION_MARKER.IDENTIFIER SECTION_CONTENT
     Reduce:
       (nil)
     Goto:
-      IDENTIFIER -> State 30
+      IDENTIFIER -> State 29
 
-  State 26:
+  State 25:
     Kernel Items:
       additional_sections:additional_sections additional_section.,*
     Reduce:
@@ -1164,7 +935,7 @@ Parser Debug States:
     Goto:
       (nil)
 
-  State 27:
+  State 26:
     Kernel Items:
       defs:defs def SEMICOLON.,*
     Reduce:
@@ -1172,21 +943,15 @@ Parser Debug States:
     Goto:
       (nil)
 
-  State 28:
+  State 27:
     Kernel Items:
-      def:rword LT IDENTIFIER.GT nonempty_ident_list,$
-      def:rword LT IDENTIFIER.GT nonempty_ident_list,RULE_DEF
-      def:rword LT IDENTIFIER.GT nonempty_ident_list,SECTION_MARKER
-      def:rword LT IDENTIFIER.GT nonempty_ident_list,SEMICOLON
-      def:rword LT IDENTIFIER.GT nonempty_ident_list,START
-      def:rword LT IDENTIFIER.GT nonempty_ident_list,TOKEN
-      def:rword LT IDENTIFIER.GT nonempty_ident_list,TYPE
+      def:rword LT IDENTIFIER.GT nonempty_ident_list
     Reduce:
       (nil)
     Goto:
-      GT -> State 31
+      GT -> State 30
 
-  State 29:
+  State 28:
     Kernel Items:
       labeled_clauses:labeled_clauses OR labeled_clause.,*
     Reduce:
@@ -1194,48 +959,27 @@ Parser Debug States:
     Goto:
       (nil)
 
-  State 30:
+  State 29:
     Kernel Items:
-      additional_section:SECTION_MARKER IDENTIFIER.SECTION_CONTENT,$
-      additional_section:SECTION_MARKER IDENTIFIER.SECTION_CONTENT,SECTION_MARKER
+      additional_section:SECTION_MARKER IDENTIFIER.SECTION_CONTENT
     Reduce:
       (nil)
     Goto:
-      SECTION_CONTENT -> State 32
+      SECTION_CONTENT -> State 31
 
-  State 31:
+  State 30:
     Kernel Items:
-      def:rword LT IDENTIFIER GT.nonempty_ident_list,$
-      def:rword LT IDENTIFIER GT.nonempty_ident_list,RULE_DEF
-      def:rword LT IDENTIFIER GT.nonempty_ident_list,SECTION_MARKER
-      def:rword LT IDENTIFIER GT.nonempty_ident_list,SEMICOLON
-      def:rword LT IDENTIFIER GT.nonempty_ident_list,START
-      def:rword LT IDENTIFIER GT.nonempty_ident_list,TOKEN
-      def:rword LT IDENTIFIER GT.nonempty_ident_list,TYPE
+      def:rword LT IDENTIFIER GT.nonempty_ident_list
     Non-kernel Items:
-      nonempty_ident_list:.IDENTIFIER,$
-      nonempty_ident_list:.IDENTIFIER,IDENTIFIER
-      nonempty_ident_list:.IDENTIFIER,RULE_DEF
-      nonempty_ident_list:.IDENTIFIER,SECTION_MARKER
-      nonempty_ident_list:.IDENTIFIER,SEMICOLON
-      nonempty_ident_list:.IDENTIFIER,START
-      nonempty_ident_list:.IDENTIFIER,TOKEN
-      nonempty_ident_list:.IDENTIFIER,TYPE
-      nonempty_ident_list:.nonempty_ident_list IDENTIFIER,$
-      nonempty_ident_list:.nonempty_ident_list IDENTIFIER,IDENTIFIER
-      nonempty_ident_list:.nonempty_ident_list IDENTIFIER,RULE_DEF
-      nonempty_ident_list:.nonempty_ident_list IDENTIFIER,SECTION_MARKER
-      nonempty_ident_list:.nonempty_ident_list IDENTIFIER,SEMICOLON
-      nonempty_ident_list:.nonempty_ident_list IDENTIFIER,START
-      nonempty_ident_list:.nonempty_ident_list IDENTIFIER,TOKEN
-      nonempty_ident_list:.nonempty_ident_list IDENTIFIER,TYPE
+      nonempty_ident_list:.IDENTIFIER
+      nonempty_ident_list:.nonempty_ident_list IDENTIFIER
     Reduce:
       (nil)
     Goto:
       IDENTIFIER -> State 10
-      nonempty_ident_list -> State 33
+      nonempty_ident_list -> State 32
 
-  State 32:
+  State 31:
     Kernel Items:
       additional_section:SECTION_MARKER IDENTIFIER SECTION_CONTENT.,*
     Reduce:
@@ -1243,22 +987,18 @@ Parser Debug States:
     Goto:
       (nil)
 
-  State 33:
+  State 32:
     Kernel Items:
       def:rword LT IDENTIFIER GT nonempty_ident_list.,*
-      nonempty_ident_list:nonempty_ident_list.IDENTIFIER,$
-      nonempty_ident_list:nonempty_ident_list.IDENTIFIER,IDENTIFIER
-      nonempty_ident_list:nonempty_ident_list.IDENTIFIER,RULE_DEF
-      nonempty_ident_list:nonempty_ident_list.IDENTIFIER,SECTION_MARKER
-      nonempty_ident_list:nonempty_ident_list.IDENTIFIER,SEMICOLON
-      nonempty_ident_list:nonempty_ident_list.IDENTIFIER,START
-      nonempty_ident_list:nonempty_ident_list.IDENTIFIER,TOKEN
-      nonempty_ident_list:nonempty_ident_list.IDENTIFIER,TYPE
+      nonempty_ident_list:nonempty_ident_list.IDENTIFIER
     Reduce:
       * -> [def]
     Goto:
-      IDENTIFIER -> State 24
+      IDENTIFIER -> State 23
 
-Number of shift actions: 44
-Number of reduce actions: 25
+Number of states: 33
+Number of shift actions: 43
+Number of reduce actions: 24
+Number of shift/reduce conflicts: 0
+Number of reduce/reduce conflicts: 0
 */

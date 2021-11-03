@@ -5,7 +5,8 @@ type LangSpecs struct {
 }
 
 type GoSpec struct {
-	Package    string            `yaml:"package"`
-	Prefix     string            `yaml:"prefix"`
-	ValueTypes map[string]string `yaml:"value_types"`
+	Package                   string            `yaml:"package"`
+	Prefix                    string            `yaml:"prefix"`
+	ValueTypes                map[string]string `yaml:"value_types"`
+	OutputDebugNonKernelItems bool              `yaml:"output_debug_non_kernel_items"`
 }

@@ -79,6 +79,7 @@ type goCodeGen struct {
 
 	errHandler        string
 	defaultErrHandler string
+	expectedTerminals string
 
 	pseudoToken string
 
@@ -160,6 +161,7 @@ func (gen *goCodeGen) populateCodeGenVariables() error {
 	gen.reducer = gen.Prefix + "Reducer"
 	gen.errHandler = gen.Prefix + "ParseErrorHandler"
 	gen.defaultErrHandler = gen.Prefix + "DefaultParseErrorHandler"
+	gen.expectedTerminals = "_" + gen.Prefix + "ExpectedTerminals"
 	gen.pseudoToken = "_" + gen.Prefix + "PseudoToken"
 	gen.symbolStack = "_" + gen.Prefix + "PseudoSymbolStack"
 	gen.stackItem = "_" + gen.Prefix + "StackItem"
@@ -625,6 +627,8 @@ func (gen *goCodeGen) generateDebugStates() {
 
 	gotoCount := 0
 	reduceCount := 0
+	shiftReduceCount := 0
+	reduceReduceCount := 0
 
 	l("/*")
 	l("Parser Debug States:")
@@ -636,6 +640,12 @@ func (gen *goCodeGen) generateDebugStates() {
 		firstNonKernel := true
 		for _, item := range state.Items {
 			if len(item.Parsed) == 0 && firstNonKernel {
+				if !gen.OutputDebugNonKernelItems &&
+					len(state.ShiftReduceConflictSymbols) == 0 &&
+					len(state.ReduceReduceConflictSymbols) == 0 {
+					break
+				}
+
 				firstNonKernel = false
 				l("    Non-kernel Items:")
 			}
@@ -669,12 +679,27 @@ func (gen *goCodeGen) generateDebugStates() {
 				l("      %s -> State %d", symbol, child.StateNum)
 			}
 		}
+		if len(state.ShiftReduceConflictSymbols) > 0 {
+			l("    Shift/reduce conflict symbols:")
+			l("      %v", state.ShiftReduceConflictSymbols)
+			shiftReduceCount += len(state.ShiftReduceConflictSymbols)
+		}
+		if len(state.ReduceReduceConflictSymbols) > 0 {
+			l("    Reduce/reduce conflict symbols:")
+			l("      %v", state.ReduceReduceConflictSymbols)
+			for _, symbol := range state.ReduceReduceConflictSymbols {
+				reduceReduceCount += len(state.Reduce[symbol])
+			}
+		}
 
 		l("")
 	}
 
+	l("Number of states: %d", len(gen.States))
 	l("Number of shift actions: %d", gotoCount)
 	l("Number of reduce actions: %d", reduceCount)
+	l("Number of shift/reduce conflicts: %d", shiftReduceCount)
+	l("Number of reduce/reduce conflicts: %d", reduceReduceCount)
 	l("*/")
 	l("")
 }
@@ -787,6 +812,7 @@ func (gen *goCodeGen) generateActionTable() {
 	}
 	pop()
 	l("}")
+	l("")
 }
 
 func (gen *goCodeGen) generatePseudoToken() {
@@ -869,6 +895,52 @@ func (gen *goCodeGen) generateSymbolStack() {
 	l("")
 }
 
+func (gen *goCodeGen) generateExpectedTerminals() {
+	l := gen.Line
+
+	idToConst := map[string]string{
+		lr.EndMarker: gen.endSymbol,
+	}
+	symbols := []string{}
+
+	for _, term := range gen.Terminals {
+		idToConst[term.Name] = term.CodeGenSymbolConst
+		symbols = append(symbols, term.Name)
+	}
+
+	l("var %s = map[%s][]%s{", gen.expectedTerminals, gen.stateId, gen.symbolId)
+	gen.PushIndent()
+
+	for _, state := range gen.OrderedStates {
+		consts := []string{}
+
+		for _, symbol := range symbols {
+			_, ok := state.Goto[symbol]
+			if !ok {
+				continue
+			}
+			consts = append(consts, idToConst[symbol])
+		}
+
+		for _, item := range state.Items {
+			if len(item.Expected) == 0 && item.LookAhead != lr.Wildcard {
+				consts = append(consts, idToConst[item.LookAhead])
+			}
+		}
+
+		if len(consts) > 0 {
+			l("%s: []%s{%s},",
+				state.CodeGenConst,
+				gen.symbolId,
+				strings.Join(consts, ", "))
+		}
+	}
+
+	gen.PopIndent()
+	l("}")
+	l("")
+}
+
 func (gen *goCodeGen) generateParseErrorHandler() {
 	l := gen.Line
 	push := gen.PushIndent
@@ -888,8 +960,9 @@ func (gen *goCodeGen) generateParseErrorHandler() {
 		gen.token,
 		gen.stack)
 	push()
-	l("return %v(\"Syntax error: unexpected %%v (%%v)\", nextToken.Id(), nextToken.Location())",
-		gen.Obj("fmt.Errorf"))
+	l("return %v(\"Syntax error: unexpected symbol %%v. Expecting: %%v (%%v)\", nextToken.Id(), %s[stack[len(stack)-1].StateId], nextToken.Location())",
+		gen.Obj("fmt.Errorf"),
+		gen.expectedTerminals)
 	pop()
 	l("}")
 	l("")
@@ -1058,6 +1131,10 @@ func GenerateGoLRCode(
 	gen.generateAction()
 
 	gen.generateActionTable()
+
+	// Maybe make the action table map[StateId]map[Symbol]Action and
+	// extract the expected terminal symbols from the action table
+	gen.generateExpectedTerminals()
 
 	gen.generateDebugStates()
 
