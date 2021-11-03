@@ -639,7 +639,7 @@ func (gen *goCodeGen) generateDebugStates() {
 		l("    Kernel Items:")
 		firstNonKernel := true
 		for _, item := range state.Items {
-			if len(item.Parsed) == 0 && firstNonKernel {
+			if !item.IsKernel() && firstNonKernel {
 				if !gen.OutputDebugNonKernelItems &&
 					len(state.ShiftReduceConflictSymbols) == 0 &&
 					len(state.ReduceReduceConflictSymbols) == 0 {
@@ -650,7 +650,7 @@ func (gen *goCodeGen) generateDebugStates() {
 				l("    Non-kernel Items:")
 			}
 
-			if len(item.Expected) == 0 {
+			if item.IsReduce() {
 				reduceCount += 1
 				reduce[item.LookAhead] = append(
 					reduce[item.LookAhead],
@@ -795,7 +795,7 @@ func (gen *goCodeGen) generateActionTable() {
 
 	for _, state := range gen.OrderedStates {
 		for _, item := range state.Items {
-			if len(item.Expected) != 0 {
+			if !item.IsReduce() {
 				continue
 			}
 
@@ -923,7 +923,7 @@ func (gen *goCodeGen) generateExpectedTerminals() {
 		}
 
 		for _, item := range state.Items {
-			if len(item.Expected) == 0 && item.LookAhead != lr.Wildcard {
+			if item.IsReduce() && item.LookAhead != lr.Wildcard {
 				consts = append(consts, idToConst[item.LookAhead])
 			}
 		}

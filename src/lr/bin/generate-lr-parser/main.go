@@ -8,6 +8,7 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
+	"runtime/pprof"
 
 	lr "github.com/pattyshack/abc/src/lr/internal"
 	"github.com/pattyshack/abc/src/lr/internal/code_gen"
@@ -16,6 +17,8 @@ import (
 )
 
 func main() {
+	cpuProfile := flag.String("cpu-profile", "", "write cpu profile to file")
+
 	useYacc := flag.Bool(
 		"use-yacc",
 		false,
@@ -29,6 +32,17 @@ func main() {
 	language := flag.String("language", "go", "output/target language")
 	output := flag.String("o", "", "parser output")
 	flag.Parse()
+
+	if *cpuProfile != "" {
+		profile, err := os.Create(*cpuProfile)
+		if err != nil {
+			panic(err)
+		}
+		defer profile.Close()
+
+		pprof.StartCPUProfile(profile)
+		defer pprof.StopCPUProfile()
+	}
 
 	if len(flag.Args()) != 1 {
 		fmt.Printf("Usage of %s:\n", filepath.Base(os.Args[0]))
@@ -187,12 +201,12 @@ func printLRStates(states *lr.LRStates) {
 		fmt.Println("      Kernel Items:")
 		firstNonKernel := true
 		for _, item := range state.Items {
-			if len(item.Parsed) == 0 && firstNonKernel {
+			if !item.IsKernel() && firstNonKernel {
 				firstNonKernel = false
 				fmt.Println("      Non-kernel Items:")
 			}
 
-			if len(item.Expected) == 0 {
+			if item.IsReduce() {
 				reduceCount += 1
 				reduce[item.LookAhead] = append(
 					reduce[item.LookAhead],
