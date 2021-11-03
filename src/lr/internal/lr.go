@@ -15,32 +15,168 @@ const (
 
 // LR(1) production item of the form: A -> [a B] . [c] , x
 type Item struct {
-	Name     string
-	Parsed   []string
-	Expected []string
+	Name string
+
+	Rule []string
+	Dot  int
 
 	LookAhead string
 
 	*Term
 	*Clause
+
+	Key  string
+	Next *Item
+	Core *Item
+}
+
+func NewCoreItem(name string, rule []string, term *Term, clause *Clause) *Item {
+	return &Item{
+		Name:   name,
+		Rule:   rule,
+		Term:   term,
+		Clause: clause,
+	}
+}
+
+func (item *Item) Shift() *Item {
+	if item.Next == nil {
+		next := *item
+		next.Dot += 1
+		next.Key = ""
+		if item.Core != nil {
+			next.Core = item.Core.Shift()
+		}
+
+		item.Next = &next
+	}
+
+	return item.Next
+}
+
+func (item *Item) ReplaceLookAhead(symbol string) *Item {
+	if symbol == item.LookAhead {
+		return item
+	}
+
+	newItem := *item
+
+	if item.LookAhead == "" {
+		newItem.Core = item
+	}
+
+	newItem.LookAhead = symbol
+	newItem.Key = ""
+	newItem.Next = nil
+
+	return &newItem
+}
+
+func (item *Item) IsKernel() bool {
+	return item.Dot != 0
+}
+
+func (item *Item) IsReduce() bool {
+	return item.Dot == len(item.Rule)
 }
 
 func (item *Item) String() string {
-	result := item.Name + ":" +
-		strings.Join(item.Parsed, " ") + "." +
-		strings.Join(item.Expected, " ")
-	if item.LookAhead != "" {
-		result += "," + item.LookAhead
+	if item.Key == "" {
+		result := ""
+		if item.Core != nil {
+			result = item.Core.String()
+		} else {
+			result += item.Name + ":"
+
+			separator := ""
+			for idx, symbol := range item.Rule {
+				if idx == item.Dot {
+					separator = "."
+				}
+
+				result += separator + symbol
+
+				separator = " "
+			}
+
+			if item.Dot == len(item.Rule) {
+				result += "."
+			}
+		}
+
+		if item.LookAhead != "" {
+			result += "," + item.LookAhead
+		}
+
+		item.Key = result
 	}
-	return result
+
+	return item.Key
+}
+
+type itemPoolKey struct {
+	Rule      string
+	Label     string
+	LookAhead string
+}
+
+type itemPool struct {
+	// (rule, clause label, "") -> item
+	coreItems map[itemPoolKey]*Item
+
+	// (rule, clause label, look ahead) -> item
+	firstItems map[itemPoolKey]*Item
+}
+
+func newItemPool() *itemPool {
+	return &itemPool{map[itemPoolKey]*Item{}, map[itemPoolKey]*Item{}}
+}
+
+func (pool *itemPool) Get(term *Term, clause *Clause, lookAhead string) *Item {
+	label := ""
+	if clause.Label != nil {
+		label = clause.Label.Value
+	}
+	key := itemPoolKey{term.Name, label, lookAhead}
+
+	first, ok := pool.firstItems[key]
+	if ok {
+		return first
+	}
+
+	coreKey := itemPoolKey{term.Name, label, ""}
+	core, ok := pool.coreItems[coreKey]
+	if !ok {
+		symbols := []string{}
+		for _, term := range clause.Bindings {
+			symbols = append(symbols, term.Name)
+		}
+
+		core = NewCoreItem(term.Name, symbols, term, clause)
+		pool.coreItems[coreKey] = core
+	}
+
+	first = core.ReplaceLookAhead(lookAhead)
+	pool.firstItems[key] = first
+
+	return first
 }
 
 type Items []*Item
 
+func (items Items) String() string {
+	chunks := []string{}
+	for _, item := range items {
+		chunks = append(chunks, item.String())
+	}
+
+	return strings.Join(chunks, ";")
+}
+
 func (items Items) KernelItems() Items {
 	kernel := Items{}
 	for _, item := range items {
-		if len(item.Parsed) == 0 {
+		if !item.IsKernel() {
 			continue
 		}
 		kernel = append(kernel, item)
@@ -66,11 +202,11 @@ func (items Items) Less(iIdx int, jIdx int) bool {
 	i := items[iIdx]
 	j := items[jIdx]
 
-	if len(i.Parsed) > 0 {
-		if len(j.Parsed) == 0 {
+	if i.IsKernel() {
+		if !j.IsKernel() {
 			return true
 		}
-	} else if len(j.Parsed) > 0 {
+	} else if j.IsKernel() {
 		return false
 	}
 
@@ -78,24 +214,10 @@ func (items Items) Less(iIdx int, jIdx int) bool {
 		return i.Name < j.Name
 	}
 
-	iRuleLen := len(i.Parsed) + len(i.Expected)
-	jRuleLen := len(j.Parsed) + len(j.Expected)
-
 	idx := 0
-	for idx < iRuleLen && idx < jRuleLen {
-		iPath := ""
-		if len(i.Parsed) > idx {
-			iPath = i.Parsed[idx]
-		} else {
-			iPath = i.Expected[idx-len(i.Parsed)]
-		}
-
-		jPath := ""
-		if len(j.Parsed) > idx {
-			jPath = j.Parsed[idx]
-		} else {
-			jPath = j.Expected[idx-len(j.Parsed)]
-		}
+	for idx < len(i.Rule) && idx < len(j.Rule) {
+		iPath := i.Rule[idx]
+		jPath := j.Rule[idx]
 
 		if iPath != jPath {
 			return iPath < jPath
@@ -104,16 +226,16 @@ func (items Items) Less(iIdx int, jIdx int) bool {
 		idx += 1
 	}
 
-	if idx < iRuleLen {
+	if idx < len(i.Rule) {
 		return false
 	}
 
-	if idx < jRuleLen {
+	if idx < len(j.Rule) {
 		return true
 	}
 
-	if len(i.Parsed) != len(j.Parsed) {
-		return len(i.Parsed) > len(j.Parsed)
+	if i.Dot != j.Dot {
+		return i.Dot > j.Dot
 	}
 
 	return i.LookAhead < j.LookAhead
@@ -129,8 +251,9 @@ type stateAction struct {
 }
 
 type ItemSet struct {
-	Kernel string
-	Items  // sorted
+	Kernel      string
+	KernelItems Items // sorted
+	Items             // sorted
 
 	StateNum int
 
@@ -142,6 +265,18 @@ type ItemSet struct {
 	ShiftReduceConflictSymbols  []string
 
 	CodeGenConst string
+}
+
+func newItemSet(kernelItems Items) *ItemSet {
+	sort.Sort(kernelItems)
+
+	return &ItemSet{
+		Kernel:      kernelItems.String(),
+		KernelItems: kernelItems,
+		Items:       kernelItems,
+		Goto:        map[string]*ItemSet{},
+		Reduce:      map[string]Items{},
+	}
 }
 
 func (set *ItemSet) canMergeFrom(other *ItemSet) bool {
@@ -200,19 +335,32 @@ func (set *ItemSet) canMergeFrom(other *ItemSet) bool {
 }
 
 func (set *ItemSet) mergeFrom(other *ItemSet) {
-	builder := itemSetBuilder{}
+	added := map[string]struct{}{}
 	for _, item := range set.Items {
-		builder.maybeAdd(item)
+		added[item.String()] = struct{}{}
 	}
+
+	numKernelItems := len(set.KernelItems)
 
 	for _, item := range other.Items {
-		builder.maybeAdd(item)
+		_, ok := added[item.String()]
+		if ok {
+			continue
+		}
+
+		added[item.String()] = struct{}{}
+		set.Items = append(set.Items, item)
+
+		if item.IsKernel() {
+			numKernelItems += 1
+		}
 	}
 
-	temp := builder.finalize()
+	sort.Sort(set.Items)
+	kernelItems := set.Items[:numKernelItems]
 
-	set.Kernel = temp.Kernel
-	set.Items = temp.Items
+	set.Kernel = kernelItems.String()
+	set.KernelItems = kernelItems
 
 	for symbol, next := range other.Goto {
 		set.Goto[symbol] = next
@@ -234,13 +382,11 @@ func (set *ItemSet) clone() *ItemSet {
 		reduce[symbol] = items
 	}
 
-	return &ItemSet{
-		Kernel:   set.Kernel,
-		StateNum: set.StateNum,
-		Items:    set.Items,
-		Goto:     gotoMap,
-		Reduce:   reduce,
-	}
+	newItem := *set
+	newItem.Goto = gotoMap
+	newItem.Reduce = reduce
+
+	return &newItem
 }
 
 func (set *ItemSet) computeConflictSymbols() {
@@ -272,36 +418,18 @@ func (set *ItemSet) compress() {
 		return // Don't compress error state to output more debug info
 	}
 
-	type itemCount struct {
-		*Item
-		Count int
-	}
-
-	builder := itemSetBuilder{}
-	counts := map[string]*itemCount{}
+	counts := map[string]int{}
 	for _, item := range set.Items {
-		if len(item.Expected) == 0 {
-			core := *item
-			core.LookAhead = ""
-			key := core.String()
-			entry, ok := counts[key]
-			if !ok {
-				entry = &itemCount{item, 0}
-				counts[key] = entry
-			}
-			entry.Count += 1
-		} else {
-			// Shift production does not depend on look ahead symbols
-			item.LookAhead = ""
-			builder.maybeAdd(item)
+		if item.IsReduce() {
+			counts[item.Core.String()] += 1
 		}
 	}
 
 	max := 0
 	maxKey := ""
-	for key, entry := range counts {
-		if entry.Count > max {
-			max = entry.Count
+	for key, count := range counts {
+		if count > max {
+			max = count
 			maxKey = key
 		}
 	}
@@ -310,64 +438,46 @@ func (set *ItemSet) compress() {
 		maxKey = ""
 	}
 
+	added := map[string]struct{}{}
+	kernelCount := 0
+	items := Items{}
 	reduce := map[string]Items{}
-	for key, entry := range counts {
-		if key == maxKey {
-			entry.LookAhead = Wildcard
+	for _, item := range set.Items {
+		var toAdd *Item
+		if item.IsReduce() {
+			toAdd = item
+			if item.Core.String() == maxKey {
+				toAdd = item.ReplaceLookAhead(Wildcard)
+			}
+
+		} else {
+			// Shift production does not depend on look ahead symbols
+			toAdd = item.ReplaceLookAhead("")
 		}
 
-		builder.maybeAdd(entry.Item)
-		reduce[entry.LookAhead] = append(reduce[entry.LookAhead], entry.Item)
+		_, ok := added[toAdd.String()]
+		if ok {
+			continue
+		}
+		added[toAdd.String()] = struct{}{}
+
+		if toAdd.IsKernel() {
+			kernelCount += 1
+		}
+
+		if toAdd.IsReduce() {
+			reduce[toAdd.LookAhead] = append(reduce[toAdd.LookAhead], toAdd)
+		}
+
+		items = append(items, toAdd)
 	}
 
-	temp := builder.finalize()
-
-	set.Kernel = temp.Kernel
-	set.Items = temp.Items
+	kernelItems := items[:kernelCount]
+	set.Kernel = kernelItems.String()
+	set.KernelItems = kernelItems
+	set.Items = items
 
 	set.Reduce = reduce
-}
-
-type itemSetBuilder map[string]*Item
-
-func (builder itemSetBuilder) maybeAdd(item *Item) bool {
-	key := item.String()
-	_, ok := builder[key]
-	if ok {
-		return false
-	}
-
-	builder[key] = item
-	return true
-}
-
-func (builder itemSetBuilder) finalize() *ItemSet {
-	items := Items{}
-	for _, item := range builder {
-		items = append(items, item)
-	}
-
-	sort.Sort(items)
-
-	chunks := []string{}
-	for _, item := range items.KernelItems() {
-		chunks = append(chunks, item.String())
-	}
-
-	reduce := map[string]Items{}
-
-	for _, item := range items {
-		if len(item.Expected) == 0 {
-			reduce[item.LookAhead] = append(reduce[item.LookAhead], item)
-		}
-	}
-
-	return &ItemSet{
-		Kernel: strings.Join(chunks, ";"),
-		Items:  items,
-		Goto:   map[string]*ItemSet{},
-		Reduce: reduce,
-	}
 }
 
 type LRStates struct {
@@ -375,17 +485,16 @@ type LRStates struct {
 
 	FirstTerms map[string]map[string]struct{}
 
+	ItemPool *itemPool
+
 	States        map[string]*ItemSet
 	OrderedStates []*ItemSet
 }
 
-func (states *LRStates) maybeAdd(builder itemSetBuilder) (*ItemSet, bool) {
-	if len(builder) == 0 {
+func (states *LRStates) maybeAdd(state *ItemSet) (*ItemSet, bool) {
+	if state.Kernel == "" {
 		return nil, false
 	}
-
-	states.populateClosure(builder)
-	state := builder.finalize()
 
 	origState, ok := states.States[state.Kernel]
 	if ok {
@@ -400,16 +509,13 @@ func (states *LRStates) maybeAdd(builder itemSetBuilder) (*ItemSet, bool) {
 }
 
 func (states *LRStates) populateStartStates() {
-	startState := itemSetBuilder{}
-	startState.maybeAdd(
-		&Item{
-			Name:      AcceptRule,
-			Parsed:    []string{StartMarker},
-			Expected:  []string{states.Start.Name},
-			LookAhead: EndMarker,
-		})
-	states.maybeAdd(startState)
+	core := NewCoreItem(
+		AcceptRule,
+		[]string{StartMarker, states.Start.Name},
+		nil,
+		nil)
 
+	states.maybeAdd(newItemSet(Items{core.ReplaceLookAhead(EndMarker).Shift()}))
 }
 
 func (states *LRStates) generateStates() {
@@ -430,6 +536,8 @@ func (states *LRStates) generateStates() {
 	exploredIdx := 0
 	for exploredIdx < len(states.OrderedStates) {
 		for _, state := range states.OrderedStates[exploredIdx:] {
+			states.populateClosure(state)
+
 			for _, symbol := range symbols {
 				gotoState, _ := states.generateGotoState(state, symbol)
 				if gotoState == nil {
@@ -455,67 +563,50 @@ func (states *LRStates) generateGotoState(
 	*ItemSet,
 	bool) {
 
-	state := itemSetBuilder{}
+	kernelItems := Items{}
 
 	for _, item := range parentState.Items {
-		if len(item.Expected) > 0 && item.Expected[0] == symbol {
-			state.maybeAdd(
-				&Item{
-					Name:      item.Name,
-					Parsed:    append(item.Parsed, symbol),
-					Expected:  item.Expected[1:],
-					LookAhead: item.LookAhead,
-
-					Term:   item.Term,
-					Clause: item.Clause,
-				})
-
+		if !item.IsReduce() && item.Rule[item.Dot] == symbol {
+			kernelItems = append(kernelItems, item.Shift())
 		}
 	}
 
-	if len(state) == 0 {
+	if len(kernelItems) == 0 {
 		return nil, false
 	}
 
-	return states.maybeAdd(state)
+	return states.maybeAdd(newItemSet(kernelItems))
 }
 
-func (states *LRStates) populateClosure(state itemSetBuilder) {
-	toExplore := state
+func (states *LRStates) populateClosure(state *ItemSet) {
+	added := map[string]struct{}{}
+
+	toExplore := state.Items
 	for len(toExplore) > 0 {
-		nextToExplore := itemSetBuilder{}
+		nextToExplore := Items{}
 
 		for _, item := range toExplore {
-			if len(item.Expected) == 0 {
+			if item.IsReduce() {
 				continue
 			}
 
-			rule := states.Terms[item.Expected[0]]
+			rule := states.Terms[item.Rule[item.Dot]]
 			if rule.IsTerminal {
 				continue
 			}
 
 			terminals := states.firstTerminals(
-				append(item.Expected[1:], item.LookAhead))
+				append(item.Rule[item.Dot+1:], item.LookAhead))
 
 			for _, clause := range rule.Clauses {
-				clauseSymbols := []string{}
-				for _, term := range clause.Bindings {
-					clauseSymbols = append(clauseSymbols, term.Name)
-				}
-
 				for terminal, _ := range terminals {
-					newItem := &Item{
-						Name:      rule.Name,
-						Expected:  clauseSymbols,
-						LookAhead: terminal,
+					item := states.ItemPool.Get(rule, clause, terminal)
 
-						Term:   rule,
-						Clause: clause,
-					}
-					added := state.maybeAdd(newItem)
-					if added {
-						nextToExplore.maybeAdd(newItem)
+					_, ok := added[item.String()]
+					if !ok {
+						added[item.String()] = struct{}{}
+						state.Items = append(state.Items, item)
+						nextToExplore = append(nextToExplore, item)
 					}
 				}
 			}
@@ -523,6 +614,8 @@ func (states *LRStates) populateClosure(state itemSetBuilder) {
 
 		toExplore = nextToExplore
 	}
+
+	sort.Sort(state.Items)
 }
 
 func (states *LRStates) firstTerminals(symbols []string) map[string]struct{} {
@@ -616,26 +709,31 @@ func (states *LRStates) mergeStates() {
 		mergeCandidates := map[string][]*ItemSet{}
 
 		for _, state := range states.OrderedStates {
-			core := itemSetBuilder{}
+			added := map[string]struct{}{}
+			kernelItems := Items{}
 
-			for _, item := range state.Items {
-				coreItem := *item
-				coreItem.LookAhead = ""
-				core.maybeAdd(&coreItem)
+			for _, item := range state.KernelItems {
+				_, ok := added[item.Core.String()]
+				if ok {
+					continue
+				}
+				added[item.Core.String()] = struct{}{}
+
+				kernelItems = append(kernelItems, item.Core)
 			}
 
-			coreState := core.finalize()
+			// NOTE: no need to sort since item.KernelItems is already sorted
+			kernelString := kernelItems.String()
 
-			_, ok := mergeCandidates[coreState.Kernel]
+			_, ok := mergeCandidates[kernelString]
 			if !ok {
-				coreKernels = append(coreKernels, coreState.Kernel)
+				coreKernels = append(coreKernels, kernelString)
 			}
 
-			mergeCandidates[coreState.Kernel] = append(
-				mergeCandidates[coreState.Kernel],
+			mergeCandidates[kernelString] = append(
+				mergeCandidates[kernelString],
 				state)
 		}
-
 		newStates := []*ItemSet{}
 
 		// lr state kernel -> merged state
@@ -694,8 +792,9 @@ func (states *LRStates) mergeStates() {
 
 func NewLRStates(grammar *Grammar) *LRStates {
 	states := &LRStates{
-		Grammar: grammar,
-		States:  map[string]*ItemSet{},
+		Grammar:  grammar,
+		States:   map[string]*ItemSet{},
+		ItemPool: newItemPool(),
 	}
 
 	states.computeFirstTerminals()
