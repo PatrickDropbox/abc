@@ -1464,8 +1464,6 @@ const (
 	_CState346 = _CStateId("State 346")
 	_CState347 = _CStateId("State 347")
 	_CState348 = _CStateId("State 348")
-	_CState349 = _CStateId("State 349")
-	_CState350 = _CStateId("State 350")
 )
 
 type _CSymbol struct {
@@ -5310,7 +5308,7 @@ var _CActionTable = _CActionTableType{
 	{_CState312, _CConditionalExpressionSymbol}:    {_CShiftAction, _CState105, ""},
 	{_CState312, _CAssignmentExpressionSymbol}:     {_CShiftAction, _CState102, ""},
 	{_CState312, _CExpressionSymbol}:               {_CShiftAction, _CState109, ""},
-	{_CState312, _CStatementSymbol}:                {_CShiftAction, _CState337, ""},
+	{_CState312, _CStatementSymbol}:                {_CShiftAction, _CState335, ""},
 	{_CState312, _CLabeledStatementSymbol}:         {_CShiftAction, _CState114, ""},
 	{_CState312, _CCompoundStatementSymbol}:        {_CShiftAction, _CState104, ""},
 	{_CState312, _CExpressionStatementSymbol}:      {_CShiftAction, _CState110, ""},
@@ -5361,7 +5359,7 @@ var _CActionTable = _CActionTableType{
 	{_CState315, _CConditionalExpressionSymbol}:    {_CShiftAction, _CState105, ""},
 	{_CState315, _CAssignmentExpressionSymbol}:     {_CShiftAction, _CState102, ""},
 	{_CState315, _CExpressionSymbol}:               {_CShiftAction, _CState109, ""},
-	{_CState315, _CStatementSymbol}:                {_CShiftAction, _CState338, ""},
+	{_CState315, _CStatementSymbol}:                {_CShiftAction, _CState336, ""},
 	{_CState315, _CLabeledStatementSymbol}:         {_CShiftAction, _CState114, ""},
 	{_CState315, _CCompoundStatementSymbol}:        {_CShiftAction, _CState104, ""},
 	{_CState315, _CExpressionStatementSymbol}:      {_CShiftAction, _CState110, ""},
@@ -5412,7 +5410,7 @@ var _CActionTable = _CActionTableType{
 	{_CState316, _CConditionalExpressionSymbol}:    {_CShiftAction, _CState105, ""},
 	{_CState316, _CAssignmentExpressionSymbol}:     {_CShiftAction, _CState102, ""},
 	{_CState316, _CExpressionSymbol}:               {_CShiftAction, _CState109, ""},
-	{_CState316, _CStatementSymbol}:                {_CShiftAction, _CState339, ""},
+	{_CState316, _CStatementSymbol}:                {_CShiftAction, _CState337, ""},
 	{_CState316, _CLabeledStatementSymbol}:         {_CShiftAction, _CState114, ""},
 	{_CState316, _CCompoundStatementSymbol}:        {_CShiftAction, _CState104, ""},
 	{_CState316, _CExpressionStatementSymbol}:      {_CShiftAction, _CState110, ""},
@@ -5447,7 +5445,7 @@ var _CActionTable = _CActionTableType{
 	{_CState317, _CInclusiveOrExpressionSymbol}:    {_CShiftAction, _CState111, ""},
 	{_CState317, _CLogicalAndExpressionSymbol}:     {_CShiftAction, _CState115, ""},
 	{_CState317, _CLogicalOrExpressionSymbol}:      {_CShiftAction, _CState116, ""},
-	{_CState317, _CConditionalExpressionSymbol}:    {_CShiftAction, _CState340, ""},
+	{_CState317, _CConditionalExpressionSymbol}:    {_CShiftAction, _CState338, ""},
 	{_CState319, CIdentifierSymbol}:                {_CShiftAction, _CState130, ""},
 	{_CState319, CConstantSymbol}:                  {_CShiftAction, _CState77, ""},
 	{_CState319, CStringLiteralSymbol}:             {_CShiftAction, _CState96, ""},
@@ -5477,10 +5475,10 @@ var _CActionTable = _CActionTableType{
 	{_CState319, _CLogicalAndExpressionSymbol}:     {_CShiftAction, _CState115, ""},
 	{_CState319, _CLogicalOrExpressionSymbol}:      {_CShiftAction, _CState116, ""},
 	{_CState319, _CConditionalExpressionSymbol}:    {_CShiftAction, _CState105, ""},
-	{_CState319, _CAssignmentExpressionSymbol}:     {_CShiftAction, _CState341, ""},
-	{_CState325, CRbraceSymbol}:                    {_CShiftAction, _CState342, ""},
-	{_CState327, CRparamSymbol}:                    {_CShiftAction, _CState343, ""},
-	{_CState332, CRparamSymbol}:                    {_CShiftAction, _CState344, ""},
+	{_CState319, _CAssignmentExpressionSymbol}:     {_CShiftAction, _CState339, ""},
+	{_CState325, CRbraceSymbol}:                    {_CShiftAction, _CState340, ""},
+	{_CState327, CRparamSymbol}:                    {_CShiftAction, _CState341, ""},
+	{_CState332, CRparamSymbol}:                    {_CShiftAction, _CState342, ""},
 	{_CState332, CCommaSymbol}:                     {_CShiftAction, _CState186, ""},
 	{_CState333, CIdentifierSymbol}:                {_CShiftAction, _CState85, ""},
 	{_CState333, CConstantSymbol}:                  {_CShiftAction, _CState77, ""},
@@ -5526,121 +5524,119 @@ var _CActionTable = _CActionTableType{
 	{_CState333, _CConditionalExpressionSymbol}:    {_CShiftAction, _CState105, ""},
 	{_CState333, _CAssignmentExpressionSymbol}:     {_CShiftAction, _CState102, ""},
 	{_CState333, _CExpressionSymbol}:               {_CShiftAction, _CState109, ""},
-	{_CState333, _CStatementSymbol}:                {_CShiftAction, _CState345, ""},
+	{_CState333, _CStatementSymbol}:                {_CShiftAction, _CState343, ""},
 	{_CState333, _CLabeledStatementSymbol}:         {_CShiftAction, _CState114, ""},
 	{_CState333, _CCompoundStatementSymbol}:        {_CShiftAction, _CState104, ""},
 	{_CState333, _CExpressionStatementSymbol}:      {_CShiftAction, _CState110, ""},
 	{_CState333, _CSelectionStatementSymbol}:       {_CShiftAction, _CState121, ""},
 	{_CState333, _CIterationStatementSymbol}:       {_CShiftAction, _CState112, ""},
 	{_CState333, _CJumpStatementSymbol}:            {_CShiftAction, _CState113, ""},
-	{_CState334, CRparamSymbol}:                    {_CShiftAction, _CState346, ""},
+	{_CState334, CRparamSymbol}:                    {_CShiftAction, _CState344, ""},
 	{_CState334, CCommaSymbol}:                     {_CShiftAction, _CState186, ""},
-	{_CState335, CElseSymbol}:                      {_CShiftAction, _CState347, ""},
-	{_CState336, CElseSymbol}:                      {_CShiftAction, _CState347, ""},
-	{_CState337, CElseSymbol}:                      {_CShiftAction, _CState347, ""},
-	{_CState344, CSemicolonSymbol}:                 {_CShiftAction, _CState348, ""},
-	{_CState346, CIdentifierSymbol}:                {_CShiftAction, _CState85, ""},
-	{_CState346, CConstantSymbol}:                  {_CShiftAction, _CState77, ""},
-	{_CState346, CStringLiteralSymbol}:             {_CShiftAction, _CState96, ""},
-	{_CState346, CSizeofSymbol}:                    {_CShiftAction, _CState95, ""},
-	{_CState346, CIncOpSymbol}:                     {_CShiftAction, _CState87, ""},
-	{_CState346, CDecOpSymbol}:                     {_CShiftAction, _CState79, ""},
-	{_CState346, CCaseSymbol}:                      {_CShiftAction, _CState76, ""},
-	{_CState346, CDefaultSymbol}:                   {_CShiftAction, _CState80, ""},
-	{_CState346, CIfSymbol}:                        {_CShiftAction, _CState86, ""},
-	{_CState346, CSwitchSymbol}:                    {_CShiftAction, _CState97, ""},
-	{_CState346, CWhileSymbol}:                     {_CShiftAction, _CState99, ""},
-	{_CState346, CDoSymbol}:                        {_CShiftAction, _CState81, ""},
-	{_CState346, CForSymbol}:                       {_CShiftAction, _CState83, ""},
-	{_CState346, CGotoSymbol}:                      {_CShiftAction, _CState84, ""},
-	{_CState346, CContinueSymbol}:                  {_CShiftAction, _CState78, ""},
-	{_CState346, CBreakSymbol}:                     {_CShiftAction, _CState75, ""},
-	{_CState346, CReturnSymbol}:                    {_CShiftAction, _CState93, ""},
-	{_CState346, CLparamSymbol}:                    {_CShiftAction, _CState88, ""},
-	{_CState346, CLcurlSymbol}:                     {_CShiftAction, _CState49, ""},
-	{_CState346, CSemicolonSymbol}:                 {_CShiftAction, _CState94, ""},
-	{_CState346, CMulSymbol}:                       {_CShiftAction, _CState90, ""},
-	{_CState346, CMinusSymbol}:                     {_CShiftAction, _CState89, ""},
-	{_CState346, CPlusSymbol}:                      {_CShiftAction, _CState91, ""},
-	{_CState346, CAndSymbol}:                       {_CShiftAction, _CState74, ""},
-	{_CState346, CExclaimSymbol}:                   {_CShiftAction, _CState82, ""},
-	{_CState346, CTildaSymbol}:                     {_CShiftAction, _CState98, ""},
-	{_CState346, _CPrimaryExpressionSymbol}:        {_CShiftAction, _CState119, ""},
-	{_CState346, _CPostfixExpressionSymbol}:        {_CShiftAction, _CState118, ""},
-	{_CState346, _CUnaryExpressionSymbol}:          {_CShiftAction, _CState125, ""},
-	{_CState346, _CUnaryOperatorSymbol}:            {_CShiftAction, _CState126, ""},
-	{_CState346, _CCastExpressionSymbol}:           {_CShiftAction, _CState103, ""},
-	{_CState346, _CMultiplicativeExpressionSymbol}: {_CShiftAction, _CState117, ""},
-	{_CState346, _CAdditiveExpressionSymbol}:       {_CShiftAction, _CState100, ""},
-	{_CState346, _CShiftExpressionSymbol}:          {_CShiftAction, _CState122, ""},
-	{_CState346, _CRelationalExpressionSymbol}:     {_CShiftAction, _CState120, ""},
-	{_CState346, _CEqualityExpressionSymbol}:       {_CShiftAction, _CState107, ""},
-	{_CState346, _CAndExpressionSymbol}:            {_CShiftAction, _CState101, ""},
-	{_CState346, _CExclusiveOrExpressionSymbol}:    {_CShiftAction, _CState108, ""},
-	{_CState346, _CInclusiveOrExpressionSymbol}:    {_CShiftAction, _CState111, ""},
-	{_CState346, _CLogicalAndExpressionSymbol}:     {_CShiftAction, _CState115, ""},
-	{_CState346, _CLogicalOrExpressionSymbol}:      {_CShiftAction, _CState116, ""},
-	{_CState346, _CConditionalExpressionSymbol}:    {_CShiftAction, _CState105, ""},
-	{_CState346, _CAssignmentExpressionSymbol}:     {_CShiftAction, _CState102, ""},
-	{_CState346, _CExpressionSymbol}:               {_CShiftAction, _CState109, ""},
-	{_CState346, _CStatementSymbol}:                {_CShiftAction, _CState349, ""},
-	{_CState346, _CLabeledStatementSymbol}:         {_CShiftAction, _CState114, ""},
-	{_CState346, _CCompoundStatementSymbol}:        {_CShiftAction, _CState104, ""},
-	{_CState346, _CExpressionStatementSymbol}:      {_CShiftAction, _CState110, ""},
-	{_CState346, _CSelectionStatementSymbol}:       {_CShiftAction, _CState121, ""},
-	{_CState346, _CIterationStatementSymbol}:       {_CShiftAction, _CState112, ""},
-	{_CState346, _CJumpStatementSymbol}:            {_CShiftAction, _CState113, ""},
-	{_CState347, CIdentifierSymbol}:                {_CShiftAction, _CState85, ""},
-	{_CState347, CConstantSymbol}:                  {_CShiftAction, _CState77, ""},
-	{_CState347, CStringLiteralSymbol}:             {_CShiftAction, _CState96, ""},
-	{_CState347, CSizeofSymbol}:                    {_CShiftAction, _CState95, ""},
-	{_CState347, CIncOpSymbol}:                     {_CShiftAction, _CState87, ""},
-	{_CState347, CDecOpSymbol}:                     {_CShiftAction, _CState79, ""},
-	{_CState347, CCaseSymbol}:                      {_CShiftAction, _CState76, ""},
-	{_CState347, CDefaultSymbol}:                   {_CShiftAction, _CState80, ""},
-	{_CState347, CIfSymbol}:                        {_CShiftAction, _CState86, ""},
-	{_CState347, CSwitchSymbol}:                    {_CShiftAction, _CState97, ""},
-	{_CState347, CWhileSymbol}:                     {_CShiftAction, _CState99, ""},
-	{_CState347, CDoSymbol}:                        {_CShiftAction, _CState81, ""},
-	{_CState347, CForSymbol}:                       {_CShiftAction, _CState83, ""},
-	{_CState347, CGotoSymbol}:                      {_CShiftAction, _CState84, ""},
-	{_CState347, CContinueSymbol}:                  {_CShiftAction, _CState78, ""},
-	{_CState347, CBreakSymbol}:                     {_CShiftAction, _CState75, ""},
-	{_CState347, CReturnSymbol}:                    {_CShiftAction, _CState93, ""},
-	{_CState347, CLparamSymbol}:                    {_CShiftAction, _CState88, ""},
-	{_CState347, CLcurlSymbol}:                     {_CShiftAction, _CState49, ""},
-	{_CState347, CSemicolonSymbol}:                 {_CShiftAction, _CState94, ""},
-	{_CState347, CMulSymbol}:                       {_CShiftAction, _CState90, ""},
-	{_CState347, CMinusSymbol}:                     {_CShiftAction, _CState89, ""},
-	{_CState347, CPlusSymbol}:                      {_CShiftAction, _CState91, ""},
-	{_CState347, CAndSymbol}:                       {_CShiftAction, _CState74, ""},
-	{_CState347, CExclaimSymbol}:                   {_CShiftAction, _CState82, ""},
-	{_CState347, CTildaSymbol}:                     {_CShiftAction, _CState98, ""},
-	{_CState347, _CPrimaryExpressionSymbol}:        {_CShiftAction, _CState119, ""},
-	{_CState347, _CPostfixExpressionSymbol}:        {_CShiftAction, _CState118, ""},
-	{_CState347, _CUnaryExpressionSymbol}:          {_CShiftAction, _CState125, ""},
-	{_CState347, _CUnaryOperatorSymbol}:            {_CShiftAction, _CState126, ""},
-	{_CState347, _CCastExpressionSymbol}:           {_CShiftAction, _CState103, ""},
-	{_CState347, _CMultiplicativeExpressionSymbol}: {_CShiftAction, _CState117, ""},
-	{_CState347, _CAdditiveExpressionSymbol}:       {_CShiftAction, _CState100, ""},
-	{_CState347, _CShiftExpressionSymbol}:          {_CShiftAction, _CState122, ""},
-	{_CState347, _CRelationalExpressionSymbol}:     {_CShiftAction, _CState120, ""},
-	{_CState347, _CEqualityExpressionSymbol}:       {_CShiftAction, _CState107, ""},
-	{_CState347, _CAndExpressionSymbol}:            {_CShiftAction, _CState101, ""},
-	{_CState347, _CExclusiveOrExpressionSymbol}:    {_CShiftAction, _CState108, ""},
-	{_CState347, _CInclusiveOrExpressionSymbol}:    {_CShiftAction, _CState111, ""},
-	{_CState347, _CLogicalAndExpressionSymbol}:     {_CShiftAction, _CState115, ""},
-	{_CState347, _CLogicalOrExpressionSymbol}:      {_CShiftAction, _CState116, ""},
-	{_CState347, _CConditionalExpressionSymbol}:    {_CShiftAction, _CState105, ""},
-	{_CState347, _CAssignmentExpressionSymbol}:     {_CShiftAction, _CState102, ""},
-	{_CState347, _CExpressionSymbol}:               {_CShiftAction, _CState109, ""},
-	{_CState347, _CStatementSymbol}:                {_CShiftAction, _CState350, ""},
-	{_CState347, _CLabeledStatementSymbol}:         {_CShiftAction, _CState114, ""},
-	{_CState347, _CCompoundStatementSymbol}:        {_CShiftAction, _CState104, ""},
-	{_CState347, _CExpressionStatementSymbol}:      {_CShiftAction, _CState110, ""},
-	{_CState347, _CSelectionStatementSymbol}:       {_CShiftAction, _CState121, ""},
-	{_CState347, _CIterationStatementSymbol}:       {_CShiftAction, _CState112, ""},
-	{_CState347, _CJumpStatementSymbol}:            {_CShiftAction, _CState113, ""},
+	{_CState335, CElseSymbol}:                      {_CShiftAction, _CState345, ""},
+	{_CState342, CSemicolonSymbol}:                 {_CShiftAction, _CState346, ""},
+	{_CState344, CIdentifierSymbol}:                {_CShiftAction, _CState85, ""},
+	{_CState344, CConstantSymbol}:                  {_CShiftAction, _CState77, ""},
+	{_CState344, CStringLiteralSymbol}:             {_CShiftAction, _CState96, ""},
+	{_CState344, CSizeofSymbol}:                    {_CShiftAction, _CState95, ""},
+	{_CState344, CIncOpSymbol}:                     {_CShiftAction, _CState87, ""},
+	{_CState344, CDecOpSymbol}:                     {_CShiftAction, _CState79, ""},
+	{_CState344, CCaseSymbol}:                      {_CShiftAction, _CState76, ""},
+	{_CState344, CDefaultSymbol}:                   {_CShiftAction, _CState80, ""},
+	{_CState344, CIfSymbol}:                        {_CShiftAction, _CState86, ""},
+	{_CState344, CSwitchSymbol}:                    {_CShiftAction, _CState97, ""},
+	{_CState344, CWhileSymbol}:                     {_CShiftAction, _CState99, ""},
+	{_CState344, CDoSymbol}:                        {_CShiftAction, _CState81, ""},
+	{_CState344, CForSymbol}:                       {_CShiftAction, _CState83, ""},
+	{_CState344, CGotoSymbol}:                      {_CShiftAction, _CState84, ""},
+	{_CState344, CContinueSymbol}:                  {_CShiftAction, _CState78, ""},
+	{_CState344, CBreakSymbol}:                     {_CShiftAction, _CState75, ""},
+	{_CState344, CReturnSymbol}:                    {_CShiftAction, _CState93, ""},
+	{_CState344, CLparamSymbol}:                    {_CShiftAction, _CState88, ""},
+	{_CState344, CLcurlSymbol}:                     {_CShiftAction, _CState49, ""},
+	{_CState344, CSemicolonSymbol}:                 {_CShiftAction, _CState94, ""},
+	{_CState344, CMulSymbol}:                       {_CShiftAction, _CState90, ""},
+	{_CState344, CMinusSymbol}:                     {_CShiftAction, _CState89, ""},
+	{_CState344, CPlusSymbol}:                      {_CShiftAction, _CState91, ""},
+	{_CState344, CAndSymbol}:                       {_CShiftAction, _CState74, ""},
+	{_CState344, CExclaimSymbol}:                   {_CShiftAction, _CState82, ""},
+	{_CState344, CTildaSymbol}:                     {_CShiftAction, _CState98, ""},
+	{_CState344, _CPrimaryExpressionSymbol}:        {_CShiftAction, _CState119, ""},
+	{_CState344, _CPostfixExpressionSymbol}:        {_CShiftAction, _CState118, ""},
+	{_CState344, _CUnaryExpressionSymbol}:          {_CShiftAction, _CState125, ""},
+	{_CState344, _CUnaryOperatorSymbol}:            {_CShiftAction, _CState126, ""},
+	{_CState344, _CCastExpressionSymbol}:           {_CShiftAction, _CState103, ""},
+	{_CState344, _CMultiplicativeExpressionSymbol}: {_CShiftAction, _CState117, ""},
+	{_CState344, _CAdditiveExpressionSymbol}:       {_CShiftAction, _CState100, ""},
+	{_CState344, _CShiftExpressionSymbol}:          {_CShiftAction, _CState122, ""},
+	{_CState344, _CRelationalExpressionSymbol}:     {_CShiftAction, _CState120, ""},
+	{_CState344, _CEqualityExpressionSymbol}:       {_CShiftAction, _CState107, ""},
+	{_CState344, _CAndExpressionSymbol}:            {_CShiftAction, _CState101, ""},
+	{_CState344, _CExclusiveOrExpressionSymbol}:    {_CShiftAction, _CState108, ""},
+	{_CState344, _CInclusiveOrExpressionSymbol}:    {_CShiftAction, _CState111, ""},
+	{_CState344, _CLogicalAndExpressionSymbol}:     {_CShiftAction, _CState115, ""},
+	{_CState344, _CLogicalOrExpressionSymbol}:      {_CShiftAction, _CState116, ""},
+	{_CState344, _CConditionalExpressionSymbol}:    {_CShiftAction, _CState105, ""},
+	{_CState344, _CAssignmentExpressionSymbol}:     {_CShiftAction, _CState102, ""},
+	{_CState344, _CExpressionSymbol}:               {_CShiftAction, _CState109, ""},
+	{_CState344, _CStatementSymbol}:                {_CShiftAction, _CState347, ""},
+	{_CState344, _CLabeledStatementSymbol}:         {_CShiftAction, _CState114, ""},
+	{_CState344, _CCompoundStatementSymbol}:        {_CShiftAction, _CState104, ""},
+	{_CState344, _CExpressionStatementSymbol}:      {_CShiftAction, _CState110, ""},
+	{_CState344, _CSelectionStatementSymbol}:       {_CShiftAction, _CState121, ""},
+	{_CState344, _CIterationStatementSymbol}:       {_CShiftAction, _CState112, ""},
+	{_CState344, _CJumpStatementSymbol}:            {_CShiftAction, _CState113, ""},
+	{_CState345, CIdentifierSymbol}:                {_CShiftAction, _CState85, ""},
+	{_CState345, CConstantSymbol}:                  {_CShiftAction, _CState77, ""},
+	{_CState345, CStringLiteralSymbol}:             {_CShiftAction, _CState96, ""},
+	{_CState345, CSizeofSymbol}:                    {_CShiftAction, _CState95, ""},
+	{_CState345, CIncOpSymbol}:                     {_CShiftAction, _CState87, ""},
+	{_CState345, CDecOpSymbol}:                     {_CShiftAction, _CState79, ""},
+	{_CState345, CCaseSymbol}:                      {_CShiftAction, _CState76, ""},
+	{_CState345, CDefaultSymbol}:                   {_CShiftAction, _CState80, ""},
+	{_CState345, CIfSymbol}:                        {_CShiftAction, _CState86, ""},
+	{_CState345, CSwitchSymbol}:                    {_CShiftAction, _CState97, ""},
+	{_CState345, CWhileSymbol}:                     {_CShiftAction, _CState99, ""},
+	{_CState345, CDoSymbol}:                        {_CShiftAction, _CState81, ""},
+	{_CState345, CForSymbol}:                       {_CShiftAction, _CState83, ""},
+	{_CState345, CGotoSymbol}:                      {_CShiftAction, _CState84, ""},
+	{_CState345, CContinueSymbol}:                  {_CShiftAction, _CState78, ""},
+	{_CState345, CBreakSymbol}:                     {_CShiftAction, _CState75, ""},
+	{_CState345, CReturnSymbol}:                    {_CShiftAction, _CState93, ""},
+	{_CState345, CLparamSymbol}:                    {_CShiftAction, _CState88, ""},
+	{_CState345, CLcurlSymbol}:                     {_CShiftAction, _CState49, ""},
+	{_CState345, CSemicolonSymbol}:                 {_CShiftAction, _CState94, ""},
+	{_CState345, CMulSymbol}:                       {_CShiftAction, _CState90, ""},
+	{_CState345, CMinusSymbol}:                     {_CShiftAction, _CState89, ""},
+	{_CState345, CPlusSymbol}:                      {_CShiftAction, _CState91, ""},
+	{_CState345, CAndSymbol}:                       {_CShiftAction, _CState74, ""},
+	{_CState345, CExclaimSymbol}:                   {_CShiftAction, _CState82, ""},
+	{_CState345, CTildaSymbol}:                     {_CShiftAction, _CState98, ""},
+	{_CState345, _CPrimaryExpressionSymbol}:        {_CShiftAction, _CState119, ""},
+	{_CState345, _CPostfixExpressionSymbol}:        {_CShiftAction, _CState118, ""},
+	{_CState345, _CUnaryExpressionSymbol}:          {_CShiftAction, _CState125, ""},
+	{_CState345, _CUnaryOperatorSymbol}:            {_CShiftAction, _CState126, ""},
+	{_CState345, _CCastExpressionSymbol}:           {_CShiftAction, _CState103, ""},
+	{_CState345, _CMultiplicativeExpressionSymbol}: {_CShiftAction, _CState117, ""},
+	{_CState345, _CAdditiveExpressionSymbol}:       {_CShiftAction, _CState100, ""},
+	{_CState345, _CShiftExpressionSymbol}:          {_CShiftAction, _CState122, ""},
+	{_CState345, _CRelationalExpressionSymbol}:     {_CShiftAction, _CState120, ""},
+	{_CState345, _CEqualityExpressionSymbol}:       {_CShiftAction, _CState107, ""},
+	{_CState345, _CAndExpressionSymbol}:            {_CShiftAction, _CState101, ""},
+	{_CState345, _CExclusiveOrExpressionSymbol}:    {_CShiftAction, _CState108, ""},
+	{_CState345, _CInclusiveOrExpressionSymbol}:    {_CShiftAction, _CState111, ""},
+	{_CState345, _CLogicalAndExpressionSymbol}:     {_CShiftAction, _CState115, ""},
+	{_CState345, _CLogicalOrExpressionSymbol}:      {_CShiftAction, _CState116, ""},
+	{_CState345, _CConditionalExpressionSymbol}:    {_CShiftAction, _CState105, ""},
+	{_CState345, _CAssignmentExpressionSymbol}:     {_CShiftAction, _CState102, ""},
+	{_CState345, _CExpressionSymbol}:               {_CShiftAction, _CState109, ""},
+	{_CState345, _CStatementSymbol}:                {_CShiftAction, _CState348, ""},
+	{_CState345, _CLabeledStatementSymbol}:         {_CShiftAction, _CState114, ""},
+	{_CState345, _CCompoundStatementSymbol}:        {_CShiftAction, _CState104, ""},
+	{_CState345, _CExpressionStatementSymbol}:      {_CShiftAction, _CState110, ""},
+	{_CState345, _CSelectionStatementSymbol}:       {_CShiftAction, _CState121, ""},
+	{_CState345, _CIterationStatementSymbol}:       {_CShiftAction, _CState112, ""},
+	{_CState345, _CJumpStatementSymbol}:            {_CShiftAction, _CState113, ""},
 	{_CState2, _CWildcardMarker}:                   {_CReduceAction, "", _CReduceDToStorageClassSpecifier},
 	{_CState3, _CWildcardMarker}:                   {_CReduceAction, "", _CReduceBToTypeSpecifier},
 	{_CState4, _CWildcardMarker}:                   {_CReduceAction, "", _CReduceAToTypeQualifier},
@@ -5846,46 +5842,16 @@ var _CActionTable = _CActionTableType{
 	{_CState330, _CWildcardMarker}:                 {_CReduceAction, "", _CReduceCToInitializer},
 	{_CState331, _CWildcardMarker}:                 {_CReduceAction, "", _CReduceBToInitializerList},
 	{_CState335, _CWildcardMarker}:                 {_CReduceAction, "", _CReduceAToSelectionStatement},
-	{_CState336, CAndSymbol}:                       {_CReduceAction, "", _CReduceAToSelectionStatement},
-	{_CState336, CBreakSymbol}:                     {_CReduceAction, "", _CReduceAToSelectionStatement},
-	{_CState336, CCaseSymbol}:                      {_CReduceAction, "", _CReduceAToSelectionStatement},
-	{_CState336, CConstantSymbol}:                  {_CReduceAction, "", _CReduceAToSelectionStatement},
-	{_CState336, CContinueSymbol}:                  {_CReduceAction, "", _CReduceAToSelectionStatement},
-	{_CState336, CDecOpSymbol}:                     {_CReduceAction, "", _CReduceAToSelectionStatement},
-	{_CState336, CDefaultSymbol}:                   {_CReduceAction, "", _CReduceAToSelectionStatement},
-	{_CState336, CDoSymbol}:                        {_CReduceAction, "", _CReduceAToSelectionStatement},
-	{_CState336, CElseSymbol}:                      {_CReduceAction, "", _CReduceAToSelectionStatement},
-	{_CState336, CExclaimSymbol}:                   {_CReduceAction, "", _CReduceAToSelectionStatement},
-	{_CState336, CForSymbol}:                       {_CReduceAction, "", _CReduceAToSelectionStatement},
-	{_CState336, CGotoSymbol}:                      {_CReduceAction, "", _CReduceAToSelectionStatement},
-	{_CState336, CIdentifierSymbol}:                {_CReduceAction, "", _CReduceAToSelectionStatement},
-	{_CState336, CIfSymbol}:                        {_CReduceAction, "", _CReduceAToSelectionStatement},
-	{_CState336, CIncOpSymbol}:                     {_CReduceAction, "", _CReduceAToSelectionStatement},
-	{_CState336, CLcurlSymbol}:                     {_CReduceAction, "", _CReduceAToSelectionStatement},
-	{_CState336, CLparamSymbol}:                    {_CReduceAction, "", _CReduceAToSelectionStatement},
-	{_CState336, CMinusSymbol}:                     {_CReduceAction, "", _CReduceAToSelectionStatement},
-	{_CState336, CMulSymbol}:                       {_CReduceAction, "", _CReduceAToSelectionStatement},
-	{_CState336, CPlusSymbol}:                      {_CReduceAction, "", _CReduceAToSelectionStatement},
-	{_CState336, CRcurlSymbol}:                     {_CReduceAction, "", _CReduceAToSelectionStatement},
-	{_CState336, CReturnSymbol}:                    {_CReduceAction, "", _CReduceAToSelectionStatement},
-	{_CState336, CSemicolonSymbol}:                 {_CReduceAction, "", _CReduceAToSelectionStatement},
-	{_CState336, CSizeofSymbol}:                    {_CReduceAction, "", _CReduceAToSelectionStatement},
-	{_CState336, CStringLiteralSymbol}:             {_CReduceAction, "", _CReduceAToSelectionStatement},
-	{_CState336, CSwitchSymbol}:                    {_CReduceAction, "", _CReduceAToSelectionStatement},
-	{_CState336, CTildaSymbol}:                     {_CReduceAction, "", _CReduceAToSelectionStatement},
-	{_CState336, CWhileSymbol}:                     {_CReduceAction, "", _CReduceAToSelectionStatement},
-	{_CState337, CElseSymbol}:                      {_CReduceAction, "", _CReduceAToSelectionStatement},
-	{_CState337, CWhileSymbol}:                     {_CReduceAction, "", _CReduceAToSelectionStatement},
-	{_CState338, _CWildcardMarker}:                 {_CReduceAction, "", _CReduceCToSelectionStatement},
-	{_CState339, _CWildcardMarker}:                 {_CReduceAction, "", _CReduceAToIterationStatement},
-	{_CState340, _CWildcardMarker}:                 {_CReduceAction, "", _CReduceBToConditionalExpression},
-	{_CState341, _CWildcardMarker}:                 {_CReduceAction, "", _CReduceBToArgumentExpressionList},
-	{_CState342, _CWildcardMarker}:                 {_CReduceAction, "", _CReduceEToDirectAbstractDeclarator},
-	{_CState343, _CWildcardMarker}:                 {_CReduceAction, "", _CReduceIToDirectAbstractDeclarator},
-	{_CState345, _CWildcardMarker}:                 {_CReduceAction, "", _CReduceCToIterationStatement},
-	{_CState348, _CWildcardMarker}:                 {_CReduceAction, "", _CReduceBToIterationStatement},
-	{_CState349, _CWildcardMarker}:                 {_CReduceAction, "", _CReduceDToIterationStatement},
-	{_CState350, _CWildcardMarker}:                 {_CReduceAction, "", _CReduceBToSelectionStatement},
+	{_CState336, _CWildcardMarker}:                 {_CReduceAction, "", _CReduceCToSelectionStatement},
+	{_CState337, _CWildcardMarker}:                 {_CReduceAction, "", _CReduceAToIterationStatement},
+	{_CState338, _CWildcardMarker}:                 {_CReduceAction, "", _CReduceBToConditionalExpression},
+	{_CState339, _CWildcardMarker}:                 {_CReduceAction, "", _CReduceBToArgumentExpressionList},
+	{_CState340, _CWildcardMarker}:                 {_CReduceAction, "", _CReduceEToDirectAbstractDeclarator},
+	{_CState341, _CWildcardMarker}:                 {_CReduceAction, "", _CReduceIToDirectAbstractDeclarator},
+	{_CState343, _CWildcardMarker}:                 {_CReduceAction, "", _CReduceCToIterationStatement},
+	{_CState346, _CWildcardMarker}:                 {_CReduceAction, "", _CReduceBToIterationStatement},
+	{_CState347, _CWildcardMarker}:                 {_CReduceAction, "", _CReduceDToIterationStatement},
+	{_CState348, _CWildcardMarker}:                 {_CReduceAction, "", _CReduceBToSelectionStatement},
 }
 
 var _CExpectedTerminals = map[_CStateId][]CSymbolId{
@@ -6073,11 +6039,9 @@ var _CExpectedTerminals = map[_CStateId][]CSymbolId{
 	_CState333: []CSymbolId{CIdentifierSymbol, CConstantSymbol, CStringLiteralSymbol, CSizeofSymbol, CIncOpSymbol, CDecOpSymbol, CCaseSymbol, CDefaultSymbol, CIfSymbol, CSwitchSymbol, CWhileSymbol, CDoSymbol, CForSymbol, CGotoSymbol, CContinueSymbol, CBreakSymbol, CReturnSymbol, CLparamSymbol, CLcurlSymbol, CSemicolonSymbol, CMulSymbol, CMinusSymbol, CPlusSymbol, CAndSymbol, CExclaimSymbol, CTildaSymbol},
 	_CState334: []CSymbolId{CRparamSymbol, CCommaSymbol},
 	_CState335: []CSymbolId{CElseSymbol},
-	_CState336: []CSymbolId{CElseSymbol, CAndSymbol, CBreakSymbol, CCaseSymbol, CConstantSymbol, CContinueSymbol, CDecOpSymbol, CDefaultSymbol, CDoSymbol, CElseSymbol, CExclaimSymbol, CForSymbol, CGotoSymbol, CIdentifierSymbol, CIfSymbol, CIncOpSymbol, CLcurlSymbol, CLparamSymbol, CMinusSymbol, CMulSymbol, CPlusSymbol, CRcurlSymbol, CReturnSymbol, CSemicolonSymbol, CSizeofSymbol, CStringLiteralSymbol, CSwitchSymbol, CTildaSymbol, CWhileSymbol},
-	_CState337: []CSymbolId{CElseSymbol, CElseSymbol, CWhileSymbol},
-	_CState344: []CSymbolId{CSemicolonSymbol},
-	_CState346: []CSymbolId{CIdentifierSymbol, CConstantSymbol, CStringLiteralSymbol, CSizeofSymbol, CIncOpSymbol, CDecOpSymbol, CCaseSymbol, CDefaultSymbol, CIfSymbol, CSwitchSymbol, CWhileSymbol, CDoSymbol, CForSymbol, CGotoSymbol, CContinueSymbol, CBreakSymbol, CReturnSymbol, CLparamSymbol, CLcurlSymbol, CSemicolonSymbol, CMulSymbol, CMinusSymbol, CPlusSymbol, CAndSymbol, CExclaimSymbol, CTildaSymbol},
-	_CState347: []CSymbolId{CIdentifierSymbol, CConstantSymbol, CStringLiteralSymbol, CSizeofSymbol, CIncOpSymbol, CDecOpSymbol, CCaseSymbol, CDefaultSymbol, CIfSymbol, CSwitchSymbol, CWhileSymbol, CDoSymbol, CForSymbol, CGotoSymbol, CContinueSymbol, CBreakSymbol, CReturnSymbol, CLparamSymbol, CLcurlSymbol, CSemicolonSymbol, CMulSymbol, CMinusSymbol, CPlusSymbol, CAndSymbol, CExclaimSymbol, CTildaSymbol},
+	_CState342: []CSymbolId{CSemicolonSymbol},
+	_CState344: []CSymbolId{CIdentifierSymbol, CConstantSymbol, CStringLiteralSymbol, CSizeofSymbol, CIncOpSymbol, CDecOpSymbol, CCaseSymbol, CDefaultSymbol, CIfSymbol, CSwitchSymbol, CWhileSymbol, CDoSymbol, CForSymbol, CGotoSymbol, CContinueSymbol, CBreakSymbol, CReturnSymbol, CLparamSymbol, CLcurlSymbol, CSemicolonSymbol, CMulSymbol, CMinusSymbol, CPlusSymbol, CAndSymbol, CExclaimSymbol, CTildaSymbol},
+	_CState345: []CSymbolId{CIdentifierSymbol, CConstantSymbol, CStringLiteralSymbol, CSizeofSymbol, CIncOpSymbol, CDecOpSymbol, CCaseSymbol, CDefaultSymbol, CIfSymbol, CSwitchSymbol, CWhileSymbol, CDoSymbol, CForSymbol, CGotoSymbol, CContinueSymbol, CBreakSymbol, CReturnSymbol, CLparamSymbol, CLcurlSymbol, CSemicolonSymbol, CMulSymbol, CMinusSymbol, CPlusSymbol, CAndSymbol, CExclaimSymbol, CTildaSymbol},
 }
 
 /*
@@ -11239,7 +11203,7 @@ Parser Debug States:
       conditional_expression -> State 105
       assignment_expression -> State 102
       expression -> State 109
-      statement -> State 337
+      statement -> State 335
       labeled_statement -> State 114
       compound_statement -> State 104
       expression_statement -> State 110
@@ -11313,7 +11277,7 @@ Parser Debug States:
       conditional_expression -> State 105
       assignment_expression -> State 102
       expression -> State 109
-      statement -> State 338
+      statement -> State 336
       labeled_statement -> State 114
       compound_statement -> State 104
       expression_statement -> State 110
@@ -11371,7 +11335,7 @@ Parser Debug States:
       conditional_expression -> State 105
       assignment_expression -> State 102
       expression -> State 109
-      statement -> State 339
+      statement -> State 337
       labeled_statement -> State 114
       compound_statement -> State 104
       expression_statement -> State 110
@@ -11413,7 +11377,7 @@ Parser Debug States:
       inclusive_or_expression -> State 111
       logical_and_expression -> State 115
       logical_or_expression -> State 116
-      conditional_expression -> State 340
+      conditional_expression -> State 338
 
   State 318:
     Kernel Items:
@@ -11458,7 +11422,7 @@ Parser Debug States:
       logical_and_expression -> State 115
       logical_or_expression -> State 116
       conditional_expression -> State 105
-      assignment_expression -> State 341
+      assignment_expression -> State 339
 
   State 320:
     Kernel Items:
@@ -11506,7 +11470,7 @@ Parser Debug States:
     Reduce:
       (nil)
     Goto:
-      RBRACE -> State 342
+      RBRACE -> State 340
 
   State 326:
     Kernel Items:
@@ -11522,7 +11486,7 @@ Parser Debug States:
     Reduce:
       (nil)
     Goto:
-      RPARAM -> State 343
+      RPARAM -> State 341
 
   State 328:
     Kernel Items:
@@ -11563,7 +11527,7 @@ Parser Debug States:
     Reduce:
       (nil)
     Goto:
-      RPARAM -> State 344
+      RPARAM -> State 342
       COMMA -> State 186
 
   State 333:
@@ -11616,7 +11580,7 @@ Parser Debug States:
       conditional_expression -> State 105
       assignment_expression -> State 102
       expression -> State 109
-      statement -> State 345
+      statement -> State 343
       labeled_statement -> State 114
       compound_statement -> State 104
       expression_statement -> State 110
@@ -11631,7 +11595,7 @@ Parser Debug States:
     Reduce:
       (nil)
     Goto:
-      RPARAM -> State 346
+      RPARAM -> State 344
       COMMA -> State 186
 
   State 335:
@@ -11641,115 +11605,9 @@ Parser Debug States:
     Reduce:
       * -> [selection_statement]
     Goto:
-      ELSE -> State 347
+      ELSE -> State 345
 
   State 336:
-    Kernel Items:
-      selection_statement:IF LPARAM expression RPARAM statement.,AND
-      selection_statement:IF LPARAM expression RPARAM statement.,BREAK
-      selection_statement:IF LPARAM expression RPARAM statement.,CASE
-      selection_statement:IF LPARAM expression RPARAM statement.,CONSTANT
-      selection_statement:IF LPARAM expression RPARAM statement.,CONTINUE
-      selection_statement:IF LPARAM expression RPARAM statement.,DEC_OP
-      selection_statement:IF LPARAM expression RPARAM statement.,DEFAULT
-      selection_statement:IF LPARAM expression RPARAM statement.,DO
-      selection_statement:IF LPARAM expression RPARAM statement.,ELSE
-      selection_statement:IF LPARAM expression RPARAM statement.,EXCLAIM
-      selection_statement:IF LPARAM expression RPARAM statement.,FOR
-      selection_statement:IF LPARAM expression RPARAM statement.,GOTO
-      selection_statement:IF LPARAM expression RPARAM statement.,IDENTIFIER
-      selection_statement:IF LPARAM expression RPARAM statement.,IF
-      selection_statement:IF LPARAM expression RPARAM statement.,INC_OP
-      selection_statement:IF LPARAM expression RPARAM statement.,LCURL
-      selection_statement:IF LPARAM expression RPARAM statement.,LPARAM
-      selection_statement:IF LPARAM expression RPARAM statement.,MINUS
-      selection_statement:IF LPARAM expression RPARAM statement.,MUL
-      selection_statement:IF LPARAM expression RPARAM statement.,PLUS
-      selection_statement:IF LPARAM expression RPARAM statement.,RCURL
-      selection_statement:IF LPARAM expression RPARAM statement.,RETURN
-      selection_statement:IF LPARAM expression RPARAM statement.,SEMICOLON
-      selection_statement:IF LPARAM expression RPARAM statement.,SIZEOF
-      selection_statement:IF LPARAM expression RPARAM statement.,STRING_LITERAL
-      selection_statement:IF LPARAM expression RPARAM statement.,SWITCH
-      selection_statement:IF LPARAM expression RPARAM statement.,TILDA
-      selection_statement:IF LPARAM expression RPARAM statement.,WHILE
-      selection_statement:IF LPARAM expression RPARAM statement.ELSE statement,AND
-      selection_statement:IF LPARAM expression RPARAM statement.ELSE statement,BREAK
-      selection_statement:IF LPARAM expression RPARAM statement.ELSE statement,CASE
-      selection_statement:IF LPARAM expression RPARAM statement.ELSE statement,CONSTANT
-      selection_statement:IF LPARAM expression RPARAM statement.ELSE statement,CONTINUE
-      selection_statement:IF LPARAM expression RPARAM statement.ELSE statement,DEC_OP
-      selection_statement:IF LPARAM expression RPARAM statement.ELSE statement,DEFAULT
-      selection_statement:IF LPARAM expression RPARAM statement.ELSE statement,DO
-      selection_statement:IF LPARAM expression RPARAM statement.ELSE statement,ELSE
-      selection_statement:IF LPARAM expression RPARAM statement.ELSE statement,EXCLAIM
-      selection_statement:IF LPARAM expression RPARAM statement.ELSE statement,FOR
-      selection_statement:IF LPARAM expression RPARAM statement.ELSE statement,GOTO
-      selection_statement:IF LPARAM expression RPARAM statement.ELSE statement,IDENTIFIER
-      selection_statement:IF LPARAM expression RPARAM statement.ELSE statement,IF
-      selection_statement:IF LPARAM expression RPARAM statement.ELSE statement,INC_OP
-      selection_statement:IF LPARAM expression RPARAM statement.ELSE statement,LCURL
-      selection_statement:IF LPARAM expression RPARAM statement.ELSE statement,LPARAM
-      selection_statement:IF LPARAM expression RPARAM statement.ELSE statement,MINUS
-      selection_statement:IF LPARAM expression RPARAM statement.ELSE statement,MUL
-      selection_statement:IF LPARAM expression RPARAM statement.ELSE statement,PLUS
-      selection_statement:IF LPARAM expression RPARAM statement.ELSE statement,RCURL
-      selection_statement:IF LPARAM expression RPARAM statement.ELSE statement,RETURN
-      selection_statement:IF LPARAM expression RPARAM statement.ELSE statement,SEMICOLON
-      selection_statement:IF LPARAM expression RPARAM statement.ELSE statement,SIZEOF
-      selection_statement:IF LPARAM expression RPARAM statement.ELSE statement,STRING_LITERAL
-      selection_statement:IF LPARAM expression RPARAM statement.ELSE statement,SWITCH
-      selection_statement:IF LPARAM expression RPARAM statement.ELSE statement,TILDA
-      selection_statement:IF LPARAM expression RPARAM statement.ELSE statement,WHILE
-    Reduce:
-      IDENTIFIER -> [selection_statement]
-      CONSTANT -> [selection_statement]
-      STRING_LITERAL -> [selection_statement]
-      SIZEOF -> [selection_statement]
-      INC_OP -> [selection_statement]
-      DEC_OP -> [selection_statement]
-      CASE -> [selection_statement]
-      DEFAULT -> [selection_statement]
-      IF -> [selection_statement]
-      ELSE -> [selection_statement]
-      SWITCH -> [selection_statement]
-      WHILE -> [selection_statement]
-      DO -> [selection_statement]
-      FOR -> [selection_statement]
-      GOTO -> [selection_statement]
-      CONTINUE -> [selection_statement]
-      BREAK -> [selection_statement]
-      RETURN -> [selection_statement]
-      LPARAM -> [selection_statement]
-      LCURL -> [selection_statement]
-      RCURL -> [selection_statement]
-      SEMICOLON -> [selection_statement]
-      MUL -> [selection_statement]
-      MINUS -> [selection_statement]
-      PLUS -> [selection_statement]
-      AND -> [selection_statement]
-      EXCLAIM -> [selection_statement]
-      TILDA -> [selection_statement]
-    Goto:
-      ELSE -> State 347
-    Shift/reduce conflict symbols:
-      [ELSE]
-
-  State 337:
-    Kernel Items:
-      selection_statement:IF LPARAM expression RPARAM statement.,ELSE
-      selection_statement:IF LPARAM expression RPARAM statement.,WHILE
-      selection_statement:IF LPARAM expression RPARAM statement.ELSE statement,ELSE
-      selection_statement:IF LPARAM expression RPARAM statement.ELSE statement,WHILE
-    Reduce:
-      ELSE -> [selection_statement]
-      WHILE -> [selection_statement]
-    Goto:
-      ELSE -> State 347
-    Shift/reduce conflict symbols:
-      [ELSE]
-
-  State 338:
     Kernel Items:
       selection_statement:SWITCH LPARAM expression RPARAM statement.,*
     Reduce:
@@ -11757,7 +11615,7 @@ Parser Debug States:
     Goto:
       (nil)
 
-  State 339:
+  State 337:
     Kernel Items:
       iteration_statement:WHILE LPARAM expression RPARAM statement.,*
     Reduce:
@@ -11765,7 +11623,7 @@ Parser Debug States:
     Goto:
       (nil)
 
-  State 340:
+  State 338:
     Kernel Items:
       conditional_expression:logical_or_expression QUESTION expression COLON conditional_expression.,*
     Reduce:
@@ -11773,7 +11631,7 @@ Parser Debug States:
     Goto:
       (nil)
 
-  State 341:
+  State 339:
     Kernel Items:
       argument_expression_list:argument_expression_list COMMA assignment_expression.,*
     Reduce:
@@ -11781,7 +11639,7 @@ Parser Debug States:
     Goto:
       (nil)
 
-  State 342:
+  State 340:
     Kernel Items:
       direct_abstract_declarator:direct_abstract_declarator LBRACE constant_expression RBRACE.,*
     Reduce:
@@ -11789,7 +11647,7 @@ Parser Debug States:
     Goto:
       (nil)
 
-  State 343:
+  State 341:
     Kernel Items:
       direct_abstract_declarator:direct_abstract_declarator LPARAM parameter_type_list RPARAM.,*
     Reduce:
@@ -11797,15 +11655,15 @@ Parser Debug States:
     Goto:
       (nil)
 
-  State 344:
+  State 342:
     Kernel Items:
       iteration_statement:DO statement WHILE LPARAM expression RPARAM.SEMICOLON
     Reduce:
       (nil)
     Goto:
-      SEMICOLON -> State 348
+      SEMICOLON -> State 346
 
-  State 345:
+  State 343:
     Kernel Items:
       iteration_statement:FOR LPARAM expression_statement expression_statement RPARAM statement.,*
     Reduce:
@@ -11813,7 +11671,7 @@ Parser Debug States:
     Goto:
       (nil)
 
-  State 346:
+  State 344:
     Kernel Items:
       iteration_statement:FOR LPARAM expression_statement expression_statement expression RPARAM.statement
     Reduce:
@@ -11863,7 +11721,7 @@ Parser Debug States:
       conditional_expression -> State 105
       assignment_expression -> State 102
       expression -> State 109
-      statement -> State 349
+      statement -> State 347
       labeled_statement -> State 114
       compound_statement -> State 104
       expression_statement -> State 110
@@ -11871,7 +11729,7 @@ Parser Debug States:
       iteration_statement -> State 112
       jump_statement -> State 113
 
-  State 347:
+  State 345:
     Kernel Items:
       selection_statement:IF LPARAM expression RPARAM statement ELSE.statement
     Reduce:
@@ -11921,7 +11779,7 @@ Parser Debug States:
       conditional_expression -> State 105
       assignment_expression -> State 102
       expression -> State 109
-      statement -> State 350
+      statement -> State 348
       labeled_statement -> State 114
       compound_statement -> State 104
       expression_statement -> State 110
@@ -11929,7 +11787,7 @@ Parser Debug States:
       iteration_statement -> State 112
       jump_statement -> State 113
 
-  State 348:
+  State 346:
     Kernel Items:
       iteration_statement:DO statement WHILE LPARAM expression RPARAM SEMICOLON.,*
     Reduce:
@@ -11937,7 +11795,7 @@ Parser Debug States:
     Goto:
       (nil)
 
-  State 349:
+  State 347:
     Kernel Items:
       iteration_statement:FOR LPARAM expression_statement expression_statement expression RPARAM statement.,*
     Reduce:
@@ -11945,7 +11803,7 @@ Parser Debug States:
     Goto:
       (nil)
 
-  State 350:
+  State 348:
     Kernel Items:
       selection_statement:IF LPARAM expression RPARAM statement ELSE statement.,*
     Reduce:
@@ -11953,9 +11811,9 @@ Parser Debug States:
     Goto:
       (nil)
 
-Number of states: 351
-Number of shift actions: 2989
-Number of reduce actions: 246
-Number of shift/reduce conflicts: 2
+Number of states: 349
+Number of shift actions: 2987
+Number of reduce actions: 216
+Number of shift/reduce conflicts: 0
 Number of reduce/reduce conflicts: 0
 */
