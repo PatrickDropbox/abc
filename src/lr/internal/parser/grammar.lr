@@ -107,6 +107,8 @@ go:
         AdditionalSection:  "*AdditionalSection"
         AdditionalSections: "[]*AdditionalSection"
         Grammar:            "*Grammar"
+
+    output_debug_non_kernel_items: true
 java:
     some other yet to be determined spec, etc.
 }%%
