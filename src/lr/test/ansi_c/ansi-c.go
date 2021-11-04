@@ -1464,6 +1464,8 @@ const (
 	_CState346 = _CStateId("State 346")
 	_CState347 = _CStateId("State 347")
 	_CState348 = _CStateId("State 348")
+	_CState349 = _CStateId("State 349")
+	_CState350 = _CStateId("State 350")
 )
 
 type _CSymbol struct {
@@ -5308,7 +5310,7 @@ var _CActionTable = _CActionTableType{
 	{_CState312, _CConditionalExpressionSymbol}:    {_CShiftAction, _CState105, ""},
 	{_CState312, _CAssignmentExpressionSymbol}:     {_CShiftAction, _CState102, ""},
 	{_CState312, _CExpressionSymbol}:               {_CShiftAction, _CState109, ""},
-	{_CState312, _CStatementSymbol}:                {_CShiftAction, _CState335, ""},
+	{_CState312, _CStatementSymbol}:                {_CShiftAction, _CState337, ""},
 	{_CState312, _CLabeledStatementSymbol}:         {_CShiftAction, _CState114, ""},
 	{_CState312, _CCompoundStatementSymbol}:        {_CShiftAction, _CState104, ""},
 	{_CState312, _CExpressionStatementSymbol}:      {_CShiftAction, _CState110, ""},
@@ -5359,7 +5361,7 @@ var _CActionTable = _CActionTableType{
 	{_CState315, _CConditionalExpressionSymbol}:    {_CShiftAction, _CState105, ""},
 	{_CState315, _CAssignmentExpressionSymbol}:     {_CShiftAction, _CState102, ""},
 	{_CState315, _CExpressionSymbol}:               {_CShiftAction, _CState109, ""},
-	{_CState315, _CStatementSymbol}:                {_CShiftAction, _CState336, ""},
+	{_CState315, _CStatementSymbol}:                {_CShiftAction, _CState338, ""},
 	{_CState315, _CLabeledStatementSymbol}:         {_CShiftAction, _CState114, ""},
 	{_CState315, _CCompoundStatementSymbol}:        {_CShiftAction, _CState104, ""},
 	{_CState315, _CExpressionStatementSymbol}:      {_CShiftAction, _CState110, ""},
@@ -5410,7 +5412,7 @@ var _CActionTable = _CActionTableType{
 	{_CState316, _CConditionalExpressionSymbol}:    {_CShiftAction, _CState105, ""},
 	{_CState316, _CAssignmentExpressionSymbol}:     {_CShiftAction, _CState102, ""},
 	{_CState316, _CExpressionSymbol}:               {_CShiftAction, _CState109, ""},
-	{_CState316, _CStatementSymbol}:                {_CShiftAction, _CState337, ""},
+	{_CState316, _CStatementSymbol}:                {_CShiftAction, _CState339, ""},
 	{_CState316, _CLabeledStatementSymbol}:         {_CShiftAction, _CState114, ""},
 	{_CState316, _CCompoundStatementSymbol}:        {_CShiftAction, _CState104, ""},
 	{_CState316, _CExpressionStatementSymbol}:      {_CShiftAction, _CState110, ""},
@@ -5445,7 +5447,7 @@ var _CActionTable = _CActionTableType{
 	{_CState317, _CInclusiveOrExpressionSymbol}:    {_CShiftAction, _CState111, ""},
 	{_CState317, _CLogicalAndExpressionSymbol}:     {_CShiftAction, _CState115, ""},
 	{_CState317, _CLogicalOrExpressionSymbol}:      {_CShiftAction, _CState116, ""},
-	{_CState317, _CConditionalExpressionSymbol}:    {_CShiftAction, _CState338, ""},
+	{_CState317, _CConditionalExpressionSymbol}:    {_CShiftAction, _CState340, ""},
 	{_CState319, CIdentifierSymbol}:                {_CShiftAction, _CState130, ""},
 	{_CState319, CConstantSymbol}:                  {_CShiftAction, _CState77, ""},
 	{_CState319, CStringLiteralSymbol}:             {_CShiftAction, _CState96, ""},
@@ -5475,10 +5477,10 @@ var _CActionTable = _CActionTableType{
 	{_CState319, _CLogicalAndExpressionSymbol}:     {_CShiftAction, _CState115, ""},
 	{_CState319, _CLogicalOrExpressionSymbol}:      {_CShiftAction, _CState116, ""},
 	{_CState319, _CConditionalExpressionSymbol}:    {_CShiftAction, _CState105, ""},
-	{_CState319, _CAssignmentExpressionSymbol}:     {_CShiftAction, _CState339, ""},
-	{_CState325, CRbraceSymbol}:                    {_CShiftAction, _CState340, ""},
-	{_CState327, CRparamSymbol}:                    {_CShiftAction, _CState341, ""},
-	{_CState332, CRparamSymbol}:                    {_CShiftAction, _CState342, ""},
+	{_CState319, _CAssignmentExpressionSymbol}:     {_CShiftAction, _CState341, ""},
+	{_CState325, CRbraceSymbol}:                    {_CShiftAction, _CState342, ""},
+	{_CState327, CRparamSymbol}:                    {_CShiftAction, _CState343, ""},
+	{_CState332, CRparamSymbol}:                    {_CShiftAction, _CState344, ""},
 	{_CState332, CCommaSymbol}:                     {_CShiftAction, _CState186, ""},
 	{_CState333, CIdentifierSymbol}:                {_CShiftAction, _CState85, ""},
 	{_CState333, CConstantSymbol}:                  {_CShiftAction, _CState77, ""},
@@ -5524,119 +5526,121 @@ var _CActionTable = _CActionTableType{
 	{_CState333, _CConditionalExpressionSymbol}:    {_CShiftAction, _CState105, ""},
 	{_CState333, _CAssignmentExpressionSymbol}:     {_CShiftAction, _CState102, ""},
 	{_CState333, _CExpressionSymbol}:               {_CShiftAction, _CState109, ""},
-	{_CState333, _CStatementSymbol}:                {_CShiftAction, _CState343, ""},
+	{_CState333, _CStatementSymbol}:                {_CShiftAction, _CState345, ""},
 	{_CState333, _CLabeledStatementSymbol}:         {_CShiftAction, _CState114, ""},
 	{_CState333, _CCompoundStatementSymbol}:        {_CShiftAction, _CState104, ""},
 	{_CState333, _CExpressionStatementSymbol}:      {_CShiftAction, _CState110, ""},
 	{_CState333, _CSelectionStatementSymbol}:       {_CShiftAction, _CState121, ""},
 	{_CState333, _CIterationStatementSymbol}:       {_CShiftAction, _CState112, ""},
 	{_CState333, _CJumpStatementSymbol}:            {_CShiftAction, _CState113, ""},
-	{_CState334, CRparamSymbol}:                    {_CShiftAction, _CState344, ""},
+	{_CState334, CRparamSymbol}:                    {_CShiftAction, _CState346, ""},
 	{_CState334, CCommaSymbol}:                     {_CShiftAction, _CState186, ""},
-	{_CState335, CElseSymbol}:                      {_CShiftAction, _CState345, ""},
-	{_CState342, CSemicolonSymbol}:                 {_CShiftAction, _CState346, ""},
-	{_CState344, CIdentifierSymbol}:                {_CShiftAction, _CState85, ""},
-	{_CState344, CConstantSymbol}:                  {_CShiftAction, _CState77, ""},
-	{_CState344, CStringLiteralSymbol}:             {_CShiftAction, _CState96, ""},
-	{_CState344, CSizeofSymbol}:                    {_CShiftAction, _CState95, ""},
-	{_CState344, CIncOpSymbol}:                     {_CShiftAction, _CState87, ""},
-	{_CState344, CDecOpSymbol}:                     {_CShiftAction, _CState79, ""},
-	{_CState344, CCaseSymbol}:                      {_CShiftAction, _CState76, ""},
-	{_CState344, CDefaultSymbol}:                   {_CShiftAction, _CState80, ""},
-	{_CState344, CIfSymbol}:                        {_CShiftAction, _CState86, ""},
-	{_CState344, CSwitchSymbol}:                    {_CShiftAction, _CState97, ""},
-	{_CState344, CWhileSymbol}:                     {_CShiftAction, _CState99, ""},
-	{_CState344, CDoSymbol}:                        {_CShiftAction, _CState81, ""},
-	{_CState344, CForSymbol}:                       {_CShiftAction, _CState83, ""},
-	{_CState344, CGotoSymbol}:                      {_CShiftAction, _CState84, ""},
-	{_CState344, CContinueSymbol}:                  {_CShiftAction, _CState78, ""},
-	{_CState344, CBreakSymbol}:                     {_CShiftAction, _CState75, ""},
-	{_CState344, CReturnSymbol}:                    {_CShiftAction, _CState93, ""},
-	{_CState344, CLparamSymbol}:                    {_CShiftAction, _CState88, ""},
-	{_CState344, CLcurlSymbol}:                     {_CShiftAction, _CState49, ""},
-	{_CState344, CSemicolonSymbol}:                 {_CShiftAction, _CState94, ""},
-	{_CState344, CMulSymbol}:                       {_CShiftAction, _CState90, ""},
-	{_CState344, CMinusSymbol}:                     {_CShiftAction, _CState89, ""},
-	{_CState344, CPlusSymbol}:                      {_CShiftAction, _CState91, ""},
-	{_CState344, CAndSymbol}:                       {_CShiftAction, _CState74, ""},
-	{_CState344, CExclaimSymbol}:                   {_CShiftAction, _CState82, ""},
-	{_CState344, CTildaSymbol}:                     {_CShiftAction, _CState98, ""},
-	{_CState344, _CPrimaryExpressionSymbol}:        {_CShiftAction, _CState119, ""},
-	{_CState344, _CPostfixExpressionSymbol}:        {_CShiftAction, _CState118, ""},
-	{_CState344, _CUnaryExpressionSymbol}:          {_CShiftAction, _CState125, ""},
-	{_CState344, _CUnaryOperatorSymbol}:            {_CShiftAction, _CState126, ""},
-	{_CState344, _CCastExpressionSymbol}:           {_CShiftAction, _CState103, ""},
-	{_CState344, _CMultiplicativeExpressionSymbol}: {_CShiftAction, _CState117, ""},
-	{_CState344, _CAdditiveExpressionSymbol}:       {_CShiftAction, _CState100, ""},
-	{_CState344, _CShiftExpressionSymbol}:          {_CShiftAction, _CState122, ""},
-	{_CState344, _CRelationalExpressionSymbol}:     {_CShiftAction, _CState120, ""},
-	{_CState344, _CEqualityExpressionSymbol}:       {_CShiftAction, _CState107, ""},
-	{_CState344, _CAndExpressionSymbol}:            {_CShiftAction, _CState101, ""},
-	{_CState344, _CExclusiveOrExpressionSymbol}:    {_CShiftAction, _CState108, ""},
-	{_CState344, _CInclusiveOrExpressionSymbol}:    {_CShiftAction, _CState111, ""},
-	{_CState344, _CLogicalAndExpressionSymbol}:     {_CShiftAction, _CState115, ""},
-	{_CState344, _CLogicalOrExpressionSymbol}:      {_CShiftAction, _CState116, ""},
-	{_CState344, _CConditionalExpressionSymbol}:    {_CShiftAction, _CState105, ""},
-	{_CState344, _CAssignmentExpressionSymbol}:     {_CShiftAction, _CState102, ""},
-	{_CState344, _CExpressionSymbol}:               {_CShiftAction, _CState109, ""},
-	{_CState344, _CStatementSymbol}:                {_CShiftAction, _CState347, ""},
-	{_CState344, _CLabeledStatementSymbol}:         {_CShiftAction, _CState114, ""},
-	{_CState344, _CCompoundStatementSymbol}:        {_CShiftAction, _CState104, ""},
-	{_CState344, _CExpressionStatementSymbol}:      {_CShiftAction, _CState110, ""},
-	{_CState344, _CSelectionStatementSymbol}:       {_CShiftAction, _CState121, ""},
-	{_CState344, _CIterationStatementSymbol}:       {_CShiftAction, _CState112, ""},
-	{_CState344, _CJumpStatementSymbol}:            {_CShiftAction, _CState113, ""},
-	{_CState345, CIdentifierSymbol}:                {_CShiftAction, _CState85, ""},
-	{_CState345, CConstantSymbol}:                  {_CShiftAction, _CState77, ""},
-	{_CState345, CStringLiteralSymbol}:             {_CShiftAction, _CState96, ""},
-	{_CState345, CSizeofSymbol}:                    {_CShiftAction, _CState95, ""},
-	{_CState345, CIncOpSymbol}:                     {_CShiftAction, _CState87, ""},
-	{_CState345, CDecOpSymbol}:                     {_CShiftAction, _CState79, ""},
-	{_CState345, CCaseSymbol}:                      {_CShiftAction, _CState76, ""},
-	{_CState345, CDefaultSymbol}:                   {_CShiftAction, _CState80, ""},
-	{_CState345, CIfSymbol}:                        {_CShiftAction, _CState86, ""},
-	{_CState345, CSwitchSymbol}:                    {_CShiftAction, _CState97, ""},
-	{_CState345, CWhileSymbol}:                     {_CShiftAction, _CState99, ""},
-	{_CState345, CDoSymbol}:                        {_CShiftAction, _CState81, ""},
-	{_CState345, CForSymbol}:                       {_CShiftAction, _CState83, ""},
-	{_CState345, CGotoSymbol}:                      {_CShiftAction, _CState84, ""},
-	{_CState345, CContinueSymbol}:                  {_CShiftAction, _CState78, ""},
-	{_CState345, CBreakSymbol}:                     {_CShiftAction, _CState75, ""},
-	{_CState345, CReturnSymbol}:                    {_CShiftAction, _CState93, ""},
-	{_CState345, CLparamSymbol}:                    {_CShiftAction, _CState88, ""},
-	{_CState345, CLcurlSymbol}:                     {_CShiftAction, _CState49, ""},
-	{_CState345, CSemicolonSymbol}:                 {_CShiftAction, _CState94, ""},
-	{_CState345, CMulSymbol}:                       {_CShiftAction, _CState90, ""},
-	{_CState345, CMinusSymbol}:                     {_CShiftAction, _CState89, ""},
-	{_CState345, CPlusSymbol}:                      {_CShiftAction, _CState91, ""},
-	{_CState345, CAndSymbol}:                       {_CShiftAction, _CState74, ""},
-	{_CState345, CExclaimSymbol}:                   {_CShiftAction, _CState82, ""},
-	{_CState345, CTildaSymbol}:                     {_CShiftAction, _CState98, ""},
-	{_CState345, _CPrimaryExpressionSymbol}:        {_CShiftAction, _CState119, ""},
-	{_CState345, _CPostfixExpressionSymbol}:        {_CShiftAction, _CState118, ""},
-	{_CState345, _CUnaryExpressionSymbol}:          {_CShiftAction, _CState125, ""},
-	{_CState345, _CUnaryOperatorSymbol}:            {_CShiftAction, _CState126, ""},
-	{_CState345, _CCastExpressionSymbol}:           {_CShiftAction, _CState103, ""},
-	{_CState345, _CMultiplicativeExpressionSymbol}: {_CShiftAction, _CState117, ""},
-	{_CState345, _CAdditiveExpressionSymbol}:       {_CShiftAction, _CState100, ""},
-	{_CState345, _CShiftExpressionSymbol}:          {_CShiftAction, _CState122, ""},
-	{_CState345, _CRelationalExpressionSymbol}:     {_CShiftAction, _CState120, ""},
-	{_CState345, _CEqualityExpressionSymbol}:       {_CShiftAction, _CState107, ""},
-	{_CState345, _CAndExpressionSymbol}:            {_CShiftAction, _CState101, ""},
-	{_CState345, _CExclusiveOrExpressionSymbol}:    {_CShiftAction, _CState108, ""},
-	{_CState345, _CInclusiveOrExpressionSymbol}:    {_CShiftAction, _CState111, ""},
-	{_CState345, _CLogicalAndExpressionSymbol}:     {_CShiftAction, _CState115, ""},
-	{_CState345, _CLogicalOrExpressionSymbol}:      {_CShiftAction, _CState116, ""},
-	{_CState345, _CConditionalExpressionSymbol}:    {_CShiftAction, _CState105, ""},
-	{_CState345, _CAssignmentExpressionSymbol}:     {_CShiftAction, _CState102, ""},
-	{_CState345, _CExpressionSymbol}:               {_CShiftAction, _CState109, ""},
-	{_CState345, _CStatementSymbol}:                {_CShiftAction, _CState348, ""},
-	{_CState345, _CLabeledStatementSymbol}:         {_CShiftAction, _CState114, ""},
-	{_CState345, _CCompoundStatementSymbol}:        {_CShiftAction, _CState104, ""},
-	{_CState345, _CExpressionStatementSymbol}:      {_CShiftAction, _CState110, ""},
-	{_CState345, _CSelectionStatementSymbol}:       {_CShiftAction, _CState121, ""},
-	{_CState345, _CIterationStatementSymbol}:       {_CShiftAction, _CState112, ""},
-	{_CState345, _CJumpStatementSymbol}:            {_CShiftAction, _CState113, ""},
+	{_CState335, CElseSymbol}:                      {_CShiftAction, _CState347, ""},
+	{_CState336, CElseSymbol}:                      {_CShiftAction, _CState347, ""},
+	{_CState337, CElseSymbol}:                      {_CShiftAction, _CState347, ""},
+	{_CState344, CSemicolonSymbol}:                 {_CShiftAction, _CState348, ""},
+	{_CState346, CIdentifierSymbol}:                {_CShiftAction, _CState85, ""},
+	{_CState346, CConstantSymbol}:                  {_CShiftAction, _CState77, ""},
+	{_CState346, CStringLiteralSymbol}:             {_CShiftAction, _CState96, ""},
+	{_CState346, CSizeofSymbol}:                    {_CShiftAction, _CState95, ""},
+	{_CState346, CIncOpSymbol}:                     {_CShiftAction, _CState87, ""},
+	{_CState346, CDecOpSymbol}:                     {_CShiftAction, _CState79, ""},
+	{_CState346, CCaseSymbol}:                      {_CShiftAction, _CState76, ""},
+	{_CState346, CDefaultSymbol}:                   {_CShiftAction, _CState80, ""},
+	{_CState346, CIfSymbol}:                        {_CShiftAction, _CState86, ""},
+	{_CState346, CSwitchSymbol}:                    {_CShiftAction, _CState97, ""},
+	{_CState346, CWhileSymbol}:                     {_CShiftAction, _CState99, ""},
+	{_CState346, CDoSymbol}:                        {_CShiftAction, _CState81, ""},
+	{_CState346, CForSymbol}:                       {_CShiftAction, _CState83, ""},
+	{_CState346, CGotoSymbol}:                      {_CShiftAction, _CState84, ""},
+	{_CState346, CContinueSymbol}:                  {_CShiftAction, _CState78, ""},
+	{_CState346, CBreakSymbol}:                     {_CShiftAction, _CState75, ""},
+	{_CState346, CReturnSymbol}:                    {_CShiftAction, _CState93, ""},
+	{_CState346, CLparamSymbol}:                    {_CShiftAction, _CState88, ""},
+	{_CState346, CLcurlSymbol}:                     {_CShiftAction, _CState49, ""},
+	{_CState346, CSemicolonSymbol}:                 {_CShiftAction, _CState94, ""},
+	{_CState346, CMulSymbol}:                       {_CShiftAction, _CState90, ""},
+	{_CState346, CMinusSymbol}:                     {_CShiftAction, _CState89, ""},
+	{_CState346, CPlusSymbol}:                      {_CShiftAction, _CState91, ""},
+	{_CState346, CAndSymbol}:                       {_CShiftAction, _CState74, ""},
+	{_CState346, CExclaimSymbol}:                   {_CShiftAction, _CState82, ""},
+	{_CState346, CTildaSymbol}:                     {_CShiftAction, _CState98, ""},
+	{_CState346, _CPrimaryExpressionSymbol}:        {_CShiftAction, _CState119, ""},
+	{_CState346, _CPostfixExpressionSymbol}:        {_CShiftAction, _CState118, ""},
+	{_CState346, _CUnaryExpressionSymbol}:          {_CShiftAction, _CState125, ""},
+	{_CState346, _CUnaryOperatorSymbol}:            {_CShiftAction, _CState126, ""},
+	{_CState346, _CCastExpressionSymbol}:           {_CShiftAction, _CState103, ""},
+	{_CState346, _CMultiplicativeExpressionSymbol}: {_CShiftAction, _CState117, ""},
+	{_CState346, _CAdditiveExpressionSymbol}:       {_CShiftAction, _CState100, ""},
+	{_CState346, _CShiftExpressionSymbol}:          {_CShiftAction, _CState122, ""},
+	{_CState346, _CRelationalExpressionSymbol}:     {_CShiftAction, _CState120, ""},
+	{_CState346, _CEqualityExpressionSymbol}:       {_CShiftAction, _CState107, ""},
+	{_CState346, _CAndExpressionSymbol}:            {_CShiftAction, _CState101, ""},
+	{_CState346, _CExclusiveOrExpressionSymbol}:    {_CShiftAction, _CState108, ""},
+	{_CState346, _CInclusiveOrExpressionSymbol}:    {_CShiftAction, _CState111, ""},
+	{_CState346, _CLogicalAndExpressionSymbol}:     {_CShiftAction, _CState115, ""},
+	{_CState346, _CLogicalOrExpressionSymbol}:      {_CShiftAction, _CState116, ""},
+	{_CState346, _CConditionalExpressionSymbol}:    {_CShiftAction, _CState105, ""},
+	{_CState346, _CAssignmentExpressionSymbol}:     {_CShiftAction, _CState102, ""},
+	{_CState346, _CExpressionSymbol}:               {_CShiftAction, _CState109, ""},
+	{_CState346, _CStatementSymbol}:                {_CShiftAction, _CState349, ""},
+	{_CState346, _CLabeledStatementSymbol}:         {_CShiftAction, _CState114, ""},
+	{_CState346, _CCompoundStatementSymbol}:        {_CShiftAction, _CState104, ""},
+	{_CState346, _CExpressionStatementSymbol}:      {_CShiftAction, _CState110, ""},
+	{_CState346, _CSelectionStatementSymbol}:       {_CShiftAction, _CState121, ""},
+	{_CState346, _CIterationStatementSymbol}:       {_CShiftAction, _CState112, ""},
+	{_CState346, _CJumpStatementSymbol}:            {_CShiftAction, _CState113, ""},
+	{_CState347, CIdentifierSymbol}:                {_CShiftAction, _CState85, ""},
+	{_CState347, CConstantSymbol}:                  {_CShiftAction, _CState77, ""},
+	{_CState347, CStringLiteralSymbol}:             {_CShiftAction, _CState96, ""},
+	{_CState347, CSizeofSymbol}:                    {_CShiftAction, _CState95, ""},
+	{_CState347, CIncOpSymbol}:                     {_CShiftAction, _CState87, ""},
+	{_CState347, CDecOpSymbol}:                     {_CShiftAction, _CState79, ""},
+	{_CState347, CCaseSymbol}:                      {_CShiftAction, _CState76, ""},
+	{_CState347, CDefaultSymbol}:                   {_CShiftAction, _CState80, ""},
+	{_CState347, CIfSymbol}:                        {_CShiftAction, _CState86, ""},
+	{_CState347, CSwitchSymbol}:                    {_CShiftAction, _CState97, ""},
+	{_CState347, CWhileSymbol}:                     {_CShiftAction, _CState99, ""},
+	{_CState347, CDoSymbol}:                        {_CShiftAction, _CState81, ""},
+	{_CState347, CForSymbol}:                       {_CShiftAction, _CState83, ""},
+	{_CState347, CGotoSymbol}:                      {_CShiftAction, _CState84, ""},
+	{_CState347, CContinueSymbol}:                  {_CShiftAction, _CState78, ""},
+	{_CState347, CBreakSymbol}:                     {_CShiftAction, _CState75, ""},
+	{_CState347, CReturnSymbol}:                    {_CShiftAction, _CState93, ""},
+	{_CState347, CLparamSymbol}:                    {_CShiftAction, _CState88, ""},
+	{_CState347, CLcurlSymbol}:                     {_CShiftAction, _CState49, ""},
+	{_CState347, CSemicolonSymbol}:                 {_CShiftAction, _CState94, ""},
+	{_CState347, CMulSymbol}:                       {_CShiftAction, _CState90, ""},
+	{_CState347, CMinusSymbol}:                     {_CShiftAction, _CState89, ""},
+	{_CState347, CPlusSymbol}:                      {_CShiftAction, _CState91, ""},
+	{_CState347, CAndSymbol}:                       {_CShiftAction, _CState74, ""},
+	{_CState347, CExclaimSymbol}:                   {_CShiftAction, _CState82, ""},
+	{_CState347, CTildaSymbol}:                     {_CShiftAction, _CState98, ""},
+	{_CState347, _CPrimaryExpressionSymbol}:        {_CShiftAction, _CState119, ""},
+	{_CState347, _CPostfixExpressionSymbol}:        {_CShiftAction, _CState118, ""},
+	{_CState347, _CUnaryExpressionSymbol}:          {_CShiftAction, _CState125, ""},
+	{_CState347, _CUnaryOperatorSymbol}:            {_CShiftAction, _CState126, ""},
+	{_CState347, _CCastExpressionSymbol}:           {_CShiftAction, _CState103, ""},
+	{_CState347, _CMultiplicativeExpressionSymbol}: {_CShiftAction, _CState117, ""},
+	{_CState347, _CAdditiveExpressionSymbol}:       {_CShiftAction, _CState100, ""},
+	{_CState347, _CShiftExpressionSymbol}:          {_CShiftAction, _CState122, ""},
+	{_CState347, _CRelationalExpressionSymbol}:     {_CShiftAction, _CState120, ""},
+	{_CState347, _CEqualityExpressionSymbol}:       {_CShiftAction, _CState107, ""},
+	{_CState347, _CAndExpressionSymbol}:            {_CShiftAction, _CState101, ""},
+	{_CState347, _CExclusiveOrExpressionSymbol}:    {_CShiftAction, _CState108, ""},
+	{_CState347, _CInclusiveOrExpressionSymbol}:    {_CShiftAction, _CState111, ""},
+	{_CState347, _CLogicalAndExpressionSymbol}:     {_CShiftAction, _CState115, ""},
+	{_CState347, _CLogicalOrExpressionSymbol}:      {_CShiftAction, _CState116, ""},
+	{_CState347, _CConditionalExpressionSymbol}:    {_CShiftAction, _CState105, ""},
+	{_CState347, _CAssignmentExpressionSymbol}:     {_CShiftAction, _CState102, ""},
+	{_CState347, _CExpressionSymbol}:               {_CShiftAction, _CState109, ""},
+	{_CState347, _CStatementSymbol}:                {_CShiftAction, _CState350, ""},
+	{_CState347, _CLabeledStatementSymbol}:         {_CShiftAction, _CState114, ""},
+	{_CState347, _CCompoundStatementSymbol}:        {_CShiftAction, _CState104, ""},
+	{_CState347, _CExpressionStatementSymbol}:      {_CShiftAction, _CState110, ""},
+	{_CState347, _CSelectionStatementSymbol}:       {_CShiftAction, _CState121, ""},
+	{_CState347, _CIterationStatementSymbol}:       {_CShiftAction, _CState112, ""},
+	{_CState347, _CJumpStatementSymbol}:            {_CShiftAction, _CState113, ""},
 	{_CState2, _CWildcardMarker}:                   {_CReduceAction, "", _CReduceDToStorageClassSpecifier},
 	{_CState3, _CWildcardMarker}:                   {_CReduceAction, "", _CReduceBToTypeSpecifier},
 	{_CState4, _CWildcardMarker}:                   {_CReduceAction, "", _CReduceAToTypeQualifier},
@@ -5842,16 +5846,46 @@ var _CActionTable = _CActionTableType{
 	{_CState330, _CWildcardMarker}:                 {_CReduceAction, "", _CReduceCToInitializer},
 	{_CState331, _CWildcardMarker}:                 {_CReduceAction, "", _CReduceBToInitializerList},
 	{_CState335, _CWildcardMarker}:                 {_CReduceAction, "", _CReduceAToSelectionStatement},
-	{_CState336, _CWildcardMarker}:                 {_CReduceAction, "", _CReduceCToSelectionStatement},
-	{_CState337, _CWildcardMarker}:                 {_CReduceAction, "", _CReduceAToIterationStatement},
-	{_CState338, _CWildcardMarker}:                 {_CReduceAction, "", _CReduceBToConditionalExpression},
-	{_CState339, _CWildcardMarker}:                 {_CReduceAction, "", _CReduceBToArgumentExpressionList},
-	{_CState340, _CWildcardMarker}:                 {_CReduceAction, "", _CReduceEToDirectAbstractDeclarator},
-	{_CState341, _CWildcardMarker}:                 {_CReduceAction, "", _CReduceIToDirectAbstractDeclarator},
-	{_CState343, _CWildcardMarker}:                 {_CReduceAction, "", _CReduceCToIterationStatement},
-	{_CState346, _CWildcardMarker}:                 {_CReduceAction, "", _CReduceBToIterationStatement},
-	{_CState347, _CWildcardMarker}:                 {_CReduceAction, "", _CReduceDToIterationStatement},
-	{_CState348, _CWildcardMarker}:                 {_CReduceAction, "", _CReduceBToSelectionStatement},
+	{_CState336, CAndSymbol}:                       {_CReduceAction, "", _CReduceAToSelectionStatement},
+	{_CState336, CBreakSymbol}:                     {_CReduceAction, "", _CReduceAToSelectionStatement},
+	{_CState336, CCaseSymbol}:                      {_CReduceAction, "", _CReduceAToSelectionStatement},
+	{_CState336, CConstantSymbol}:                  {_CReduceAction, "", _CReduceAToSelectionStatement},
+	{_CState336, CContinueSymbol}:                  {_CReduceAction, "", _CReduceAToSelectionStatement},
+	{_CState336, CDecOpSymbol}:                     {_CReduceAction, "", _CReduceAToSelectionStatement},
+	{_CState336, CDefaultSymbol}:                   {_CReduceAction, "", _CReduceAToSelectionStatement},
+	{_CState336, CDoSymbol}:                        {_CReduceAction, "", _CReduceAToSelectionStatement},
+	{_CState336, CElseSymbol}:                      {_CReduceAction, "", _CReduceAToSelectionStatement},
+	{_CState336, CExclaimSymbol}:                   {_CReduceAction, "", _CReduceAToSelectionStatement},
+	{_CState336, CForSymbol}:                       {_CReduceAction, "", _CReduceAToSelectionStatement},
+	{_CState336, CGotoSymbol}:                      {_CReduceAction, "", _CReduceAToSelectionStatement},
+	{_CState336, CIdentifierSymbol}:                {_CReduceAction, "", _CReduceAToSelectionStatement},
+	{_CState336, CIfSymbol}:                        {_CReduceAction, "", _CReduceAToSelectionStatement},
+	{_CState336, CIncOpSymbol}:                     {_CReduceAction, "", _CReduceAToSelectionStatement},
+	{_CState336, CLcurlSymbol}:                     {_CReduceAction, "", _CReduceAToSelectionStatement},
+	{_CState336, CLparamSymbol}:                    {_CReduceAction, "", _CReduceAToSelectionStatement},
+	{_CState336, CMinusSymbol}:                     {_CReduceAction, "", _CReduceAToSelectionStatement},
+	{_CState336, CMulSymbol}:                       {_CReduceAction, "", _CReduceAToSelectionStatement},
+	{_CState336, CPlusSymbol}:                      {_CReduceAction, "", _CReduceAToSelectionStatement},
+	{_CState336, CRcurlSymbol}:                     {_CReduceAction, "", _CReduceAToSelectionStatement},
+	{_CState336, CReturnSymbol}:                    {_CReduceAction, "", _CReduceAToSelectionStatement},
+	{_CState336, CSemicolonSymbol}:                 {_CReduceAction, "", _CReduceAToSelectionStatement},
+	{_CState336, CSizeofSymbol}:                    {_CReduceAction, "", _CReduceAToSelectionStatement},
+	{_CState336, CStringLiteralSymbol}:             {_CReduceAction, "", _CReduceAToSelectionStatement},
+	{_CState336, CSwitchSymbol}:                    {_CReduceAction, "", _CReduceAToSelectionStatement},
+	{_CState336, CTildaSymbol}:                     {_CReduceAction, "", _CReduceAToSelectionStatement},
+	{_CState336, CWhileSymbol}:                     {_CReduceAction, "", _CReduceAToSelectionStatement},
+	{_CState337, CElseSymbol}:                      {_CReduceAction, "", _CReduceAToSelectionStatement},
+	{_CState337, CWhileSymbol}:                     {_CReduceAction, "", _CReduceAToSelectionStatement},
+	{_CState338, _CWildcardMarker}:                 {_CReduceAction, "", _CReduceCToSelectionStatement},
+	{_CState339, _CWildcardMarker}:                 {_CReduceAction, "", _CReduceAToIterationStatement},
+	{_CState340, _CWildcardMarker}:                 {_CReduceAction, "", _CReduceBToConditionalExpression},
+	{_CState341, _CWildcardMarker}:                 {_CReduceAction, "", _CReduceBToArgumentExpressionList},
+	{_CState342, _CWildcardMarker}:                 {_CReduceAction, "", _CReduceEToDirectAbstractDeclarator},
+	{_CState343, _CWildcardMarker}:                 {_CReduceAction, "", _CReduceIToDirectAbstractDeclarator},
+	{_CState345, _CWildcardMarker}:                 {_CReduceAction, "", _CReduceCToIterationStatement},
+	{_CState348, _CWildcardMarker}:                 {_CReduceAction, "", _CReduceBToIterationStatement},
+	{_CState349, _CWildcardMarker}:                 {_CReduceAction, "", _CReduceDToIterationStatement},
+	{_CState350, _CWildcardMarker}:                 {_CReduceAction, "", _CReduceBToSelectionStatement},
 }
 
 var _CExpectedTerminals = map[_CStateId][]CSymbolId{
@@ -6039,16 +6073,18 @@ var _CExpectedTerminals = map[_CStateId][]CSymbolId{
 	_CState333: []CSymbolId{CIdentifierSymbol, CConstantSymbol, CStringLiteralSymbol, CSizeofSymbol, CIncOpSymbol, CDecOpSymbol, CCaseSymbol, CDefaultSymbol, CIfSymbol, CSwitchSymbol, CWhileSymbol, CDoSymbol, CForSymbol, CGotoSymbol, CContinueSymbol, CBreakSymbol, CReturnSymbol, CLparamSymbol, CLcurlSymbol, CSemicolonSymbol, CMulSymbol, CMinusSymbol, CPlusSymbol, CAndSymbol, CExclaimSymbol, CTildaSymbol},
 	_CState334: []CSymbolId{CRparamSymbol, CCommaSymbol},
 	_CState335: []CSymbolId{CElseSymbol},
-	_CState342: []CSymbolId{CSemicolonSymbol},
-	_CState344: []CSymbolId{CIdentifierSymbol, CConstantSymbol, CStringLiteralSymbol, CSizeofSymbol, CIncOpSymbol, CDecOpSymbol, CCaseSymbol, CDefaultSymbol, CIfSymbol, CSwitchSymbol, CWhileSymbol, CDoSymbol, CForSymbol, CGotoSymbol, CContinueSymbol, CBreakSymbol, CReturnSymbol, CLparamSymbol, CLcurlSymbol, CSemicolonSymbol, CMulSymbol, CMinusSymbol, CPlusSymbol, CAndSymbol, CExclaimSymbol, CTildaSymbol},
-	_CState345: []CSymbolId{CIdentifierSymbol, CConstantSymbol, CStringLiteralSymbol, CSizeofSymbol, CIncOpSymbol, CDecOpSymbol, CCaseSymbol, CDefaultSymbol, CIfSymbol, CSwitchSymbol, CWhileSymbol, CDoSymbol, CForSymbol, CGotoSymbol, CContinueSymbol, CBreakSymbol, CReturnSymbol, CLparamSymbol, CLcurlSymbol, CSemicolonSymbol, CMulSymbol, CMinusSymbol, CPlusSymbol, CAndSymbol, CExclaimSymbol, CTildaSymbol},
+	_CState336: []CSymbolId{CElseSymbol, CAndSymbol, CBreakSymbol, CCaseSymbol, CConstantSymbol, CContinueSymbol, CDecOpSymbol, CDefaultSymbol, CDoSymbol, CElseSymbol, CExclaimSymbol, CForSymbol, CGotoSymbol, CIdentifierSymbol, CIfSymbol, CIncOpSymbol, CLcurlSymbol, CLparamSymbol, CMinusSymbol, CMulSymbol, CPlusSymbol, CRcurlSymbol, CReturnSymbol, CSemicolonSymbol, CSizeofSymbol, CStringLiteralSymbol, CSwitchSymbol, CTildaSymbol, CWhileSymbol},
+	_CState337: []CSymbolId{CElseSymbol, CElseSymbol, CWhileSymbol},
+	_CState344: []CSymbolId{CSemicolonSymbol},
+	_CState346: []CSymbolId{CIdentifierSymbol, CConstantSymbol, CStringLiteralSymbol, CSizeofSymbol, CIncOpSymbol, CDecOpSymbol, CCaseSymbol, CDefaultSymbol, CIfSymbol, CSwitchSymbol, CWhileSymbol, CDoSymbol, CForSymbol, CGotoSymbol, CContinueSymbol, CBreakSymbol, CReturnSymbol, CLparamSymbol, CLcurlSymbol, CSemicolonSymbol, CMulSymbol, CMinusSymbol, CPlusSymbol, CAndSymbol, CExclaimSymbol, CTildaSymbol},
+	_CState347: []CSymbolId{CIdentifierSymbol, CConstantSymbol, CStringLiteralSymbol, CSizeofSymbol, CIncOpSymbol, CDecOpSymbol, CCaseSymbol, CDefaultSymbol, CIfSymbol, CSwitchSymbol, CWhileSymbol, CDoSymbol, CForSymbol, CGotoSymbol, CContinueSymbol, CBreakSymbol, CReturnSymbol, CLparamSymbol, CLcurlSymbol, CSemicolonSymbol, CMulSymbol, CMinusSymbol, CPlusSymbol, CAndSymbol, CExclaimSymbol, CTildaSymbol},
 }
 
 /*
 Parser Debug States:
   State 0:
     Kernel Items:
-      #accept:^.translation_unit
+      #accept: ^.translation_unit
     Reduce:
       (nil)
     Goto:
@@ -6092,8 +6128,8 @@ Parser Debug States:
 
   State 1:
     Kernel Items:
-      #accept:^ translation_unit.,$
-      translation_unit:translation_unit.external_declaration
+      #accept: ^ translation_unit., $
+      translation_unit: translation_unit.external_declaration
     Reduce:
       $ -> [#accept]
     Goto:
@@ -6136,7 +6172,7 @@ Parser Debug States:
 
   State 2:
     Kernel Items:
-      storage_class_specifier:AUTO.,*
+      storage_class_specifier: AUTO., *
     Reduce:
       * -> [storage_class_specifier]
     Goto:
@@ -6144,7 +6180,7 @@ Parser Debug States:
 
   State 3:
     Kernel Items:
-      type_specifier:CHAR.,*
+      type_specifier: CHAR., *
     Reduce:
       * -> [type_specifier]
     Goto:
@@ -6152,7 +6188,7 @@ Parser Debug States:
 
   State 4:
     Kernel Items:
-      type_qualifier:CONST.,*
+      type_qualifier: CONST., *
     Reduce:
       * -> [type_qualifier]
     Goto:
@@ -6160,7 +6196,7 @@ Parser Debug States:
 
   State 5:
     Kernel Items:
-      type_specifier:DOUBLE.,*
+      type_specifier: DOUBLE., *
     Reduce:
       * -> [type_specifier]
     Goto:
@@ -6168,9 +6204,9 @@ Parser Debug States:
 
   State 6:
     Kernel Items:
-      enum_specifier:ENUM.IDENTIFIER
-      enum_specifier:ENUM.IDENTIFIER LCURL enumerator_list RCURL
-      enum_specifier:ENUM.LCURL enumerator_list RCURL
+      enum_specifier: ENUM.IDENTIFIER
+      enum_specifier: ENUM.IDENTIFIER LCURL enumerator_list RCURL
+      enum_specifier: ENUM.LCURL enumerator_list RCURL
     Reduce:
       (nil)
     Goto:
@@ -6179,7 +6215,7 @@ Parser Debug States:
 
   State 7:
     Kernel Items:
-      storage_class_specifier:EXTERN.,*
+      storage_class_specifier: EXTERN., *
     Reduce:
       * -> [storage_class_specifier]
     Goto:
@@ -6187,7 +6223,7 @@ Parser Debug States:
 
   State 8:
     Kernel Items:
-      type_specifier:FLOAT.,*
+      type_specifier: FLOAT., *
     Reduce:
       * -> [type_specifier]
     Goto:
@@ -6195,7 +6231,7 @@ Parser Debug States:
 
   State 9:
     Kernel Items:
-      direct_declarator:IDENTIFIER.,*
+      direct_declarator: IDENTIFIER., *
     Reduce:
       * -> [direct_declarator]
     Goto:
@@ -6203,7 +6239,7 @@ Parser Debug States:
 
   State 10:
     Kernel Items:
-      type_specifier:INT.,*
+      type_specifier: INT., *
     Reduce:
       * -> [type_specifier]
     Goto:
@@ -6211,7 +6247,7 @@ Parser Debug States:
 
   State 11:
     Kernel Items:
-      type_specifier:LONG.,*
+      type_specifier: LONG., *
     Reduce:
       * -> [type_specifier]
     Goto:
@@ -6219,7 +6255,7 @@ Parser Debug States:
 
   State 12:
     Kernel Items:
-      direct_declarator:LPARAM.declarator RPARAM
+      direct_declarator: LPARAM.declarator RPARAM
     Reduce:
       (nil)
     Goto:
@@ -6232,10 +6268,10 @@ Parser Debug States:
 
   State 13:
     Kernel Items:
-      pointer:MUL.,*
-      pointer:MUL.pointer
-      pointer:MUL.type_qualifier_list
-      pointer:MUL.type_qualifier_list pointer
+      pointer: MUL., *
+      pointer: MUL.pointer
+      pointer: MUL.type_qualifier_list
+      pointer: MUL.type_qualifier_list pointer
     Reduce:
       * -> [pointer]
     Goto:
@@ -6248,7 +6284,7 @@ Parser Debug States:
 
   State 14:
     Kernel Items:
-      storage_class_specifier:REGISTER.,*
+      storage_class_specifier: REGISTER., *
     Reduce:
       * -> [storage_class_specifier]
     Goto:
@@ -6256,7 +6292,7 @@ Parser Debug States:
 
   State 15:
     Kernel Items:
-      type_specifier:SHORT.,*
+      type_specifier: SHORT., *
     Reduce:
       * -> [type_specifier]
     Goto:
@@ -6264,7 +6300,7 @@ Parser Debug States:
 
   State 16:
     Kernel Items:
-      type_specifier:SIGNED.,*
+      type_specifier: SIGNED., *
     Reduce:
       * -> [type_specifier]
     Goto:
@@ -6272,7 +6308,7 @@ Parser Debug States:
 
   State 17:
     Kernel Items:
-      storage_class_specifier:STATIC.,*
+      storage_class_specifier: STATIC., *
     Reduce:
       * -> [storage_class_specifier]
     Goto:
@@ -6280,7 +6316,7 @@ Parser Debug States:
 
   State 18:
     Kernel Items:
-      struct_or_union:STRUCT.,*
+      struct_or_union: STRUCT., *
     Reduce:
       * -> [struct_or_union]
     Goto:
@@ -6288,7 +6324,7 @@ Parser Debug States:
 
   State 19:
     Kernel Items:
-      storage_class_specifier:TYPEDEF.,*
+      storage_class_specifier: TYPEDEF., *
     Reduce:
       * -> [storage_class_specifier]
     Goto:
@@ -6296,7 +6332,7 @@ Parser Debug States:
 
   State 20:
     Kernel Items:
-      type_specifier:TYPE_NAME.,*
+      type_specifier: TYPE_NAME., *
     Reduce:
       * -> [type_specifier]
     Goto:
@@ -6304,7 +6340,7 @@ Parser Debug States:
 
   State 21:
     Kernel Items:
-      struct_or_union:UNION.,*
+      struct_or_union: UNION., *
     Reduce:
       * -> [struct_or_union]
     Goto:
@@ -6312,7 +6348,7 @@ Parser Debug States:
 
   State 22:
     Kernel Items:
-      type_specifier:UNSIGNED.,*
+      type_specifier: UNSIGNED., *
     Reduce:
       * -> [type_specifier]
     Goto:
@@ -6320,7 +6356,7 @@ Parser Debug States:
 
   State 23:
     Kernel Items:
-      type_specifier:VOID.,*
+      type_specifier: VOID., *
     Reduce:
       * -> [type_specifier]
     Goto:
@@ -6328,7 +6364,7 @@ Parser Debug States:
 
   State 24:
     Kernel Items:
-      type_qualifier:VOLATILE.,*
+      type_qualifier: VOLATILE., *
     Reduce:
       * -> [type_qualifier]
     Goto:
@@ -6336,7 +6372,7 @@ Parser Debug States:
 
   State 25:
     Kernel Items:
-      external_declaration:declaration.,*
+      external_declaration: declaration., *
     Reduce:
       * -> [external_declaration]
     Goto:
@@ -6344,10 +6380,10 @@ Parser Debug States:
 
   State 26:
     Kernel Items:
-      declaration:declaration_specifiers.SEMICOLON
-      declaration:declaration_specifiers.init_declarator_list SEMICOLON
-      function_definition:declaration_specifiers.declarator compound_statement
-      function_definition:declaration_specifiers.declarator declaration_list compound_statement
+      declaration: declaration_specifiers.SEMICOLON
+      declaration: declaration_specifiers.init_declarator_list SEMICOLON
+      function_definition: declaration_specifiers.declarator compound_statement
+      function_definition: declaration_specifiers.declarator declaration_list compound_statement
     Reduce:
       (nil)
     Goto:
@@ -6363,8 +6399,8 @@ Parser Debug States:
 
   State 27:
     Kernel Items:
-      function_definition:declarator.compound_statement
-      function_definition:declarator.declaration_list compound_statement
+      function_definition: declarator.compound_statement
+      function_definition: declarator.declaration_list compound_statement
     Reduce:
       (nil)
     Goto:
@@ -6402,12 +6438,12 @@ Parser Debug States:
 
   State 28:
     Kernel Items:
-      declarator:direct_declarator.,*
-      direct_declarator:direct_declarator.LBRACE RBRACE
-      direct_declarator:direct_declarator.LBRACE constant_expression RBRACE
-      direct_declarator:direct_declarator.LPARAM RPARAM
-      direct_declarator:direct_declarator.LPARAM identifier_list RPARAM
-      direct_declarator:direct_declarator.LPARAM parameter_type_list RPARAM
+      declarator: direct_declarator., *
+      direct_declarator: direct_declarator.LBRACE RBRACE
+      direct_declarator: direct_declarator.LBRACE constant_expression RBRACE
+      direct_declarator: direct_declarator.LPARAM RPARAM
+      direct_declarator: direct_declarator.LPARAM identifier_list RPARAM
+      direct_declarator: direct_declarator.LPARAM parameter_type_list RPARAM
     Reduce:
       * -> [declarator]
     Goto:
@@ -6416,7 +6452,7 @@ Parser Debug States:
 
   State 29:
     Kernel Items:
-      type_specifier:enum_specifier.,*
+      type_specifier: enum_specifier., *
     Reduce:
       * -> [type_specifier]
     Goto:
@@ -6424,7 +6460,7 @@ Parser Debug States:
 
   State 30:
     Kernel Items:
-      translation_unit:external_declaration.,*
+      translation_unit: external_declaration., *
     Reduce:
       * -> [translation_unit]
     Goto:
@@ -6432,7 +6468,7 @@ Parser Debug States:
 
   State 31:
     Kernel Items:
-      external_declaration:function_definition.,*
+      external_declaration: function_definition., *
     Reduce:
       * -> [external_declaration]
     Goto:
@@ -6440,7 +6476,7 @@ Parser Debug States:
 
   State 32:
     Kernel Items:
-      declarator:pointer.direct_declarator
+      declarator: pointer.direct_declarator
     Reduce:
       (nil)
     Goto:
@@ -6450,8 +6486,8 @@ Parser Debug States:
 
   State 33:
     Kernel Items:
-      declaration_specifiers:storage_class_specifier.,*
-      declaration_specifiers:storage_class_specifier.declaration_specifiers
+      declaration_specifiers: storage_class_specifier., *
+      declaration_specifiers: storage_class_specifier.declaration_specifiers
     Reduce:
       * -> [declaration_specifiers]
     Goto:
@@ -6485,9 +6521,9 @@ Parser Debug States:
 
   State 34:
     Kernel Items:
-      struct_or_union_specifier:struct_or_union.IDENTIFIER
-      struct_or_union_specifier:struct_or_union.IDENTIFIER LCURL struct_declaration_list RCURL
-      struct_or_union_specifier:struct_or_union.LCURL struct_declaration_list RCURL
+      struct_or_union_specifier: struct_or_union.IDENTIFIER
+      struct_or_union_specifier: struct_or_union.IDENTIFIER LCURL struct_declaration_list RCURL
+      struct_or_union_specifier: struct_or_union.LCURL struct_declaration_list RCURL
     Reduce:
       (nil)
     Goto:
@@ -6496,7 +6532,7 @@ Parser Debug States:
 
   State 35:
     Kernel Items:
-      type_specifier:struct_or_union_specifier.,*
+      type_specifier: struct_or_union_specifier., *
     Reduce:
       * -> [type_specifier]
     Goto:
@@ -6504,8 +6540,8 @@ Parser Debug States:
 
   State 36:
     Kernel Items:
-      declaration_specifiers:type_qualifier.,*
-      declaration_specifiers:type_qualifier.declaration_specifiers
+      declaration_specifiers: type_qualifier., *
+      declaration_specifiers: type_qualifier.declaration_specifiers
     Reduce:
       * -> [declaration_specifiers]
     Goto:
@@ -6539,8 +6575,8 @@ Parser Debug States:
 
   State 37:
     Kernel Items:
-      declaration_specifiers:type_specifier.,*
-      declaration_specifiers:type_specifier.declaration_specifiers
+      declaration_specifiers: type_specifier., *
+      declaration_specifiers: type_specifier.declaration_specifiers
     Reduce:
       * -> [declaration_specifiers]
     Goto:
@@ -6574,7 +6610,7 @@ Parser Debug States:
 
   State 38:
     Kernel Items:
-      translation_unit:translation_unit external_declaration.,*
+      translation_unit: translation_unit external_declaration., *
     Reduce:
       * -> [translation_unit]
     Goto:
@@ -6582,8 +6618,8 @@ Parser Debug States:
 
   State 39:
     Kernel Items:
-      enum_specifier:ENUM IDENTIFIER.,*
-      enum_specifier:ENUM IDENTIFIER.LCURL enumerator_list RCURL
+      enum_specifier: ENUM IDENTIFIER., *
+      enum_specifier: ENUM IDENTIFIER.LCURL enumerator_list RCURL
     Reduce:
       * -> [enum_specifier]
     Goto:
@@ -6591,7 +6627,7 @@ Parser Debug States:
 
   State 40:
     Kernel Items:
-      enum_specifier:ENUM LCURL.enumerator_list RCURL
+      enum_specifier: ENUM LCURL.enumerator_list RCURL
     Reduce:
       (nil)
     Goto:
@@ -6601,7 +6637,7 @@ Parser Debug States:
 
   State 41:
     Kernel Items:
-      direct_declarator:LPARAM declarator.RPARAM
+      direct_declarator: LPARAM declarator.RPARAM
     Reduce:
       (nil)
     Goto:
@@ -6609,7 +6645,7 @@ Parser Debug States:
 
   State 42:
     Kernel Items:
-      pointer:MUL pointer.,*
+      pointer: MUL pointer., *
     Reduce:
       * -> [pointer]
     Goto:
@@ -6617,7 +6653,7 @@ Parser Debug States:
 
   State 43:
     Kernel Items:
-      type_qualifier_list:type_qualifier.,*
+      type_qualifier_list: type_qualifier., *
     Reduce:
       * -> [type_qualifier_list]
     Goto:
@@ -6625,9 +6661,9 @@ Parser Debug States:
 
   State 44:
     Kernel Items:
-      pointer:MUL type_qualifier_list.,*
-      pointer:MUL type_qualifier_list.pointer
-      type_qualifier_list:type_qualifier_list.type_qualifier
+      pointer: MUL type_qualifier_list., *
+      pointer: MUL type_qualifier_list.pointer
+      type_qualifier_list: type_qualifier_list.type_qualifier
     Reduce:
       * -> [pointer]
     Goto:
@@ -6639,7 +6675,7 @@ Parser Debug States:
 
   State 45:
     Kernel Items:
-      declaration:declaration_specifiers SEMICOLON.,*
+      declaration: declaration_specifiers SEMICOLON., *
     Reduce:
       * -> [declaration]
     Goto:
@@ -6647,10 +6683,10 @@ Parser Debug States:
 
   State 46:
     Kernel Items:
-      function_definition:declaration_specifiers declarator.compound_statement
-      function_definition:declaration_specifiers declarator.declaration_list compound_statement
-      init_declarator:declarator.,*
-      init_declarator:declarator.EQ initializer
+      function_definition: declaration_specifiers declarator.compound_statement
+      function_definition: declaration_specifiers declarator.declaration_list compound_statement
+      init_declarator: declarator., *
+      init_declarator: declarator.EQ initializer
     Reduce:
       * -> [init_declarator]
     Goto:
@@ -6689,7 +6725,7 @@ Parser Debug States:
 
   State 47:
     Kernel Items:
-      init_declarator_list:init_declarator.,*
+      init_declarator_list: init_declarator., *
     Reduce:
       * -> [init_declarator_list]
     Goto:
@@ -6697,8 +6733,8 @@ Parser Debug States:
 
   State 48:
     Kernel Items:
-      declaration:declaration_specifiers init_declarator_list.SEMICOLON
-      init_declarator_list:init_declarator_list.COMMA init_declarator
+      declaration: declaration_specifiers init_declarator_list.SEMICOLON
+      init_declarator_list: init_declarator_list.COMMA init_declarator
     Reduce:
       (nil)
     Goto:
@@ -6707,10 +6743,10 @@ Parser Debug States:
 
   State 49:
     Kernel Items:
-      compound_statement:LCURL.RCURL
-      compound_statement:LCURL.declaration_list RCURL
-      compound_statement:LCURL.declaration_list statement_list RCURL
-      compound_statement:LCURL.statement_list RCURL
+      compound_statement: LCURL.RCURL
+      compound_statement: LCURL.declaration_list RCURL
+      compound_statement: LCURL.declaration_list statement_list RCURL
+      compound_statement: LCURL.statement_list RCURL
     Reduce:
       (nil)
     Goto:
@@ -6799,7 +6835,7 @@ Parser Debug States:
 
   State 50:
     Kernel Items:
-      function_definition:declarator compound_statement.,*
+      function_definition: declarator compound_statement., *
     Reduce:
       * -> [function_definition]
     Goto:
@@ -6807,7 +6843,7 @@ Parser Debug States:
 
   State 51:
     Kernel Items:
-      declaration_list:declaration.,*
+      declaration_list: declaration., *
     Reduce:
       * -> [declaration_list]
     Goto:
@@ -6815,8 +6851,8 @@ Parser Debug States:
 
   State 52:
     Kernel Items:
-      declaration_list:declaration_list.declaration
-      function_definition:declarator declaration_list.compound_statement
+      declaration_list: declaration_list.declaration
+      function_definition: declarator declaration_list.compound_statement
     Reduce:
       (nil)
     Goto:
@@ -6853,8 +6889,8 @@ Parser Debug States:
 
   State 53:
     Kernel Items:
-      declaration:declaration_specifiers.SEMICOLON
-      declaration:declaration_specifiers.init_declarator_list SEMICOLON
+      declaration: declaration_specifiers.SEMICOLON
+      declaration: declaration_specifiers.init_declarator_list SEMICOLON
     Reduce:
       (nil)
     Goto:
@@ -6870,8 +6906,8 @@ Parser Debug States:
 
   State 54:
     Kernel Items:
-      direct_declarator:direct_declarator LBRACE.RBRACE
-      direct_declarator:direct_declarator LBRACE.constant_expression RBRACE
+      direct_declarator: direct_declarator LBRACE.RBRACE
+      direct_declarator: direct_declarator LBRACE.constant_expression RBRACE
     Reduce:
       (nil)
     Goto:
@@ -6909,9 +6945,9 @@ Parser Debug States:
 
   State 55:
     Kernel Items:
-      direct_declarator:direct_declarator LPARAM.RPARAM
-      direct_declarator:direct_declarator LPARAM.identifier_list RPARAM
-      direct_declarator:direct_declarator LPARAM.parameter_type_list RPARAM
+      direct_declarator: direct_declarator LPARAM.RPARAM
+      direct_declarator: direct_declarator LPARAM.identifier_list RPARAM
+      direct_declarator: direct_declarator LPARAM.parameter_type_list RPARAM
     Reduce:
       (nil)
     Goto:
@@ -6951,12 +6987,12 @@ Parser Debug States:
 
   State 56:
     Kernel Items:
-      declarator:pointer direct_declarator.,*
-      direct_declarator:direct_declarator.LBRACE RBRACE
-      direct_declarator:direct_declarator.LBRACE constant_expression RBRACE
-      direct_declarator:direct_declarator.LPARAM RPARAM
-      direct_declarator:direct_declarator.LPARAM identifier_list RPARAM
-      direct_declarator:direct_declarator.LPARAM parameter_type_list RPARAM
+      declarator: pointer direct_declarator., *
+      direct_declarator: direct_declarator.LBRACE RBRACE
+      direct_declarator: direct_declarator.LBRACE constant_expression RBRACE
+      direct_declarator: direct_declarator.LPARAM RPARAM
+      direct_declarator: direct_declarator.LPARAM identifier_list RPARAM
+      direct_declarator: direct_declarator.LPARAM parameter_type_list RPARAM
     Reduce:
       * -> [declarator]
     Goto:
@@ -6965,7 +7001,7 @@ Parser Debug States:
 
   State 57:
     Kernel Items:
-      declaration_specifiers:storage_class_specifier declaration_specifiers.,*
+      declaration_specifiers: storage_class_specifier declaration_specifiers., *
     Reduce:
       * -> [declaration_specifiers]
     Goto:
@@ -6973,8 +7009,8 @@ Parser Debug States:
 
   State 58:
     Kernel Items:
-      struct_or_union_specifier:struct_or_union IDENTIFIER.,*
-      struct_or_union_specifier:struct_or_union IDENTIFIER.LCURL struct_declaration_list RCURL
+      struct_or_union_specifier: struct_or_union IDENTIFIER., *
+      struct_or_union_specifier: struct_or_union IDENTIFIER.LCURL struct_declaration_list RCURL
     Reduce:
       * -> [struct_or_union_specifier]
     Goto:
@@ -6982,7 +7018,7 @@ Parser Debug States:
 
   State 59:
     Kernel Items:
-      struct_or_union_specifier:struct_or_union LCURL.struct_declaration_list RCURL
+      struct_or_union_specifier: struct_or_union LCURL.struct_declaration_list RCURL
     Reduce:
       (nil)
     Goto:
@@ -7012,7 +7048,7 @@ Parser Debug States:
 
   State 60:
     Kernel Items:
-      declaration_specifiers:type_qualifier declaration_specifiers.,*
+      declaration_specifiers: type_qualifier declaration_specifiers., *
     Reduce:
       * -> [declaration_specifiers]
     Goto:
@@ -7020,7 +7056,7 @@ Parser Debug States:
 
   State 61:
     Kernel Items:
-      declaration_specifiers:type_specifier declaration_specifiers.,*
+      declaration_specifiers: type_specifier declaration_specifiers., *
     Reduce:
       * -> [declaration_specifiers]
     Goto:
@@ -7028,7 +7064,7 @@ Parser Debug States:
 
   State 62:
     Kernel Items:
-      enum_specifier:ENUM IDENTIFIER LCURL.enumerator_list RCURL
+      enum_specifier: ENUM IDENTIFIER LCURL.enumerator_list RCURL
     Reduce:
       (nil)
     Goto:
@@ -7038,8 +7074,8 @@ Parser Debug States:
 
   State 63:
     Kernel Items:
-      enumerator:IDENTIFIER.,*
-      enumerator:IDENTIFIER.EQ constant_expression
+      enumerator: IDENTIFIER., *
+      enumerator: IDENTIFIER.EQ constant_expression
     Reduce:
       * -> [enumerator]
     Goto:
@@ -7047,7 +7083,7 @@ Parser Debug States:
 
   State 64:
     Kernel Items:
-      enumerator_list:enumerator.,*
+      enumerator_list: enumerator., *
     Reduce:
       * -> [enumerator_list]
     Goto:
@@ -7055,8 +7091,8 @@ Parser Debug States:
 
   State 65:
     Kernel Items:
-      enum_specifier:ENUM LCURL enumerator_list.RCURL
-      enumerator_list:enumerator_list.COMMA enumerator
+      enum_specifier: ENUM LCURL enumerator_list.RCURL
+      enumerator_list: enumerator_list.COMMA enumerator
     Reduce:
       (nil)
     Goto:
@@ -7065,7 +7101,7 @@ Parser Debug States:
 
   State 66:
     Kernel Items:
-      direct_declarator:LPARAM declarator RPARAM.,*
+      direct_declarator: LPARAM declarator RPARAM., *
     Reduce:
       * -> [direct_declarator]
     Goto:
@@ -7073,7 +7109,7 @@ Parser Debug States:
 
   State 67:
     Kernel Items:
-      pointer:MUL type_qualifier_list pointer.,*
+      pointer: MUL type_qualifier_list pointer., *
     Reduce:
       * -> [pointer]
     Goto:
@@ -7081,7 +7117,7 @@ Parser Debug States:
 
   State 68:
     Kernel Items:
-      type_qualifier_list:type_qualifier_list type_qualifier.,*
+      type_qualifier_list: type_qualifier_list type_qualifier., *
     Reduce:
       * -> [type_qualifier_list]
     Goto:
@@ -7089,7 +7125,7 @@ Parser Debug States:
 
   State 69:
     Kernel Items:
-      init_declarator:declarator EQ.initializer
+      init_declarator: declarator EQ.initializer
     Reduce:
       (nil)
     Goto:
@@ -7128,7 +7164,7 @@ Parser Debug States:
 
   State 70:
     Kernel Items:
-      function_definition:declaration_specifiers declarator compound_statement.,*
+      function_definition: declaration_specifiers declarator compound_statement., *
     Reduce:
       * -> [function_definition]
     Goto:
@@ -7136,8 +7172,8 @@ Parser Debug States:
 
   State 71:
     Kernel Items:
-      declaration_list:declaration_list.declaration
-      function_definition:declaration_specifiers declarator declaration_list.compound_statement
+      declaration_list: declaration_list.declaration
+      function_definition: declaration_specifiers declarator declaration_list.compound_statement
     Reduce:
       (nil)
     Goto:
@@ -7174,7 +7210,7 @@ Parser Debug States:
 
   State 72:
     Kernel Items:
-      init_declarator_list:init_declarator_list COMMA.init_declarator
+      init_declarator_list: init_declarator_list COMMA.init_declarator
     Reduce:
       (nil)
     Goto:
@@ -7188,7 +7224,7 @@ Parser Debug States:
 
   State 73:
     Kernel Items:
-      declaration:declaration_specifiers init_declarator_list SEMICOLON.,*
+      declaration: declaration_specifiers init_declarator_list SEMICOLON., *
     Reduce:
       * -> [declaration]
     Goto:
@@ -7196,7 +7232,7 @@ Parser Debug States:
 
   State 74:
     Kernel Items:
-      unary_operator:AND.,*
+      unary_operator: AND., *
     Reduce:
       * -> [unary_operator]
     Goto:
@@ -7204,7 +7240,7 @@ Parser Debug States:
 
   State 75:
     Kernel Items:
-      jump_statement:BREAK.SEMICOLON
+      jump_statement: BREAK.SEMICOLON
     Reduce:
       (nil)
     Goto:
@@ -7212,7 +7248,7 @@ Parser Debug States:
 
   State 76:
     Kernel Items:
-      labeled_statement:CASE.constant_expression COLON statement
+      labeled_statement: CASE.constant_expression COLON statement
     Reduce:
       (nil)
     Goto:
@@ -7249,7 +7285,7 @@ Parser Debug States:
 
   State 77:
     Kernel Items:
-      primary_expression:CONSTANT.,*
+      primary_expression: CONSTANT., *
     Reduce:
       * -> [primary_expression]
     Goto:
@@ -7257,7 +7293,7 @@ Parser Debug States:
 
   State 78:
     Kernel Items:
-      jump_statement:CONTINUE.SEMICOLON
+      jump_statement: CONTINUE.SEMICOLON
     Reduce:
       (nil)
     Goto:
@@ -7265,7 +7301,7 @@ Parser Debug States:
 
   State 79:
     Kernel Items:
-      unary_expression:DEC_OP.unary_expression
+      unary_expression: DEC_OP.unary_expression
     Reduce:
       (nil)
     Goto:
@@ -7289,7 +7325,7 @@ Parser Debug States:
 
   State 80:
     Kernel Items:
-      labeled_statement:DEFAULT.COLON statement
+      labeled_statement: DEFAULT.COLON statement
     Reduce:
       (nil)
     Goto:
@@ -7297,7 +7333,7 @@ Parser Debug States:
 
   State 81:
     Kernel Items:
-      iteration_statement:DO.statement WHILE LPARAM expression RPARAM SEMICOLON
+      iteration_statement: DO.statement WHILE LPARAM expression RPARAM SEMICOLON
     Reduce:
       (nil)
     Goto:
@@ -7355,7 +7391,7 @@ Parser Debug States:
 
   State 82:
     Kernel Items:
-      unary_operator:EXCLAIM.,*
+      unary_operator: EXCLAIM., *
     Reduce:
       * -> [unary_operator]
     Goto:
@@ -7363,8 +7399,8 @@ Parser Debug States:
 
   State 83:
     Kernel Items:
-      iteration_statement:FOR.LPARAM expression_statement expression_statement RPARAM statement
-      iteration_statement:FOR.LPARAM expression_statement expression_statement expression RPARAM statement
+      iteration_statement: FOR.LPARAM expression_statement expression_statement RPARAM statement
+      iteration_statement: FOR.LPARAM expression_statement expression_statement expression RPARAM statement
     Reduce:
       (nil)
     Goto:
@@ -7372,7 +7408,7 @@ Parser Debug States:
 
   State 84:
     Kernel Items:
-      jump_statement:GOTO.IDENTIFIER SEMICOLON
+      jump_statement: GOTO.IDENTIFIER SEMICOLON
     Reduce:
       (nil)
     Goto:
@@ -7380,8 +7416,8 @@ Parser Debug States:
 
   State 85:
     Kernel Items:
-      labeled_statement:IDENTIFIER.COLON statement
-      primary_expression:IDENTIFIER.,*
+      labeled_statement: IDENTIFIER.COLON statement
+      primary_expression: IDENTIFIER., *
     Reduce:
       * -> [primary_expression]
     Goto:
@@ -7389,8 +7425,8 @@ Parser Debug States:
 
   State 86:
     Kernel Items:
-      selection_statement:IF.LPARAM expression RPARAM statement
-      selection_statement:IF.LPARAM expression RPARAM statement ELSE statement
+      selection_statement: IF.LPARAM expression RPARAM statement
+      selection_statement: IF.LPARAM expression RPARAM statement ELSE statement
     Reduce:
       (nil)
     Goto:
@@ -7398,7 +7434,7 @@ Parser Debug States:
 
   State 87:
     Kernel Items:
-      unary_expression:INC_OP.unary_expression
+      unary_expression: INC_OP.unary_expression
     Reduce:
       (nil)
     Goto:
@@ -7422,8 +7458,8 @@ Parser Debug States:
 
   State 88:
     Kernel Items:
-      cast_expression:LPARAM.type_name RPARAM cast_expression
-      primary_expression:LPARAM.expression RPARAM
+      cast_expression: LPARAM.type_name RPARAM cast_expression
+      primary_expression: LPARAM.expression RPARAM
     Reduce:
       (nil)
     Goto:
@@ -7483,7 +7519,7 @@ Parser Debug States:
 
   State 89:
     Kernel Items:
-      unary_operator:MINUS.,*
+      unary_operator: MINUS., *
     Reduce:
       * -> [unary_operator]
     Goto:
@@ -7491,7 +7527,7 @@ Parser Debug States:
 
   State 90:
     Kernel Items:
-      unary_operator:MUL.,*
+      unary_operator: MUL., *
     Reduce:
       * -> [unary_operator]
     Goto:
@@ -7499,7 +7535,7 @@ Parser Debug States:
 
   State 91:
     Kernel Items:
-      unary_operator:PLUS.,*
+      unary_operator: PLUS., *
     Reduce:
       * -> [unary_operator]
     Goto:
@@ -7507,7 +7543,7 @@ Parser Debug States:
 
   State 92:
     Kernel Items:
-      compound_statement:LCURL RCURL.,*
+      compound_statement: LCURL RCURL., *
     Reduce:
       * -> [compound_statement]
     Goto:
@@ -7515,8 +7551,8 @@ Parser Debug States:
 
   State 93:
     Kernel Items:
-      jump_statement:RETURN.SEMICOLON
-      jump_statement:RETURN.expression SEMICOLON
+      jump_statement: RETURN.SEMICOLON
+      jump_statement: RETURN.expression SEMICOLON
     Reduce:
       (nil)
     Goto:
@@ -7555,7 +7591,7 @@ Parser Debug States:
 
   State 94:
     Kernel Items:
-      expression_statement:SEMICOLON.,*
+      expression_statement: SEMICOLON., *
     Reduce:
       * -> [expression_statement]
     Goto:
@@ -7563,8 +7599,8 @@ Parser Debug States:
 
   State 95:
     Kernel Items:
-      unary_expression:SIZEOF.LPARAM type_name RPARAM
-      unary_expression:SIZEOF.unary_expression
+      unary_expression: SIZEOF.LPARAM type_name RPARAM
+      unary_expression: SIZEOF.unary_expression
     Reduce:
       (nil)
     Goto:
@@ -7588,7 +7624,7 @@ Parser Debug States:
 
   State 96:
     Kernel Items:
-      primary_expression:STRING_LITERAL.,*
+      primary_expression: STRING_LITERAL., *
     Reduce:
       * -> [primary_expression]
     Goto:
@@ -7596,7 +7632,7 @@ Parser Debug States:
 
   State 97:
     Kernel Items:
-      selection_statement:SWITCH.LPARAM expression RPARAM statement
+      selection_statement: SWITCH.LPARAM expression RPARAM statement
     Reduce:
       (nil)
     Goto:
@@ -7604,7 +7640,7 @@ Parser Debug States:
 
   State 98:
     Kernel Items:
-      unary_operator:TILDA.,*
+      unary_operator: TILDA., *
     Reduce:
       * -> [unary_operator]
     Goto:
@@ -7612,7 +7648,7 @@ Parser Debug States:
 
   State 99:
     Kernel Items:
-      iteration_statement:WHILE.LPARAM expression RPARAM statement
+      iteration_statement: WHILE.LPARAM expression RPARAM statement
     Reduce:
       (nil)
     Goto:
@@ -7620,9 +7656,9 @@ Parser Debug States:
 
   State 100:
     Kernel Items:
-      additive_expression:additive_expression.MINUS multiplicative_expression
-      additive_expression:additive_expression.PLUS multiplicative_expression
-      shift_expression:additive_expression.,*
+      additive_expression: additive_expression.MINUS multiplicative_expression
+      additive_expression: additive_expression.PLUS multiplicative_expression
+      shift_expression: additive_expression., *
     Reduce:
       * -> [shift_expression]
     Goto:
@@ -7631,8 +7667,8 @@ Parser Debug States:
 
   State 101:
     Kernel Items:
-      and_expression:and_expression.AND equality_expression
-      exclusive_or_expression:and_expression.,*
+      and_expression: and_expression.AND equality_expression
+      exclusive_or_expression: and_expression., *
     Reduce:
       * -> [exclusive_or_expression]
     Goto:
@@ -7640,7 +7676,7 @@ Parser Debug States:
 
   State 102:
     Kernel Items:
-      expression:assignment_expression.,*
+      expression: assignment_expression., *
     Reduce:
       * -> [expression]
     Goto:
@@ -7648,7 +7684,7 @@ Parser Debug States:
 
   State 103:
     Kernel Items:
-      multiplicative_expression:cast_expression.,*
+      multiplicative_expression: cast_expression., *
     Reduce:
       * -> [multiplicative_expression]
     Goto:
@@ -7656,7 +7692,7 @@ Parser Debug States:
 
   State 104:
     Kernel Items:
-      statement:compound_statement.,*
+      statement: compound_statement., *
     Reduce:
       * -> [statement]
     Goto:
@@ -7664,7 +7700,7 @@ Parser Debug States:
 
   State 105:
     Kernel Items:
-      assignment_expression:conditional_expression.,*
+      assignment_expression: conditional_expression., *
     Reduce:
       * -> [assignment_expression]
     Goto:
@@ -7672,9 +7708,9 @@ Parser Debug States:
 
   State 106:
     Kernel Items:
-      compound_statement:LCURL declaration_list.RCURL
-      compound_statement:LCURL declaration_list.statement_list RCURL
-      declaration_list:declaration_list.declaration
+      compound_statement: LCURL declaration_list.RCURL
+      compound_statement: LCURL declaration_list.statement_list RCURL
+      declaration_list: declaration_list.declaration
     Reduce:
       (nil)
     Goto:
@@ -7762,9 +7798,9 @@ Parser Debug States:
 
   State 107:
     Kernel Items:
-      and_expression:equality_expression.,*
-      equality_expression:equality_expression.EQ_OP relational_expression
-      equality_expression:equality_expression.NE_OP relational_expression
+      and_expression: equality_expression., *
+      equality_expression: equality_expression.EQ_OP relational_expression
+      equality_expression: equality_expression.NE_OP relational_expression
     Reduce:
       * -> [and_expression]
     Goto:
@@ -7773,8 +7809,8 @@ Parser Debug States:
 
   State 108:
     Kernel Items:
-      exclusive_or_expression:exclusive_or_expression.HAT and_expression
-      inclusive_or_expression:exclusive_or_expression.,*
+      exclusive_or_expression: exclusive_or_expression.HAT and_expression
+      inclusive_or_expression: exclusive_or_expression., *
     Reduce:
       * -> [inclusive_or_expression]
     Goto:
@@ -7782,8 +7818,8 @@ Parser Debug States:
 
   State 109:
     Kernel Items:
-      expression:expression.COMMA assignment_expression
-      expression_statement:expression.SEMICOLON
+      expression: expression.COMMA assignment_expression
+      expression_statement: expression.SEMICOLON
     Reduce:
       (nil)
     Goto:
@@ -7792,7 +7828,7 @@ Parser Debug States:
 
   State 110:
     Kernel Items:
-      statement:expression_statement.,*
+      statement: expression_statement., *
     Reduce:
       * -> [statement]
     Goto:
@@ -7800,8 +7836,8 @@ Parser Debug States:
 
   State 111:
     Kernel Items:
-      inclusive_or_expression:inclusive_or_expression.OR exclusive_or_expression
-      logical_and_expression:inclusive_or_expression.,*
+      inclusive_or_expression: inclusive_or_expression.OR exclusive_or_expression
+      logical_and_expression: inclusive_or_expression., *
     Reduce:
       * -> [logical_and_expression]
     Goto:
@@ -7809,7 +7845,7 @@ Parser Debug States:
 
   State 112:
     Kernel Items:
-      statement:iteration_statement.,*
+      statement: iteration_statement., *
     Reduce:
       * -> [statement]
     Goto:
@@ -7817,7 +7853,7 @@ Parser Debug States:
 
   State 113:
     Kernel Items:
-      statement:jump_statement.,*
+      statement: jump_statement., *
     Reduce:
       * -> [statement]
     Goto:
@@ -7825,7 +7861,7 @@ Parser Debug States:
 
   State 114:
     Kernel Items:
-      statement:labeled_statement.,*
+      statement: labeled_statement., *
     Reduce:
       * -> [statement]
     Goto:
@@ -7833,8 +7869,8 @@ Parser Debug States:
 
   State 115:
     Kernel Items:
-      logical_and_expression:logical_and_expression.AND_OP inclusive_or_expression
-      logical_or_expression:logical_and_expression.,*
+      logical_and_expression: logical_and_expression.AND_OP inclusive_or_expression
+      logical_or_expression: logical_and_expression., *
     Reduce:
       * -> [logical_or_expression]
     Goto:
@@ -7842,9 +7878,9 @@ Parser Debug States:
 
   State 116:
     Kernel Items:
-      conditional_expression:logical_or_expression.,*
-      conditional_expression:logical_or_expression.QUESTION expression COLON conditional_expression
-      logical_or_expression:logical_or_expression.OR_OP logical_and_expression
+      conditional_expression: logical_or_expression., *
+      conditional_expression: logical_or_expression.QUESTION expression COLON conditional_expression
+      logical_or_expression: logical_or_expression.OR_OP logical_and_expression
     Reduce:
       * -> [conditional_expression]
     Goto:
@@ -7853,10 +7889,10 @@ Parser Debug States:
 
   State 117:
     Kernel Items:
-      additive_expression:multiplicative_expression.,*
-      multiplicative_expression:multiplicative_expression.DIV cast_expression
-      multiplicative_expression:multiplicative_expression.MOD cast_expression
-      multiplicative_expression:multiplicative_expression.MUL cast_expression
+      additive_expression: multiplicative_expression., *
+      multiplicative_expression: multiplicative_expression.DIV cast_expression
+      multiplicative_expression: multiplicative_expression.MOD cast_expression
+      multiplicative_expression: multiplicative_expression.MUL cast_expression
     Reduce:
       * -> [additive_expression]
     Goto:
@@ -7866,14 +7902,14 @@ Parser Debug States:
 
   State 118:
     Kernel Items:
-      postfix_expression:postfix_expression.DEC_OP
-      postfix_expression:postfix_expression.DOT IDENTIFIER
-      postfix_expression:postfix_expression.INC_OP
-      postfix_expression:postfix_expression.LBRACE expression RBRACE
-      postfix_expression:postfix_expression.LPARAM RPARAM
-      postfix_expression:postfix_expression.LPARAM argument_expression_list RPARAM
-      postfix_expression:postfix_expression.PTR_OP IDENTIFIER
-      unary_expression:postfix_expression.,*
+      postfix_expression: postfix_expression.DEC_OP
+      postfix_expression: postfix_expression.DOT IDENTIFIER
+      postfix_expression: postfix_expression.INC_OP
+      postfix_expression: postfix_expression.LBRACE expression RBRACE
+      postfix_expression: postfix_expression.LPARAM RPARAM
+      postfix_expression: postfix_expression.LPARAM argument_expression_list RPARAM
+      postfix_expression: postfix_expression.PTR_OP IDENTIFIER
+      unary_expression: postfix_expression., *
     Reduce:
       * -> [unary_expression]
     Goto:
@@ -7886,7 +7922,7 @@ Parser Debug States:
 
   State 119:
     Kernel Items:
-      postfix_expression:primary_expression.,*
+      postfix_expression: primary_expression., *
     Reduce:
       * -> [postfix_expression]
     Goto:
@@ -7894,11 +7930,11 @@ Parser Debug States:
 
   State 120:
     Kernel Items:
-      equality_expression:relational_expression.,*
-      relational_expression:relational_expression.GE_OP shift_expression
-      relational_expression:relational_expression.GT shift_expression
-      relational_expression:relational_expression.LE_OP shift_expression
-      relational_expression:relational_expression.LT shift_expression
+      equality_expression: relational_expression., *
+      relational_expression: relational_expression.GE_OP shift_expression
+      relational_expression: relational_expression.GT shift_expression
+      relational_expression: relational_expression.LE_OP shift_expression
+      relational_expression: relational_expression.LT shift_expression
     Reduce:
       * -> [equality_expression]
     Goto:
@@ -7909,7 +7945,7 @@ Parser Debug States:
 
   State 121:
     Kernel Items:
-      statement:selection_statement.,*
+      statement: selection_statement., *
     Reduce:
       * -> [statement]
     Goto:
@@ -7917,9 +7953,9 @@ Parser Debug States:
 
   State 122:
     Kernel Items:
-      relational_expression:shift_expression.,*
-      shift_expression:shift_expression.LEFT_OP additive_expression
-      shift_expression:shift_expression.RIGHT_OP additive_expression
+      relational_expression: shift_expression., *
+      shift_expression: shift_expression.LEFT_OP additive_expression
+      shift_expression: shift_expression.RIGHT_OP additive_expression
     Reduce:
       * -> [relational_expression]
     Goto:
@@ -7928,7 +7964,7 @@ Parser Debug States:
 
   State 123:
     Kernel Items:
-      statement_list:statement.,*
+      statement_list: statement., *
     Reduce:
       * -> [statement_list]
     Goto:
@@ -7936,8 +7972,8 @@ Parser Debug States:
 
   State 124:
     Kernel Items:
-      compound_statement:LCURL statement_list.RCURL
-      statement_list:statement_list.statement
+      compound_statement: LCURL statement_list.RCURL
+      statement_list: statement_list.statement
     Reduce:
       (nil)
     Goto:
@@ -7996,8 +8032,8 @@ Parser Debug States:
 
   State 125:
     Kernel Items:
-      assignment_expression:unary_expression.assignment_operator assignment_expression
-      cast_expression:unary_expression.,*
+      assignment_expression: unary_expression.assignment_operator assignment_expression
+      cast_expression: unary_expression., *
     Reduce:
       * -> [cast_expression]
     Goto:
@@ -8016,7 +8052,7 @@ Parser Debug States:
 
   State 126:
     Kernel Items:
-      unary_expression:unary_operator.cast_expression
+      unary_expression: unary_operator.cast_expression
     Reduce:
       (nil)
     Goto:
@@ -8041,7 +8077,7 @@ Parser Debug States:
 
   State 127:
     Kernel Items:
-      function_definition:declarator declaration_list compound_statement.,*
+      function_definition: declarator declaration_list compound_statement., *
     Reduce:
       * -> [function_definition]
     Goto:
@@ -8049,7 +8085,7 @@ Parser Debug States:
 
   State 128:
     Kernel Items:
-      declaration_list:declaration_list declaration.,*
+      declaration_list: declaration_list declaration., *
     Reduce:
       * -> [declaration_list]
     Goto:
@@ -8057,8 +8093,8 @@ Parser Debug States:
 
   State 129:
     Kernel Items:
-      init_declarator:declarator.,*
-      init_declarator:declarator.EQ initializer
+      init_declarator: declarator., *
+      init_declarator: declarator.EQ initializer
     Reduce:
       * -> [init_declarator]
     Goto:
@@ -8066,7 +8102,7 @@ Parser Debug States:
 
   State 130:
     Kernel Items:
-      primary_expression:IDENTIFIER.,*
+      primary_expression: IDENTIFIER., *
     Reduce:
       * -> [primary_expression]
     Goto:
@@ -8074,7 +8110,7 @@ Parser Debug States:
 
   State 131:
     Kernel Items:
-      direct_declarator:direct_declarator LBRACE RBRACE.,*
+      direct_declarator: direct_declarator LBRACE RBRACE., *
     Reduce:
       * -> [direct_declarator]
     Goto:
@@ -8082,7 +8118,7 @@ Parser Debug States:
 
   State 132:
     Kernel Items:
-      constant_expression:conditional_expression.,*
+      constant_expression: conditional_expression., *
     Reduce:
       * -> [constant_expression]
     Goto:
@@ -8090,7 +8126,7 @@ Parser Debug States:
 
   State 133:
     Kernel Items:
-      direct_declarator:direct_declarator LBRACE constant_expression.RBRACE
+      direct_declarator: direct_declarator LBRACE constant_expression.RBRACE
     Reduce:
       (nil)
     Goto:
@@ -8098,7 +8134,7 @@ Parser Debug States:
 
   State 134:
     Kernel Items:
-      cast_expression:unary_expression.,*
+      cast_expression: unary_expression., *
     Reduce:
       * -> [cast_expression]
     Goto:
@@ -8106,7 +8142,7 @@ Parser Debug States:
 
   State 135:
     Kernel Items:
-      identifier_list:IDENTIFIER.,*
+      identifier_list: IDENTIFIER., *
     Reduce:
       * -> [identifier_list]
     Goto:
@@ -8114,7 +8150,7 @@ Parser Debug States:
 
   State 136:
     Kernel Items:
-      direct_declarator:direct_declarator LPARAM RPARAM.,*
+      direct_declarator: direct_declarator LPARAM RPARAM., *
     Reduce:
       * -> [direct_declarator]
     Goto:
@@ -8122,9 +8158,9 @@ Parser Debug States:
 
   State 137:
     Kernel Items:
-      parameter_declaration:declaration_specifiers.,*
-      parameter_declaration:declaration_specifiers.abstract_declarator
-      parameter_declaration:declaration_specifiers.declarator
+      parameter_declaration: declaration_specifiers., *
+      parameter_declaration: declaration_specifiers.abstract_declarator
+      parameter_declaration: declaration_specifiers.declarator
     Reduce:
       * -> [parameter_declaration]
     Goto:
@@ -8140,8 +8176,8 @@ Parser Debug States:
 
   State 138:
     Kernel Items:
-      direct_declarator:direct_declarator LPARAM identifier_list.RPARAM
-      identifier_list:identifier_list.COMMA IDENTIFIER
+      direct_declarator: direct_declarator LPARAM identifier_list.RPARAM
+      identifier_list: identifier_list.COMMA IDENTIFIER
     Reduce:
       (nil)
     Goto:
@@ -8150,7 +8186,7 @@ Parser Debug States:
 
   State 139:
     Kernel Items:
-      parameter_list:parameter_declaration.,*
+      parameter_list: parameter_declaration., *
     Reduce:
       * -> [parameter_list]
     Goto:
@@ -8158,9 +8194,9 @@ Parser Debug States:
 
   State 140:
     Kernel Items:
-      parameter_list:parameter_list.COMMA parameter_declaration
-      parameter_type_list:parameter_list.,RPARAM
-      parameter_type_list:parameter_list.COMMA ELLIPSIS
+      parameter_list: parameter_list.COMMA parameter_declaration
+      parameter_type_list: parameter_list., RPARAM
+      parameter_type_list: parameter_list.COMMA ELLIPSIS
     Reduce:
       RPARAM -> [parameter_type_list]
     Goto:
@@ -8168,7 +8204,7 @@ Parser Debug States:
 
   State 141:
     Kernel Items:
-      direct_declarator:direct_declarator LPARAM parameter_type_list.RPARAM
+      direct_declarator: direct_declarator LPARAM parameter_type_list.RPARAM
     Reduce:
       (nil)
     Goto:
@@ -8176,7 +8212,7 @@ Parser Debug States:
 
   State 142:
     Kernel Items:
-      struct_or_union_specifier:struct_or_union IDENTIFIER LCURL.struct_declaration_list RCURL
+      struct_or_union_specifier: struct_or_union IDENTIFIER LCURL.struct_declaration_list RCURL
     Reduce:
       (nil)
     Goto:
@@ -8206,7 +8242,7 @@ Parser Debug States:
 
   State 143:
     Kernel Items:
-      struct_declaration:specifier_qualifier_list.struct_declarator_list SEMICOLON
+      struct_declaration: specifier_qualifier_list.struct_declarator_list SEMICOLON
     Reduce:
       (nil)
     Goto:
@@ -8222,7 +8258,7 @@ Parser Debug States:
 
   State 144:
     Kernel Items:
-      struct_declaration_list:struct_declaration.,*
+      struct_declaration_list: struct_declaration., *
     Reduce:
       * -> [struct_declaration_list]
     Goto:
@@ -8230,8 +8266,8 @@ Parser Debug States:
 
   State 145:
     Kernel Items:
-      struct_declaration_list:struct_declaration_list.struct_declaration
-      struct_or_union_specifier:struct_or_union LCURL struct_declaration_list.RCURL
+      struct_declaration_list: struct_declaration_list.struct_declaration
+      struct_or_union_specifier: struct_or_union LCURL struct_declaration_list.RCURL
     Reduce:
       (nil)
     Goto:
@@ -8261,8 +8297,8 @@ Parser Debug States:
 
   State 146:
     Kernel Items:
-      specifier_qualifier_list:type_qualifier.,*
-      specifier_qualifier_list:type_qualifier.specifier_qualifier_list
+      specifier_qualifier_list: type_qualifier., *
+      specifier_qualifier_list: type_qualifier.specifier_qualifier_list
     Reduce:
       * -> [specifier_qualifier_list]
     Goto:
@@ -8290,8 +8326,8 @@ Parser Debug States:
 
   State 147:
     Kernel Items:
-      specifier_qualifier_list:type_specifier.,*
-      specifier_qualifier_list:type_specifier.specifier_qualifier_list
+      specifier_qualifier_list: type_specifier., *
+      specifier_qualifier_list: type_specifier.specifier_qualifier_list
     Reduce:
       * -> [specifier_qualifier_list]
     Goto:
@@ -8319,8 +8355,8 @@ Parser Debug States:
 
   State 148:
     Kernel Items:
-      enum_specifier:ENUM IDENTIFIER LCURL enumerator_list.RCURL
-      enumerator_list:enumerator_list.COMMA enumerator
+      enum_specifier: ENUM IDENTIFIER LCURL enumerator_list.RCURL
+      enumerator_list: enumerator_list.COMMA enumerator
     Reduce:
       (nil)
     Goto:
@@ -8329,7 +8365,7 @@ Parser Debug States:
 
   State 149:
     Kernel Items:
-      enumerator:IDENTIFIER EQ.constant_expression
+      enumerator: IDENTIFIER EQ.constant_expression
     Reduce:
       (nil)
     Goto:
@@ -8366,7 +8402,7 @@ Parser Debug States:
 
   State 150:
     Kernel Items:
-      enumerator_list:enumerator_list COMMA.enumerator
+      enumerator_list: enumerator_list COMMA.enumerator
     Reduce:
       (nil)
     Goto:
@@ -8375,7 +8411,7 @@ Parser Debug States:
 
   State 151:
     Kernel Items:
-      enum_specifier:ENUM LCURL enumerator_list RCURL.,*
+      enum_specifier: ENUM LCURL enumerator_list RCURL., *
     Reduce:
       * -> [enum_specifier]
     Goto:
@@ -8383,8 +8419,8 @@ Parser Debug States:
 
   State 152:
     Kernel Items:
-      initializer:LCURL.initializer_list COMMA RCURL
-      initializer:LCURL.initializer_list RCURL
+      initializer: LCURL.initializer_list COMMA RCURL
+      initializer: LCURL.initializer_list RCURL
     Reduce:
       (nil)
     Goto:
@@ -8424,7 +8460,7 @@ Parser Debug States:
 
   State 153:
     Kernel Items:
-      initializer:assignment_expression.,*
+      initializer: assignment_expression., *
     Reduce:
       * -> [initializer]
     Goto:
@@ -8432,7 +8468,7 @@ Parser Debug States:
 
   State 154:
     Kernel Items:
-      init_declarator:declarator EQ initializer.,*
+      init_declarator: declarator EQ initializer., *
     Reduce:
       * -> [init_declarator]
     Goto:
@@ -8440,7 +8476,7 @@ Parser Debug States:
 
   State 155:
     Kernel Items:
-      function_definition:declaration_specifiers declarator declaration_list compound_statement.,*
+      function_definition: declaration_specifiers declarator declaration_list compound_statement., *
     Reduce:
       * -> [function_definition]
     Goto:
@@ -8448,7 +8484,7 @@ Parser Debug States:
 
   State 156:
     Kernel Items:
-      init_declarator_list:init_declarator_list COMMA init_declarator.,*
+      init_declarator_list: init_declarator_list COMMA init_declarator., *
     Reduce:
       * -> [init_declarator_list]
     Goto:
@@ -8456,7 +8492,7 @@ Parser Debug States:
 
   State 157:
     Kernel Items:
-      jump_statement:BREAK SEMICOLON.,*
+      jump_statement: BREAK SEMICOLON., *
     Reduce:
       * -> [jump_statement]
     Goto:
@@ -8464,7 +8500,7 @@ Parser Debug States:
 
   State 158:
     Kernel Items:
-      labeled_statement:CASE constant_expression.COLON statement
+      labeled_statement: CASE constant_expression.COLON statement
     Reduce:
       (nil)
     Goto:
@@ -8472,7 +8508,7 @@ Parser Debug States:
 
   State 159:
     Kernel Items:
-      jump_statement:CONTINUE SEMICOLON.,*
+      jump_statement: CONTINUE SEMICOLON., *
     Reduce:
       * -> [jump_statement]
     Goto:
@@ -8480,7 +8516,7 @@ Parser Debug States:
 
   State 160:
     Kernel Items:
-      primary_expression:LPARAM.expression RPARAM
+      primary_expression: LPARAM.expression RPARAM
     Reduce:
       (nil)
     Goto:
@@ -8518,7 +8554,7 @@ Parser Debug States:
 
   State 161:
     Kernel Items:
-      unary_expression:DEC_OP unary_expression.,*
+      unary_expression: DEC_OP unary_expression., *
     Reduce:
       * -> [unary_expression]
     Goto:
@@ -8526,7 +8562,7 @@ Parser Debug States:
 
   State 162:
     Kernel Items:
-      labeled_statement:DEFAULT COLON.statement
+      labeled_statement: DEFAULT COLON.statement
     Reduce:
       (nil)
     Goto:
@@ -8584,7 +8620,7 @@ Parser Debug States:
 
   State 163:
     Kernel Items:
-      iteration_statement:DO statement.WHILE LPARAM expression RPARAM SEMICOLON
+      iteration_statement: DO statement.WHILE LPARAM expression RPARAM SEMICOLON
     Reduce:
       (nil)
     Goto:
@@ -8592,8 +8628,8 @@ Parser Debug States:
 
   State 164:
     Kernel Items:
-      iteration_statement:FOR LPARAM.expression_statement expression_statement RPARAM statement
-      iteration_statement:FOR LPARAM.expression_statement expression_statement expression RPARAM statement
+      iteration_statement: FOR LPARAM.expression_statement expression_statement RPARAM statement
+      iteration_statement: FOR LPARAM.expression_statement expression_statement expression RPARAM statement
     Reduce:
       (nil)
     Goto:
@@ -8633,7 +8669,7 @@ Parser Debug States:
 
   State 165:
     Kernel Items:
-      jump_statement:GOTO IDENTIFIER.SEMICOLON
+      jump_statement: GOTO IDENTIFIER.SEMICOLON
     Reduce:
       (nil)
     Goto:
@@ -8641,7 +8677,7 @@ Parser Debug States:
 
   State 166:
     Kernel Items:
-      labeled_statement:IDENTIFIER COLON.statement
+      labeled_statement: IDENTIFIER COLON.statement
     Reduce:
       (nil)
     Goto:
@@ -8699,8 +8735,8 @@ Parser Debug States:
 
   State 167:
     Kernel Items:
-      selection_statement:IF LPARAM.expression RPARAM statement
-      selection_statement:IF LPARAM.expression RPARAM statement ELSE statement
+      selection_statement: IF LPARAM.expression RPARAM statement
+      selection_statement: IF LPARAM.expression RPARAM statement ELSE statement
     Reduce:
       (nil)
     Goto:
@@ -8738,7 +8774,7 @@ Parser Debug States:
 
   State 168:
     Kernel Items:
-      unary_expression:INC_OP unary_expression.,*
+      unary_expression: INC_OP unary_expression., *
     Reduce:
       * -> [unary_expression]
     Goto:
@@ -8746,8 +8782,8 @@ Parser Debug States:
 
   State 169:
     Kernel Items:
-      expression:expression.COMMA assignment_expression
-      primary_expression:LPARAM expression.RPARAM
+      expression: expression.COMMA assignment_expression
+      primary_expression: LPARAM expression.RPARAM
     Reduce:
       (nil)
     Goto:
@@ -8756,8 +8792,8 @@ Parser Debug States:
 
   State 170:
     Kernel Items:
-      type_name:specifier_qualifier_list.,RPARAM
-      type_name:specifier_qualifier_list.abstract_declarator
+      type_name: specifier_qualifier_list., RPARAM
+      type_name: specifier_qualifier_list.abstract_declarator
     Reduce:
       RPARAM -> [type_name]
     Goto:
@@ -8770,7 +8806,7 @@ Parser Debug States:
 
   State 171:
     Kernel Items:
-      cast_expression:LPARAM type_name.RPARAM cast_expression
+      cast_expression: LPARAM type_name.RPARAM cast_expression
     Reduce:
       (nil)
     Goto:
@@ -8778,7 +8814,7 @@ Parser Debug States:
 
   State 172:
     Kernel Items:
-      jump_statement:RETURN SEMICOLON.,*
+      jump_statement: RETURN SEMICOLON., *
     Reduce:
       * -> [jump_statement]
     Goto:
@@ -8786,8 +8822,8 @@ Parser Debug States:
 
   State 173:
     Kernel Items:
-      expression:expression.COMMA assignment_expression
-      jump_statement:RETURN expression.SEMICOLON
+      expression: expression.COMMA assignment_expression
+      jump_statement: RETURN expression.SEMICOLON
     Reduce:
       (nil)
     Goto:
@@ -8796,8 +8832,8 @@ Parser Debug States:
 
   State 174:
     Kernel Items:
-      primary_expression:LPARAM.expression RPARAM
-      unary_expression:SIZEOF LPARAM.type_name RPARAM
+      primary_expression: LPARAM.expression RPARAM
+      unary_expression: SIZEOF LPARAM.type_name RPARAM
     Reduce:
       (nil)
     Goto:
@@ -8857,7 +8893,7 @@ Parser Debug States:
 
   State 175:
     Kernel Items:
-      unary_expression:SIZEOF unary_expression.,*
+      unary_expression: SIZEOF unary_expression., *
     Reduce:
       * -> [unary_expression]
     Goto:
@@ -8865,7 +8901,7 @@ Parser Debug States:
 
   State 176:
     Kernel Items:
-      selection_statement:SWITCH LPARAM.expression RPARAM statement
+      selection_statement: SWITCH LPARAM.expression RPARAM statement
     Reduce:
       (nil)
     Goto:
@@ -8903,7 +8939,7 @@ Parser Debug States:
 
   State 177:
     Kernel Items:
-      iteration_statement:WHILE LPARAM.expression RPARAM statement
+      iteration_statement: WHILE LPARAM.expression RPARAM statement
     Reduce:
       (nil)
     Goto:
@@ -8941,7 +8977,7 @@ Parser Debug States:
 
   State 178:
     Kernel Items:
-      additive_expression:additive_expression MINUS.multiplicative_expression
+      additive_expression: additive_expression MINUS.multiplicative_expression
     Reduce:
       (nil)
     Goto:
@@ -8967,7 +9003,7 @@ Parser Debug States:
 
   State 179:
     Kernel Items:
-      additive_expression:additive_expression PLUS.multiplicative_expression
+      additive_expression: additive_expression PLUS.multiplicative_expression
     Reduce:
       (nil)
     Goto:
@@ -8993,7 +9029,7 @@ Parser Debug States:
 
   State 180:
     Kernel Items:
-      and_expression:and_expression AND.equality_expression
+      and_expression: and_expression AND.equality_expression
     Reduce:
       (nil)
     Goto:
@@ -9023,7 +9059,7 @@ Parser Debug States:
 
   State 181:
     Kernel Items:
-      compound_statement:LCURL declaration_list RCURL.,*
+      compound_statement: LCURL declaration_list RCURL., *
     Reduce:
       * -> [compound_statement]
     Goto:
@@ -9031,8 +9067,8 @@ Parser Debug States:
 
   State 182:
     Kernel Items:
-      compound_statement:LCURL declaration_list statement_list.RCURL
-      statement_list:statement_list.statement
+      compound_statement: LCURL declaration_list statement_list.RCURL
+      statement_list: statement_list.statement
     Reduce:
       (nil)
     Goto:
@@ -9091,7 +9127,7 @@ Parser Debug States:
 
   State 183:
     Kernel Items:
-      equality_expression:equality_expression EQ_OP.relational_expression
+      equality_expression: equality_expression EQ_OP.relational_expression
     Reduce:
       (nil)
     Goto:
@@ -9120,7 +9156,7 @@ Parser Debug States:
 
   State 184:
     Kernel Items:
-      equality_expression:equality_expression NE_OP.relational_expression
+      equality_expression: equality_expression NE_OP.relational_expression
     Reduce:
       (nil)
     Goto:
@@ -9149,7 +9185,7 @@ Parser Debug States:
 
   State 185:
     Kernel Items:
-      exclusive_or_expression:exclusive_or_expression HAT.and_expression
+      exclusive_or_expression: exclusive_or_expression HAT.and_expression
     Reduce:
       (nil)
     Goto:
@@ -9180,7 +9216,7 @@ Parser Debug States:
 
   State 186:
     Kernel Items:
-      expression:expression COMMA.assignment_expression
+      expression: expression COMMA.assignment_expression
     Reduce:
       (nil)
     Goto:
@@ -9217,7 +9253,7 @@ Parser Debug States:
 
   State 187:
     Kernel Items:
-      expression_statement:expression SEMICOLON.,*
+      expression_statement: expression SEMICOLON., *
     Reduce:
       * -> [expression_statement]
     Goto:
@@ -9225,7 +9261,7 @@ Parser Debug States:
 
   State 188:
     Kernel Items:
-      inclusive_or_expression:inclusive_or_expression OR.exclusive_or_expression
+      inclusive_or_expression: inclusive_or_expression OR.exclusive_or_expression
     Reduce:
       (nil)
     Goto:
@@ -9257,7 +9293,7 @@ Parser Debug States:
 
   State 189:
     Kernel Items:
-      logical_and_expression:logical_and_expression AND_OP.inclusive_or_expression
+      logical_and_expression: logical_and_expression AND_OP.inclusive_or_expression
     Reduce:
       (nil)
     Goto:
@@ -9290,7 +9326,7 @@ Parser Debug States:
 
   State 190:
     Kernel Items:
-      logical_or_expression:logical_or_expression OR_OP.logical_and_expression
+      logical_or_expression: logical_or_expression OR_OP.logical_and_expression
     Reduce:
       (nil)
     Goto:
@@ -9324,7 +9360,7 @@ Parser Debug States:
 
   State 191:
     Kernel Items:
-      conditional_expression:logical_or_expression QUESTION.expression COLON conditional_expression
+      conditional_expression: logical_or_expression QUESTION.expression COLON conditional_expression
     Reduce:
       (nil)
     Goto:
@@ -9362,7 +9398,7 @@ Parser Debug States:
 
   State 192:
     Kernel Items:
-      multiplicative_expression:multiplicative_expression DIV.cast_expression
+      multiplicative_expression: multiplicative_expression DIV.cast_expression
     Reduce:
       (nil)
     Goto:
@@ -9387,7 +9423,7 @@ Parser Debug States:
 
   State 193:
     Kernel Items:
-      multiplicative_expression:multiplicative_expression MOD.cast_expression
+      multiplicative_expression: multiplicative_expression MOD.cast_expression
     Reduce:
       (nil)
     Goto:
@@ -9412,7 +9448,7 @@ Parser Debug States:
 
   State 194:
     Kernel Items:
-      multiplicative_expression:multiplicative_expression MUL.cast_expression
+      multiplicative_expression: multiplicative_expression MUL.cast_expression
     Reduce:
       (nil)
     Goto:
@@ -9437,7 +9473,7 @@ Parser Debug States:
 
   State 195:
     Kernel Items:
-      postfix_expression:postfix_expression DEC_OP.,*
+      postfix_expression: postfix_expression DEC_OP., *
     Reduce:
       * -> [postfix_expression]
     Goto:
@@ -9445,7 +9481,7 @@ Parser Debug States:
 
   State 196:
     Kernel Items:
-      postfix_expression:postfix_expression DOT.IDENTIFIER
+      postfix_expression: postfix_expression DOT.IDENTIFIER
     Reduce:
       (nil)
     Goto:
@@ -9453,7 +9489,7 @@ Parser Debug States:
 
   State 197:
     Kernel Items:
-      postfix_expression:postfix_expression INC_OP.,*
+      postfix_expression: postfix_expression INC_OP., *
     Reduce:
       * -> [postfix_expression]
     Goto:
@@ -9461,7 +9497,7 @@ Parser Debug States:
 
   State 198:
     Kernel Items:
-      postfix_expression:postfix_expression LBRACE.expression RBRACE
+      postfix_expression: postfix_expression LBRACE.expression RBRACE
     Reduce:
       (nil)
     Goto:
@@ -9499,8 +9535,8 @@ Parser Debug States:
 
   State 199:
     Kernel Items:
-      postfix_expression:postfix_expression LPARAM.RPARAM
-      postfix_expression:postfix_expression LPARAM.argument_expression_list RPARAM
+      postfix_expression: postfix_expression LPARAM.RPARAM
+      postfix_expression: postfix_expression LPARAM.argument_expression_list RPARAM
     Reduce:
       (nil)
     Goto:
@@ -9539,7 +9575,7 @@ Parser Debug States:
 
   State 200:
     Kernel Items:
-      postfix_expression:postfix_expression PTR_OP.IDENTIFIER
+      postfix_expression: postfix_expression PTR_OP.IDENTIFIER
     Reduce:
       (nil)
     Goto:
@@ -9547,7 +9583,7 @@ Parser Debug States:
 
   State 201:
     Kernel Items:
-      relational_expression:relational_expression GE_OP.shift_expression
+      relational_expression: relational_expression GE_OP.shift_expression
     Reduce:
       (nil)
     Goto:
@@ -9575,7 +9611,7 @@ Parser Debug States:
 
   State 202:
     Kernel Items:
-      relational_expression:relational_expression GT.shift_expression
+      relational_expression: relational_expression GT.shift_expression
     Reduce:
       (nil)
     Goto:
@@ -9603,7 +9639,7 @@ Parser Debug States:
 
   State 203:
     Kernel Items:
-      relational_expression:relational_expression LE_OP.shift_expression
+      relational_expression: relational_expression LE_OP.shift_expression
     Reduce:
       (nil)
     Goto:
@@ -9631,7 +9667,7 @@ Parser Debug States:
 
   State 204:
     Kernel Items:
-      relational_expression:relational_expression LT.shift_expression
+      relational_expression: relational_expression LT.shift_expression
     Reduce:
       (nil)
     Goto:
@@ -9659,7 +9695,7 @@ Parser Debug States:
 
   State 205:
     Kernel Items:
-      shift_expression:shift_expression LEFT_OP.additive_expression
+      shift_expression: shift_expression LEFT_OP.additive_expression
     Reduce:
       (nil)
     Goto:
@@ -9686,7 +9722,7 @@ Parser Debug States:
 
   State 206:
     Kernel Items:
-      shift_expression:shift_expression RIGHT_OP.additive_expression
+      shift_expression: shift_expression RIGHT_OP.additive_expression
     Reduce:
       (nil)
     Goto:
@@ -9713,7 +9749,7 @@ Parser Debug States:
 
   State 207:
     Kernel Items:
-      compound_statement:LCURL statement_list RCURL.,*
+      compound_statement: LCURL statement_list RCURL., *
     Reduce:
       * -> [compound_statement]
     Goto:
@@ -9721,7 +9757,7 @@ Parser Debug States:
 
   State 208:
     Kernel Items:
-      statement_list:statement_list statement.,*
+      statement_list: statement_list statement., *
     Reduce:
       * -> [statement_list]
     Goto:
@@ -9729,7 +9765,7 @@ Parser Debug States:
 
   State 209:
     Kernel Items:
-      assignment_operator:ADD_ASSIGN.,*
+      assignment_operator: ADD_ASSIGN., *
     Reduce:
       * -> [assignment_operator]
     Goto:
@@ -9737,7 +9773,7 @@ Parser Debug States:
 
   State 210:
     Kernel Items:
-      assignment_operator:AND_ASSIGN.,*
+      assignment_operator: AND_ASSIGN., *
     Reduce:
       * -> [assignment_operator]
     Goto:
@@ -9745,7 +9781,7 @@ Parser Debug States:
 
   State 211:
     Kernel Items:
-      assignment_operator:DIV_ASSIGN.,*
+      assignment_operator: DIV_ASSIGN., *
     Reduce:
       * -> [assignment_operator]
     Goto:
@@ -9753,7 +9789,7 @@ Parser Debug States:
 
   State 212:
     Kernel Items:
-      assignment_operator:EQ.,*
+      assignment_operator: EQ., *
     Reduce:
       * -> [assignment_operator]
     Goto:
@@ -9761,7 +9797,7 @@ Parser Debug States:
 
   State 213:
     Kernel Items:
-      assignment_operator:LEFT_ASSIGN.,*
+      assignment_operator: LEFT_ASSIGN., *
     Reduce:
       * -> [assignment_operator]
     Goto:
@@ -9769,7 +9805,7 @@ Parser Debug States:
 
   State 214:
     Kernel Items:
-      assignment_operator:MOD_ASSIGN.,*
+      assignment_operator: MOD_ASSIGN., *
     Reduce:
       * -> [assignment_operator]
     Goto:
@@ -9777,7 +9813,7 @@ Parser Debug States:
 
   State 215:
     Kernel Items:
-      assignment_operator:MUL_ASSIGN.,*
+      assignment_operator: MUL_ASSIGN., *
     Reduce:
       * -> [assignment_operator]
     Goto:
@@ -9785,7 +9821,7 @@ Parser Debug States:
 
   State 216:
     Kernel Items:
-      assignment_operator:OR_ASSIGN.,*
+      assignment_operator: OR_ASSIGN., *
     Reduce:
       * -> [assignment_operator]
     Goto:
@@ -9793,7 +9829,7 @@ Parser Debug States:
 
   State 217:
     Kernel Items:
-      assignment_operator:RIGHT_ASSIGN.,*
+      assignment_operator: RIGHT_ASSIGN., *
     Reduce:
       * -> [assignment_operator]
     Goto:
@@ -9801,7 +9837,7 @@ Parser Debug States:
 
   State 218:
     Kernel Items:
-      assignment_operator:SUB_ASSIGN.,*
+      assignment_operator: SUB_ASSIGN., *
     Reduce:
       * -> [assignment_operator]
     Goto:
@@ -9809,7 +9845,7 @@ Parser Debug States:
 
   State 219:
     Kernel Items:
-      assignment_operator:XOR_ASSIGN.,*
+      assignment_operator: XOR_ASSIGN., *
     Reduce:
       * -> [assignment_operator]
     Goto:
@@ -9817,7 +9853,7 @@ Parser Debug States:
 
   State 220:
     Kernel Items:
-      assignment_expression:unary_expression assignment_operator.assignment_expression
+      assignment_expression: unary_expression assignment_operator.assignment_expression
     Reduce:
       (nil)
     Goto:
@@ -9854,7 +9890,7 @@ Parser Debug States:
 
   State 221:
     Kernel Items:
-      unary_expression:unary_operator cast_expression.,*
+      unary_expression: unary_operator cast_expression., *
     Reduce:
       * -> [unary_expression]
     Goto:
@@ -9862,7 +9898,7 @@ Parser Debug States:
 
   State 222:
     Kernel Items:
-      direct_declarator:direct_declarator LBRACE constant_expression RBRACE.,*
+      direct_declarator: direct_declarator LBRACE constant_expression RBRACE., *
     Reduce:
       * -> [direct_declarator]
     Goto:
@@ -9870,8 +9906,8 @@ Parser Debug States:
 
   State 223:
     Kernel Items:
-      direct_abstract_declarator:LBRACE.RBRACE
-      direct_abstract_declarator:LBRACE.constant_expression RBRACE
+      direct_abstract_declarator: LBRACE.RBRACE
+      direct_abstract_declarator: LBRACE.constant_expression RBRACE
     Reduce:
       (nil)
     Goto:
@@ -9909,10 +9945,10 @@ Parser Debug States:
 
   State 224:
     Kernel Items:
-      direct_abstract_declarator:LPARAM.RPARAM
-      direct_abstract_declarator:LPARAM.abstract_declarator RPARAM
-      direct_abstract_declarator:LPARAM.parameter_type_list RPARAM
-      direct_declarator:LPARAM.declarator RPARAM
+      direct_abstract_declarator: LPARAM.RPARAM
+      direct_abstract_declarator: LPARAM.abstract_declarator RPARAM
+      direct_abstract_declarator: LPARAM.parameter_type_list RPARAM
+      direct_declarator: LPARAM.declarator RPARAM
     Reduce:
       (nil)
     Goto:
@@ -9959,7 +9995,7 @@ Parser Debug States:
 
   State 225:
     Kernel Items:
-      parameter_declaration:declaration_specifiers abstract_declarator.,*
+      parameter_declaration: declaration_specifiers abstract_declarator., *
     Reduce:
       * -> [parameter_declaration]
     Goto:
@@ -9967,7 +10003,7 @@ Parser Debug States:
 
   State 226:
     Kernel Items:
-      parameter_declaration:declaration_specifiers declarator.,*
+      parameter_declaration: declaration_specifiers declarator., *
     Reduce:
       * -> [parameter_declaration]
     Goto:
@@ -9975,11 +10011,11 @@ Parser Debug States:
 
   State 227:
     Kernel Items:
-      abstract_declarator:direct_abstract_declarator.,*
-      direct_abstract_declarator:direct_abstract_declarator.LBRACE RBRACE
-      direct_abstract_declarator:direct_abstract_declarator.LBRACE constant_expression RBRACE
-      direct_abstract_declarator:direct_abstract_declarator.LPARAM RPARAM
-      direct_abstract_declarator:direct_abstract_declarator.LPARAM parameter_type_list RPARAM
+      abstract_declarator: direct_abstract_declarator., *
+      direct_abstract_declarator: direct_abstract_declarator.LBRACE RBRACE
+      direct_abstract_declarator: direct_abstract_declarator.LBRACE constant_expression RBRACE
+      direct_abstract_declarator: direct_abstract_declarator.LPARAM RPARAM
+      direct_abstract_declarator: direct_abstract_declarator.LPARAM parameter_type_list RPARAM
     Reduce:
       * -> [abstract_declarator]
     Goto:
@@ -9988,9 +10024,9 @@ Parser Debug States:
 
   State 228:
     Kernel Items:
-      abstract_declarator:pointer.,*
-      abstract_declarator:pointer.direct_abstract_declarator
-      declarator:pointer.direct_declarator
+      abstract_declarator: pointer., *
+      abstract_declarator: pointer.direct_abstract_declarator
+      declarator: pointer.direct_declarator
     Reduce:
       * -> [abstract_declarator]
     Goto:
@@ -10002,7 +10038,7 @@ Parser Debug States:
 
   State 229:
     Kernel Items:
-      identifier_list:identifier_list COMMA.IDENTIFIER
+      identifier_list: identifier_list COMMA.IDENTIFIER
     Reduce:
       (nil)
     Goto:
@@ -10010,7 +10046,7 @@ Parser Debug States:
 
   State 230:
     Kernel Items:
-      direct_declarator:direct_declarator LPARAM identifier_list RPARAM.,*
+      direct_declarator: direct_declarator LPARAM identifier_list RPARAM., *
     Reduce:
       * -> [direct_declarator]
     Goto:
@@ -10018,8 +10054,8 @@ Parser Debug States:
 
   State 231:
     Kernel Items:
-      parameter_list:parameter_list COMMA.parameter_declaration
-      parameter_type_list:parameter_list COMMA.ELLIPSIS
+      parameter_list: parameter_list COMMA.parameter_declaration
+      parameter_type_list: parameter_list COMMA.ELLIPSIS
     Reduce:
       (nil)
     Goto:
@@ -10055,7 +10091,7 @@ Parser Debug States:
 
   State 232:
     Kernel Items:
-      direct_declarator:direct_declarator LPARAM parameter_type_list RPARAM.,*
+      direct_declarator: direct_declarator LPARAM parameter_type_list RPARAM., *
     Reduce:
       * -> [direct_declarator]
     Goto:
@@ -10063,8 +10099,8 @@ Parser Debug States:
 
   State 233:
     Kernel Items:
-      struct_declaration_list:struct_declaration_list.struct_declaration
-      struct_or_union_specifier:struct_or_union IDENTIFIER LCURL struct_declaration_list.RCURL
+      struct_declaration_list: struct_declaration_list.struct_declaration
+      struct_or_union_specifier: struct_or_union IDENTIFIER LCURL struct_declaration_list.RCURL
     Reduce:
       (nil)
     Goto:
@@ -10094,7 +10130,7 @@ Parser Debug States:
 
   State 234:
     Kernel Items:
-      struct_declarator:COLON.constant_expression
+      struct_declarator: COLON.constant_expression
     Reduce:
       (nil)
     Goto:
@@ -10131,8 +10167,8 @@ Parser Debug States:
 
   State 235:
     Kernel Items:
-      struct_declarator:declarator.,*
-      struct_declarator:declarator.COLON constant_expression
+      struct_declarator: declarator., *
+      struct_declarator: declarator.COLON constant_expression
     Reduce:
       * -> [struct_declarator]
     Goto:
@@ -10140,7 +10176,7 @@ Parser Debug States:
 
   State 236:
     Kernel Items:
-      struct_declarator_list:struct_declarator.,*
+      struct_declarator_list: struct_declarator., *
     Reduce:
       * -> [struct_declarator_list]
     Goto:
@@ -10148,8 +10184,8 @@ Parser Debug States:
 
   State 237:
     Kernel Items:
-      struct_declaration:specifier_qualifier_list struct_declarator_list.SEMICOLON
-      struct_declarator_list:struct_declarator_list.COMMA struct_declarator
+      struct_declaration: specifier_qualifier_list struct_declarator_list.SEMICOLON
+      struct_declarator_list: struct_declarator_list.COMMA struct_declarator
     Reduce:
       (nil)
     Goto:
@@ -10158,7 +10194,7 @@ Parser Debug States:
 
   State 238:
     Kernel Items:
-      struct_or_union_specifier:struct_or_union LCURL struct_declaration_list RCURL.,*
+      struct_or_union_specifier: struct_or_union LCURL struct_declaration_list RCURL., *
     Reduce:
       * -> [struct_or_union_specifier]
     Goto:
@@ -10166,7 +10202,7 @@ Parser Debug States:
 
   State 239:
     Kernel Items:
-      struct_declaration_list:struct_declaration_list struct_declaration.,*
+      struct_declaration_list: struct_declaration_list struct_declaration., *
     Reduce:
       * -> [struct_declaration_list]
     Goto:
@@ -10174,7 +10210,7 @@ Parser Debug States:
 
   State 240:
     Kernel Items:
-      specifier_qualifier_list:type_qualifier specifier_qualifier_list.,*
+      specifier_qualifier_list: type_qualifier specifier_qualifier_list., *
     Reduce:
       * -> [specifier_qualifier_list]
     Goto:
@@ -10182,7 +10218,7 @@ Parser Debug States:
 
   State 241:
     Kernel Items:
-      specifier_qualifier_list:type_specifier specifier_qualifier_list.,*
+      specifier_qualifier_list: type_specifier specifier_qualifier_list., *
     Reduce:
       * -> [specifier_qualifier_list]
     Goto:
@@ -10190,7 +10226,7 @@ Parser Debug States:
 
   State 242:
     Kernel Items:
-      enum_specifier:ENUM IDENTIFIER LCURL enumerator_list RCURL.,*
+      enum_specifier: ENUM IDENTIFIER LCURL enumerator_list RCURL., *
     Reduce:
       * -> [enum_specifier]
     Goto:
@@ -10198,7 +10234,7 @@ Parser Debug States:
 
   State 243:
     Kernel Items:
-      enumerator:IDENTIFIER EQ constant_expression.,*
+      enumerator: IDENTIFIER EQ constant_expression., *
     Reduce:
       * -> [enumerator]
     Goto:
@@ -10206,7 +10242,7 @@ Parser Debug States:
 
   State 244:
     Kernel Items:
-      enumerator_list:enumerator_list COMMA enumerator.,*
+      enumerator_list: enumerator_list COMMA enumerator., *
     Reduce:
       * -> [enumerator_list]
     Goto:
@@ -10214,7 +10250,7 @@ Parser Debug States:
 
   State 245:
     Kernel Items:
-      initializer_list:initializer.,*
+      initializer_list: initializer., *
     Reduce:
       * -> [initializer_list]
     Goto:
@@ -10222,9 +10258,9 @@ Parser Debug States:
 
   State 246:
     Kernel Items:
-      initializer:LCURL initializer_list.COMMA RCURL
-      initializer:LCURL initializer_list.RCURL
-      initializer_list:initializer_list.COMMA initializer
+      initializer: LCURL initializer_list.COMMA RCURL
+      initializer: LCURL initializer_list.RCURL
+      initializer_list: initializer_list.COMMA initializer
     Reduce:
       (nil)
     Goto:
@@ -10233,7 +10269,7 @@ Parser Debug States:
 
   State 247:
     Kernel Items:
-      labeled_statement:CASE constant_expression COLON.statement
+      labeled_statement: CASE constant_expression COLON.statement
     Reduce:
       (nil)
     Goto:
@@ -10291,7 +10327,7 @@ Parser Debug States:
 
   State 248:
     Kernel Items:
-      labeled_statement:DEFAULT COLON statement.,*
+      labeled_statement: DEFAULT COLON statement., *
     Reduce:
       * -> [labeled_statement]
     Goto:
@@ -10299,7 +10335,7 @@ Parser Debug States:
 
   State 249:
     Kernel Items:
-      iteration_statement:DO statement WHILE.LPARAM expression RPARAM SEMICOLON
+      iteration_statement: DO statement WHILE.LPARAM expression RPARAM SEMICOLON
     Reduce:
       (nil)
     Goto:
@@ -10307,8 +10343,8 @@ Parser Debug States:
 
   State 250:
     Kernel Items:
-      iteration_statement:FOR LPARAM expression_statement.expression_statement RPARAM statement
-      iteration_statement:FOR LPARAM expression_statement.expression_statement expression RPARAM statement
+      iteration_statement: FOR LPARAM expression_statement.expression_statement RPARAM statement
+      iteration_statement: FOR LPARAM expression_statement.expression_statement expression RPARAM statement
     Reduce:
       (nil)
     Goto:
@@ -10348,7 +10384,7 @@ Parser Debug States:
 
   State 251:
     Kernel Items:
-      jump_statement:GOTO IDENTIFIER SEMICOLON.,*
+      jump_statement: GOTO IDENTIFIER SEMICOLON., *
     Reduce:
       * -> [jump_statement]
     Goto:
@@ -10356,7 +10392,7 @@ Parser Debug States:
 
   State 252:
     Kernel Items:
-      labeled_statement:IDENTIFIER COLON statement.,*
+      labeled_statement: IDENTIFIER COLON statement., *
     Reduce:
       * -> [labeled_statement]
     Goto:
@@ -10364,9 +10400,9 @@ Parser Debug States:
 
   State 253:
     Kernel Items:
-      expression:expression.COMMA assignment_expression
-      selection_statement:IF LPARAM expression.RPARAM statement
-      selection_statement:IF LPARAM expression.RPARAM statement ELSE statement
+      expression: expression.COMMA assignment_expression
+      selection_statement: IF LPARAM expression.RPARAM statement
+      selection_statement: IF LPARAM expression.RPARAM statement ELSE statement
     Reduce:
       (nil)
     Goto:
@@ -10375,7 +10411,7 @@ Parser Debug States:
 
   State 254:
     Kernel Items:
-      primary_expression:LPARAM expression RPARAM.,*
+      primary_expression: LPARAM expression RPARAM., *
     Reduce:
       * -> [primary_expression]
     Goto:
@@ -10383,9 +10419,9 @@ Parser Debug States:
 
   State 255:
     Kernel Items:
-      direct_abstract_declarator:LPARAM.RPARAM
-      direct_abstract_declarator:LPARAM.abstract_declarator RPARAM
-      direct_abstract_declarator:LPARAM.parameter_type_list RPARAM
+      direct_abstract_declarator: LPARAM.RPARAM
+      direct_abstract_declarator: LPARAM.abstract_declarator RPARAM
+      direct_abstract_declarator: LPARAM.parameter_type_list RPARAM
     Reduce:
       (nil)
     Goto:
@@ -10429,7 +10465,7 @@ Parser Debug States:
 
   State 256:
     Kernel Items:
-      type_name:specifier_qualifier_list abstract_declarator.,RPARAM
+      type_name: specifier_qualifier_list abstract_declarator., RPARAM
     Reduce:
       RPARAM -> [type_name]
     Goto:
@@ -10437,8 +10473,8 @@ Parser Debug States:
 
   State 257:
     Kernel Items:
-      abstract_declarator:pointer.,RPARAM
-      abstract_declarator:pointer.direct_abstract_declarator
+      abstract_declarator: pointer., RPARAM
+      abstract_declarator: pointer.direct_abstract_declarator
     Reduce:
       RPARAM -> [abstract_declarator]
     Goto:
@@ -10448,7 +10484,7 @@ Parser Debug States:
 
   State 258:
     Kernel Items:
-      cast_expression:LPARAM type_name RPARAM.cast_expression
+      cast_expression: LPARAM type_name RPARAM.cast_expression
     Reduce:
       (nil)
     Goto:
@@ -10473,7 +10509,7 @@ Parser Debug States:
 
   State 259:
     Kernel Items:
-      jump_statement:RETURN expression SEMICOLON.,*
+      jump_statement: RETURN expression SEMICOLON., *
     Reduce:
       * -> [jump_statement]
     Goto:
@@ -10481,7 +10517,7 @@ Parser Debug States:
 
   State 260:
     Kernel Items:
-      unary_expression:SIZEOF LPARAM type_name.RPARAM
+      unary_expression: SIZEOF LPARAM type_name.RPARAM
     Reduce:
       (nil)
     Goto:
@@ -10489,8 +10525,8 @@ Parser Debug States:
 
   State 261:
     Kernel Items:
-      expression:expression.COMMA assignment_expression
-      selection_statement:SWITCH LPARAM expression.RPARAM statement
+      expression: expression.COMMA assignment_expression
+      selection_statement: SWITCH LPARAM expression.RPARAM statement
     Reduce:
       (nil)
     Goto:
@@ -10499,8 +10535,8 @@ Parser Debug States:
 
   State 262:
     Kernel Items:
-      expression:expression.COMMA assignment_expression
-      iteration_statement:WHILE LPARAM expression.RPARAM statement
+      expression: expression.COMMA assignment_expression
+      iteration_statement: WHILE LPARAM expression.RPARAM statement
     Reduce:
       (nil)
     Goto:
@@ -10509,10 +10545,10 @@ Parser Debug States:
 
   State 263:
     Kernel Items:
-      additive_expression:additive_expression MINUS multiplicative_expression.,*
-      multiplicative_expression:multiplicative_expression.DIV cast_expression
-      multiplicative_expression:multiplicative_expression.MOD cast_expression
-      multiplicative_expression:multiplicative_expression.MUL cast_expression
+      additive_expression: additive_expression MINUS multiplicative_expression., *
+      multiplicative_expression: multiplicative_expression.DIV cast_expression
+      multiplicative_expression: multiplicative_expression.MOD cast_expression
+      multiplicative_expression: multiplicative_expression.MUL cast_expression
     Reduce:
       * -> [additive_expression]
     Goto:
@@ -10522,10 +10558,10 @@ Parser Debug States:
 
   State 264:
     Kernel Items:
-      additive_expression:additive_expression PLUS multiplicative_expression.,*
-      multiplicative_expression:multiplicative_expression.DIV cast_expression
-      multiplicative_expression:multiplicative_expression.MOD cast_expression
-      multiplicative_expression:multiplicative_expression.MUL cast_expression
+      additive_expression: additive_expression PLUS multiplicative_expression., *
+      multiplicative_expression: multiplicative_expression.DIV cast_expression
+      multiplicative_expression: multiplicative_expression.MOD cast_expression
+      multiplicative_expression: multiplicative_expression.MUL cast_expression
     Reduce:
       * -> [additive_expression]
     Goto:
@@ -10535,9 +10571,9 @@ Parser Debug States:
 
   State 265:
     Kernel Items:
-      and_expression:and_expression AND equality_expression.,*
-      equality_expression:equality_expression.EQ_OP relational_expression
-      equality_expression:equality_expression.NE_OP relational_expression
+      and_expression: and_expression AND equality_expression., *
+      equality_expression: equality_expression.EQ_OP relational_expression
+      equality_expression: equality_expression.NE_OP relational_expression
     Reduce:
       * -> [and_expression]
     Goto:
@@ -10546,7 +10582,7 @@ Parser Debug States:
 
   State 266:
     Kernel Items:
-      compound_statement:LCURL declaration_list statement_list RCURL.,*
+      compound_statement: LCURL declaration_list statement_list RCURL., *
     Reduce:
       * -> [compound_statement]
     Goto:
@@ -10554,11 +10590,11 @@ Parser Debug States:
 
   State 267:
     Kernel Items:
-      equality_expression:equality_expression EQ_OP relational_expression.,*
-      relational_expression:relational_expression.GE_OP shift_expression
-      relational_expression:relational_expression.GT shift_expression
-      relational_expression:relational_expression.LE_OP shift_expression
-      relational_expression:relational_expression.LT shift_expression
+      equality_expression: equality_expression EQ_OP relational_expression., *
+      relational_expression: relational_expression.GE_OP shift_expression
+      relational_expression: relational_expression.GT shift_expression
+      relational_expression: relational_expression.LE_OP shift_expression
+      relational_expression: relational_expression.LT shift_expression
     Reduce:
       * -> [equality_expression]
     Goto:
@@ -10569,11 +10605,11 @@ Parser Debug States:
 
   State 268:
     Kernel Items:
-      equality_expression:equality_expression NE_OP relational_expression.,*
-      relational_expression:relational_expression.GE_OP shift_expression
-      relational_expression:relational_expression.GT shift_expression
-      relational_expression:relational_expression.LE_OP shift_expression
-      relational_expression:relational_expression.LT shift_expression
+      equality_expression: equality_expression NE_OP relational_expression., *
+      relational_expression: relational_expression.GE_OP shift_expression
+      relational_expression: relational_expression.GT shift_expression
+      relational_expression: relational_expression.LE_OP shift_expression
+      relational_expression: relational_expression.LT shift_expression
     Reduce:
       * -> [equality_expression]
     Goto:
@@ -10584,8 +10620,8 @@ Parser Debug States:
 
   State 269:
     Kernel Items:
-      and_expression:and_expression.AND equality_expression
-      exclusive_or_expression:exclusive_or_expression HAT and_expression.,*
+      and_expression: and_expression.AND equality_expression
+      exclusive_or_expression: exclusive_or_expression HAT and_expression., *
     Reduce:
       * -> [exclusive_or_expression]
     Goto:
@@ -10593,7 +10629,7 @@ Parser Debug States:
 
   State 270:
     Kernel Items:
-      expression:expression COMMA assignment_expression.,*
+      expression: expression COMMA assignment_expression., *
     Reduce:
       * -> [expression]
     Goto:
@@ -10601,8 +10637,8 @@ Parser Debug States:
 
   State 271:
     Kernel Items:
-      exclusive_or_expression:exclusive_or_expression.HAT and_expression
-      inclusive_or_expression:inclusive_or_expression OR exclusive_or_expression.,*
+      exclusive_or_expression: exclusive_or_expression.HAT and_expression
+      inclusive_or_expression: inclusive_or_expression OR exclusive_or_expression., *
     Reduce:
       * -> [inclusive_or_expression]
     Goto:
@@ -10610,8 +10646,8 @@ Parser Debug States:
 
   State 272:
     Kernel Items:
-      inclusive_or_expression:inclusive_or_expression.OR exclusive_or_expression
-      logical_and_expression:logical_and_expression AND_OP inclusive_or_expression.,*
+      inclusive_or_expression: inclusive_or_expression.OR exclusive_or_expression
+      logical_and_expression: logical_and_expression AND_OP inclusive_or_expression., *
     Reduce:
       * -> [logical_and_expression]
     Goto:
@@ -10619,8 +10655,8 @@ Parser Debug States:
 
   State 273:
     Kernel Items:
-      logical_and_expression:logical_and_expression.AND_OP inclusive_or_expression
-      logical_or_expression:logical_or_expression OR_OP logical_and_expression.,*
+      logical_and_expression: logical_and_expression.AND_OP inclusive_or_expression
+      logical_or_expression: logical_or_expression OR_OP logical_and_expression., *
     Reduce:
       * -> [logical_or_expression]
     Goto:
@@ -10628,8 +10664,8 @@ Parser Debug States:
 
   State 274:
     Kernel Items:
-      conditional_expression:logical_or_expression QUESTION expression.COLON conditional_expression
-      expression:expression.COMMA assignment_expression
+      conditional_expression: logical_or_expression QUESTION expression.COLON conditional_expression
+      expression: expression.COMMA assignment_expression
     Reduce:
       (nil)
     Goto:
@@ -10638,7 +10674,7 @@ Parser Debug States:
 
   State 275:
     Kernel Items:
-      multiplicative_expression:multiplicative_expression DIV cast_expression.,*
+      multiplicative_expression: multiplicative_expression DIV cast_expression., *
     Reduce:
       * -> [multiplicative_expression]
     Goto:
@@ -10646,7 +10682,7 @@ Parser Debug States:
 
   State 276:
     Kernel Items:
-      multiplicative_expression:multiplicative_expression MOD cast_expression.,*
+      multiplicative_expression: multiplicative_expression MOD cast_expression., *
     Reduce:
       * -> [multiplicative_expression]
     Goto:
@@ -10654,7 +10690,7 @@ Parser Debug States:
 
   State 277:
     Kernel Items:
-      multiplicative_expression:multiplicative_expression MUL cast_expression.,*
+      multiplicative_expression: multiplicative_expression MUL cast_expression., *
     Reduce:
       * -> [multiplicative_expression]
     Goto:
@@ -10662,7 +10698,7 @@ Parser Debug States:
 
   State 278:
     Kernel Items:
-      postfix_expression:postfix_expression DOT IDENTIFIER.,*
+      postfix_expression: postfix_expression DOT IDENTIFIER., *
     Reduce:
       * -> [postfix_expression]
     Goto:
@@ -10670,8 +10706,8 @@ Parser Debug States:
 
   State 279:
     Kernel Items:
-      expression:expression.COMMA assignment_expression
-      postfix_expression:postfix_expression LBRACE expression.RBRACE
+      expression: expression.COMMA assignment_expression
+      postfix_expression: postfix_expression LBRACE expression.RBRACE
     Reduce:
       (nil)
     Goto:
@@ -10680,7 +10716,7 @@ Parser Debug States:
 
   State 280:
     Kernel Items:
-      postfix_expression:postfix_expression LPARAM RPARAM.,*
+      postfix_expression: postfix_expression LPARAM RPARAM., *
     Reduce:
       * -> [postfix_expression]
     Goto:
@@ -10688,8 +10724,8 @@ Parser Debug States:
 
   State 281:
     Kernel Items:
-      argument_expression_list:argument_expression_list.COMMA assignment_expression
-      postfix_expression:postfix_expression LPARAM argument_expression_list.RPARAM
+      argument_expression_list: argument_expression_list.COMMA assignment_expression
+      postfix_expression: postfix_expression LPARAM argument_expression_list.RPARAM
     Reduce:
       (nil)
     Goto:
@@ -10698,7 +10734,7 @@ Parser Debug States:
 
   State 282:
     Kernel Items:
-      argument_expression_list:assignment_expression.,*
+      argument_expression_list: assignment_expression., *
     Reduce:
       * -> [argument_expression_list]
     Goto:
@@ -10706,7 +10742,7 @@ Parser Debug States:
 
   State 283:
     Kernel Items:
-      postfix_expression:postfix_expression PTR_OP IDENTIFIER.,*
+      postfix_expression: postfix_expression PTR_OP IDENTIFIER., *
     Reduce:
       * -> [postfix_expression]
     Goto:
@@ -10714,9 +10750,9 @@ Parser Debug States:
 
   State 284:
     Kernel Items:
-      relational_expression:relational_expression GE_OP shift_expression.,*
-      shift_expression:shift_expression.LEFT_OP additive_expression
-      shift_expression:shift_expression.RIGHT_OP additive_expression
+      relational_expression: relational_expression GE_OP shift_expression., *
+      shift_expression: shift_expression.LEFT_OP additive_expression
+      shift_expression: shift_expression.RIGHT_OP additive_expression
     Reduce:
       * -> [relational_expression]
     Goto:
@@ -10725,9 +10761,9 @@ Parser Debug States:
 
   State 285:
     Kernel Items:
-      relational_expression:relational_expression GT shift_expression.,*
-      shift_expression:shift_expression.LEFT_OP additive_expression
-      shift_expression:shift_expression.RIGHT_OP additive_expression
+      relational_expression: relational_expression GT shift_expression., *
+      shift_expression: shift_expression.LEFT_OP additive_expression
+      shift_expression: shift_expression.RIGHT_OP additive_expression
     Reduce:
       * -> [relational_expression]
     Goto:
@@ -10736,9 +10772,9 @@ Parser Debug States:
 
   State 286:
     Kernel Items:
-      relational_expression:relational_expression LE_OP shift_expression.,*
-      shift_expression:shift_expression.LEFT_OP additive_expression
-      shift_expression:shift_expression.RIGHT_OP additive_expression
+      relational_expression: relational_expression LE_OP shift_expression., *
+      shift_expression: shift_expression.LEFT_OP additive_expression
+      shift_expression: shift_expression.RIGHT_OP additive_expression
     Reduce:
       * -> [relational_expression]
     Goto:
@@ -10747,9 +10783,9 @@ Parser Debug States:
 
   State 287:
     Kernel Items:
-      relational_expression:relational_expression LT shift_expression.,*
-      shift_expression:shift_expression.LEFT_OP additive_expression
-      shift_expression:shift_expression.RIGHT_OP additive_expression
+      relational_expression: relational_expression LT shift_expression., *
+      shift_expression: shift_expression.LEFT_OP additive_expression
+      shift_expression: shift_expression.RIGHT_OP additive_expression
     Reduce:
       * -> [relational_expression]
     Goto:
@@ -10758,9 +10794,9 @@ Parser Debug States:
 
   State 288:
     Kernel Items:
-      additive_expression:additive_expression.MINUS multiplicative_expression
-      additive_expression:additive_expression.PLUS multiplicative_expression
-      shift_expression:shift_expression LEFT_OP additive_expression.,*
+      additive_expression: additive_expression.MINUS multiplicative_expression
+      additive_expression: additive_expression.PLUS multiplicative_expression
+      shift_expression: shift_expression LEFT_OP additive_expression., *
     Reduce:
       * -> [shift_expression]
     Goto:
@@ -10769,9 +10805,9 @@ Parser Debug States:
 
   State 289:
     Kernel Items:
-      additive_expression:additive_expression.MINUS multiplicative_expression
-      additive_expression:additive_expression.PLUS multiplicative_expression
-      shift_expression:shift_expression RIGHT_OP additive_expression.,*
+      additive_expression: additive_expression.MINUS multiplicative_expression
+      additive_expression: additive_expression.PLUS multiplicative_expression
+      shift_expression: shift_expression RIGHT_OP additive_expression., *
     Reduce:
       * -> [shift_expression]
     Goto:
@@ -10780,7 +10816,7 @@ Parser Debug States:
 
   State 290:
     Kernel Items:
-      assignment_expression:unary_expression assignment_operator assignment_expression.,*
+      assignment_expression: unary_expression assignment_operator assignment_expression., *
     Reduce:
       * -> [assignment_expression]
     Goto:
@@ -10788,7 +10824,7 @@ Parser Debug States:
 
   State 291:
     Kernel Items:
-      direct_abstract_declarator:LBRACE RBRACE.,*
+      direct_abstract_declarator: LBRACE RBRACE., *
     Reduce:
       * -> [direct_abstract_declarator]
     Goto:
@@ -10796,7 +10832,7 @@ Parser Debug States:
 
   State 292:
     Kernel Items:
-      direct_abstract_declarator:LBRACE constant_expression.RBRACE
+      direct_abstract_declarator: LBRACE constant_expression.RBRACE
     Reduce:
       (nil)
     Goto:
@@ -10804,7 +10840,7 @@ Parser Debug States:
 
   State 293:
     Kernel Items:
-      direct_abstract_declarator:LPARAM RPARAM.,*
+      direct_abstract_declarator: LPARAM RPARAM., *
     Reduce:
       * -> [direct_abstract_declarator]
     Goto:
@@ -10812,7 +10848,7 @@ Parser Debug States:
 
   State 294:
     Kernel Items:
-      direct_abstract_declarator:LPARAM abstract_declarator.RPARAM
+      direct_abstract_declarator: LPARAM abstract_declarator.RPARAM
     Reduce:
       (nil)
     Goto:
@@ -10820,7 +10856,7 @@ Parser Debug States:
 
   State 295:
     Kernel Items:
-      direct_abstract_declarator:LPARAM parameter_type_list.RPARAM
+      direct_abstract_declarator: LPARAM parameter_type_list.RPARAM
     Reduce:
       (nil)
     Goto:
@@ -10828,8 +10864,8 @@ Parser Debug States:
 
   State 296:
     Kernel Items:
-      direct_abstract_declarator:direct_abstract_declarator LBRACE.RBRACE
-      direct_abstract_declarator:direct_abstract_declarator LBRACE.constant_expression RBRACE
+      direct_abstract_declarator: direct_abstract_declarator LBRACE.RBRACE
+      direct_abstract_declarator: direct_abstract_declarator LBRACE.constant_expression RBRACE
     Reduce:
       (nil)
     Goto:
@@ -10867,8 +10903,8 @@ Parser Debug States:
 
   State 297:
     Kernel Items:
-      direct_abstract_declarator:direct_abstract_declarator LPARAM.RPARAM
-      direct_abstract_declarator:direct_abstract_declarator LPARAM.parameter_type_list RPARAM
+      direct_abstract_declarator: direct_abstract_declarator LPARAM.RPARAM
+      direct_abstract_declarator: direct_abstract_declarator LPARAM.parameter_type_list RPARAM
     Reduce:
       (nil)
     Goto:
@@ -10906,11 +10942,11 @@ Parser Debug States:
 
   State 298:
     Kernel Items:
-      abstract_declarator:pointer direct_abstract_declarator.,*
-      direct_abstract_declarator:direct_abstract_declarator.LBRACE RBRACE
-      direct_abstract_declarator:direct_abstract_declarator.LBRACE constant_expression RBRACE
-      direct_abstract_declarator:direct_abstract_declarator.LPARAM RPARAM
-      direct_abstract_declarator:direct_abstract_declarator.LPARAM parameter_type_list RPARAM
+      abstract_declarator: pointer direct_abstract_declarator., *
+      direct_abstract_declarator: direct_abstract_declarator.LBRACE RBRACE
+      direct_abstract_declarator: direct_abstract_declarator.LBRACE constant_expression RBRACE
+      direct_abstract_declarator: direct_abstract_declarator.LPARAM RPARAM
+      direct_abstract_declarator: direct_abstract_declarator.LPARAM parameter_type_list RPARAM
     Reduce:
       * -> [abstract_declarator]
     Goto:
@@ -10919,7 +10955,7 @@ Parser Debug States:
 
   State 299:
     Kernel Items:
-      identifier_list:identifier_list COMMA IDENTIFIER.,*
+      identifier_list: identifier_list COMMA IDENTIFIER., *
     Reduce:
       * -> [identifier_list]
     Goto:
@@ -10927,7 +10963,7 @@ Parser Debug States:
 
   State 300:
     Kernel Items:
-      parameter_type_list:parameter_list COMMA ELLIPSIS.,RPARAM
+      parameter_type_list: parameter_list COMMA ELLIPSIS., RPARAM
     Reduce:
       RPARAM -> [parameter_type_list]
     Goto:
@@ -10935,7 +10971,7 @@ Parser Debug States:
 
   State 301:
     Kernel Items:
-      parameter_list:parameter_list COMMA parameter_declaration.,*
+      parameter_list: parameter_list COMMA parameter_declaration., *
     Reduce:
       * -> [parameter_list]
     Goto:
@@ -10943,7 +10979,7 @@ Parser Debug States:
 
   State 302:
     Kernel Items:
-      struct_or_union_specifier:struct_or_union IDENTIFIER LCURL struct_declaration_list RCURL.,*
+      struct_or_union_specifier: struct_or_union IDENTIFIER LCURL struct_declaration_list RCURL., *
     Reduce:
       * -> [struct_or_union_specifier]
     Goto:
@@ -10951,7 +10987,7 @@ Parser Debug States:
 
   State 303:
     Kernel Items:
-      struct_declarator:COLON constant_expression.,*
+      struct_declarator: COLON constant_expression., *
     Reduce:
       * -> [struct_declarator]
     Goto:
@@ -10959,7 +10995,7 @@ Parser Debug States:
 
   State 304:
     Kernel Items:
-      struct_declarator:declarator COLON.constant_expression
+      struct_declarator: declarator COLON.constant_expression
     Reduce:
       (nil)
     Goto:
@@ -10996,7 +11032,7 @@ Parser Debug States:
 
   State 305:
     Kernel Items:
-      struct_declarator_list:struct_declarator_list COMMA.struct_declarator
+      struct_declarator_list: struct_declarator_list COMMA.struct_declarator
     Reduce:
       (nil)
     Goto:
@@ -11011,7 +11047,7 @@ Parser Debug States:
 
   State 306:
     Kernel Items:
-      struct_declaration:specifier_qualifier_list struct_declarator_list SEMICOLON.,*
+      struct_declaration: specifier_qualifier_list struct_declarator_list SEMICOLON., *
     Reduce:
       * -> [struct_declaration]
     Goto:
@@ -11019,8 +11055,8 @@ Parser Debug States:
 
   State 307:
     Kernel Items:
-      initializer:LCURL initializer_list COMMA.RCURL
-      initializer_list:initializer_list COMMA.initializer
+      initializer: LCURL initializer_list COMMA.RCURL
+      initializer_list: initializer_list COMMA.initializer
     Reduce:
       (nil)
     Goto:
@@ -11060,7 +11096,7 @@ Parser Debug States:
 
   State 308:
     Kernel Items:
-      initializer:LCURL initializer_list RCURL.,*
+      initializer: LCURL initializer_list RCURL., *
     Reduce:
       * -> [initializer]
     Goto:
@@ -11068,7 +11104,7 @@ Parser Debug States:
 
   State 309:
     Kernel Items:
-      labeled_statement:CASE constant_expression COLON statement.,*
+      labeled_statement: CASE constant_expression COLON statement., *
     Reduce:
       * -> [labeled_statement]
     Goto:
@@ -11076,7 +11112,7 @@ Parser Debug States:
 
   State 310:
     Kernel Items:
-      iteration_statement:DO statement WHILE LPARAM.expression RPARAM SEMICOLON
+      iteration_statement: DO statement WHILE LPARAM.expression RPARAM SEMICOLON
     Reduce:
       (nil)
     Goto:
@@ -11114,8 +11150,8 @@ Parser Debug States:
 
   State 311:
     Kernel Items:
-      iteration_statement:FOR LPARAM expression_statement expression_statement.RPARAM statement
-      iteration_statement:FOR LPARAM expression_statement expression_statement.expression RPARAM statement
+      iteration_statement: FOR LPARAM expression_statement expression_statement.RPARAM statement
+      iteration_statement: FOR LPARAM expression_statement expression_statement.expression RPARAM statement
     Reduce:
       (nil)
     Goto:
@@ -11154,140 +11190,8 @@ Parser Debug States:
 
   State 312:
     Kernel Items:
-      selection_statement:IF LPARAM expression RPARAM.statement
-      selection_statement:IF LPARAM expression RPARAM.statement ELSE statement
-    Reduce:
-      (nil)
-    Goto:
-      IDENTIFIER -> State 85
-      CONSTANT -> State 77
-      STRING_LITERAL -> State 96
-      SIZEOF -> State 95
-      INC_OP -> State 87
-      DEC_OP -> State 79
-      CASE -> State 76
-      DEFAULT -> State 80
-      IF -> State 86
-      SWITCH -> State 97
-      WHILE -> State 99
-      DO -> State 81
-      FOR -> State 83
-      GOTO -> State 84
-      CONTINUE -> State 78
-      BREAK -> State 75
-      RETURN -> State 93
-      LPARAM -> State 88
-      LCURL -> State 49
-      SEMICOLON -> State 94
-      MUL -> State 90
-      MINUS -> State 89
-      PLUS -> State 91
-      AND -> State 74
-      EXCLAIM -> State 82
-      TILDA -> State 98
-      primary_expression -> State 119
-      postfix_expression -> State 118
-      unary_expression -> State 125
-      unary_operator -> State 126
-      cast_expression -> State 103
-      multiplicative_expression -> State 117
-      additive_expression -> State 100
-      shift_expression -> State 122
-      relational_expression -> State 120
-      equality_expression -> State 107
-      and_expression -> State 101
-      exclusive_or_expression -> State 108
-      inclusive_or_expression -> State 111
-      logical_and_expression -> State 115
-      logical_or_expression -> State 116
-      conditional_expression -> State 105
-      assignment_expression -> State 102
-      expression -> State 109
-      statement -> State 335
-      labeled_statement -> State 114
-      compound_statement -> State 104
-      expression_statement -> State 110
-      selection_statement -> State 121
-      iteration_statement -> State 112
-      jump_statement -> State 113
-
-  State 313:
-    Kernel Items:
-      cast_expression:LPARAM type_name RPARAM cast_expression.,*
-    Reduce:
-      * -> [cast_expression]
-    Goto:
-      (nil)
-
-  State 314:
-    Kernel Items:
-      unary_expression:SIZEOF LPARAM type_name RPARAM.,*
-    Reduce:
-      * -> [unary_expression]
-    Goto:
-      (nil)
-
-  State 315:
-    Kernel Items:
-      selection_statement:SWITCH LPARAM expression RPARAM.statement
-    Reduce:
-      (nil)
-    Goto:
-      IDENTIFIER -> State 85
-      CONSTANT -> State 77
-      STRING_LITERAL -> State 96
-      SIZEOF -> State 95
-      INC_OP -> State 87
-      DEC_OP -> State 79
-      CASE -> State 76
-      DEFAULT -> State 80
-      IF -> State 86
-      SWITCH -> State 97
-      WHILE -> State 99
-      DO -> State 81
-      FOR -> State 83
-      GOTO -> State 84
-      CONTINUE -> State 78
-      BREAK -> State 75
-      RETURN -> State 93
-      LPARAM -> State 88
-      LCURL -> State 49
-      SEMICOLON -> State 94
-      MUL -> State 90
-      MINUS -> State 89
-      PLUS -> State 91
-      AND -> State 74
-      EXCLAIM -> State 82
-      TILDA -> State 98
-      primary_expression -> State 119
-      postfix_expression -> State 118
-      unary_expression -> State 125
-      unary_operator -> State 126
-      cast_expression -> State 103
-      multiplicative_expression -> State 117
-      additive_expression -> State 100
-      shift_expression -> State 122
-      relational_expression -> State 120
-      equality_expression -> State 107
-      and_expression -> State 101
-      exclusive_or_expression -> State 108
-      inclusive_or_expression -> State 111
-      logical_and_expression -> State 115
-      logical_or_expression -> State 116
-      conditional_expression -> State 105
-      assignment_expression -> State 102
-      expression -> State 109
-      statement -> State 336
-      labeled_statement -> State 114
-      compound_statement -> State 104
-      expression_statement -> State 110
-      selection_statement -> State 121
-      iteration_statement -> State 112
-      jump_statement -> State 113
-
-  State 316:
-    Kernel Items:
-      iteration_statement:WHILE LPARAM expression RPARAM.statement
+      selection_statement: IF LPARAM expression RPARAM.statement
+      selection_statement: IF LPARAM expression RPARAM.statement ELSE statement
     Reduce:
       (nil)
     Goto:
@@ -11343,9 +11247,141 @@ Parser Debug States:
       iteration_statement -> State 112
       jump_statement -> State 113
 
+  State 313:
+    Kernel Items:
+      cast_expression: LPARAM type_name RPARAM cast_expression., *
+    Reduce:
+      * -> [cast_expression]
+    Goto:
+      (nil)
+
+  State 314:
+    Kernel Items:
+      unary_expression: SIZEOF LPARAM type_name RPARAM., *
+    Reduce:
+      * -> [unary_expression]
+    Goto:
+      (nil)
+
+  State 315:
+    Kernel Items:
+      selection_statement: SWITCH LPARAM expression RPARAM.statement
+    Reduce:
+      (nil)
+    Goto:
+      IDENTIFIER -> State 85
+      CONSTANT -> State 77
+      STRING_LITERAL -> State 96
+      SIZEOF -> State 95
+      INC_OP -> State 87
+      DEC_OP -> State 79
+      CASE -> State 76
+      DEFAULT -> State 80
+      IF -> State 86
+      SWITCH -> State 97
+      WHILE -> State 99
+      DO -> State 81
+      FOR -> State 83
+      GOTO -> State 84
+      CONTINUE -> State 78
+      BREAK -> State 75
+      RETURN -> State 93
+      LPARAM -> State 88
+      LCURL -> State 49
+      SEMICOLON -> State 94
+      MUL -> State 90
+      MINUS -> State 89
+      PLUS -> State 91
+      AND -> State 74
+      EXCLAIM -> State 82
+      TILDA -> State 98
+      primary_expression -> State 119
+      postfix_expression -> State 118
+      unary_expression -> State 125
+      unary_operator -> State 126
+      cast_expression -> State 103
+      multiplicative_expression -> State 117
+      additive_expression -> State 100
+      shift_expression -> State 122
+      relational_expression -> State 120
+      equality_expression -> State 107
+      and_expression -> State 101
+      exclusive_or_expression -> State 108
+      inclusive_or_expression -> State 111
+      logical_and_expression -> State 115
+      logical_or_expression -> State 116
+      conditional_expression -> State 105
+      assignment_expression -> State 102
+      expression -> State 109
+      statement -> State 338
+      labeled_statement -> State 114
+      compound_statement -> State 104
+      expression_statement -> State 110
+      selection_statement -> State 121
+      iteration_statement -> State 112
+      jump_statement -> State 113
+
+  State 316:
+    Kernel Items:
+      iteration_statement: WHILE LPARAM expression RPARAM.statement
+    Reduce:
+      (nil)
+    Goto:
+      IDENTIFIER -> State 85
+      CONSTANT -> State 77
+      STRING_LITERAL -> State 96
+      SIZEOF -> State 95
+      INC_OP -> State 87
+      DEC_OP -> State 79
+      CASE -> State 76
+      DEFAULT -> State 80
+      IF -> State 86
+      SWITCH -> State 97
+      WHILE -> State 99
+      DO -> State 81
+      FOR -> State 83
+      GOTO -> State 84
+      CONTINUE -> State 78
+      BREAK -> State 75
+      RETURN -> State 93
+      LPARAM -> State 88
+      LCURL -> State 49
+      SEMICOLON -> State 94
+      MUL -> State 90
+      MINUS -> State 89
+      PLUS -> State 91
+      AND -> State 74
+      EXCLAIM -> State 82
+      TILDA -> State 98
+      primary_expression -> State 119
+      postfix_expression -> State 118
+      unary_expression -> State 125
+      unary_operator -> State 126
+      cast_expression -> State 103
+      multiplicative_expression -> State 117
+      additive_expression -> State 100
+      shift_expression -> State 122
+      relational_expression -> State 120
+      equality_expression -> State 107
+      and_expression -> State 101
+      exclusive_or_expression -> State 108
+      inclusive_or_expression -> State 111
+      logical_and_expression -> State 115
+      logical_or_expression -> State 116
+      conditional_expression -> State 105
+      assignment_expression -> State 102
+      expression -> State 109
+      statement -> State 339
+      labeled_statement -> State 114
+      compound_statement -> State 104
+      expression_statement -> State 110
+      selection_statement -> State 121
+      iteration_statement -> State 112
+      jump_statement -> State 113
+
   State 317:
     Kernel Items:
-      conditional_expression:logical_or_expression QUESTION expression COLON.conditional_expression
+      conditional_expression: logical_or_expression QUESTION expression COLON.conditional_expression
     Reduce:
       (nil)
     Goto:
@@ -11377,11 +11413,11 @@ Parser Debug States:
       inclusive_or_expression -> State 111
       logical_and_expression -> State 115
       logical_or_expression -> State 116
-      conditional_expression -> State 338
+      conditional_expression -> State 340
 
   State 318:
     Kernel Items:
-      postfix_expression:postfix_expression LBRACE expression RBRACE.,*
+      postfix_expression: postfix_expression LBRACE expression RBRACE., *
     Reduce:
       * -> [postfix_expression]
     Goto:
@@ -11389,7 +11425,7 @@ Parser Debug States:
 
   State 319:
     Kernel Items:
-      argument_expression_list:argument_expression_list COMMA.assignment_expression
+      argument_expression_list: argument_expression_list COMMA.assignment_expression
     Reduce:
       (nil)
     Goto:
@@ -11422,11 +11458,11 @@ Parser Debug States:
       logical_and_expression -> State 115
       logical_or_expression -> State 116
       conditional_expression -> State 105
-      assignment_expression -> State 339
+      assignment_expression -> State 341
 
   State 320:
     Kernel Items:
-      postfix_expression:postfix_expression LPARAM argument_expression_list RPARAM.,*
+      postfix_expression: postfix_expression LPARAM argument_expression_list RPARAM., *
     Reduce:
       * -> [postfix_expression]
     Goto:
@@ -11434,7 +11470,7 @@ Parser Debug States:
 
   State 321:
     Kernel Items:
-      direct_abstract_declarator:LBRACE constant_expression RBRACE.,*
+      direct_abstract_declarator: LBRACE constant_expression RBRACE., *
     Reduce:
       * -> [direct_abstract_declarator]
     Goto:
@@ -11442,7 +11478,7 @@ Parser Debug States:
 
   State 322:
     Kernel Items:
-      direct_abstract_declarator:LPARAM abstract_declarator RPARAM.,*
+      direct_abstract_declarator: LPARAM abstract_declarator RPARAM., *
     Reduce:
       * -> [direct_abstract_declarator]
     Goto:
@@ -11450,7 +11486,7 @@ Parser Debug States:
 
   State 323:
     Kernel Items:
-      direct_abstract_declarator:LPARAM parameter_type_list RPARAM.,*
+      direct_abstract_declarator: LPARAM parameter_type_list RPARAM., *
     Reduce:
       * -> [direct_abstract_declarator]
     Goto:
@@ -11458,7 +11494,7 @@ Parser Debug States:
 
   State 324:
     Kernel Items:
-      direct_abstract_declarator:direct_abstract_declarator LBRACE RBRACE.,*
+      direct_abstract_declarator: direct_abstract_declarator LBRACE RBRACE., *
     Reduce:
       * -> [direct_abstract_declarator]
     Goto:
@@ -11466,15 +11502,15 @@ Parser Debug States:
 
   State 325:
     Kernel Items:
-      direct_abstract_declarator:direct_abstract_declarator LBRACE constant_expression.RBRACE
+      direct_abstract_declarator: direct_abstract_declarator LBRACE constant_expression.RBRACE
     Reduce:
       (nil)
     Goto:
-      RBRACE -> State 340
+      RBRACE -> State 342
 
   State 326:
     Kernel Items:
-      direct_abstract_declarator:direct_abstract_declarator LPARAM RPARAM.,*
+      direct_abstract_declarator: direct_abstract_declarator LPARAM RPARAM., *
     Reduce:
       * -> [direct_abstract_declarator]
     Goto:
@@ -11482,15 +11518,15 @@ Parser Debug States:
 
   State 327:
     Kernel Items:
-      direct_abstract_declarator:direct_abstract_declarator LPARAM parameter_type_list.RPARAM
+      direct_abstract_declarator: direct_abstract_declarator LPARAM parameter_type_list.RPARAM
     Reduce:
       (nil)
     Goto:
-      RPARAM -> State 341
+      RPARAM -> State 343
 
   State 328:
     Kernel Items:
-      struct_declarator:declarator COLON constant_expression.,*
+      struct_declarator: declarator COLON constant_expression., *
     Reduce:
       * -> [struct_declarator]
     Goto:
@@ -11498,7 +11534,7 @@ Parser Debug States:
 
   State 329:
     Kernel Items:
-      struct_declarator_list:struct_declarator_list COMMA struct_declarator.,*
+      struct_declarator_list: struct_declarator_list COMMA struct_declarator., *
     Reduce:
       * -> [struct_declarator_list]
     Goto:
@@ -11506,7 +11542,7 @@ Parser Debug States:
 
   State 330:
     Kernel Items:
-      initializer:LCURL initializer_list COMMA RCURL.,*
+      initializer: LCURL initializer_list COMMA RCURL., *
     Reduce:
       * -> [initializer]
     Goto:
@@ -11514,7 +11550,7 @@ Parser Debug States:
 
   State 331:
     Kernel Items:
-      initializer_list:initializer_list COMMA initializer.,*
+      initializer_list: initializer_list COMMA initializer., *
     Reduce:
       * -> [initializer_list]
     Goto:
@@ -11522,17 +11558,17 @@ Parser Debug States:
 
   State 332:
     Kernel Items:
-      expression:expression.COMMA assignment_expression
-      iteration_statement:DO statement WHILE LPARAM expression.RPARAM SEMICOLON
+      expression: expression.COMMA assignment_expression
+      iteration_statement: DO statement WHILE LPARAM expression.RPARAM SEMICOLON
     Reduce:
       (nil)
     Goto:
-      RPARAM -> State 342
+      RPARAM -> State 344
       COMMA -> State 186
 
   State 333:
     Kernel Items:
-      iteration_statement:FOR LPARAM expression_statement expression_statement RPARAM.statement
+      iteration_statement: FOR LPARAM expression_statement expression_statement RPARAM.statement
     Reduce:
       (nil)
     Goto:
@@ -11580,7 +11616,7 @@ Parser Debug States:
       conditional_expression -> State 105
       assignment_expression -> State 102
       expression -> State 109
-      statement -> State 343
+      statement -> State 345
       labeled_statement -> State 114
       compound_statement -> State 104
       expression_statement -> State 110
@@ -11590,148 +11626,196 @@ Parser Debug States:
 
   State 334:
     Kernel Items:
-      expression:expression.COMMA assignment_expression
-      iteration_statement:FOR LPARAM expression_statement expression_statement expression.RPARAM statement
+      expression: expression.COMMA assignment_expression
+      iteration_statement: FOR LPARAM expression_statement expression_statement expression.RPARAM statement
     Reduce:
       (nil)
     Goto:
-      RPARAM -> State 344
+      RPARAM -> State 346
       COMMA -> State 186
 
   State 335:
     Kernel Items:
-      selection_statement:IF LPARAM expression RPARAM statement.,*
-      selection_statement:IF LPARAM expression RPARAM statement.ELSE statement
+      selection_statement: IF LPARAM expression RPARAM statement., *
+      selection_statement: IF LPARAM expression RPARAM statement.ELSE statement
     Reduce:
       * -> [selection_statement]
     Goto:
-      ELSE -> State 345
+      ELSE -> State 347
 
   State 336:
     Kernel Items:
-      selection_statement:SWITCH LPARAM expression RPARAM statement.,*
+      selection_statement: IF LPARAM expression RPARAM statement., AND
+      selection_statement: IF LPARAM expression RPARAM statement., BREAK
+      selection_statement: IF LPARAM expression RPARAM statement., CASE
+      selection_statement: IF LPARAM expression RPARAM statement., CONSTANT
+      selection_statement: IF LPARAM expression RPARAM statement., CONTINUE
+      selection_statement: IF LPARAM expression RPARAM statement., DEC_OP
+      selection_statement: IF LPARAM expression RPARAM statement., DEFAULT
+      selection_statement: IF LPARAM expression RPARAM statement., DO
+      selection_statement: IF LPARAM expression RPARAM statement., ELSE
+      selection_statement: IF LPARAM expression RPARAM statement., EXCLAIM
+      selection_statement: IF LPARAM expression RPARAM statement., FOR
+      selection_statement: IF LPARAM expression RPARAM statement., GOTO
+      selection_statement: IF LPARAM expression RPARAM statement., IDENTIFIER
+      selection_statement: IF LPARAM expression RPARAM statement., IF
+      selection_statement: IF LPARAM expression RPARAM statement., INC_OP
+      selection_statement: IF LPARAM expression RPARAM statement., LCURL
+      selection_statement: IF LPARAM expression RPARAM statement., LPARAM
+      selection_statement: IF LPARAM expression RPARAM statement., MINUS
+      selection_statement: IF LPARAM expression RPARAM statement., MUL
+      selection_statement: IF LPARAM expression RPARAM statement., PLUS
+      selection_statement: IF LPARAM expression RPARAM statement., RCURL
+      selection_statement: IF LPARAM expression RPARAM statement., RETURN
+      selection_statement: IF LPARAM expression RPARAM statement., SEMICOLON
+      selection_statement: IF LPARAM expression RPARAM statement., SIZEOF
+      selection_statement: IF LPARAM expression RPARAM statement., STRING_LITERAL
+      selection_statement: IF LPARAM expression RPARAM statement., SWITCH
+      selection_statement: IF LPARAM expression RPARAM statement., TILDA
+      selection_statement: IF LPARAM expression RPARAM statement., WHILE
+      selection_statement: IF LPARAM expression RPARAM statement.ELSE statement , AND
+      selection_statement: IF LPARAM expression RPARAM statement.ELSE statement , BREAK
+      selection_statement: IF LPARAM expression RPARAM statement.ELSE statement , CASE
+      selection_statement: IF LPARAM expression RPARAM statement.ELSE statement , CONSTANT
+      selection_statement: IF LPARAM expression RPARAM statement.ELSE statement , CONTINUE
+      selection_statement: IF LPARAM expression RPARAM statement.ELSE statement , DEC_OP
+      selection_statement: IF LPARAM expression RPARAM statement.ELSE statement , DEFAULT
+      selection_statement: IF LPARAM expression RPARAM statement.ELSE statement , DO
+      selection_statement: IF LPARAM expression RPARAM statement.ELSE statement , ELSE
+      selection_statement: IF LPARAM expression RPARAM statement.ELSE statement , EXCLAIM
+      selection_statement: IF LPARAM expression RPARAM statement.ELSE statement , FOR
+      selection_statement: IF LPARAM expression RPARAM statement.ELSE statement , GOTO
+      selection_statement: IF LPARAM expression RPARAM statement.ELSE statement , IDENTIFIER
+      selection_statement: IF LPARAM expression RPARAM statement.ELSE statement , IF
+      selection_statement: IF LPARAM expression RPARAM statement.ELSE statement , INC_OP
+      selection_statement: IF LPARAM expression RPARAM statement.ELSE statement , LCURL
+      selection_statement: IF LPARAM expression RPARAM statement.ELSE statement , LPARAM
+      selection_statement: IF LPARAM expression RPARAM statement.ELSE statement , MINUS
+      selection_statement: IF LPARAM expression RPARAM statement.ELSE statement , MUL
+      selection_statement: IF LPARAM expression RPARAM statement.ELSE statement , PLUS
+      selection_statement: IF LPARAM expression RPARAM statement.ELSE statement , RCURL
+      selection_statement: IF LPARAM expression RPARAM statement.ELSE statement , RETURN
+      selection_statement: IF LPARAM expression RPARAM statement.ELSE statement , SEMICOLON
+      selection_statement: IF LPARAM expression RPARAM statement.ELSE statement , SIZEOF
+      selection_statement: IF LPARAM expression RPARAM statement.ELSE statement , STRING_LITERAL
+      selection_statement: IF LPARAM expression RPARAM statement.ELSE statement , SWITCH
+      selection_statement: IF LPARAM expression RPARAM statement.ELSE statement , TILDA
+      selection_statement: IF LPARAM expression RPARAM statement.ELSE statement , WHILE
     Reduce:
-      * -> [selection_statement]
+      IDENTIFIER -> [selection_statement]
+      CONSTANT -> [selection_statement]
+      STRING_LITERAL -> [selection_statement]
+      SIZEOF -> [selection_statement]
+      INC_OP -> [selection_statement]
+      DEC_OP -> [selection_statement]
+      CASE -> [selection_statement]
+      DEFAULT -> [selection_statement]
+      IF -> [selection_statement]
+      ELSE -> [selection_statement]
+      SWITCH -> [selection_statement]
+      WHILE -> [selection_statement]
+      DO -> [selection_statement]
+      FOR -> [selection_statement]
+      GOTO -> [selection_statement]
+      CONTINUE -> [selection_statement]
+      BREAK -> [selection_statement]
+      RETURN -> [selection_statement]
+      LPARAM -> [selection_statement]
+      LCURL -> [selection_statement]
+      RCURL -> [selection_statement]
+      SEMICOLON -> [selection_statement]
+      MUL -> [selection_statement]
+      MINUS -> [selection_statement]
+      PLUS -> [selection_statement]
+      AND -> [selection_statement]
+      EXCLAIM -> [selection_statement]
+      TILDA -> [selection_statement]
     Goto:
-      (nil)
+      ELSE -> State 347
+    Shift/reduce conflict symbols:
+      [ELSE]
 
   State 337:
     Kernel Items:
-      iteration_statement:WHILE LPARAM expression RPARAM statement.,*
+      selection_statement: IF LPARAM expression RPARAM statement., ELSE
+      selection_statement: IF LPARAM expression RPARAM statement., WHILE
+      selection_statement: IF LPARAM expression RPARAM statement.ELSE statement , ELSE
+      selection_statement: IF LPARAM expression RPARAM statement.ELSE statement , WHILE
     Reduce:
-      * -> [iteration_statement]
+      ELSE -> [selection_statement]
+      WHILE -> [selection_statement]
     Goto:
-      (nil)
+      ELSE -> State 347
+    Shift/reduce conflict symbols:
+      [ELSE]
 
   State 338:
     Kernel Items:
-      conditional_expression:logical_or_expression QUESTION expression COLON conditional_expression.,*
+      selection_statement: SWITCH LPARAM expression RPARAM statement., *
     Reduce:
-      * -> [conditional_expression]
+      * -> [selection_statement]
     Goto:
       (nil)
 
   State 339:
     Kernel Items:
-      argument_expression_list:argument_expression_list COMMA assignment_expression.,*
+      iteration_statement: WHILE LPARAM expression RPARAM statement., *
     Reduce:
-      * -> [argument_expression_list]
+      * -> [iteration_statement]
     Goto:
       (nil)
 
   State 340:
     Kernel Items:
-      direct_abstract_declarator:direct_abstract_declarator LBRACE constant_expression RBRACE.,*
+      conditional_expression: logical_or_expression QUESTION expression COLON conditional_expression., *
     Reduce:
-      * -> [direct_abstract_declarator]
+      * -> [conditional_expression]
     Goto:
       (nil)
 
   State 341:
     Kernel Items:
-      direct_abstract_declarator:direct_abstract_declarator LPARAM parameter_type_list RPARAM.,*
+      argument_expression_list: argument_expression_list COMMA assignment_expression., *
     Reduce:
-      * -> [direct_abstract_declarator]
+      * -> [argument_expression_list]
     Goto:
       (nil)
 
   State 342:
     Kernel Items:
-      iteration_statement:DO statement WHILE LPARAM expression RPARAM.SEMICOLON
+      direct_abstract_declarator: direct_abstract_declarator LBRACE constant_expression RBRACE., *
     Reduce:
-      (nil)
+      * -> [direct_abstract_declarator]
     Goto:
-      SEMICOLON -> State 346
+      (nil)
 
   State 343:
     Kernel Items:
-      iteration_statement:FOR LPARAM expression_statement expression_statement RPARAM statement.,*
+      direct_abstract_declarator: direct_abstract_declarator LPARAM parameter_type_list RPARAM., *
     Reduce:
-      * -> [iteration_statement]
+      * -> [direct_abstract_declarator]
     Goto:
       (nil)
 
   State 344:
     Kernel Items:
-      iteration_statement:FOR LPARAM expression_statement expression_statement expression RPARAM.statement
+      iteration_statement: DO statement WHILE LPARAM expression RPARAM.SEMICOLON
     Reduce:
       (nil)
     Goto:
-      IDENTIFIER -> State 85
-      CONSTANT -> State 77
-      STRING_LITERAL -> State 96
-      SIZEOF -> State 95
-      INC_OP -> State 87
-      DEC_OP -> State 79
-      CASE -> State 76
-      DEFAULT -> State 80
-      IF -> State 86
-      SWITCH -> State 97
-      WHILE -> State 99
-      DO -> State 81
-      FOR -> State 83
-      GOTO -> State 84
-      CONTINUE -> State 78
-      BREAK -> State 75
-      RETURN -> State 93
-      LPARAM -> State 88
-      LCURL -> State 49
-      SEMICOLON -> State 94
-      MUL -> State 90
-      MINUS -> State 89
-      PLUS -> State 91
-      AND -> State 74
-      EXCLAIM -> State 82
-      TILDA -> State 98
-      primary_expression -> State 119
-      postfix_expression -> State 118
-      unary_expression -> State 125
-      unary_operator -> State 126
-      cast_expression -> State 103
-      multiplicative_expression -> State 117
-      additive_expression -> State 100
-      shift_expression -> State 122
-      relational_expression -> State 120
-      equality_expression -> State 107
-      and_expression -> State 101
-      exclusive_or_expression -> State 108
-      inclusive_or_expression -> State 111
-      logical_and_expression -> State 115
-      logical_or_expression -> State 116
-      conditional_expression -> State 105
-      assignment_expression -> State 102
-      expression -> State 109
-      statement -> State 347
-      labeled_statement -> State 114
-      compound_statement -> State 104
-      expression_statement -> State 110
-      selection_statement -> State 121
-      iteration_statement -> State 112
-      jump_statement -> State 113
+      SEMICOLON -> State 348
 
   State 345:
     Kernel Items:
-      selection_statement:IF LPARAM expression RPARAM statement ELSE.statement
+      iteration_statement: FOR LPARAM expression_statement expression_statement RPARAM statement., *
+    Reduce:
+      * -> [iteration_statement]
+    Goto:
+      (nil)
+
+  State 346:
+    Kernel Items:
+      iteration_statement: FOR LPARAM expression_statement expression_statement expression RPARAM.statement
     Reduce:
       (nil)
     Goto:
@@ -11779,7 +11863,7 @@ Parser Debug States:
       conditional_expression -> State 105
       assignment_expression -> State 102
       expression -> State 109
-      statement -> State 348
+      statement -> State 349
       labeled_statement -> State 114
       compound_statement -> State 104
       expression_statement -> State 110
@@ -11787,33 +11871,91 @@ Parser Debug States:
       iteration_statement -> State 112
       jump_statement -> State 113
 
-  State 346:
-    Kernel Items:
-      iteration_statement:DO statement WHILE LPARAM expression RPARAM SEMICOLON.,*
-    Reduce:
-      * -> [iteration_statement]
-    Goto:
-      (nil)
-
   State 347:
     Kernel Items:
-      iteration_statement:FOR LPARAM expression_statement expression_statement expression RPARAM statement.,*
+      selection_statement: IF LPARAM expression RPARAM statement ELSE.statement
     Reduce:
-      * -> [iteration_statement]
-    Goto:
       (nil)
+    Goto:
+      IDENTIFIER -> State 85
+      CONSTANT -> State 77
+      STRING_LITERAL -> State 96
+      SIZEOF -> State 95
+      INC_OP -> State 87
+      DEC_OP -> State 79
+      CASE -> State 76
+      DEFAULT -> State 80
+      IF -> State 86
+      SWITCH -> State 97
+      WHILE -> State 99
+      DO -> State 81
+      FOR -> State 83
+      GOTO -> State 84
+      CONTINUE -> State 78
+      BREAK -> State 75
+      RETURN -> State 93
+      LPARAM -> State 88
+      LCURL -> State 49
+      SEMICOLON -> State 94
+      MUL -> State 90
+      MINUS -> State 89
+      PLUS -> State 91
+      AND -> State 74
+      EXCLAIM -> State 82
+      TILDA -> State 98
+      primary_expression -> State 119
+      postfix_expression -> State 118
+      unary_expression -> State 125
+      unary_operator -> State 126
+      cast_expression -> State 103
+      multiplicative_expression -> State 117
+      additive_expression -> State 100
+      shift_expression -> State 122
+      relational_expression -> State 120
+      equality_expression -> State 107
+      and_expression -> State 101
+      exclusive_or_expression -> State 108
+      inclusive_or_expression -> State 111
+      logical_and_expression -> State 115
+      logical_or_expression -> State 116
+      conditional_expression -> State 105
+      assignment_expression -> State 102
+      expression -> State 109
+      statement -> State 350
+      labeled_statement -> State 114
+      compound_statement -> State 104
+      expression_statement -> State 110
+      selection_statement -> State 121
+      iteration_statement -> State 112
+      jump_statement -> State 113
 
   State 348:
     Kernel Items:
-      selection_statement:IF LPARAM expression RPARAM statement ELSE statement.,*
+      iteration_statement: DO statement WHILE LPARAM expression RPARAM SEMICOLON., *
+    Reduce:
+      * -> [iteration_statement]
+    Goto:
+      (nil)
+
+  State 349:
+    Kernel Items:
+      iteration_statement: FOR LPARAM expression_statement expression_statement expression RPARAM statement., *
+    Reduce:
+      * -> [iteration_statement]
+    Goto:
+      (nil)
+
+  State 350:
+    Kernel Items:
+      selection_statement: IF LPARAM expression RPARAM statement ELSE statement., *
     Reduce:
       * -> [selection_statement]
     Goto:
       (nil)
 
-Number of states: 349
-Number of shift actions: 2987
-Number of reduce actions: 216
-Number of shift/reduce conflicts: 0
+Number of states: 351
+Number of shift actions: 2989
+Number of reduce actions: 246
+Number of shift/reduce conflicts: 2
 Number of reduce/reduce conflicts: 0
 */

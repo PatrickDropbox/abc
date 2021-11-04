@@ -657,7 +657,7 @@ var _LRExpectedTerminals = map[_LRStateId][]LRSymbolId{
 Parser Debug States:
   State 0:
     Kernel Items:
-      #accept:^.grammar
+      #accept: ^.grammar
     Non-kernel Items:
       def:.START IDENTIFIER
       def:.rule
@@ -686,7 +686,7 @@ Parser Debug States:
 
   State 1:
     Kernel Items:
-      #accept:^ grammar.,$
+      #accept: ^ grammar., $
     Reduce:
       $ -> [#accept]
     Goto:
@@ -694,10 +694,10 @@ Parser Debug States:
 
   State 2:
     Kernel Items:
-      rule:RULE_DEF.ident_list
-      rule:RULE_DEF.labeled_clauses
+      rule: RULE_DEF.ident_list
+      rule: RULE_DEF.labeled_clauses
     Non-kernel Items:
-      ident_list:.,*
+      ident_list:., *
       ident_list:.nonempty_ident_list
       labeled_clause:.LABEL ident_list
       labeled_clauses:.labeled_clause
@@ -716,7 +716,7 @@ Parser Debug States:
 
   State 3:
     Kernel Items:
-      def:START.IDENTIFIER
+      def: START.IDENTIFIER
     Reduce:
       (nil)
     Goto:
@@ -724,7 +724,7 @@ Parser Debug States:
 
   State 4:
     Kernel Items:
-      rword:TOKEN.,LT
+      rword: TOKEN., LT
     Reduce:
       LT -> [rword]
     Goto:
@@ -732,7 +732,7 @@ Parser Debug States:
 
   State 5:
     Kernel Items:
-      rword:TYPE.,LT
+      rword: TYPE., LT
     Reduce:
       LT -> [rword]
     Goto:
@@ -740,8 +740,8 @@ Parser Debug States:
 
   State 6:
     Kernel Items:
-      defs:def.,*
-      defs:def.SEMICOLON
+      defs: def., *
+      defs: def.SEMICOLON
     Reduce:
       * -> [defs]
     Goto:
@@ -749,11 +749,11 @@ Parser Debug States:
 
   State 7:
     Kernel Items:
-      defs:defs.def
-      defs:defs.def SEMICOLON
-      grammar:defs.additional_sections
+      defs: defs.def
+      defs: defs.def SEMICOLON
+      grammar: defs.additional_sections
     Non-kernel Items:
-      additional_sections:.,*
+      additional_sections:., *
       additional_sections:.additional_sections additional_section
       def:.START IDENTIFIER
       def:.rule
@@ -776,7 +776,7 @@ Parser Debug States:
 
   State 8:
     Kernel Items:
-      def:rule.,*
+      def: rule., *
     Reduce:
       * -> [def]
     Goto:
@@ -784,7 +784,7 @@ Parser Debug States:
 
   State 9:
     Kernel Items:
-      def:rword.LT IDENTIFIER GT nonempty_ident_list
+      def: rword.LT IDENTIFIER GT nonempty_ident_list
     Reduce:
       (nil)
     Goto:
@@ -792,7 +792,7 @@ Parser Debug States:
 
   State 10:
     Kernel Items:
-      nonempty_ident_list:IDENTIFIER.,*
+      nonempty_ident_list: IDENTIFIER., *
     Reduce:
       * -> [nonempty_ident_list]
     Goto:
@@ -800,9 +800,9 @@ Parser Debug States:
 
   State 11:
     Kernel Items:
-      labeled_clause:LABEL.ident_list
+      labeled_clause: LABEL.ident_list
     Non-kernel Items:
-      ident_list:.,*
+      ident_list:., *
       ident_list:.nonempty_ident_list
       nonempty_ident_list:.IDENTIFIER
       nonempty_ident_list:.nonempty_ident_list IDENTIFIER
@@ -815,7 +815,7 @@ Parser Debug States:
 
   State 12:
     Kernel Items:
-      rule:RULE_DEF ident_list.,*
+      rule: RULE_DEF ident_list., *
     Reduce:
       * -> [rule]
     Goto:
@@ -823,7 +823,7 @@ Parser Debug States:
 
   State 13:
     Kernel Items:
-      labeled_clauses:labeled_clause.,*
+      labeled_clauses: labeled_clause., *
     Reduce:
       * -> [labeled_clauses]
     Goto:
@@ -831,8 +831,8 @@ Parser Debug States:
 
   State 14:
     Kernel Items:
-      labeled_clauses:labeled_clauses.OR labeled_clause
-      rule:RULE_DEF labeled_clauses.,*
+      labeled_clauses: labeled_clauses.OR labeled_clause
+      rule: RULE_DEF labeled_clauses., *
     Reduce:
       * -> [rule]
     Goto:
@@ -840,8 +840,8 @@ Parser Debug States:
 
   State 15:
     Kernel Items:
-      ident_list:nonempty_ident_list.,*
-      nonempty_ident_list:nonempty_ident_list.IDENTIFIER
+      ident_list: nonempty_ident_list., *
+      nonempty_ident_list: nonempty_ident_list.IDENTIFIER
     Reduce:
       * -> [ident_list]
     Goto:
@@ -849,7 +849,7 @@ Parser Debug States:
 
   State 16:
     Kernel Items:
-      def:START IDENTIFIER.,*
+      def: START IDENTIFIER., *
     Reduce:
       * -> [def]
     Goto:
@@ -857,7 +857,7 @@ Parser Debug States:
 
   State 17:
     Kernel Items:
-      defs:def SEMICOLON.,*
+      defs: def SEMICOLON., *
     Reduce:
       * -> [defs]
     Goto:
@@ -865,8 +865,8 @@ Parser Debug States:
 
   State 18:
     Kernel Items:
-      additional_sections:additional_sections.additional_section
-      grammar:defs additional_sections.,$
+      additional_sections: additional_sections.additional_section
+      grammar: defs additional_sections., $
     Non-kernel Items:
       additional_section:.SECTION_MARKER IDENTIFIER SECTION_CONTENT
     Reduce:
@@ -877,8 +877,8 @@ Parser Debug States:
 
   State 19:
     Kernel Items:
-      defs:defs def.,*
-      defs:defs def.SEMICOLON
+      defs: defs def., *
+      defs: defs def.SEMICOLON
     Reduce:
       * -> [defs]
     Goto:
@@ -886,7 +886,7 @@ Parser Debug States:
 
   State 20:
     Kernel Items:
-      def:rword LT.IDENTIFIER GT nonempty_ident_list
+      def: rword LT.IDENTIFIER GT nonempty_ident_list
     Reduce:
       (nil)
     Goto:
@@ -894,7 +894,7 @@ Parser Debug States:
 
   State 21:
     Kernel Items:
-      labeled_clause:LABEL ident_list.,*
+      labeled_clause: LABEL ident_list., *
     Reduce:
       * -> [labeled_clause]
     Goto:
@@ -902,7 +902,7 @@ Parser Debug States:
 
   State 22:
     Kernel Items:
-      labeled_clauses:labeled_clauses OR.labeled_clause
+      labeled_clauses: labeled_clauses OR.labeled_clause
     Non-kernel Items:
       labeled_clause:.LABEL ident_list
     Reduce:
@@ -913,7 +913,7 @@ Parser Debug States:
 
   State 23:
     Kernel Items:
-      nonempty_ident_list:nonempty_ident_list IDENTIFIER.,*
+      nonempty_ident_list: nonempty_ident_list IDENTIFIER., *
     Reduce:
       * -> [nonempty_ident_list]
     Goto:
@@ -921,7 +921,7 @@ Parser Debug States:
 
   State 24:
     Kernel Items:
-      additional_section:SECTION_MARKER.IDENTIFIER SECTION_CONTENT
+      additional_section: SECTION_MARKER.IDENTIFIER SECTION_CONTENT
     Reduce:
       (nil)
     Goto:
@@ -929,7 +929,7 @@ Parser Debug States:
 
   State 25:
     Kernel Items:
-      additional_sections:additional_sections additional_section.,*
+      additional_sections: additional_sections additional_section., *
     Reduce:
       * -> [additional_sections]
     Goto:
@@ -937,7 +937,7 @@ Parser Debug States:
 
   State 26:
     Kernel Items:
-      defs:defs def SEMICOLON.,*
+      defs: defs def SEMICOLON., *
     Reduce:
       * -> [defs]
     Goto:
@@ -945,7 +945,7 @@ Parser Debug States:
 
   State 27:
     Kernel Items:
-      def:rword LT IDENTIFIER.GT nonempty_ident_list
+      def: rword LT IDENTIFIER.GT nonempty_ident_list
     Reduce:
       (nil)
     Goto:
@@ -953,7 +953,7 @@ Parser Debug States:
 
   State 28:
     Kernel Items:
-      labeled_clauses:labeled_clauses OR labeled_clause.,*
+      labeled_clauses: labeled_clauses OR labeled_clause., *
     Reduce:
       * -> [labeled_clauses]
     Goto:
@@ -961,7 +961,7 @@ Parser Debug States:
 
   State 29:
     Kernel Items:
-      additional_section:SECTION_MARKER IDENTIFIER.SECTION_CONTENT
+      additional_section: SECTION_MARKER IDENTIFIER.SECTION_CONTENT
     Reduce:
       (nil)
     Goto:
@@ -969,7 +969,7 @@ Parser Debug States:
 
   State 30:
     Kernel Items:
-      def:rword LT IDENTIFIER GT.nonempty_ident_list
+      def: rword LT IDENTIFIER GT.nonempty_ident_list
     Non-kernel Items:
       nonempty_ident_list:.IDENTIFIER
       nonempty_ident_list:.nonempty_ident_list IDENTIFIER
@@ -981,7 +981,7 @@ Parser Debug States:
 
   State 31:
     Kernel Items:
-      additional_section:SECTION_MARKER IDENTIFIER SECTION_CONTENT.,*
+      additional_section: SECTION_MARKER IDENTIFIER SECTION_CONTENT., *
     Reduce:
       * -> [additional_section]
     Goto:
@@ -989,8 +989,8 @@ Parser Debug States:
 
   State 32:
     Kernel Items:
-      def:rword LT IDENTIFIER GT nonempty_ident_list.,*
-      nonempty_ident_list:nonempty_ident_list.IDENTIFIER
+      def: rword LT IDENTIFIER GT nonempty_ident_list., *
+      nonempty_ident_list: nonempty_ident_list.IDENTIFIER
     Reduce:
       * -> [def]
     Goto:
