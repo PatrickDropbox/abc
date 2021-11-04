@@ -231,7 +231,8 @@ type ItemSet struct {
 	ReduceReduceConflictSymbols []string
 	ShiftReduceConflictSymbols  []string
 
-	CodeGenConst string
+	CodeGenConst  string
+	CodeGenAction string
 }
 
 func newItemSet(kernelItems Items) *ItemSet {

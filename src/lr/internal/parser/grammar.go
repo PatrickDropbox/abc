@@ -543,14 +543,72 @@ func (act *_LRAction) ReduceSymbol(reducer LRReducer, stack _LRStack) (_LRStack,
 	return stack, symbol, err
 }
 
+var (
+	_LRGotoState0Action                     = &_LRAction{_LRShiftAction, _LRState0, ""}
+	_LRGotoState1Action                     = &_LRAction{_LRShiftAction, _LRState1, ""}
+	_LRGotoState2Action                     = &_LRAction{_LRShiftAction, _LRState2, ""}
+	_LRGotoState3Action                     = &_LRAction{_LRShiftAction, _LRState3, ""}
+	_LRGotoState4Action                     = &_LRAction{_LRShiftAction, _LRState4, ""}
+	_LRGotoState5Action                     = &_LRAction{_LRShiftAction, _LRState5, ""}
+	_LRGotoState6Action                     = &_LRAction{_LRShiftAction, _LRState6, ""}
+	_LRGotoState7Action                     = &_LRAction{_LRShiftAction, _LRState7, ""}
+	_LRGotoState8Action                     = &_LRAction{_LRShiftAction, _LRState8, ""}
+	_LRGotoState9Action                     = &_LRAction{_LRShiftAction, _LRState9, ""}
+	_LRGotoState10Action                    = &_LRAction{_LRShiftAction, _LRState10, ""}
+	_LRGotoState11Action                    = &_LRAction{_LRShiftAction, _LRState11, ""}
+	_LRGotoState12Action                    = &_LRAction{_LRShiftAction, _LRState12, ""}
+	_LRGotoState13Action                    = &_LRAction{_LRShiftAction, _LRState13, ""}
+	_LRGotoState14Action                    = &_LRAction{_LRShiftAction, _LRState14, ""}
+	_LRGotoState15Action                    = &_LRAction{_LRShiftAction, _LRState15, ""}
+	_LRGotoState16Action                    = &_LRAction{_LRShiftAction, _LRState16, ""}
+	_LRGotoState17Action                    = &_LRAction{_LRShiftAction, _LRState17, ""}
+	_LRGotoState18Action                    = &_LRAction{_LRShiftAction, _LRState18, ""}
+	_LRGotoState19Action                    = &_LRAction{_LRShiftAction, _LRState19, ""}
+	_LRGotoState20Action                    = &_LRAction{_LRShiftAction, _LRState20, ""}
+	_LRGotoState21Action                    = &_LRAction{_LRShiftAction, _LRState21, ""}
+	_LRGotoState22Action                    = &_LRAction{_LRShiftAction, _LRState22, ""}
+	_LRGotoState23Action                    = &_LRAction{_LRShiftAction, _LRState23, ""}
+	_LRGotoState24Action                    = &_LRAction{_LRShiftAction, _LRState24, ""}
+	_LRGotoState25Action                    = &_LRAction{_LRShiftAction, _LRState25, ""}
+	_LRGotoState26Action                    = &_LRAction{_LRShiftAction, _LRState26, ""}
+	_LRGotoState27Action                    = &_LRAction{_LRShiftAction, _LRState27, ""}
+	_LRGotoState28Action                    = &_LRAction{_LRShiftAction, _LRState28, ""}
+	_LRGotoState29Action                    = &_LRAction{_LRShiftAction, _LRState29, ""}
+	_LRGotoState30Action                    = &_LRAction{_LRShiftAction, _LRState30, ""}
+	_LRGotoState31Action                    = &_LRAction{_LRShiftAction, _LRState31, ""}
+	_LRGotoState32Action                    = &_LRAction{_LRShiftAction, _LRState32, ""}
+	_LRReduceToGrammarAction                = &_LRAction{_LRReduceAction, "", _LRReduceToGrammar}
+	_LRReduceAddToAdditionalSectionsAction  = &_LRAction{_LRReduceAction, "", _LRReduceAddToAdditionalSections}
+	_LRReduceNilToAdditionalSectionsAction  = &_LRAction{_LRReduceAction, "", _LRReduceNilToAdditionalSections}
+	_LRReduceToAdditionalSectionAction      = &_LRAction{_LRReduceAction, "", _LRReduceToAdditionalSection}
+	_LRReduceAddToDefsAction                = &_LRAction{_LRReduceAction, "", _LRReduceAddToDefs}
+	_LRReduceAddExplicitToDefsAction        = &_LRAction{_LRReduceAction, "", _LRReduceAddExplicitToDefs}
+	_LRReduceDefToDefsAction                = &_LRAction{_LRReduceAction, "", _LRReduceDefToDefs}
+	_LRReduceExplicitDefToDefsAction        = &_LRAction{_LRReduceAction, "", _LRReduceExplicitDefToDefs}
+	_LRReduceTermDeclToDefAction            = &_LRAction{_LRReduceAction, "", _LRReduceTermDeclToDef}
+	_LRReduceStartDeclToDefAction           = &_LRAction{_LRReduceAction, "", _LRReduceStartDeclToDef}
+	_LRReduceRuleToDefAction                = &_LRAction{_LRReduceAction, "", _LRReduceRuleToDef}
+	_LRReduceTokenToRwordAction             = &_LRAction{_LRReduceAction, "", _LRReduceTokenToRword}
+	_LRReduceTypeToRwordAction              = &_LRAction{_LRReduceAction, "", _LRReduceTypeToRword}
+	_LRReduceAddToNonemptyIdentListAction   = &_LRAction{_LRReduceAction, "", _LRReduceAddToNonemptyIdentList}
+	_LRReduceIdentToNonemptyIdentListAction = &_LRAction{_LRReduceAction, "", _LRReduceIdentToNonemptyIdentList}
+	_LRReduceNonEmptyListToIdentListAction  = &_LRAction{_LRReduceAction, "", _LRReduceNonEmptyListToIdentList}
+	_LRReduceNilToIdentListAction           = &_LRAction{_LRReduceAction, "", _LRReduceNilToIdentList}
+	_LRReduceUnlabeledClauseToRuleAction    = &_LRAction{_LRReduceAction, "", _LRReduceUnlabeledClauseToRule}
+	_LRReduceClausesToRuleAction            = &_LRAction{_LRReduceAction, "", _LRReduceClausesToRule}
+	_LRReduceAddToLabeledClausesAction      = &_LRAction{_LRReduceAction, "", _LRReduceAddToLabeledClauses}
+	_LRReduceClauseToLabeledClausesAction   = &_LRAction{_LRReduceAction, "", _LRReduceClauseToLabeledClauses}
+	_LRReduceToLabeledClauseAction          = &_LRAction{_LRReduceAction, "", _LRReduceToLabeledClause}
+)
+
 type _LRActionTableKey struct {
 	_LRStateId
 	LRSymbolId
 }
 
-type _LRActionTableType map[_LRActionTableKey]_LRAction
+type _LRActionTableType map[_LRActionTableKey]*_LRAction
 
-func (table _LRActionTableType) Get(stateId _LRStateId, symbol LRSymbolId) (_LRAction, bool) {
+func (table _LRActionTableType) Get(stateId _LRStateId, symbol LRSymbolId) (*_LRAction, bool) {
 	action, ok := table[_LRActionTableKey{stateId, symbol}]
 	if ok {
 		return action, ok
@@ -560,73 +618,73 @@ func (table _LRActionTableType) Get(stateId _LRStateId, symbol LRSymbolId) (_LRA
 }
 
 var _LRActionTable = _LRActionTableType{
-	{_LRState1, _LREndMarker}:                {_LRAcceptAction, "", ""},
-	{_LRState0, LRTokenSymbol}:               {_LRShiftAction, _LRState4, ""},
-	{_LRState0, LRTypeSymbol}:                {_LRShiftAction, _LRState5, ""},
-	{_LRState0, LRStartSymbol}:               {_LRShiftAction, _LRState3, ""},
-	{_LRState0, LRRuleDefSymbol}:             {_LRShiftAction, _LRState2, ""},
-	{_LRState0, _LRGrammarSymbol}:            {_LRShiftAction, _LRState1, ""},
-	{_LRState0, _LRDefsSymbol}:               {_LRShiftAction, _LRState7, ""},
-	{_LRState0, _LRDefSymbol}:                {_LRShiftAction, _LRState6, ""},
-	{_LRState0, _LRRwordSymbol}:              {_LRShiftAction, _LRState9, ""},
-	{_LRState0, _LRRuleSymbol}:               {_LRShiftAction, _LRState8, ""},
-	{_LRState2, LRLabelSymbol}:               {_LRShiftAction, _LRState11, ""},
-	{_LRState2, LRIdentifierSymbol}:          {_LRShiftAction, _LRState10, ""},
-	{_LRState2, _LRNonemptyIdentListSymbol}:  {_LRShiftAction, _LRState15, ""},
-	{_LRState2, _LRIdentListSymbol}:          {_LRShiftAction, _LRState12, ""},
-	{_LRState2, _LRLabeledClausesSymbol}:     {_LRShiftAction, _LRState14, ""},
-	{_LRState2, _LRLabeledClauseSymbol}:      {_LRShiftAction, _LRState13, ""},
-	{_LRState3, LRIdentifierSymbol}:          {_LRShiftAction, _LRState16, ""},
-	{_LRState6, LRSemicolonSymbol}:           {_LRShiftAction, _LRState17, ""},
-	{_LRState7, LRTokenSymbol}:               {_LRShiftAction, _LRState4, ""},
-	{_LRState7, LRTypeSymbol}:                {_LRShiftAction, _LRState5, ""},
-	{_LRState7, LRStartSymbol}:               {_LRShiftAction, _LRState3, ""},
-	{_LRState7, LRRuleDefSymbol}:             {_LRShiftAction, _LRState2, ""},
-	{_LRState7, _LRAdditionalSectionsSymbol}: {_LRShiftAction, _LRState18, ""},
-	{_LRState7, _LRDefSymbol}:                {_LRShiftAction, _LRState19, ""},
-	{_LRState7, _LRRwordSymbol}:              {_LRShiftAction, _LRState9, ""},
-	{_LRState7, _LRRuleSymbol}:               {_LRShiftAction, _LRState8, ""},
-	{_LRState9, LRLtSymbol}:                  {_LRShiftAction, _LRState20, ""},
-	{_LRState11, LRIdentifierSymbol}:         {_LRShiftAction, _LRState10, ""},
-	{_LRState11, _LRNonemptyIdentListSymbol}: {_LRShiftAction, _LRState15, ""},
-	{_LRState11, _LRIdentListSymbol}:         {_LRShiftAction, _LRState21, ""},
-	{_LRState14, LROrSymbol}:                 {_LRShiftAction, _LRState22, ""},
-	{_LRState15, LRIdentifierSymbol}:         {_LRShiftAction, _LRState23, ""},
-	{_LRState18, LRSectionMarkerSymbol}:      {_LRShiftAction, _LRState24, ""},
-	{_LRState18, _LRAdditionalSectionSymbol}: {_LRShiftAction, _LRState25, ""},
-	{_LRState19, LRSemicolonSymbol}:          {_LRShiftAction, _LRState26, ""},
-	{_LRState20, LRIdentifierSymbol}:         {_LRShiftAction, _LRState27, ""},
-	{_LRState22, LRLabelSymbol}:              {_LRShiftAction, _LRState11, ""},
-	{_LRState22, _LRLabeledClauseSymbol}:     {_LRShiftAction, _LRState28, ""},
-	{_LRState24, LRIdentifierSymbol}:         {_LRShiftAction, _LRState29, ""},
-	{_LRState27, LRGtSymbol}:                 {_LRShiftAction, _LRState30, ""},
-	{_LRState29, LRSectionContentSymbol}:     {_LRShiftAction, _LRState31, ""},
-	{_LRState30, LRIdentifierSymbol}:         {_LRShiftAction, _LRState10, ""},
-	{_LRState30, _LRNonemptyIdentListSymbol}: {_LRShiftAction, _LRState32, ""},
-	{_LRState32, LRIdentifierSymbol}:         {_LRShiftAction, _LRState23, ""},
-	{_LRState2, _LRWildcardMarker}:           {_LRReduceAction, "", _LRReduceNilToIdentList},
-	{_LRState4, LRLtSymbol}:                  {_LRReduceAction, "", _LRReduceTokenToRword},
-	{_LRState5, LRLtSymbol}:                  {_LRReduceAction, "", _LRReduceTypeToRword},
-	{_LRState6, _LRWildcardMarker}:           {_LRReduceAction, "", _LRReduceDefToDefs},
-	{_LRState7, _LRWildcardMarker}:           {_LRReduceAction, "", _LRReduceNilToAdditionalSections},
-	{_LRState8, _LRWildcardMarker}:           {_LRReduceAction, "", _LRReduceRuleToDef},
-	{_LRState10, _LRWildcardMarker}:          {_LRReduceAction, "", _LRReduceIdentToNonemptyIdentList},
-	{_LRState11, _LRWildcardMarker}:          {_LRReduceAction, "", _LRReduceNilToIdentList},
-	{_LRState12, _LRWildcardMarker}:          {_LRReduceAction, "", _LRReduceUnlabeledClauseToRule},
-	{_LRState13, _LRWildcardMarker}:          {_LRReduceAction, "", _LRReduceClauseToLabeledClauses},
-	{_LRState14, _LRWildcardMarker}:          {_LRReduceAction, "", _LRReduceClausesToRule},
-	{_LRState15, _LRWildcardMarker}:          {_LRReduceAction, "", _LRReduceNonEmptyListToIdentList},
-	{_LRState16, _LRWildcardMarker}:          {_LRReduceAction, "", _LRReduceStartDeclToDef},
-	{_LRState17, _LRWildcardMarker}:          {_LRReduceAction, "", _LRReduceExplicitDefToDefs},
-	{_LRState18, _LREndMarker}:               {_LRReduceAction, "", _LRReduceToGrammar},
-	{_LRState19, _LRWildcardMarker}:          {_LRReduceAction, "", _LRReduceAddToDefs},
-	{_LRState21, _LRWildcardMarker}:          {_LRReduceAction, "", _LRReduceToLabeledClause},
-	{_LRState23, _LRWildcardMarker}:          {_LRReduceAction, "", _LRReduceAddToNonemptyIdentList},
-	{_LRState25, _LRWildcardMarker}:          {_LRReduceAction, "", _LRReduceAddToAdditionalSections},
-	{_LRState26, _LRWildcardMarker}:          {_LRReduceAction, "", _LRReduceAddExplicitToDefs},
-	{_LRState28, _LRWildcardMarker}:          {_LRReduceAction, "", _LRReduceAddToLabeledClauses},
-	{_LRState31, _LRWildcardMarker}:          {_LRReduceAction, "", _LRReduceToAdditionalSection},
-	{_LRState32, _LRWildcardMarker}:          {_LRReduceAction, "", _LRReduceTermDeclToDef},
+	{_LRState1, _LREndMarker}:                &_LRAction{_LRAcceptAction, "", ""},
+	{_LRState0, LRTokenSymbol}:               _LRGotoState4Action,
+	{_LRState0, LRTypeSymbol}:                _LRGotoState5Action,
+	{_LRState0, LRStartSymbol}:               _LRGotoState3Action,
+	{_LRState0, LRRuleDefSymbol}:             _LRGotoState2Action,
+	{_LRState0, _LRGrammarSymbol}:            _LRGotoState1Action,
+	{_LRState0, _LRDefsSymbol}:               _LRGotoState7Action,
+	{_LRState0, _LRDefSymbol}:                _LRGotoState6Action,
+	{_LRState0, _LRRwordSymbol}:              _LRGotoState9Action,
+	{_LRState0, _LRRuleSymbol}:               _LRGotoState8Action,
+	{_LRState2, LRLabelSymbol}:               _LRGotoState11Action,
+	{_LRState2, LRIdentifierSymbol}:          _LRGotoState10Action,
+	{_LRState2, _LRNonemptyIdentListSymbol}:  _LRGotoState15Action,
+	{_LRState2, _LRIdentListSymbol}:          _LRGotoState12Action,
+	{_LRState2, _LRLabeledClausesSymbol}:     _LRGotoState14Action,
+	{_LRState2, _LRLabeledClauseSymbol}:      _LRGotoState13Action,
+	{_LRState3, LRIdentifierSymbol}:          _LRGotoState16Action,
+	{_LRState6, LRSemicolonSymbol}:           _LRGotoState17Action,
+	{_LRState7, LRTokenSymbol}:               _LRGotoState4Action,
+	{_LRState7, LRTypeSymbol}:                _LRGotoState5Action,
+	{_LRState7, LRStartSymbol}:               _LRGotoState3Action,
+	{_LRState7, LRRuleDefSymbol}:             _LRGotoState2Action,
+	{_LRState7, _LRAdditionalSectionsSymbol}: _LRGotoState18Action,
+	{_LRState7, _LRDefSymbol}:                _LRGotoState19Action,
+	{_LRState7, _LRRwordSymbol}:              _LRGotoState9Action,
+	{_LRState7, _LRRuleSymbol}:               _LRGotoState8Action,
+	{_LRState9, LRLtSymbol}:                  _LRGotoState20Action,
+	{_LRState11, LRIdentifierSymbol}:         _LRGotoState10Action,
+	{_LRState11, _LRNonemptyIdentListSymbol}: _LRGotoState15Action,
+	{_LRState11, _LRIdentListSymbol}:         _LRGotoState21Action,
+	{_LRState14, LROrSymbol}:                 _LRGotoState22Action,
+	{_LRState15, LRIdentifierSymbol}:         _LRGotoState23Action,
+	{_LRState18, LRSectionMarkerSymbol}:      _LRGotoState24Action,
+	{_LRState18, _LRAdditionalSectionSymbol}: _LRGotoState25Action,
+	{_LRState19, LRSemicolonSymbol}:          _LRGotoState26Action,
+	{_LRState20, LRIdentifierSymbol}:         _LRGotoState27Action,
+	{_LRState22, LRLabelSymbol}:              _LRGotoState11Action,
+	{_LRState22, _LRLabeledClauseSymbol}:     _LRGotoState28Action,
+	{_LRState24, LRIdentifierSymbol}:         _LRGotoState29Action,
+	{_LRState27, LRGtSymbol}:                 _LRGotoState30Action,
+	{_LRState29, LRSectionContentSymbol}:     _LRGotoState31Action,
+	{_LRState30, LRIdentifierSymbol}:         _LRGotoState10Action,
+	{_LRState30, _LRNonemptyIdentListSymbol}: _LRGotoState32Action,
+	{_LRState32, LRIdentifierSymbol}:         _LRGotoState23Action,
+	{_LRState2, _LRWildcardMarker}:           _LRReduceNilToIdentListAction,
+	{_LRState4, LRLtSymbol}:                  _LRReduceTokenToRwordAction,
+	{_LRState5, LRLtSymbol}:                  _LRReduceTypeToRwordAction,
+	{_LRState6, _LRWildcardMarker}:           _LRReduceDefToDefsAction,
+	{_LRState7, _LRWildcardMarker}:           _LRReduceNilToAdditionalSectionsAction,
+	{_LRState8, _LRWildcardMarker}:           _LRReduceRuleToDefAction,
+	{_LRState10, _LRWildcardMarker}:          _LRReduceIdentToNonemptyIdentListAction,
+	{_LRState11, _LRWildcardMarker}:          _LRReduceNilToIdentListAction,
+	{_LRState12, _LRWildcardMarker}:          _LRReduceUnlabeledClauseToRuleAction,
+	{_LRState13, _LRWildcardMarker}:          _LRReduceClauseToLabeledClausesAction,
+	{_LRState14, _LRWildcardMarker}:          _LRReduceClausesToRuleAction,
+	{_LRState15, _LRWildcardMarker}:          _LRReduceNonEmptyListToIdentListAction,
+	{_LRState16, _LRWildcardMarker}:          _LRReduceStartDeclToDefAction,
+	{_LRState17, _LRWildcardMarker}:          _LRReduceExplicitDefToDefsAction,
+	{_LRState18, _LREndMarker}:               _LRReduceToGrammarAction,
+	{_LRState19, _LRWildcardMarker}:          _LRReduceAddToDefsAction,
+	{_LRState21, _LRWildcardMarker}:          _LRReduceToLabeledClauseAction,
+	{_LRState23, _LRWildcardMarker}:          _LRReduceAddToNonemptyIdentListAction,
+	{_LRState25, _LRWildcardMarker}:          _LRReduceAddToAdditionalSectionsAction,
+	{_LRState26, _LRWildcardMarker}:          _LRReduceAddExplicitToDefsAction,
+	{_LRState28, _LRWildcardMarker}:          _LRReduceAddToLabeledClausesAction,
+	{_LRState31, _LRWildcardMarker}:          _LRReduceToAdditionalSectionAction,
+	{_LRState32, _LRWildcardMarker}:          _LRReduceTermDeclToDefAction,
 }
 
 var _LRExpectedTerminals = map[_LRStateId][]LRSymbolId{
