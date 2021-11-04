@@ -88,24 +88,23 @@ func (item *Item) String() string {
 		} else {
 			result += item.Name + ":"
 
-			separator := ""
 			for idx, symbol := range item.Rule {
 				if idx == item.Dot {
-					separator = "."
+					result += "." + symbol
+				} else {
+					result += " " + symbol
 				}
-
-				result += separator + symbol
-
-				separator = " "
 			}
 
 			if item.Dot == len(item.Rule) {
 				result += "."
+			} else {
+				result += " "
 			}
 		}
 
 		if item.LookAhead != "" {
-			result += "," + item.LookAhead
+			result += ", " + item.LookAhead
 		}
 
 		item.Key = result
@@ -193,11 +192,7 @@ func (items Items) Len() int {
 
 // sort order:
 //  kernel items before non-kernel items
-//  rule name
-//  rule "path component"
-//  longer parsed
-//  parsed len (longer before shorter)
-//  look ahead
+//  item string
 func (items Items) Less(iIdx int, jIdx int) bool {
 	i := items[iIdx]
 	j := items[jIdx]
@@ -210,35 +205,7 @@ func (items Items) Less(iIdx int, jIdx int) bool {
 		return false
 	}
 
-	if i.Name != j.Name {
-		return i.Name < j.Name
-	}
-
-	idx := 0
-	for idx < len(i.Rule) && idx < len(j.Rule) {
-		iPath := i.Rule[idx]
-		jPath := j.Rule[idx]
-
-		if iPath != jPath {
-			return iPath < jPath
-		}
-
-		idx += 1
-	}
-
-	if idx < len(i.Rule) {
-		return false
-	}
-
-	if idx < len(j.Rule) {
-		return true
-	}
-
-	if i.Dot != j.Dot {
-		return i.Dot > j.Dot
-	}
-
-	return i.LookAhead < j.LookAhead
+	return i.String() < j.String()
 }
 
 func (items Items) Swap(i int, j int) {
@@ -275,7 +242,6 @@ func newItemSet(kernelItems Items) *ItemSet {
 		KernelItems: kernelItems,
 		Items:       kernelItems,
 		Goto:        map[string]*ItemSet{},
-		Reduce:      map[string]Items{},
 	}
 }
 
@@ -579,6 +545,11 @@ func (states *LRStates) generateGotoState(
 }
 
 func (states *LRStates) populateClosure(state *ItemSet) {
+	type checkedEntry struct {
+		rule     string
+		terminal string
+	}
+	checked := map[checkedEntry]struct{}{}
 	added := map[string]struct{}{}
 
 	toExplore := state.Items
@@ -598,8 +569,15 @@ func (states *LRStates) populateClosure(state *ItemSet) {
 			terminals := states.firstTerminals(
 				append(item.Rule[item.Dot+1:], item.LookAhead))
 
-			for _, clause := range rule.Clauses {
-				for terminal, _ := range terminals {
+			for terminal, _ := range terminals {
+				key := checkedEntry{rule.Name, terminal}
+				_, ok := checked[key]
+				if ok {
+					continue
+				}
+				checked[key] = struct{}{}
+
+				for _, clause := range rule.Clauses {
 					item := states.ItemPool.Get(rule, clause, terminal)
 
 					_, ok := added[item.String()]
@@ -616,6 +594,14 @@ func (states *LRStates) populateClosure(state *ItemSet) {
 	}
 
 	sort.Sort(state.Items)
+
+	reduce := map[string]Items{}
+	for _, item := range state.Items {
+		if item.IsReduce() {
+			reduce[item.LookAhead] = append(reduce[item.LookAhead], item)
+		}
+	}
+	state.Reduce = reduce
 }
 
 func (states *LRStates) firstTerminals(symbols []string) map[string]struct{} {
