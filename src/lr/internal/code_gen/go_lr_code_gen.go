@@ -221,6 +221,14 @@ func (gen *goCodeGen) populateCodeGenVariables() error {
 			}
 
 			clause.CodeGenReducerNameConst = reducerConst
+
+			actionConst := reducerConst + "Action"
+			err = gen.check(actionConst, clause.LRLocation)
+			if err != nil {
+				return err
+			}
+
+			clause.CodeGenReduceAction = actionConst
 		}
 	}
 
@@ -229,6 +237,17 @@ func (gen *goCodeGen) populateCodeGenVariables() error {
 			"_%sState%d",
 			gen.Prefix,
 			state.StateNum)
+
+		actionConst := fmt.Sprintf(
+			"_%sGotoState%dAction",
+			gen.Prefix,
+			state.StateNum)
+		err := gen.check(actionConst, parser.LRLocation{})
+		if err != nil {
+			return err
+		}
+
+		state.CodeGenAction = actionConst
 	}
 
 	return nil
@@ -538,6 +557,33 @@ func (gen *goCodeGen) generateAction() {
 	l("")
 }
 
+func (gen *goCodeGen) generateActionEntries() {
+	l := gen.Line
+
+	l("var (")
+	gen.PushIndent()
+	for _, state := range gen.OrderedStates {
+		l("%s = &%s{%s, %s, \"\"}",
+			state.CodeGenAction,
+			gen.action,
+			gen.shiftAction,
+			state.CodeGenConst)
+	}
+
+	for _, term := range gen.NonTerminals {
+		for _, clause := range term.Clauses {
+			l("%s = &%s{%s, \"\", %s}",
+				clause.CodeGenReduceAction,
+				gen.action,
+				gen.reduceAction,
+				clause.CodeGenReducerNameConst)
+		}
+	}
+	gen.PopIndent()
+	l(")")
+	l("")
+}
+
 func (gen *goCodeGen) generateSymbolType() {
 	l := gen.Line
 	push := gen.PushIndent
@@ -734,9 +780,9 @@ func (gen *goCodeGen) generateActionTable() {
 	l("}")
 	l("")
 
-	l("type %s map[%s]%s", gen.actionTableType, gen.tableKey, gen.action)
+	l("type %s map[%s]*%s", gen.actionTableType, gen.tableKey, gen.action)
 	l("")
-	l("func (table %s) Get(stateId %s, symbol %s) (%s, bool) {",
+	l("func (table %s) Get(stateId %s, symbol %s) (*%s, bool) {",
 		gen.actionTableType,
 		gen.stateId,
 		gen.symbolId,
@@ -775,20 +821,20 @@ func (gen *goCodeGen) generateActionTable() {
 	l("var %s = %s{", gen.actionTable, gen.actionTableType)
 	push()
 
-	l("{%s, %s}: {%s, \"\", \"\"},",
+	l("{%s, %s}: &%s{%s, \"\", \"\"},",
 		gen.OrderedStates[1].CodeGenConst,
 		gen.endSymbol,
+		gen.action,
 		gen.acceptAction)
 
 	for _, state := range gen.OrderedStates {
 		for _, symbol := range symbols {
 			child, ok := state.Goto[symbol]
 			if ok {
-				l("{%s, %s}: {%s, %s, \"\"},",
+				l("{%s, %s}: %s,",
 					state.CodeGenConst,
 					idToConst[symbol],
-					gen.shiftAction,
-					child.CodeGenConst)
+					child.CodeGenAction)
 			}
 		}
 	}
@@ -803,11 +849,10 @@ func (gen *goCodeGen) generateActionTable() {
 				continue
 			}
 
-			l("{%s, %s}: {%s, \"\", %s},",
+			l("{%s, %s}: %s,",
 				state.CodeGenConst,
 				idToConst[item.LookAhead],
-				gen.reduceAction,
-				item.Clause.CodeGenReducerNameConst)
+				item.Clause.CodeGenReduceAction)
 		}
 	}
 	pop()
@@ -1129,6 +1174,7 @@ func GenerateGoLRCode(
 	gen.generateStack()
 
 	gen.generateAction()
+	gen.generateActionEntries()
 
 	gen.generateActionTable()
 

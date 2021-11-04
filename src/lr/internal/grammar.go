@@ -18,6 +18,7 @@ type Clause struct {
 	// Temp variable populated by the code generator.
 	CodeGenReducerName      string
 	CodeGenReducerNameConst string
+	CodeGenReduceAction     string
 }
 
 type Term struct {
