@@ -11,15 +11,15 @@ import (
 
 var (
 	keywordsAndSymbols = map[string]LRSymbolId{
-		TokenKeyword: LRTokenSymbol,
-		TypeKeyword:  LRTypeSymbol,
-		"%start":     LRStartSymbol,
-		"<":          LRLtSymbol,
-		">":          LRGtSymbol,
-		"|":          LROrSymbol,
-		";":          LRSemicolonSymbol,
+		TokenKeyword: LRTokenToken,
+		TypeKeyword:  LRTypeToken,
+		"%start":     LRStartToken,
+		"<":          LRLtToken,
+		">":          LRGtToken,
+		"|":          LROrToken,
+		";":          LRSemicolonToken,
 
-		"%%": LRSectionMarkerSymbol,
+		"%%": LRSectionMarkerToken,
 
 		"->": Arrow,
 		":":  Colon,
@@ -43,7 +43,7 @@ func newRawLexer(filename string, reader io.Reader) *rawLexer {
 	return &rawLexer{parseutil.NewLocationReader(filename, reader)}
 }
 
-func (lexer *rawLexer) Next() (*Token, error) {
+func (lexer *rawLexer) Next() (LRToken, error) {
 	err := lexer.stripLeadingWhitespacesAndComments()
 	if err != nil {
 		return nil, err
@@ -54,7 +54,8 @@ func (lexer *rawLexer) Next() (*Token, error) {
 		return nil, err
 	}
 
-	token, err := lexer.maybeTokenizeKeywordOrSymbol()
+	var token LRToken
+	token, err = lexer.maybeTokenizeKeywordOrSymbol()
 	if token != nil || err != nil {
 		return token, err
 	}
@@ -145,12 +146,12 @@ func (lexer *rawLexer) stripLeadingWhitespacesAndComments() error {
 	return nil
 }
 
-func (lexer *rawLexer) maybeTokenizeKeywordOrSymbol() (*Token, error) {
+func (lexer *rawLexer) maybeTokenizeKeywordOrSymbol() (LRToken, error) {
 	for str, ttype := range keywordsAndSymbols {
 		bytes, _ := lexer.reader.Peek(len(str))
 
 		if string(bytes) == str {
-			token := &Token{LRLocation(lexer.reader.Location), ttype, str}
+			token := &LRGenericSymbol{ttype, LRLocation(lexer.reader.Location)}
 
 			n, err := lexer.reader.Read(bytes)
 			if len(bytes) != n || err != nil {
@@ -164,7 +165,7 @@ func (lexer *rawLexer) maybeTokenizeKeywordOrSymbol() (*Token, error) {
 	return nil, nil
 }
 
-func (lexer *rawLexer) maybeTokenizeIdentifier() (*Token, error) {
+func (lexer *rawLexer) maybeTokenizeIdentifier() (LRToken, error) {
 	// TODO: handle more gracefully.  Scan until the first \W
 	bytes, _ := lexer.reader.Peek(128)
 
@@ -175,7 +176,7 @@ func (lexer *rawLexer) maybeTokenizeIdentifier() (*Token, error) {
 
 	token := &Token{
 		LRLocation: LRLocation(lexer.reader.Location),
-		LRSymbolId: LRIdentifierSymbol,
+		LRSymbolId: LRIdentifierToken,
 		Value:      string(name),
 	}
 
@@ -187,7 +188,7 @@ func (lexer *rawLexer) maybeTokenizeIdentifier() (*Token, error) {
 	return token, nil
 }
 
-func (lexer *rawLexer) maybeTokenizeSectionContent() (*Token, error) {
+func (lexer *rawLexer) maybeTokenizeSectionContent() (LRToken, error) {
 	peek, _ := lexer.reader.Peek(1)
 	if string(peek) != "{" {
 		return nil, nil
@@ -195,7 +196,7 @@ func (lexer *rawLexer) maybeTokenizeSectionContent() (*Token, error) {
 
 	token := &Token{
 		LRLocation: LRLocation(lexer.reader.Location),
-		LRSymbolId: LRSectionContentSymbol,
+		LRSymbolId: LRSectionContentToken,
 		Value:      "",
 	}
 
@@ -238,11 +239,11 @@ func (lexer *rawLexer) maybeTokenizeSectionContent() (*Token, error) {
 type tokenPairLexer struct {
 	base *rawLexer
 
-	nextToken *Token
+	nextToken LRToken
 	nextErr   error
 }
 
-func (lexer *tokenPairLexer) Next() (LRSymbol, error) {
+func (lexer *tokenPairLexer) Next() (LRToken, error) {
 	if lexer.nextErr != nil {
 		err := lexer.nextErr
 		lexer.nextErr = nil
@@ -261,7 +262,7 @@ func (lexer *tokenPairLexer) Next() (LRSymbol, error) {
 		}
 	}
 
-	if curr.LRSymbolId != LRIdentifierSymbol {
+	if curr.Id() != LRIdentifierToken {
 		return curr, nil
 	}
 
@@ -271,18 +272,26 @@ func (lexer *tokenPairLexer) Next() (LRSymbol, error) {
 		return curr, nil
 	}
 
-	if next.LRSymbolId == Arrow {
-		curr.LRSymbolId = LRRuleDefSymbol
+	if next.Id() == Arrow {
+		curr.(*Token).LRSymbolId = LRRuleDefToken
 		return curr, nil
 	}
 
-	if next.LRSymbolId == Colon {
-		curr.LRSymbolId = LRLabelSymbol
+	if next.Id() == Colon {
+		curr.(*Token).LRSymbolId = LRLabelToken
 		return curr, nil
 	}
 
 	lexer.nextToken = next
 	return curr, nil
+}
+
+func (lexer *tokenPairLexer) CurrentLocation() LRLocation {
+	if lexer.nextToken != nil {
+		return lexer.nextToken.Location()
+	}
+
+	return LRLocation(lexer.base.reader.Location)
 }
 
 func NewLexer(filename string, reader io.Reader) LRLexer {

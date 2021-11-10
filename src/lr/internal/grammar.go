@@ -10,6 +10,10 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
+const (
+	Generic = "Generic_"
+)
+
 type Clause struct {
 	*parser.Clause
 
@@ -87,6 +91,10 @@ func classifyDefinitions(
 
 		case *parser.TermDeclaration:
 			for _, term := range def.Terms {
+				if def.ValueType == nil {
+					def.ValueType = &parser.Token{Value: Generic}
+				}
+
 				prev, ok := terms[term.Value]
 				if ok {
 					errStrs = append(

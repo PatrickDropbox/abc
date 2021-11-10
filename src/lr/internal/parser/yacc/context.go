@@ -10,7 +10,7 @@ import (
 type ParseContext struct {
 	parser.Reducer
 
-	Tokens []parser.LRSymbol
+	Tokens []parser.LRToken
 
 	*parser.Grammar
 	Err error
@@ -21,7 +21,7 @@ type ParseContext struct {
 func newParseContext(filename string, reader io.Reader) (*ParseContext, error) {
 	lexer := parser.NewLexer(filename, reader)
 
-	tokens := []parser.LRSymbol{}
+	tokens := []parser.LRToken{}
 	for {
 		token, err := lexer.Next()
 		if err != nil {

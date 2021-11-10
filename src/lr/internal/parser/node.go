@@ -9,7 +9,7 @@ type Definition interface {
 	String() string
 }
 
-var _ LRSymbol = &Token{}
+var _ LRToken = &Token{}
 
 type Token struct {
 	LRLocation
@@ -36,7 +36,7 @@ type StartDeclaration struct {
 	Id *Token
 }
 
-func NewStartDeclaration(start *Token, id *Token) *StartDeclaration {
+func NewStartDeclaration(start *LRGenericSymbol, id *Token) *StartDeclaration {
 	return &StartDeclaration{
 		LRLocation: start.LRLocation,
 		Id:         id,
@@ -52,7 +52,7 @@ func (sd *StartDeclaration) String() string {
 }
 
 type TermDeclaration struct {
-	TermType *Token
+	TermType *LRGenericSymbol
 
 	IsTerminal bool
 
@@ -62,13 +62,13 @@ type TermDeclaration struct {
 }
 
 func NewTermDeclaration(
-	termType *Token,
+	termType *LRGenericSymbol,
 	valueType *Token,
 	terms []*Token) *TermDeclaration {
 
 	return &TermDeclaration{
 		TermType:   termType,
-		IsTerminal: termType.Value == TokenKeyword,
+		IsTerminal: termType.Id() == LRTokenToken,
 		ValueType:  valueType,
 		Terms:      terms,
 	}
@@ -79,12 +79,20 @@ func (td *TermDeclaration) Location() LRLocation {
 }
 
 func (td *TermDeclaration) String() string {
-	terms := ""
-	for _, term := range td.Terms {
-		terms += " " + term.Value
+	result := TypeKeyword
+	if td.IsTerminal {
+		result = TokenKeyword
 	}
 
-	return td.TermType.Value + " <" + td.ValueType.Value + ">" + terms
+	if td.ValueType != nil {
+		result += " <" + td.ValueType.Value + ">"
+	}
+
+	for _, term := range td.Terms {
+		result += " " + term.Value
+	}
+
+	return result
 }
 
 type Clause struct {

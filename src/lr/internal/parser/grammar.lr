@@ -4,7 +4,7 @@
 // - all language specific declaration are specified at the end of the file
 
 // XXX: maybe add LEFT / RIGHT / NONASSOC?
-%token <Token> TOKEN TYPE START // %<identifier>
+%token TOKEN TYPE START // %<identifier>
 
 // <identifier> followed by -> (ignoring whitespace and comment), tokenized as a
 // single token by the lexer.  Equivalent to C_IDENTIFIER in yacc
@@ -14,12 +14,12 @@
 // a single token by the lexer.
 %token <Token> LABEL
 
-%token <Token> LT GT OR SEMICOLON
+%token LT GT OR SEMICOLON SECTION_MARKER
 %token <Token> IDENTIFIER
 
-%token <Token> SECTION_MARKER SECTION_CONTENT
+%token <Token> SECTION_CONTENT
 
-%type <Token> rword
+%type rword
 %type <Tokens> nonempty_ident_list ident_list
 
 %type <Definition> def
@@ -57,6 +57,7 @@ defs ->
 def ->
     // type / token declaration
     term_decl  : rword LT IDENTIFIER GT nonempty_ident_list |
+    untyped_term_decl  : rword nonempty_ident_list |
     // start declaration
     start_decl : START IDENTIFIER |
     rule       : rule

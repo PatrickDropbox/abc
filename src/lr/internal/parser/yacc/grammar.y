@@ -7,6 +7,8 @@ import (
 %}
 
 %union {
+    Generic_ *parser.LRGenericSymbol
+
     *parser.Token
     Tokens []*parser.Token
 
@@ -28,7 +30,7 @@ import (
 // https://docs.oracle.com/cd/E19504-01/802-5880/yacc-19/index.html
 
 // XXX: add LEFT / RIGHT / NONASSOC?
-%token <Token> TOKEN TYPE START // %<identifier>
+%token <Generic_> TOKEN TYPE START // %<identifier>
 
 // Intermediate token that should not reach the parser
 %token <Token> ARROW COLON
@@ -41,12 +43,12 @@ import (
 // a single token by the lexer.
 %token <Token> LABEL
 
-%token <Token> LT GT OR SEMICOLON
+%token <Generic_> LT GT OR SEMICOLON SECTION_MARKER
 %token <Token> IDENTIFIER
 
-%token <Token> SECTION_MARKER SECTION_CONTENT
+%token <Token> SECTION_CONTENT
 
-%type <Token> rword
+%type <Generic_> rword
 %type <Tokens> nonempty_ident_list ident_list
 
 %type <Definition> def
@@ -113,6 +115,10 @@ def:
     // type / token declaration
     rword LT IDENTIFIER GT nonempty_ident_list {
         $$, _ =  Lrlex.(*ParseContext).TermDeclToDef($1, $2, $3, $4, $5)
+    }
+    |
+    rword nonempty_ident_list {
+        $$, _ =  Lrlex.(*ParseContext).UntypedTermDeclToDef($1, $2)
     }
     |
     // start declaration
