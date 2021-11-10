@@ -325,7 +325,7 @@ func (gen *goCodeGen) generateTokenInterface() {
 	l("type %s interface {", gen.token)
 	push()
 	l("Id() %s", gen.symbolId)
-	l("Location() %v", gen.location)
+	l("Loc() %v", gen.location)
 	pop()
 	l("}")
 	l("")
@@ -651,9 +651,9 @@ func (gen *goCodeGen) generateSymbolType() {
 	l("}")
 	l("")
 
-	l("func (s *%s) Location() %s {", gen.symbol, gen.location)
+	l("func (s *%s) Loc() %s {", gen.symbol, gen.location)
 	push()
-	l("type locator interface { Location() %s }", gen.location)
+	l("type locator interface { Loc() %s }", gen.location)
 	l("switch s.SymbolId_ {")
 	for _, field := range fields {
 		list := valueTermConsts[field.name]
@@ -662,7 +662,7 @@ func (gen *goCodeGen) generateSymbolType() {
 		l("loc, ok := interface{}(s.%s).(locator)", field.name)
 		l("if ok {")
 		push()
-		l("return loc.Location()")
+		l("return loc.Loc()")
 		pop()
 		l("}")
 		pop()
@@ -670,7 +670,7 @@ func (gen *goCodeGen) generateSymbolType() {
 	l("}")
 	l("if s.Generic_ != nil {")
 	push()
-	l("return s.Generic_.Location()")
+	l("return s.Generic_.Loc()")
 	pop()
 	l("}")
 	l("return %s{}", gen.location)
@@ -909,7 +909,7 @@ func (gen *goCodeGen) generateGenericSymbol() {
 		gen.symbolId,
 		gen.symbolId)
 	l("")
-	l("func (t *%s) Location() %v { return t.%v }",
+	l("func (t *%s) Loc() %v { return t.%v }",
 		gen.genericSymbol,
 		gen.location,
 		gen.location)
@@ -1052,7 +1052,7 @@ func (gen *goCodeGen) generateParseErrorHandler() {
 		gen.token,
 		gen.stack)
 	push()
-	l("return %v(\"Syntax error: unexpected symbol %%v. Expecting: %%v (%%v)\", nextToken.Id(), %s[stack[len(stack)-1].StateId], nextToken.Location())",
+	l("return %v(\"Syntax error: unexpected symbol %%v. Expecting: %%v (%%v)\", nextToken.Id(), %s[stack[len(stack)-1].StateId], nextToken.Loc())",
 		gen.Obj("fmt.Errorf"),
 		gen.expectedTerminals)
 	pop()

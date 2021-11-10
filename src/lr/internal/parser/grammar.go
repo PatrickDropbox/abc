@@ -40,7 +40,7 @@ func (l LRLocation) ShortString() string {
 
 type LRToken interface {
 	Id() LRSymbolId
-	Location() LRLocation
+	Loc() LRLocation
 }
 
 type LRGenericSymbol struct {
@@ -50,7 +50,7 @@ type LRGenericSymbol struct {
 
 func (t *LRGenericSymbol) Id() LRSymbolId { return t.LRSymbolId }
 
-func (t *LRGenericSymbol) Location() LRLocation { return t.LRLocation }
+func (t *LRGenericSymbol) Loc() LRLocation { return t.LRLocation }
 
 type LRLexer interface {
 	// Note: Return io.EOF to indicate end of stream
@@ -138,7 +138,7 @@ type LRParseErrorHandler interface {
 type LRDefaultParseErrorHandler struct{}
 
 func (LRDefaultParseErrorHandler) Error(nextToken LRToken, stack _LRStack) error {
-	return fmt.Errorf("Syntax error: unexpected symbol %v. Expecting: %v (%v)", nextToken.Id(), _LRExpectedTerminals[stack[len(stack)-1].StateId], nextToken.Location())
+	return fmt.Errorf("Syntax error: unexpected symbol %v. Expecting: %v (%v)", nextToken.Id(), _LRExpectedTerminals[stack[len(stack)-1].StateId], nextToken.Loc())
 }
 
 func LRParse(lexer LRLexer, reducer LRReducer) (*Grammar, error) {
@@ -332,62 +332,62 @@ func (s *LRSymbol) Id() LRSymbolId {
 	return s.SymbolId_
 }
 
-func (s *LRSymbol) Location() LRLocation {
-	type locator interface{ Location() LRLocation }
+func (s *LRSymbol) Loc() LRLocation {
+	type locator interface{ Loc() LRLocation }
 	switch s.SymbolId_ {
 	case LRAdditionalSectionType:
 		loc, ok := interface{}(s.AdditionalSection).(locator)
 		if ok {
-			return loc.Location()
+			return loc.Loc()
 		}
 	case LRAdditionalSectionsType:
 		loc, ok := interface{}(s.AdditionalSections).(locator)
 		if ok {
-			return loc.Location()
+			return loc.Loc()
 		}
 	case LRLabeledClauseType:
 		loc, ok := interface{}(s.Clause).(locator)
 		if ok {
-			return loc.Location()
+			return loc.Loc()
 		}
 	case LRLabeledClausesType:
 		loc, ok := interface{}(s.Clauses).(locator)
 		if ok {
-			return loc.Location()
+			return loc.Loc()
 		}
 	case LRDefType:
 		loc, ok := interface{}(s.Definition).(locator)
 		if ok {
-			return loc.Location()
+			return loc.Loc()
 		}
 	case LRDefsType:
 		loc, ok := interface{}(s.Definitions).(locator)
 		if ok {
-			return loc.Location()
+			return loc.Loc()
 		}
 	case LRGrammarType:
 		loc, ok := interface{}(s.Grammar).(locator)
 		if ok {
-			return loc.Location()
+			return loc.Loc()
 		}
 	case LRRuleType:
 		loc, ok := interface{}(s.Rule).(locator)
 		if ok {
-			return loc.Location()
+			return loc.Loc()
 		}
 	case LRRuleDefToken, LRLabelToken, LRIdentifierToken, LRSectionContentToken:
 		loc, ok := interface{}(s.Token).(locator)
 		if ok {
-			return loc.Location()
+			return loc.Loc()
 		}
 	case LRNonemptyIdentListType, LRIdentListType:
 		loc, ok := interface{}(s.Tokens).(locator)
 		if ok {
-			return loc.Location()
+			return loc.Loc()
 		}
 	}
 	if s.Generic_ != nil {
-		return s.Generic_.Location()
+		return s.Generic_.Loc()
 	}
 	return LRLocation{}
 }

@@ -288,7 +288,7 @@ func (lexer *tokenPairLexer) Next() (LRToken, error) {
 
 func (lexer *tokenPairLexer) CurrentLocation() LRLocation {
 	if lexer.nextToken != nil {
-		return lexer.nextToken.Location()
+		return lexer.nextToken.Loc()
 	}
 
 	return LRLocation(lexer.base.reader.Location)

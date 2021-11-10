@@ -83,8 +83,8 @@ func classifyDefinitions(
 					errStrs,
 					fmt.Sprintf(
 						"Duplicate start declaration: %s %s",
-						start.Location().ShortString(),
-						def.Location().ShortString()))
+						start.Loc().ShortString(),
+						def.Loc().ShortString()))
 			}
 
 			start = def
@@ -127,8 +127,8 @@ func classifyDefinitions(
 					fmt.Sprintf(
 						"Duplicate rule: %s %s %s",
 						def.Name.Value,
-						prev.Location().ShortString(),
-						def.Location().ShortString()))
+						prev.Loc().ShortString(),
+						def.Loc().ShortString()))
 			}
 			rules[def.Name.Value] = def
 		}
@@ -150,7 +150,7 @@ func bindTerms(
 		if !ok {
 			errStrs = append(
 				errStrs,
-				fmt.Sprintf("Undefined type: %s %v", name, rule.Location()))
+				fmt.Sprintf("Undefined type: %s %v", name, rule.Loc()))
 			continue
 		}
 
@@ -170,7 +170,7 @@ func bindTerms(
 						fmt.Sprintf(
 							"Undefined token/type: %s %v",
 							id.Value,
-							id.Location))
+							id.Loc()))
 				}
 			}
 
@@ -194,7 +194,7 @@ func bindTerms(
 				fmt.Sprintf(
 					"token cannot have associated rule: %s %v",
 					name,
-					term.Rule.Location()))
+					term.Rule.Loc()))
 		}
 	}
 
@@ -272,7 +272,7 @@ func extractLangSpecs(
 				fmt.Sprintf(
 					"Unexpected additional section: %s %v",
 					section.Name.Value,
-					section.Name.Location))
+					section.Name.Loc()))
 			continue
 		}
 
@@ -281,8 +281,8 @@ func extractLangSpecs(
 				errStrs,
 				fmt.Sprintf(
 					"Duplicated lang_specs section specified: %v %v",
-					langSpecsSection.Name.Location,
-					section.Name.Location))
+					langSpecsSection.Name.Loc(),
+					section.Name.Loc()))
 		}
 
 		langSpecsSection = section

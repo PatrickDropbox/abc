@@ -5,7 +5,7 @@ import (
 )
 
 type Definition interface {
-	Location() LRLocation
+	Loc() LRLocation
 	String() string
 }
 
@@ -22,12 +22,12 @@ func (t *Token) Id() LRSymbolId {
 	return t.LRSymbolId
 }
 
-func (t *Token) Location() LRLocation {
+func (t *Token) Loc() LRLocation {
 	return t.LRLocation
 }
 
 func (t *Token) String() string {
-	return fmt.Sprintf("%v: %s (%v)", t.LRSymbolId, t.Value, t.Location)
+	return fmt.Sprintf("%v: %s (%v)", t.LRSymbolId, t.Value, t.Loc())
 }
 
 type StartDeclaration struct {
@@ -43,7 +43,7 @@ func NewStartDeclaration(start *LRGenericSymbol, id *Token) *StartDeclaration {
 	}
 }
 
-func (sd *StartDeclaration) Location() LRLocation {
+func (sd *StartDeclaration) Loc() LRLocation {
 	return sd.LRLocation
 }
 
@@ -74,7 +74,7 @@ func NewTermDeclaration(
 	}
 }
 
-func (td *TermDeclaration) Location() LRLocation {
+func (td *TermDeclaration) Loc() LRLocation {
 	return td.TermType.LRLocation
 }
 
@@ -150,7 +150,7 @@ func NewRule(name *Token, clauses []*Clause) *Rule {
 	return rule
 }
 
-func (r *Rule) Location() LRLocation {
+func (r *Rule) Loc() LRLocation {
 	return r.Name.LRLocation
 }
 

@@ -167,14 +167,14 @@ func printParsed(filename string) {
 	}
 
 	for _, def := range parsed.Definitions {
-		fmt.Println(def.Location())
+		fmt.Println(def.Loc())
 		fmt.Println(def)
 		fmt.Println()
 	}
 
 	for _, section := range parsed.AdditionalSections {
 		fmt.Println("--------------------------")
-		fmt.Println(section.Name.Location)
+		fmt.Println(section.Name.Loc())
 		fmt.Println("Additional Section: ", section.Name.Value)
 		fmt.Println(section.Content.Value)
 	}
