@@ -148,7 +148,8 @@ func LRParse(lexer LRLexer, reducer LRReducer) (*Grammar, error) {
 func LRParseWithCustomErrorHandler(lexer LRLexer, reducer LRReducer, errHandler LRParseErrorHandler) (*Grammar, error) {
 	var errRetVal *Grammar
 	stateStack := _LRStack{
-		&_LRStackItem{_LRState0, &LRSymbol{SymbolId_: _LRStartMarker}},
+		// Note: we don't have to populate the start symbol since its value is never accessed
+		&_LRStackItem{_LRState0, nil},
 	}
 	symbolStack := &_LRPseudoSymbolStack{lexer: lexer}
 
@@ -195,8 +196,6 @@ func LRParseWithCustomErrorHandler(lexer LRLexer, reducer LRReducer, errHandler 
 // =======================================================
 
 const (
-	_LRAcceptMarker   = LRSymbolId("#accept")
-	_LRStartMarker    = LRSymbolId("^")
 	_LREndMarker      = LRSymbolId("$")
 	_LRWildcardMarker = LRSymbolId("*")
 
@@ -250,43 +249,47 @@ const (
 	_LRReduceToLabeledClause          = _LRReduceType("ToLabeledClause")
 )
 
-type _LRStateId string
+type _LRStateId int
+
+func (id _LRStateId) String() string {
+	return fmt.Sprintf("State %d", int(id))
+}
 
 const (
-	_LRState0  = _LRStateId("State 0")
-	_LRState1  = _LRStateId("State 1")
-	_LRState2  = _LRStateId("State 2")
-	_LRState3  = _LRStateId("State 3")
-	_LRState4  = _LRStateId("State 4")
-	_LRState5  = _LRStateId("State 5")
-	_LRState6  = _LRStateId("State 6")
-	_LRState7  = _LRStateId("State 7")
-	_LRState8  = _LRStateId("State 8")
-	_LRState9  = _LRStateId("State 9")
-	_LRState10 = _LRStateId("State 10")
-	_LRState11 = _LRStateId("State 11")
-	_LRState12 = _LRStateId("State 12")
-	_LRState13 = _LRStateId("State 13")
-	_LRState14 = _LRStateId("State 14")
-	_LRState15 = _LRStateId("State 15")
-	_LRState16 = _LRStateId("State 16")
-	_LRState17 = _LRStateId("State 17")
-	_LRState18 = _LRStateId("State 18")
-	_LRState19 = _LRStateId("State 19")
-	_LRState20 = _LRStateId("State 20")
-	_LRState21 = _LRStateId("State 21")
-	_LRState22 = _LRStateId("State 22")
-	_LRState23 = _LRStateId("State 23")
-	_LRState24 = _LRStateId("State 24")
-	_LRState25 = _LRStateId("State 25")
-	_LRState26 = _LRStateId("State 26")
-	_LRState27 = _LRStateId("State 27")
-	_LRState28 = _LRStateId("State 28")
-	_LRState29 = _LRStateId("State 29")
-	_LRState30 = _LRStateId("State 30")
-	_LRState31 = _LRStateId("State 31")
-	_LRState32 = _LRStateId("State 32")
-	_LRState33 = _LRStateId("State 33")
+	_LRState0  = _LRStateId(0)
+	_LRState1  = _LRStateId(1)
+	_LRState2  = _LRStateId(2)
+	_LRState3  = _LRStateId(3)
+	_LRState4  = _LRStateId(4)
+	_LRState5  = _LRStateId(5)
+	_LRState6  = _LRStateId(6)
+	_LRState7  = _LRStateId(7)
+	_LRState8  = _LRStateId(8)
+	_LRState9  = _LRStateId(9)
+	_LRState10 = _LRStateId(10)
+	_LRState11 = _LRStateId(11)
+	_LRState12 = _LRStateId(12)
+	_LRState13 = _LRStateId(13)
+	_LRState14 = _LRStateId(14)
+	_LRState15 = _LRStateId(15)
+	_LRState16 = _LRStateId(16)
+	_LRState17 = _LRStateId(17)
+	_LRState18 = _LRStateId(18)
+	_LRState19 = _LRStateId(19)
+	_LRState20 = _LRStateId(20)
+	_LRState21 = _LRStateId(21)
+	_LRState22 = _LRStateId(22)
+	_LRState23 = _LRStateId(23)
+	_LRState24 = _LRStateId(24)
+	_LRState25 = _LRStateId(25)
+	_LRState26 = _LRStateId(26)
+	_LRState27 = _LRStateId(27)
+	_LRState28 = _LRStateId(28)
+	_LRState29 = _LRStateId(29)
+	_LRState30 = _LRStateId(30)
+	_LRState31 = _LRStateId(31)
+	_LRState32 = _LRStateId(32)
+	_LRState33 = _LRStateId(33)
 )
 
 type LRSymbol struct {
@@ -307,19 +310,23 @@ type LRSymbol struct {
 }
 
 func NewSymbol(token LRToken) (*LRSymbol, error) {
-	symbol := &LRSymbol{SymbolId_: token.Id()}
+	symbol, ok := token.(*LRSymbol)
+	if ok {
+		return symbol, nil
+	}
 
+	symbol = &LRSymbol{SymbolId_: token.Id()}
 	switch token.Id() {
 	case _LREndMarker, LRTokenToken, LRTypeToken, LRStartToken, LRLtToken, LRGtToken, LROrToken, LRSemicolonToken, LRSectionMarkerToken:
 		val, ok := token.(*LRGenericSymbol)
 		if !ok {
-			return nil, fmt.Errorf("Invalid value type for token %s.  Expecting *LRGenericSymbol", token.Id())
+			return nil, fmt.Errorf("Invalid value type for token %s.  Expecting *LRGenericSymbol (%v)", token.Id(), token.Loc())
 		}
 		symbol.Generic_ = val
 	case LRRuleDefToken, LRLabelToken, LRIdentifierToken, LRSectionContentToken:
 		val, ok := token.(*Token)
 		if !ok {
-			return nil, fmt.Errorf("Invalid value type for token %s.  Expecting *Token", token.Id())
+			return nil, fmt.Errorf("Invalid value type for token %s.  Expecting *Token (%v)", token.Id(), token.Loc())
 		}
 		symbol.Token = val
 	default:
@@ -608,29 +615,29 @@ var (
 	_LRGotoState31Action                    = &_LRAction{_LRShiftAction, _LRState31, ""}
 	_LRGotoState32Action                    = &_LRAction{_LRShiftAction, _LRState32, ""}
 	_LRGotoState33Action                    = &_LRAction{_LRShiftAction, _LRState33, ""}
-	_LRReduceToGrammarAction                = &_LRAction{_LRReduceAction, "", _LRReduceToGrammar}
-	_LRReduceAddToAdditionalSectionsAction  = &_LRAction{_LRReduceAction, "", _LRReduceAddToAdditionalSections}
-	_LRReduceNilToAdditionalSectionsAction  = &_LRAction{_LRReduceAction, "", _LRReduceNilToAdditionalSections}
-	_LRReduceToAdditionalSectionAction      = &_LRAction{_LRReduceAction, "", _LRReduceToAdditionalSection}
-	_LRReduceAddToDefsAction                = &_LRAction{_LRReduceAction, "", _LRReduceAddToDefs}
-	_LRReduceAddExplicitToDefsAction        = &_LRAction{_LRReduceAction, "", _LRReduceAddExplicitToDefs}
-	_LRReduceDefToDefsAction                = &_LRAction{_LRReduceAction, "", _LRReduceDefToDefs}
-	_LRReduceExplicitDefToDefsAction        = &_LRAction{_LRReduceAction, "", _LRReduceExplicitDefToDefs}
-	_LRReduceTermDeclToDefAction            = &_LRAction{_LRReduceAction, "", _LRReduceTermDeclToDef}
-	_LRReduceUntypedTermDeclToDefAction     = &_LRAction{_LRReduceAction, "", _LRReduceUntypedTermDeclToDef}
-	_LRReduceStartDeclToDefAction           = &_LRAction{_LRReduceAction, "", _LRReduceStartDeclToDef}
-	_LRReduceRuleToDefAction                = &_LRAction{_LRReduceAction, "", _LRReduceRuleToDef}
-	_LRReduceTokenToRwordAction             = &_LRAction{_LRReduceAction, "", _LRReduceTokenToRword}
-	_LRReduceTypeToRwordAction              = &_LRAction{_LRReduceAction, "", _LRReduceTypeToRword}
-	_LRReduceAddToNonemptyIdentListAction   = &_LRAction{_LRReduceAction, "", _LRReduceAddToNonemptyIdentList}
-	_LRReduceIdentToNonemptyIdentListAction = &_LRAction{_LRReduceAction, "", _LRReduceIdentToNonemptyIdentList}
-	_LRReduceNonEmptyListToIdentListAction  = &_LRAction{_LRReduceAction, "", _LRReduceNonEmptyListToIdentList}
-	_LRReduceNilToIdentListAction           = &_LRAction{_LRReduceAction, "", _LRReduceNilToIdentList}
-	_LRReduceUnlabeledClauseToRuleAction    = &_LRAction{_LRReduceAction, "", _LRReduceUnlabeledClauseToRule}
-	_LRReduceClausesToRuleAction            = &_LRAction{_LRReduceAction, "", _LRReduceClausesToRule}
-	_LRReduceAddToLabeledClausesAction      = &_LRAction{_LRReduceAction, "", _LRReduceAddToLabeledClauses}
-	_LRReduceClauseToLabeledClausesAction   = &_LRAction{_LRReduceAction, "", _LRReduceClauseToLabeledClauses}
-	_LRReduceToLabeledClauseAction          = &_LRAction{_LRReduceAction, "", _LRReduceToLabeledClause}
+	_LRReduceToGrammarAction                = &_LRAction{_LRReduceAction, 0, _LRReduceToGrammar}
+	_LRReduceAddToAdditionalSectionsAction  = &_LRAction{_LRReduceAction, 0, _LRReduceAddToAdditionalSections}
+	_LRReduceNilToAdditionalSectionsAction  = &_LRAction{_LRReduceAction, 0, _LRReduceNilToAdditionalSections}
+	_LRReduceToAdditionalSectionAction      = &_LRAction{_LRReduceAction, 0, _LRReduceToAdditionalSection}
+	_LRReduceAddToDefsAction                = &_LRAction{_LRReduceAction, 0, _LRReduceAddToDefs}
+	_LRReduceAddExplicitToDefsAction        = &_LRAction{_LRReduceAction, 0, _LRReduceAddExplicitToDefs}
+	_LRReduceDefToDefsAction                = &_LRAction{_LRReduceAction, 0, _LRReduceDefToDefs}
+	_LRReduceExplicitDefToDefsAction        = &_LRAction{_LRReduceAction, 0, _LRReduceExplicitDefToDefs}
+	_LRReduceTermDeclToDefAction            = &_LRAction{_LRReduceAction, 0, _LRReduceTermDeclToDef}
+	_LRReduceUntypedTermDeclToDefAction     = &_LRAction{_LRReduceAction, 0, _LRReduceUntypedTermDeclToDef}
+	_LRReduceStartDeclToDefAction           = &_LRAction{_LRReduceAction, 0, _LRReduceStartDeclToDef}
+	_LRReduceRuleToDefAction                = &_LRAction{_LRReduceAction, 0, _LRReduceRuleToDef}
+	_LRReduceTokenToRwordAction             = &_LRAction{_LRReduceAction, 0, _LRReduceTokenToRword}
+	_LRReduceTypeToRwordAction              = &_LRAction{_LRReduceAction, 0, _LRReduceTypeToRword}
+	_LRReduceAddToNonemptyIdentListAction   = &_LRAction{_LRReduceAction, 0, _LRReduceAddToNonemptyIdentList}
+	_LRReduceIdentToNonemptyIdentListAction = &_LRAction{_LRReduceAction, 0, _LRReduceIdentToNonemptyIdentList}
+	_LRReduceNonEmptyListToIdentListAction  = &_LRAction{_LRReduceAction, 0, _LRReduceNonEmptyListToIdentList}
+	_LRReduceNilToIdentListAction           = &_LRAction{_LRReduceAction, 0, _LRReduceNilToIdentList}
+	_LRReduceUnlabeledClauseToRuleAction    = &_LRAction{_LRReduceAction, 0, _LRReduceUnlabeledClauseToRule}
+	_LRReduceClausesToRuleAction            = &_LRAction{_LRReduceAction, 0, _LRReduceClausesToRule}
+	_LRReduceAddToLabeledClausesAction      = &_LRAction{_LRReduceAction, 0, _LRReduceAddToLabeledClauses}
+	_LRReduceClauseToLabeledClausesAction   = &_LRAction{_LRReduceAction, 0, _LRReduceClauseToLabeledClauses}
+	_LRReduceToLabeledClauseAction          = &_LRAction{_LRReduceAction, 0, _LRReduceToLabeledClause}
 )
 
 type _LRActionTableKey struct {
@@ -650,7 +657,7 @@ func (table _LRActionTableType) Get(stateId _LRStateId, symbol LRSymbolId) (*_LR
 }
 
 var _LRActionTable = _LRActionTableType{
-	{_LRState1, _LREndMarker}:             &_LRAction{_LRAcceptAction, "", ""},
+	{_LRState1, _LREndMarker}:             &_LRAction{_LRAcceptAction, 0, ""},
 	{_LRState0, LRTokenToken}:             _LRGotoState4Action,
 	{_LRState0, LRTypeToken}:              _LRGotoState5Action,
 	{_LRState0, LRStartToken}:             _LRGotoState3Action,

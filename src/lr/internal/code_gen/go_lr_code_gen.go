@@ -68,8 +68,6 @@ type goCodeGen struct {
 
 	symbol string
 
-	acceptSymbol   string
-	startSymbol    string
 	endSymbol      string
 	wildcardSymbol string
 
@@ -152,8 +150,6 @@ func (gen *goCodeGen) populateCodeGenVariables() error {
 	gen.symbolId = gen.Prefix + "SymbolId"
 	gen.symbol = gen.Prefix + "Symbol"
 	gen.stateId = "_" + gen.Prefix + "StateId"
-	gen.acceptSymbol = "_" + gen.Prefix + "AcceptMarker"
-	gen.startSymbol = "_" + gen.Prefix + "StartMarker"
 	gen.endSymbol = "_" + gen.Prefix + "EndMarker"
 	gen.wildcardSymbol = "_" + gen.Prefix + "WildcardMarker"
 	gen.token = gen.Prefix + "Token"
@@ -278,8 +274,6 @@ func (gen *goCodeGen) generateNonTerminalSymbolIds() {
 	l("const (")
 	gen.PushIndent()
 
-	l("%s = %s(\"%s\")", gen.acceptSymbol, gen.symbolId, lr.AcceptRule)
-	l("%s = %s(\"%s\")", gen.startSymbol, gen.symbolId, lr.StartMarker)
 	l("%s = %s(\"%s\")", gen.endSymbol, gen.symbolId, lr.EndMarker)
 	l("%s = %s(\"%s\")", gen.wildcardSymbol, gen.symbolId, lr.Wildcard)
 
@@ -536,7 +530,7 @@ func (gen *goCodeGen) generateActionEntries() {
 
 	for _, term := range gen.NonTerminals {
 		for _, clause := range term.Clauses {
-			l("%s = &%s{%s, \"\", %s}",
+			l("%s = &%s{%s, 0, %s}",
 				clause.CodeGenReduceAction,
 				gen.action,
 				gen.reduceAction,
@@ -599,8 +593,14 @@ func (gen *goCodeGen) generateSymbolType() {
 
 	l("func NewSymbol(token %s) (*%s, error) {", gen.token, gen.symbol)
 	push()
-	l("symbol := &%s{SymbolId_: token.Id()}", gen.symbol)
+	l("symbol, ok := token.(*%s)", gen.symbol)
+	l("if ok {")
+	push()
+	l("return symbol, nil")
+	pop()
+	l("}")
 	l("")
+	l("symbol = &%s{SymbolId_: token.Id()}", gen.symbol)
 	l("switch token.Id() {")
 	for _, value := range values {
 		terms := valueTerms[value]
@@ -614,7 +614,7 @@ func (gen *goCodeGen) generateSymbolType() {
 		l("val, ok := token.(%s)", terms[0].CodeGenType)
 		l("if !ok {")
 		push()
-		l("return nil, %v(\"Invalid value type for token %%s.  Expecting %s\", token.Id())",
+		l("return nil, %v(\"Invalid value type for token %%s.  Expecting %s (%%v)\", token.Id(), token.Loc())",
 			gen.Obj("fmt.Errorf"),
 			terms[0].CodeGenType)
 		pop()
@@ -786,12 +786,18 @@ func (gen *goCodeGen) generateDebugStates() {
 func (gen *goCodeGen) generateStateIds() {
 	l := gen.Line
 
-	l("type %s string", gen.stateId)
+	l("type %s int", gen.stateId)
+	l("")
+	l("func (id %s) String() string {", gen.stateId)
+	gen.PushIndent()
+	l("return %v(\"State %%d\", int(id))", gen.Obj("fmt.Sprintf"))
+	gen.PopIndent()
+	l("}")
 	l("")
 	l("const (")
 	gen.PushIndent()
 	for _, state := range gen.OrderedStates {
-		l("%s = %s(\"State %d\")",
+		l("%s = %s(%d)",
 			state.CodeGenConst,
 			gen.stateId,
 			state.StateNum)
@@ -841,10 +847,8 @@ func (gen *goCodeGen) generateActionTable() {
 	}
 
 	idToConst := map[string]string{
-		lr.AcceptRule:  gen.acceptSymbol,
-		lr.StartMarker: gen.startSymbol,
-		lr.EndMarker:   gen.endSymbol,
-		lr.Wildcard:    gen.wildcardSymbol,
+		lr.EndMarker: gen.endSymbol,
+		lr.Wildcard:  gen.wildcardSymbol,
 	}
 
 	for _, term := range gen.Terms {
@@ -854,7 +858,7 @@ func (gen *goCodeGen) generateActionTable() {
 	l("var %s = %s{", gen.actionTable, gen.actionTableType)
 	push()
 
-	l("{%s, %s}: &%s{%s, \"\", \"\"},",
+	l("{%s, %s}: &%s{%s, 0, \"\"},",
 		gen.OrderedStates[1].CodeGenConst,
 		gen.endSymbol,
 		gen.action,
@@ -1089,11 +1093,10 @@ func (gen *goCodeGen) generateParse() {
 	l("var errRetVal %v", gen.Start.CodeGenType)
 	l("stateStack := %s{", gen.stack)
 	push()
-	l("&%s{%s, &%s{SymbolId_: %s}},",
+	l("// Note: we don't have to populate the start symbol since its value is never accessed")
+	l("&%s{%s, nil},",
 		gen.stackItem,
-		gen.OrderedStates[0].CodeGenConst,
-		gen.symbol,
-		gen.startSymbol)
+		gen.OrderedStates[0].CodeGenConst)
 	pop()
 	l("}")
 

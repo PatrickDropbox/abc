@@ -10,7 +10,7 @@ import (
 )
 
 var (
-	nameRe = regexp.MustCompile(`((?:(?:\[\])*\**)*)(?:(.+)\.)?(\w+)$`)
+	nameRe = regexp.MustCompile(`((?:(?:\[\])*\**)*)(?:(.+)\.)?(\w+(?:{})?)$`)
 )
 
 type Code interface {
@@ -133,7 +133,7 @@ func newGoHeader(pkg string) *goHeader {
 }
 
 // This supports accessing objects of the form:
-//     *(\[\])*(\*)*)*(<full module path>\.)?<object>
+//     *(\[\])*(\*)*)*(<full module path>\.)?<object>({})?
 // map objects are not supported
 func (header *goHeader) Obj(fullName string) *importObject {
 	match := nameRe.FindStringSubmatch(fullName)
