@@ -422,20 +422,40 @@ func (gen *goCodeGen) generateReducerInterface() {
 func (gen *goCodeGen) generateReduceTypes() {
 	l := gen.Line
 
-	l("type %s string", gen.reduceType)
+	l("type %s int", gen.reduceType)
 	l("")
 	l("const (")
 	gen.PushIndent()
+	idx := 1
 	for _, rule := range gen.NonTerminals {
 		for _, clause := range rule.Clauses {
-			l("%s = %s(\"%s\")",
+			l("%s = %s(%d)",
 				clause.CodeGenReducerNameConst,
 				gen.reduceType,
-				clause.CodeGenReducerName)
+				idx)
+			idx += 1
 		}
 	}
 	gen.PopIndent()
 	l(")")
+	l("")
+
+	l("func (i %s) String() string {", gen.reduceType)
+	gen.PushIndent()
+	l("switch i {")
+	for _, rule := range gen.NonTerminals {
+		for _, clause := range rule.Clauses {
+			l("case %s: return \"%s\"",
+				clause.CodeGenReducerNameConst,
+				clause.CodeGenReducerName)
+		}
+	}
+	l("default: return %v(\"?unknown reduce type %%d?\", int(i))",
+		gen.Obj("fmt.Sprintf"))
+	l("}")
+	gen.PopIndent()
+	l("}")
+	l("")
 }
 
 func (gen *goCodeGen) generateActionTypes() {
@@ -531,7 +551,7 @@ func (gen *goCodeGen) generateAction() {
 	}
 	l("default:")
 	push()
-	l("panic(\"Unknown reduce type: \" + act.ReduceType)")
+	l("panic(\"Unknown reduce type: \" + act.ReduceType.String())")
 	pop()
 	l("}")
 	l("")
@@ -554,7 +574,7 @@ func (gen *goCodeGen) generateActionEntries() {
 	l("var (")
 	gen.PushIndent()
 	for _, state := range gen.OrderedStates {
-		l("%s = &%s{%s, %s, \"\"}",
+		l("%s = &%s{%s, %s, 0}",
 			state.CodeGenAction,
 			gen.action,
 			gen.shiftAction,
@@ -891,7 +911,7 @@ func (gen *goCodeGen) generateActionTable() {
 	l("var %s = %s{", gen.actionTable, gen.actionTableType)
 	push()
 
-	l("{%s, %s}: &%s{%s, 0, \"\"},",
+	l("{%s, %s}: &%s{%s, 0, 0},",
 		gen.OrderedStates[1].CodeGenConst,
 		gen.endSymbol,
 		gen.action,

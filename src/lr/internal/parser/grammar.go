@@ -291,33 +291,86 @@ func (i _LRActionType) String() string {
 	}
 }
 
-type _LRReduceType string
+type _LRReduceType int
 
 const (
-	_LRReduceToGrammar                = _LRReduceType("ToGrammar")
-	_LRReduceAddToAdditionalSections  = _LRReduceType("AddToAdditionalSections")
-	_LRReduceNilToAdditionalSections  = _LRReduceType("NilToAdditionalSections")
-	_LRReduceToAdditionalSection      = _LRReduceType("ToAdditionalSection")
-	_LRReduceAddToDefs                = _LRReduceType("AddToDefs")
-	_LRReduceAddExplicitToDefs        = _LRReduceType("AddExplicitToDefs")
-	_LRReduceDefToDefs                = _LRReduceType("DefToDefs")
-	_LRReduceExplicitDefToDefs        = _LRReduceType("ExplicitDefToDefs")
-	_LRReduceTermDeclToDef            = _LRReduceType("TermDeclToDef")
-	_LRReduceUntypedTermDeclToDef     = _LRReduceType("UntypedTermDeclToDef")
-	_LRReduceStartDeclToDef           = _LRReduceType("StartDeclToDef")
-	_LRReduceRuleToDef                = _LRReduceType("RuleToDef")
-	_LRReduceTokenToRword             = _LRReduceType("TokenToRword")
-	_LRReduceTypeToRword              = _LRReduceType("TypeToRword")
-	_LRReduceAddToNonemptyIdentList   = _LRReduceType("AddToNonemptyIdentList")
-	_LRReduceIdentToNonemptyIdentList = _LRReduceType("IdentToNonemptyIdentList")
-	_LRReduceNonEmptyListToIdentList  = _LRReduceType("NonEmptyListToIdentList")
-	_LRReduceNilToIdentList           = _LRReduceType("NilToIdentList")
-	_LRReduceUnlabeledClauseToRule    = _LRReduceType("UnlabeledClauseToRule")
-	_LRReduceClausesToRule            = _LRReduceType("ClausesToRule")
-	_LRReduceAddToLabeledClauses      = _LRReduceType("AddToLabeledClauses")
-	_LRReduceClauseToLabeledClauses   = _LRReduceType("ClauseToLabeledClauses")
-	_LRReduceToLabeledClause          = _LRReduceType("ToLabeledClause")
+	_LRReduceToGrammar                = _LRReduceType(1)
+	_LRReduceAddToAdditionalSections  = _LRReduceType(2)
+	_LRReduceNilToAdditionalSections  = _LRReduceType(3)
+	_LRReduceToAdditionalSection      = _LRReduceType(4)
+	_LRReduceAddToDefs                = _LRReduceType(5)
+	_LRReduceAddExplicitToDefs        = _LRReduceType(6)
+	_LRReduceDefToDefs                = _LRReduceType(7)
+	_LRReduceExplicitDefToDefs        = _LRReduceType(8)
+	_LRReduceTermDeclToDef            = _LRReduceType(9)
+	_LRReduceUntypedTermDeclToDef     = _LRReduceType(10)
+	_LRReduceStartDeclToDef           = _LRReduceType(11)
+	_LRReduceRuleToDef                = _LRReduceType(12)
+	_LRReduceTokenToRword             = _LRReduceType(13)
+	_LRReduceTypeToRword              = _LRReduceType(14)
+	_LRReduceAddToNonemptyIdentList   = _LRReduceType(15)
+	_LRReduceIdentToNonemptyIdentList = _LRReduceType(16)
+	_LRReduceNonEmptyListToIdentList  = _LRReduceType(17)
+	_LRReduceNilToIdentList           = _LRReduceType(18)
+	_LRReduceUnlabeledClauseToRule    = _LRReduceType(19)
+	_LRReduceClausesToRule            = _LRReduceType(20)
+	_LRReduceAddToLabeledClauses      = _LRReduceType(21)
+	_LRReduceClauseToLabeledClauses   = _LRReduceType(22)
+	_LRReduceToLabeledClause          = _LRReduceType(23)
 )
+
+func (i _LRReduceType) String() string {
+	switch i {
+	case _LRReduceToGrammar:
+		return "ToGrammar"
+	case _LRReduceAddToAdditionalSections:
+		return "AddToAdditionalSections"
+	case _LRReduceNilToAdditionalSections:
+		return "NilToAdditionalSections"
+	case _LRReduceToAdditionalSection:
+		return "ToAdditionalSection"
+	case _LRReduceAddToDefs:
+		return "AddToDefs"
+	case _LRReduceAddExplicitToDefs:
+		return "AddExplicitToDefs"
+	case _LRReduceDefToDefs:
+		return "DefToDefs"
+	case _LRReduceExplicitDefToDefs:
+		return "ExplicitDefToDefs"
+	case _LRReduceTermDeclToDef:
+		return "TermDeclToDef"
+	case _LRReduceUntypedTermDeclToDef:
+		return "UntypedTermDeclToDef"
+	case _LRReduceStartDeclToDef:
+		return "StartDeclToDef"
+	case _LRReduceRuleToDef:
+		return "RuleToDef"
+	case _LRReduceTokenToRword:
+		return "TokenToRword"
+	case _LRReduceTypeToRword:
+		return "TypeToRword"
+	case _LRReduceAddToNonemptyIdentList:
+		return "AddToNonemptyIdentList"
+	case _LRReduceIdentToNonemptyIdentList:
+		return "IdentToNonemptyIdentList"
+	case _LRReduceNonEmptyListToIdentList:
+		return "NonEmptyListToIdentList"
+	case _LRReduceNilToIdentList:
+		return "NilToIdentList"
+	case _LRReduceUnlabeledClauseToRule:
+		return "UnlabeledClauseToRule"
+	case _LRReduceClausesToRule:
+		return "ClausesToRule"
+	case _LRReduceAddToLabeledClauses:
+		return "AddToLabeledClauses"
+	case _LRReduceClauseToLabeledClauses:
+		return "ClauseToLabeledClauses"
+	case _LRReduceToLabeledClause:
+		return "ToLabeledClause"
+	default:
+		return fmt.Sprintf("?unknown reduce type %d?", int(i))
+	}
+}
 
 type _LRStateId int
 
@@ -640,7 +693,7 @@ func (act *_LRAction) ReduceSymbol(reducer LRReducer, stack _LRStack) (_LRStack,
 		symbol.SymbolId_ = LRLabeledClauseType
 		symbol.Clause, err = reducer.ToLabeledClause(args[0].Token, args[1].Tokens)
 	default:
-		panic("Unknown reduce type: " + act.ReduceType)
+		panic("Unknown reduce type: " + act.ReduceType.String())
 	}
 
 	if err != nil {
@@ -651,40 +704,40 @@ func (act *_LRAction) ReduceSymbol(reducer LRReducer, stack _LRStack) (_LRStack,
 }
 
 var (
-	_LRGotoState0Action                     = &_LRAction{_LRShiftAction, _LRState0, ""}
-	_LRGotoState1Action                     = &_LRAction{_LRShiftAction, _LRState1, ""}
-	_LRGotoState2Action                     = &_LRAction{_LRShiftAction, _LRState2, ""}
-	_LRGotoState3Action                     = &_LRAction{_LRShiftAction, _LRState3, ""}
-	_LRGotoState4Action                     = &_LRAction{_LRShiftAction, _LRState4, ""}
-	_LRGotoState5Action                     = &_LRAction{_LRShiftAction, _LRState5, ""}
-	_LRGotoState6Action                     = &_LRAction{_LRShiftAction, _LRState6, ""}
-	_LRGotoState7Action                     = &_LRAction{_LRShiftAction, _LRState7, ""}
-	_LRGotoState8Action                     = &_LRAction{_LRShiftAction, _LRState8, ""}
-	_LRGotoState9Action                     = &_LRAction{_LRShiftAction, _LRState9, ""}
-	_LRGotoState10Action                    = &_LRAction{_LRShiftAction, _LRState10, ""}
-	_LRGotoState11Action                    = &_LRAction{_LRShiftAction, _LRState11, ""}
-	_LRGotoState12Action                    = &_LRAction{_LRShiftAction, _LRState12, ""}
-	_LRGotoState13Action                    = &_LRAction{_LRShiftAction, _LRState13, ""}
-	_LRGotoState14Action                    = &_LRAction{_LRShiftAction, _LRState14, ""}
-	_LRGotoState15Action                    = &_LRAction{_LRShiftAction, _LRState15, ""}
-	_LRGotoState16Action                    = &_LRAction{_LRShiftAction, _LRState16, ""}
-	_LRGotoState17Action                    = &_LRAction{_LRShiftAction, _LRState17, ""}
-	_LRGotoState18Action                    = &_LRAction{_LRShiftAction, _LRState18, ""}
-	_LRGotoState19Action                    = &_LRAction{_LRShiftAction, _LRState19, ""}
-	_LRGotoState20Action                    = &_LRAction{_LRShiftAction, _LRState20, ""}
-	_LRGotoState21Action                    = &_LRAction{_LRShiftAction, _LRState21, ""}
-	_LRGotoState22Action                    = &_LRAction{_LRShiftAction, _LRState22, ""}
-	_LRGotoState23Action                    = &_LRAction{_LRShiftAction, _LRState23, ""}
-	_LRGotoState24Action                    = &_LRAction{_LRShiftAction, _LRState24, ""}
-	_LRGotoState25Action                    = &_LRAction{_LRShiftAction, _LRState25, ""}
-	_LRGotoState26Action                    = &_LRAction{_LRShiftAction, _LRState26, ""}
-	_LRGotoState27Action                    = &_LRAction{_LRShiftAction, _LRState27, ""}
-	_LRGotoState28Action                    = &_LRAction{_LRShiftAction, _LRState28, ""}
-	_LRGotoState29Action                    = &_LRAction{_LRShiftAction, _LRState29, ""}
-	_LRGotoState30Action                    = &_LRAction{_LRShiftAction, _LRState30, ""}
-	_LRGotoState31Action                    = &_LRAction{_LRShiftAction, _LRState31, ""}
-	_LRGotoState32Action                    = &_LRAction{_LRShiftAction, _LRState32, ""}
-	_LRGotoState33Action                    = &_LRAction{_LRShiftAction, _LRState33, ""}
+	_LRGotoState0Action                     = &_LRAction{_LRShiftAction, _LRState0, 0}
+	_LRGotoState1Action                     = &_LRAction{_LRShiftAction, _LRState1, 0}
+	_LRGotoState2Action                     = &_LRAction{_LRShiftAction, _LRState2, 0}
+	_LRGotoState3Action                     = &_LRAction{_LRShiftAction, _LRState3, 0}
+	_LRGotoState4Action                     = &_LRAction{_LRShiftAction, _LRState4, 0}
+	_LRGotoState5Action                     = &_LRAction{_LRShiftAction, _LRState5, 0}
+	_LRGotoState6Action                     = &_LRAction{_LRShiftAction, _LRState6, 0}
+	_LRGotoState7Action                     = &_LRAction{_LRShiftAction, _LRState7, 0}
+	_LRGotoState8Action                     = &_LRAction{_LRShiftAction, _LRState8, 0}
+	_LRGotoState9Action                     = &_LRAction{_LRShiftAction, _LRState9, 0}
+	_LRGotoState10Action                    = &_LRAction{_LRShiftAction, _LRState10, 0}
+	_LRGotoState11Action                    = &_LRAction{_LRShiftAction, _LRState11, 0}
+	_LRGotoState12Action                    = &_LRAction{_LRShiftAction, _LRState12, 0}
+	_LRGotoState13Action                    = &_LRAction{_LRShiftAction, _LRState13, 0}
+	_LRGotoState14Action                    = &_LRAction{_LRShiftAction, _LRState14, 0}
+	_LRGotoState15Action                    = &_LRAction{_LRShiftAction, _LRState15, 0}
+	_LRGotoState16Action                    = &_LRAction{_LRShiftAction, _LRState16, 0}
+	_LRGotoState17Action                    = &_LRAction{_LRShiftAction, _LRState17, 0}
+	_LRGotoState18Action                    = &_LRAction{_LRShiftAction, _LRState18, 0}
+	_LRGotoState19Action                    = &_LRAction{_LRShiftAction, _LRState19, 0}
+	_LRGotoState20Action                    = &_LRAction{_LRShiftAction, _LRState20, 0}
+	_LRGotoState21Action                    = &_LRAction{_LRShiftAction, _LRState21, 0}
+	_LRGotoState22Action                    = &_LRAction{_LRShiftAction, _LRState22, 0}
+	_LRGotoState23Action                    = &_LRAction{_LRShiftAction, _LRState23, 0}
+	_LRGotoState24Action                    = &_LRAction{_LRShiftAction, _LRState24, 0}
+	_LRGotoState25Action                    = &_LRAction{_LRShiftAction, _LRState25, 0}
+	_LRGotoState26Action                    = &_LRAction{_LRShiftAction, _LRState26, 0}
+	_LRGotoState27Action                    = &_LRAction{_LRShiftAction, _LRState27, 0}
+	_LRGotoState28Action                    = &_LRAction{_LRShiftAction, _LRState28, 0}
+	_LRGotoState29Action                    = &_LRAction{_LRShiftAction, _LRState29, 0}
+	_LRGotoState30Action                    = &_LRAction{_LRShiftAction, _LRState30, 0}
+	_LRGotoState31Action                    = &_LRAction{_LRShiftAction, _LRState31, 0}
+	_LRGotoState32Action                    = &_LRAction{_LRShiftAction, _LRState32, 0}
+	_LRGotoState33Action                    = &_LRAction{_LRShiftAction, _LRState33, 0}
 	_LRReduceToGrammarAction                = &_LRAction{_LRReduceAction, 0, _LRReduceToGrammar}
 	_LRReduceAddToAdditionalSectionsAction  = &_LRAction{_LRReduceAction, 0, _LRReduceAddToAdditionalSections}
 	_LRReduceNilToAdditionalSectionsAction  = &_LRAction{_LRReduceAction, 0, _LRReduceNilToAdditionalSections}
@@ -727,7 +780,7 @@ func (table _LRActionTableType) Get(stateId _LRStateId, symbol LRSymbolId) (*_LR
 }
 
 var _LRActionTable = _LRActionTableType{
-	{_LRState1, _LREndMarker}:             &_LRAction{_LRAcceptAction, 0, ""},
+	{_LRState1, _LREndMarker}:             &_LRAction{_LRAcceptAction, 0, 0},
 	{_LRState0, LRTokenToken}:             _LRGotoState4Action,
 	{_LRState0, LRTypeToken}:              _LRGotoState5Action,
 	{_LRState0, LRStartToken}:             _LRGotoState3Action,

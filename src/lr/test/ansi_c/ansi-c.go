@@ -1221,221 +1221,650 @@ func (i _CActionType) String() string {
 	}
 }
 
-type _CReduceType string
+type _CReduceType int
 
 const (
-	_CReduceAToPrimaryExpression        = _CReduceType("AToPrimaryExpression")
-	_CReduceBToPrimaryExpression        = _CReduceType("BToPrimaryExpression")
-	_CReduceCToPrimaryExpression        = _CReduceType("CToPrimaryExpression")
-	_CReduceDToPrimaryExpression        = _CReduceType("DToPrimaryExpression")
-	_CReduceAToPostfixExpression        = _CReduceType("AToPostfixExpression")
-	_CReduceBToPostfixExpression        = _CReduceType("BToPostfixExpression")
-	_CReduceCToPostfixExpression        = _CReduceType("CToPostfixExpression")
-	_CReduceDToPostfixExpression        = _CReduceType("DToPostfixExpression")
-	_CReduceEToPostfixExpression        = _CReduceType("EToPostfixExpression")
-	_CReduceFToPostfixExpression        = _CReduceType("FToPostfixExpression")
-	_CReduceGToPostfixExpression        = _CReduceType("GToPostfixExpression")
-	_CReduceHToPostfixExpression        = _CReduceType("HToPostfixExpression")
-	_CReduceAToArgumentExpressionList   = _CReduceType("AToArgumentExpressionList")
-	_CReduceBToArgumentExpressionList   = _CReduceType("BToArgumentExpressionList")
-	_CReduceAToUnaryExpression          = _CReduceType("AToUnaryExpression")
-	_CReduceBToUnaryExpression          = _CReduceType("BToUnaryExpression")
-	_CReduceCToUnaryExpression          = _CReduceType("CToUnaryExpression")
-	_CReduceDToUnaryExpression          = _CReduceType("DToUnaryExpression")
-	_CReduceEToUnaryExpression          = _CReduceType("EToUnaryExpression")
-	_CReduceFToUnaryExpression          = _CReduceType("FToUnaryExpression")
-	_CReduceAToUnaryOperator            = _CReduceType("AToUnaryOperator")
-	_CReduceBToUnaryOperator            = _CReduceType("BToUnaryOperator")
-	_CReduceCToUnaryOperator            = _CReduceType("CToUnaryOperator")
-	_CReduceDToUnaryOperator            = _CReduceType("DToUnaryOperator")
-	_CReduceEToUnaryOperator            = _CReduceType("EToUnaryOperator")
-	_CReduceFToUnaryOperator            = _CReduceType("FToUnaryOperator")
-	_CReduceAToCastExpression           = _CReduceType("AToCastExpression")
-	_CReduceBToCastExpression           = _CReduceType("BToCastExpression")
-	_CReduceAToMultiplicativeExpression = _CReduceType("AToMultiplicativeExpression")
-	_CReduceBToMultiplicativeExpression = _CReduceType("BToMultiplicativeExpression")
-	_CReduceCToMultiplicativeExpression = _CReduceType("CToMultiplicativeExpression")
-	_CReduceDToMultiplicativeExpression = _CReduceType("DToMultiplicativeExpression")
-	_CReduceAToAdditiveExpression       = _CReduceType("AToAdditiveExpression")
-	_CReduceBToAdditiveExpression       = _CReduceType("BToAdditiveExpression")
-	_CReduceCToAdditiveExpression       = _CReduceType("CToAdditiveExpression")
-	_CReduceAToShiftExpression          = _CReduceType("AToShiftExpression")
-	_CReduceBToShiftExpression          = _CReduceType("BToShiftExpression")
-	_CReduceCToShiftExpression          = _CReduceType("CToShiftExpression")
-	_CReduceAToRelationalExpression     = _CReduceType("AToRelationalExpression")
-	_CReduceBToRelationalExpression     = _CReduceType("BToRelationalExpression")
-	_CReduceCToRelationalExpression     = _CReduceType("CToRelationalExpression")
-	_CReduceDToRelationalExpression     = _CReduceType("DToRelationalExpression")
-	_CReduceEToRelationalExpression     = _CReduceType("EToRelationalExpression")
-	_CReduceAToEqualityExpression       = _CReduceType("AToEqualityExpression")
-	_CReduceBToEqualityExpression       = _CReduceType("BToEqualityExpression")
-	_CReduceCToEqualityExpression       = _CReduceType("CToEqualityExpression")
-	_CReduceAToAndExpression            = _CReduceType("AToAndExpression")
-	_CReduceBToAndExpression            = _CReduceType("BToAndExpression")
-	_CReduceAToExclusiveOrExpression    = _CReduceType("AToExclusiveOrExpression")
-	_CReduceBToExclusiveOrExpression    = _CReduceType("BToExclusiveOrExpression")
-	_CReduceAToInclusiveOrExpression    = _CReduceType("AToInclusiveOrExpression")
-	_CReduceBToInclusiveOrExpression    = _CReduceType("BToInclusiveOrExpression")
-	_CReduceAToLogicalAndExpression     = _CReduceType("AToLogicalAndExpression")
-	_CReduceBToLogicalAndExpression     = _CReduceType("BToLogicalAndExpression")
-	_CReduceAToLogicalOrExpression      = _CReduceType("AToLogicalOrExpression")
-	_CReduceBToLogicalOrExpression      = _CReduceType("BToLogicalOrExpression")
-	_CReduceAToConditionalExpression    = _CReduceType("AToConditionalExpression")
-	_CReduceBToConditionalExpression    = _CReduceType("BToConditionalExpression")
-	_CReduceAToAssignmentExpression     = _CReduceType("AToAssignmentExpression")
-	_CReduceBToAssignmentExpression     = _CReduceType("BToAssignmentExpression")
-	_CReduceAToAssignmentOperator       = _CReduceType("AToAssignmentOperator")
-	_CReduceBToAssignmentOperator       = _CReduceType("BToAssignmentOperator")
-	_CReduceCToAssignmentOperator       = _CReduceType("CToAssignmentOperator")
-	_CReduceDToAssignmentOperator       = _CReduceType("DToAssignmentOperator")
-	_CReduceEToAssignmentOperator       = _CReduceType("EToAssignmentOperator")
-	_CReduceFToAssignmentOperator       = _CReduceType("FToAssignmentOperator")
-	_CReduceGToAssignmentOperator       = _CReduceType("GToAssignmentOperator")
-	_CReduceHToAssignmentOperator       = _CReduceType("HToAssignmentOperator")
-	_CReduceIToAssignmentOperator       = _CReduceType("IToAssignmentOperator")
-	_CReduceJToAssignmentOperator       = _CReduceType("JToAssignmentOperator")
-	_CReduceKToAssignmentOperator       = _CReduceType("KToAssignmentOperator")
-	_CReduceAToExpression               = _CReduceType("AToExpression")
-	_CReduceBToExpression               = _CReduceType("BToExpression")
-	_CReduceAToConstantExpression       = _CReduceType("AToConstantExpression")
-	_CReduceAToDeclaration              = _CReduceType("AToDeclaration")
-	_CReduceBToDeclaration              = _CReduceType("BToDeclaration")
-	_CReduceAToDeclarationSpecifiers    = _CReduceType("AToDeclarationSpecifiers")
-	_CReduceBToDeclarationSpecifiers    = _CReduceType("BToDeclarationSpecifiers")
-	_CReduceCToDeclarationSpecifiers    = _CReduceType("CToDeclarationSpecifiers")
-	_CReduceDToDeclarationSpecifiers    = _CReduceType("DToDeclarationSpecifiers")
-	_CReduceEToDeclarationSpecifiers    = _CReduceType("EToDeclarationSpecifiers")
-	_CReduceFToDeclarationSpecifiers    = _CReduceType("FToDeclarationSpecifiers")
-	_CReduceAToInitDeclaratorList       = _CReduceType("AToInitDeclaratorList")
-	_CReduceBToInitDeclaratorList       = _CReduceType("BToInitDeclaratorList")
-	_CReduceAToInitDeclarator           = _CReduceType("AToInitDeclarator")
-	_CReduceBToInitDeclarator           = _CReduceType("BToInitDeclarator")
-	_CReduceAToStorageClassSpecifier    = _CReduceType("AToStorageClassSpecifier")
-	_CReduceBToStorageClassSpecifier    = _CReduceType("BToStorageClassSpecifier")
-	_CReduceCToStorageClassSpecifier    = _CReduceType("CToStorageClassSpecifier")
-	_CReduceDToStorageClassSpecifier    = _CReduceType("DToStorageClassSpecifier")
-	_CReduceEToStorageClassSpecifier    = _CReduceType("EToStorageClassSpecifier")
-	_CReduceAToTypeSpecifier            = _CReduceType("AToTypeSpecifier")
-	_CReduceBToTypeSpecifier            = _CReduceType("BToTypeSpecifier")
-	_CReduceCToTypeSpecifier            = _CReduceType("CToTypeSpecifier")
-	_CReduceDToTypeSpecifier            = _CReduceType("DToTypeSpecifier")
-	_CReduceEToTypeSpecifier            = _CReduceType("EToTypeSpecifier")
-	_CReduceFToTypeSpecifier            = _CReduceType("FToTypeSpecifier")
-	_CReduceGToTypeSpecifier            = _CReduceType("GToTypeSpecifier")
-	_CReduceHToTypeSpecifier            = _CReduceType("HToTypeSpecifier")
-	_CReduceIToTypeSpecifier            = _CReduceType("IToTypeSpecifier")
-	_CReduceJToTypeSpecifier            = _CReduceType("JToTypeSpecifier")
-	_CReduceKToTypeSpecifier            = _CReduceType("KToTypeSpecifier")
-	_CReduceLToTypeSpecifier            = _CReduceType("LToTypeSpecifier")
-	_CReduceAToStructOrUnionSpecifier   = _CReduceType("AToStructOrUnionSpecifier")
-	_CReduceBToStructOrUnionSpecifier   = _CReduceType("BToStructOrUnionSpecifier")
-	_CReduceCToStructOrUnionSpecifier   = _CReduceType("CToStructOrUnionSpecifier")
-	_CReduceAToStructOrUnion            = _CReduceType("AToStructOrUnion")
-	_CReduceBToStructOrUnion            = _CReduceType("BToStructOrUnion")
-	_CReduceAToStructDeclarationList    = _CReduceType("AToStructDeclarationList")
-	_CReduceBToStructDeclarationList    = _CReduceType("BToStructDeclarationList")
-	_CReduceAToStructDeclaration        = _CReduceType("AToStructDeclaration")
-	_CReduceAToSpecifierQualifierList   = _CReduceType("AToSpecifierQualifierList")
-	_CReduceBToSpecifierQualifierList   = _CReduceType("BToSpecifierQualifierList")
-	_CReduceCToSpecifierQualifierList   = _CReduceType("CToSpecifierQualifierList")
-	_CReduceDToSpecifierQualifierList   = _CReduceType("DToSpecifierQualifierList")
-	_CReduceAToStructDeclaratorList     = _CReduceType("AToStructDeclaratorList")
-	_CReduceBToStructDeclaratorList     = _CReduceType("BToStructDeclaratorList")
-	_CReduceAToStructDeclarator         = _CReduceType("AToStructDeclarator")
-	_CReduceBToStructDeclarator         = _CReduceType("BToStructDeclarator")
-	_CReduceCToStructDeclarator         = _CReduceType("CToStructDeclarator")
-	_CReduceAToEnumSpecifier            = _CReduceType("AToEnumSpecifier")
-	_CReduceBToEnumSpecifier            = _CReduceType("BToEnumSpecifier")
-	_CReduceCToEnumSpecifier            = _CReduceType("CToEnumSpecifier")
-	_CReduceAToEnumeratorList           = _CReduceType("AToEnumeratorList")
-	_CReduceBToEnumeratorList           = _CReduceType("BToEnumeratorList")
-	_CReduceAToEnumerator               = _CReduceType("AToEnumerator")
-	_CReduceBToEnumerator               = _CReduceType("BToEnumerator")
-	_CReduceAToTypeQualifier            = _CReduceType("AToTypeQualifier")
-	_CReduceBToTypeQualifier            = _CReduceType("BToTypeQualifier")
-	_CReduceAToDeclarator               = _CReduceType("AToDeclarator")
-	_CReduceBToDeclarator               = _CReduceType("BToDeclarator")
-	_CReduceAToDirectDeclarator         = _CReduceType("AToDirectDeclarator")
-	_CReduceBToDirectDeclarator         = _CReduceType("BToDirectDeclarator")
-	_CReduceCToDirectDeclarator         = _CReduceType("CToDirectDeclarator")
-	_CReduceDToDirectDeclarator         = _CReduceType("DToDirectDeclarator")
-	_CReduceEToDirectDeclarator         = _CReduceType("EToDirectDeclarator")
-	_CReduceFToDirectDeclarator         = _CReduceType("FToDirectDeclarator")
-	_CReduceGToDirectDeclarator         = _CReduceType("GToDirectDeclarator")
-	_CReduceAToPointer                  = _CReduceType("AToPointer")
-	_CReduceBToPointer                  = _CReduceType("BToPointer")
-	_CReduceCToPointer                  = _CReduceType("CToPointer")
-	_CReduceDToPointer                  = _CReduceType("DToPointer")
-	_CReduceAToTypeQualifierList        = _CReduceType("AToTypeQualifierList")
-	_CReduceBToTypeQualifierList        = _CReduceType("BToTypeQualifierList")
-	_CReduceAToParameterTypeList        = _CReduceType("AToParameterTypeList")
-	_CReduceBToParameterTypeList        = _CReduceType("BToParameterTypeList")
-	_CReduceAToParameterList            = _CReduceType("AToParameterList")
-	_CReduceBToParameterList            = _CReduceType("BToParameterList")
-	_CReduceAToParameterDeclaration     = _CReduceType("AToParameterDeclaration")
-	_CReduceBToParameterDeclaration     = _CReduceType("BToParameterDeclaration")
-	_CReduceCToParameterDeclaration     = _CReduceType("CToParameterDeclaration")
-	_CReduceAToIdentifierList           = _CReduceType("AToIdentifierList")
-	_CReduceBToIdentifierList           = _CReduceType("BToIdentifierList")
-	_CReduceAToTypeName                 = _CReduceType("AToTypeName")
-	_CReduceBToTypeName                 = _CReduceType("BToTypeName")
-	_CReduceAToAbstractDeclarator       = _CReduceType("AToAbstractDeclarator")
-	_CReduceBToAbstractDeclarator       = _CReduceType("BToAbstractDeclarator")
-	_CReduceCToAbstractDeclarator       = _CReduceType("CToAbstractDeclarator")
-	_CReduceAToDirectAbstractDeclarator = _CReduceType("AToDirectAbstractDeclarator")
-	_CReduceBToDirectAbstractDeclarator = _CReduceType("BToDirectAbstractDeclarator")
-	_CReduceCToDirectAbstractDeclarator = _CReduceType("CToDirectAbstractDeclarator")
-	_CReduceDToDirectAbstractDeclarator = _CReduceType("DToDirectAbstractDeclarator")
-	_CReduceEToDirectAbstractDeclarator = _CReduceType("EToDirectAbstractDeclarator")
-	_CReduceFToDirectAbstractDeclarator = _CReduceType("FToDirectAbstractDeclarator")
-	_CReduceGToDirectAbstractDeclarator = _CReduceType("GToDirectAbstractDeclarator")
-	_CReduceHToDirectAbstractDeclarator = _CReduceType("HToDirectAbstractDeclarator")
-	_CReduceIToDirectAbstractDeclarator = _CReduceType("IToDirectAbstractDeclarator")
-	_CReduceAToInitializer              = _CReduceType("AToInitializer")
-	_CReduceBToInitializer              = _CReduceType("BToInitializer")
-	_CReduceCToInitializer              = _CReduceType("CToInitializer")
-	_CReduceAToInitializerList          = _CReduceType("AToInitializerList")
-	_CReduceBToInitializerList          = _CReduceType("BToInitializerList")
-	_CReduceAToStatement                = _CReduceType("AToStatement")
-	_CReduceBToStatement                = _CReduceType("BToStatement")
-	_CReduceCToStatement                = _CReduceType("CToStatement")
-	_CReduceDToStatement                = _CReduceType("DToStatement")
-	_CReduceEToStatement                = _CReduceType("EToStatement")
-	_CReduceFToStatement                = _CReduceType("FToStatement")
-	_CReduceAToLabeledStatement         = _CReduceType("AToLabeledStatement")
-	_CReduceBToLabeledStatement         = _CReduceType("BToLabeledStatement")
-	_CReduceCToLabeledStatement         = _CReduceType("CToLabeledStatement")
-	_CReduceAToCompoundStatement        = _CReduceType("AToCompoundStatement")
-	_CReduceBToCompoundStatement        = _CReduceType("BToCompoundStatement")
-	_CReduceCToCompoundStatement        = _CReduceType("CToCompoundStatement")
-	_CReduceDToCompoundStatement        = _CReduceType("DToCompoundStatement")
-	_CReduceAToDeclarationList          = _CReduceType("AToDeclarationList")
-	_CReduceBToDeclarationList          = _CReduceType("BToDeclarationList")
-	_CReduceAToStatementList            = _CReduceType("AToStatementList")
-	_CReduceBToStatementList            = _CReduceType("BToStatementList")
-	_CReduceAToExpressionStatement      = _CReduceType("AToExpressionStatement")
-	_CReduceBToExpressionStatement      = _CReduceType("BToExpressionStatement")
-	_CReduceAToSelectionStatement       = _CReduceType("AToSelectionStatement")
-	_CReduceBToSelectionStatement       = _CReduceType("BToSelectionStatement")
-	_CReduceCToSelectionStatement       = _CReduceType("CToSelectionStatement")
-	_CReduceAToIterationStatement       = _CReduceType("AToIterationStatement")
-	_CReduceBToIterationStatement       = _CReduceType("BToIterationStatement")
-	_CReduceCToIterationStatement       = _CReduceType("CToIterationStatement")
-	_CReduceDToIterationStatement       = _CReduceType("DToIterationStatement")
-	_CReduceAToJumpStatement            = _CReduceType("AToJumpStatement")
-	_CReduceBToJumpStatement            = _CReduceType("BToJumpStatement")
-	_CReduceCToJumpStatement            = _CReduceType("CToJumpStatement")
-	_CReduceDToJumpStatement            = _CReduceType("DToJumpStatement")
-	_CReduceEToJumpStatement            = _CReduceType("EToJumpStatement")
-	_CReduceAToTranslationUnit          = _CReduceType("AToTranslationUnit")
-	_CReduceBToTranslationUnit          = _CReduceType("BToTranslationUnit")
-	_CReduceAToExternalDeclaration      = _CReduceType("AToExternalDeclaration")
-	_CReduceBToExternalDeclaration      = _CReduceType("BToExternalDeclaration")
-	_CReduceAToFunctionDefinition       = _CReduceType("AToFunctionDefinition")
-	_CReduceBToFunctionDefinition       = _CReduceType("BToFunctionDefinition")
-	_CReduceCToFunctionDefinition       = _CReduceType("CToFunctionDefinition")
-	_CReduceDToFunctionDefinition       = _CReduceType("DToFunctionDefinition")
+	_CReduceAToPrimaryExpression        = _CReduceType(1)
+	_CReduceBToPrimaryExpression        = _CReduceType(2)
+	_CReduceCToPrimaryExpression        = _CReduceType(3)
+	_CReduceDToPrimaryExpression        = _CReduceType(4)
+	_CReduceAToPostfixExpression        = _CReduceType(5)
+	_CReduceBToPostfixExpression        = _CReduceType(6)
+	_CReduceCToPostfixExpression        = _CReduceType(7)
+	_CReduceDToPostfixExpression        = _CReduceType(8)
+	_CReduceEToPostfixExpression        = _CReduceType(9)
+	_CReduceFToPostfixExpression        = _CReduceType(10)
+	_CReduceGToPostfixExpression        = _CReduceType(11)
+	_CReduceHToPostfixExpression        = _CReduceType(12)
+	_CReduceAToArgumentExpressionList   = _CReduceType(13)
+	_CReduceBToArgumentExpressionList   = _CReduceType(14)
+	_CReduceAToUnaryExpression          = _CReduceType(15)
+	_CReduceBToUnaryExpression          = _CReduceType(16)
+	_CReduceCToUnaryExpression          = _CReduceType(17)
+	_CReduceDToUnaryExpression          = _CReduceType(18)
+	_CReduceEToUnaryExpression          = _CReduceType(19)
+	_CReduceFToUnaryExpression          = _CReduceType(20)
+	_CReduceAToUnaryOperator            = _CReduceType(21)
+	_CReduceBToUnaryOperator            = _CReduceType(22)
+	_CReduceCToUnaryOperator            = _CReduceType(23)
+	_CReduceDToUnaryOperator            = _CReduceType(24)
+	_CReduceEToUnaryOperator            = _CReduceType(25)
+	_CReduceFToUnaryOperator            = _CReduceType(26)
+	_CReduceAToCastExpression           = _CReduceType(27)
+	_CReduceBToCastExpression           = _CReduceType(28)
+	_CReduceAToMultiplicativeExpression = _CReduceType(29)
+	_CReduceBToMultiplicativeExpression = _CReduceType(30)
+	_CReduceCToMultiplicativeExpression = _CReduceType(31)
+	_CReduceDToMultiplicativeExpression = _CReduceType(32)
+	_CReduceAToAdditiveExpression       = _CReduceType(33)
+	_CReduceBToAdditiveExpression       = _CReduceType(34)
+	_CReduceCToAdditiveExpression       = _CReduceType(35)
+	_CReduceAToShiftExpression          = _CReduceType(36)
+	_CReduceBToShiftExpression          = _CReduceType(37)
+	_CReduceCToShiftExpression          = _CReduceType(38)
+	_CReduceAToRelationalExpression     = _CReduceType(39)
+	_CReduceBToRelationalExpression     = _CReduceType(40)
+	_CReduceCToRelationalExpression     = _CReduceType(41)
+	_CReduceDToRelationalExpression     = _CReduceType(42)
+	_CReduceEToRelationalExpression     = _CReduceType(43)
+	_CReduceAToEqualityExpression       = _CReduceType(44)
+	_CReduceBToEqualityExpression       = _CReduceType(45)
+	_CReduceCToEqualityExpression       = _CReduceType(46)
+	_CReduceAToAndExpression            = _CReduceType(47)
+	_CReduceBToAndExpression            = _CReduceType(48)
+	_CReduceAToExclusiveOrExpression    = _CReduceType(49)
+	_CReduceBToExclusiveOrExpression    = _CReduceType(50)
+	_CReduceAToInclusiveOrExpression    = _CReduceType(51)
+	_CReduceBToInclusiveOrExpression    = _CReduceType(52)
+	_CReduceAToLogicalAndExpression     = _CReduceType(53)
+	_CReduceBToLogicalAndExpression     = _CReduceType(54)
+	_CReduceAToLogicalOrExpression      = _CReduceType(55)
+	_CReduceBToLogicalOrExpression      = _CReduceType(56)
+	_CReduceAToConditionalExpression    = _CReduceType(57)
+	_CReduceBToConditionalExpression    = _CReduceType(58)
+	_CReduceAToAssignmentExpression     = _CReduceType(59)
+	_CReduceBToAssignmentExpression     = _CReduceType(60)
+	_CReduceAToAssignmentOperator       = _CReduceType(61)
+	_CReduceBToAssignmentOperator       = _CReduceType(62)
+	_CReduceCToAssignmentOperator       = _CReduceType(63)
+	_CReduceDToAssignmentOperator       = _CReduceType(64)
+	_CReduceEToAssignmentOperator       = _CReduceType(65)
+	_CReduceFToAssignmentOperator       = _CReduceType(66)
+	_CReduceGToAssignmentOperator       = _CReduceType(67)
+	_CReduceHToAssignmentOperator       = _CReduceType(68)
+	_CReduceIToAssignmentOperator       = _CReduceType(69)
+	_CReduceJToAssignmentOperator       = _CReduceType(70)
+	_CReduceKToAssignmentOperator       = _CReduceType(71)
+	_CReduceAToExpression               = _CReduceType(72)
+	_CReduceBToExpression               = _CReduceType(73)
+	_CReduceAToConstantExpression       = _CReduceType(74)
+	_CReduceAToDeclaration              = _CReduceType(75)
+	_CReduceBToDeclaration              = _CReduceType(76)
+	_CReduceAToDeclarationSpecifiers    = _CReduceType(77)
+	_CReduceBToDeclarationSpecifiers    = _CReduceType(78)
+	_CReduceCToDeclarationSpecifiers    = _CReduceType(79)
+	_CReduceDToDeclarationSpecifiers    = _CReduceType(80)
+	_CReduceEToDeclarationSpecifiers    = _CReduceType(81)
+	_CReduceFToDeclarationSpecifiers    = _CReduceType(82)
+	_CReduceAToInitDeclaratorList       = _CReduceType(83)
+	_CReduceBToInitDeclaratorList       = _CReduceType(84)
+	_CReduceAToInitDeclarator           = _CReduceType(85)
+	_CReduceBToInitDeclarator           = _CReduceType(86)
+	_CReduceAToStorageClassSpecifier    = _CReduceType(87)
+	_CReduceBToStorageClassSpecifier    = _CReduceType(88)
+	_CReduceCToStorageClassSpecifier    = _CReduceType(89)
+	_CReduceDToStorageClassSpecifier    = _CReduceType(90)
+	_CReduceEToStorageClassSpecifier    = _CReduceType(91)
+	_CReduceAToTypeSpecifier            = _CReduceType(92)
+	_CReduceBToTypeSpecifier            = _CReduceType(93)
+	_CReduceCToTypeSpecifier            = _CReduceType(94)
+	_CReduceDToTypeSpecifier            = _CReduceType(95)
+	_CReduceEToTypeSpecifier            = _CReduceType(96)
+	_CReduceFToTypeSpecifier            = _CReduceType(97)
+	_CReduceGToTypeSpecifier            = _CReduceType(98)
+	_CReduceHToTypeSpecifier            = _CReduceType(99)
+	_CReduceIToTypeSpecifier            = _CReduceType(100)
+	_CReduceJToTypeSpecifier            = _CReduceType(101)
+	_CReduceKToTypeSpecifier            = _CReduceType(102)
+	_CReduceLToTypeSpecifier            = _CReduceType(103)
+	_CReduceAToStructOrUnionSpecifier   = _CReduceType(104)
+	_CReduceBToStructOrUnionSpecifier   = _CReduceType(105)
+	_CReduceCToStructOrUnionSpecifier   = _CReduceType(106)
+	_CReduceAToStructOrUnion            = _CReduceType(107)
+	_CReduceBToStructOrUnion            = _CReduceType(108)
+	_CReduceAToStructDeclarationList    = _CReduceType(109)
+	_CReduceBToStructDeclarationList    = _CReduceType(110)
+	_CReduceAToStructDeclaration        = _CReduceType(111)
+	_CReduceAToSpecifierQualifierList   = _CReduceType(112)
+	_CReduceBToSpecifierQualifierList   = _CReduceType(113)
+	_CReduceCToSpecifierQualifierList   = _CReduceType(114)
+	_CReduceDToSpecifierQualifierList   = _CReduceType(115)
+	_CReduceAToStructDeclaratorList     = _CReduceType(116)
+	_CReduceBToStructDeclaratorList     = _CReduceType(117)
+	_CReduceAToStructDeclarator         = _CReduceType(118)
+	_CReduceBToStructDeclarator         = _CReduceType(119)
+	_CReduceCToStructDeclarator         = _CReduceType(120)
+	_CReduceAToEnumSpecifier            = _CReduceType(121)
+	_CReduceBToEnumSpecifier            = _CReduceType(122)
+	_CReduceCToEnumSpecifier            = _CReduceType(123)
+	_CReduceAToEnumeratorList           = _CReduceType(124)
+	_CReduceBToEnumeratorList           = _CReduceType(125)
+	_CReduceAToEnumerator               = _CReduceType(126)
+	_CReduceBToEnumerator               = _CReduceType(127)
+	_CReduceAToTypeQualifier            = _CReduceType(128)
+	_CReduceBToTypeQualifier            = _CReduceType(129)
+	_CReduceAToDeclarator               = _CReduceType(130)
+	_CReduceBToDeclarator               = _CReduceType(131)
+	_CReduceAToDirectDeclarator         = _CReduceType(132)
+	_CReduceBToDirectDeclarator         = _CReduceType(133)
+	_CReduceCToDirectDeclarator         = _CReduceType(134)
+	_CReduceDToDirectDeclarator         = _CReduceType(135)
+	_CReduceEToDirectDeclarator         = _CReduceType(136)
+	_CReduceFToDirectDeclarator         = _CReduceType(137)
+	_CReduceGToDirectDeclarator         = _CReduceType(138)
+	_CReduceAToPointer                  = _CReduceType(139)
+	_CReduceBToPointer                  = _CReduceType(140)
+	_CReduceCToPointer                  = _CReduceType(141)
+	_CReduceDToPointer                  = _CReduceType(142)
+	_CReduceAToTypeQualifierList        = _CReduceType(143)
+	_CReduceBToTypeQualifierList        = _CReduceType(144)
+	_CReduceAToParameterTypeList        = _CReduceType(145)
+	_CReduceBToParameterTypeList        = _CReduceType(146)
+	_CReduceAToParameterList            = _CReduceType(147)
+	_CReduceBToParameterList            = _CReduceType(148)
+	_CReduceAToParameterDeclaration     = _CReduceType(149)
+	_CReduceBToParameterDeclaration     = _CReduceType(150)
+	_CReduceCToParameterDeclaration     = _CReduceType(151)
+	_CReduceAToIdentifierList           = _CReduceType(152)
+	_CReduceBToIdentifierList           = _CReduceType(153)
+	_CReduceAToTypeName                 = _CReduceType(154)
+	_CReduceBToTypeName                 = _CReduceType(155)
+	_CReduceAToAbstractDeclarator       = _CReduceType(156)
+	_CReduceBToAbstractDeclarator       = _CReduceType(157)
+	_CReduceCToAbstractDeclarator       = _CReduceType(158)
+	_CReduceAToDirectAbstractDeclarator = _CReduceType(159)
+	_CReduceBToDirectAbstractDeclarator = _CReduceType(160)
+	_CReduceCToDirectAbstractDeclarator = _CReduceType(161)
+	_CReduceDToDirectAbstractDeclarator = _CReduceType(162)
+	_CReduceEToDirectAbstractDeclarator = _CReduceType(163)
+	_CReduceFToDirectAbstractDeclarator = _CReduceType(164)
+	_CReduceGToDirectAbstractDeclarator = _CReduceType(165)
+	_CReduceHToDirectAbstractDeclarator = _CReduceType(166)
+	_CReduceIToDirectAbstractDeclarator = _CReduceType(167)
+	_CReduceAToInitializer              = _CReduceType(168)
+	_CReduceBToInitializer              = _CReduceType(169)
+	_CReduceCToInitializer              = _CReduceType(170)
+	_CReduceAToInitializerList          = _CReduceType(171)
+	_CReduceBToInitializerList          = _CReduceType(172)
+	_CReduceAToStatement                = _CReduceType(173)
+	_CReduceBToStatement                = _CReduceType(174)
+	_CReduceCToStatement                = _CReduceType(175)
+	_CReduceDToStatement                = _CReduceType(176)
+	_CReduceEToStatement                = _CReduceType(177)
+	_CReduceFToStatement                = _CReduceType(178)
+	_CReduceAToLabeledStatement         = _CReduceType(179)
+	_CReduceBToLabeledStatement         = _CReduceType(180)
+	_CReduceCToLabeledStatement         = _CReduceType(181)
+	_CReduceAToCompoundStatement        = _CReduceType(182)
+	_CReduceBToCompoundStatement        = _CReduceType(183)
+	_CReduceCToCompoundStatement        = _CReduceType(184)
+	_CReduceDToCompoundStatement        = _CReduceType(185)
+	_CReduceAToDeclarationList          = _CReduceType(186)
+	_CReduceBToDeclarationList          = _CReduceType(187)
+	_CReduceAToStatementList            = _CReduceType(188)
+	_CReduceBToStatementList            = _CReduceType(189)
+	_CReduceAToExpressionStatement      = _CReduceType(190)
+	_CReduceBToExpressionStatement      = _CReduceType(191)
+	_CReduceAToSelectionStatement       = _CReduceType(192)
+	_CReduceBToSelectionStatement       = _CReduceType(193)
+	_CReduceCToSelectionStatement       = _CReduceType(194)
+	_CReduceAToIterationStatement       = _CReduceType(195)
+	_CReduceBToIterationStatement       = _CReduceType(196)
+	_CReduceCToIterationStatement       = _CReduceType(197)
+	_CReduceDToIterationStatement       = _CReduceType(198)
+	_CReduceAToJumpStatement            = _CReduceType(199)
+	_CReduceBToJumpStatement            = _CReduceType(200)
+	_CReduceCToJumpStatement            = _CReduceType(201)
+	_CReduceDToJumpStatement            = _CReduceType(202)
+	_CReduceEToJumpStatement            = _CReduceType(203)
+	_CReduceAToTranslationUnit          = _CReduceType(204)
+	_CReduceBToTranslationUnit          = _CReduceType(205)
+	_CReduceAToExternalDeclaration      = _CReduceType(206)
+	_CReduceBToExternalDeclaration      = _CReduceType(207)
+	_CReduceAToFunctionDefinition       = _CReduceType(208)
+	_CReduceBToFunctionDefinition       = _CReduceType(209)
+	_CReduceCToFunctionDefinition       = _CReduceType(210)
+	_CReduceDToFunctionDefinition       = _CReduceType(211)
 )
+
+func (i _CReduceType) String() string {
+	switch i {
+	case _CReduceAToPrimaryExpression:
+		return "AToPrimaryExpression"
+	case _CReduceBToPrimaryExpression:
+		return "BToPrimaryExpression"
+	case _CReduceCToPrimaryExpression:
+		return "CToPrimaryExpression"
+	case _CReduceDToPrimaryExpression:
+		return "DToPrimaryExpression"
+	case _CReduceAToPostfixExpression:
+		return "AToPostfixExpression"
+	case _CReduceBToPostfixExpression:
+		return "BToPostfixExpression"
+	case _CReduceCToPostfixExpression:
+		return "CToPostfixExpression"
+	case _CReduceDToPostfixExpression:
+		return "DToPostfixExpression"
+	case _CReduceEToPostfixExpression:
+		return "EToPostfixExpression"
+	case _CReduceFToPostfixExpression:
+		return "FToPostfixExpression"
+	case _CReduceGToPostfixExpression:
+		return "GToPostfixExpression"
+	case _CReduceHToPostfixExpression:
+		return "HToPostfixExpression"
+	case _CReduceAToArgumentExpressionList:
+		return "AToArgumentExpressionList"
+	case _CReduceBToArgumentExpressionList:
+		return "BToArgumentExpressionList"
+	case _CReduceAToUnaryExpression:
+		return "AToUnaryExpression"
+	case _CReduceBToUnaryExpression:
+		return "BToUnaryExpression"
+	case _CReduceCToUnaryExpression:
+		return "CToUnaryExpression"
+	case _CReduceDToUnaryExpression:
+		return "DToUnaryExpression"
+	case _CReduceEToUnaryExpression:
+		return "EToUnaryExpression"
+	case _CReduceFToUnaryExpression:
+		return "FToUnaryExpression"
+	case _CReduceAToUnaryOperator:
+		return "AToUnaryOperator"
+	case _CReduceBToUnaryOperator:
+		return "BToUnaryOperator"
+	case _CReduceCToUnaryOperator:
+		return "CToUnaryOperator"
+	case _CReduceDToUnaryOperator:
+		return "DToUnaryOperator"
+	case _CReduceEToUnaryOperator:
+		return "EToUnaryOperator"
+	case _CReduceFToUnaryOperator:
+		return "FToUnaryOperator"
+	case _CReduceAToCastExpression:
+		return "AToCastExpression"
+	case _CReduceBToCastExpression:
+		return "BToCastExpression"
+	case _CReduceAToMultiplicativeExpression:
+		return "AToMultiplicativeExpression"
+	case _CReduceBToMultiplicativeExpression:
+		return "BToMultiplicativeExpression"
+	case _CReduceCToMultiplicativeExpression:
+		return "CToMultiplicativeExpression"
+	case _CReduceDToMultiplicativeExpression:
+		return "DToMultiplicativeExpression"
+	case _CReduceAToAdditiveExpression:
+		return "AToAdditiveExpression"
+	case _CReduceBToAdditiveExpression:
+		return "BToAdditiveExpression"
+	case _CReduceCToAdditiveExpression:
+		return "CToAdditiveExpression"
+	case _CReduceAToShiftExpression:
+		return "AToShiftExpression"
+	case _CReduceBToShiftExpression:
+		return "BToShiftExpression"
+	case _CReduceCToShiftExpression:
+		return "CToShiftExpression"
+	case _CReduceAToRelationalExpression:
+		return "AToRelationalExpression"
+	case _CReduceBToRelationalExpression:
+		return "BToRelationalExpression"
+	case _CReduceCToRelationalExpression:
+		return "CToRelationalExpression"
+	case _CReduceDToRelationalExpression:
+		return "DToRelationalExpression"
+	case _CReduceEToRelationalExpression:
+		return "EToRelationalExpression"
+	case _CReduceAToEqualityExpression:
+		return "AToEqualityExpression"
+	case _CReduceBToEqualityExpression:
+		return "BToEqualityExpression"
+	case _CReduceCToEqualityExpression:
+		return "CToEqualityExpression"
+	case _CReduceAToAndExpression:
+		return "AToAndExpression"
+	case _CReduceBToAndExpression:
+		return "BToAndExpression"
+	case _CReduceAToExclusiveOrExpression:
+		return "AToExclusiveOrExpression"
+	case _CReduceBToExclusiveOrExpression:
+		return "BToExclusiveOrExpression"
+	case _CReduceAToInclusiveOrExpression:
+		return "AToInclusiveOrExpression"
+	case _CReduceBToInclusiveOrExpression:
+		return "BToInclusiveOrExpression"
+	case _CReduceAToLogicalAndExpression:
+		return "AToLogicalAndExpression"
+	case _CReduceBToLogicalAndExpression:
+		return "BToLogicalAndExpression"
+	case _CReduceAToLogicalOrExpression:
+		return "AToLogicalOrExpression"
+	case _CReduceBToLogicalOrExpression:
+		return "BToLogicalOrExpression"
+	case _CReduceAToConditionalExpression:
+		return "AToConditionalExpression"
+	case _CReduceBToConditionalExpression:
+		return "BToConditionalExpression"
+	case _CReduceAToAssignmentExpression:
+		return "AToAssignmentExpression"
+	case _CReduceBToAssignmentExpression:
+		return "BToAssignmentExpression"
+	case _CReduceAToAssignmentOperator:
+		return "AToAssignmentOperator"
+	case _CReduceBToAssignmentOperator:
+		return "BToAssignmentOperator"
+	case _CReduceCToAssignmentOperator:
+		return "CToAssignmentOperator"
+	case _CReduceDToAssignmentOperator:
+		return "DToAssignmentOperator"
+	case _CReduceEToAssignmentOperator:
+		return "EToAssignmentOperator"
+	case _CReduceFToAssignmentOperator:
+		return "FToAssignmentOperator"
+	case _CReduceGToAssignmentOperator:
+		return "GToAssignmentOperator"
+	case _CReduceHToAssignmentOperator:
+		return "HToAssignmentOperator"
+	case _CReduceIToAssignmentOperator:
+		return "IToAssignmentOperator"
+	case _CReduceJToAssignmentOperator:
+		return "JToAssignmentOperator"
+	case _CReduceKToAssignmentOperator:
+		return "KToAssignmentOperator"
+	case _CReduceAToExpression:
+		return "AToExpression"
+	case _CReduceBToExpression:
+		return "BToExpression"
+	case _CReduceAToConstantExpression:
+		return "AToConstantExpression"
+	case _CReduceAToDeclaration:
+		return "AToDeclaration"
+	case _CReduceBToDeclaration:
+		return "BToDeclaration"
+	case _CReduceAToDeclarationSpecifiers:
+		return "AToDeclarationSpecifiers"
+	case _CReduceBToDeclarationSpecifiers:
+		return "BToDeclarationSpecifiers"
+	case _CReduceCToDeclarationSpecifiers:
+		return "CToDeclarationSpecifiers"
+	case _CReduceDToDeclarationSpecifiers:
+		return "DToDeclarationSpecifiers"
+	case _CReduceEToDeclarationSpecifiers:
+		return "EToDeclarationSpecifiers"
+	case _CReduceFToDeclarationSpecifiers:
+		return "FToDeclarationSpecifiers"
+	case _CReduceAToInitDeclaratorList:
+		return "AToInitDeclaratorList"
+	case _CReduceBToInitDeclaratorList:
+		return "BToInitDeclaratorList"
+	case _CReduceAToInitDeclarator:
+		return "AToInitDeclarator"
+	case _CReduceBToInitDeclarator:
+		return "BToInitDeclarator"
+	case _CReduceAToStorageClassSpecifier:
+		return "AToStorageClassSpecifier"
+	case _CReduceBToStorageClassSpecifier:
+		return "BToStorageClassSpecifier"
+	case _CReduceCToStorageClassSpecifier:
+		return "CToStorageClassSpecifier"
+	case _CReduceDToStorageClassSpecifier:
+		return "DToStorageClassSpecifier"
+	case _CReduceEToStorageClassSpecifier:
+		return "EToStorageClassSpecifier"
+	case _CReduceAToTypeSpecifier:
+		return "AToTypeSpecifier"
+	case _CReduceBToTypeSpecifier:
+		return "BToTypeSpecifier"
+	case _CReduceCToTypeSpecifier:
+		return "CToTypeSpecifier"
+	case _CReduceDToTypeSpecifier:
+		return "DToTypeSpecifier"
+	case _CReduceEToTypeSpecifier:
+		return "EToTypeSpecifier"
+	case _CReduceFToTypeSpecifier:
+		return "FToTypeSpecifier"
+	case _CReduceGToTypeSpecifier:
+		return "GToTypeSpecifier"
+	case _CReduceHToTypeSpecifier:
+		return "HToTypeSpecifier"
+	case _CReduceIToTypeSpecifier:
+		return "IToTypeSpecifier"
+	case _CReduceJToTypeSpecifier:
+		return "JToTypeSpecifier"
+	case _CReduceKToTypeSpecifier:
+		return "KToTypeSpecifier"
+	case _CReduceLToTypeSpecifier:
+		return "LToTypeSpecifier"
+	case _CReduceAToStructOrUnionSpecifier:
+		return "AToStructOrUnionSpecifier"
+	case _CReduceBToStructOrUnionSpecifier:
+		return "BToStructOrUnionSpecifier"
+	case _CReduceCToStructOrUnionSpecifier:
+		return "CToStructOrUnionSpecifier"
+	case _CReduceAToStructOrUnion:
+		return "AToStructOrUnion"
+	case _CReduceBToStructOrUnion:
+		return "BToStructOrUnion"
+	case _CReduceAToStructDeclarationList:
+		return "AToStructDeclarationList"
+	case _CReduceBToStructDeclarationList:
+		return "BToStructDeclarationList"
+	case _CReduceAToStructDeclaration:
+		return "AToStructDeclaration"
+	case _CReduceAToSpecifierQualifierList:
+		return "AToSpecifierQualifierList"
+	case _CReduceBToSpecifierQualifierList:
+		return "BToSpecifierQualifierList"
+	case _CReduceCToSpecifierQualifierList:
+		return "CToSpecifierQualifierList"
+	case _CReduceDToSpecifierQualifierList:
+		return "DToSpecifierQualifierList"
+	case _CReduceAToStructDeclaratorList:
+		return "AToStructDeclaratorList"
+	case _CReduceBToStructDeclaratorList:
+		return "BToStructDeclaratorList"
+	case _CReduceAToStructDeclarator:
+		return "AToStructDeclarator"
+	case _CReduceBToStructDeclarator:
+		return "BToStructDeclarator"
+	case _CReduceCToStructDeclarator:
+		return "CToStructDeclarator"
+	case _CReduceAToEnumSpecifier:
+		return "AToEnumSpecifier"
+	case _CReduceBToEnumSpecifier:
+		return "BToEnumSpecifier"
+	case _CReduceCToEnumSpecifier:
+		return "CToEnumSpecifier"
+	case _CReduceAToEnumeratorList:
+		return "AToEnumeratorList"
+	case _CReduceBToEnumeratorList:
+		return "BToEnumeratorList"
+	case _CReduceAToEnumerator:
+		return "AToEnumerator"
+	case _CReduceBToEnumerator:
+		return "BToEnumerator"
+	case _CReduceAToTypeQualifier:
+		return "AToTypeQualifier"
+	case _CReduceBToTypeQualifier:
+		return "BToTypeQualifier"
+	case _CReduceAToDeclarator:
+		return "AToDeclarator"
+	case _CReduceBToDeclarator:
+		return "BToDeclarator"
+	case _CReduceAToDirectDeclarator:
+		return "AToDirectDeclarator"
+	case _CReduceBToDirectDeclarator:
+		return "BToDirectDeclarator"
+	case _CReduceCToDirectDeclarator:
+		return "CToDirectDeclarator"
+	case _CReduceDToDirectDeclarator:
+		return "DToDirectDeclarator"
+	case _CReduceEToDirectDeclarator:
+		return "EToDirectDeclarator"
+	case _CReduceFToDirectDeclarator:
+		return "FToDirectDeclarator"
+	case _CReduceGToDirectDeclarator:
+		return "GToDirectDeclarator"
+	case _CReduceAToPointer:
+		return "AToPointer"
+	case _CReduceBToPointer:
+		return "BToPointer"
+	case _CReduceCToPointer:
+		return "CToPointer"
+	case _CReduceDToPointer:
+		return "DToPointer"
+	case _CReduceAToTypeQualifierList:
+		return "AToTypeQualifierList"
+	case _CReduceBToTypeQualifierList:
+		return "BToTypeQualifierList"
+	case _CReduceAToParameterTypeList:
+		return "AToParameterTypeList"
+	case _CReduceBToParameterTypeList:
+		return "BToParameterTypeList"
+	case _CReduceAToParameterList:
+		return "AToParameterList"
+	case _CReduceBToParameterList:
+		return "BToParameterList"
+	case _CReduceAToParameterDeclaration:
+		return "AToParameterDeclaration"
+	case _CReduceBToParameterDeclaration:
+		return "BToParameterDeclaration"
+	case _CReduceCToParameterDeclaration:
+		return "CToParameterDeclaration"
+	case _CReduceAToIdentifierList:
+		return "AToIdentifierList"
+	case _CReduceBToIdentifierList:
+		return "BToIdentifierList"
+	case _CReduceAToTypeName:
+		return "AToTypeName"
+	case _CReduceBToTypeName:
+		return "BToTypeName"
+	case _CReduceAToAbstractDeclarator:
+		return "AToAbstractDeclarator"
+	case _CReduceBToAbstractDeclarator:
+		return "BToAbstractDeclarator"
+	case _CReduceCToAbstractDeclarator:
+		return "CToAbstractDeclarator"
+	case _CReduceAToDirectAbstractDeclarator:
+		return "AToDirectAbstractDeclarator"
+	case _CReduceBToDirectAbstractDeclarator:
+		return "BToDirectAbstractDeclarator"
+	case _CReduceCToDirectAbstractDeclarator:
+		return "CToDirectAbstractDeclarator"
+	case _CReduceDToDirectAbstractDeclarator:
+		return "DToDirectAbstractDeclarator"
+	case _CReduceEToDirectAbstractDeclarator:
+		return "EToDirectAbstractDeclarator"
+	case _CReduceFToDirectAbstractDeclarator:
+		return "FToDirectAbstractDeclarator"
+	case _CReduceGToDirectAbstractDeclarator:
+		return "GToDirectAbstractDeclarator"
+	case _CReduceHToDirectAbstractDeclarator:
+		return "HToDirectAbstractDeclarator"
+	case _CReduceIToDirectAbstractDeclarator:
+		return "IToDirectAbstractDeclarator"
+	case _CReduceAToInitializer:
+		return "AToInitializer"
+	case _CReduceBToInitializer:
+		return "BToInitializer"
+	case _CReduceCToInitializer:
+		return "CToInitializer"
+	case _CReduceAToInitializerList:
+		return "AToInitializerList"
+	case _CReduceBToInitializerList:
+		return "BToInitializerList"
+	case _CReduceAToStatement:
+		return "AToStatement"
+	case _CReduceBToStatement:
+		return "BToStatement"
+	case _CReduceCToStatement:
+		return "CToStatement"
+	case _CReduceDToStatement:
+		return "DToStatement"
+	case _CReduceEToStatement:
+		return "EToStatement"
+	case _CReduceFToStatement:
+		return "FToStatement"
+	case _CReduceAToLabeledStatement:
+		return "AToLabeledStatement"
+	case _CReduceBToLabeledStatement:
+		return "BToLabeledStatement"
+	case _CReduceCToLabeledStatement:
+		return "CToLabeledStatement"
+	case _CReduceAToCompoundStatement:
+		return "AToCompoundStatement"
+	case _CReduceBToCompoundStatement:
+		return "BToCompoundStatement"
+	case _CReduceCToCompoundStatement:
+		return "CToCompoundStatement"
+	case _CReduceDToCompoundStatement:
+		return "DToCompoundStatement"
+	case _CReduceAToDeclarationList:
+		return "AToDeclarationList"
+	case _CReduceBToDeclarationList:
+		return "BToDeclarationList"
+	case _CReduceAToStatementList:
+		return "AToStatementList"
+	case _CReduceBToStatementList:
+		return "BToStatementList"
+	case _CReduceAToExpressionStatement:
+		return "AToExpressionStatement"
+	case _CReduceBToExpressionStatement:
+		return "BToExpressionStatement"
+	case _CReduceAToSelectionStatement:
+		return "AToSelectionStatement"
+	case _CReduceBToSelectionStatement:
+		return "BToSelectionStatement"
+	case _CReduceCToSelectionStatement:
+		return "CToSelectionStatement"
+	case _CReduceAToIterationStatement:
+		return "AToIterationStatement"
+	case _CReduceBToIterationStatement:
+		return "BToIterationStatement"
+	case _CReduceCToIterationStatement:
+		return "CToIterationStatement"
+	case _CReduceDToIterationStatement:
+		return "DToIterationStatement"
+	case _CReduceAToJumpStatement:
+		return "AToJumpStatement"
+	case _CReduceBToJumpStatement:
+		return "BToJumpStatement"
+	case _CReduceCToJumpStatement:
+		return "CToJumpStatement"
+	case _CReduceDToJumpStatement:
+		return "DToJumpStatement"
+	case _CReduceEToJumpStatement:
+		return "EToJumpStatement"
+	case _CReduceAToTranslationUnit:
+		return "AToTranslationUnit"
+	case _CReduceBToTranslationUnit:
+		return "BToTranslationUnit"
+	case _CReduceAToExternalDeclaration:
+		return "AToExternalDeclaration"
+	case _CReduceBToExternalDeclaration:
+		return "BToExternalDeclaration"
+	case _CReduceAToFunctionDefinition:
+		return "AToFunctionDefinition"
+	case _CReduceBToFunctionDefinition:
+		return "BToFunctionDefinition"
+	case _CReduceCToFunctionDefinition:
+		return "CToFunctionDefinition"
+	case _CReduceDToFunctionDefinition:
+		return "DToFunctionDefinition"
+	default:
+		return fmt.Sprintf("?unknown reduce type %d?", int(i))
+	}
+}
 
 type _CStateId int
 
@@ -2965,7 +3394,7 @@ func (act *_CAction) ReduceSymbol(reducer CReducer, stack _CStack) (_CStack, *CS
 		symbol.SymbolId_ = CFunctionDefinitionType
 		symbol.T, err = reducer.DToFunctionDefinition(args[0].T, args[1].T)
 	default:
-		panic("Unknown reduce type: " + act.ReduceType)
+		panic("Unknown reduce type: " + act.ReduceType.String())
 	}
 
 	if err != nil {
@@ -2976,357 +3405,357 @@ func (act *_CAction) ReduceSymbol(reducer CReducer, stack _CStack) (_CStack, *CS
 }
 
 var (
-	_CGotoState0Action                        = &_CAction{_CShiftAction, _CState0, ""}
-	_CGotoState1Action                        = &_CAction{_CShiftAction, _CState1, ""}
-	_CGotoState2Action                        = &_CAction{_CShiftAction, _CState2, ""}
-	_CGotoState3Action                        = &_CAction{_CShiftAction, _CState3, ""}
-	_CGotoState4Action                        = &_CAction{_CShiftAction, _CState4, ""}
-	_CGotoState5Action                        = &_CAction{_CShiftAction, _CState5, ""}
-	_CGotoState6Action                        = &_CAction{_CShiftAction, _CState6, ""}
-	_CGotoState7Action                        = &_CAction{_CShiftAction, _CState7, ""}
-	_CGotoState8Action                        = &_CAction{_CShiftAction, _CState8, ""}
-	_CGotoState9Action                        = &_CAction{_CShiftAction, _CState9, ""}
-	_CGotoState10Action                       = &_CAction{_CShiftAction, _CState10, ""}
-	_CGotoState11Action                       = &_CAction{_CShiftAction, _CState11, ""}
-	_CGotoState12Action                       = &_CAction{_CShiftAction, _CState12, ""}
-	_CGotoState13Action                       = &_CAction{_CShiftAction, _CState13, ""}
-	_CGotoState14Action                       = &_CAction{_CShiftAction, _CState14, ""}
-	_CGotoState15Action                       = &_CAction{_CShiftAction, _CState15, ""}
-	_CGotoState16Action                       = &_CAction{_CShiftAction, _CState16, ""}
-	_CGotoState17Action                       = &_CAction{_CShiftAction, _CState17, ""}
-	_CGotoState18Action                       = &_CAction{_CShiftAction, _CState18, ""}
-	_CGotoState19Action                       = &_CAction{_CShiftAction, _CState19, ""}
-	_CGotoState20Action                       = &_CAction{_CShiftAction, _CState20, ""}
-	_CGotoState21Action                       = &_CAction{_CShiftAction, _CState21, ""}
-	_CGotoState22Action                       = &_CAction{_CShiftAction, _CState22, ""}
-	_CGotoState23Action                       = &_CAction{_CShiftAction, _CState23, ""}
-	_CGotoState24Action                       = &_CAction{_CShiftAction, _CState24, ""}
-	_CGotoState25Action                       = &_CAction{_CShiftAction, _CState25, ""}
-	_CGotoState26Action                       = &_CAction{_CShiftAction, _CState26, ""}
-	_CGotoState27Action                       = &_CAction{_CShiftAction, _CState27, ""}
-	_CGotoState28Action                       = &_CAction{_CShiftAction, _CState28, ""}
-	_CGotoState29Action                       = &_CAction{_CShiftAction, _CState29, ""}
-	_CGotoState30Action                       = &_CAction{_CShiftAction, _CState30, ""}
-	_CGotoState31Action                       = &_CAction{_CShiftAction, _CState31, ""}
-	_CGotoState32Action                       = &_CAction{_CShiftAction, _CState32, ""}
-	_CGotoState33Action                       = &_CAction{_CShiftAction, _CState33, ""}
-	_CGotoState34Action                       = &_CAction{_CShiftAction, _CState34, ""}
-	_CGotoState35Action                       = &_CAction{_CShiftAction, _CState35, ""}
-	_CGotoState36Action                       = &_CAction{_CShiftAction, _CState36, ""}
-	_CGotoState37Action                       = &_CAction{_CShiftAction, _CState37, ""}
-	_CGotoState38Action                       = &_CAction{_CShiftAction, _CState38, ""}
-	_CGotoState39Action                       = &_CAction{_CShiftAction, _CState39, ""}
-	_CGotoState40Action                       = &_CAction{_CShiftAction, _CState40, ""}
-	_CGotoState41Action                       = &_CAction{_CShiftAction, _CState41, ""}
-	_CGotoState42Action                       = &_CAction{_CShiftAction, _CState42, ""}
-	_CGotoState43Action                       = &_CAction{_CShiftAction, _CState43, ""}
-	_CGotoState44Action                       = &_CAction{_CShiftAction, _CState44, ""}
-	_CGotoState45Action                       = &_CAction{_CShiftAction, _CState45, ""}
-	_CGotoState46Action                       = &_CAction{_CShiftAction, _CState46, ""}
-	_CGotoState47Action                       = &_CAction{_CShiftAction, _CState47, ""}
-	_CGotoState48Action                       = &_CAction{_CShiftAction, _CState48, ""}
-	_CGotoState49Action                       = &_CAction{_CShiftAction, _CState49, ""}
-	_CGotoState50Action                       = &_CAction{_CShiftAction, _CState50, ""}
-	_CGotoState51Action                       = &_CAction{_CShiftAction, _CState51, ""}
-	_CGotoState52Action                       = &_CAction{_CShiftAction, _CState52, ""}
-	_CGotoState53Action                       = &_CAction{_CShiftAction, _CState53, ""}
-	_CGotoState54Action                       = &_CAction{_CShiftAction, _CState54, ""}
-	_CGotoState55Action                       = &_CAction{_CShiftAction, _CState55, ""}
-	_CGotoState56Action                       = &_CAction{_CShiftAction, _CState56, ""}
-	_CGotoState57Action                       = &_CAction{_CShiftAction, _CState57, ""}
-	_CGotoState58Action                       = &_CAction{_CShiftAction, _CState58, ""}
-	_CGotoState59Action                       = &_CAction{_CShiftAction, _CState59, ""}
-	_CGotoState60Action                       = &_CAction{_CShiftAction, _CState60, ""}
-	_CGotoState61Action                       = &_CAction{_CShiftAction, _CState61, ""}
-	_CGotoState62Action                       = &_CAction{_CShiftAction, _CState62, ""}
-	_CGotoState63Action                       = &_CAction{_CShiftAction, _CState63, ""}
-	_CGotoState64Action                       = &_CAction{_CShiftAction, _CState64, ""}
-	_CGotoState65Action                       = &_CAction{_CShiftAction, _CState65, ""}
-	_CGotoState66Action                       = &_CAction{_CShiftAction, _CState66, ""}
-	_CGotoState67Action                       = &_CAction{_CShiftAction, _CState67, ""}
-	_CGotoState68Action                       = &_CAction{_CShiftAction, _CState68, ""}
-	_CGotoState69Action                       = &_CAction{_CShiftAction, _CState69, ""}
-	_CGotoState70Action                       = &_CAction{_CShiftAction, _CState70, ""}
-	_CGotoState71Action                       = &_CAction{_CShiftAction, _CState71, ""}
-	_CGotoState72Action                       = &_CAction{_CShiftAction, _CState72, ""}
-	_CGotoState73Action                       = &_CAction{_CShiftAction, _CState73, ""}
-	_CGotoState74Action                       = &_CAction{_CShiftAction, _CState74, ""}
-	_CGotoState75Action                       = &_CAction{_CShiftAction, _CState75, ""}
-	_CGotoState76Action                       = &_CAction{_CShiftAction, _CState76, ""}
-	_CGotoState77Action                       = &_CAction{_CShiftAction, _CState77, ""}
-	_CGotoState78Action                       = &_CAction{_CShiftAction, _CState78, ""}
-	_CGotoState79Action                       = &_CAction{_CShiftAction, _CState79, ""}
-	_CGotoState80Action                       = &_CAction{_CShiftAction, _CState80, ""}
-	_CGotoState81Action                       = &_CAction{_CShiftAction, _CState81, ""}
-	_CGotoState82Action                       = &_CAction{_CShiftAction, _CState82, ""}
-	_CGotoState83Action                       = &_CAction{_CShiftAction, _CState83, ""}
-	_CGotoState84Action                       = &_CAction{_CShiftAction, _CState84, ""}
-	_CGotoState85Action                       = &_CAction{_CShiftAction, _CState85, ""}
-	_CGotoState86Action                       = &_CAction{_CShiftAction, _CState86, ""}
-	_CGotoState87Action                       = &_CAction{_CShiftAction, _CState87, ""}
-	_CGotoState88Action                       = &_CAction{_CShiftAction, _CState88, ""}
-	_CGotoState89Action                       = &_CAction{_CShiftAction, _CState89, ""}
-	_CGotoState90Action                       = &_CAction{_CShiftAction, _CState90, ""}
-	_CGotoState91Action                       = &_CAction{_CShiftAction, _CState91, ""}
-	_CGotoState92Action                       = &_CAction{_CShiftAction, _CState92, ""}
-	_CGotoState93Action                       = &_CAction{_CShiftAction, _CState93, ""}
-	_CGotoState94Action                       = &_CAction{_CShiftAction, _CState94, ""}
-	_CGotoState95Action                       = &_CAction{_CShiftAction, _CState95, ""}
-	_CGotoState96Action                       = &_CAction{_CShiftAction, _CState96, ""}
-	_CGotoState97Action                       = &_CAction{_CShiftAction, _CState97, ""}
-	_CGotoState98Action                       = &_CAction{_CShiftAction, _CState98, ""}
-	_CGotoState99Action                       = &_CAction{_CShiftAction, _CState99, ""}
-	_CGotoState100Action                      = &_CAction{_CShiftAction, _CState100, ""}
-	_CGotoState101Action                      = &_CAction{_CShiftAction, _CState101, ""}
-	_CGotoState102Action                      = &_CAction{_CShiftAction, _CState102, ""}
-	_CGotoState103Action                      = &_CAction{_CShiftAction, _CState103, ""}
-	_CGotoState104Action                      = &_CAction{_CShiftAction, _CState104, ""}
-	_CGotoState105Action                      = &_CAction{_CShiftAction, _CState105, ""}
-	_CGotoState106Action                      = &_CAction{_CShiftAction, _CState106, ""}
-	_CGotoState107Action                      = &_CAction{_CShiftAction, _CState107, ""}
-	_CGotoState108Action                      = &_CAction{_CShiftAction, _CState108, ""}
-	_CGotoState109Action                      = &_CAction{_CShiftAction, _CState109, ""}
-	_CGotoState110Action                      = &_CAction{_CShiftAction, _CState110, ""}
-	_CGotoState111Action                      = &_CAction{_CShiftAction, _CState111, ""}
-	_CGotoState112Action                      = &_CAction{_CShiftAction, _CState112, ""}
-	_CGotoState113Action                      = &_CAction{_CShiftAction, _CState113, ""}
-	_CGotoState114Action                      = &_CAction{_CShiftAction, _CState114, ""}
-	_CGotoState115Action                      = &_CAction{_CShiftAction, _CState115, ""}
-	_CGotoState116Action                      = &_CAction{_CShiftAction, _CState116, ""}
-	_CGotoState117Action                      = &_CAction{_CShiftAction, _CState117, ""}
-	_CGotoState118Action                      = &_CAction{_CShiftAction, _CState118, ""}
-	_CGotoState119Action                      = &_CAction{_CShiftAction, _CState119, ""}
-	_CGotoState120Action                      = &_CAction{_CShiftAction, _CState120, ""}
-	_CGotoState121Action                      = &_CAction{_CShiftAction, _CState121, ""}
-	_CGotoState122Action                      = &_CAction{_CShiftAction, _CState122, ""}
-	_CGotoState123Action                      = &_CAction{_CShiftAction, _CState123, ""}
-	_CGotoState124Action                      = &_CAction{_CShiftAction, _CState124, ""}
-	_CGotoState125Action                      = &_CAction{_CShiftAction, _CState125, ""}
-	_CGotoState126Action                      = &_CAction{_CShiftAction, _CState126, ""}
-	_CGotoState127Action                      = &_CAction{_CShiftAction, _CState127, ""}
-	_CGotoState128Action                      = &_CAction{_CShiftAction, _CState128, ""}
-	_CGotoState129Action                      = &_CAction{_CShiftAction, _CState129, ""}
-	_CGotoState130Action                      = &_CAction{_CShiftAction, _CState130, ""}
-	_CGotoState131Action                      = &_CAction{_CShiftAction, _CState131, ""}
-	_CGotoState132Action                      = &_CAction{_CShiftAction, _CState132, ""}
-	_CGotoState133Action                      = &_CAction{_CShiftAction, _CState133, ""}
-	_CGotoState134Action                      = &_CAction{_CShiftAction, _CState134, ""}
-	_CGotoState135Action                      = &_CAction{_CShiftAction, _CState135, ""}
-	_CGotoState136Action                      = &_CAction{_CShiftAction, _CState136, ""}
-	_CGotoState137Action                      = &_CAction{_CShiftAction, _CState137, ""}
-	_CGotoState138Action                      = &_CAction{_CShiftAction, _CState138, ""}
-	_CGotoState139Action                      = &_CAction{_CShiftAction, _CState139, ""}
-	_CGotoState140Action                      = &_CAction{_CShiftAction, _CState140, ""}
-	_CGotoState141Action                      = &_CAction{_CShiftAction, _CState141, ""}
-	_CGotoState142Action                      = &_CAction{_CShiftAction, _CState142, ""}
-	_CGotoState143Action                      = &_CAction{_CShiftAction, _CState143, ""}
-	_CGotoState144Action                      = &_CAction{_CShiftAction, _CState144, ""}
-	_CGotoState145Action                      = &_CAction{_CShiftAction, _CState145, ""}
-	_CGotoState146Action                      = &_CAction{_CShiftAction, _CState146, ""}
-	_CGotoState147Action                      = &_CAction{_CShiftAction, _CState147, ""}
-	_CGotoState148Action                      = &_CAction{_CShiftAction, _CState148, ""}
-	_CGotoState149Action                      = &_CAction{_CShiftAction, _CState149, ""}
-	_CGotoState150Action                      = &_CAction{_CShiftAction, _CState150, ""}
-	_CGotoState151Action                      = &_CAction{_CShiftAction, _CState151, ""}
-	_CGotoState152Action                      = &_CAction{_CShiftAction, _CState152, ""}
-	_CGotoState153Action                      = &_CAction{_CShiftAction, _CState153, ""}
-	_CGotoState154Action                      = &_CAction{_CShiftAction, _CState154, ""}
-	_CGotoState155Action                      = &_CAction{_CShiftAction, _CState155, ""}
-	_CGotoState156Action                      = &_CAction{_CShiftAction, _CState156, ""}
-	_CGotoState157Action                      = &_CAction{_CShiftAction, _CState157, ""}
-	_CGotoState158Action                      = &_CAction{_CShiftAction, _CState158, ""}
-	_CGotoState159Action                      = &_CAction{_CShiftAction, _CState159, ""}
-	_CGotoState160Action                      = &_CAction{_CShiftAction, _CState160, ""}
-	_CGotoState161Action                      = &_CAction{_CShiftAction, _CState161, ""}
-	_CGotoState162Action                      = &_CAction{_CShiftAction, _CState162, ""}
-	_CGotoState163Action                      = &_CAction{_CShiftAction, _CState163, ""}
-	_CGotoState164Action                      = &_CAction{_CShiftAction, _CState164, ""}
-	_CGotoState165Action                      = &_CAction{_CShiftAction, _CState165, ""}
-	_CGotoState166Action                      = &_CAction{_CShiftAction, _CState166, ""}
-	_CGotoState167Action                      = &_CAction{_CShiftAction, _CState167, ""}
-	_CGotoState168Action                      = &_CAction{_CShiftAction, _CState168, ""}
-	_CGotoState169Action                      = &_CAction{_CShiftAction, _CState169, ""}
-	_CGotoState170Action                      = &_CAction{_CShiftAction, _CState170, ""}
-	_CGotoState171Action                      = &_CAction{_CShiftAction, _CState171, ""}
-	_CGotoState172Action                      = &_CAction{_CShiftAction, _CState172, ""}
-	_CGotoState173Action                      = &_CAction{_CShiftAction, _CState173, ""}
-	_CGotoState174Action                      = &_CAction{_CShiftAction, _CState174, ""}
-	_CGotoState175Action                      = &_CAction{_CShiftAction, _CState175, ""}
-	_CGotoState176Action                      = &_CAction{_CShiftAction, _CState176, ""}
-	_CGotoState177Action                      = &_CAction{_CShiftAction, _CState177, ""}
-	_CGotoState178Action                      = &_CAction{_CShiftAction, _CState178, ""}
-	_CGotoState179Action                      = &_CAction{_CShiftAction, _CState179, ""}
-	_CGotoState180Action                      = &_CAction{_CShiftAction, _CState180, ""}
-	_CGotoState181Action                      = &_CAction{_CShiftAction, _CState181, ""}
-	_CGotoState182Action                      = &_CAction{_CShiftAction, _CState182, ""}
-	_CGotoState183Action                      = &_CAction{_CShiftAction, _CState183, ""}
-	_CGotoState184Action                      = &_CAction{_CShiftAction, _CState184, ""}
-	_CGotoState185Action                      = &_CAction{_CShiftAction, _CState185, ""}
-	_CGotoState186Action                      = &_CAction{_CShiftAction, _CState186, ""}
-	_CGotoState187Action                      = &_CAction{_CShiftAction, _CState187, ""}
-	_CGotoState188Action                      = &_CAction{_CShiftAction, _CState188, ""}
-	_CGotoState189Action                      = &_CAction{_CShiftAction, _CState189, ""}
-	_CGotoState190Action                      = &_CAction{_CShiftAction, _CState190, ""}
-	_CGotoState191Action                      = &_CAction{_CShiftAction, _CState191, ""}
-	_CGotoState192Action                      = &_CAction{_CShiftAction, _CState192, ""}
-	_CGotoState193Action                      = &_CAction{_CShiftAction, _CState193, ""}
-	_CGotoState194Action                      = &_CAction{_CShiftAction, _CState194, ""}
-	_CGotoState195Action                      = &_CAction{_CShiftAction, _CState195, ""}
-	_CGotoState196Action                      = &_CAction{_CShiftAction, _CState196, ""}
-	_CGotoState197Action                      = &_CAction{_CShiftAction, _CState197, ""}
-	_CGotoState198Action                      = &_CAction{_CShiftAction, _CState198, ""}
-	_CGotoState199Action                      = &_CAction{_CShiftAction, _CState199, ""}
-	_CGotoState200Action                      = &_CAction{_CShiftAction, _CState200, ""}
-	_CGotoState201Action                      = &_CAction{_CShiftAction, _CState201, ""}
-	_CGotoState202Action                      = &_CAction{_CShiftAction, _CState202, ""}
-	_CGotoState203Action                      = &_CAction{_CShiftAction, _CState203, ""}
-	_CGotoState204Action                      = &_CAction{_CShiftAction, _CState204, ""}
-	_CGotoState205Action                      = &_CAction{_CShiftAction, _CState205, ""}
-	_CGotoState206Action                      = &_CAction{_CShiftAction, _CState206, ""}
-	_CGotoState207Action                      = &_CAction{_CShiftAction, _CState207, ""}
-	_CGotoState208Action                      = &_CAction{_CShiftAction, _CState208, ""}
-	_CGotoState209Action                      = &_CAction{_CShiftAction, _CState209, ""}
-	_CGotoState210Action                      = &_CAction{_CShiftAction, _CState210, ""}
-	_CGotoState211Action                      = &_CAction{_CShiftAction, _CState211, ""}
-	_CGotoState212Action                      = &_CAction{_CShiftAction, _CState212, ""}
-	_CGotoState213Action                      = &_CAction{_CShiftAction, _CState213, ""}
-	_CGotoState214Action                      = &_CAction{_CShiftAction, _CState214, ""}
-	_CGotoState215Action                      = &_CAction{_CShiftAction, _CState215, ""}
-	_CGotoState216Action                      = &_CAction{_CShiftAction, _CState216, ""}
-	_CGotoState217Action                      = &_CAction{_CShiftAction, _CState217, ""}
-	_CGotoState218Action                      = &_CAction{_CShiftAction, _CState218, ""}
-	_CGotoState219Action                      = &_CAction{_CShiftAction, _CState219, ""}
-	_CGotoState220Action                      = &_CAction{_CShiftAction, _CState220, ""}
-	_CGotoState221Action                      = &_CAction{_CShiftAction, _CState221, ""}
-	_CGotoState222Action                      = &_CAction{_CShiftAction, _CState222, ""}
-	_CGotoState223Action                      = &_CAction{_CShiftAction, _CState223, ""}
-	_CGotoState224Action                      = &_CAction{_CShiftAction, _CState224, ""}
-	_CGotoState225Action                      = &_CAction{_CShiftAction, _CState225, ""}
-	_CGotoState226Action                      = &_CAction{_CShiftAction, _CState226, ""}
-	_CGotoState227Action                      = &_CAction{_CShiftAction, _CState227, ""}
-	_CGotoState228Action                      = &_CAction{_CShiftAction, _CState228, ""}
-	_CGotoState229Action                      = &_CAction{_CShiftAction, _CState229, ""}
-	_CGotoState230Action                      = &_CAction{_CShiftAction, _CState230, ""}
-	_CGotoState231Action                      = &_CAction{_CShiftAction, _CState231, ""}
-	_CGotoState232Action                      = &_CAction{_CShiftAction, _CState232, ""}
-	_CGotoState233Action                      = &_CAction{_CShiftAction, _CState233, ""}
-	_CGotoState234Action                      = &_CAction{_CShiftAction, _CState234, ""}
-	_CGotoState235Action                      = &_CAction{_CShiftAction, _CState235, ""}
-	_CGotoState236Action                      = &_CAction{_CShiftAction, _CState236, ""}
-	_CGotoState237Action                      = &_CAction{_CShiftAction, _CState237, ""}
-	_CGotoState238Action                      = &_CAction{_CShiftAction, _CState238, ""}
-	_CGotoState239Action                      = &_CAction{_CShiftAction, _CState239, ""}
-	_CGotoState240Action                      = &_CAction{_CShiftAction, _CState240, ""}
-	_CGotoState241Action                      = &_CAction{_CShiftAction, _CState241, ""}
-	_CGotoState242Action                      = &_CAction{_CShiftAction, _CState242, ""}
-	_CGotoState243Action                      = &_CAction{_CShiftAction, _CState243, ""}
-	_CGotoState244Action                      = &_CAction{_CShiftAction, _CState244, ""}
-	_CGotoState245Action                      = &_CAction{_CShiftAction, _CState245, ""}
-	_CGotoState246Action                      = &_CAction{_CShiftAction, _CState246, ""}
-	_CGotoState247Action                      = &_CAction{_CShiftAction, _CState247, ""}
-	_CGotoState248Action                      = &_CAction{_CShiftAction, _CState248, ""}
-	_CGotoState249Action                      = &_CAction{_CShiftAction, _CState249, ""}
-	_CGotoState250Action                      = &_CAction{_CShiftAction, _CState250, ""}
-	_CGotoState251Action                      = &_CAction{_CShiftAction, _CState251, ""}
-	_CGotoState252Action                      = &_CAction{_CShiftAction, _CState252, ""}
-	_CGotoState253Action                      = &_CAction{_CShiftAction, _CState253, ""}
-	_CGotoState254Action                      = &_CAction{_CShiftAction, _CState254, ""}
-	_CGotoState255Action                      = &_CAction{_CShiftAction, _CState255, ""}
-	_CGotoState256Action                      = &_CAction{_CShiftAction, _CState256, ""}
-	_CGotoState257Action                      = &_CAction{_CShiftAction, _CState257, ""}
-	_CGotoState258Action                      = &_CAction{_CShiftAction, _CState258, ""}
-	_CGotoState259Action                      = &_CAction{_CShiftAction, _CState259, ""}
-	_CGotoState260Action                      = &_CAction{_CShiftAction, _CState260, ""}
-	_CGotoState261Action                      = &_CAction{_CShiftAction, _CState261, ""}
-	_CGotoState262Action                      = &_CAction{_CShiftAction, _CState262, ""}
-	_CGotoState263Action                      = &_CAction{_CShiftAction, _CState263, ""}
-	_CGotoState264Action                      = &_CAction{_CShiftAction, _CState264, ""}
-	_CGotoState265Action                      = &_CAction{_CShiftAction, _CState265, ""}
-	_CGotoState266Action                      = &_CAction{_CShiftAction, _CState266, ""}
-	_CGotoState267Action                      = &_CAction{_CShiftAction, _CState267, ""}
-	_CGotoState268Action                      = &_CAction{_CShiftAction, _CState268, ""}
-	_CGotoState269Action                      = &_CAction{_CShiftAction, _CState269, ""}
-	_CGotoState270Action                      = &_CAction{_CShiftAction, _CState270, ""}
-	_CGotoState271Action                      = &_CAction{_CShiftAction, _CState271, ""}
-	_CGotoState272Action                      = &_CAction{_CShiftAction, _CState272, ""}
-	_CGotoState273Action                      = &_CAction{_CShiftAction, _CState273, ""}
-	_CGotoState274Action                      = &_CAction{_CShiftAction, _CState274, ""}
-	_CGotoState275Action                      = &_CAction{_CShiftAction, _CState275, ""}
-	_CGotoState276Action                      = &_CAction{_CShiftAction, _CState276, ""}
-	_CGotoState277Action                      = &_CAction{_CShiftAction, _CState277, ""}
-	_CGotoState278Action                      = &_CAction{_CShiftAction, _CState278, ""}
-	_CGotoState279Action                      = &_CAction{_CShiftAction, _CState279, ""}
-	_CGotoState280Action                      = &_CAction{_CShiftAction, _CState280, ""}
-	_CGotoState281Action                      = &_CAction{_CShiftAction, _CState281, ""}
-	_CGotoState282Action                      = &_CAction{_CShiftAction, _CState282, ""}
-	_CGotoState283Action                      = &_CAction{_CShiftAction, _CState283, ""}
-	_CGotoState284Action                      = &_CAction{_CShiftAction, _CState284, ""}
-	_CGotoState285Action                      = &_CAction{_CShiftAction, _CState285, ""}
-	_CGotoState286Action                      = &_CAction{_CShiftAction, _CState286, ""}
-	_CGotoState287Action                      = &_CAction{_CShiftAction, _CState287, ""}
-	_CGotoState288Action                      = &_CAction{_CShiftAction, _CState288, ""}
-	_CGotoState289Action                      = &_CAction{_CShiftAction, _CState289, ""}
-	_CGotoState290Action                      = &_CAction{_CShiftAction, _CState290, ""}
-	_CGotoState291Action                      = &_CAction{_CShiftAction, _CState291, ""}
-	_CGotoState292Action                      = &_CAction{_CShiftAction, _CState292, ""}
-	_CGotoState293Action                      = &_CAction{_CShiftAction, _CState293, ""}
-	_CGotoState294Action                      = &_CAction{_CShiftAction, _CState294, ""}
-	_CGotoState295Action                      = &_CAction{_CShiftAction, _CState295, ""}
-	_CGotoState296Action                      = &_CAction{_CShiftAction, _CState296, ""}
-	_CGotoState297Action                      = &_CAction{_CShiftAction, _CState297, ""}
-	_CGotoState298Action                      = &_CAction{_CShiftAction, _CState298, ""}
-	_CGotoState299Action                      = &_CAction{_CShiftAction, _CState299, ""}
-	_CGotoState300Action                      = &_CAction{_CShiftAction, _CState300, ""}
-	_CGotoState301Action                      = &_CAction{_CShiftAction, _CState301, ""}
-	_CGotoState302Action                      = &_CAction{_CShiftAction, _CState302, ""}
-	_CGotoState303Action                      = &_CAction{_CShiftAction, _CState303, ""}
-	_CGotoState304Action                      = &_CAction{_CShiftAction, _CState304, ""}
-	_CGotoState305Action                      = &_CAction{_CShiftAction, _CState305, ""}
-	_CGotoState306Action                      = &_CAction{_CShiftAction, _CState306, ""}
-	_CGotoState307Action                      = &_CAction{_CShiftAction, _CState307, ""}
-	_CGotoState308Action                      = &_CAction{_CShiftAction, _CState308, ""}
-	_CGotoState309Action                      = &_CAction{_CShiftAction, _CState309, ""}
-	_CGotoState310Action                      = &_CAction{_CShiftAction, _CState310, ""}
-	_CGotoState311Action                      = &_CAction{_CShiftAction, _CState311, ""}
-	_CGotoState312Action                      = &_CAction{_CShiftAction, _CState312, ""}
-	_CGotoState313Action                      = &_CAction{_CShiftAction, _CState313, ""}
-	_CGotoState314Action                      = &_CAction{_CShiftAction, _CState314, ""}
-	_CGotoState315Action                      = &_CAction{_CShiftAction, _CState315, ""}
-	_CGotoState316Action                      = &_CAction{_CShiftAction, _CState316, ""}
-	_CGotoState317Action                      = &_CAction{_CShiftAction, _CState317, ""}
-	_CGotoState318Action                      = &_CAction{_CShiftAction, _CState318, ""}
-	_CGotoState319Action                      = &_CAction{_CShiftAction, _CState319, ""}
-	_CGotoState320Action                      = &_CAction{_CShiftAction, _CState320, ""}
-	_CGotoState321Action                      = &_CAction{_CShiftAction, _CState321, ""}
-	_CGotoState322Action                      = &_CAction{_CShiftAction, _CState322, ""}
-	_CGotoState323Action                      = &_CAction{_CShiftAction, _CState323, ""}
-	_CGotoState324Action                      = &_CAction{_CShiftAction, _CState324, ""}
-	_CGotoState325Action                      = &_CAction{_CShiftAction, _CState325, ""}
-	_CGotoState326Action                      = &_CAction{_CShiftAction, _CState326, ""}
-	_CGotoState327Action                      = &_CAction{_CShiftAction, _CState327, ""}
-	_CGotoState328Action                      = &_CAction{_CShiftAction, _CState328, ""}
-	_CGotoState329Action                      = &_CAction{_CShiftAction, _CState329, ""}
-	_CGotoState330Action                      = &_CAction{_CShiftAction, _CState330, ""}
-	_CGotoState331Action                      = &_CAction{_CShiftAction, _CState331, ""}
-	_CGotoState332Action                      = &_CAction{_CShiftAction, _CState332, ""}
-	_CGotoState333Action                      = &_CAction{_CShiftAction, _CState333, ""}
-	_CGotoState334Action                      = &_CAction{_CShiftAction, _CState334, ""}
-	_CGotoState335Action                      = &_CAction{_CShiftAction, _CState335, ""}
-	_CGotoState336Action                      = &_CAction{_CShiftAction, _CState336, ""}
-	_CGotoState337Action                      = &_CAction{_CShiftAction, _CState337, ""}
-	_CGotoState338Action                      = &_CAction{_CShiftAction, _CState338, ""}
-	_CGotoState339Action                      = &_CAction{_CShiftAction, _CState339, ""}
-	_CGotoState340Action                      = &_CAction{_CShiftAction, _CState340, ""}
-	_CGotoState341Action                      = &_CAction{_CShiftAction, _CState341, ""}
-	_CGotoState342Action                      = &_CAction{_CShiftAction, _CState342, ""}
-	_CGotoState343Action                      = &_CAction{_CShiftAction, _CState343, ""}
-	_CGotoState344Action                      = &_CAction{_CShiftAction, _CState344, ""}
-	_CGotoState345Action                      = &_CAction{_CShiftAction, _CState345, ""}
-	_CGotoState346Action                      = &_CAction{_CShiftAction, _CState346, ""}
-	_CGotoState347Action                      = &_CAction{_CShiftAction, _CState347, ""}
-	_CGotoState348Action                      = &_CAction{_CShiftAction, _CState348, ""}
-	_CGotoState349Action                      = &_CAction{_CShiftAction, _CState349, ""}
-	_CGotoState350Action                      = &_CAction{_CShiftAction, _CState350, ""}
+	_CGotoState0Action                        = &_CAction{_CShiftAction, _CState0, 0}
+	_CGotoState1Action                        = &_CAction{_CShiftAction, _CState1, 0}
+	_CGotoState2Action                        = &_CAction{_CShiftAction, _CState2, 0}
+	_CGotoState3Action                        = &_CAction{_CShiftAction, _CState3, 0}
+	_CGotoState4Action                        = &_CAction{_CShiftAction, _CState4, 0}
+	_CGotoState5Action                        = &_CAction{_CShiftAction, _CState5, 0}
+	_CGotoState6Action                        = &_CAction{_CShiftAction, _CState6, 0}
+	_CGotoState7Action                        = &_CAction{_CShiftAction, _CState7, 0}
+	_CGotoState8Action                        = &_CAction{_CShiftAction, _CState8, 0}
+	_CGotoState9Action                        = &_CAction{_CShiftAction, _CState9, 0}
+	_CGotoState10Action                       = &_CAction{_CShiftAction, _CState10, 0}
+	_CGotoState11Action                       = &_CAction{_CShiftAction, _CState11, 0}
+	_CGotoState12Action                       = &_CAction{_CShiftAction, _CState12, 0}
+	_CGotoState13Action                       = &_CAction{_CShiftAction, _CState13, 0}
+	_CGotoState14Action                       = &_CAction{_CShiftAction, _CState14, 0}
+	_CGotoState15Action                       = &_CAction{_CShiftAction, _CState15, 0}
+	_CGotoState16Action                       = &_CAction{_CShiftAction, _CState16, 0}
+	_CGotoState17Action                       = &_CAction{_CShiftAction, _CState17, 0}
+	_CGotoState18Action                       = &_CAction{_CShiftAction, _CState18, 0}
+	_CGotoState19Action                       = &_CAction{_CShiftAction, _CState19, 0}
+	_CGotoState20Action                       = &_CAction{_CShiftAction, _CState20, 0}
+	_CGotoState21Action                       = &_CAction{_CShiftAction, _CState21, 0}
+	_CGotoState22Action                       = &_CAction{_CShiftAction, _CState22, 0}
+	_CGotoState23Action                       = &_CAction{_CShiftAction, _CState23, 0}
+	_CGotoState24Action                       = &_CAction{_CShiftAction, _CState24, 0}
+	_CGotoState25Action                       = &_CAction{_CShiftAction, _CState25, 0}
+	_CGotoState26Action                       = &_CAction{_CShiftAction, _CState26, 0}
+	_CGotoState27Action                       = &_CAction{_CShiftAction, _CState27, 0}
+	_CGotoState28Action                       = &_CAction{_CShiftAction, _CState28, 0}
+	_CGotoState29Action                       = &_CAction{_CShiftAction, _CState29, 0}
+	_CGotoState30Action                       = &_CAction{_CShiftAction, _CState30, 0}
+	_CGotoState31Action                       = &_CAction{_CShiftAction, _CState31, 0}
+	_CGotoState32Action                       = &_CAction{_CShiftAction, _CState32, 0}
+	_CGotoState33Action                       = &_CAction{_CShiftAction, _CState33, 0}
+	_CGotoState34Action                       = &_CAction{_CShiftAction, _CState34, 0}
+	_CGotoState35Action                       = &_CAction{_CShiftAction, _CState35, 0}
+	_CGotoState36Action                       = &_CAction{_CShiftAction, _CState36, 0}
+	_CGotoState37Action                       = &_CAction{_CShiftAction, _CState37, 0}
+	_CGotoState38Action                       = &_CAction{_CShiftAction, _CState38, 0}
+	_CGotoState39Action                       = &_CAction{_CShiftAction, _CState39, 0}
+	_CGotoState40Action                       = &_CAction{_CShiftAction, _CState40, 0}
+	_CGotoState41Action                       = &_CAction{_CShiftAction, _CState41, 0}
+	_CGotoState42Action                       = &_CAction{_CShiftAction, _CState42, 0}
+	_CGotoState43Action                       = &_CAction{_CShiftAction, _CState43, 0}
+	_CGotoState44Action                       = &_CAction{_CShiftAction, _CState44, 0}
+	_CGotoState45Action                       = &_CAction{_CShiftAction, _CState45, 0}
+	_CGotoState46Action                       = &_CAction{_CShiftAction, _CState46, 0}
+	_CGotoState47Action                       = &_CAction{_CShiftAction, _CState47, 0}
+	_CGotoState48Action                       = &_CAction{_CShiftAction, _CState48, 0}
+	_CGotoState49Action                       = &_CAction{_CShiftAction, _CState49, 0}
+	_CGotoState50Action                       = &_CAction{_CShiftAction, _CState50, 0}
+	_CGotoState51Action                       = &_CAction{_CShiftAction, _CState51, 0}
+	_CGotoState52Action                       = &_CAction{_CShiftAction, _CState52, 0}
+	_CGotoState53Action                       = &_CAction{_CShiftAction, _CState53, 0}
+	_CGotoState54Action                       = &_CAction{_CShiftAction, _CState54, 0}
+	_CGotoState55Action                       = &_CAction{_CShiftAction, _CState55, 0}
+	_CGotoState56Action                       = &_CAction{_CShiftAction, _CState56, 0}
+	_CGotoState57Action                       = &_CAction{_CShiftAction, _CState57, 0}
+	_CGotoState58Action                       = &_CAction{_CShiftAction, _CState58, 0}
+	_CGotoState59Action                       = &_CAction{_CShiftAction, _CState59, 0}
+	_CGotoState60Action                       = &_CAction{_CShiftAction, _CState60, 0}
+	_CGotoState61Action                       = &_CAction{_CShiftAction, _CState61, 0}
+	_CGotoState62Action                       = &_CAction{_CShiftAction, _CState62, 0}
+	_CGotoState63Action                       = &_CAction{_CShiftAction, _CState63, 0}
+	_CGotoState64Action                       = &_CAction{_CShiftAction, _CState64, 0}
+	_CGotoState65Action                       = &_CAction{_CShiftAction, _CState65, 0}
+	_CGotoState66Action                       = &_CAction{_CShiftAction, _CState66, 0}
+	_CGotoState67Action                       = &_CAction{_CShiftAction, _CState67, 0}
+	_CGotoState68Action                       = &_CAction{_CShiftAction, _CState68, 0}
+	_CGotoState69Action                       = &_CAction{_CShiftAction, _CState69, 0}
+	_CGotoState70Action                       = &_CAction{_CShiftAction, _CState70, 0}
+	_CGotoState71Action                       = &_CAction{_CShiftAction, _CState71, 0}
+	_CGotoState72Action                       = &_CAction{_CShiftAction, _CState72, 0}
+	_CGotoState73Action                       = &_CAction{_CShiftAction, _CState73, 0}
+	_CGotoState74Action                       = &_CAction{_CShiftAction, _CState74, 0}
+	_CGotoState75Action                       = &_CAction{_CShiftAction, _CState75, 0}
+	_CGotoState76Action                       = &_CAction{_CShiftAction, _CState76, 0}
+	_CGotoState77Action                       = &_CAction{_CShiftAction, _CState77, 0}
+	_CGotoState78Action                       = &_CAction{_CShiftAction, _CState78, 0}
+	_CGotoState79Action                       = &_CAction{_CShiftAction, _CState79, 0}
+	_CGotoState80Action                       = &_CAction{_CShiftAction, _CState80, 0}
+	_CGotoState81Action                       = &_CAction{_CShiftAction, _CState81, 0}
+	_CGotoState82Action                       = &_CAction{_CShiftAction, _CState82, 0}
+	_CGotoState83Action                       = &_CAction{_CShiftAction, _CState83, 0}
+	_CGotoState84Action                       = &_CAction{_CShiftAction, _CState84, 0}
+	_CGotoState85Action                       = &_CAction{_CShiftAction, _CState85, 0}
+	_CGotoState86Action                       = &_CAction{_CShiftAction, _CState86, 0}
+	_CGotoState87Action                       = &_CAction{_CShiftAction, _CState87, 0}
+	_CGotoState88Action                       = &_CAction{_CShiftAction, _CState88, 0}
+	_CGotoState89Action                       = &_CAction{_CShiftAction, _CState89, 0}
+	_CGotoState90Action                       = &_CAction{_CShiftAction, _CState90, 0}
+	_CGotoState91Action                       = &_CAction{_CShiftAction, _CState91, 0}
+	_CGotoState92Action                       = &_CAction{_CShiftAction, _CState92, 0}
+	_CGotoState93Action                       = &_CAction{_CShiftAction, _CState93, 0}
+	_CGotoState94Action                       = &_CAction{_CShiftAction, _CState94, 0}
+	_CGotoState95Action                       = &_CAction{_CShiftAction, _CState95, 0}
+	_CGotoState96Action                       = &_CAction{_CShiftAction, _CState96, 0}
+	_CGotoState97Action                       = &_CAction{_CShiftAction, _CState97, 0}
+	_CGotoState98Action                       = &_CAction{_CShiftAction, _CState98, 0}
+	_CGotoState99Action                       = &_CAction{_CShiftAction, _CState99, 0}
+	_CGotoState100Action                      = &_CAction{_CShiftAction, _CState100, 0}
+	_CGotoState101Action                      = &_CAction{_CShiftAction, _CState101, 0}
+	_CGotoState102Action                      = &_CAction{_CShiftAction, _CState102, 0}
+	_CGotoState103Action                      = &_CAction{_CShiftAction, _CState103, 0}
+	_CGotoState104Action                      = &_CAction{_CShiftAction, _CState104, 0}
+	_CGotoState105Action                      = &_CAction{_CShiftAction, _CState105, 0}
+	_CGotoState106Action                      = &_CAction{_CShiftAction, _CState106, 0}
+	_CGotoState107Action                      = &_CAction{_CShiftAction, _CState107, 0}
+	_CGotoState108Action                      = &_CAction{_CShiftAction, _CState108, 0}
+	_CGotoState109Action                      = &_CAction{_CShiftAction, _CState109, 0}
+	_CGotoState110Action                      = &_CAction{_CShiftAction, _CState110, 0}
+	_CGotoState111Action                      = &_CAction{_CShiftAction, _CState111, 0}
+	_CGotoState112Action                      = &_CAction{_CShiftAction, _CState112, 0}
+	_CGotoState113Action                      = &_CAction{_CShiftAction, _CState113, 0}
+	_CGotoState114Action                      = &_CAction{_CShiftAction, _CState114, 0}
+	_CGotoState115Action                      = &_CAction{_CShiftAction, _CState115, 0}
+	_CGotoState116Action                      = &_CAction{_CShiftAction, _CState116, 0}
+	_CGotoState117Action                      = &_CAction{_CShiftAction, _CState117, 0}
+	_CGotoState118Action                      = &_CAction{_CShiftAction, _CState118, 0}
+	_CGotoState119Action                      = &_CAction{_CShiftAction, _CState119, 0}
+	_CGotoState120Action                      = &_CAction{_CShiftAction, _CState120, 0}
+	_CGotoState121Action                      = &_CAction{_CShiftAction, _CState121, 0}
+	_CGotoState122Action                      = &_CAction{_CShiftAction, _CState122, 0}
+	_CGotoState123Action                      = &_CAction{_CShiftAction, _CState123, 0}
+	_CGotoState124Action                      = &_CAction{_CShiftAction, _CState124, 0}
+	_CGotoState125Action                      = &_CAction{_CShiftAction, _CState125, 0}
+	_CGotoState126Action                      = &_CAction{_CShiftAction, _CState126, 0}
+	_CGotoState127Action                      = &_CAction{_CShiftAction, _CState127, 0}
+	_CGotoState128Action                      = &_CAction{_CShiftAction, _CState128, 0}
+	_CGotoState129Action                      = &_CAction{_CShiftAction, _CState129, 0}
+	_CGotoState130Action                      = &_CAction{_CShiftAction, _CState130, 0}
+	_CGotoState131Action                      = &_CAction{_CShiftAction, _CState131, 0}
+	_CGotoState132Action                      = &_CAction{_CShiftAction, _CState132, 0}
+	_CGotoState133Action                      = &_CAction{_CShiftAction, _CState133, 0}
+	_CGotoState134Action                      = &_CAction{_CShiftAction, _CState134, 0}
+	_CGotoState135Action                      = &_CAction{_CShiftAction, _CState135, 0}
+	_CGotoState136Action                      = &_CAction{_CShiftAction, _CState136, 0}
+	_CGotoState137Action                      = &_CAction{_CShiftAction, _CState137, 0}
+	_CGotoState138Action                      = &_CAction{_CShiftAction, _CState138, 0}
+	_CGotoState139Action                      = &_CAction{_CShiftAction, _CState139, 0}
+	_CGotoState140Action                      = &_CAction{_CShiftAction, _CState140, 0}
+	_CGotoState141Action                      = &_CAction{_CShiftAction, _CState141, 0}
+	_CGotoState142Action                      = &_CAction{_CShiftAction, _CState142, 0}
+	_CGotoState143Action                      = &_CAction{_CShiftAction, _CState143, 0}
+	_CGotoState144Action                      = &_CAction{_CShiftAction, _CState144, 0}
+	_CGotoState145Action                      = &_CAction{_CShiftAction, _CState145, 0}
+	_CGotoState146Action                      = &_CAction{_CShiftAction, _CState146, 0}
+	_CGotoState147Action                      = &_CAction{_CShiftAction, _CState147, 0}
+	_CGotoState148Action                      = &_CAction{_CShiftAction, _CState148, 0}
+	_CGotoState149Action                      = &_CAction{_CShiftAction, _CState149, 0}
+	_CGotoState150Action                      = &_CAction{_CShiftAction, _CState150, 0}
+	_CGotoState151Action                      = &_CAction{_CShiftAction, _CState151, 0}
+	_CGotoState152Action                      = &_CAction{_CShiftAction, _CState152, 0}
+	_CGotoState153Action                      = &_CAction{_CShiftAction, _CState153, 0}
+	_CGotoState154Action                      = &_CAction{_CShiftAction, _CState154, 0}
+	_CGotoState155Action                      = &_CAction{_CShiftAction, _CState155, 0}
+	_CGotoState156Action                      = &_CAction{_CShiftAction, _CState156, 0}
+	_CGotoState157Action                      = &_CAction{_CShiftAction, _CState157, 0}
+	_CGotoState158Action                      = &_CAction{_CShiftAction, _CState158, 0}
+	_CGotoState159Action                      = &_CAction{_CShiftAction, _CState159, 0}
+	_CGotoState160Action                      = &_CAction{_CShiftAction, _CState160, 0}
+	_CGotoState161Action                      = &_CAction{_CShiftAction, _CState161, 0}
+	_CGotoState162Action                      = &_CAction{_CShiftAction, _CState162, 0}
+	_CGotoState163Action                      = &_CAction{_CShiftAction, _CState163, 0}
+	_CGotoState164Action                      = &_CAction{_CShiftAction, _CState164, 0}
+	_CGotoState165Action                      = &_CAction{_CShiftAction, _CState165, 0}
+	_CGotoState166Action                      = &_CAction{_CShiftAction, _CState166, 0}
+	_CGotoState167Action                      = &_CAction{_CShiftAction, _CState167, 0}
+	_CGotoState168Action                      = &_CAction{_CShiftAction, _CState168, 0}
+	_CGotoState169Action                      = &_CAction{_CShiftAction, _CState169, 0}
+	_CGotoState170Action                      = &_CAction{_CShiftAction, _CState170, 0}
+	_CGotoState171Action                      = &_CAction{_CShiftAction, _CState171, 0}
+	_CGotoState172Action                      = &_CAction{_CShiftAction, _CState172, 0}
+	_CGotoState173Action                      = &_CAction{_CShiftAction, _CState173, 0}
+	_CGotoState174Action                      = &_CAction{_CShiftAction, _CState174, 0}
+	_CGotoState175Action                      = &_CAction{_CShiftAction, _CState175, 0}
+	_CGotoState176Action                      = &_CAction{_CShiftAction, _CState176, 0}
+	_CGotoState177Action                      = &_CAction{_CShiftAction, _CState177, 0}
+	_CGotoState178Action                      = &_CAction{_CShiftAction, _CState178, 0}
+	_CGotoState179Action                      = &_CAction{_CShiftAction, _CState179, 0}
+	_CGotoState180Action                      = &_CAction{_CShiftAction, _CState180, 0}
+	_CGotoState181Action                      = &_CAction{_CShiftAction, _CState181, 0}
+	_CGotoState182Action                      = &_CAction{_CShiftAction, _CState182, 0}
+	_CGotoState183Action                      = &_CAction{_CShiftAction, _CState183, 0}
+	_CGotoState184Action                      = &_CAction{_CShiftAction, _CState184, 0}
+	_CGotoState185Action                      = &_CAction{_CShiftAction, _CState185, 0}
+	_CGotoState186Action                      = &_CAction{_CShiftAction, _CState186, 0}
+	_CGotoState187Action                      = &_CAction{_CShiftAction, _CState187, 0}
+	_CGotoState188Action                      = &_CAction{_CShiftAction, _CState188, 0}
+	_CGotoState189Action                      = &_CAction{_CShiftAction, _CState189, 0}
+	_CGotoState190Action                      = &_CAction{_CShiftAction, _CState190, 0}
+	_CGotoState191Action                      = &_CAction{_CShiftAction, _CState191, 0}
+	_CGotoState192Action                      = &_CAction{_CShiftAction, _CState192, 0}
+	_CGotoState193Action                      = &_CAction{_CShiftAction, _CState193, 0}
+	_CGotoState194Action                      = &_CAction{_CShiftAction, _CState194, 0}
+	_CGotoState195Action                      = &_CAction{_CShiftAction, _CState195, 0}
+	_CGotoState196Action                      = &_CAction{_CShiftAction, _CState196, 0}
+	_CGotoState197Action                      = &_CAction{_CShiftAction, _CState197, 0}
+	_CGotoState198Action                      = &_CAction{_CShiftAction, _CState198, 0}
+	_CGotoState199Action                      = &_CAction{_CShiftAction, _CState199, 0}
+	_CGotoState200Action                      = &_CAction{_CShiftAction, _CState200, 0}
+	_CGotoState201Action                      = &_CAction{_CShiftAction, _CState201, 0}
+	_CGotoState202Action                      = &_CAction{_CShiftAction, _CState202, 0}
+	_CGotoState203Action                      = &_CAction{_CShiftAction, _CState203, 0}
+	_CGotoState204Action                      = &_CAction{_CShiftAction, _CState204, 0}
+	_CGotoState205Action                      = &_CAction{_CShiftAction, _CState205, 0}
+	_CGotoState206Action                      = &_CAction{_CShiftAction, _CState206, 0}
+	_CGotoState207Action                      = &_CAction{_CShiftAction, _CState207, 0}
+	_CGotoState208Action                      = &_CAction{_CShiftAction, _CState208, 0}
+	_CGotoState209Action                      = &_CAction{_CShiftAction, _CState209, 0}
+	_CGotoState210Action                      = &_CAction{_CShiftAction, _CState210, 0}
+	_CGotoState211Action                      = &_CAction{_CShiftAction, _CState211, 0}
+	_CGotoState212Action                      = &_CAction{_CShiftAction, _CState212, 0}
+	_CGotoState213Action                      = &_CAction{_CShiftAction, _CState213, 0}
+	_CGotoState214Action                      = &_CAction{_CShiftAction, _CState214, 0}
+	_CGotoState215Action                      = &_CAction{_CShiftAction, _CState215, 0}
+	_CGotoState216Action                      = &_CAction{_CShiftAction, _CState216, 0}
+	_CGotoState217Action                      = &_CAction{_CShiftAction, _CState217, 0}
+	_CGotoState218Action                      = &_CAction{_CShiftAction, _CState218, 0}
+	_CGotoState219Action                      = &_CAction{_CShiftAction, _CState219, 0}
+	_CGotoState220Action                      = &_CAction{_CShiftAction, _CState220, 0}
+	_CGotoState221Action                      = &_CAction{_CShiftAction, _CState221, 0}
+	_CGotoState222Action                      = &_CAction{_CShiftAction, _CState222, 0}
+	_CGotoState223Action                      = &_CAction{_CShiftAction, _CState223, 0}
+	_CGotoState224Action                      = &_CAction{_CShiftAction, _CState224, 0}
+	_CGotoState225Action                      = &_CAction{_CShiftAction, _CState225, 0}
+	_CGotoState226Action                      = &_CAction{_CShiftAction, _CState226, 0}
+	_CGotoState227Action                      = &_CAction{_CShiftAction, _CState227, 0}
+	_CGotoState228Action                      = &_CAction{_CShiftAction, _CState228, 0}
+	_CGotoState229Action                      = &_CAction{_CShiftAction, _CState229, 0}
+	_CGotoState230Action                      = &_CAction{_CShiftAction, _CState230, 0}
+	_CGotoState231Action                      = &_CAction{_CShiftAction, _CState231, 0}
+	_CGotoState232Action                      = &_CAction{_CShiftAction, _CState232, 0}
+	_CGotoState233Action                      = &_CAction{_CShiftAction, _CState233, 0}
+	_CGotoState234Action                      = &_CAction{_CShiftAction, _CState234, 0}
+	_CGotoState235Action                      = &_CAction{_CShiftAction, _CState235, 0}
+	_CGotoState236Action                      = &_CAction{_CShiftAction, _CState236, 0}
+	_CGotoState237Action                      = &_CAction{_CShiftAction, _CState237, 0}
+	_CGotoState238Action                      = &_CAction{_CShiftAction, _CState238, 0}
+	_CGotoState239Action                      = &_CAction{_CShiftAction, _CState239, 0}
+	_CGotoState240Action                      = &_CAction{_CShiftAction, _CState240, 0}
+	_CGotoState241Action                      = &_CAction{_CShiftAction, _CState241, 0}
+	_CGotoState242Action                      = &_CAction{_CShiftAction, _CState242, 0}
+	_CGotoState243Action                      = &_CAction{_CShiftAction, _CState243, 0}
+	_CGotoState244Action                      = &_CAction{_CShiftAction, _CState244, 0}
+	_CGotoState245Action                      = &_CAction{_CShiftAction, _CState245, 0}
+	_CGotoState246Action                      = &_CAction{_CShiftAction, _CState246, 0}
+	_CGotoState247Action                      = &_CAction{_CShiftAction, _CState247, 0}
+	_CGotoState248Action                      = &_CAction{_CShiftAction, _CState248, 0}
+	_CGotoState249Action                      = &_CAction{_CShiftAction, _CState249, 0}
+	_CGotoState250Action                      = &_CAction{_CShiftAction, _CState250, 0}
+	_CGotoState251Action                      = &_CAction{_CShiftAction, _CState251, 0}
+	_CGotoState252Action                      = &_CAction{_CShiftAction, _CState252, 0}
+	_CGotoState253Action                      = &_CAction{_CShiftAction, _CState253, 0}
+	_CGotoState254Action                      = &_CAction{_CShiftAction, _CState254, 0}
+	_CGotoState255Action                      = &_CAction{_CShiftAction, _CState255, 0}
+	_CGotoState256Action                      = &_CAction{_CShiftAction, _CState256, 0}
+	_CGotoState257Action                      = &_CAction{_CShiftAction, _CState257, 0}
+	_CGotoState258Action                      = &_CAction{_CShiftAction, _CState258, 0}
+	_CGotoState259Action                      = &_CAction{_CShiftAction, _CState259, 0}
+	_CGotoState260Action                      = &_CAction{_CShiftAction, _CState260, 0}
+	_CGotoState261Action                      = &_CAction{_CShiftAction, _CState261, 0}
+	_CGotoState262Action                      = &_CAction{_CShiftAction, _CState262, 0}
+	_CGotoState263Action                      = &_CAction{_CShiftAction, _CState263, 0}
+	_CGotoState264Action                      = &_CAction{_CShiftAction, _CState264, 0}
+	_CGotoState265Action                      = &_CAction{_CShiftAction, _CState265, 0}
+	_CGotoState266Action                      = &_CAction{_CShiftAction, _CState266, 0}
+	_CGotoState267Action                      = &_CAction{_CShiftAction, _CState267, 0}
+	_CGotoState268Action                      = &_CAction{_CShiftAction, _CState268, 0}
+	_CGotoState269Action                      = &_CAction{_CShiftAction, _CState269, 0}
+	_CGotoState270Action                      = &_CAction{_CShiftAction, _CState270, 0}
+	_CGotoState271Action                      = &_CAction{_CShiftAction, _CState271, 0}
+	_CGotoState272Action                      = &_CAction{_CShiftAction, _CState272, 0}
+	_CGotoState273Action                      = &_CAction{_CShiftAction, _CState273, 0}
+	_CGotoState274Action                      = &_CAction{_CShiftAction, _CState274, 0}
+	_CGotoState275Action                      = &_CAction{_CShiftAction, _CState275, 0}
+	_CGotoState276Action                      = &_CAction{_CShiftAction, _CState276, 0}
+	_CGotoState277Action                      = &_CAction{_CShiftAction, _CState277, 0}
+	_CGotoState278Action                      = &_CAction{_CShiftAction, _CState278, 0}
+	_CGotoState279Action                      = &_CAction{_CShiftAction, _CState279, 0}
+	_CGotoState280Action                      = &_CAction{_CShiftAction, _CState280, 0}
+	_CGotoState281Action                      = &_CAction{_CShiftAction, _CState281, 0}
+	_CGotoState282Action                      = &_CAction{_CShiftAction, _CState282, 0}
+	_CGotoState283Action                      = &_CAction{_CShiftAction, _CState283, 0}
+	_CGotoState284Action                      = &_CAction{_CShiftAction, _CState284, 0}
+	_CGotoState285Action                      = &_CAction{_CShiftAction, _CState285, 0}
+	_CGotoState286Action                      = &_CAction{_CShiftAction, _CState286, 0}
+	_CGotoState287Action                      = &_CAction{_CShiftAction, _CState287, 0}
+	_CGotoState288Action                      = &_CAction{_CShiftAction, _CState288, 0}
+	_CGotoState289Action                      = &_CAction{_CShiftAction, _CState289, 0}
+	_CGotoState290Action                      = &_CAction{_CShiftAction, _CState290, 0}
+	_CGotoState291Action                      = &_CAction{_CShiftAction, _CState291, 0}
+	_CGotoState292Action                      = &_CAction{_CShiftAction, _CState292, 0}
+	_CGotoState293Action                      = &_CAction{_CShiftAction, _CState293, 0}
+	_CGotoState294Action                      = &_CAction{_CShiftAction, _CState294, 0}
+	_CGotoState295Action                      = &_CAction{_CShiftAction, _CState295, 0}
+	_CGotoState296Action                      = &_CAction{_CShiftAction, _CState296, 0}
+	_CGotoState297Action                      = &_CAction{_CShiftAction, _CState297, 0}
+	_CGotoState298Action                      = &_CAction{_CShiftAction, _CState298, 0}
+	_CGotoState299Action                      = &_CAction{_CShiftAction, _CState299, 0}
+	_CGotoState300Action                      = &_CAction{_CShiftAction, _CState300, 0}
+	_CGotoState301Action                      = &_CAction{_CShiftAction, _CState301, 0}
+	_CGotoState302Action                      = &_CAction{_CShiftAction, _CState302, 0}
+	_CGotoState303Action                      = &_CAction{_CShiftAction, _CState303, 0}
+	_CGotoState304Action                      = &_CAction{_CShiftAction, _CState304, 0}
+	_CGotoState305Action                      = &_CAction{_CShiftAction, _CState305, 0}
+	_CGotoState306Action                      = &_CAction{_CShiftAction, _CState306, 0}
+	_CGotoState307Action                      = &_CAction{_CShiftAction, _CState307, 0}
+	_CGotoState308Action                      = &_CAction{_CShiftAction, _CState308, 0}
+	_CGotoState309Action                      = &_CAction{_CShiftAction, _CState309, 0}
+	_CGotoState310Action                      = &_CAction{_CShiftAction, _CState310, 0}
+	_CGotoState311Action                      = &_CAction{_CShiftAction, _CState311, 0}
+	_CGotoState312Action                      = &_CAction{_CShiftAction, _CState312, 0}
+	_CGotoState313Action                      = &_CAction{_CShiftAction, _CState313, 0}
+	_CGotoState314Action                      = &_CAction{_CShiftAction, _CState314, 0}
+	_CGotoState315Action                      = &_CAction{_CShiftAction, _CState315, 0}
+	_CGotoState316Action                      = &_CAction{_CShiftAction, _CState316, 0}
+	_CGotoState317Action                      = &_CAction{_CShiftAction, _CState317, 0}
+	_CGotoState318Action                      = &_CAction{_CShiftAction, _CState318, 0}
+	_CGotoState319Action                      = &_CAction{_CShiftAction, _CState319, 0}
+	_CGotoState320Action                      = &_CAction{_CShiftAction, _CState320, 0}
+	_CGotoState321Action                      = &_CAction{_CShiftAction, _CState321, 0}
+	_CGotoState322Action                      = &_CAction{_CShiftAction, _CState322, 0}
+	_CGotoState323Action                      = &_CAction{_CShiftAction, _CState323, 0}
+	_CGotoState324Action                      = &_CAction{_CShiftAction, _CState324, 0}
+	_CGotoState325Action                      = &_CAction{_CShiftAction, _CState325, 0}
+	_CGotoState326Action                      = &_CAction{_CShiftAction, _CState326, 0}
+	_CGotoState327Action                      = &_CAction{_CShiftAction, _CState327, 0}
+	_CGotoState328Action                      = &_CAction{_CShiftAction, _CState328, 0}
+	_CGotoState329Action                      = &_CAction{_CShiftAction, _CState329, 0}
+	_CGotoState330Action                      = &_CAction{_CShiftAction, _CState330, 0}
+	_CGotoState331Action                      = &_CAction{_CShiftAction, _CState331, 0}
+	_CGotoState332Action                      = &_CAction{_CShiftAction, _CState332, 0}
+	_CGotoState333Action                      = &_CAction{_CShiftAction, _CState333, 0}
+	_CGotoState334Action                      = &_CAction{_CShiftAction, _CState334, 0}
+	_CGotoState335Action                      = &_CAction{_CShiftAction, _CState335, 0}
+	_CGotoState336Action                      = &_CAction{_CShiftAction, _CState336, 0}
+	_CGotoState337Action                      = &_CAction{_CShiftAction, _CState337, 0}
+	_CGotoState338Action                      = &_CAction{_CShiftAction, _CState338, 0}
+	_CGotoState339Action                      = &_CAction{_CShiftAction, _CState339, 0}
+	_CGotoState340Action                      = &_CAction{_CShiftAction, _CState340, 0}
+	_CGotoState341Action                      = &_CAction{_CShiftAction, _CState341, 0}
+	_CGotoState342Action                      = &_CAction{_CShiftAction, _CState342, 0}
+	_CGotoState343Action                      = &_CAction{_CShiftAction, _CState343, 0}
+	_CGotoState344Action                      = &_CAction{_CShiftAction, _CState344, 0}
+	_CGotoState345Action                      = &_CAction{_CShiftAction, _CState345, 0}
+	_CGotoState346Action                      = &_CAction{_CShiftAction, _CState346, 0}
+	_CGotoState347Action                      = &_CAction{_CShiftAction, _CState347, 0}
+	_CGotoState348Action                      = &_CAction{_CShiftAction, _CState348, 0}
+	_CGotoState349Action                      = &_CAction{_CShiftAction, _CState349, 0}
+	_CGotoState350Action                      = &_CAction{_CShiftAction, _CState350, 0}
 	_CReduceAToPrimaryExpressionAction        = &_CAction{_CReduceAction, 0, _CReduceAToPrimaryExpression}
 	_CReduceBToPrimaryExpressionAction        = &_CAction{_CReduceAction, 0, _CReduceBToPrimaryExpression}
 	_CReduceCToPrimaryExpressionAction        = &_CAction{_CReduceAction, 0, _CReduceCToPrimaryExpression}
@@ -3557,7 +3986,7 @@ func (table _CActionTableType) Get(stateId _CStateId, symbol CSymbolId) (*_CActi
 }
 
 var _CActionTable = _CActionTableType{
-	{_CState1, _CEndMarker}:                     &_CAction{_CAcceptAction, 0, ""},
+	{_CState1, _CEndMarker}:                     &_CAction{_CAcceptAction, 0, 0},
 	{_CState0, CIdentifierToken}:                _CGotoState9Action,
 	{_CState0, CTypeNameToken}:                  _CGotoState20Action,
 	{_CState0, CTypedefToken}:                   _CGotoState19Action,
