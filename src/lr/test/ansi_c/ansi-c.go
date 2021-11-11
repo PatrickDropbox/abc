@@ -824,10 +824,10 @@ func CParseWithCustomErrorHandler(lexer CLexer, reducer CReducer, errHandler CPa
 	}
 }
 
-// =======================================================
+// ================================================================
 // Parser internal implementation
-// User should avoid directly accessing the following code
-// =======================================================
+// User should normally avoid directly accessing the following code
+// ================================================================
 
 func (i CSymbolId) String() string {
 	switch i {
@@ -1201,6 +1201,13 @@ const (
 
 type _CActionType int
 
+const (
+	// NOTE: error action is implicit
+	_CShiftAction  = _CActionType(0)
+	_CReduceAction = _CActionType(1)
+	_CAcceptAction = _CActionType(2)
+)
+
 func (i _CActionType) String() string {
 	switch i {
 	case _CShiftAction:
@@ -1210,16 +1217,9 @@ func (i _CActionType) String() string {
 	case _CAcceptAction:
 		return "accept"
 	default:
-		return fmt.Sprintf("?unknown action %!d(MISSING)", int(i))
+		return fmt.Sprintf("?unknown action %d", int(i))
 	}
 }
-
-const (
-	// NOTE: error action is implicit
-	_CShiftAction  = _CActionType(0)
-	_CReduceAction = _CActionType(1)
-	_CAcceptAction = _CActionType(2)
-)
 
 type _CReduceType string
 

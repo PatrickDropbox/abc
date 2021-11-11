@@ -190,10 +190,10 @@ func LRParseWithCustomErrorHandler(lexer LRLexer, reducer LRReducer, errHandler 
 	}
 }
 
-// =======================================================
+// ================================================================
 // Parser internal implementation
-// User should avoid directly accessing the following code
-// =======================================================
+// User should normally avoid directly accessing the following code
+// ================================================================
 
 func (i LRSymbolId) String() string {
 	switch i {
@@ -271,6 +271,13 @@ const (
 
 type _LRActionType int
 
+const (
+	// NOTE: error action is implicit
+	_LRShiftAction  = _LRActionType(0)
+	_LRReduceAction = _LRActionType(1)
+	_LRAcceptAction = _LRActionType(2)
+)
+
 func (i _LRActionType) String() string {
 	switch i {
 	case _LRShiftAction:
@@ -280,16 +287,9 @@ func (i _LRActionType) String() string {
 	case _LRAcceptAction:
 		return "accept"
 	default:
-		return fmt.Sprintf("?unknown action %!d(MISSING)", int(i))
+		return fmt.Sprintf("?unknown action %d", int(i))
 	}
 }
-
-const (
-	// NOTE: error action is implicit
-	_LRShiftAction  = _LRActionType(0)
-	_LRReduceAction = _LRActionType(1)
-	_LRAcceptAction = _LRActionType(2)
-)
 
 type _LRReduceType string
 

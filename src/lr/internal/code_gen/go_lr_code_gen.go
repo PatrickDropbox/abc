@@ -443,18 +443,6 @@ func (gen *goCodeGen) generateActionTypes() {
 
 	l("type %s int", gen.actionType)
 	l("")
-	l("func (i %s) String() string {", gen.actionType)
-	gen.PushIndent()
-	l("switch i {")
-	l("case %s: return \"shift\"", gen.shiftAction)
-	l("case %s: return \"reduce\"", gen.reduceAction)
-	l("case %s: return \"accept\"", gen.acceptAction)
-	l("default: return %v(\"?unknown action %d\", int(i))",
-		gen.Obj("fmt.Sprintf"))
-	l("}")
-	gen.PopIndent()
-	l("}")
-	l("")
 	l("const (")
 	gen.PushIndent()
 	l("// NOTE: error action is implicit")
@@ -463,6 +451,18 @@ func (gen *goCodeGen) generateActionTypes() {
 	l("%s = %s(2)", gen.acceptAction, gen.actionType)
 	gen.PopIndent()
 	l(")")
+	l("")
+	l("func (i %s) String() string {", gen.actionType)
+	gen.PushIndent()
+	l("switch i {")
+	l("case %s: return \"shift\"", gen.shiftAction)
+	l("case %s: return \"reduce\"", gen.reduceAction)
+	l("case %s: return \"accept\"", gen.acceptAction)
+	l("default: return %v(\"?unknown action %%d\", int(i))",
+		gen.Obj("fmt.Sprintf"))
+	l("}")
+	gen.PopIndent()
+	l("}")
 	l("")
 }
 
@@ -1238,10 +1238,10 @@ func GenerateGoLRCode(
 	gen.generateParse()
 
 	l := gen.Line
-	l("// =======================================================")
+	l("// ================================================================")
 	l("// Parser internal implementation")
-	l("// User should avoid directly accessing the following code")
-	l("// =======================================================")
+	l("// User should normally avoid directly accessing the following code")
+	l("// ================================================================")
 	l("")
 
 	gen.generateNonTerminalSymbolIds()
