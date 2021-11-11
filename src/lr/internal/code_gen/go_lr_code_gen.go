@@ -935,7 +935,7 @@ func (gen *goCodeGen) generateActionTable() {
 				continue
 			}
 
-			if state.StateNum == 1 && item.LookAhead == lr.EndMarker {
+			if state.StateNum == 2 && item.LookAhead == lr.EndMarker {
 				continue
 			}
 

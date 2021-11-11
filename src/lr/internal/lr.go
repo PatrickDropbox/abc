@@ -468,9 +468,9 @@ func (states *LRStates) maybeAdd(state *ItemSet) (*ItemSet, bool) {
 		return origState, false
 	}
 
-	state.StateNum = len(states.OrderedStates)
 	states.States[state.Kernel] = state
 	states.OrderedStates = append(states.OrderedStates, state)
+	state.StateNum = len(states.OrderedStates)
 
 	return state, true
 }
@@ -761,7 +761,7 @@ func (states *LRStates) mergeStates() {
 			}
 			state.Goto = newGoto
 
-			state.StateNum = idx
+			state.StateNum = idx + 1
 		}
 
 		if len(states.OrderedStates) > len(newStates) {
