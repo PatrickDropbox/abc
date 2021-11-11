@@ -185,7 +185,7 @@ func LRParseWithCustomErrorHandler(lexer LRLexer, reducer LRReducer, errHandler 
 			return stateStack[1].Grammar, nil
 
 		} else {
-			panic("Unknown action type: " + action.ActionType)
+			panic("Unknown action type: " + action.ActionType.String())
 		}
 	}
 }
@@ -269,13 +269,26 @@ const (
 	LRLabeledClauseType      = LRSymbolId(278)
 )
 
-type _LRActionType string
+type _LRActionType int
+
+func (i _LRActionType) String() string {
+	switch i {
+	case _LRShiftAction:
+		return "shift"
+	case _LRReduceAction:
+		return "reduce"
+	case _LRAcceptAction:
+		return "accept"
+	default:
+		return fmt.Sprintf("?unknown action %!d(MISSING)", int(i))
+	}
+}
 
 const (
 	// NOTE: error action is implicit
-	_LRShiftAction  = _LRActionType("shift")
-	_LRReduceAction = _LRActionType("reduce")
-	_LRAcceptAction = _LRActionType("accept")
+	_LRShiftAction  = _LRActionType(0)
+	_LRReduceAction = _LRActionType(1)
+	_LRAcceptAction = _LRActionType(2)
 )
 
 type _LRReduceType string

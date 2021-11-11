@@ -819,7 +819,7 @@ func CParseWithCustomErrorHandler(lexer CLexer, reducer CReducer, errHandler CPa
 			return stateStack[1].T, nil
 
 		} else {
-			panic("Unknown action type: " + action.ActionType)
+			panic("Unknown action type: " + action.ActionType.String())
 		}
 	}
 }
@@ -1199,13 +1199,26 @@ const (
 	CFunctionDefinitionType       = CSymbolId(400)
 )
 
-type _CActionType string
+type _CActionType int
+
+func (i _CActionType) String() string {
+	switch i {
+	case _CShiftAction:
+		return "shift"
+	case _CReduceAction:
+		return "reduce"
+	case _CAcceptAction:
+		return "accept"
+	default:
+		return fmt.Sprintf("?unknown action %!d(MISSING)", int(i))
+	}
+}
 
 const (
 	// NOTE: error action is implicit
-	_CShiftAction  = _CActionType("shift")
-	_CReduceAction = _CActionType("reduce")
-	_CAcceptAction = _CActionType("accept")
+	_CShiftAction  = _CActionType(0)
+	_CReduceAction = _CActionType(1)
+	_CAcceptAction = _CActionType(2)
 )
 
 type _CReduceType string
