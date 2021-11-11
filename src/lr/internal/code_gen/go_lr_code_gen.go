@@ -256,12 +256,12 @@ func (gen *goCodeGen) populateCodeGenVariables() error {
 func (gen *goCodeGen) generateTerminalSymbolIds() {
 	l := gen.Line
 
-	l("type %s string", gen.symbolId)
+	l("type %s int", gen.symbolId)
 	l("")
 	l("const (")
 	gen.PushIndent()
-	for _, term := range gen.Terminals {
-		l("%s = %s(\"%s\")", term.CodeGenSymbolConst, gen.symbolId, term.Name)
+	for idx, term := range gen.Terminals {
+		l("%s = %s(%d)", term.CodeGenSymbolConst, gen.symbolId, 256+idx)
 	}
 	gen.PopIndent()
 	l(")")
@@ -271,16 +271,37 @@ func (gen *goCodeGen) generateTerminalSymbolIds() {
 func (gen *goCodeGen) generateNonTerminalSymbolIds() {
 	l := gen.Line
 
+	l("func (i %s) String() string {", gen.symbolId)
+	gen.PushIndent()
+	l("switch i {")
+	l("case %s: return \"$\"", gen.endSymbol)
+	l("case %s: return \"*\"", gen.wildcardSymbol)
+	for _, term := range gen.Terminals {
+		l("case %s: return \"%s\"", term.CodeGenSymbolConst, term.Name)
+	}
+	for _, term := range gen.NonTerminals {
+		l("case %s: return \"%s\"", term.CodeGenSymbolConst, term.Name)
+	}
+	l("default: return %v(\"?unknown symbol %%d?\", int(i))",
+		gen.Obj("fmt.Sprintf"))
+	l("}")
+	gen.PopIndent()
+	l("}")
+	l("")
+
 	l("const (")
 	gen.PushIndent()
 
-	l("%s = %s(\"%s\")", gen.endSymbol, gen.symbolId, lr.EndMarker)
-	l("%s = %s(\"%s\")", gen.wildcardSymbol, gen.symbolId, lr.Wildcard)
+	l("%s = %s(0)", gen.endSymbol, gen.symbolId)
+	l("%s = %s(-1)", gen.wildcardSymbol, gen.symbolId)
 
 	l("")
 
-	for _, term := range gen.NonTerminals {
-		l("%s = %s(\"%s\")", term.CodeGenSymbolConst, gen.symbolId, term.Name)
+	for idx, term := range gen.NonTerminals {
+		l("%s = %s(%d)",
+			term.CodeGenSymbolConst,
+			gen.symbolId,
+			256+len(gen.Terminals)+idx)
 	}
 	gen.PopIndent()
 	l(")")

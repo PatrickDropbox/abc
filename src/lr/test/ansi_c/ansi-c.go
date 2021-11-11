@@ -7,91 +7,91 @@ import (
 	io "io"
 )
 
-type CSymbolId string
+type CSymbolId int
 
 const (
-	CIdentifierToken    = CSymbolId("IDENTIFIER")
-	CConstantToken      = CSymbolId("CONSTANT")
-	CStringLiteralToken = CSymbolId("STRING_LITERAL")
-	CSizeofToken        = CSymbolId("SIZEOF")
-	CPtrOpToken         = CSymbolId("PTR_OP")
-	CIncOpToken         = CSymbolId("INC_OP")
-	CDecOpToken         = CSymbolId("DEC_OP")
-	CLeftOpToken        = CSymbolId("LEFT_OP")
-	CRightOpToken       = CSymbolId("RIGHT_OP")
-	CLeOpToken          = CSymbolId("LE_OP")
-	CGeOpToken          = CSymbolId("GE_OP")
-	CEqOpToken          = CSymbolId("EQ_OP")
-	CNeOpToken          = CSymbolId("NE_OP")
-	CAndOpToken         = CSymbolId("AND_OP")
-	COrOpToken          = CSymbolId("OR_OP")
-	CMulAssignToken     = CSymbolId("MUL_ASSIGN")
-	CDivAssignToken     = CSymbolId("DIV_ASSIGN")
-	CModAssignToken     = CSymbolId("MOD_ASSIGN")
-	CAddAssignToken     = CSymbolId("ADD_ASSIGN")
-	CSubAssignToken     = CSymbolId("SUB_ASSIGN")
-	CLeftAssignToken    = CSymbolId("LEFT_ASSIGN")
-	CRightAssignToken   = CSymbolId("RIGHT_ASSIGN")
-	CAndAssignToken     = CSymbolId("AND_ASSIGN")
-	CXorAssignToken     = CSymbolId("XOR_ASSIGN")
-	COrAssignToken      = CSymbolId("OR_ASSIGN")
-	CTypeNameToken      = CSymbolId("TYPE_NAME")
-	CTypedefToken       = CSymbolId("TYPEDEF")
-	CExternToken        = CSymbolId("EXTERN")
-	CStaticToken        = CSymbolId("STATIC")
-	CAutoToken          = CSymbolId("AUTO")
-	CRegisterToken      = CSymbolId("REGISTER")
-	CCharToken          = CSymbolId("CHAR")
-	CShortToken         = CSymbolId("SHORT")
-	CIntToken           = CSymbolId("INT")
-	CLongToken          = CSymbolId("LONG")
-	CSignedToken        = CSymbolId("SIGNED")
-	CUnsignedToken      = CSymbolId("UNSIGNED")
-	CFloatToken         = CSymbolId("FLOAT")
-	CDoubleToken        = CSymbolId("DOUBLE")
-	CConstToken         = CSymbolId("CONST")
-	CVolatileToken      = CSymbolId("VOLATILE")
-	CVoidToken          = CSymbolId("VOID")
-	CStructToken        = CSymbolId("STRUCT")
-	CUnionToken         = CSymbolId("UNION")
-	CEnumToken          = CSymbolId("ENUM")
-	CEllipsisToken      = CSymbolId("ELLIPSIS")
-	CCaseToken          = CSymbolId("CASE")
-	CDefaultToken       = CSymbolId("DEFAULT")
-	CIfToken            = CSymbolId("IF")
-	CElseToken          = CSymbolId("ELSE")
-	CSwitchToken        = CSymbolId("SWITCH")
-	CWhileToken         = CSymbolId("WHILE")
-	CDoToken            = CSymbolId("DO")
-	CForToken           = CSymbolId("FOR")
-	CGotoToken          = CSymbolId("GOTO")
-	CContinueToken      = CSymbolId("CONTINUE")
-	CBreakToken         = CSymbolId("BREAK")
-	CReturnToken        = CSymbolId("RETURN")
-	CLparamToken        = CSymbolId("LPARAM")
-	CRparamToken        = CSymbolId("RPARAM")
-	CLcurlToken         = CSymbolId("LCURL")
-	CRcurlToken         = CSymbolId("RCURL")
-	CLbraceToken        = CSymbolId("LBRACE")
-	CRbraceToken        = CSymbolId("RBRACE")
-	CSemicolonToken     = CSymbolId("SEMICOLON")
-	CColonToken         = CSymbolId("COLON")
-	CCommaToken         = CSymbolId("COMMA")
-	CEqToken            = CSymbolId("EQ")
-	CQuestionToken      = CSymbolId("QUESTION")
-	CMulToken           = CSymbolId("MUL")
-	CDivToken           = CSymbolId("DIV")
-	CMinusToken         = CSymbolId("MINUS")
-	CPlusToken          = CSymbolId("PLUS")
-	CModToken           = CSymbolId("MOD")
-	CAndToken           = CSymbolId("AND")
-	COrToken            = CSymbolId("OR")
-	CExclaimToken       = CSymbolId("EXCLAIM")
-	CDotToken           = CSymbolId("DOT")
-	CHatToken           = CSymbolId("HAT")
-	CLtToken            = CSymbolId("LT")
-	CGtToken            = CSymbolId("GT")
-	CTildaToken         = CSymbolId("TILDA")
+	CIdentifierToken    = CSymbolId(256)
+	CConstantToken      = CSymbolId(257)
+	CStringLiteralToken = CSymbolId(258)
+	CSizeofToken        = CSymbolId(259)
+	CPtrOpToken         = CSymbolId(260)
+	CIncOpToken         = CSymbolId(261)
+	CDecOpToken         = CSymbolId(262)
+	CLeftOpToken        = CSymbolId(263)
+	CRightOpToken       = CSymbolId(264)
+	CLeOpToken          = CSymbolId(265)
+	CGeOpToken          = CSymbolId(266)
+	CEqOpToken          = CSymbolId(267)
+	CNeOpToken          = CSymbolId(268)
+	CAndOpToken         = CSymbolId(269)
+	COrOpToken          = CSymbolId(270)
+	CMulAssignToken     = CSymbolId(271)
+	CDivAssignToken     = CSymbolId(272)
+	CModAssignToken     = CSymbolId(273)
+	CAddAssignToken     = CSymbolId(274)
+	CSubAssignToken     = CSymbolId(275)
+	CLeftAssignToken    = CSymbolId(276)
+	CRightAssignToken   = CSymbolId(277)
+	CAndAssignToken     = CSymbolId(278)
+	CXorAssignToken     = CSymbolId(279)
+	COrAssignToken      = CSymbolId(280)
+	CTypeNameToken      = CSymbolId(281)
+	CTypedefToken       = CSymbolId(282)
+	CExternToken        = CSymbolId(283)
+	CStaticToken        = CSymbolId(284)
+	CAutoToken          = CSymbolId(285)
+	CRegisterToken      = CSymbolId(286)
+	CCharToken          = CSymbolId(287)
+	CShortToken         = CSymbolId(288)
+	CIntToken           = CSymbolId(289)
+	CLongToken          = CSymbolId(290)
+	CSignedToken        = CSymbolId(291)
+	CUnsignedToken      = CSymbolId(292)
+	CFloatToken         = CSymbolId(293)
+	CDoubleToken        = CSymbolId(294)
+	CConstToken         = CSymbolId(295)
+	CVolatileToken      = CSymbolId(296)
+	CVoidToken          = CSymbolId(297)
+	CStructToken        = CSymbolId(298)
+	CUnionToken         = CSymbolId(299)
+	CEnumToken          = CSymbolId(300)
+	CEllipsisToken      = CSymbolId(301)
+	CCaseToken          = CSymbolId(302)
+	CDefaultToken       = CSymbolId(303)
+	CIfToken            = CSymbolId(304)
+	CElseToken          = CSymbolId(305)
+	CSwitchToken        = CSymbolId(306)
+	CWhileToken         = CSymbolId(307)
+	CDoToken            = CSymbolId(308)
+	CForToken           = CSymbolId(309)
+	CGotoToken          = CSymbolId(310)
+	CContinueToken      = CSymbolId(311)
+	CBreakToken         = CSymbolId(312)
+	CReturnToken        = CSymbolId(313)
+	CLparamToken        = CSymbolId(314)
+	CRparamToken        = CSymbolId(315)
+	CLcurlToken         = CSymbolId(316)
+	CRcurlToken         = CSymbolId(317)
+	CLbraceToken        = CSymbolId(318)
+	CRbraceToken        = CSymbolId(319)
+	CSemicolonToken     = CSymbolId(320)
+	CColonToken         = CSymbolId(321)
+	CCommaToken         = CSymbolId(322)
+	CEqToken            = CSymbolId(323)
+	CQuestionToken      = CSymbolId(324)
+	CMulToken           = CSymbolId(325)
+	CDivToken           = CSymbolId(326)
+	CMinusToken         = CSymbolId(327)
+	CPlusToken          = CSymbolId(328)
+	CModToken           = CSymbolId(329)
+	CAndToken           = CSymbolId(330)
+	COrToken            = CSymbolId(331)
+	CExclaimToken       = CSymbolId(332)
+	CDotToken           = CSymbolId(333)
+	CHatToken           = CSymbolId(334)
+	CLtToken            = CSymbolId(335)
+	CGtToken            = CSymbolId(336)
+	CTildaToken         = CSymbolId(337)
 )
 
 type CLocation struct {
@@ -829,73 +829,374 @@ func CParseWithCustomErrorHandler(lexer CLexer, reducer CReducer, errHandler CPa
 // User should avoid directly accessing the following code
 // =======================================================
 
-const (
-	_CEndMarker      = CSymbolId("$")
-	_CWildcardMarker = CSymbolId("*")
+func (i CSymbolId) String() string {
+	switch i {
+	case _CEndMarker:
+		return "$"
+	case _CWildcardMarker:
+		return "*"
+	case CIdentifierToken:
+		return "IDENTIFIER"
+	case CConstantToken:
+		return "CONSTANT"
+	case CStringLiteralToken:
+		return "STRING_LITERAL"
+	case CSizeofToken:
+		return "SIZEOF"
+	case CPtrOpToken:
+		return "PTR_OP"
+	case CIncOpToken:
+		return "INC_OP"
+	case CDecOpToken:
+		return "DEC_OP"
+	case CLeftOpToken:
+		return "LEFT_OP"
+	case CRightOpToken:
+		return "RIGHT_OP"
+	case CLeOpToken:
+		return "LE_OP"
+	case CGeOpToken:
+		return "GE_OP"
+	case CEqOpToken:
+		return "EQ_OP"
+	case CNeOpToken:
+		return "NE_OP"
+	case CAndOpToken:
+		return "AND_OP"
+	case COrOpToken:
+		return "OR_OP"
+	case CMulAssignToken:
+		return "MUL_ASSIGN"
+	case CDivAssignToken:
+		return "DIV_ASSIGN"
+	case CModAssignToken:
+		return "MOD_ASSIGN"
+	case CAddAssignToken:
+		return "ADD_ASSIGN"
+	case CSubAssignToken:
+		return "SUB_ASSIGN"
+	case CLeftAssignToken:
+		return "LEFT_ASSIGN"
+	case CRightAssignToken:
+		return "RIGHT_ASSIGN"
+	case CAndAssignToken:
+		return "AND_ASSIGN"
+	case CXorAssignToken:
+		return "XOR_ASSIGN"
+	case COrAssignToken:
+		return "OR_ASSIGN"
+	case CTypeNameToken:
+		return "TYPE_NAME"
+	case CTypedefToken:
+		return "TYPEDEF"
+	case CExternToken:
+		return "EXTERN"
+	case CStaticToken:
+		return "STATIC"
+	case CAutoToken:
+		return "AUTO"
+	case CRegisterToken:
+		return "REGISTER"
+	case CCharToken:
+		return "CHAR"
+	case CShortToken:
+		return "SHORT"
+	case CIntToken:
+		return "INT"
+	case CLongToken:
+		return "LONG"
+	case CSignedToken:
+		return "SIGNED"
+	case CUnsignedToken:
+		return "UNSIGNED"
+	case CFloatToken:
+		return "FLOAT"
+	case CDoubleToken:
+		return "DOUBLE"
+	case CConstToken:
+		return "CONST"
+	case CVolatileToken:
+		return "VOLATILE"
+	case CVoidToken:
+		return "VOID"
+	case CStructToken:
+		return "STRUCT"
+	case CUnionToken:
+		return "UNION"
+	case CEnumToken:
+		return "ENUM"
+	case CEllipsisToken:
+		return "ELLIPSIS"
+	case CCaseToken:
+		return "CASE"
+	case CDefaultToken:
+		return "DEFAULT"
+	case CIfToken:
+		return "IF"
+	case CElseToken:
+		return "ELSE"
+	case CSwitchToken:
+		return "SWITCH"
+	case CWhileToken:
+		return "WHILE"
+	case CDoToken:
+		return "DO"
+	case CForToken:
+		return "FOR"
+	case CGotoToken:
+		return "GOTO"
+	case CContinueToken:
+		return "CONTINUE"
+	case CBreakToken:
+		return "BREAK"
+	case CReturnToken:
+		return "RETURN"
+	case CLparamToken:
+		return "LPARAM"
+	case CRparamToken:
+		return "RPARAM"
+	case CLcurlToken:
+		return "LCURL"
+	case CRcurlToken:
+		return "RCURL"
+	case CLbraceToken:
+		return "LBRACE"
+	case CRbraceToken:
+		return "RBRACE"
+	case CSemicolonToken:
+		return "SEMICOLON"
+	case CColonToken:
+		return "COLON"
+	case CCommaToken:
+		return "COMMA"
+	case CEqToken:
+		return "EQ"
+	case CQuestionToken:
+		return "QUESTION"
+	case CMulToken:
+		return "MUL"
+	case CDivToken:
+		return "DIV"
+	case CMinusToken:
+		return "MINUS"
+	case CPlusToken:
+		return "PLUS"
+	case CModToken:
+		return "MOD"
+	case CAndToken:
+		return "AND"
+	case COrToken:
+		return "OR"
+	case CExclaimToken:
+		return "EXCLAIM"
+	case CDotToken:
+		return "DOT"
+	case CHatToken:
+		return "HAT"
+	case CLtToken:
+		return "LT"
+	case CGtToken:
+		return "GT"
+	case CTildaToken:
+		return "TILDA"
+	case CPrimaryExpressionType:
+		return "primary_expression"
+	case CPostfixExpressionType:
+		return "postfix_expression"
+	case CArgumentExpressionListType:
+		return "argument_expression_list"
+	case CUnaryExpressionType:
+		return "unary_expression"
+	case CUnaryOperatorType:
+		return "unary_operator"
+	case CCastExpressionType:
+		return "cast_expression"
+	case CMultiplicativeExpressionType:
+		return "multiplicative_expression"
+	case CAdditiveExpressionType:
+		return "additive_expression"
+	case CShiftExpressionType:
+		return "shift_expression"
+	case CRelationalExpressionType:
+		return "relational_expression"
+	case CEqualityExpressionType:
+		return "equality_expression"
+	case CAndExpressionType:
+		return "and_expression"
+	case CExclusiveOrExpressionType:
+		return "exclusive_or_expression"
+	case CInclusiveOrExpressionType:
+		return "inclusive_or_expression"
+	case CLogicalAndExpressionType:
+		return "logical_and_expression"
+	case CLogicalOrExpressionType:
+		return "logical_or_expression"
+	case CConditionalExpressionType:
+		return "conditional_expression"
+	case CAssignmentExpressionType:
+		return "assignment_expression"
+	case CAssignmentOperatorType:
+		return "assignment_operator"
+	case CExpressionType:
+		return "expression"
+	case CConstantExpressionType:
+		return "constant_expression"
+	case CDeclarationType:
+		return "declaration"
+	case CDeclarationSpecifiersType:
+		return "declaration_specifiers"
+	case CInitDeclaratorListType:
+		return "init_declarator_list"
+	case CInitDeclaratorType:
+		return "init_declarator"
+	case CStorageClassSpecifierType:
+		return "storage_class_specifier"
+	case CTypeSpecifierType:
+		return "type_specifier"
+	case CStructOrUnionSpecifierType:
+		return "struct_or_union_specifier"
+	case CStructOrUnionType:
+		return "struct_or_union"
+	case CStructDeclarationListType:
+		return "struct_declaration_list"
+	case CStructDeclarationType:
+		return "struct_declaration"
+	case CSpecifierQualifierListType:
+		return "specifier_qualifier_list"
+	case CStructDeclaratorListType:
+		return "struct_declarator_list"
+	case CStructDeclaratorType:
+		return "struct_declarator"
+	case CEnumSpecifierType:
+		return "enum_specifier"
+	case CEnumeratorListType:
+		return "enumerator_list"
+	case CEnumeratorType:
+		return "enumerator"
+	case CTypeQualifierType:
+		return "type_qualifier"
+	case CDeclaratorType:
+		return "declarator"
+	case CDirectDeclaratorType:
+		return "direct_declarator"
+	case CPointerType:
+		return "pointer"
+	case CTypeQualifierListType:
+		return "type_qualifier_list"
+	case CParameterTypeListType:
+		return "parameter_type_list"
+	case CParameterListType:
+		return "parameter_list"
+	case CParameterDeclarationType:
+		return "parameter_declaration"
+	case CIdentifierListType:
+		return "identifier_list"
+	case CTypeNameType:
+		return "type_name"
+	case CAbstractDeclaratorType:
+		return "abstract_declarator"
+	case CDirectAbstractDeclaratorType:
+		return "direct_abstract_declarator"
+	case CInitializerType:
+		return "initializer"
+	case CInitializerListType:
+		return "initializer_list"
+	case CStatementType:
+		return "statement"
+	case CLabeledStatementType:
+		return "labeled_statement"
+	case CCompoundStatementType:
+		return "compound_statement"
+	case CDeclarationListType:
+		return "declaration_list"
+	case CStatementListType:
+		return "statement_list"
+	case CExpressionStatementType:
+		return "expression_statement"
+	case CSelectionStatementType:
+		return "selection_statement"
+	case CIterationStatementType:
+		return "iteration_statement"
+	case CJumpStatementType:
+		return "jump_statement"
+	case CTranslationUnitType:
+		return "translation_unit"
+	case CExternalDeclarationType:
+		return "external_declaration"
+	case CFunctionDefinitionType:
+		return "function_definition"
+	default:
+		return fmt.Sprintf("?unknown symbol %d?", int(i))
+	}
+}
 
-	CPrimaryExpressionType        = CSymbolId("primary_expression")
-	CPostfixExpressionType        = CSymbolId("postfix_expression")
-	CArgumentExpressionListType   = CSymbolId("argument_expression_list")
-	CUnaryExpressionType          = CSymbolId("unary_expression")
-	CUnaryOperatorType            = CSymbolId("unary_operator")
-	CCastExpressionType           = CSymbolId("cast_expression")
-	CMultiplicativeExpressionType = CSymbolId("multiplicative_expression")
-	CAdditiveExpressionType       = CSymbolId("additive_expression")
-	CShiftExpressionType          = CSymbolId("shift_expression")
-	CRelationalExpressionType     = CSymbolId("relational_expression")
-	CEqualityExpressionType       = CSymbolId("equality_expression")
-	CAndExpressionType            = CSymbolId("and_expression")
-	CExclusiveOrExpressionType    = CSymbolId("exclusive_or_expression")
-	CInclusiveOrExpressionType    = CSymbolId("inclusive_or_expression")
-	CLogicalAndExpressionType     = CSymbolId("logical_and_expression")
-	CLogicalOrExpressionType      = CSymbolId("logical_or_expression")
-	CConditionalExpressionType    = CSymbolId("conditional_expression")
-	CAssignmentExpressionType     = CSymbolId("assignment_expression")
-	CAssignmentOperatorType       = CSymbolId("assignment_operator")
-	CExpressionType               = CSymbolId("expression")
-	CConstantExpressionType       = CSymbolId("constant_expression")
-	CDeclarationType              = CSymbolId("declaration")
-	CDeclarationSpecifiersType    = CSymbolId("declaration_specifiers")
-	CInitDeclaratorListType       = CSymbolId("init_declarator_list")
-	CInitDeclaratorType           = CSymbolId("init_declarator")
-	CStorageClassSpecifierType    = CSymbolId("storage_class_specifier")
-	CTypeSpecifierType            = CSymbolId("type_specifier")
-	CStructOrUnionSpecifierType   = CSymbolId("struct_or_union_specifier")
-	CStructOrUnionType            = CSymbolId("struct_or_union")
-	CStructDeclarationListType    = CSymbolId("struct_declaration_list")
-	CStructDeclarationType        = CSymbolId("struct_declaration")
-	CSpecifierQualifierListType   = CSymbolId("specifier_qualifier_list")
-	CStructDeclaratorListType     = CSymbolId("struct_declarator_list")
-	CStructDeclaratorType         = CSymbolId("struct_declarator")
-	CEnumSpecifierType            = CSymbolId("enum_specifier")
-	CEnumeratorListType           = CSymbolId("enumerator_list")
-	CEnumeratorType               = CSymbolId("enumerator")
-	CTypeQualifierType            = CSymbolId("type_qualifier")
-	CDeclaratorType               = CSymbolId("declarator")
-	CDirectDeclaratorType         = CSymbolId("direct_declarator")
-	CPointerType                  = CSymbolId("pointer")
-	CTypeQualifierListType        = CSymbolId("type_qualifier_list")
-	CParameterTypeListType        = CSymbolId("parameter_type_list")
-	CParameterListType            = CSymbolId("parameter_list")
-	CParameterDeclarationType     = CSymbolId("parameter_declaration")
-	CIdentifierListType           = CSymbolId("identifier_list")
-	CTypeNameType                 = CSymbolId("type_name")
-	CAbstractDeclaratorType       = CSymbolId("abstract_declarator")
-	CDirectAbstractDeclaratorType = CSymbolId("direct_abstract_declarator")
-	CInitializerType              = CSymbolId("initializer")
-	CInitializerListType          = CSymbolId("initializer_list")
-	CStatementType                = CSymbolId("statement")
-	CLabeledStatementType         = CSymbolId("labeled_statement")
-	CCompoundStatementType        = CSymbolId("compound_statement")
-	CDeclarationListType          = CSymbolId("declaration_list")
-	CStatementListType            = CSymbolId("statement_list")
-	CExpressionStatementType      = CSymbolId("expression_statement")
-	CSelectionStatementType       = CSymbolId("selection_statement")
-	CIterationStatementType       = CSymbolId("iteration_statement")
-	CJumpStatementType            = CSymbolId("jump_statement")
-	CTranslationUnitType          = CSymbolId("translation_unit")
-	CExternalDeclarationType      = CSymbolId("external_declaration")
-	CFunctionDefinitionType       = CSymbolId("function_definition")
+const (
+	_CEndMarker      = CSymbolId(0)
+	_CWildcardMarker = CSymbolId(-1)
+
+	CPrimaryExpressionType        = CSymbolId(338)
+	CPostfixExpressionType        = CSymbolId(339)
+	CArgumentExpressionListType   = CSymbolId(340)
+	CUnaryExpressionType          = CSymbolId(341)
+	CUnaryOperatorType            = CSymbolId(342)
+	CCastExpressionType           = CSymbolId(343)
+	CMultiplicativeExpressionType = CSymbolId(344)
+	CAdditiveExpressionType       = CSymbolId(345)
+	CShiftExpressionType          = CSymbolId(346)
+	CRelationalExpressionType     = CSymbolId(347)
+	CEqualityExpressionType       = CSymbolId(348)
+	CAndExpressionType            = CSymbolId(349)
+	CExclusiveOrExpressionType    = CSymbolId(350)
+	CInclusiveOrExpressionType    = CSymbolId(351)
+	CLogicalAndExpressionType     = CSymbolId(352)
+	CLogicalOrExpressionType      = CSymbolId(353)
+	CConditionalExpressionType    = CSymbolId(354)
+	CAssignmentExpressionType     = CSymbolId(355)
+	CAssignmentOperatorType       = CSymbolId(356)
+	CExpressionType               = CSymbolId(357)
+	CConstantExpressionType       = CSymbolId(358)
+	CDeclarationType              = CSymbolId(359)
+	CDeclarationSpecifiersType    = CSymbolId(360)
+	CInitDeclaratorListType       = CSymbolId(361)
+	CInitDeclaratorType           = CSymbolId(362)
+	CStorageClassSpecifierType    = CSymbolId(363)
+	CTypeSpecifierType            = CSymbolId(364)
+	CStructOrUnionSpecifierType   = CSymbolId(365)
+	CStructOrUnionType            = CSymbolId(366)
+	CStructDeclarationListType    = CSymbolId(367)
+	CStructDeclarationType        = CSymbolId(368)
+	CSpecifierQualifierListType   = CSymbolId(369)
+	CStructDeclaratorListType     = CSymbolId(370)
+	CStructDeclaratorType         = CSymbolId(371)
+	CEnumSpecifierType            = CSymbolId(372)
+	CEnumeratorListType           = CSymbolId(373)
+	CEnumeratorType               = CSymbolId(374)
+	CTypeQualifierType            = CSymbolId(375)
+	CDeclaratorType               = CSymbolId(376)
+	CDirectDeclaratorType         = CSymbolId(377)
+	CPointerType                  = CSymbolId(378)
+	CTypeQualifierListType        = CSymbolId(379)
+	CParameterTypeListType        = CSymbolId(380)
+	CParameterListType            = CSymbolId(381)
+	CParameterDeclarationType     = CSymbolId(382)
+	CIdentifierListType           = CSymbolId(383)
+	CTypeNameType                 = CSymbolId(384)
+	CAbstractDeclaratorType       = CSymbolId(385)
+	CDirectAbstractDeclaratorType = CSymbolId(386)
+	CInitializerType              = CSymbolId(387)
+	CInitializerListType          = CSymbolId(388)
+	CStatementType                = CSymbolId(389)
+	CLabeledStatementType         = CSymbolId(390)
+	CCompoundStatementType        = CSymbolId(391)
+	CDeclarationListType          = CSymbolId(392)
+	CStatementListType            = CSymbolId(393)
+	CExpressionStatementType      = CSymbolId(394)
+	CSelectionStatementType       = CSymbolId(395)
+	CIterationStatementType       = CSymbolId(396)
+	CJumpStatementType            = CSymbolId(397)
+	CTranslationUnitType          = CSymbolId(398)
+	CExternalDeclarationType      = CSymbolId(399)
+	CFunctionDefinitionType       = CSymbolId(400)
 )
 
 type _CActionType string

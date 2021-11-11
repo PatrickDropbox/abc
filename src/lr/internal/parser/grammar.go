@@ -7,21 +7,21 @@ import (
 	io "io"
 )
 
-type LRSymbolId string
+type LRSymbolId int
 
 const (
-	LRTokenToken          = LRSymbolId("TOKEN")
-	LRTypeToken           = LRSymbolId("TYPE")
-	LRStartToken          = LRSymbolId("START")
-	LRRuleDefToken        = LRSymbolId("RULE_DEF")
-	LRLabelToken          = LRSymbolId("LABEL")
-	LRLtToken             = LRSymbolId("LT")
-	LRGtToken             = LRSymbolId("GT")
-	LROrToken             = LRSymbolId("OR")
-	LRSemicolonToken      = LRSymbolId("SEMICOLON")
-	LRSectionMarkerToken  = LRSymbolId("SECTION_MARKER")
-	LRIdentifierToken     = LRSymbolId("IDENTIFIER")
-	LRSectionContentToken = LRSymbolId("SECTION_CONTENT")
+	LRTokenToken          = LRSymbolId(256)
+	LRTypeToken           = LRSymbolId(257)
+	LRStartToken          = LRSymbolId(258)
+	LRRuleDefToken        = LRSymbolId(259)
+	LRLabelToken          = LRSymbolId(260)
+	LRLtToken             = LRSymbolId(261)
+	LRGtToken             = LRSymbolId(262)
+	LROrToken             = LRSymbolId(263)
+	LRSemicolonToken      = LRSymbolId(264)
+	LRSectionMarkerToken  = LRSymbolId(265)
+	LRIdentifierToken     = LRSymbolId(266)
+	LRSectionContentToken = LRSymbolId(267)
 )
 
 type LRLocation struct {
@@ -195,21 +195,78 @@ func LRParseWithCustomErrorHandler(lexer LRLexer, reducer LRReducer, errHandler 
 // User should avoid directly accessing the following code
 // =======================================================
 
-const (
-	_LREndMarker      = LRSymbolId("$")
-	_LRWildcardMarker = LRSymbolId("*")
+func (i LRSymbolId) String() string {
+	switch i {
+	case _LREndMarker:
+		return "$"
+	case _LRWildcardMarker:
+		return "*"
+	case LRTokenToken:
+		return "TOKEN"
+	case LRTypeToken:
+		return "TYPE"
+	case LRStartToken:
+		return "START"
+	case LRRuleDefToken:
+		return "RULE_DEF"
+	case LRLabelToken:
+		return "LABEL"
+	case LRLtToken:
+		return "LT"
+	case LRGtToken:
+		return "GT"
+	case LROrToken:
+		return "OR"
+	case LRSemicolonToken:
+		return "SEMICOLON"
+	case LRSectionMarkerToken:
+		return "SECTION_MARKER"
+	case LRIdentifierToken:
+		return "IDENTIFIER"
+	case LRSectionContentToken:
+		return "SECTION_CONTENT"
+	case LRGrammarType:
+		return "grammar"
+	case LRAdditionalSectionsType:
+		return "additional_sections"
+	case LRAdditionalSectionType:
+		return "additional_section"
+	case LRDefsType:
+		return "defs"
+	case LRDefType:
+		return "def"
+	case LRRwordType:
+		return "rword"
+	case LRNonemptyIdentListType:
+		return "nonempty_ident_list"
+	case LRIdentListType:
+		return "ident_list"
+	case LRRuleType:
+		return "rule"
+	case LRLabeledClausesType:
+		return "labeled_clauses"
+	case LRLabeledClauseType:
+		return "labeled_clause"
+	default:
+		return fmt.Sprintf("?unknown symbol %d?", int(i))
+	}
+}
 
-	LRGrammarType            = LRSymbolId("grammar")
-	LRAdditionalSectionsType = LRSymbolId("additional_sections")
-	LRAdditionalSectionType  = LRSymbolId("additional_section")
-	LRDefsType               = LRSymbolId("defs")
-	LRDefType                = LRSymbolId("def")
-	LRRwordType              = LRSymbolId("rword")
-	LRNonemptyIdentListType  = LRSymbolId("nonempty_ident_list")
-	LRIdentListType          = LRSymbolId("ident_list")
-	LRRuleType               = LRSymbolId("rule")
-	LRLabeledClausesType     = LRSymbolId("labeled_clauses")
-	LRLabeledClauseType      = LRSymbolId("labeled_clause")
+const (
+	_LREndMarker      = LRSymbolId(0)
+	_LRWildcardMarker = LRSymbolId(-1)
+
+	LRGrammarType            = LRSymbolId(268)
+	LRAdditionalSectionsType = LRSymbolId(269)
+	LRAdditionalSectionType  = LRSymbolId(270)
+	LRDefsType               = LRSymbolId(271)
+	LRDefType                = LRSymbolId(272)
+	LRRwordType              = LRSymbolId(273)
+	LRNonemptyIdentListType  = LRSymbolId(274)
+	LRIdentListType          = LRSymbolId(275)
+	LRRuleType               = LRSymbolId(276)
+	LRLabeledClausesType     = LRSymbolId(277)
+	LRLabeledClauseType      = LRSymbolId(278)
 )
 
 type _LRActionType string
