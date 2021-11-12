@@ -911,11 +911,24 @@ func (gen *goCodeGen) generateActionTable() {
 	l("var %s = %s{", gen.actionTable, gen.actionTableType)
 	push()
 
-	l("{%s, %s}: &%s{%s, 0, 0},",
-		gen.OrderedStates[1].CodeGenConst,
-		gen.endSymbol,
-		gen.action,
-		gen.acceptAction)
+	for _, state := range gen.OrderedStates {
+		for _, item := range state.Items {
+			if !item.IsReduce() {
+				continue
+			}
+
+			if item.Name != lr.AcceptRule || item.LookAhead != lr.EndMarker {
+				// regular reduction
+				continue
+			}
+
+			l("{%s, %s}: &%s{%s, 0, 0},",
+				state.CodeGenConst,
+				gen.endSymbol,
+				gen.action,
+				gen.acceptAction)
+		}
+	}
 
 	for _, state := range gen.OrderedStates {
 		for _, symbol := range symbols {
@@ -935,7 +948,7 @@ func (gen *goCodeGen) generateActionTable() {
 				continue
 			}
 
-			if state.StateNum == 2 && item.LookAhead == lr.EndMarker {
+			if item.Name == lr.AcceptRule && item.LookAhead == lr.EndMarker {
 				continue
 			}
 
@@ -1117,19 +1130,30 @@ func (gen *goCodeGen) generateParseErrorHandler() {
 	l("")
 }
 
-func (gen *goCodeGen) generateParse() {
+func (gen *goCodeGen) _generateParse(
+	startTerm *lr.Term,
+	startState *lr.ItemSet,
+	generateSuffix bool) {
+
+	parseSuffix := ""
+	if generateSuffix {
+		parseSuffix = snakeToCamel(startTerm.Name)
+	}
+
 	l := gen.Line
 	push := gen.PushIndent
 	pop := gen.PopIndent
 
-	l("func %sParse(lexer %s, reducer %s) (%v, error) {",
+	l("func %sParse%s(lexer %s, reducer %s) (%v, error) {",
 		gen.Prefix,
+		parseSuffix,
 		gen.lexer,
 		gen.reducer,
-		gen.Start.CodeGenType)
+		startTerm.CodeGenType)
 	push()
-	l("return %sParseWithCustomErrorHandler(lexer, reducer, %s{})",
+	l("return %sParse%sWithCustomErrorHandler(lexer, reducer, %s{})",
 		gen.Prefix,
+		parseSuffix,
 		gen.defaultErrHandler)
 	pop()
 	l("}")
@@ -1140,16 +1164,16 @@ func (gen *goCodeGen) generateParse() {
 		gen.lexer,
 		gen.reducer,
 		gen.errHandler,
-		gen.Start.CodeGenType)
+		startTerm.CodeGenType)
 	push()
 
-	l("var errRetVal %v", gen.Start.CodeGenType)
+	l("var errRetVal %v", startTerm.CodeGenType)
 	l("stateStack := %s{", gen.stack)
 	push()
 	l("// Note: we don't have to populate the start symbol since its value is never accessed")
 	l("&%s{%s, nil},",
 		gen.stackItem,
-		gen.OrderedStates[0].CodeGenConst)
+		startState.CodeGenConst)
 	pop()
 	l("}")
 
@@ -1214,7 +1238,7 @@ func (gen *goCodeGen) generateParse() {
 	pop()
 	l("}")
 
-	l("return stateStack[1].%s, nil", gen.Start.ValueType.Value)
+	l("return stateStack[1].%s, nil", startTerm.ValueType.Value)
 	l("")
 
 	pop()
@@ -1229,6 +1253,12 @@ func (gen *goCodeGen) generateParse() {
 
 	pop()
 	l("}")
+}
+
+func (gen *goCodeGen) generateParse() {
+	for idx, start := range gen.Starts {
+		gen._generateParse(start, gen.OrderedStates[idx], len(gen.Starts) > 1)
+	}
 }
 
 func GenerateGoLRCode(

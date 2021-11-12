@@ -53,7 +53,7 @@ type Grammar struct {
 	Terminals    []*Term // sorted by declaration location
 	NonTerminals []*Term // sorted by rule location
 
-	Start *Term
+	Starts []*Term
 
 	*LangSpecs
 }
@@ -345,7 +345,7 @@ func NewGrammar(
 		Terms:        terms,
 		Terminals:    terminals,
 		NonTerminals: nonTerminals,
-		Start:        startTerm,
+		Starts:       []*Term{startTerm},
 		LangSpecs:    langSpecs,
 	}, nil
 }

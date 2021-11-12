@@ -4058,29 +4058,29 @@ var _CActionTable = _CActionTableType{
 	{_CState2, CDeclaratorType}:                 _CGotoState28Action,
 	{_CState2, CDirectDeclaratorType}:           _CGotoState29Action,
 	{_CState2, CPointerType}:                    _CGotoState33Action,
-	{_CState2, CExternalDeclarationType}:        _CGotoState39Action,
+	{_CState2, CExternalDeclarationType}:        _CGotoState60Action,
 	{_CState2, CFunctionDefinitionType}:         _CGotoState32Action,
-	{_CState7, CIdentifierToken}:                _CGotoState40Action,
-	{_CState7, CLcurlToken}:                     _CGotoState41Action,
+	{_CState7, CIdentifierToken}:                _CGotoState39Action,
+	{_CState7, CLcurlToken}:                     _CGotoState40Action,
 	{_CState13, CIdentifierToken}:               _CGotoState10Action,
 	{_CState13, CLparamToken}:                   _CGotoState13Action,
 	{_CState13, CMulToken}:                      _CGotoState14Action,
-	{_CState13, CDeclaratorType}:                _CGotoState42Action,
+	{_CState13, CDeclaratorType}:                _CGotoState41Action,
 	{_CState13, CDirectDeclaratorType}:          _CGotoState29Action,
 	{_CState13, CPointerType}:                   _CGotoState33Action,
 	{_CState14, CConstToken}:                    _CGotoState5Action,
 	{_CState14, CVolatileToken}:                 _CGotoState25Action,
 	{_CState14, CMulToken}:                      _CGotoState14Action,
-	{_CState14, CTypeQualifierType}:             _CGotoState44Action,
-	{_CState14, CPointerType}:                   _CGotoState43Action,
-	{_CState14, CTypeQualifierListType}:         _CGotoState45Action,
+	{_CState14, CTypeQualifierType}:             _CGotoState43Action,
+	{_CState14, CPointerType}:                   _CGotoState42Action,
+	{_CState14, CTypeQualifierListType}:         _CGotoState44Action,
 	{_CState27, CIdentifierToken}:               _CGotoState10Action,
 	{_CState27, CLparamToken}:                   _CGotoState13Action,
-	{_CState27, CSemicolonToken}:                _CGotoState46Action,
+	{_CState27, CSemicolonToken}:                _CGotoState45Action,
 	{_CState27, CMulToken}:                      _CGotoState14Action,
-	{_CState27, CInitDeclaratorListType}:        _CGotoState49Action,
-	{_CState27, CInitDeclaratorType}:            _CGotoState48Action,
-	{_CState27, CDeclaratorType}:                _CGotoState47Action,
+	{_CState27, CInitDeclaratorListType}:        _CGotoState48Action,
+	{_CState27, CInitDeclaratorType}:            _CGotoState47Action,
+	{_CState27, CDeclaratorType}:                _CGotoState46Action,
 	{_CState27, CDirectDeclaratorType}:          _CGotoState29Action,
 	{_CState27, CPointerType}:                   _CGotoState33Action,
 	{_CState28, CTypeNameToken}:                 _CGotoState21Action,
@@ -4103,22 +4103,22 @@ var _CActionTable = _CActionTableType{
 	{_CState28, CStructToken}:                   _CGotoState19Action,
 	{_CState28, CUnionToken}:                    _CGotoState22Action,
 	{_CState28, CEnumToken}:                     _CGotoState7Action,
-	{_CState28, CLcurlToken}:                    _CGotoState50Action,
-	{_CState28, CDeclarationType}:               _CGotoState52Action,
-	{_CState28, CDeclarationSpecifiersType}:     _CGotoState54Action,
+	{_CState28, CLcurlToken}:                    _CGotoState49Action,
+	{_CState28, CDeclarationType}:               _CGotoState51Action,
+	{_CState28, CDeclarationSpecifiersType}:     _CGotoState53Action,
 	{_CState28, CStorageClassSpecifierType}:     _CGotoState34Action,
 	{_CState28, CTypeSpecifierType}:             _CGotoState38Action,
 	{_CState28, CStructOrUnionSpecifierType}:    _CGotoState36Action,
 	{_CState28, CStructOrUnionType}:             _CGotoState35Action,
 	{_CState28, CEnumSpecifierType}:             _CGotoState30Action,
 	{_CState28, CTypeQualifierType}:             _CGotoState37Action,
-	{_CState28, CCompoundStatementType}:         _CGotoState51Action,
-	{_CState28, CDeclarationListType}:           _CGotoState53Action,
-	{_CState29, CLparamToken}:                   _CGotoState56Action,
-	{_CState29, CLbraceToken}:                   _CGotoState55Action,
+	{_CState28, CCompoundStatementType}:         _CGotoState50Action,
+	{_CState28, CDeclarationListType}:           _CGotoState52Action,
+	{_CState29, CLparamToken}:                   _CGotoState55Action,
+	{_CState29, CLbraceToken}:                   _CGotoState54Action,
 	{_CState33, CIdentifierToken}:               _CGotoState10Action,
 	{_CState33, CLparamToken}:                   _CGotoState13Action,
-	{_CState33, CDirectDeclaratorType}:          _CGotoState57Action,
+	{_CState33, CDirectDeclaratorType}:          _CGotoState56Action,
 	{_CState34, CTypeNameToken}:                 _CGotoState21Action,
 	{_CState34, CTypedefToken}:                  _CGotoState20Action,
 	{_CState34, CExternToken}:                   _CGotoState8Action,
@@ -4139,15 +4139,15 @@ var _CActionTable = _CActionTableType{
 	{_CState34, CStructToken}:                   _CGotoState19Action,
 	{_CState34, CUnionToken}:                    _CGotoState22Action,
 	{_CState34, CEnumToken}:                     _CGotoState7Action,
-	{_CState34, CDeclarationSpecifiersType}:     _CGotoState58Action,
+	{_CState34, CDeclarationSpecifiersType}:     _CGotoState57Action,
 	{_CState34, CStorageClassSpecifierType}:     _CGotoState34Action,
 	{_CState34, CTypeSpecifierType}:             _CGotoState38Action,
 	{_CState34, CStructOrUnionSpecifierType}:    _CGotoState36Action,
 	{_CState34, CStructOrUnionType}:             _CGotoState35Action,
 	{_CState34, CEnumSpecifierType}:             _CGotoState30Action,
 	{_CState34, CTypeQualifierType}:             _CGotoState37Action,
-	{_CState35, CIdentifierToken}:               _CGotoState59Action,
-	{_CState35, CLcurlToken}:                    _CGotoState60Action,
+	{_CState35, CIdentifierToken}:               _CGotoState58Action,
+	{_CState35, CLcurlToken}:                    _CGotoState59Action,
 	{_CState37, CTypeNameToken}:                 _CGotoState21Action,
 	{_CState37, CTypedefToken}:                  _CGotoState20Action,
 	{_CState37, CExternToken}:                   _CGotoState8Action,
@@ -4202,261 +4202,261 @@ var _CActionTable = _CActionTableType{
 	{_CState38, CStructOrUnionType}:             _CGotoState35Action,
 	{_CState38, CEnumSpecifierType}:             _CGotoState30Action,
 	{_CState38, CTypeQualifierType}:             _CGotoState37Action,
-	{_CState40, CLcurlToken}:                    _CGotoState63Action,
-	{_CState41, CIdentifierToken}:               _CGotoState64Action,
-	{_CState41, CEnumeratorListType}:            _CGotoState66Action,
-	{_CState41, CEnumeratorType}:                _CGotoState65Action,
-	{_CState42, CRparamToken}:                   _CGotoState67Action,
-	{_CState45, CConstToken}:                    _CGotoState5Action,
-	{_CState45, CVolatileToken}:                 _CGotoState25Action,
-	{_CState45, CMulToken}:                      _CGotoState14Action,
-	{_CState45, CTypeQualifierType}:             _CGotoState69Action,
-	{_CState45, CPointerType}:                   _CGotoState68Action,
-	{_CState47, CTypeNameToken}:                 _CGotoState21Action,
-	{_CState47, CTypedefToken}:                  _CGotoState20Action,
-	{_CState47, CExternToken}:                   _CGotoState8Action,
-	{_CState47, CStaticToken}:                   _CGotoState18Action,
-	{_CState47, CAutoToken}:                     _CGotoState3Action,
-	{_CState47, CRegisterToken}:                 _CGotoState15Action,
-	{_CState47, CCharToken}:                     _CGotoState4Action,
-	{_CState47, CShortToken}:                    _CGotoState16Action,
-	{_CState47, CIntToken}:                      _CGotoState11Action,
-	{_CState47, CLongToken}:                     _CGotoState12Action,
-	{_CState47, CSignedToken}:                   _CGotoState17Action,
-	{_CState47, CUnsignedToken}:                 _CGotoState23Action,
-	{_CState47, CFloatToken}:                    _CGotoState9Action,
-	{_CState47, CDoubleToken}:                   _CGotoState6Action,
-	{_CState47, CConstToken}:                    _CGotoState5Action,
-	{_CState47, CVolatileToken}:                 _CGotoState25Action,
-	{_CState47, CVoidToken}:                     _CGotoState24Action,
-	{_CState47, CStructToken}:                   _CGotoState19Action,
-	{_CState47, CUnionToken}:                    _CGotoState22Action,
-	{_CState47, CEnumToken}:                     _CGotoState7Action,
-	{_CState47, CLcurlToken}:                    _CGotoState50Action,
-	{_CState47, CEqToken}:                       _CGotoState70Action,
-	{_CState47, CDeclarationType}:               _CGotoState52Action,
-	{_CState47, CDeclarationSpecifiersType}:     _CGotoState54Action,
-	{_CState47, CStorageClassSpecifierType}:     _CGotoState34Action,
-	{_CState47, CTypeSpecifierType}:             _CGotoState38Action,
-	{_CState47, CStructOrUnionSpecifierType}:    _CGotoState36Action,
-	{_CState47, CStructOrUnionType}:             _CGotoState35Action,
-	{_CState47, CEnumSpecifierType}:             _CGotoState30Action,
-	{_CState47, CTypeQualifierType}:             _CGotoState37Action,
-	{_CState47, CCompoundStatementType}:         _CGotoState71Action,
-	{_CState47, CDeclarationListType}:           _CGotoState72Action,
-	{_CState49, CSemicolonToken}:                _CGotoState74Action,
-	{_CState49, CCommaToken}:                    _CGotoState73Action,
-	{_CState50, CIdentifierToken}:               _CGotoState86Action,
-	{_CState50, CConstantToken}:                 _CGotoState78Action,
-	{_CState50, CStringLiteralToken}:            _CGotoState97Action,
-	{_CState50, CSizeofToken}:                   _CGotoState96Action,
-	{_CState50, CIncOpToken}:                    _CGotoState88Action,
-	{_CState50, CDecOpToken}:                    _CGotoState80Action,
-	{_CState50, CTypeNameToken}:                 _CGotoState21Action,
-	{_CState50, CTypedefToken}:                  _CGotoState20Action,
-	{_CState50, CExternToken}:                   _CGotoState8Action,
-	{_CState50, CStaticToken}:                   _CGotoState18Action,
-	{_CState50, CAutoToken}:                     _CGotoState3Action,
-	{_CState50, CRegisterToken}:                 _CGotoState15Action,
-	{_CState50, CCharToken}:                     _CGotoState4Action,
-	{_CState50, CShortToken}:                    _CGotoState16Action,
-	{_CState50, CIntToken}:                      _CGotoState11Action,
-	{_CState50, CLongToken}:                     _CGotoState12Action,
-	{_CState50, CSignedToken}:                   _CGotoState17Action,
-	{_CState50, CUnsignedToken}:                 _CGotoState23Action,
-	{_CState50, CFloatToken}:                    _CGotoState9Action,
-	{_CState50, CDoubleToken}:                   _CGotoState6Action,
-	{_CState50, CConstToken}:                    _CGotoState5Action,
-	{_CState50, CVolatileToken}:                 _CGotoState25Action,
-	{_CState50, CVoidToken}:                     _CGotoState24Action,
-	{_CState50, CStructToken}:                   _CGotoState19Action,
-	{_CState50, CUnionToken}:                    _CGotoState22Action,
-	{_CState50, CEnumToken}:                     _CGotoState7Action,
-	{_CState50, CCaseToken}:                     _CGotoState77Action,
-	{_CState50, CDefaultToken}:                  _CGotoState81Action,
-	{_CState50, CIfToken}:                       _CGotoState87Action,
-	{_CState50, CSwitchToken}:                   _CGotoState98Action,
-	{_CState50, CWhileToken}:                    _CGotoState100Action,
-	{_CState50, CDoToken}:                       _CGotoState82Action,
-	{_CState50, CForToken}:                      _CGotoState84Action,
-	{_CState50, CGotoToken}:                     _CGotoState85Action,
-	{_CState50, CContinueToken}:                 _CGotoState79Action,
-	{_CState50, CBreakToken}:                    _CGotoState76Action,
-	{_CState50, CReturnToken}:                   _CGotoState94Action,
-	{_CState50, CLparamToken}:                   _CGotoState89Action,
-	{_CState50, CLcurlToken}:                    _CGotoState50Action,
-	{_CState50, CRcurlToken}:                    _CGotoState93Action,
-	{_CState50, CSemicolonToken}:                _CGotoState95Action,
-	{_CState50, CMulToken}:                      _CGotoState91Action,
-	{_CState50, CMinusToken}:                    _CGotoState90Action,
-	{_CState50, CPlusToken}:                     _CGotoState92Action,
-	{_CState50, CAndToken}:                      _CGotoState75Action,
-	{_CState50, CExclaimToken}:                  _CGotoState83Action,
-	{_CState50, CTildaToken}:                    _CGotoState99Action,
-	{_CState50, CPrimaryExpressionType}:         _CGotoState120Action,
-	{_CState50, CPostfixExpressionType}:         _CGotoState119Action,
-	{_CState50, CUnaryExpressionType}:           _CGotoState126Action,
-	{_CState50, CUnaryOperatorType}:             _CGotoState127Action,
-	{_CState50, CCastExpressionType}:            _CGotoState104Action,
-	{_CState50, CMultiplicativeExpressionType}:  _CGotoState118Action,
-	{_CState50, CAdditiveExpressionType}:        _CGotoState101Action,
-	{_CState50, CShiftExpressionType}:           _CGotoState123Action,
-	{_CState50, CRelationalExpressionType}:      _CGotoState121Action,
-	{_CState50, CEqualityExpressionType}:        _CGotoState108Action,
-	{_CState50, CAndExpressionType}:             _CGotoState102Action,
-	{_CState50, CExclusiveOrExpressionType}:     _CGotoState109Action,
-	{_CState50, CInclusiveOrExpressionType}:     _CGotoState112Action,
-	{_CState50, CLogicalAndExpressionType}:      _CGotoState116Action,
-	{_CState50, CLogicalOrExpressionType}:       _CGotoState117Action,
-	{_CState50, CConditionalExpressionType}:     _CGotoState106Action,
-	{_CState50, CAssignmentExpressionType}:      _CGotoState103Action,
-	{_CState50, CExpressionType}:                _CGotoState110Action,
-	{_CState50, CDeclarationType}:               _CGotoState52Action,
-	{_CState50, CDeclarationSpecifiersType}:     _CGotoState54Action,
-	{_CState50, CStorageClassSpecifierType}:     _CGotoState34Action,
-	{_CState50, CTypeSpecifierType}:             _CGotoState38Action,
-	{_CState50, CStructOrUnionSpecifierType}:    _CGotoState36Action,
-	{_CState50, CStructOrUnionType}:             _CGotoState35Action,
-	{_CState50, CEnumSpecifierType}:             _CGotoState30Action,
-	{_CState50, CTypeQualifierType}:             _CGotoState37Action,
-	{_CState50, CStatementType}:                 _CGotoState124Action,
-	{_CState50, CLabeledStatementType}:          _CGotoState115Action,
-	{_CState50, CCompoundStatementType}:         _CGotoState105Action,
-	{_CState50, CDeclarationListType}:           _CGotoState107Action,
-	{_CState50, CStatementListType}:             _CGotoState125Action,
-	{_CState50, CExpressionStatementType}:       _CGotoState111Action,
-	{_CState50, CSelectionStatementType}:        _CGotoState122Action,
-	{_CState50, CIterationStatementType}:        _CGotoState113Action,
-	{_CState50, CJumpStatementType}:             _CGotoState114Action,
-	{_CState53, CTypeNameToken}:                 _CGotoState21Action,
-	{_CState53, CTypedefToken}:                  _CGotoState20Action,
-	{_CState53, CExternToken}:                   _CGotoState8Action,
-	{_CState53, CStaticToken}:                   _CGotoState18Action,
-	{_CState53, CAutoToken}:                     _CGotoState3Action,
-	{_CState53, CRegisterToken}:                 _CGotoState15Action,
-	{_CState53, CCharToken}:                     _CGotoState4Action,
-	{_CState53, CShortToken}:                    _CGotoState16Action,
-	{_CState53, CIntToken}:                      _CGotoState11Action,
-	{_CState53, CLongToken}:                     _CGotoState12Action,
-	{_CState53, CSignedToken}:                   _CGotoState17Action,
-	{_CState53, CUnsignedToken}:                 _CGotoState23Action,
-	{_CState53, CFloatToken}:                    _CGotoState9Action,
-	{_CState53, CDoubleToken}:                   _CGotoState6Action,
-	{_CState53, CConstToken}:                    _CGotoState5Action,
-	{_CState53, CVolatileToken}:                 _CGotoState25Action,
-	{_CState53, CVoidToken}:                     _CGotoState24Action,
-	{_CState53, CStructToken}:                   _CGotoState19Action,
-	{_CState53, CUnionToken}:                    _CGotoState22Action,
-	{_CState53, CEnumToken}:                     _CGotoState7Action,
-	{_CState53, CLcurlToken}:                    _CGotoState50Action,
-	{_CState53, CDeclarationType}:               _CGotoState129Action,
-	{_CState53, CDeclarationSpecifiersType}:     _CGotoState54Action,
-	{_CState53, CStorageClassSpecifierType}:     _CGotoState34Action,
-	{_CState53, CTypeSpecifierType}:             _CGotoState38Action,
-	{_CState53, CStructOrUnionSpecifierType}:    _CGotoState36Action,
-	{_CState53, CStructOrUnionType}:             _CGotoState35Action,
-	{_CState53, CEnumSpecifierType}:             _CGotoState30Action,
-	{_CState53, CTypeQualifierType}:             _CGotoState37Action,
-	{_CState53, CCompoundStatementType}:         _CGotoState128Action,
-	{_CState54, CIdentifierToken}:               _CGotoState10Action,
-	{_CState54, CLparamToken}:                   _CGotoState13Action,
-	{_CState54, CSemicolonToken}:                _CGotoState46Action,
-	{_CState54, CMulToken}:                      _CGotoState14Action,
-	{_CState54, CInitDeclaratorListType}:        _CGotoState49Action,
-	{_CState54, CInitDeclaratorType}:            _CGotoState48Action,
-	{_CState54, CDeclaratorType}:                _CGotoState130Action,
-	{_CState54, CDirectDeclaratorType}:          _CGotoState29Action,
-	{_CState54, CPointerType}:                   _CGotoState33Action,
-	{_CState55, CIdentifierToken}:               _CGotoState131Action,
-	{_CState55, CConstantToken}:                 _CGotoState78Action,
-	{_CState55, CStringLiteralToken}:            _CGotoState97Action,
-	{_CState55, CSizeofToken}:                   _CGotoState96Action,
-	{_CState55, CIncOpToken}:                    _CGotoState88Action,
-	{_CState55, CDecOpToken}:                    _CGotoState80Action,
-	{_CState55, CLparamToken}:                   _CGotoState89Action,
-	{_CState55, CRbraceToken}:                   _CGotoState132Action,
-	{_CState55, CMulToken}:                      _CGotoState91Action,
-	{_CState55, CMinusToken}:                    _CGotoState90Action,
-	{_CState55, CPlusToken}:                     _CGotoState92Action,
-	{_CState55, CAndToken}:                      _CGotoState75Action,
-	{_CState55, CExclaimToken}:                  _CGotoState83Action,
-	{_CState55, CTildaToken}:                    _CGotoState99Action,
-	{_CState55, CPrimaryExpressionType}:         _CGotoState120Action,
-	{_CState55, CPostfixExpressionType}:         _CGotoState119Action,
-	{_CState55, CUnaryExpressionType}:           _CGotoState135Action,
-	{_CState55, CUnaryOperatorType}:             _CGotoState127Action,
-	{_CState55, CCastExpressionType}:            _CGotoState104Action,
-	{_CState55, CMultiplicativeExpressionType}:  _CGotoState118Action,
-	{_CState55, CAdditiveExpressionType}:        _CGotoState101Action,
-	{_CState55, CShiftExpressionType}:           _CGotoState123Action,
-	{_CState55, CRelationalExpressionType}:      _CGotoState121Action,
-	{_CState55, CEqualityExpressionType}:        _CGotoState108Action,
-	{_CState55, CAndExpressionType}:             _CGotoState102Action,
-	{_CState55, CExclusiveOrExpressionType}:     _CGotoState109Action,
-	{_CState55, CInclusiveOrExpressionType}:     _CGotoState112Action,
-	{_CState55, CLogicalAndExpressionType}:      _CGotoState116Action,
-	{_CState55, CLogicalOrExpressionType}:       _CGotoState117Action,
-	{_CState55, CConditionalExpressionType}:     _CGotoState133Action,
-	{_CState55, CConstantExpressionType}:        _CGotoState134Action,
-	{_CState56, CIdentifierToken}:               _CGotoState136Action,
-	{_CState56, CTypeNameToken}:                 _CGotoState21Action,
-	{_CState56, CTypedefToken}:                  _CGotoState20Action,
-	{_CState56, CExternToken}:                   _CGotoState8Action,
-	{_CState56, CStaticToken}:                   _CGotoState18Action,
-	{_CState56, CAutoToken}:                     _CGotoState3Action,
-	{_CState56, CRegisterToken}:                 _CGotoState15Action,
-	{_CState56, CCharToken}:                     _CGotoState4Action,
-	{_CState56, CShortToken}:                    _CGotoState16Action,
-	{_CState56, CIntToken}:                      _CGotoState11Action,
-	{_CState56, CLongToken}:                     _CGotoState12Action,
-	{_CState56, CSignedToken}:                   _CGotoState17Action,
-	{_CState56, CUnsignedToken}:                 _CGotoState23Action,
-	{_CState56, CFloatToken}:                    _CGotoState9Action,
-	{_CState56, CDoubleToken}:                   _CGotoState6Action,
-	{_CState56, CConstToken}:                    _CGotoState5Action,
-	{_CState56, CVolatileToken}:                 _CGotoState25Action,
-	{_CState56, CVoidToken}:                     _CGotoState24Action,
-	{_CState56, CStructToken}:                   _CGotoState19Action,
-	{_CState56, CUnionToken}:                    _CGotoState22Action,
-	{_CState56, CEnumToken}:                     _CGotoState7Action,
-	{_CState56, CRparamToken}:                   _CGotoState137Action,
-	{_CState56, CDeclarationSpecifiersType}:     _CGotoState138Action,
-	{_CState56, CStorageClassSpecifierType}:     _CGotoState34Action,
-	{_CState56, CTypeSpecifierType}:             _CGotoState38Action,
-	{_CState56, CStructOrUnionSpecifierType}:    _CGotoState36Action,
-	{_CState56, CStructOrUnionType}:             _CGotoState35Action,
-	{_CState56, CEnumSpecifierType}:             _CGotoState30Action,
-	{_CState56, CTypeQualifierType}:             _CGotoState37Action,
-	{_CState56, CParameterTypeListType}:         _CGotoState142Action,
-	{_CState56, CParameterListType}:             _CGotoState141Action,
-	{_CState56, CParameterDeclarationType}:      _CGotoState140Action,
-	{_CState56, CIdentifierListType}:            _CGotoState139Action,
-	{_CState57, CLparamToken}:                   _CGotoState56Action,
-	{_CState57, CLbraceToken}:                   _CGotoState55Action,
-	{_CState59, CLcurlToken}:                    _CGotoState143Action,
-	{_CState60, CTypeNameToken}:                 _CGotoState21Action,
-	{_CState60, CCharToken}:                     _CGotoState4Action,
-	{_CState60, CShortToken}:                    _CGotoState16Action,
-	{_CState60, CIntToken}:                      _CGotoState11Action,
-	{_CState60, CLongToken}:                     _CGotoState12Action,
-	{_CState60, CSignedToken}:                   _CGotoState17Action,
-	{_CState60, CUnsignedToken}:                 _CGotoState23Action,
-	{_CState60, CFloatToken}:                    _CGotoState9Action,
-	{_CState60, CDoubleToken}:                   _CGotoState6Action,
-	{_CState60, CConstToken}:                    _CGotoState5Action,
-	{_CState60, CVolatileToken}:                 _CGotoState25Action,
-	{_CState60, CVoidToken}:                     _CGotoState24Action,
-	{_CState60, CStructToken}:                   _CGotoState19Action,
-	{_CState60, CUnionToken}:                    _CGotoState22Action,
-	{_CState60, CEnumToken}:                     _CGotoState7Action,
-	{_CState60, CTypeSpecifierType}:             _CGotoState148Action,
-	{_CState60, CStructOrUnionSpecifierType}:    _CGotoState36Action,
-	{_CState60, CStructOrUnionType}:             _CGotoState35Action,
-	{_CState60, CStructDeclarationListType}:     _CGotoState146Action,
-	{_CState60, CStructDeclarationType}:         _CGotoState145Action,
-	{_CState60, CSpecifierQualifierListType}:    _CGotoState144Action,
-	{_CState60, CEnumSpecifierType}:             _CGotoState30Action,
-	{_CState60, CTypeQualifierType}:             _CGotoState147Action,
+	{_CState39, CLcurlToken}:                    _CGotoState63Action,
+	{_CState40, CIdentifierToken}:               _CGotoState64Action,
+	{_CState40, CEnumeratorListType}:            _CGotoState66Action,
+	{_CState40, CEnumeratorType}:                _CGotoState65Action,
+	{_CState41, CRparamToken}:                   _CGotoState67Action,
+	{_CState44, CConstToken}:                    _CGotoState5Action,
+	{_CState44, CVolatileToken}:                 _CGotoState25Action,
+	{_CState44, CMulToken}:                      _CGotoState14Action,
+	{_CState44, CTypeQualifierType}:             _CGotoState69Action,
+	{_CState44, CPointerType}:                   _CGotoState68Action,
+	{_CState46, CTypeNameToken}:                 _CGotoState21Action,
+	{_CState46, CTypedefToken}:                  _CGotoState20Action,
+	{_CState46, CExternToken}:                   _CGotoState8Action,
+	{_CState46, CStaticToken}:                   _CGotoState18Action,
+	{_CState46, CAutoToken}:                     _CGotoState3Action,
+	{_CState46, CRegisterToken}:                 _CGotoState15Action,
+	{_CState46, CCharToken}:                     _CGotoState4Action,
+	{_CState46, CShortToken}:                    _CGotoState16Action,
+	{_CState46, CIntToken}:                      _CGotoState11Action,
+	{_CState46, CLongToken}:                     _CGotoState12Action,
+	{_CState46, CSignedToken}:                   _CGotoState17Action,
+	{_CState46, CUnsignedToken}:                 _CGotoState23Action,
+	{_CState46, CFloatToken}:                    _CGotoState9Action,
+	{_CState46, CDoubleToken}:                   _CGotoState6Action,
+	{_CState46, CConstToken}:                    _CGotoState5Action,
+	{_CState46, CVolatileToken}:                 _CGotoState25Action,
+	{_CState46, CVoidToken}:                     _CGotoState24Action,
+	{_CState46, CStructToken}:                   _CGotoState19Action,
+	{_CState46, CUnionToken}:                    _CGotoState22Action,
+	{_CState46, CEnumToken}:                     _CGotoState7Action,
+	{_CState46, CLcurlToken}:                    _CGotoState49Action,
+	{_CState46, CEqToken}:                       _CGotoState70Action,
+	{_CState46, CDeclarationType}:               _CGotoState51Action,
+	{_CState46, CDeclarationSpecifiersType}:     _CGotoState53Action,
+	{_CState46, CStorageClassSpecifierType}:     _CGotoState34Action,
+	{_CState46, CTypeSpecifierType}:             _CGotoState38Action,
+	{_CState46, CStructOrUnionSpecifierType}:    _CGotoState36Action,
+	{_CState46, CStructOrUnionType}:             _CGotoState35Action,
+	{_CState46, CEnumSpecifierType}:             _CGotoState30Action,
+	{_CState46, CTypeQualifierType}:             _CGotoState37Action,
+	{_CState46, CCompoundStatementType}:         _CGotoState71Action,
+	{_CState46, CDeclarationListType}:           _CGotoState72Action,
+	{_CState48, CSemicolonToken}:                _CGotoState74Action,
+	{_CState48, CCommaToken}:                    _CGotoState73Action,
+	{_CState49, CIdentifierToken}:               _CGotoState86Action,
+	{_CState49, CConstantToken}:                 _CGotoState78Action,
+	{_CState49, CStringLiteralToken}:            _CGotoState97Action,
+	{_CState49, CSizeofToken}:                   _CGotoState96Action,
+	{_CState49, CIncOpToken}:                    _CGotoState88Action,
+	{_CState49, CDecOpToken}:                    _CGotoState80Action,
+	{_CState49, CTypeNameToken}:                 _CGotoState21Action,
+	{_CState49, CTypedefToken}:                  _CGotoState20Action,
+	{_CState49, CExternToken}:                   _CGotoState8Action,
+	{_CState49, CStaticToken}:                   _CGotoState18Action,
+	{_CState49, CAutoToken}:                     _CGotoState3Action,
+	{_CState49, CRegisterToken}:                 _CGotoState15Action,
+	{_CState49, CCharToken}:                     _CGotoState4Action,
+	{_CState49, CShortToken}:                    _CGotoState16Action,
+	{_CState49, CIntToken}:                      _CGotoState11Action,
+	{_CState49, CLongToken}:                     _CGotoState12Action,
+	{_CState49, CSignedToken}:                   _CGotoState17Action,
+	{_CState49, CUnsignedToken}:                 _CGotoState23Action,
+	{_CState49, CFloatToken}:                    _CGotoState9Action,
+	{_CState49, CDoubleToken}:                   _CGotoState6Action,
+	{_CState49, CConstToken}:                    _CGotoState5Action,
+	{_CState49, CVolatileToken}:                 _CGotoState25Action,
+	{_CState49, CVoidToken}:                     _CGotoState24Action,
+	{_CState49, CStructToken}:                   _CGotoState19Action,
+	{_CState49, CUnionToken}:                    _CGotoState22Action,
+	{_CState49, CEnumToken}:                     _CGotoState7Action,
+	{_CState49, CCaseToken}:                     _CGotoState77Action,
+	{_CState49, CDefaultToken}:                  _CGotoState81Action,
+	{_CState49, CIfToken}:                       _CGotoState87Action,
+	{_CState49, CSwitchToken}:                   _CGotoState98Action,
+	{_CState49, CWhileToken}:                    _CGotoState100Action,
+	{_CState49, CDoToken}:                       _CGotoState82Action,
+	{_CState49, CForToken}:                      _CGotoState84Action,
+	{_CState49, CGotoToken}:                     _CGotoState85Action,
+	{_CState49, CContinueToken}:                 _CGotoState79Action,
+	{_CState49, CBreakToken}:                    _CGotoState76Action,
+	{_CState49, CReturnToken}:                   _CGotoState94Action,
+	{_CState49, CLparamToken}:                   _CGotoState89Action,
+	{_CState49, CLcurlToken}:                    _CGotoState49Action,
+	{_CState49, CRcurlToken}:                    _CGotoState93Action,
+	{_CState49, CSemicolonToken}:                _CGotoState95Action,
+	{_CState49, CMulToken}:                      _CGotoState91Action,
+	{_CState49, CMinusToken}:                    _CGotoState90Action,
+	{_CState49, CPlusToken}:                     _CGotoState92Action,
+	{_CState49, CAndToken}:                      _CGotoState75Action,
+	{_CState49, CExclaimToken}:                  _CGotoState83Action,
+	{_CState49, CTildaToken}:                    _CGotoState99Action,
+	{_CState49, CPrimaryExpressionType}:         _CGotoState120Action,
+	{_CState49, CPostfixExpressionType}:         _CGotoState119Action,
+	{_CState49, CUnaryExpressionType}:           _CGotoState126Action,
+	{_CState49, CUnaryOperatorType}:             _CGotoState127Action,
+	{_CState49, CCastExpressionType}:            _CGotoState104Action,
+	{_CState49, CMultiplicativeExpressionType}:  _CGotoState118Action,
+	{_CState49, CAdditiveExpressionType}:        _CGotoState101Action,
+	{_CState49, CShiftExpressionType}:           _CGotoState123Action,
+	{_CState49, CRelationalExpressionType}:      _CGotoState121Action,
+	{_CState49, CEqualityExpressionType}:        _CGotoState108Action,
+	{_CState49, CAndExpressionType}:             _CGotoState102Action,
+	{_CState49, CExclusiveOrExpressionType}:     _CGotoState109Action,
+	{_CState49, CInclusiveOrExpressionType}:     _CGotoState112Action,
+	{_CState49, CLogicalAndExpressionType}:      _CGotoState116Action,
+	{_CState49, CLogicalOrExpressionType}:       _CGotoState117Action,
+	{_CState49, CConditionalExpressionType}:     _CGotoState106Action,
+	{_CState49, CAssignmentExpressionType}:      _CGotoState103Action,
+	{_CState49, CExpressionType}:                _CGotoState110Action,
+	{_CState49, CDeclarationType}:               _CGotoState51Action,
+	{_CState49, CDeclarationSpecifiersType}:     _CGotoState53Action,
+	{_CState49, CStorageClassSpecifierType}:     _CGotoState34Action,
+	{_CState49, CTypeSpecifierType}:             _CGotoState38Action,
+	{_CState49, CStructOrUnionSpecifierType}:    _CGotoState36Action,
+	{_CState49, CStructOrUnionType}:             _CGotoState35Action,
+	{_CState49, CEnumSpecifierType}:             _CGotoState30Action,
+	{_CState49, CTypeQualifierType}:             _CGotoState37Action,
+	{_CState49, CStatementType}:                 _CGotoState124Action,
+	{_CState49, CLabeledStatementType}:          _CGotoState115Action,
+	{_CState49, CCompoundStatementType}:         _CGotoState105Action,
+	{_CState49, CDeclarationListType}:           _CGotoState107Action,
+	{_CState49, CStatementListType}:             _CGotoState125Action,
+	{_CState49, CExpressionStatementType}:       _CGotoState111Action,
+	{_CState49, CSelectionStatementType}:        _CGotoState122Action,
+	{_CState49, CIterationStatementType}:        _CGotoState113Action,
+	{_CState49, CJumpStatementType}:             _CGotoState114Action,
+	{_CState52, CTypeNameToken}:                 _CGotoState21Action,
+	{_CState52, CTypedefToken}:                  _CGotoState20Action,
+	{_CState52, CExternToken}:                   _CGotoState8Action,
+	{_CState52, CStaticToken}:                   _CGotoState18Action,
+	{_CState52, CAutoToken}:                     _CGotoState3Action,
+	{_CState52, CRegisterToken}:                 _CGotoState15Action,
+	{_CState52, CCharToken}:                     _CGotoState4Action,
+	{_CState52, CShortToken}:                    _CGotoState16Action,
+	{_CState52, CIntToken}:                      _CGotoState11Action,
+	{_CState52, CLongToken}:                     _CGotoState12Action,
+	{_CState52, CSignedToken}:                   _CGotoState17Action,
+	{_CState52, CUnsignedToken}:                 _CGotoState23Action,
+	{_CState52, CFloatToken}:                    _CGotoState9Action,
+	{_CState52, CDoubleToken}:                   _CGotoState6Action,
+	{_CState52, CConstToken}:                    _CGotoState5Action,
+	{_CState52, CVolatileToken}:                 _CGotoState25Action,
+	{_CState52, CVoidToken}:                     _CGotoState24Action,
+	{_CState52, CStructToken}:                   _CGotoState19Action,
+	{_CState52, CUnionToken}:                    _CGotoState22Action,
+	{_CState52, CEnumToken}:                     _CGotoState7Action,
+	{_CState52, CLcurlToken}:                    _CGotoState49Action,
+	{_CState52, CDeclarationType}:               _CGotoState129Action,
+	{_CState52, CDeclarationSpecifiersType}:     _CGotoState53Action,
+	{_CState52, CStorageClassSpecifierType}:     _CGotoState34Action,
+	{_CState52, CTypeSpecifierType}:             _CGotoState38Action,
+	{_CState52, CStructOrUnionSpecifierType}:    _CGotoState36Action,
+	{_CState52, CStructOrUnionType}:             _CGotoState35Action,
+	{_CState52, CEnumSpecifierType}:             _CGotoState30Action,
+	{_CState52, CTypeQualifierType}:             _CGotoState37Action,
+	{_CState52, CCompoundStatementType}:         _CGotoState128Action,
+	{_CState53, CIdentifierToken}:               _CGotoState10Action,
+	{_CState53, CLparamToken}:                   _CGotoState13Action,
+	{_CState53, CSemicolonToken}:                _CGotoState45Action,
+	{_CState53, CMulToken}:                      _CGotoState14Action,
+	{_CState53, CInitDeclaratorListType}:        _CGotoState48Action,
+	{_CState53, CInitDeclaratorType}:            _CGotoState47Action,
+	{_CState53, CDeclaratorType}:                _CGotoState130Action,
+	{_CState53, CDirectDeclaratorType}:          _CGotoState29Action,
+	{_CState53, CPointerType}:                   _CGotoState33Action,
+	{_CState54, CIdentifierToken}:               _CGotoState131Action,
+	{_CState54, CConstantToken}:                 _CGotoState78Action,
+	{_CState54, CStringLiteralToken}:            _CGotoState97Action,
+	{_CState54, CSizeofToken}:                   _CGotoState96Action,
+	{_CState54, CIncOpToken}:                    _CGotoState88Action,
+	{_CState54, CDecOpToken}:                    _CGotoState80Action,
+	{_CState54, CLparamToken}:                   _CGotoState89Action,
+	{_CState54, CRbraceToken}:                   _CGotoState132Action,
+	{_CState54, CMulToken}:                      _CGotoState91Action,
+	{_CState54, CMinusToken}:                    _CGotoState90Action,
+	{_CState54, CPlusToken}:                     _CGotoState92Action,
+	{_CState54, CAndToken}:                      _CGotoState75Action,
+	{_CState54, CExclaimToken}:                  _CGotoState83Action,
+	{_CState54, CTildaToken}:                    _CGotoState99Action,
+	{_CState54, CPrimaryExpressionType}:         _CGotoState120Action,
+	{_CState54, CPostfixExpressionType}:         _CGotoState119Action,
+	{_CState54, CUnaryExpressionType}:           _CGotoState135Action,
+	{_CState54, CUnaryOperatorType}:             _CGotoState127Action,
+	{_CState54, CCastExpressionType}:            _CGotoState104Action,
+	{_CState54, CMultiplicativeExpressionType}:  _CGotoState118Action,
+	{_CState54, CAdditiveExpressionType}:        _CGotoState101Action,
+	{_CState54, CShiftExpressionType}:           _CGotoState123Action,
+	{_CState54, CRelationalExpressionType}:      _CGotoState121Action,
+	{_CState54, CEqualityExpressionType}:        _CGotoState108Action,
+	{_CState54, CAndExpressionType}:             _CGotoState102Action,
+	{_CState54, CExclusiveOrExpressionType}:     _CGotoState109Action,
+	{_CState54, CInclusiveOrExpressionType}:     _CGotoState112Action,
+	{_CState54, CLogicalAndExpressionType}:      _CGotoState116Action,
+	{_CState54, CLogicalOrExpressionType}:       _CGotoState117Action,
+	{_CState54, CConditionalExpressionType}:     _CGotoState133Action,
+	{_CState54, CConstantExpressionType}:        _CGotoState134Action,
+	{_CState55, CIdentifierToken}:               _CGotoState136Action,
+	{_CState55, CTypeNameToken}:                 _CGotoState21Action,
+	{_CState55, CTypedefToken}:                  _CGotoState20Action,
+	{_CState55, CExternToken}:                   _CGotoState8Action,
+	{_CState55, CStaticToken}:                   _CGotoState18Action,
+	{_CState55, CAutoToken}:                     _CGotoState3Action,
+	{_CState55, CRegisterToken}:                 _CGotoState15Action,
+	{_CState55, CCharToken}:                     _CGotoState4Action,
+	{_CState55, CShortToken}:                    _CGotoState16Action,
+	{_CState55, CIntToken}:                      _CGotoState11Action,
+	{_CState55, CLongToken}:                     _CGotoState12Action,
+	{_CState55, CSignedToken}:                   _CGotoState17Action,
+	{_CState55, CUnsignedToken}:                 _CGotoState23Action,
+	{_CState55, CFloatToken}:                    _CGotoState9Action,
+	{_CState55, CDoubleToken}:                   _CGotoState6Action,
+	{_CState55, CConstToken}:                    _CGotoState5Action,
+	{_CState55, CVolatileToken}:                 _CGotoState25Action,
+	{_CState55, CVoidToken}:                     _CGotoState24Action,
+	{_CState55, CStructToken}:                   _CGotoState19Action,
+	{_CState55, CUnionToken}:                    _CGotoState22Action,
+	{_CState55, CEnumToken}:                     _CGotoState7Action,
+	{_CState55, CRparamToken}:                   _CGotoState137Action,
+	{_CState55, CDeclarationSpecifiersType}:     _CGotoState138Action,
+	{_CState55, CStorageClassSpecifierType}:     _CGotoState34Action,
+	{_CState55, CTypeSpecifierType}:             _CGotoState38Action,
+	{_CState55, CStructOrUnionSpecifierType}:    _CGotoState36Action,
+	{_CState55, CStructOrUnionType}:             _CGotoState35Action,
+	{_CState55, CEnumSpecifierType}:             _CGotoState30Action,
+	{_CState55, CTypeQualifierType}:             _CGotoState37Action,
+	{_CState55, CParameterTypeListType}:         _CGotoState142Action,
+	{_CState55, CParameterListType}:             _CGotoState141Action,
+	{_CState55, CParameterDeclarationType}:      _CGotoState140Action,
+	{_CState55, CIdentifierListType}:            _CGotoState139Action,
+	{_CState56, CLparamToken}:                   _CGotoState55Action,
+	{_CState56, CLbraceToken}:                   _CGotoState54Action,
+	{_CState58, CLcurlToken}:                    _CGotoState143Action,
+	{_CState59, CTypeNameToken}:                 _CGotoState21Action,
+	{_CState59, CCharToken}:                     _CGotoState4Action,
+	{_CState59, CShortToken}:                    _CGotoState16Action,
+	{_CState59, CIntToken}:                      _CGotoState11Action,
+	{_CState59, CLongToken}:                     _CGotoState12Action,
+	{_CState59, CSignedToken}:                   _CGotoState17Action,
+	{_CState59, CUnsignedToken}:                 _CGotoState23Action,
+	{_CState59, CFloatToken}:                    _CGotoState9Action,
+	{_CState59, CDoubleToken}:                   _CGotoState6Action,
+	{_CState59, CConstToken}:                    _CGotoState5Action,
+	{_CState59, CVolatileToken}:                 _CGotoState25Action,
+	{_CState59, CVoidToken}:                     _CGotoState24Action,
+	{_CState59, CStructToken}:                   _CGotoState19Action,
+	{_CState59, CUnionToken}:                    _CGotoState22Action,
+	{_CState59, CEnumToken}:                     _CGotoState7Action,
+	{_CState59, CTypeSpecifierType}:             _CGotoState148Action,
+	{_CState59, CStructOrUnionSpecifierType}:    _CGotoState36Action,
+	{_CState59, CStructOrUnionType}:             _CGotoState35Action,
+	{_CState59, CStructDeclarationListType}:     _CGotoState146Action,
+	{_CState59, CStructDeclarationType}:         _CGotoState145Action,
+	{_CState59, CSpecifierQualifierListType}:    _CGotoState144Action,
+	{_CState59, CEnumSpecifierType}:             _CGotoState30Action,
+	{_CState59, CTypeQualifierType}:             _CGotoState147Action,
 	{_CState63, CIdentifierToken}:               _CGotoState64Action,
 	{_CState63, CEnumeratorListType}:            _CGotoState149Action,
 	{_CState63, CEnumeratorType}:                _CGotoState65Action,
@@ -4515,9 +4515,9 @@ var _CActionTable = _CActionTableType{
 	{_CState72, CStructToken}:                   _CGotoState19Action,
 	{_CState72, CUnionToken}:                    _CGotoState22Action,
 	{_CState72, CEnumToken}:                     _CGotoState7Action,
-	{_CState72, CLcurlToken}:                    _CGotoState50Action,
+	{_CState72, CLcurlToken}:                    _CGotoState49Action,
 	{_CState72, CDeclarationType}:               _CGotoState129Action,
-	{_CState72, CDeclarationSpecifiersType}:     _CGotoState54Action,
+	{_CState72, CDeclarationSpecifiersType}:     _CGotoState53Action,
 	{_CState72, CStorageClassSpecifierType}:     _CGotoState34Action,
 	{_CState72, CTypeSpecifierType}:             _CGotoState38Action,
 	{_CState72, CStructOrUnionSpecifierType}:    _CGotoState36Action,
@@ -4600,7 +4600,7 @@ var _CActionTable = _CActionTableType{
 	{_CState82, CBreakToken}:                    _CGotoState76Action,
 	{_CState82, CReturnToken}:                   _CGotoState94Action,
 	{_CState82, CLparamToken}:                   _CGotoState89Action,
-	{_CState82, CLcurlToken}:                    _CGotoState50Action,
+	{_CState82, CLcurlToken}:                    _CGotoState49Action,
 	{_CState82, CSemicolonToken}:                _CGotoState95Action,
 	{_CState82, CMulToken}:                      _CGotoState91Action,
 	{_CState82, CMinusToken}:                    _CGotoState90Action,
@@ -4799,7 +4799,7 @@ var _CActionTable = _CActionTableType{
 	{_CState107, CBreakToken}:                   _CGotoState76Action,
 	{_CState107, CReturnToken}:                  _CGotoState94Action,
 	{_CState107, CLparamToken}:                  _CGotoState89Action,
-	{_CState107, CLcurlToken}:                   _CGotoState50Action,
+	{_CState107, CLcurlToken}:                   _CGotoState49Action,
 	{_CState107, CRcurlToken}:                   _CGotoState182Action,
 	{_CState107, CSemicolonToken}:               _CGotoState95Action,
 	{_CState107, CMulToken}:                     _CGotoState91Action,
@@ -4827,7 +4827,7 @@ var _CActionTable = _CActionTableType{
 	{_CState107, CAssignmentExpressionType}:     _CGotoState103Action,
 	{_CState107, CExpressionType}:               _CGotoState110Action,
 	{_CState107, CDeclarationType}:              _CGotoState129Action,
-	{_CState107, CDeclarationSpecifiersType}:    _CGotoState54Action,
+	{_CState107, CDeclarationSpecifiersType}:    _CGotoState53Action,
 	{_CState107, CStorageClassSpecifierType}:    _CGotoState34Action,
 	{_CState107, CTypeSpecifierType}:            _CGotoState38Action,
 	{_CState107, CStructOrUnionSpecifierType}:   _CGotoState36Action,
@@ -4884,7 +4884,7 @@ var _CActionTable = _CActionTableType{
 	{_CState125, CBreakToken}:                   _CGotoState76Action,
 	{_CState125, CReturnToken}:                  _CGotoState94Action,
 	{_CState125, CLparamToken}:                  _CGotoState89Action,
-	{_CState125, CLcurlToken}:                   _CGotoState50Action,
+	{_CState125, CLcurlToken}:                   _CGotoState49Action,
 	{_CState125, CRcurlToken}:                   _CGotoState208Action,
 	{_CState125, CSemicolonToken}:               _CGotoState95Action,
 	{_CState125, CMulToken}:                     _CGotoState91Action,
@@ -5177,7 +5177,7 @@ var _CActionTable = _CActionTableType{
 	{_CState163, CBreakToken}:                   _CGotoState76Action,
 	{_CState163, CReturnToken}:                  _CGotoState94Action,
 	{_CState163, CLparamToken}:                  _CGotoState89Action,
-	{_CState163, CLcurlToken}:                   _CGotoState50Action,
+	{_CState163, CLcurlToken}:                   _CGotoState49Action,
 	{_CState163, CSemicolonToken}:               _CGotoState95Action,
 	{_CState163, CMulToken}:                     _CGotoState91Action,
 	{_CState163, CMinusToken}:                   _CGotoState90Action,
@@ -5263,7 +5263,7 @@ var _CActionTable = _CActionTableType{
 	{_CState167, CBreakToken}:                   _CGotoState76Action,
 	{_CState167, CReturnToken}:                  _CGotoState94Action,
 	{_CState167, CLparamToken}:                  _CGotoState89Action,
-	{_CState167, CLcurlToken}:                   _CGotoState50Action,
+	{_CState167, CLcurlToken}:                   _CGotoState49Action,
 	{_CState167, CSemicolonToken}:               _CGotoState95Action,
 	{_CState167, CMulToken}:                     _CGotoState91Action,
 	{_CState167, CMinusToken}:                   _CGotoState90Action,
@@ -5532,7 +5532,7 @@ var _CActionTable = _CActionTableType{
 	{_CState183, CBreakToken}:                   _CGotoState76Action,
 	{_CState183, CReturnToken}:                  _CGotoState94Action,
 	{_CState183, CLparamToken}:                  _CGotoState89Action,
-	{_CState183, CLcurlToken}:                   _CGotoState50Action,
+	{_CState183, CLcurlToken}:                   _CGotoState49Action,
 	{_CState183, CRcurlToken}:                   _CGotoState267Action,
 	{_CState183, CSemicolonToken}:               _CGotoState95Action,
 	{_CState183, CMulToken}:                     _CGotoState91Action,
@@ -6109,7 +6109,7 @@ var _CActionTable = _CActionTableType{
 	{_CState225, CStructOrUnionType}:            _CGotoState35Action,
 	{_CState225, CEnumSpecifierType}:            _CGotoState30Action,
 	{_CState225, CTypeQualifierType}:            _CGotoState37Action,
-	{_CState225, CDeclaratorType}:               _CGotoState42Action,
+	{_CState225, CDeclaratorType}:               _CGotoState41Action,
 	{_CState225, CDirectDeclaratorType}:         _CGotoState29Action,
 	{_CState225, CPointerType}:                  _CGotoState229Action,
 	{_CState225, CParameterTypeListType}:        _CGotoState296Action,
@@ -6122,7 +6122,7 @@ var _CActionTable = _CActionTableType{
 	{_CState229, CIdentifierToken}:              _CGotoState10Action,
 	{_CState229, CLparamToken}:                  _CGotoState225Action,
 	{_CState229, CLbraceToken}:                  _CGotoState224Action,
-	{_CState229, CDirectDeclaratorType}:         _CGotoState57Action,
+	{_CState229, CDirectDeclaratorType}:         _CGotoState56Action,
 	{_CState229, CDirectAbstractDeclaratorType}: _CGotoState299Action,
 	{_CState230, CIdentifierToken}:              _CGotoState300Action,
 	{_CState232, CTypeNameToken}:                _CGotoState21Action,
@@ -6230,7 +6230,7 @@ var _CActionTable = _CActionTableType{
 	{_CState248, CBreakToken}:                   _CGotoState76Action,
 	{_CState248, CReturnToken}:                  _CGotoState94Action,
 	{_CState248, CLparamToken}:                  _CGotoState89Action,
-	{_CState248, CLcurlToken}:                   _CGotoState50Action,
+	{_CState248, CLcurlToken}:                   _CGotoState49Action,
 	{_CState248, CSemicolonToken}:               _CGotoState95Action,
 	{_CState248, CMulToken}:                     _CGotoState91Action,
 	{_CState248, CMinusToken}:                   _CGotoState90Action,
@@ -6619,7 +6619,7 @@ var _CActionTable = _CActionTableType{
 	{_CState313, CBreakToken}:                   _CGotoState76Action,
 	{_CState313, CReturnToken}:                  _CGotoState94Action,
 	{_CState313, CLparamToken}:                  _CGotoState89Action,
-	{_CState313, CLcurlToken}:                   _CGotoState50Action,
+	{_CState313, CLcurlToken}:                   _CGotoState49Action,
 	{_CState313, CSemicolonToken}:               _CGotoState95Action,
 	{_CState313, CMulToken}:                     _CGotoState91Action,
 	{_CState313, CMinusToken}:                   _CGotoState90Action,
@@ -6670,7 +6670,7 @@ var _CActionTable = _CActionTableType{
 	{_CState316, CBreakToken}:                   _CGotoState76Action,
 	{_CState316, CReturnToken}:                  _CGotoState94Action,
 	{_CState316, CLparamToken}:                  _CGotoState89Action,
-	{_CState316, CLcurlToken}:                   _CGotoState50Action,
+	{_CState316, CLcurlToken}:                   _CGotoState49Action,
 	{_CState316, CSemicolonToken}:               _CGotoState95Action,
 	{_CState316, CMulToken}:                     _CGotoState91Action,
 	{_CState316, CMinusToken}:                   _CGotoState90Action,
@@ -6721,7 +6721,7 @@ var _CActionTable = _CActionTableType{
 	{_CState317, CBreakToken}:                   _CGotoState76Action,
 	{_CState317, CReturnToken}:                  _CGotoState94Action,
 	{_CState317, CLparamToken}:                  _CGotoState89Action,
-	{_CState317, CLcurlToken}:                   _CGotoState50Action,
+	{_CState317, CLcurlToken}:                   _CGotoState49Action,
 	{_CState317, CSemicolonToken}:               _CGotoState95Action,
 	{_CState317, CMulToken}:                     _CGotoState91Action,
 	{_CState317, CMinusToken}:                   _CGotoState90Action,
@@ -6835,7 +6835,7 @@ var _CActionTable = _CActionTableType{
 	{_CState334, CBreakToken}:                   _CGotoState76Action,
 	{_CState334, CReturnToken}:                  _CGotoState94Action,
 	{_CState334, CLparamToken}:                  _CGotoState89Action,
-	{_CState334, CLcurlToken}:                   _CGotoState50Action,
+	{_CState334, CLcurlToken}:                   _CGotoState49Action,
 	{_CState334, CSemicolonToken}:               _CGotoState95Action,
 	{_CState334, CMulToken}:                     _CGotoState91Action,
 	{_CState334, CMinusToken}:                   _CGotoState90Action,
@@ -6892,7 +6892,7 @@ var _CActionTable = _CActionTableType{
 	{_CState347, CBreakToken}:                   _CGotoState76Action,
 	{_CState347, CReturnToken}:                  _CGotoState94Action,
 	{_CState347, CLparamToken}:                  _CGotoState89Action,
-	{_CState347, CLcurlToken}:                   _CGotoState50Action,
+	{_CState347, CLcurlToken}:                   _CGotoState49Action,
 	{_CState347, CSemicolonToken}:               _CGotoState95Action,
 	{_CState347, CMulToken}:                     _CGotoState91Action,
 	{_CState347, CMinusToken}:                   _CGotoState90Action,
@@ -6943,7 +6943,7 @@ var _CActionTable = _CActionTableType{
 	{_CState348, CBreakToken}:                   _CGotoState76Action,
 	{_CState348, CReturnToken}:                  _CGotoState94Action,
 	{_CState348, CLparamToken}:                  _CGotoState89Action,
-	{_CState348, CLcurlToken}:                   _CGotoState50Action,
+	{_CState348, CLcurlToken}:                   _CGotoState49Action,
 	{_CState348, CSemicolonToken}:               _CGotoState95Action,
 	{_CState348, CMulToken}:                     _CGotoState91Action,
 	{_CState348, CMinusToken}:                   _CGotoState90Action,
@@ -7006,19 +7006,19 @@ var _CActionTable = _CActionTableType{
 	{_CState36, _CWildcardMarker}:               _CReduceJToTypeSpecifierAction,
 	{_CState37, _CWildcardMarker}:               _CReduceEToDeclarationSpecifiersAction,
 	{_CState38, _CWildcardMarker}:               _CReduceCToDeclarationSpecifiersAction,
-	{_CState39, _CWildcardMarker}:               _CReduceBToTranslationUnitAction,
-	{_CState40, _CWildcardMarker}:               _CReduceCToEnumSpecifierAction,
-	{_CState43, _CWildcardMarker}:               _CReduceCToPointerAction,
-	{_CState44, _CWildcardMarker}:               _CReduceAToTypeQualifierListAction,
-	{_CState45, _CWildcardMarker}:               _CReduceBToPointerAction,
-	{_CState46, _CWildcardMarker}:               _CReduceAToDeclarationAction,
-	{_CState47, _CWildcardMarker}:               _CReduceAToInitDeclaratorAction,
-	{_CState48, _CWildcardMarker}:               _CReduceAToInitDeclaratorListAction,
-	{_CState51, _CWildcardMarker}:               _CReduceDToFunctionDefinitionAction,
-	{_CState52, _CWildcardMarker}:               _CReduceAToDeclarationListAction,
-	{_CState57, _CWildcardMarker}:               _CReduceAToDeclaratorAction,
-	{_CState58, _CWildcardMarker}:               _CReduceBToDeclarationSpecifiersAction,
-	{_CState59, _CWildcardMarker}:               _CReduceCToStructOrUnionSpecifierAction,
+	{_CState39, _CWildcardMarker}:               _CReduceCToEnumSpecifierAction,
+	{_CState42, _CWildcardMarker}:               _CReduceCToPointerAction,
+	{_CState43, _CWildcardMarker}:               _CReduceAToTypeQualifierListAction,
+	{_CState44, _CWildcardMarker}:               _CReduceBToPointerAction,
+	{_CState45, _CWildcardMarker}:               _CReduceAToDeclarationAction,
+	{_CState46, _CWildcardMarker}:               _CReduceAToInitDeclaratorAction,
+	{_CState47, _CWildcardMarker}:               _CReduceAToInitDeclaratorListAction,
+	{_CState50, _CWildcardMarker}:               _CReduceDToFunctionDefinitionAction,
+	{_CState51, _CWildcardMarker}:               _CReduceAToDeclarationListAction,
+	{_CState56, _CWildcardMarker}:               _CReduceAToDeclaratorAction,
+	{_CState57, _CWildcardMarker}:               _CReduceBToDeclarationSpecifiersAction,
+	{_CState58, _CWildcardMarker}:               _CReduceCToStructOrUnionSpecifierAction,
+	{_CState60, _CWildcardMarker}:               _CReduceBToTranslationUnitAction,
 	{_CState61, _CWildcardMarker}:               _CReduceFToDeclarationSpecifiersAction,
 	{_CState62, _CWildcardMarker}:               _CReduceDToDeclarationSpecifiersAction,
 	{_CState64, _CWildcardMarker}:               _CReduceAToEnumeratorAction,
@@ -7237,20 +7237,20 @@ var _CExpectedTerminals = map[_CStateId][]CSymbolId{
 	_CState35:  []CSymbolId{CIdentifierToken, CLcurlToken},
 	_CState37:  []CSymbolId{CTypeNameToken, CTypedefToken, CExternToken, CStaticToken, CAutoToken, CRegisterToken, CCharToken, CShortToken, CIntToken, CLongToken, CSignedToken, CUnsignedToken, CFloatToken, CDoubleToken, CConstToken, CVolatileToken, CVoidToken, CStructToken, CUnionToken, CEnumToken},
 	_CState38:  []CSymbolId{CTypeNameToken, CTypedefToken, CExternToken, CStaticToken, CAutoToken, CRegisterToken, CCharToken, CShortToken, CIntToken, CLongToken, CSignedToken, CUnsignedToken, CFloatToken, CDoubleToken, CConstToken, CVolatileToken, CVoidToken, CStructToken, CUnionToken, CEnumToken},
-	_CState40:  []CSymbolId{CLcurlToken},
-	_CState41:  []CSymbolId{CIdentifierToken},
-	_CState42:  []CSymbolId{CRparamToken},
-	_CState45:  []CSymbolId{CConstToken, CVolatileToken, CMulToken},
-	_CState47:  []CSymbolId{CTypeNameToken, CTypedefToken, CExternToken, CStaticToken, CAutoToken, CRegisterToken, CCharToken, CShortToken, CIntToken, CLongToken, CSignedToken, CUnsignedToken, CFloatToken, CDoubleToken, CConstToken, CVolatileToken, CVoidToken, CStructToken, CUnionToken, CEnumToken, CLcurlToken, CEqToken},
-	_CState49:  []CSymbolId{CSemicolonToken, CCommaToken},
-	_CState50:  []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, CTypeNameToken, CTypedefToken, CExternToken, CStaticToken, CAutoToken, CRegisterToken, CCharToken, CShortToken, CIntToken, CLongToken, CSignedToken, CUnsignedToken, CFloatToken, CDoubleToken, CConstToken, CVolatileToken, CVoidToken, CStructToken, CUnionToken, CEnumToken, CCaseToken, CDefaultToken, CIfToken, CSwitchToken, CWhileToken, CDoToken, CForToken, CGotoToken, CContinueToken, CBreakToken, CReturnToken, CLparamToken, CLcurlToken, CRcurlToken, CSemicolonToken, CMulToken, CMinusToken, CPlusToken, CAndToken, CExclaimToken, CTildaToken},
-	_CState53:  []CSymbolId{CTypeNameToken, CTypedefToken, CExternToken, CStaticToken, CAutoToken, CRegisterToken, CCharToken, CShortToken, CIntToken, CLongToken, CSignedToken, CUnsignedToken, CFloatToken, CDoubleToken, CConstToken, CVolatileToken, CVoidToken, CStructToken, CUnionToken, CEnumToken, CLcurlToken},
-	_CState54:  []CSymbolId{CIdentifierToken, CLparamToken, CSemicolonToken, CMulToken},
-	_CState55:  []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, CLparamToken, CRbraceToken, CMulToken, CMinusToken, CPlusToken, CAndToken, CExclaimToken, CTildaToken},
-	_CState56:  []CSymbolId{CIdentifierToken, CTypeNameToken, CTypedefToken, CExternToken, CStaticToken, CAutoToken, CRegisterToken, CCharToken, CShortToken, CIntToken, CLongToken, CSignedToken, CUnsignedToken, CFloatToken, CDoubleToken, CConstToken, CVolatileToken, CVoidToken, CStructToken, CUnionToken, CEnumToken, CRparamToken},
-	_CState57:  []CSymbolId{CLparamToken, CLbraceToken},
-	_CState59:  []CSymbolId{CLcurlToken},
-	_CState60:  []CSymbolId{CTypeNameToken, CCharToken, CShortToken, CIntToken, CLongToken, CSignedToken, CUnsignedToken, CFloatToken, CDoubleToken, CConstToken, CVolatileToken, CVoidToken, CStructToken, CUnionToken, CEnumToken},
+	_CState39:  []CSymbolId{CLcurlToken},
+	_CState40:  []CSymbolId{CIdentifierToken},
+	_CState41:  []CSymbolId{CRparamToken},
+	_CState44:  []CSymbolId{CConstToken, CVolatileToken, CMulToken},
+	_CState46:  []CSymbolId{CTypeNameToken, CTypedefToken, CExternToken, CStaticToken, CAutoToken, CRegisterToken, CCharToken, CShortToken, CIntToken, CLongToken, CSignedToken, CUnsignedToken, CFloatToken, CDoubleToken, CConstToken, CVolatileToken, CVoidToken, CStructToken, CUnionToken, CEnumToken, CLcurlToken, CEqToken},
+	_CState48:  []CSymbolId{CSemicolonToken, CCommaToken},
+	_CState49:  []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, CTypeNameToken, CTypedefToken, CExternToken, CStaticToken, CAutoToken, CRegisterToken, CCharToken, CShortToken, CIntToken, CLongToken, CSignedToken, CUnsignedToken, CFloatToken, CDoubleToken, CConstToken, CVolatileToken, CVoidToken, CStructToken, CUnionToken, CEnumToken, CCaseToken, CDefaultToken, CIfToken, CSwitchToken, CWhileToken, CDoToken, CForToken, CGotoToken, CContinueToken, CBreakToken, CReturnToken, CLparamToken, CLcurlToken, CRcurlToken, CSemicolonToken, CMulToken, CMinusToken, CPlusToken, CAndToken, CExclaimToken, CTildaToken},
+	_CState52:  []CSymbolId{CTypeNameToken, CTypedefToken, CExternToken, CStaticToken, CAutoToken, CRegisterToken, CCharToken, CShortToken, CIntToken, CLongToken, CSignedToken, CUnsignedToken, CFloatToken, CDoubleToken, CConstToken, CVolatileToken, CVoidToken, CStructToken, CUnionToken, CEnumToken, CLcurlToken},
+	_CState53:  []CSymbolId{CIdentifierToken, CLparamToken, CSemicolonToken, CMulToken},
+	_CState54:  []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, CLparamToken, CRbraceToken, CMulToken, CMinusToken, CPlusToken, CAndToken, CExclaimToken, CTildaToken},
+	_CState55:  []CSymbolId{CIdentifierToken, CTypeNameToken, CTypedefToken, CExternToken, CStaticToken, CAutoToken, CRegisterToken, CCharToken, CShortToken, CIntToken, CLongToken, CSignedToken, CUnsignedToken, CFloatToken, CDoubleToken, CConstToken, CVolatileToken, CVoidToken, CStructToken, CUnionToken, CEnumToken, CRparamToken},
+	_CState56:  []CSymbolId{CLparamToken, CLbraceToken},
+	_CState58:  []CSymbolId{CLcurlToken},
+	_CState59:  []CSymbolId{CTypeNameToken, CCharToken, CShortToken, CIntToken, CLongToken, CSignedToken, CUnsignedToken, CFloatToken, CDoubleToken, CConstToken, CVolatileToken, CVoidToken, CStructToken, CUnionToken, CEnumToken},
 	_CState63:  []CSymbolId{CIdentifierToken},
 	_CState64:  []CSymbolId{CEqToken},
 	_CState66:  []CSymbolId{CRcurlToken, CCommaToken},
@@ -7502,7 +7502,7 @@ Parser Debug States:
       declarator -> State 28
       direct_declarator -> State 29
       pointer -> State 33
-      external_declaration -> State 39
+      external_declaration -> State 60
       function_definition -> State 32
 
   State 3:
@@ -7545,8 +7545,8 @@ Parser Debug States:
     Reduce:
       (nil)
     Goto:
-      IDENTIFIER -> State 40
-      LCURL -> State 41
+      IDENTIFIER -> State 39
+      LCURL -> State 40
 
   State 8:
     Kernel Items:
@@ -7597,7 +7597,7 @@ Parser Debug States:
       IDENTIFIER -> State 10
       LPARAM -> State 13
       MUL -> State 14
-      declarator -> State 42
+      declarator -> State 41
       direct_declarator -> State 29
       pointer -> State 33
 
@@ -7613,9 +7613,9 @@ Parser Debug States:
       CONST -> State 5
       VOLATILE -> State 25
       MUL -> State 14
-      type_qualifier -> State 44
-      pointer -> State 43
-      type_qualifier_list -> State 45
+      type_qualifier -> State 43
+      pointer -> State 42
+      type_qualifier_list -> State 44
 
   State 15:
     Kernel Items:
@@ -7724,11 +7724,11 @@ Parser Debug States:
     Goto:
       IDENTIFIER -> State 10
       LPARAM -> State 13
-      SEMICOLON -> State 46
+      SEMICOLON -> State 45
       MUL -> State 14
-      init_declarator_list -> State 49
-      init_declarator -> State 48
-      declarator -> State 47
+      init_declarator_list -> State 48
+      init_declarator -> State 47
+      declarator -> State 46
       direct_declarator -> State 29
       pointer -> State 33
 
@@ -7759,17 +7759,17 @@ Parser Debug States:
       STRUCT -> State 19
       UNION -> State 22
       ENUM -> State 7
-      LCURL -> State 50
-      declaration -> State 52
-      declaration_specifiers -> State 54
+      LCURL -> State 49
+      declaration -> State 51
+      declaration_specifiers -> State 53
       storage_class_specifier -> State 34
       type_specifier -> State 38
       struct_or_union_specifier -> State 36
       struct_or_union -> State 35
       enum_specifier -> State 30
       type_qualifier -> State 37
-      compound_statement -> State 51
-      declaration_list -> State 53
+      compound_statement -> State 50
+      declaration_list -> State 52
 
   State 29:
     Kernel Items:
@@ -7782,8 +7782,8 @@ Parser Debug States:
     Reduce:
       * -> [declarator]
     Goto:
-      LPARAM -> State 56
-      LBRACE -> State 55
+      LPARAM -> State 55
+      LBRACE -> State 54
 
   State 30:
     Kernel Items:
@@ -7817,7 +7817,7 @@ Parser Debug States:
     Goto:
       IDENTIFIER -> State 10
       LPARAM -> State 13
-      direct_declarator -> State 57
+      direct_declarator -> State 56
 
   State 34:
     Kernel Items:
@@ -7846,7 +7846,7 @@ Parser Debug States:
       STRUCT -> State 19
       UNION -> State 22
       ENUM -> State 7
-      declaration_specifiers -> State 58
+      declaration_specifiers -> State 57
       storage_class_specifier -> State 34
       type_specifier -> State 38
       struct_or_union_specifier -> State 36
@@ -7862,8 +7862,8 @@ Parser Debug States:
     Reduce:
       (nil)
     Goto:
-      IDENTIFIER -> State 59
-      LCURL -> State 60
+      IDENTIFIER -> State 58
+      LCURL -> State 59
 
   State 36:
     Kernel Items:
@@ -7945,14 +7945,6 @@ Parser Debug States:
 
   State 39:
     Kernel Items:
-      translation_unit: translation_unit external_declaration., *
-    Reduce:
-      * -> [translation_unit]
-    Goto:
-      (nil)
-
-  State 40:
-    Kernel Items:
       enum_specifier: ENUM IDENTIFIER., *
       enum_specifier: ENUM IDENTIFIER.LCURL enumerator_list RCURL
     Reduce:
@@ -7960,7 +7952,7 @@ Parser Debug States:
     Goto:
       LCURL -> State 63
 
-  State 41:
+  State 40:
     Kernel Items:
       enum_specifier: ENUM LCURL.enumerator_list RCURL
     Reduce:
@@ -7970,7 +7962,7 @@ Parser Debug States:
       enumerator_list -> State 66
       enumerator -> State 65
 
-  State 42:
+  State 41:
     Kernel Items:
       direct_declarator: LPARAM declarator.RPARAM
     Reduce:
@@ -7978,7 +7970,7 @@ Parser Debug States:
     Goto:
       RPARAM -> State 67
 
-  State 43:
+  State 42:
     Kernel Items:
       pointer: MUL pointer., *
     Reduce:
@@ -7986,7 +7978,7 @@ Parser Debug States:
     Goto:
       (nil)
 
-  State 44:
+  State 43:
     Kernel Items:
       type_qualifier_list: type_qualifier., *
     Reduce:
@@ -7994,7 +7986,7 @@ Parser Debug States:
     Goto:
       (nil)
 
-  State 45:
+  State 44:
     Kernel Items:
       pointer: MUL type_qualifier_list., *
       pointer: MUL type_qualifier_list.pointer
@@ -8008,7 +8000,7 @@ Parser Debug States:
       type_qualifier -> State 69
       pointer -> State 68
 
-  State 46:
+  State 45:
     Kernel Items:
       declaration: declaration_specifiers SEMICOLON., *
     Reduce:
@@ -8016,7 +8008,7 @@ Parser Debug States:
     Goto:
       (nil)
 
-  State 47:
+  State 46:
     Kernel Items:
       function_definition: declaration_specifiers declarator.compound_statement
       function_definition: declaration_specifiers declarator.declaration_list compound_statement
@@ -8045,10 +8037,10 @@ Parser Debug States:
       STRUCT -> State 19
       UNION -> State 22
       ENUM -> State 7
-      LCURL -> State 50
+      LCURL -> State 49
       EQ -> State 70
-      declaration -> State 52
-      declaration_specifiers -> State 54
+      declaration -> State 51
+      declaration_specifiers -> State 53
       storage_class_specifier -> State 34
       type_specifier -> State 38
       struct_or_union_specifier -> State 36
@@ -8058,7 +8050,7 @@ Parser Debug States:
       compound_statement -> State 71
       declaration_list -> State 72
 
-  State 48:
+  State 47:
     Kernel Items:
       init_declarator_list: init_declarator., *
     Reduce:
@@ -8066,7 +8058,7 @@ Parser Debug States:
     Goto:
       (nil)
 
-  State 49:
+  State 48:
     Kernel Items:
       declaration: declaration_specifiers init_declarator_list.SEMICOLON
       init_declarator_list: init_declarator_list.COMMA init_declarator
@@ -8076,7 +8068,7 @@ Parser Debug States:
       SEMICOLON -> State 74
       COMMA -> State 73
 
-  State 50:
+  State 49:
     Kernel Items:
       compound_statement: LCURL.RCURL
       compound_statement: LCURL.declaration_list RCURL
@@ -8123,7 +8115,7 @@ Parser Debug States:
       BREAK -> State 76
       RETURN -> State 94
       LPARAM -> State 89
-      LCURL -> State 50
+      LCURL -> State 49
       RCURL -> State 93
       SEMICOLON -> State 95
       MUL -> State 91
@@ -8150,8 +8142,8 @@ Parser Debug States:
       conditional_expression -> State 106
       assignment_expression -> State 103
       expression -> State 110
-      declaration -> State 52
-      declaration_specifiers -> State 54
+      declaration -> State 51
+      declaration_specifiers -> State 53
       storage_class_specifier -> State 34
       type_specifier -> State 38
       struct_or_union_specifier -> State 36
@@ -8168,7 +8160,7 @@ Parser Debug States:
       iteration_statement -> State 113
       jump_statement -> State 114
 
-  State 51:
+  State 50:
     Kernel Items:
       function_definition: declarator compound_statement., *
     Reduce:
@@ -8176,7 +8168,7 @@ Parser Debug States:
     Goto:
       (nil)
 
-  State 52:
+  State 51:
     Kernel Items:
       declaration_list: declaration., *
     Reduce:
@@ -8184,7 +8176,7 @@ Parser Debug States:
     Goto:
       (nil)
 
-  State 53:
+  State 52:
     Kernel Items:
       declaration_list: declaration_list.declaration
       function_definition: declarator declaration_list.compound_statement
@@ -8211,9 +8203,9 @@ Parser Debug States:
       STRUCT -> State 19
       UNION -> State 22
       ENUM -> State 7
-      LCURL -> State 50
+      LCURL -> State 49
       declaration -> State 129
-      declaration_specifiers -> State 54
+      declaration_specifiers -> State 53
       storage_class_specifier -> State 34
       type_specifier -> State 38
       struct_or_union_specifier -> State 36
@@ -8222,7 +8214,7 @@ Parser Debug States:
       type_qualifier -> State 37
       compound_statement -> State 128
 
-  State 54:
+  State 53:
     Kernel Items:
       declaration: declaration_specifiers.SEMICOLON
       declaration: declaration_specifiers.init_declarator_list SEMICOLON
@@ -8231,15 +8223,15 @@ Parser Debug States:
     Goto:
       IDENTIFIER -> State 10
       LPARAM -> State 13
-      SEMICOLON -> State 46
+      SEMICOLON -> State 45
       MUL -> State 14
-      init_declarator_list -> State 49
-      init_declarator -> State 48
+      init_declarator_list -> State 48
+      init_declarator -> State 47
       declarator -> State 130
       direct_declarator -> State 29
       pointer -> State 33
 
-  State 55:
+  State 54:
     Kernel Items:
       direct_declarator: direct_declarator LBRACE.RBRACE
       direct_declarator: direct_declarator LBRACE.constant_expression RBRACE
@@ -8278,7 +8270,7 @@ Parser Debug States:
       conditional_expression -> State 133
       constant_expression -> State 134
 
-  State 56:
+  State 55:
     Kernel Items:
       direct_declarator: direct_declarator LPARAM.RPARAM
       direct_declarator: direct_declarator LPARAM.identifier_list RPARAM
@@ -8320,7 +8312,7 @@ Parser Debug States:
       parameter_declaration -> State 140
       identifier_list -> State 139
 
-  State 57:
+  State 56:
     Kernel Items:
       declarator: pointer direct_declarator., *
       direct_declarator: direct_declarator.LBRACE RBRACE
@@ -8331,10 +8323,10 @@ Parser Debug States:
     Reduce:
       * -> [declarator]
     Goto:
-      LPARAM -> State 56
-      LBRACE -> State 55
+      LPARAM -> State 55
+      LBRACE -> State 54
 
-  State 58:
+  State 57:
     Kernel Items:
       declaration_specifiers: storage_class_specifier declaration_specifiers., *
     Reduce:
@@ -8342,7 +8334,7 @@ Parser Debug States:
     Goto:
       (nil)
 
-  State 59:
+  State 58:
     Kernel Items:
       struct_or_union_specifier: struct_or_union IDENTIFIER., *
       struct_or_union_specifier: struct_or_union IDENTIFIER.LCURL struct_declaration_list RCURL
@@ -8351,7 +8343,7 @@ Parser Debug States:
     Goto:
       LCURL -> State 143
 
-  State 60:
+  State 59:
     Kernel Items:
       struct_or_union_specifier: struct_or_union LCURL.struct_declaration_list RCURL
     Reduce:
@@ -8380,6 +8372,14 @@ Parser Debug States:
       specifier_qualifier_list -> State 144
       enum_specifier -> State 30
       type_qualifier -> State 147
+
+  State 60:
+    Kernel Items:
+      translation_unit: translation_unit external_declaration., *
+    Reduce:
+      * -> [translation_unit]
+    Goto:
+      (nil)
 
   State 61:
     Kernel Items:
@@ -8532,9 +8532,9 @@ Parser Debug States:
       STRUCT -> State 19
       UNION -> State 22
       ENUM -> State 7
-      LCURL -> State 50
+      LCURL -> State 49
       declaration -> State 129
-      declaration_specifiers -> State 54
+      declaration_specifiers -> State 53
       storage_class_specifier -> State 34
       type_specifier -> State 38
       struct_or_union_specifier -> State 36
@@ -8690,7 +8690,7 @@ Parser Debug States:
       BREAK -> State 76
       RETURN -> State 94
       LPARAM -> State 89
-      LCURL -> State 50
+      LCURL -> State 49
       SEMICOLON -> State 95
       MUL -> State 91
       MINUS -> State 90
@@ -9087,7 +9087,7 @@ Parser Debug States:
       BREAK -> State 76
       RETURN -> State 94
       LPARAM -> State 89
-      LCURL -> State 50
+      LCURL -> State 49
       RCURL -> State 182
       SEMICOLON -> State 95
       MUL -> State 91
@@ -9115,7 +9115,7 @@ Parser Debug States:
       assignment_expression -> State 103
       expression -> State 110
       declaration -> State 129
-      declaration_specifiers -> State 54
+      declaration_specifiers -> State 53
       storage_class_specifier -> State 34
       type_specifier -> State 38
       struct_or_union_specifier -> State 36
@@ -9330,7 +9330,7 @@ Parser Debug States:
       BREAK -> State 76
       RETURN -> State 94
       LPARAM -> State 89
-      LCURL -> State 50
+      LCURL -> State 49
       RCURL -> State 208
       SEMICOLON -> State 95
       MUL -> State 91
@@ -9919,7 +9919,7 @@ Parser Debug States:
       BREAK -> State 76
       RETURN -> State 94
       LPARAM -> State 89
-      LCURL -> State 50
+      LCURL -> State 49
       SEMICOLON -> State 95
       MUL -> State 91
       MINUS -> State 90
@@ -10034,7 +10034,7 @@ Parser Debug States:
       BREAK -> State 76
       RETURN -> State 94
       LPARAM -> State 89
-      LCURL -> State 50
+      LCURL -> State 49
       SEMICOLON -> State 95
       MUL -> State 91
       MINUS -> State 90
@@ -10425,7 +10425,7 @@ Parser Debug States:
       BREAK -> State 76
       RETURN -> State 94
       LPARAM -> State 89
-      LCURL -> State 50
+      LCURL -> State 49
       RCURL -> State 267
       SEMICOLON -> State 95
       MUL -> State 91
@@ -11319,7 +11319,7 @@ Parser Debug States:
       struct_or_union -> State 35
       enum_specifier -> State 30
       type_qualifier -> State 37
-      declarator -> State 42
+      declarator -> State 41
       direct_declarator -> State 29
       pointer -> State 229
       parameter_type_list -> State 296
@@ -11368,7 +11368,7 @@ Parser Debug States:
       IDENTIFIER -> State 10
       LPARAM -> State 225
       LBRACE -> State 224
-      direct_declarator -> State 57
+      direct_declarator -> State 56
       direct_abstract_declarator -> State 299
 
   State 230:
@@ -11626,7 +11626,7 @@ Parser Debug States:
       BREAK -> State 76
       RETURN -> State 94
       LPARAM -> State 89
-      LCURL -> State 50
+      LCURL -> State 49
       SEMICOLON -> State 95
       MUL -> State 91
       MINUS -> State 90
@@ -12548,7 +12548,7 @@ Parser Debug States:
       BREAK -> State 76
       RETURN -> State 94
       LPARAM -> State 89
-      LCURL -> State 50
+      LCURL -> State 49
       SEMICOLON -> State 95
       MUL -> State 91
       MINUS -> State 90
@@ -12622,7 +12622,7 @@ Parser Debug States:
       BREAK -> State 76
       RETURN -> State 94
       LPARAM -> State 89
-      LCURL -> State 50
+      LCURL -> State 49
       SEMICOLON -> State 95
       MUL -> State 91
       MINUS -> State 90
@@ -12680,7 +12680,7 @@ Parser Debug States:
       BREAK -> State 76
       RETURN -> State 94
       LPARAM -> State 89
-      LCURL -> State 50
+      LCURL -> State 49
       SEMICOLON -> State 95
       MUL -> State 91
       MINUS -> State 90
@@ -12925,7 +12925,7 @@ Parser Debug States:
       BREAK -> State 76
       RETURN -> State 94
       LPARAM -> State 89
-      LCURL -> State 50
+      LCURL -> State 49
       SEMICOLON -> State 95
       MUL -> State 91
       MINUS -> State 90
@@ -13172,7 +13172,7 @@ Parser Debug States:
       BREAK -> State 76
       RETURN -> State 94
       LPARAM -> State 89
-      LCURL -> State 50
+      LCURL -> State 49
       SEMICOLON -> State 95
       MUL -> State 91
       MINUS -> State 90
@@ -13230,7 +13230,7 @@ Parser Debug States:
       BREAK -> State 76
       RETURN -> State 94
       LPARAM -> State 89
-      LCURL -> State 50
+      LCURL -> State 49
       SEMICOLON -> State 95
       MUL -> State 91
       MINUS -> State 90

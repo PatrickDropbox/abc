@@ -476,29 +476,24 @@ func (states *LRStates) maybeAdd(state *ItemSet) (*ItemSet, bool) {
 }
 
 func (states *LRStates) populateStartStates() {
-	core := NewCoreItem(
-		AcceptRule,
-		[]string{StartMarker, states.Start.Name},
-		nil,
-		nil)
+	for _, start := range states.Starts {
+		core := NewCoreItem(
+			AcceptRule,
+			[]string{StartMarker, start.Name},
+			nil,
+			nil)
 
-	states.maybeAdd(newItemSet(Items{core.ReplaceLookAhead(EndMarker).Shift()}))
+		states.maybeAdd(
+			newItemSet(Items{core.ReplaceLookAhead(EndMarker).Shift()}))
+	}
 }
 
 func (states *LRStates) generateStates() {
-
 	symbols := []string{}
 	for symbol, _ := range states.Terms {
-		if symbol == states.Start.Name {
-			continue
-		}
 		symbols = append(symbols, symbol)
 	}
 	sort.Strings(symbols)
-
-	// NOTE: by placing the start symbol at the front of the list,
-	// we ensure that the second state is always the accept state.
-	symbols = append([]string{states.Start.Name}, symbols...)
 
 	exploredIdx := 0
 	for exploredIdx < len(states.OrderedStates) {
@@ -777,6 +772,36 @@ func (states *LRStates) mergeStates() {
 	}
 }
 
+func (states *LRStates) shuffleAcceptStates() {
+	orderedStates := states.OrderedStates[:len(states.Starts)]
+
+	acceptStates := []*ItemSet{}
+	otherStates := []*ItemSet{}
+	for _, state := range states.OrderedStates[len(states.Starts):] {
+		isAcceptState := false
+		for _, item := range state.KernelItems {
+			if item.Name == AcceptRule && item.LookAhead == EndMarker {
+				isAcceptState = true
+				break
+			}
+		}
+		if isAcceptState {
+			acceptStates = append(acceptStates, state)
+		} else {
+			otherStates = append(otherStates, state)
+		}
+	}
+
+	orderedStates = append(orderedStates, acceptStates...)
+	orderedStates = append(orderedStates, otherStates...)
+
+	for idx, state := range orderedStates {
+		state.StateNum = idx + 1
+	}
+
+	states.OrderedStates = orderedStates
+}
+
 func NewLRStates(grammar *Grammar) *LRStates {
 	states := &LRStates{
 		Grammar:  grammar,
@@ -789,6 +814,8 @@ func NewLRStates(grammar *Grammar) *LRStates {
 	states.generateStates()
 
 	states.mergeStates()
+
+	states.shuffleAcceptStates()
 
 	for _, state := range states.OrderedStates {
 		state.computeConflictSymbols()
