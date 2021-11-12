@@ -1,0 +1,49 @@
+// This is equivlent to yacc_error_demo.  Unlike yacc_error_demo, this does
+// not require creating a pseudo BLOCK token and modifying the grammar to
+// support for piecemeal block parsing.  Note that we still need to create a
+// pseudo ERROR atom as error placeholder.
+
+%token PLUS MINUS LBRACE RBRACE
+%token <Ident> ID
+%token <Err> ERROR
+
+%type op
+%type <Block> block
+%type <Expr> atom expr
+%type <ExprList> expr_list
+
+%start expr_list block
+
+expr_list ->
+    add: expr_list expr |
+    nil:
+
+atom ->
+    id : ID |
+    error : ERROR |
+    block : block
+
+expr ->
+    atom: atom |
+    binary : expr op atom
+
+op ->
+    plus: PLUS |
+    minus: MINUS
+
+block -> LBRACE expr_list RBRACE
+
+%%lang_specs{
+# The additional lang_specs section is specified in yaml
+go:
+    package: main
+
+    value_types:
+        Ident: "*Id"
+        Err: "*Err"
+        Block: "*Block"
+        Expr: "Expr"
+        ExprList: "[]Expr"
+
+    #output_debug_non_kernel_items: true
+}%%
