@@ -59,7 +59,7 @@ def ->
     term_decl  : rword LT IDENTIFIER GT nonempty_ident_list |
     untyped_term_decl  : rword nonempty_ident_list |
     // start declaration
-    start_decl : START IDENTIFIER |
+    start_decl : START nonempty_ident_list |
     rule       : rule
 
 rword ->

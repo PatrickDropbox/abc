@@ -62,15 +62,14 @@ func classifyDefinitions(
 	parsed []parser.Definition) (
 	map[string]*Term,
 	map[string]*parser.Rule,
-	string, // fist rule's name
-	*parser.StartDeclaration,
+    []string,  // start rule(s)
 	[]string) { // error strings
 
 	terms := map[string]*Term{}
 
 	rules := map[string]*parser.Rule{}
 
-	startRuleName := ""
+	firstRuleName := ""
 	var start *parser.StartDeclaration
 
 	errStrs := []string{}
@@ -116,8 +115,8 @@ func classifyDefinitions(
 			}
 
 		case *parser.Rule:
-			if startRuleName == "" {
-				startRuleName = def.Name.Value
+			if firstRuleName == "" {
+				firstRuleName = def.Name.Value
 			}
 
 			prev, ok := rules[def.Name.Value]
@@ -134,14 +133,37 @@ func classifyDefinitions(
 		}
 	}
 
-	return terms, rules, startRuleName, start, errStrs
+    startRules := []string{}
+    if start != nil {
+        ids := map[string]parser.LRLocation{}
+        for _, id := range start.Ids {
+            prev, ok := ids[id.Value]
+            if ok {
+                errStrs = append(
+                    errStrs,
+                    fmt.Sprintf(
+                        "Duplicate start entry: %s %s %s",
+                        id.Value,
+                        prev.ShortString(),
+                        id.Loc().ShortString()))
+            } else {
+                ids[id.Value] = id.Loc()
+                startRules = append(startRules, id.Value)
+            }
+        }
+    } else {
+        startRules = append(startRules, firstRuleName)
+    }
+
+	return terms, rules, startRules, errStrs
 }
 
 func bindTerms(
 	terms map[string]*Term,
 	rules map[string]*parser.Rule,
-	startRuleName string,
-	start *parser.StartDeclaration) (*Term, []string) {
+	startRuleNames []string) (
+    []*Term,
+    []string) {
 
 	errStrs := []string{}
 
@@ -198,27 +220,29 @@ func bindTerms(
 		}
 	}
 
-	if start != nil {
-		startRuleName = start.Id.Value
-	}
+    startTerms := []*Term{}
+    for _, name := range startRuleNames {
+        startTerm, ok := terms[name]
+        if !ok || startTerm.IsTerminal {
+            errStrs = append(
+                errStrs,
+                fmt.Sprintf("Invalid start rule: %s", name))
+        } else {
+            startTerms = append(startTerms, startTerm)
+        }
+    }
 
-	startTerm, ok := terms[startRuleName]
-	if !ok || startTerm.IsTerminal {
-		errStrs = append(
-			errStrs,
-			fmt.Sprintf("Invalid start rule: %s", startRuleName))
-	}
-
-	return startTerm, errStrs
+	return startTerms, errStrs
 }
 
-func checkReachability(start *Term, terms map[string]*Term) []string {
-	if start == nil {
+func checkReachability(starts []*Term, terms map[string]*Term) []string {
+	if len(starts) == 0 {
 		return nil
 	}
 
-	exploreSet := map[string]*Term{
-		start.Name: start,
+	exploreSet := map[string]*Term{}
+    for _, start := range starts {
+		exploreSet[start.Name] = start
 	}
 
 	for len(exploreSet) > 0 {
@@ -307,17 +331,17 @@ func NewGrammar(
 	*Grammar,
 	error) {
 
-	terms, rules, firstRuleName, start, errStrs := classifyDefinitions(
+	terms, rules, startRuleNames, errStrs := classifyDefinitions(
 		parsed.Definitions)
 
 	if len(rules) == 0 {
 		errStrs = append(errStrs, "No rules specified in grammar.")
 	}
 
-	startTerm, bindErrStrs := bindTerms(terms, rules, firstRuleName, start)
+	startTerms, bindErrStrs := bindTerms(terms, rules, startRuleNames)
 	errStrs = append(errStrs, bindErrStrs...)
 
-	errStrs = append(errStrs, checkReachability(startTerm, terms)...)
+	errStrs = append(errStrs, checkReachability(startTerms, terms)...)
 
 	langSpecs, asErrStrs := extractLangSpecs(parsed.AdditionalSections)
 	errStrs = append(errStrs, asErrStrs...)
@@ -345,7 +369,7 @@ func NewGrammar(
 		Terms:        terms,
 		Terminals:    terminals,
 		NonTerminals: nonTerminals,
-		Starts:       []*Term{startTerm},
+		Starts:       startTerms,
 		LangSpecs:    langSpecs,
 	}, nil
 }

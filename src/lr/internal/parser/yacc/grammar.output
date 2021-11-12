@@ -57,11 +57,12 @@ state 4
 	nonempty_ident_list  goto 14
 
 state 5
-	def:  START.IDENTIFIER 
+	def:  START.nonempty_ident_list 
 
-	IDENTIFIER  shift 16
+	IDENTIFIER  shift 15
 	.  error
 
+	nonempty_ident_list  goto 16
 
 state 6
 	def:  rule.    (12)
@@ -140,8 +141,10 @@ state 15
 
 
 state 16
-	def:  START IDENTIFIER.    (11)
+	def:  START nonempty_ident_list.    (11)
+	nonempty_ident_list:  nonempty_ident_list.IDENTIFIER 
 
+	IDENTIFIER  shift 26
 	.  reduce 11 (src line 123)
 
 
@@ -268,10 +271,10 @@ state 33
 24 grammar rules, 34/8000 states
 0 shift/reduce, 0 reduce/reduce conflicts reported
 61 working sets used
-memory: parser 18/120000
+memory: parser 19/120000
 3 extra closures
-27 shift entries, 1 exceptions
-16 goto entries
+28 shift entries, 1 exceptions
+17 goto entries
 3 entries saved by goto default
 Optimizer space used: output 36/120000
 36 table entries, 0 zero

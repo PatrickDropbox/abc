@@ -122,7 +122,7 @@ def:
     }
     |
     // start declaration
-    START IDENTIFIER {
+    START nonempty_ident_list {
         $$, _ =  Lrlex.(*ParseContext).StartDeclToDef($1, $2)
     }
     | rule {

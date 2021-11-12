@@ -2,6 +2,7 @@ package parser
 
 import (
 	"fmt"
+	"strings"
 )
 
 type Definition interface {
@@ -33,13 +34,16 @@ func (t *Token) String() string {
 type StartDeclaration struct {
 	LRLocation
 
-	Id *Token
+	Ids []*Token
 }
 
-func NewStartDeclaration(start *LRGenericSymbol, id *Token) *StartDeclaration {
+func NewStartDeclaration(
+	start *LRGenericSymbol,
+	ids []*Token) *StartDeclaration {
+
 	return &StartDeclaration{
 		LRLocation: start.LRLocation,
-		Id:         id,
+		Ids:        ids,
 	}
 }
 
@@ -48,7 +52,11 @@ func (sd *StartDeclaration) Loc() LRLocation {
 }
 
 func (sd *StartDeclaration) String() string {
-	return "%start " + sd.Id.Value
+	names := []string{}
+	for _, id := range sd.Ids {
+		names = append(names, id.Value)
+	}
+	return "%start " + strings.Join(names, " ")
 }
 
 type TermDeclaration struct {

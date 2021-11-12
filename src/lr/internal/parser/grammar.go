@@ -92,7 +92,7 @@ type LRReducer interface {
 	UntypedTermDeclToDef(Rword_ *LRGenericSymbol, NonemptyIdentList_ []*Token) (Definition, error)
 
 	// 62:4: def -> start_decl: ...
-	StartDeclToDef(Start_ *LRGenericSymbol, Identifier_ *Token) (Definition, error)
+	StartDeclToDef(Start_ *LRGenericSymbol, NonemptyIdentList_ []*Token) (Definition, error)
 
 	// 63:4: def -> rule: ...
 	RuleToDef(Rule_ *Rule) (Definition, error)
@@ -633,7 +633,7 @@ func (act *_LRAction) ReduceSymbol(reducer LRReducer, stack _LRStack) (_LRStack,
 		args := stack[len(stack)-2:]
 		stack = stack[:len(stack)-2]
 		symbol.SymbolId_ = LRDefType
-		symbol.Definition, err = reducer.StartDeclToDef(args[0].Generic_, args[1].Token)
+		symbol.Definition, err = reducer.StartDeclToDef(args[0].Generic_, args[1].Tokens)
 	case _LRReduceRuleToDef:
 		args := stack[len(stack)-1:]
 		stack = stack[:len(stack)-1]
@@ -796,7 +796,8 @@ var _LRActionTable = _LRActionTableType{
 	{_LRState3, LRIdentListType}:          _LRGotoState13Action,
 	{_LRState3, LRLabeledClausesType}:     _LRGotoState15Action,
 	{_LRState3, LRLabeledClauseType}:      _LRGotoState14Action,
-	{_LRState4, LRIdentifierToken}:        _LRGotoState17Action,
+	{_LRState4, LRIdentifierToken}:        _LRGotoState11Action,
+	{_LRState4, LRNonemptyIdentListType}:  _LRGotoState17Action,
 	{_LRState7, LRSemicolonToken}:         _LRGotoState18Action,
 	{_LRState8, LRTokenToken}:             _LRGotoState5Action,
 	{_LRState8, LRTypeToken}:              _LRGotoState6Action,
@@ -814,6 +815,7 @@ var _LRActionTable = _LRActionTableType{
 	{_LRState12, LRIdentListType}:         _LRGotoState23Action,
 	{_LRState15, LROrToken}:               _LRGotoState24Action,
 	{_LRState16, LRIdentifierToken}:       _LRGotoState25Action,
+	{_LRState17, LRIdentifierToken}:       _LRGotoState25Action,
 	{_LRState19, LRSectionMarkerToken}:    _LRGotoState26Action,
 	{_LRState19, LRAdditionalSectionType}: _LRGotoState27Action,
 	{_LRState20, LRSemicolonToken}:        _LRGotoState28Action,
@@ -864,6 +866,7 @@ var _LRExpectedTerminals = map[_LRStateId][]LRSymbolId{
 	_LRState12: []LRSymbolId{LRIdentifierToken},
 	_LRState15: []LRSymbolId{LROrToken},
 	_LRState16: []LRSymbolId{LRIdentifierToken},
+	_LRState17: []LRSymbolId{LRIdentifierToken},
 	_LRState19: []LRSymbolId{LRSectionMarkerToken, _LREndMarker},
 	_LRState20: []LRSymbolId{LRSemicolonToken},
 	_LRState21: []LRSymbolId{LRIdentifierToken},
@@ -882,7 +885,7 @@ Parser Debug States:
     Kernel Items:
       #accept: ^.grammar
     Non-kernel Items:
-      def:.START IDENTIFIER
+      def:.START nonempty_ident_list
       def:.rule
       def:.rword LT IDENTIFIER GT nonempty_ident_list
       def:.rword nonempty_ident_list
@@ -940,11 +943,15 @@ Parser Debug States:
 
   State 4:
     Kernel Items:
-      def: START.IDENTIFIER
+      def: START.nonempty_ident_list
+    Non-kernel Items:
+      nonempty_ident_list:.IDENTIFIER
+      nonempty_ident_list:.nonempty_ident_list IDENTIFIER
     Reduce:
       (nil)
     Goto:
-      IDENTIFIER -> State 17
+      IDENTIFIER -> State 11
+      nonempty_ident_list -> State 17
 
   State 5:
     Kernel Items:
@@ -979,7 +986,7 @@ Parser Debug States:
     Non-kernel Items:
       additional_sections:., *
       additional_sections:.additional_sections additional_section
-      def:.START IDENTIFIER
+      def:.START nonempty_ident_list
       def:.rule
       def:.rword LT IDENTIFIER GT nonempty_ident_list
       def:.rword nonempty_ident_list
@@ -1080,11 +1087,12 @@ Parser Debug States:
 
   State 17:
     Kernel Items:
-      def: START IDENTIFIER., *
+      def: START nonempty_ident_list., *
+      nonempty_ident_list: nonempty_ident_list.IDENTIFIER
     Reduce:
       * -> [def]
     Goto:
-      (nil)
+      IDENTIFIER -> State 25
 
   State 18:
     Kernel Items:
@@ -1237,7 +1245,7 @@ Parser Debug States:
       IDENTIFIER -> State 25
 
 Number of states: 34
-Number of shift actions: 46
+Number of shift actions: 48
 Number of reduce actions: 25
 Number of shift/reduce conflicts: 0
 Number of reduce/reduce conflicts: 0

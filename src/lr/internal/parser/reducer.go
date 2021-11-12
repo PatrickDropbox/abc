@@ -91,11 +91,11 @@ func (Reducer) UntypedTermDeclToDef(
 
 func (Reducer) StartDeclToDef(
 	startKw *LRGenericSymbol,
-	ruleName *Token) (
+	ruleNames []*Token) (
 	Definition,
 	error) {
 
-	return NewStartDeclaration(startKw, ruleName), nil
+	return NewStartDeclaration(startKw, ruleNames), nil
 }
 
 func (Reducer) RuleToDef(rule *Rule) (Definition, error) {
