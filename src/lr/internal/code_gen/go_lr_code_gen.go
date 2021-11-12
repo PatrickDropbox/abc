@@ -68,8 +68,6 @@ type goCodeGen struct {
 
 	symbol string
 
-	acceptSymbol   string
-	startSymbol    string
 	endSymbol      string
 	wildcardSymbol string
 
@@ -81,7 +79,7 @@ type goCodeGen struct {
 	defaultErrHandler string
 	expectedTerminals string
 
-	pseudoToken string
+	genericSymbol string
 
 	symbolStack string
 
@@ -150,19 +148,17 @@ func (gen *goCodeGen) check(name string, loc parser.LRLocation) error {
 func (gen *goCodeGen) populateCodeGenVariables() error {
 	gen.location = gen.Prefix + "Location"
 	gen.symbolId = gen.Prefix + "SymbolId"
-	gen.symbol = "_" + gen.Prefix + "Symbol"
+	gen.symbol = gen.Prefix + "Symbol"
 	gen.stateId = "_" + gen.Prefix + "StateId"
-	gen.acceptSymbol = "_" + gen.Prefix + "AcceptMarker"
-	gen.startSymbol = "_" + gen.Prefix + "StartMarker"
 	gen.endSymbol = "_" + gen.Prefix + "EndMarker"
 	gen.wildcardSymbol = "_" + gen.Prefix + "WildcardMarker"
-	gen.token = gen.Prefix + "Symbol"
+	gen.token = gen.Prefix + "Token"
 	gen.lexer = gen.Prefix + "Lexer"
 	gen.reducer = gen.Prefix + "Reducer"
 	gen.errHandler = gen.Prefix + "ParseErrorHandler"
 	gen.defaultErrHandler = gen.Prefix + "DefaultParseErrorHandler"
 	gen.expectedTerminals = "_" + gen.Prefix + "ExpectedTerminals"
-	gen.pseudoToken = "_" + gen.Prefix + "PseudoToken"
+	gen.genericSymbol = gen.Prefix + "GenericSymbol"
 	gen.symbolStack = "_" + gen.Prefix + "PseudoSymbolStack"
 	gen.stackItem = "_" + gen.Prefix + "StackItem"
 	gen.stack = "_" + gen.Prefix + "Stack"
@@ -179,18 +175,22 @@ func (gen *goCodeGen) populateCodeGenVariables() error {
 	for _, term := range gen.Terms {
 		valueType := gen.ValueTypes[term.ValueType.Value]
 		if valueType == "" {
-			return fmt.Errorf(
-				"Undefined value type for <%s> %s",
-				term.ValueType.Value,
-				term.LRLocation)
+			if term.ValueType.Value != lr.Generic {
+				return fmt.Errorf(
+					"Undefined value type for <%s> %s",
+					term.ValueType.Value,
+					term.LRLocation)
+			}
+			valueType = "*" + gen.genericSymbol
 		}
 
 		term.CodeGenType = gen.Obj(valueType)
 
-		symbolConst := gen.Prefix + snakeToCamel(term.Name) + "Symbol"
-
-		if !term.IsTerminal {
-			symbolConst = "_" + symbolConst
+		symbolConst := gen.Prefix + snakeToCamel(term.Name)
+		if term.IsTerminal {
+			symbolConst += "Token"
+		} else {
+			symbolConst += "Type"
 		}
 
 		err := gen.check(symbolConst, term.LRLocation)
@@ -256,12 +256,12 @@ func (gen *goCodeGen) populateCodeGenVariables() error {
 func (gen *goCodeGen) generateTerminalSymbolIds() {
 	l := gen.Line
 
-	l("type %s string", gen.symbolId)
+	l("type %s int", gen.symbolId)
 	l("")
 	l("const (")
 	gen.PushIndent()
-	for _, term := range gen.Terminals {
-		l("%s = %s(\"%s\")", term.CodeGenSymbolConst, gen.symbolId, term.Name)
+	for idx, term := range gen.Terminals {
+		l("%s = %s(%d)", term.CodeGenSymbolConst, gen.symbolId, 256+idx)
 	}
 	gen.PopIndent()
 	l(")")
@@ -271,18 +271,37 @@ func (gen *goCodeGen) generateTerminalSymbolIds() {
 func (gen *goCodeGen) generateNonTerminalSymbolIds() {
 	l := gen.Line
 
+	l("func (i %s) String() string {", gen.symbolId)
+	gen.PushIndent()
+	l("switch i {")
+	l("case %s: return \"$\"", gen.endSymbol)
+	l("case %s: return \"*\"", gen.wildcardSymbol)
+	for _, term := range gen.Terminals {
+		l("case %s: return \"%s\"", term.CodeGenSymbolConst, term.Name)
+	}
+	for _, term := range gen.NonTerminals {
+		l("case %s: return \"%s\"", term.CodeGenSymbolConst, term.Name)
+	}
+	l("default: return %v(\"?unknown symbol %%d?\", int(i))",
+		gen.Obj("fmt.Sprintf"))
+	l("}")
+	gen.PopIndent()
+	l("}")
+	l("")
+
 	l("const (")
 	gen.PushIndent()
 
-	l("%s = %s(\"%s\")", gen.acceptSymbol, gen.symbolId, lr.AcceptRule)
-	l("%s = %s(\"%s\")", gen.startSymbol, gen.symbolId, lr.StartMarker)
-	l("%s = %s(\"%s\")", gen.endSymbol, gen.symbolId, lr.EndMarker)
-	l("%s = %s(\"%s\")", gen.wildcardSymbol, gen.symbolId, lr.Wildcard)
+	l("%s = %s(0)", gen.endSymbol, gen.symbolId)
+	l("%s = %s(-1)", gen.wildcardSymbol, gen.symbolId)
 
 	l("")
 
-	for _, term := range gen.NonTerminals {
-		l("%s = %s(\"%s\")", term.CodeGenSymbolConst, gen.symbolId, term.Name)
+	for idx, term := range gen.NonTerminals {
+		l("%s = %s(%d)",
+			term.CodeGenSymbolConst,
+			gen.symbolId,
+			256+len(gen.Terminals)+idx)
 	}
 	gen.PopIndent()
 	l(")")
@@ -321,7 +340,7 @@ func (gen *goCodeGen) generateTokenInterface() {
 	l("type %s interface {", gen.token)
 	push()
 	l("Id() %s", gen.symbolId)
-	l("Location() %v", gen.location)
+	l("Loc() %v", gen.location)
 	pop()
 	l("}")
 	l("")
@@ -333,7 +352,10 @@ func (gen *goCodeGen) generateLexerInterface() {
 	l("type %s interface {", gen.lexer)
 	gen.PushIndent()
 	l("// Note: Return io.EOF to indicate end of stream")
+	l("// Token with unspecified value type should return *%s", gen.genericSymbol)
 	l("Next() (%s, error)", gen.token)
+	l("")
+	l("CurrentLocation() %s", gen.location)
 	gen.PopIndent()
 	l("}")
 	l("")
@@ -400,35 +422,67 @@ func (gen *goCodeGen) generateReducerInterface() {
 func (gen *goCodeGen) generateReduceTypes() {
 	l := gen.Line
 
-	l("type %s string", gen.reduceType)
+	l("type %s int", gen.reduceType)
 	l("")
 	l("const (")
 	gen.PushIndent()
+	idx := 1
 	for _, rule := range gen.NonTerminals {
 		for _, clause := range rule.Clauses {
-			l("%s = %s(\"%s\")",
+			l("%s = %s(%d)",
 				clause.CodeGenReducerNameConst,
 				gen.reduceType,
-				clause.CodeGenReducerName)
+				idx)
+			idx += 1
 		}
 	}
 	gen.PopIndent()
 	l(")")
+	l("")
+
+	l("func (i %s) String() string {", gen.reduceType)
+	gen.PushIndent()
+	l("switch i {")
+	for _, rule := range gen.NonTerminals {
+		for _, clause := range rule.Clauses {
+			l("case %s: return \"%s\"",
+				clause.CodeGenReducerNameConst,
+				clause.CodeGenReducerName)
+		}
+	}
+	l("default: return %v(\"?unknown reduce type %%d?\", int(i))",
+		gen.Obj("fmt.Sprintf"))
+	l("}")
+	gen.PopIndent()
+	l("}")
+	l("")
 }
 
 func (gen *goCodeGen) generateActionTypes() {
 	l := gen.Line
 
-	l("type %s string", gen.actionType)
+	l("type %s int", gen.actionType)
 	l("")
 	l("const (")
 	gen.PushIndent()
 	l("// NOTE: error action is implicit")
-	l("%s = %s(\"shift\")", gen.shiftAction, gen.actionType)
-	l("%s = %s(\"reduce\")", gen.reduceAction, gen.actionType)
-	l("%s = %s(\"accept\")", gen.acceptAction, gen.actionType)
+	l("%s = %s(0)", gen.shiftAction, gen.actionType)
+	l("%s = %s(1)", gen.reduceAction, gen.actionType)
+	l("%s = %s(2)", gen.acceptAction, gen.actionType)
 	gen.PopIndent()
 	l(")")
+	l("")
+	l("func (i %s) String() string {", gen.actionType)
+	gen.PushIndent()
+	l("switch i {")
+	l("case %s: return \"shift\"", gen.shiftAction)
+	l("case %s: return \"reduce\"", gen.reduceAction)
+	l("case %s: return \"accept\"", gen.acceptAction)
+	l("default: return %v(\"?unknown action %%d\", int(i))",
+		gen.Obj("fmt.Sprintf"))
+	l("}")
+	gen.PopIndent()
+	l("}")
 	l("")
 }
 
@@ -447,58 +501,15 @@ func (gen *goCodeGen) generateAction() {
 	l("}")
 	l("")
 
-	valueTerms := map[string][]*lr.Term{}
-	for _, term := range gen.Terminals {
-		valueTerms[term.ValueType.Value] = append(
-			valueTerms[term.ValueType.Value],
-			term)
-	}
-
-	values := []string{}
-	for value, _ := range valueTerms {
-		values = append(values, value)
-	}
-
-	sort.Strings(values)
-
-	l("func (act *%s) ShiftItem(symbol %s) *%s {",
+	l("func (act *%s) ShiftItem(symbol *%s) *%s {",
 		gen.action,
-		gen.token,
+		gen.symbol,
 		gen.stackItem)
 	push()
-	l("item := &%s{StateId: act.ShiftStateId}", gen.stackItem)
-	l("")
-	l("reducedSymbol, ok := symbol.(*%s)", gen.symbol)
-	l("if ok {")
-	push()
-	l("item.%s = reducedSymbol", gen.symbol)
-	l("return item")
-	pop()
-	l("}")
-	l("")
+	l("return &%s{StateId: act.ShiftStateId, %s: symbol}",
+		gen.stackItem,
+		gen.symbol)
 
-	l("item.%s = &%s{SymbolId_: symbol.Id()}", gen.symbol, gen.symbol)
-	l("")
-	l("switch symbol.Id() {")
-	for _, value := range values {
-		terms := valueTerms[value]
-		consts := []string{}
-		for _, term := range terms {
-			consts = append(consts, term.CodeGenSymbolConst)
-		}
-
-		l("case %s:", strings.Join(consts, ", "))
-		push()
-		l("item.%s = symbol.(%s)", value, terms[0].CodeGenType)
-		pop()
-	}
-
-	l("case %s: // EOF has no value", gen.endSymbol)
-	l("default:")
-	l("panic(\"Unexpected symbol type: \" + symbol.Id())")
-	l("}")
-
-	l("return item")
 	pop()
 	l("}")
 	l("")
@@ -540,7 +551,7 @@ func (gen *goCodeGen) generateAction() {
 	}
 	l("default:")
 	push()
-	l("panic(\"Unknown reduce type: \" + act.ReduceType)")
+	l("panic(\"Unknown reduce type: \" + act.ReduceType.String())")
 	pop()
 	l("}")
 	l("")
@@ -563,7 +574,7 @@ func (gen *goCodeGen) generateActionEntries() {
 	l("var (")
 	gen.PushIndent()
 	for _, state := range gen.OrderedStates {
-		l("%s = &%s{%s, %s, \"\"}",
+		l("%s = &%s{%s, %s, 0}",
 			state.CodeGenAction,
 			gen.action,
 			gen.shiftAction,
@@ -572,7 +583,7 @@ func (gen *goCodeGen) generateActionEntries() {
 
 	for _, term := range gen.NonTerminals {
 		for _, clause := range term.Clauses {
-			l("%s = &%s{%s, \"\", %s}",
+			l("%s = &%s{%s, 0, %s}",
 				clause.CodeGenReduceAction,
 				gen.action,
 				gen.reduceAction,
@@ -593,6 +604,8 @@ func (gen *goCodeGen) generateSymbolType() {
 	push()
 	l("SymbolId_ %s", gen.symbolId)
 	l("")
+	l("Generic_ *%s", gen.genericSymbol)
+	l("")
 	fields := paramList{}
 	for name, valueType := range gen.ValueTypes {
 		fields = append(fields, &param{name, gen.Obj(valueType)})
@@ -603,6 +616,74 @@ func (gen *goCodeGen) generateSymbolType() {
 		l("%s %v", field.name, field.paramType)
 	}
 
+	pop()
+	l("}")
+	l("")
+
+	valueTerms := map[string][]*lr.Term{
+		lr.Generic: []*lr.Term{
+			&lr.Term{
+				TermDeclaration: &parser.TermDeclaration{
+					ValueType: &parser.Token{Value: lr.Generic},
+				},
+				CodeGenSymbolConst: gen.endSymbol,
+				CodeGenType:        gen.Obj("*" + gen.genericSymbol),
+			},
+		},
+	}
+	for _, term := range gen.Terminals {
+		valueTerms[term.ValueType.Value] = append(
+			valueTerms[term.ValueType.Value],
+			term)
+	}
+
+	values := []string{}
+	for value, _ := range valueTerms {
+		values = append(values, value)
+	}
+
+	sort.Strings(values)
+
+	l("func NewSymbol(token %s) (*%s, error) {", gen.token, gen.symbol)
+	push()
+	l("symbol, ok := token.(*%s)", gen.symbol)
+	l("if ok {")
+	push()
+	l("return symbol, nil")
+	pop()
+	l("}")
+	l("")
+	l("symbol = &%s{SymbolId_: token.Id()}", gen.symbol)
+	l("switch token.Id() {")
+	for _, value := range values {
+		terms := valueTerms[value]
+		consts := []string{}
+		for _, term := range terms {
+			consts = append(consts, term.CodeGenSymbolConst)
+		}
+
+		l("case %s:", strings.Join(consts, ", "))
+		push()
+		l("val, ok := token.(%s)", terms[0].CodeGenType)
+		l("if !ok {")
+		push()
+		l("return nil, %v(\"Invalid value type for token %%s.  Expecting %s (%%v)\", token.Id(), token.Loc())",
+			gen.Obj("fmt.Errorf"),
+			terms[0].CodeGenType)
+		pop()
+		l("}")
+		l("symbol.%s = val", value)
+		pop()
+	}
+
+	l("default:")
+	push()
+	l("return nil, %s(\"Unexpected token type: %%s\", symbol.Id())",
+		gen.Obj("fmt.Errorf"))
+	pop()
+	l("}")
+
+	l("return symbol, nil")
 	pop()
 	l("}")
 	l("")
@@ -623,9 +704,9 @@ func (gen *goCodeGen) generateSymbolType() {
 	l("}")
 	l("")
 
-	l("func (s *%s) Location() %s {", gen.symbol, gen.location)
+	l("func (s *%s) Loc() %s {", gen.symbol, gen.location)
 	push()
-	l("type locator interface { Location() %s }", gen.location)
+	l("type locator interface { Loc() %s }", gen.location)
 	l("switch s.SymbolId_ {")
 	for _, field := range fields {
 		list := valueTermConsts[field.name]
@@ -634,11 +715,16 @@ func (gen *goCodeGen) generateSymbolType() {
 		l("loc, ok := interface{}(s.%s).(locator)", field.name)
 		l("if ok {")
 		push()
-		l("return loc.Location()")
+		l("return loc.Loc()")
 		pop()
 		l("}")
 		pop()
 	}
+	l("}")
+	l("if s.Generic_ != nil {")
+	push()
+	l("return s.Generic_.Loc()")
+	pop()
 	l("}")
 	l("return %s{}", gen.location)
 	pop()
@@ -680,7 +766,6 @@ func (gen *goCodeGen) generateDebugStates() {
 	l("Parser Debug States:")
 
 	for _, state := range gen.OrderedStates {
-		reduce := map[string][]string{}
 		l("  State %d:", state.StateNum)
 		l("    Kernel Items:")
 		firstNonKernel := true
@@ -696,21 +781,20 @@ func (gen *goCodeGen) generateDebugStates() {
 				l("    Non-kernel Items:")
 			}
 
-			if item.IsReduce() {
-				reduceCount += 1
-				reduce[item.LookAhead] = append(
-					reduce[item.LookAhead],
-					item.Name)
-			}
 			l("      %s", item)
 		}
 		l("    Reduce:")
-		if len(reduce) == 0 {
+		if len(state.Reduce) == 0 {
 			l("      (nil)")
 		}
 		for _, symbol := range symbols {
-			list := reduce[symbol]
-			if len(list) > 0 {
+			items := state.Reduce[symbol]
+			reduceCount += len(items)
+			if len(items) > 0 {
+				list := []string{}
+				for _, item := range items {
+					list = append(list, item.Name)
+				}
 				l("      %s -> %v", symbol, list)
 			}
 		}
@@ -753,12 +837,18 @@ func (gen *goCodeGen) generateDebugStates() {
 func (gen *goCodeGen) generateStateIds() {
 	l := gen.Line
 
-	l("type %s string", gen.stateId)
+	l("type %s int", gen.stateId)
+	l("")
+	l("func (id %s) String() string {", gen.stateId)
+	gen.PushIndent()
+	l("return %v(\"State %%d\", int(id))", gen.Obj("fmt.Sprintf"))
+	gen.PopIndent()
+	l("}")
 	l("")
 	l("const (")
 	gen.PushIndent()
 	for _, state := range gen.OrderedStates {
-		l("%s = %s(\"State %d\")",
+		l("%s = %s(%d)",
 			state.CodeGenConst,
 			gen.stateId,
 			state.StateNum)
@@ -808,10 +898,8 @@ func (gen *goCodeGen) generateActionTable() {
 	}
 
 	idToConst := map[string]string{
-		lr.AcceptRule:  gen.acceptSymbol,
-		lr.StartMarker: gen.startSymbol,
-		lr.EndMarker:   gen.endSymbol,
-		lr.Wildcard:    gen.wildcardSymbol,
+		lr.EndMarker: gen.endSymbol,
+		lr.Wildcard:  gen.wildcardSymbol,
 	}
 
 	for _, term := range gen.Terms {
@@ -821,11 +909,24 @@ func (gen *goCodeGen) generateActionTable() {
 	l("var %s = %s{", gen.actionTable, gen.actionTableType)
 	push()
 
-	l("{%s, %s}: &%s{%s, \"\", \"\"},",
-		gen.OrderedStates[1].CodeGenConst,
-		gen.endSymbol,
-		gen.action,
-		gen.acceptAction)
+	for _, state := range gen.OrderedStates {
+		for _, item := range state.Items {
+			if !item.IsReduce() {
+				continue
+			}
+
+			if item.Name != lr.AcceptRule || item.LookAhead != lr.EndMarker {
+				// regular reduction
+				continue
+			}
+
+			l("{%s, %s}: &%s{%s, 0, 0},",
+				state.CodeGenConst,
+				gen.endSymbol,
+				gen.action,
+				gen.acceptAction)
+		}
+	}
 
 	for _, state := range gen.OrderedStates {
 		for _, symbol := range symbols {
@@ -845,7 +946,7 @@ func (gen *goCodeGen) generateActionTable() {
 				continue
 			}
 
-			if state.StateNum == 1 && item.LookAhead == lr.EndMarker {
+			if item.Name == lr.AcceptRule && item.LookAhead == lr.EndMarker {
 				continue
 			}
 
@@ -860,18 +961,24 @@ func (gen *goCodeGen) generateActionTable() {
 	l("")
 }
 
-func (gen *goCodeGen) generatePseudoToken() {
+func (gen *goCodeGen) generateGenericSymbol() {
 	l := gen.Line
 
-	l("type %s %s", gen.pseudoToken, gen.symbolId)
+	l("type %s struct {", gen.genericSymbol)
+	gen.PushIndent()
+	l("%s", gen.symbolId)
+	l("%s", gen.location)
+	gen.PopIndent()
+	l("}")
 	l("")
-	l("func (t %s) Id() %s { return %s(t) }",
-		gen.pseudoToken,
+
+	l("func (t *%s) Id() %s { return t.%s }",
+		gen.genericSymbol,
 		gen.symbolId,
 		gen.symbolId)
 	l("")
-	l("func (%s) Location() %v { return %v{} }",
-		gen.pseudoToken,
+	l("func (t *%s) Loc() %v { return t.%v }",
+		gen.genericSymbol,
 		gen.location,
 		gen.location)
 	l("")
@@ -885,12 +992,12 @@ func (gen *goCodeGen) generateSymbolStack() {
 	l("type %s struct {", gen.symbolStack)
 	push()
 	l("lexer %s", gen.lexer)
-	l("top []%s", gen.token)
+	l("top []*%s", gen.symbol)
 	pop()
 	l("}")
 	l("")
 
-	l("func (stack *%s) Top() (%s, error) {", gen.symbolStack, gen.token)
+	l("func (stack *%s) Top() (*%s, error) {", gen.symbolStack, gen.symbol)
 	push()
 	l("if len(stack.top) == 0 {")
 	push()
@@ -903,10 +1010,18 @@ func (gen *goCodeGen) generateSymbolStack() {
 		gen.Obj("fmt.Errorf"))
 	pop()
 	l("}")
-	l("token = %s(%s)", gen.pseudoToken, gen.endSymbol)
+	l("token = &%s{%s, stack.lexer.CurrentLocation()}",
+		gen.genericSymbol,
+		gen.endSymbol)
 	pop()
 	l("}")
-	l("stack.top = append(stack.top, token)")
+	l("item, err := NewSymbol(token)")
+	l("if err != nil {")
+	push()
+	l("return nil, err")
+	pop()
+	l("}")
+	l("stack.top = append(stack.top, item)")
 	pop()
 	l("}")
 	l("return stack.top[len(stack.top)-1], nil")
@@ -914,7 +1029,7 @@ func (gen *goCodeGen) generateSymbolStack() {
 	l("}")
 	l("")
 
-	l("func (stack *%s) Push(symbol %s) {", gen.symbolStack, gen.token)
+	l("func (stack *%s) Push(symbol *%s) {", gen.symbolStack, gen.symbol)
 	push()
 	l("stack.top = append(stack.top, symbol)")
 	pop()
@@ -1005,7 +1120,7 @@ func (gen *goCodeGen) generateParseErrorHandler() {
 		gen.token,
 		gen.stack)
 	push()
-	l("return %v(\"Syntax error: unexpected symbol %%v. Expecting: %%v (%%v)\", nextToken.Id(), %s[stack[len(stack)-1].StateId], nextToken.Location())",
+	l("return %v(\"Syntax error: unexpected symbol %%v. Expecting: %%v (%%v)\", nextToken.Id(), %s[stack[len(stack)-1].StateId], nextToken.Loc())",
 		gen.Obj("fmt.Errorf"),
 		gen.expectedTerminals)
 	pop()
@@ -1013,40 +1128,51 @@ func (gen *goCodeGen) generateParseErrorHandler() {
 	l("")
 }
 
-func (gen *goCodeGen) generateParse() {
+func (gen *goCodeGen) _generateParse(
+	startTerm *lr.Term,
+	startState *lr.ItemSet,
+	generateSuffix bool) {
+
+	parseSuffix := ""
+	if generateSuffix {
+		parseSuffix = snakeToCamel(startTerm.Name)
+	}
+
 	l := gen.Line
 	push := gen.PushIndent
 	pop := gen.PopIndent
 
-	l("func %sParse(lexer %s, reducer %s) (%v, error) {",
+	l("func %sParse%s(lexer %s, reducer %s) (%v, error) {",
 		gen.Prefix,
+		parseSuffix,
 		gen.lexer,
 		gen.reducer,
-		gen.Start.CodeGenType)
+		startTerm.CodeGenType)
 	push()
-	l("return %sParseWithCustomErrorHandler(lexer, reducer, %s{})",
+	l("return %sParse%sWithCustomErrorHandler(lexer, reducer, %s{})",
 		gen.Prefix,
+		parseSuffix,
 		gen.defaultErrHandler)
 	pop()
 	l("}")
 	l("")
 
-	l("func %sParseWithCustomErrorHandler(lexer %s, reducer %s, errHandler %s) (%v, error) {",
+	l("func %sParse%sWithCustomErrorHandler(lexer %s, reducer %s, errHandler %s) (%v, error) {",
 		gen.Prefix,
+		parseSuffix,
 		gen.lexer,
 		gen.reducer,
 		gen.errHandler,
-		gen.Start.CodeGenType)
+		startTerm.CodeGenType)
 	push()
 
-	l("var errRetVal %v", gen.Start.CodeGenType)
+	l("var errRetVal %v", startTerm.CodeGenType)
 	l("stateStack := %s{", gen.stack)
 	push()
-	l("&%s{%s, &%s{SymbolId_: %s}},",
+	l("// Note: we don't have to populate the start symbol since its value is never accessed")
+	l("&%s{%s, nil},",
 		gen.stackItem,
-		gen.OrderedStates[0].CodeGenConst,
-		gen.symbol,
-		gen.startSymbol)
+		startState.CodeGenConst)
 	pop()
 	l("}")
 
@@ -1090,7 +1216,7 @@ func (gen *goCodeGen) generateParse() {
 	l("} else if action.ActionType == %s {", gen.reduceAction)
 
 	push()
-	l("var reduceSymbol %s", gen.token)
+	l("var reduceSymbol *%s", gen.symbol)
 	l("stateStack, reduceSymbol, err = action.ReduceSymbol(reducer, stateStack)")
 	l("if err != nil {")
 	push()
@@ -1111,13 +1237,13 @@ func (gen *goCodeGen) generateParse() {
 	pop()
 	l("}")
 
-	l("return stateStack[1].%s, nil", gen.Start.ValueType.Value)
+	l("return stateStack[1].%s, nil", startTerm.ValueType.Value)
 	l("")
 
 	pop()
 	l("} else {")
 	push()
-	l("panic(\"Unknown action type: \" + action.ActionType)")
+	l("panic(\"Unknown action type: \" + action.ActionType.String())")
 	pop()
 	l("}")
 	pop()
@@ -1126,6 +1252,12 @@ func (gen *goCodeGen) generateParse() {
 
 	pop()
 	l("}")
+}
+
+func (gen *goCodeGen) generateParse() {
+	for idx, start := range gen.Starts {
+		gen._generateParse(start, gen.OrderedStates[idx], len(gen.Starts) > 1)
+	}
 }
 
 func GenerateGoLRCode(
@@ -1146,6 +1278,7 @@ func GenerateGoLRCode(
 
 	gen.generateTerminalSymbolIds()
 	gen.generateTokenInterface()
+	gen.generateGenericSymbol()
 	gen.generateLexerInterface()
 	gen.generateReducerInterface()
 
@@ -1154,10 +1287,10 @@ func GenerateGoLRCode(
 	gen.generateParse()
 
 	l := gen.Line
-	l("// =======================================================")
+	l("// ================================================================")
 	l("// Parser internal implementation")
-	l("// User should avoid directly accessing the following code")
-	l("// =======================================================")
+	l("// User should normally avoid directly accessing the following code")
+	l("// ================================================================")
 	l("")
 
 	gen.generateNonTerminalSymbolIds()
@@ -1168,7 +1301,6 @@ func GenerateGoLRCode(
 
 	gen.generateSymbolType()
 
-	gen.generatePseudoToken()
 	gen.generateSymbolStack()
 
 	gen.generateStack()

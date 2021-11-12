@@ -24,6 +24,10 @@ This deviates slightly from the dragon book's LR(1) presentation:
    table lookup will first attempt to look up the look ahead specific action,
    and if that fails, fall back to looking up the wildcard action.
 
+5. For convenience, we allow %start to accept a list of production names
+   instead of a single production name.  The generated state graph will
+   have one start state for each specified production.
+
 The generator's parser is self bootstrapped from ./internal/parser/grammar.lr
 
 ---------

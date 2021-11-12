@@ -2,14 +2,15 @@ package parser
 
 import (
 	"fmt"
+	"strings"
 )
 
 type Definition interface {
-	Location() LRLocation
+	Loc() LRLocation
 	String() string
 }
 
-var _ LRSymbol = &Token{}
+var _ LRToken = &Token{}
 
 type Token struct {
 	LRLocation
@@ -22,37 +23,44 @@ func (t *Token) Id() LRSymbolId {
 	return t.LRSymbolId
 }
 
-func (t *Token) Location() LRLocation {
+func (t *Token) Loc() LRLocation {
 	return t.LRLocation
 }
 
 func (t *Token) String() string {
-	return fmt.Sprintf("%v: %s (%v)", t.LRSymbolId, t.Value, t.Location)
+	return fmt.Sprintf("%v: %s (%v)", t.LRSymbolId, t.Value, t.Loc())
 }
 
 type StartDeclaration struct {
 	LRLocation
 
-	Id *Token
+	Ids []*Token
 }
 
-func NewStartDeclaration(start *Token, id *Token) *StartDeclaration {
+func NewStartDeclaration(
+	start *LRGenericSymbol,
+	ids []*Token) *StartDeclaration {
+
 	return &StartDeclaration{
 		LRLocation: start.LRLocation,
-		Id:         id,
+		Ids:        ids,
 	}
 }
 
-func (sd *StartDeclaration) Location() LRLocation {
+func (sd *StartDeclaration) Loc() LRLocation {
 	return sd.LRLocation
 }
 
 func (sd *StartDeclaration) String() string {
-	return "%start " + sd.Id.Value
+	names := []string{}
+	for _, id := range sd.Ids {
+		names = append(names, id.Value)
+	}
+	return "%start " + strings.Join(names, " ")
 }
 
 type TermDeclaration struct {
-	TermType *Token
+	TermType *LRGenericSymbol
 
 	IsTerminal bool
 
@@ -62,29 +70,37 @@ type TermDeclaration struct {
 }
 
 func NewTermDeclaration(
-	termType *Token,
+	termType *LRGenericSymbol,
 	valueType *Token,
 	terms []*Token) *TermDeclaration {
 
 	return &TermDeclaration{
 		TermType:   termType,
-		IsTerminal: termType.Value == TokenKeyword,
+		IsTerminal: termType.Id() == LRTokenToken,
 		ValueType:  valueType,
 		Terms:      terms,
 	}
 }
 
-func (td *TermDeclaration) Location() LRLocation {
+func (td *TermDeclaration) Loc() LRLocation {
 	return td.TermType.LRLocation
 }
 
 func (td *TermDeclaration) String() string {
-	terms := ""
-	for _, term := range td.Terms {
-		terms += " " + term.Value
+	result := TypeKeyword
+	if td.IsTerminal {
+		result = TokenKeyword
 	}
 
-	return td.TermType.Value + " <" + td.ValueType.Value + ">" + terms
+	if td.ValueType != nil {
+		result += " <" + td.ValueType.Value + ">"
+	}
+
+	for _, term := range td.Terms {
+		result += " " + term.Value
+	}
+
+	return result
 }
 
 type Clause struct {
@@ -142,7 +158,7 @@ func NewRule(name *Token, clauses []*Clause) *Rule {
 	return rule
 }
 
-func (r *Rule) Location() LRLocation {
+func (r *Rule) Loc() LRLocation {
 	return r.Name.LRLocation
 }
 

@@ -28,7 +28,7 @@ func (Reducer) NilToAdditionalSections() ([]*AdditionalSection, error) {
 }
 
 func (Reducer) ToAdditionalSection(
-	marker *Token,
+	marker *LRGenericSymbol,
 	name *Token,
 	content *Token) (
 	*AdditionalSection,
@@ -49,7 +49,7 @@ func (Reducer) AddToDefs(
 func (Reducer) AddExplicitToDefs(
 	defs []Definition,
 	def Definition,
-	terminator *Token) (
+	terminator *LRGenericSymbol) (
 	[]Definition, error) {
 
 	return append(defs, def), nil
@@ -61,7 +61,7 @@ func (Reducer) DefToDefs(def Definition) ([]Definition, error) {
 
 func (Reducer) ExplicitDefToDefs(
 	def Definition,
-	terminator *Token) (
+	terminator *LRGenericSymbol) (
 	[]Definition,
 	error) {
 
@@ -69,10 +69,10 @@ func (Reducer) ExplicitDefToDefs(
 }
 
 func (Reducer) TermDeclToDef(
-	rword *Token,
-	lt *Token,
+	rword *LRGenericSymbol,
+	lt *LRGenericSymbol,
 	value *Token,
-	gt *Token,
+	gt *LRGenericSymbol,
 	terms []*Token) (
 	Definition,
 	error) {
@@ -80,24 +80,33 @@ func (Reducer) TermDeclToDef(
 	return NewTermDeclaration(rword, value, terms), nil
 }
 
-func (Reducer) StartDeclToDef(
-	startKw *Token,
-	ruleName *Token) (
+func (Reducer) UntypedTermDeclToDef(
+	rword *LRGenericSymbol,
+	terms []*Token) (
 	Definition,
 	error) {
 
-	return NewStartDeclaration(startKw, ruleName), nil
+	return NewTermDeclaration(rword, nil, terms), nil
+}
+
+func (Reducer) StartDeclToDef(
+	startKw *LRGenericSymbol,
+	ruleNames []*Token) (
+	Definition,
+	error) {
+
+	return NewStartDeclaration(startKw, ruleNames), nil
 }
 
 func (Reducer) RuleToDef(rule *Rule) (Definition, error) {
 	return rule, nil
 }
 
-func (Reducer) TokenToRword(tokenKw *Token) (*Token, error) {
+func (Reducer) TokenToRword(tokenKw *LRGenericSymbol) (*LRGenericSymbol, error) {
 	return tokenKw, nil
 }
 
-func (Reducer) TypeToRword(typeKw *Token) (*Token, error) {
+func (Reducer) TypeToRword(typeKw *LRGenericSymbol) (*LRGenericSymbol, error) {
 	return typeKw, nil
 }
 
@@ -146,7 +155,7 @@ func (Reducer) ClausesToRule(
 
 func (Reducer) AddToLabeledClauses(
 	clauses []*Clause,
-	or *Token,
+	or *LRGenericSymbol,
 	clause *Clause) (
 	[]*Clause,
 	error) {
