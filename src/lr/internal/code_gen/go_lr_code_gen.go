@@ -1159,8 +1159,9 @@ func (gen *goCodeGen) _generateParse(
 	l("}")
 	l("")
 
-	l("func %sParseWithCustomErrorHandler(lexer %s, reducer %s, errHandler %s) (%v, error) {",
+	l("func %sParse%sWithCustomErrorHandler(lexer %s, reducer %s, errHandler %s) (%v, error) {",
 		gen.Prefix,
+		parseSuffix,
 		gen.lexer,
 		gen.reducer,
 		gen.errHandler,
