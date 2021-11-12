@@ -98,6 +98,8 @@ type goCodeGen struct {
 	tableKey        string
 	actionTableType string
 	actionTable     string
+
+	parse string
 }
 
 func newGoCodeGen(
@@ -171,6 +173,7 @@ func (gen *goCodeGen) populateCodeGenVariables() error {
 	gen.tableKey = "_" + gen.Prefix + "ActionTableKey"
 	gen.actionTableType = "_" + gen.Prefix + "ActionTableType"
 	gen.actionTable = "_" + gen.Prefix + "ActionTable"
+	gen.parse = "_" + gen.Prefix + "Parse"
 
 	for _, term := range gen.Terms {
 		valueType := gen.ValueTypes[term.ValueType.Value]
@@ -1128,7 +1131,107 @@ func (gen *goCodeGen) generateParseErrorHandler() {
 	l("")
 }
 
-func (gen *goCodeGen) _generateParse(
+func (gen *goCodeGen) generateParse() {
+	l := gen.Line
+	push := gen.PushIndent
+	pop := gen.PopIndent
+
+	l("func %s(lexer %s, reducer %s, errHandler %s, startState %s) (*%s, error) {",
+		gen.parse,
+		gen.lexer,
+		gen.reducer,
+		gen.errHandler,
+		gen.stateId,
+		gen.stackItem)
+	push()
+
+	l("stateStack := %s{", gen.stack)
+	push()
+	l("// Note: we don't have to populate the start symbol since its value is never accessed")
+	l("&%s{startState, nil},", gen.stackItem)
+	pop()
+	l("}")
+
+	l("symbolStack := &%s{lexer: lexer}", gen.symbolStack)
+	l("")
+
+	l("for {")
+	push()
+
+	l("nextSymbol, err := symbolStack.Top()")
+	l("if err != nil {")
+	push()
+
+	l("return nil, err")
+
+	pop()
+	l("}")
+
+	l("")
+	l("action, ok := %s.Get(stateStack[len(stateStack)-1].StateId, nextSymbol.Id())",
+		gen.actionTable)
+	l("if !ok {")
+	push()
+	l("return nil, errHandler.Error(nextSymbol, stateStack)")
+	pop()
+	l("}")
+
+	l("if action.ActionType == %s {", gen.shiftAction)
+	push()
+	l("stateStack = append(stateStack, action.ShiftItem(nextSymbol))")
+	l("")
+	l("_, err = symbolStack.Pop()")
+	l("if err != nil {")
+	push()
+	l("return nil, err")
+	pop()
+	l("}")
+
+	pop()
+
+	l("} else if action.ActionType == %s {", gen.reduceAction)
+
+	push()
+	l("var reduceSymbol *%s", gen.symbol)
+	l("stateStack, reduceSymbol, err = action.ReduceSymbol(reducer, stateStack)")
+	l("if err != nil {")
+	push()
+	l("return nil, err")
+	pop()
+	l("}")
+	l("")
+
+	l("symbolStack.Push(reduceSymbol)")
+
+	pop()
+	l("} else if action.ActionType == %s {", gen.acceptAction)
+	push()
+
+	l("if len(stateStack) != 2 {")
+	push()
+	l("panic(\"This should never happen\")")
+	pop()
+	l("}")
+
+	l("return stateStack[1], nil")
+	l("")
+
+	pop()
+	l("} else {")
+	push()
+	l("panic(\"Unknown action type: \" + action.ActionType.String())")
+	pop()
+	l("}")
+	pop()
+
+	l("}")
+
+	pop()
+	l("}")
+	l("")
+}
+
+func (gen *goCodeGen) generateParseEntryPoint(
 	startTerm *lr.Term,
 	startState *lr.ItemSet,
 	generateSuffix bool) {
@@ -1166,97 +1269,28 @@ func (gen *goCodeGen) _generateParse(
 		startTerm.CodeGenType)
 	push()
 
-	l("var errRetVal %v", startTerm.CodeGenType)
-	l("stateStack := %s{", gen.stack)
-	push()
-	l("// Note: we don't have to populate the start symbol since its value is never accessed")
-	l("&%s{%s, nil},",
-		gen.stackItem,
+	l("item, err := %s(lexer, reducer, errHandler, %s)",
+		gen.parse,
 		startState.CodeGenConst)
-	pop()
-	l("}")
-
-	l("symbolStack := &%s{lexer: lexer}", gen.symbolStack)
-	l("")
-
-	l("for {")
-	push()
-
-	l("nextSymbol, err := symbolStack.Top()")
 	l("if err != nil {")
 	push()
-
-	l("return errRetVal, err")
-
-	pop()
-	l("}")
-
-	l("")
-	l("action, ok := %s.Get(stateStack[len(stateStack)-1].StateId, nextSymbol.Id())",
-		gen.actionTable)
-	l("if !ok {")
-	push()
-	l("return errRetVal, errHandler.Error(nextSymbol, stateStack)")
-	pop()
-	l("}")
-
-	l("if action.ActionType == %s {", gen.shiftAction)
-	push()
-	l("stateStack = append(stateStack, action.ShiftItem(nextSymbol))")
-	l("")
-	l("_, err = symbolStack.Pop()")
-	l("if err != nil {")
-	push()
+	l("var errRetVal %v", startTerm.CodeGenType)
 	l("return errRetVal, err")
 	pop()
 	l("}")
 
-	pop()
-
-	l("} else if action.ActionType == %s {", gen.reduceAction)
-
-	push()
-	l("var reduceSymbol *%s", gen.symbol)
-	l("stateStack, reduceSymbol, err = action.ReduceSymbol(reducer, stateStack)")
-	l("if err != nil {")
-	push()
-	l("return errRetVal, err")
+	l("return item.%s, nil", startTerm.ValueType.Value)
 	pop()
 	l("}")
 	l("")
-
-	l("symbolStack.Push(reduceSymbol)")
-
-	pop()
-	l("} else if action.ActionType == %s {", gen.acceptAction)
-	push()
-
-	l("if len(stateStack) != 2 {")
-	push()
-	l("panic(\"This should never happen\")")
-	pop()
-	l("}")
-
-	l("return stateStack[1].%s, nil", startTerm.ValueType.Value)
-	l("")
-
-	pop()
-	l("} else {")
-	push()
-	l("panic(\"Unknown action type: \" + action.ActionType.String())")
-	pop()
-	l("}")
-	pop()
-
-	l("}")
-
-	pop()
-	l("}")
 }
 
-func (gen *goCodeGen) generateParse() {
+func (gen *goCodeGen) generateParseEntryPoints() {
 	for idx, start := range gen.Starts {
-		gen._generateParse(start, gen.OrderedStates[idx], len(gen.Starts) > 1)
+		gen.generateParseEntryPoint(
+			start,
+			gen.OrderedStates[idx],
+			len(gen.Starts) > 1)
 	}
 }
 
@@ -1284,7 +1318,7 @@ func GenerateGoLRCode(
 
 	gen.generateParseErrorHandler()
 
-	gen.generateParse()
+	gen.generateParseEntryPoints()
 
 	l := gen.Line
 	l("// ================================================================")
@@ -1292,6 +1326,8 @@ func GenerateGoLRCode(
 	l("// User should normally avoid directly accessing the following code")
 	l("// ================================================================")
 	l("")
+
+	gen.generateParse()
 
 	gen.generateNonTerminalSymbolIds()
 	gen.generateActionTypes()
