@@ -766,7 +766,6 @@ func (gen *goCodeGen) generateDebugStates() {
 	l("Parser Debug States:")
 
 	for _, state := range gen.OrderedStates {
-		reduce := map[string][]string{}
 		l("  State %d:", state.StateNum)
 		l("    Kernel Items:")
 		firstNonKernel := true
@@ -782,21 +781,20 @@ func (gen *goCodeGen) generateDebugStates() {
 				l("    Non-kernel Items:")
 			}
 
-			if item.IsReduce() {
-				reduceCount += 1
-				reduce[item.LookAhead] = append(
-					reduce[item.LookAhead],
-					item.Name)
-			}
 			l("      %s", item)
 		}
 		l("    Reduce:")
-		if len(reduce) == 0 {
+		if len(state.Reduce) == 0 {
 			l("      (nil)")
 		}
 		for _, symbol := range symbols {
-			list := reduce[symbol]
-			if len(list) > 0 {
+			items := state.Reduce[symbol]
+			reduceCount += len(items)
+			if len(items) > 0 {
+				list := []string{}
+				for _, item := range items {
+					list = append(list, item.Name)
+				}
 				l("      %s -> %v", symbol, list)
 			}
 		}
