@@ -780,35 +780,48 @@ func CParse(lexer CLexer, reducer CReducer) (Symbol, error) {
 }
 
 func CParseWithCustomErrorHandler(lexer CLexer, reducer CReducer, errHandler CParseErrorHandler) (Symbol, error) {
-	var errRetVal Symbol
+	item, err := _CParse(lexer, reducer, errHandler, _CState1)
+	if err != nil {
+		var errRetVal Symbol
+		return errRetVal, err
+	}
+	return item.T, nil
+}
+
+// ================================================================
+// Parser internal implementation
+// User should normally avoid directly accessing the following code
+// ================================================================
+
+func _CParse(lexer CLexer, reducer CReducer, errHandler CParseErrorHandler, startState _CStateId) (*_CStackItem, error) {
 	stateStack := _CStack{
 		// Note: we don't have to populate the start symbol since its value is never accessed
-		&_CStackItem{_CState1, nil},
+		&_CStackItem{startState, nil},
 	}
 	symbolStack := &_CPseudoSymbolStack{lexer: lexer}
 
 	for {
 		nextSymbol, err := symbolStack.Top()
 		if err != nil {
-			return errRetVal, err
+			return nil, err
 		}
 
 		action, ok := _CActionTable.Get(stateStack[len(stateStack)-1].StateId, nextSymbol.Id())
 		if !ok {
-			return errRetVal, errHandler.Error(nextSymbol, stateStack)
+			return nil, errHandler.Error(nextSymbol, stateStack)
 		}
 		if action.ActionType == _CShiftAction {
 			stateStack = append(stateStack, action.ShiftItem(nextSymbol))
 
 			_, err = symbolStack.Pop()
 			if err != nil {
-				return errRetVal, err
+				return nil, err
 			}
 		} else if action.ActionType == _CReduceAction {
 			var reduceSymbol *CSymbol
 			stateStack, reduceSymbol, err = action.ReduceSymbol(reducer, stateStack)
 			if err != nil {
-				return errRetVal, err
+				return nil, err
 			}
 
 			symbolStack.Push(reduceSymbol)
@@ -816,18 +829,13 @@ func CParseWithCustomErrorHandler(lexer CLexer, reducer CReducer, errHandler CPa
 			if len(stateStack) != 2 {
 				panic("This should never happen")
 			}
-			return stateStack[1].T, nil
+			return stateStack[1], nil
 
 		} else {
 			panic("Unknown action type: " + action.ActionType.String())
 		}
 	}
 }
-
-// ================================================================
-// Parser internal implementation
-// User should normally avoid directly accessing the following code
-// ================================================================
 
 func (i CSymbolId) String() string {
 	switch i {

@@ -146,35 +146,48 @@ func LRParse(lexer LRLexer, reducer LRReducer) (*Grammar, error) {
 }
 
 func LRParseWithCustomErrorHandler(lexer LRLexer, reducer LRReducer, errHandler LRParseErrorHandler) (*Grammar, error) {
-	var errRetVal *Grammar
+	item, err := _LRParse(lexer, reducer, errHandler, _LRState1)
+	if err != nil {
+		var errRetVal *Grammar
+		return errRetVal, err
+	}
+	return item.Grammar, nil
+}
+
+// ================================================================
+// Parser internal implementation
+// User should normally avoid directly accessing the following code
+// ================================================================
+
+func _LRParse(lexer LRLexer, reducer LRReducer, errHandler LRParseErrorHandler, startState _LRStateId) (*_LRStackItem, error) {
 	stateStack := _LRStack{
 		// Note: we don't have to populate the start symbol since its value is never accessed
-		&_LRStackItem{_LRState1, nil},
+		&_LRStackItem{startState, nil},
 	}
 	symbolStack := &_LRPseudoSymbolStack{lexer: lexer}
 
 	for {
 		nextSymbol, err := symbolStack.Top()
 		if err != nil {
-			return errRetVal, err
+			return nil, err
 		}
 
 		action, ok := _LRActionTable.Get(stateStack[len(stateStack)-1].StateId, nextSymbol.Id())
 		if !ok {
-			return errRetVal, errHandler.Error(nextSymbol, stateStack)
+			return nil, errHandler.Error(nextSymbol, stateStack)
 		}
 		if action.ActionType == _LRShiftAction {
 			stateStack = append(stateStack, action.ShiftItem(nextSymbol))
 
 			_, err = symbolStack.Pop()
 			if err != nil {
-				return errRetVal, err
+				return nil, err
 			}
 		} else if action.ActionType == _LRReduceAction {
 			var reduceSymbol *LRSymbol
 			stateStack, reduceSymbol, err = action.ReduceSymbol(reducer, stateStack)
 			if err != nil {
-				return errRetVal, err
+				return nil, err
 			}
 
 			symbolStack.Push(reduceSymbol)
@@ -182,18 +195,13 @@ func LRParseWithCustomErrorHandler(lexer LRLexer, reducer LRReducer, errHandler 
 			if len(stateStack) != 2 {
 				panic("This should never happen")
 			}
-			return stateStack[1].Grammar, nil
+			return stateStack[1], nil
 
 		} else {
 			panic("Unknown action type: " + action.ActionType.String())
 		}
 	}
 }
-
-// ================================================================
-// Parser internal implementation
-// User should normally avoid directly accessing the following code
-// ================================================================
 
 func (i LRSymbolId) String() string {
 	switch i {
