@@ -172,20 +172,6 @@ func (items Items) String() string {
 	return strings.Join(chunks, ";")
 }
 
-func (items Items) KernelItems() Items {
-	kernel := Items{}
-	for _, item := range items {
-		if !item.IsKernel() {
-			continue
-		}
-		kernel = append(kernel, item)
-	}
-
-	sort.Sort(kernel)
-
-	return kernel
-}
-
 func (items Items) Len() int {
 	return len(items)
 }
@@ -377,12 +363,12 @@ func (set *ItemSet) clone() *ItemSet {
 }
 
 func (set *ItemSet) computeConflictSymbols() {
+	shiftReduce := []string{}
+	reduceReduce := []string{}
 	for symbol, items := range set.Reduce {
 		_, ok := set.Goto[symbol]
 		if ok {
-			set.ShiftReduceConflictSymbols = append(
-				set.ShiftReduceConflictSymbols,
-				symbol)
+			shiftReduce = append(shiftReduce, symbol)
 		}
 
 		if len(items) > 1 {
@@ -390,12 +376,12 @@ func (set *ItemSet) computeConflictSymbols() {
 			// as long as neither production rule is a prefix of the other
 			// production rule.  However, this require inspecting the stack
 			// which is kind of painful to code gen.
-
-			set.ReduceReduceConflictSymbols = append(
-				set.ReduceReduceConflictSymbols,
-				symbol)
+			reduceReduce = append(reduceReduce, symbol)
 		}
 	}
+
+	set.ShiftReduceConflictSymbols = shiftReduce
+	set.ReduceReduceConflictSymbols = reduceReduce
 }
 
 func (set *ItemSet) compress() {
