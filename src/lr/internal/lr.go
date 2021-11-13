@@ -22,6 +22,8 @@ type Item struct {
 
 	LookAhead string
 
+	IsReduce bool
+
 	*Term
 	*Clause
 
@@ -32,10 +34,11 @@ type Item struct {
 
 func NewCoreItem(name string, rule []string, term *Term, clause *Clause) *Item {
 	return &Item{
-		Name:   name,
-		Rule:   rule,
-		Term:   term,
-		Clause: clause,
+		Name:     name,
+		Rule:     rule,
+		IsReduce: len(rule) == 0,
+		Term:     term,
+		Clause:   clause,
 	}
 }
 
@@ -43,6 +46,9 @@ func (item *Item) Shift() *Item {
 	if item.Next == nil {
 		next := *item
 		next.Dot += 1
+		if len(next.Rule) == next.Dot {
+			next.IsReduce = true
+		}
 		next.Key = ""
 		if item.Core != nil {
 			next.Core = item.Core.Shift()
@@ -74,10 +80,6 @@ func (item *Item) ReplaceLookAhead(symbol string) *Item {
 
 func (item *Item) IsKernel() bool {
 	return item.Dot != 0
-}
-
-func (item *Item) IsReduce() bool {
-	return item.Dot == len(item.Rule)
 }
 
 func (item *Item) String() string {
@@ -242,8 +244,6 @@ type ItemSet struct {
 }
 
 func newItemSet(kernelItems Items) *ItemSet {
-	sort.Sort(kernelItems)
-
 	return &ItemSet{
 		Kernel:      kernelItems.String(),
 		KernelItems: kernelItems,
@@ -393,7 +393,7 @@ func (set *ItemSet) compress() {
 
 	counts := map[string]int{}
 	for _, item := range set.Items {
-		if item.IsReduce() {
+		if item.IsReduce {
 			counts[item.Core.String()] += 1
 		}
 	}
@@ -417,7 +417,7 @@ func (set *ItemSet) compress() {
 	reduce := map[string]Items{}
 	for _, item := range set.Items {
 		var toAdd *Item
-		if item.IsReduce() {
+		if item.IsReduce {
 			toAdd = item
 			if item.Core.String() == maxKey {
 				toAdd = item.ReplaceLookAhead(Wildcard)
@@ -438,7 +438,7 @@ func (set *ItemSet) compress() {
 			kernelCount += 1
 		}
 
-		if toAdd.IsReduce() {
+		if toAdd.IsReduce {
 			reduce[toAdd.LookAhead] = append(reduce[toAdd.LookAhead], toAdd)
 		}
 
@@ -506,8 +506,31 @@ func (states *LRStates) generateStates() {
 		for _, state := range states.OrderedStates[exploredIdx:] {
 			states.populateClosure(state)
 
+			shiftableItems := map[string]Items{}
+			for _, item := range state.Items {
+				if item.IsReduce {
+					continue
+				}
+
+				nextSymbol := item.Rule[item.Dot]
+				shiftableItems[nextSymbol] = append(
+					shiftableItems[nextSymbol],
+					item)
+			}
+
+			// This is needed to keep runs deterministic
 			for _, symbol := range symbols {
-				gotoState, _ := states.generateGotoState(state, symbol)
+				items, ok := shiftableItems[symbol]
+				if !ok {
+					continue
+				}
+
+				gotoKernelItems := Items{}
+				for _, item := range items {
+					gotoKernelItems = append(gotoKernelItems, item.Shift())
+				}
+
+				gotoState, _ := states.maybeAdd(newItemSet(gotoKernelItems))
 				if gotoState == nil {
 					continue
 				}
@@ -525,27 +548,6 @@ func (states *LRStates) generateStates() {
 	}
 }
 
-func (states *LRStates) generateGotoState(
-	parentState *ItemSet,
-	symbol string) (
-	*ItemSet,
-	bool) {
-
-	kernelItems := Items{}
-
-	for _, item := range parentState.Items {
-		if !item.IsReduce() && item.Rule[item.Dot] == symbol {
-			kernelItems = append(kernelItems, item.Shift())
-		}
-	}
-
-	if len(kernelItems) == 0 {
-		return nil, false
-	}
-
-	return states.maybeAdd(newItemSet(kernelItems))
-}
-
 func (states *LRStates) populateClosure(state *ItemSet) {
 	type checkedEntry struct {
 		rule     string
@@ -559,7 +561,7 @@ func (states *LRStates) populateClosure(state *ItemSet) {
 		nextToExplore := Items{}
 
 		for _, item := range toExplore {
-			if item.IsReduce() {
+			if item.IsReduce {
 				continue
 			}
 
@@ -599,7 +601,7 @@ func (states *LRStates) populateClosure(state *ItemSet) {
 
 	reduce := map[string]Items{}
 	for _, item := range state.Items {
-		if item.IsReduce() {
+		if item.IsReduce {
 			reduce[item.LookAhead] = append(reduce[item.LookAhead], item)
 		}
 	}

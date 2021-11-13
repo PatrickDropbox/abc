@@ -943,7 +943,7 @@ func (gen *goCodeGen) generateActionTable() {
 
 	for _, state := range gen.OrderedStates {
 		for _, item := range state.Items {
-			if !item.IsReduce() {
+			if !item.IsReduce {
 				continue
 			}
 
@@ -974,7 +974,7 @@ func (gen *goCodeGen) generateActionTable() {
 
 	for _, state := range gen.OrderedStates {
 		for _, item := range state.Items {
-			if !item.IsReduce() {
+			if !item.IsReduce {
 				continue
 			}
 
@@ -1115,7 +1115,7 @@ func (gen *goCodeGen) generateExpectedTerminals() {
 		}
 
 		for _, item := range state.Items {
-			if item.IsReduce() && item.LookAhead != lr.Wildcard {
+			if item.IsReduce && item.LookAhead != lr.Wildcard {
 				consts = append(consts, idToConst[item.LookAhead])
 			}
 		}

@@ -206,7 +206,7 @@ func printLRStates(states *lr.LRStates) {
 				fmt.Println("      Non-kernel Items:")
 			}
 
-			if item.IsReduce() {
+			if item.IsReduce {
 				reduceCount += 1
 				reduce[item.LookAhead] = append(
 					reduce[item.LookAhead],
