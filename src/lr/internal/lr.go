@@ -192,7 +192,9 @@ func (items Items) Len() int {
 
 // sort order:
 //  kernel items before non-kernel items
-//  item string
+//  clause sort id
+//  dot position
+//  lookahead string
 func (items Items) Less(iIdx int, jIdx int) bool {
 	i := items[iIdx]
 	j := items[jIdx]
@@ -205,7 +207,25 @@ func (items Items) Less(iIdx int, jIdx int) bool {
 		return false
 	}
 
-	return i.String() < j.String()
+	iSortId := 0
+	if i.Clause != nil {
+		iSortId = i.Clause.SortId
+	}
+
+	jSortId := 0
+	if j.Clause != nil {
+		jSortId = j.Clause.SortId
+	}
+
+	if iSortId != jSortId {
+		return iSortId < jSortId
+	}
+
+	if i.Dot != j.Dot {
+		return i.Dot < j.Dot
+	}
+
+	return i.LookAhead < j.LookAhead
 }
 
 func (items Items) Swap(i int, j int) {

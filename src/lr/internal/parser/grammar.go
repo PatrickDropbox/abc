@@ -962,17 +962,17 @@ Parser Debug States:
     Kernel Items:
       #accept: ^.grammar
     Non-kernel Items:
-      def:.START nonempty_ident_list
-      def:.rule
-      def:.rword '<' IDENTIFIER '>' nonempty_id_or_char_list
-      def:.rword nonempty_id_or_char_list
-      defs:.def ';'
-      defs:.def
-      defs:.defs def ';'
-      defs:.defs def
-      grammar:.defs additional_sections
       rule:.RULE_DEF id_or_char_list
       rule:.RULE_DEF labeled_clauses
+      defs:.defs def
+      defs:.defs def ';'
+      defs:.def
+      defs:.def ';'
+      def:.rword '<' IDENTIFIER '>' nonempty_id_or_char_list
+      def:.rword nonempty_id_or_char_list
+      def:.START nonempty_ident_list
+      def:.rule
+      grammar:.defs additional_sections
       rword:.TOKEN
       rword:.TYPE
     Reduce:
@@ -1001,15 +1001,15 @@ Parser Debug States:
       rule: RULE_DEF.id_or_char_list
       rule: RULE_DEF.labeled_clauses
     Non-kernel Items:
-      id_or_char_list:., *
-      id_or_char_list:.nonempty_id_or_char_list
-      labeled_clause:.LABEL id_or_char_list
-      labeled_clauses:.labeled_clause
-      labeled_clauses:.labeled_clauses '|' labeled_clause
-      nonempty_id_or_char_list:.CHARACTER
-      nonempty_id_or_char_list:.IDENTIFIER
-      nonempty_id_or_char_list:.nonempty_id_or_char_list CHARACTER
       nonempty_id_or_char_list:.nonempty_id_or_char_list IDENTIFIER
+      nonempty_id_or_char_list:.nonempty_id_or_char_list CHARACTER
+      nonempty_id_or_char_list:.IDENTIFIER
+      nonempty_id_or_char_list:.CHARACTER
+      labeled_clauses:.labeled_clauses '|' labeled_clause
+      labeled_clauses:.labeled_clause
+      labeled_clause:.LABEL id_or_char_list
+      id_or_char_list:.nonempty_id_or_char_list
+      id_or_char_list:., *
     Reduce:
       * -> [id_or_char_list]
     Goto:
@@ -1025,8 +1025,8 @@ Parser Debug States:
     Kernel Items:
       def: START.nonempty_ident_list
     Non-kernel Items:
-      nonempty_ident_list:.IDENTIFIER
       nonempty_ident_list:.nonempty_ident_list IDENTIFIER
+      nonempty_ident_list:.IDENTIFIER
     Reduce:
       (nil)
     Goto:
@@ -1051,8 +1051,8 @@ Parser Debug States:
 
   State 7:
     Kernel Items:
-      defs: def.';'
       defs: def., *
+      defs: def.';'
     Reduce:
       * -> [defs]
     Goto:
@@ -1060,18 +1060,18 @@ Parser Debug States:
 
   State 8:
     Kernel Items:
-      defs: defs.def ';'
       defs: defs.def
+      defs: defs.def ';'
       grammar: defs.additional_sections
     Non-kernel Items:
-      additional_sections:., *
-      additional_sections:.additional_sections additional_section
-      def:.START nonempty_ident_list
-      def:.rule
-      def:.rword '<' IDENTIFIER '>' nonempty_id_or_char_list
-      def:.rword nonempty_id_or_char_list
       rule:.RULE_DEF id_or_char_list
       rule:.RULE_DEF labeled_clauses
+      additional_sections:.additional_sections additional_section
+      additional_sections:., *
+      def:.rword '<' IDENTIFIER '>' nonempty_id_or_char_list
+      def:.rword nonempty_id_or_char_list
+      def:.START nonempty_ident_list
+      def:.rule
       rword:.TOKEN
       rword:.TYPE
     Reduce:
@@ -1099,10 +1099,10 @@ Parser Debug States:
       def: rword.'<' IDENTIFIER '>' nonempty_id_or_char_list
       def: rword.nonempty_id_or_char_list
     Non-kernel Items:
-      nonempty_id_or_char_list:.CHARACTER
-      nonempty_id_or_char_list:.IDENTIFIER
-      nonempty_id_or_char_list:.nonempty_id_or_char_list CHARACTER
       nonempty_id_or_char_list:.nonempty_id_or_char_list IDENTIFIER
+      nonempty_id_or_char_list:.nonempty_id_or_char_list CHARACTER
+      nonempty_id_or_char_list:.IDENTIFIER
+      nonempty_id_or_char_list:.CHARACTER
     Reduce:
       (nil)
     Goto:
@@ -1131,12 +1131,12 @@ Parser Debug States:
     Kernel Items:
       labeled_clause: LABEL.id_or_char_list
     Non-kernel Items:
-      id_or_char_list:., *
-      id_or_char_list:.nonempty_id_or_char_list
-      nonempty_id_or_char_list:.CHARACTER
-      nonempty_id_or_char_list:.IDENTIFIER
-      nonempty_id_or_char_list:.nonempty_id_or_char_list CHARACTER
       nonempty_id_or_char_list:.nonempty_id_or_char_list IDENTIFIER
+      nonempty_id_or_char_list:.nonempty_id_or_char_list CHARACTER
+      nonempty_id_or_char_list:.IDENTIFIER
+      nonempty_id_or_char_list:.CHARACTER
+      id_or_char_list:.nonempty_id_or_char_list
+      id_or_char_list:., *
     Reduce:
       * -> [id_or_char_list]
     Goto:
@@ -1163,8 +1163,8 @@ Parser Debug States:
 
   State 16:
     Kernel Items:
-      labeled_clauses: labeled_clauses.'|' labeled_clause
       rule: RULE_DEF labeled_clauses., *
+      labeled_clauses: labeled_clauses.'|' labeled_clause
     Reduce:
       * -> [rule]
     Goto:
@@ -1172,9 +1172,9 @@ Parser Debug States:
 
   State 17:
     Kernel Items:
-      id_or_char_list: nonempty_id_or_char_list., *
-      nonempty_id_or_char_list: nonempty_id_or_char_list.CHARACTER
       nonempty_id_or_char_list: nonempty_id_or_char_list.IDENTIFIER
+      nonempty_id_or_char_list: nonempty_id_or_char_list.CHARACTER
+      id_or_char_list: nonempty_id_or_char_list., *
     Reduce:
       * -> [id_or_char_list]
     Goto:
@@ -1220,8 +1220,8 @@ Parser Debug States:
 
   State 22:
     Kernel Items:
-      defs: defs def.';'
       defs: defs def., *
+      defs: defs def.';'
     Reduce:
       * -> [defs]
     Goto:
@@ -1237,9 +1237,9 @@ Parser Debug States:
 
   State 24:
     Kernel Items:
-      def: rword nonempty_id_or_char_list., *
-      nonempty_id_or_char_list: nonempty_id_or_char_list.CHARACTER
       nonempty_id_or_char_list: nonempty_id_or_char_list.IDENTIFIER
+      nonempty_id_or_char_list: nonempty_id_or_char_list.CHARACTER
+      def: rword nonempty_id_or_char_list., *
     Reduce:
       * -> [def]
     Goto:
@@ -1341,10 +1341,10 @@ Parser Debug States:
     Kernel Items:
       def: rword '<' IDENTIFIER '>'.nonempty_id_or_char_list
     Non-kernel Items:
-      nonempty_id_or_char_list:.CHARACTER
-      nonempty_id_or_char_list:.IDENTIFIER
-      nonempty_id_or_char_list:.nonempty_id_or_char_list CHARACTER
       nonempty_id_or_char_list:.nonempty_id_or_char_list IDENTIFIER
+      nonempty_id_or_char_list:.nonempty_id_or_char_list CHARACTER
+      nonempty_id_or_char_list:.IDENTIFIER
+      nonempty_id_or_char_list:.CHARACTER
     Reduce:
       (nil)
     Goto:
@@ -1362,9 +1362,9 @@ Parser Debug States:
 
   State 38:
     Kernel Items:
-      def: rword '<' IDENTIFIER '>' nonempty_id_or_char_list., *
-      nonempty_id_or_char_list: nonempty_id_or_char_list.CHARACTER
       nonempty_id_or_char_list: nonempty_id_or_char_list.IDENTIFIER
+      nonempty_id_or_char_list: nonempty_id_or_char_list.CHARACTER
+      def: rword '<' IDENTIFIER '>' nonempty_id_or_char_list., *
     Reduce:
       * -> [def]
     Goto:
