@@ -15,14 +15,10 @@ const (
 	LRStartToken          = LRSymbolId(258)
 	LRRuleDefToken        = LRSymbolId(259)
 	LRLabelToken          = LRSymbolId(260)
-	LRLtToken             = LRSymbolId(261)
-	LRGtToken             = LRSymbolId(262)
-	LROrToken             = LRSymbolId(263)
-	LRSemicolonToken      = LRSymbolId(264)
-	LRSectionMarkerToken  = LRSymbolId(265)
-	LRCharacterToken      = LRSymbolId(266)
-	LRIdentifierToken     = LRSymbolId(267)
-	LRSectionContentToken = LRSymbolId(268)
+	LRSectionMarkerToken  = LRSymbolId(261)
+	LRCharacterToken      = LRSymbolId(262)
+	LRIdentifierToken     = LRSymbolId(263)
+	LRSectionContentToken = LRSymbolId(264)
 )
 
 type LRLocation struct {
@@ -78,16 +74,16 @@ type LRReducer interface {
 	AddToDefs(Defs_ []Definition, Def_ Definition) ([]Definition, error)
 
 	// 52:4: defs -> add_explicit: ...
-	AddExplicitToDefs(Defs_ []Definition, Def_ Definition, Semicolon_ *LRGenericSymbol) ([]Definition, error)
+	AddExplicitToDefs(Defs_ []Definition, Def_ Definition, char *LRGenericSymbol) ([]Definition, error)
 
 	// 53:4: defs -> def: ...
 	DefToDefs(Def_ Definition) ([]Definition, error)
 
 	// 54:4: defs -> explicit_def: ...
-	ExplicitDefToDefs(Def_ Definition, Semicolon_ *LRGenericSymbol) ([]Definition, error)
+	ExplicitDefToDefs(Def_ Definition, char *LRGenericSymbol) ([]Definition, error)
 
 	// 59:4: def -> term_decl: ...
-	TermDeclToDef(Rword_ *LRGenericSymbol, Lt_ *LRGenericSymbol, Identifier_ *Token, Gt_ *LRGenericSymbol, NonemptyIdentList_ []*Token) (Definition, error)
+	TermDeclToDef(Rword_ *LRGenericSymbol, char *LRGenericSymbol, Identifier_ *Token, char2 *LRGenericSymbol, NonemptyIdentList_ []*Token) (Definition, error)
 
 	// 60:4: def -> untyped_term_decl: ...
 	UntypedTermDeclToDef(Rword_ *LRGenericSymbol, NonemptyIdentList_ []*Token) (Definition, error)
@@ -126,7 +122,7 @@ type LRReducer interface {
 	NilToRuleBody() ([]*Token, error)
 
 	// 83:4: labeled_clauses -> add: ...
-	AddToLabeledClauses(LabeledClauses_ []*Clause, Or_ *LRGenericSymbol, LabeledClause_ *Clause) ([]*Clause, error)
+	AddToLabeledClauses(LabeledClauses_ []*Clause, char *LRGenericSymbol, LabeledClause_ *Clause) ([]*Clause, error)
 
 	// 84:4: labeled_clauses -> clause: ...
 	ClauseToLabeledClauses(LabeledClause_ *Clause) ([]*Clause, error)
@@ -223,14 +219,6 @@ func (i LRSymbolId) String() string {
 		return "RULE_DEF"
 	case LRLabelToken:
 		return "LABEL"
-	case LRLtToken:
-		return "LT"
-	case LRGtToken:
-		return "GT"
-	case LROrToken:
-		return "OR"
-	case LRSemicolonToken:
-		return "SEMICOLON"
 	case LRSectionMarkerToken:
 		return "SECTION_MARKER"
 	case LRCharacterToken:
@@ -239,6 +227,14 @@ func (i LRSymbolId) String() string {
 		return "IDENTIFIER"
 	case LRSectionContentToken:
 		return "SECTION_CONTENT"
+	case ';':
+		return "';'"
+	case '<':
+		return "'<'"
+	case '>':
+		return "'>'"
+	case '|':
+		return "'|'"
 	case LRGrammarType:
 		return "grammar"
 	case LRAdditionalSectionsType:
@@ -458,7 +454,7 @@ func NewSymbol(token LRToken) (*LRSymbol, error) {
 
 	symbol = &LRSymbol{SymbolId_: token.Id()}
 	switch token.Id() {
-	case _LREndMarker, LRTokenToken, LRTypeToken, LRStartToken, LRLtToken, LRGtToken, LROrToken, LRSemicolonToken, LRSectionMarkerToken:
+	case _LREndMarker, LRTokenToken, LRTypeToken, LRStartToken, LRSectionMarkerToken, ';', '<', '>', '|':
 		val, ok := token.(*LRGenericSymbol)
 		if !ok {
 			return nil, fmt.Errorf("Invalid value type for token %s.  Expecting *LRGenericSymbol (%v)", token.Id(), token.Loc())
@@ -821,7 +817,7 @@ var _LRActionTable = _LRActionTableType{
 	{_LRState3, LRLabeledClauseType}:      _LRGotoState12Action,
 	{_LRState4, LRIdentifierToken}:        _LRGotoState15Action,
 	{_LRState4, LRNonemptyIdentListType}:  _LRGotoState16Action,
-	{_LRState7, LRSemicolonToken}:         _LRGotoState17Action,
+	{_LRState7, ';'}:                      _LRGotoState17Action,
 	{_LRState8, LRTokenToken}:             _LRGotoState5Action,
 	{_LRState8, LRTypeToken}:              _LRGotoState6Action,
 	{_LRState8, LRStartToken}:             _LRGotoState4Action,
@@ -830,17 +826,17 @@ var _LRActionTable = _LRActionTableType{
 	{_LRState8, LRDefType}:                _LRGotoState19Action,
 	{_LRState8, LRRwordType}:              _LRGotoState10Action,
 	{_LRState8, LRRuleType}:               _LRGotoState9Action,
-	{_LRState10, LRLtToken}:               _LRGotoState20Action,
 	{_LRState10, LRIdentifierToken}:       _LRGotoState15Action,
+	{_LRState10, '<'}:                     _LRGotoState20Action,
 	{_LRState10, LRNonemptyIdentListType}: _LRGotoState21Action,
 	{_LRState11, LRRuleBodyType}:          _LRGotoState22Action,
-	{_LRState13, LROrToken}:               _LRGotoState23Action,
+	{_LRState13, '|'}:                     _LRGotoState23Action,
 	{_LRState14, LRCharacterToken}:        _LRGotoState24Action,
 	{_LRState14, LRIdentifierToken}:       _LRGotoState25Action,
 	{_LRState16, LRIdentifierToken}:       _LRGotoState26Action,
 	{_LRState18, LRSectionMarkerToken}:    _LRGotoState27Action,
 	{_LRState18, LRAdditionalSectionType}: _LRGotoState28Action,
-	{_LRState19, LRSemicolonToken}:        _LRGotoState29Action,
+	{_LRState19, ';'}:                     _LRGotoState29Action,
 	{_LRState20, LRIdentifierToken}:       _LRGotoState30Action,
 	{_LRState21, LRIdentifierToken}:       _LRGotoState26Action,
 	{_LRState22, LRCharacterToken}:        _LRGotoState24Action,
@@ -848,7 +844,7 @@ var _LRActionTable = _LRActionTableType{
 	{_LRState23, LRLabelToken}:            _LRGotoState11Action,
 	{_LRState23, LRLabeledClauseType}:     _LRGotoState31Action,
 	{_LRState27, LRIdentifierToken}:       _LRGotoState32Action,
-	{_LRState30, LRGtToken}:               _LRGotoState33Action,
+	{_LRState30, '>'}:                     _LRGotoState33Action,
 	{_LRState32, LRSectionContentToken}:   _LRGotoState34Action,
 	{_LRState33, LRIdentifierToken}:       _LRGotoState15Action,
 	{_LRState33, LRNonemptyIdentListType}: _LRGotoState35Action,
@@ -885,20 +881,20 @@ var _LRExpectedTerminals = map[_LRStateId][]LRSymbolId{
 	_LRState2:  []LRSymbolId{_LREndMarker},
 	_LRState3:  []LRSymbolId{LRLabelToken},
 	_LRState4:  []LRSymbolId{LRIdentifierToken},
-	_LRState7:  []LRSymbolId{LRSemicolonToken},
+	_LRState7:  []LRSymbolId{';'},
 	_LRState8:  []LRSymbolId{LRTokenToken, LRTypeToken, LRStartToken, LRRuleDefToken},
-	_LRState10: []LRSymbolId{LRLtToken, LRIdentifierToken},
-	_LRState13: []LRSymbolId{LROrToken},
+	_LRState10: []LRSymbolId{LRIdentifierToken, '<'},
+	_LRState13: []LRSymbolId{'|'},
 	_LRState14: []LRSymbolId{LRCharacterToken, LRIdentifierToken},
 	_LRState16: []LRSymbolId{LRIdentifierToken},
 	_LRState18: []LRSymbolId{LRSectionMarkerToken, _LREndMarker},
-	_LRState19: []LRSymbolId{LRSemicolonToken},
+	_LRState19: []LRSymbolId{';'},
 	_LRState20: []LRSymbolId{LRIdentifierToken},
 	_LRState21: []LRSymbolId{LRIdentifierToken},
 	_LRState22: []LRSymbolId{LRCharacterToken, LRIdentifierToken},
 	_LRState23: []LRSymbolId{LRLabelToken},
 	_LRState27: []LRSymbolId{LRIdentifierToken},
-	_LRState30: []LRSymbolId{LRGtToken},
+	_LRState30: []LRSymbolId{'>'},
 	_LRState32: []LRSymbolId{LRSectionContentToken},
 	_LRState33: []LRSymbolId{LRIdentifierToken},
 	_LRState35: []LRSymbolId{LRIdentifierToken},
@@ -912,12 +908,12 @@ Parser Debug States:
     Non-kernel Items:
       def:.START nonempty_ident_list
       def:.rule
-      def:.rword LT IDENTIFIER GT nonempty_ident_list
+      def:.rword '<' IDENTIFIER '>' nonempty_ident_list
       def:.rword nonempty_ident_list
+      defs:.def ';'
       defs:.def
-      defs:.def SEMICOLON
+      defs:.defs def ';'
       defs:.defs def
-      defs:.defs def SEMICOLON
       grammar:.defs additional_sections
       rule:.RULE_DEF labeled_clauses
       rule:.RULE_DEF rule_body
@@ -951,7 +947,7 @@ Parser Debug States:
     Non-kernel Items:
       labeled_clause:.LABEL rule_body
       labeled_clauses:.labeled_clause
-      labeled_clauses:.labeled_clauses OR labeled_clause
+      labeled_clauses:.labeled_clauses '|' labeled_clause
       rule_body:., *
       rule_body:.rule_body CHARACTER
       rule_body:.rule_body IDENTIFIER
@@ -993,24 +989,24 @@ Parser Debug States:
 
   State 7:
     Kernel Items:
+      defs: def.';'
       defs: def., *
-      defs: def.SEMICOLON
     Reduce:
       * -> [defs]
     Goto:
-      SEMICOLON -> State 17
+      ';' -> State 17
 
   State 8:
     Kernel Items:
+      defs: defs.def ';'
       defs: defs.def
-      defs: defs.def SEMICOLON
       grammar: defs.additional_sections
     Non-kernel Items:
       additional_sections:., *
       additional_sections:.additional_sections additional_section
       def:.START nonempty_ident_list
       def:.rule
-      def:.rword LT IDENTIFIER GT nonempty_ident_list
+      def:.rword '<' IDENTIFIER '>' nonempty_ident_list
       def:.rword nonempty_ident_list
       rule:.RULE_DEF labeled_clauses
       rule:.RULE_DEF rule_body
@@ -1038,7 +1034,7 @@ Parser Debug States:
 
   State 10:
     Kernel Items:
-      def: rword.LT IDENTIFIER GT nonempty_ident_list
+      def: rword.'<' IDENTIFIER '>' nonempty_ident_list
       def: rword.nonempty_ident_list
     Non-kernel Items:
       nonempty_ident_list:.IDENTIFIER
@@ -1046,8 +1042,8 @@ Parser Debug States:
     Reduce:
       (nil)
     Goto:
-      LT -> State 20
       IDENTIFIER -> State 15
+      '<' -> State 20
       nonempty_ident_list -> State 21
 
   State 11:
@@ -1072,12 +1068,12 @@ Parser Debug States:
 
   State 13:
     Kernel Items:
-      labeled_clauses: labeled_clauses.OR labeled_clause
+      labeled_clauses: labeled_clauses.'|' labeled_clause
       rule: RULE_DEF labeled_clauses., *
     Reduce:
       * -> [rule]
     Goto:
-      OR -> State 23
+      '|' -> State 23
 
   State 14:
     Kernel Items:
@@ -1109,7 +1105,7 @@ Parser Debug States:
 
   State 17:
     Kernel Items:
-      defs: def SEMICOLON., *
+      defs: def ';'., *
     Reduce:
       * -> [defs]
     Goto:
@@ -1129,16 +1125,16 @@ Parser Debug States:
 
   State 19:
     Kernel Items:
+      defs: defs def.';'
       defs: defs def., *
-      defs: defs def.SEMICOLON
     Reduce:
       * -> [defs]
     Goto:
-      SEMICOLON -> State 29
+      ';' -> State 29
 
   State 20:
     Kernel Items:
-      def: rword LT.IDENTIFIER GT nonempty_ident_list
+      def: rword '<'.IDENTIFIER '>' nonempty_ident_list
     Reduce:
       (nil)
     Goto:
@@ -1166,7 +1162,7 @@ Parser Debug States:
 
   State 23:
     Kernel Items:
-      labeled_clauses: labeled_clauses OR.labeled_clause
+      labeled_clauses: labeled_clauses '|'.labeled_clause
     Non-kernel Items:
       labeled_clause:.LABEL rule_body
     Reduce:
@@ -1217,7 +1213,7 @@ Parser Debug States:
 
   State 29:
     Kernel Items:
-      defs: defs def SEMICOLON., *
+      defs: defs def ';'., *
     Reduce:
       * -> [defs]
     Goto:
@@ -1225,15 +1221,15 @@ Parser Debug States:
 
   State 30:
     Kernel Items:
-      def: rword LT IDENTIFIER.GT nonempty_ident_list
+      def: rword '<' IDENTIFIER.'>' nonempty_ident_list
     Reduce:
       (nil)
     Goto:
-      GT -> State 33
+      '>' -> State 33
 
   State 31:
     Kernel Items:
-      labeled_clauses: labeled_clauses OR labeled_clause., *
+      labeled_clauses: labeled_clauses '|' labeled_clause., *
     Reduce:
       * -> [labeled_clauses]
     Goto:
@@ -1249,7 +1245,7 @@ Parser Debug States:
 
   State 33:
     Kernel Items:
-      def: rword LT IDENTIFIER GT.nonempty_ident_list
+      def: rword '<' IDENTIFIER '>'.nonempty_ident_list
     Non-kernel Items:
       nonempty_ident_list:.IDENTIFIER
       nonempty_ident_list:.nonempty_ident_list IDENTIFIER
@@ -1269,7 +1265,7 @@ Parser Debug States:
 
   State 35:
     Kernel Items:
-      def: rword LT IDENTIFIER GT nonempty_ident_list., *
+      def: rword '<' IDENTIFIER '>' nonempty_ident_list., *
       nonempty_ident_list: nonempty_ident_list.IDENTIFIER
     Reduce:
       * -> [def]

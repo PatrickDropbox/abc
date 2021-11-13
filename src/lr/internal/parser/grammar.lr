@@ -14,7 +14,7 @@
 // a single token by the lexer.
 %token <Token> LABEL
 
-%token LT GT OR SEMICOLON SECTION_MARKER
+%token SECTION_MARKER
 %token <Token> CHARACTER IDENTIFIER
 
 %token <Token> SECTION_CONTENT
@@ -49,14 +49,14 @@ additional_section -> SECTION_MARKER IDENTIFIER SECTION_CONTENT
 
 defs ->
     add          : defs def |
-    add_explicit : defs def SEMICOLON |
+    add_explicit : defs def ';' |
     def          : def |
-    explicit_def : def SEMICOLON
+    explicit_def : def ';'
 
 // TODO: handle language specific boiler plate, union/struct
 def ->
     // type / token declaration
-    term_decl  : rword LT IDENTIFIER GT nonempty_ident_list |
+    term_decl  : rword '<' IDENTIFIER '>' nonempty_ident_list |
     untyped_term_decl  : rword nonempty_ident_list |
     // start declaration
     start_decl : START nonempty_ident_list |
@@ -80,7 +80,7 @@ rule_body ->
     nil      :
 
 labeled_clauses ->
-    add    : labeled_clauses OR labeled_clause |
+    add    : labeled_clauses '|' labeled_clause |
     clause : labeled_clause
 
 labeled_clause -> LABEL rule_body

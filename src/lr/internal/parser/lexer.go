@@ -14,15 +14,15 @@ var (
 		TokenKeyword: LRTokenToken,
 		TypeKeyword:  LRTypeToken,
 		"%start":     LRStartToken,
-		"<":          LRLtToken,
-		">":          LRGtToken,
-		"|":          LROrToken,
-		";":          LRSemicolonToken,
+		"<":          '<',
+		">":          '>',
+		"|":          '|',
+		";":          ';',
 
 		"%%": LRSectionMarkerToken,
 
 		"->": Arrow,
-		":":  Colon,
+		":":  ':',
 	}
 
 	whitespaces = map[string]struct{}{
@@ -346,7 +346,7 @@ func (lexer *tokenPairLexer) Next() (LRToken, error) {
 		return curr, nil
 	}
 
-	if next.Id() == Colon {
+	if next.Id() == ':' {
 		curr.(*Token).LRSymbolId = LRLabelToken
 		return curr, nil
 	}

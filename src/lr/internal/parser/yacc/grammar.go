@@ -37,17 +37,12 @@ const TOKEN = 57346
 const TYPE = 57347
 const START = 57348
 const ARROW = 57349
-const COLON = 57350
-const RULE_DEF = 57351
-const LABEL = 57352
-const LT = 57353
-const GT = 57354
-const OR = 57355
-const SEMICOLON = 57356
-const SECTION_MARKER = 57357
-const IDENTIFIER = 57358
-const CHARACTER = 57359
-const SECTION_CONTENT = 57360
+const RULE_DEF = 57350
+const LABEL = 57351
+const SECTION_MARKER = 57352
+const IDENTIFIER = 57353
+const CHARACTER = 57354
+const SECTION_CONTENT = 57355
 
 var LrToknames = [...]string{
 	"$end",
@@ -57,17 +52,16 @@ var LrToknames = [...]string{
 	"TYPE",
 	"START",
 	"ARROW",
-	"COLON",
 	"RULE_DEF",
 	"LABEL",
-	"LT",
-	"GT",
-	"OR",
-	"SEMICOLON",
 	"SECTION_MARKER",
 	"IDENTIFIER",
 	"CHARACTER",
 	"SECTION_CONTENT",
+	"';'",
+	"'<'",
+	"'>'",
+	"'|'",
 }
 
 var LrStatenames = [...]string{}
@@ -94,17 +88,17 @@ const LrPrivate = 57344
 const LrLast = 35
 
 var LrAct = [...]int{
-	14, 19, 17, 33, 26, 27, 16, 13, 25, 15,
-	30, 24, 15, 22, 23, 12, 28, 31, 20, 7,
-	8, 5, 3, 29, 9, 11, 1, 10, 21, 18,
+	14, 19, 17, 28, 31, 15, 16, 23, 33, 13,
+	12, 26, 27, 25, 15, 30, 24, 7, 8, 5,
+	22, 9, 3, 29, 20, 11, 1, 10, 21, 18,
 	32, 6, 34, 2, 4,
 }
 
 var LrPact = [...]int{
-	15, -1000, 15, 1, -4, -7, -1000, -1000, -1000, 8,
-	-2, 0, -1000, -5, -8, -1000, -8, -12, 3, -1000,
-	-1000, -1000, -6, -1000, 5, -1000, -1000, -1000, 8, -12,
-	-15, -7, -1000, -1000, -8,
+	13, -1000, 13, -4, -6, 3, -1000, -1000, -1000, 15,
+	10, -7, -1000, 5, 2, -1000, 2, 0, -14, -1000,
+	-1000, -1000, 4, -1000, -12, -1000, -1000, -1000, 15, 0,
+	-5, 3, -1000, -1000, 2,
 }
 
 var LrPgo = [...]int{
@@ -125,10 +119,10 @@ var LrR2 = [...]int{
 }
 
 var LrChk = [...]int{
-	-1000, -11, -5, -4, -1, 6, -6, 4, 5, 9,
-	-10, -4, 14, 11, -2, 16, -2, -3, -8, -7,
-	10, -9, 15, 14, 16, 16, 16, 17, 13, -3,
-	16, 12, -7, 18, -2,
+	-1000, -11, -5, -4, -1, 6, -6, 4, 5, 8,
+	-10, -4, 14, 15, -2, 11, -2, -3, -8, -7,
+	9, -9, 10, 14, 11, 11, 11, 12, 17, -3,
+	11, 16, -7, 13, -2,
 }
 
 var LrDef = [...]int{
@@ -139,12 +133,24 @@ var LrDef = [...]int{
 }
 
 var LrTok1 = [...]int{
-	1,
+	1, 3, 3, 3, 3, 3, 3, 3, 3, 3,
+	3, 3, 3, 3, 3, 3, 3, 3, 3, 3,
+	3, 3, 3, 3, 3, 3, 3, 3, 3, 3,
+	3, 3, 3, 3, 3, 3, 3, 3, 3, 3,
+	3, 3, 3, 3, 3, 3, 3, 3, 3, 3,
+	3, 3, 3, 3, 3, 3, 3, 3, 3, 14,
+	15, 3, 16, 3, 3, 3, 3, 3, 3, 3,
+	3, 3, 3, 3, 3, 3, 3, 3, 3, 3,
+	3, 3, 3, 3, 3, 3, 3, 3, 3, 3,
+	3, 3, 3, 3, 3, 3, 3, 3, 3, 3,
+	3, 3, 3, 3, 3, 3, 3, 3, 3, 3,
+	3, 3, 3, 3, 3, 3, 3, 3, 3, 3,
+	3, 3, 3, 3, 17,
 }
 
 var LrTok2 = [...]int{
 	2, 3, 4, 5, 6, 7, 8, 9, 10, 11,
-	12, 13, 14, 15, 16, 17, 18,
+	12, 13,
 }
 
 var LrTok3 = [...]int{
@@ -522,7 +528,7 @@ Lrdefault:
 		LrDollar = LrS[Lrpt-3 : Lrpt+1]
 //line grammar.y:100
 		{
-			LrVAL.Definitions, _ = Lrlex.(*ParseContext).AddExplicitToDefs(LrDollar[1].Definitions, LrDollar[2].Definition, LrDollar[3].Generic_)
+			LrVAL.Definitions, _ = Lrlex.(*ParseContext).AddExplicitToDefs(LrDollar[1].Definitions, LrDollar[2].Definition, nil)
 		}
 	case 7:
 		LrDollar = LrS[Lrpt-1 : Lrpt+1]
@@ -534,13 +540,13 @@ Lrdefault:
 		LrDollar = LrS[Lrpt-2 : Lrpt+1]
 //line grammar.y:108
 		{
-			LrVAL.Definitions, _ = Lrlex.(*ParseContext).ExplicitDefToDefs(LrDollar[1].Definition, LrDollar[2].Generic_)
+			LrVAL.Definitions, _ = Lrlex.(*ParseContext).ExplicitDefToDefs(LrDollar[1].Definition, nil)
 		}
 	case 9:
 		LrDollar = LrS[Lrpt-5 : Lrpt+1]
 //line grammar.y:116
 		{
-			LrVAL.Definition, _ = Lrlex.(*ParseContext).TermDeclToDef(LrDollar[1].Generic_, LrDollar[2].Generic_, LrDollar[3].Token, LrDollar[4].Generic_, LrDollar[5].Tokens)
+			LrVAL.Definition, _ = Lrlex.(*ParseContext).TermDeclToDef(LrDollar[1].Generic_, nil, LrDollar[3].Token, nil, LrDollar[5].Tokens)
 		}
 	case 10:
 		LrDollar = LrS[Lrpt-2 : Lrpt+1]
@@ -618,7 +624,7 @@ Lrdefault:
 		LrDollar = LrS[Lrpt-3 : Lrpt+1]
 //line grammar.y:177
 		{
-			LrVAL.Clauses, _ = Lrlex.(*ParseContext).AddToLabeledClauses(LrDollar[1].Clauses, LrDollar[2].Generic_, LrDollar[3].Clause)
+			LrVAL.Clauses, _ = Lrlex.(*ParseContext).AddToLabeledClauses(LrDollar[1].Clauses, nil, LrDollar[3].Clause)
 		}
 	case 23:
 		LrDollar = LrS[Lrpt-1 : Lrpt+1]

@@ -33,7 +33,7 @@ import (
 %token <Generic_> TOKEN TYPE START // %<identifier>
 
 // Intermediate token that should not reach the parser
-%token <Token> ARROW COLON
+%token <Token> ARROW
 
 // <identifier> followed by -> (ignoring whitespace and comment), tokenized as a
 // single token by the lexer.  Equivalent to C_IDENTIFIER in yacc
@@ -43,7 +43,7 @@ import (
 // a single token by the lexer.
 %token <Token> LABEL
 
-%token <Generic_> LT GT OR SEMICOLON SECTION_MARKER
+%token <Generic_> SECTION_MARKER
 %token <Token> IDENTIFIER CHARACTER
 
 %token <Token> SECTION_CONTENT
@@ -97,24 +97,24 @@ defs:
         $$, _ =  Lrlex.(*ParseContext).AddToDefs($1, $2)
     }
     |
-    defs def SEMICOLON {
-        $$, _ =  Lrlex.(*ParseContext).AddExplicitToDefs($1, $2, $3)
+    defs def ';' {
+        $$, _ =  Lrlex.(*ParseContext).AddExplicitToDefs($1, $2, nil)
     }
     |
     def {
         $$, _ =  Lrlex.(*ParseContext).DefToDefs($1)
     }
     |
-    def SEMICOLON {
-        $$, _ =  Lrlex.(*ParseContext).ExplicitDefToDefs($1, $2)
+    def ';' {
+        $$, _ =  Lrlex.(*ParseContext).ExplicitDefToDefs($1, nil)
     }
     ;
 
 // TODO: handle language specific boiler plate, union/struct
 def:
     // type / token declaration
-    rword LT IDENTIFIER GT nonempty_ident_list {
-        $$, _ =  Lrlex.(*ParseContext).TermDeclToDef($1, $2, $3, $4, $5)
+    rword '<' IDENTIFIER '>' nonempty_ident_list {
+        $$, _ =  Lrlex.(*ParseContext).TermDeclToDef($1, nil, $3, nil, $5)
     }
     |
     rword nonempty_ident_list {
@@ -174,8 +174,8 @@ rule_body:
     ;
 
 labeled_clauses:
-    labeled_clauses OR labeled_clause {
-        $$, _ = Lrlex.(*ParseContext).AddToLabeledClauses($1, $2, $3)
+    labeled_clauses '|' labeled_clause {
+        $$, _ = Lrlex.(*ParseContext).AddToLabeledClauses($1, nil, $3)
     }
     |
     labeled_clause {

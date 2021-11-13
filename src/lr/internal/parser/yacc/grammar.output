@@ -24,7 +24,7 @@ state 1
 state 2
 	grammar:  defs.additional_sections 
 	defs:  defs.def 
-	defs:  defs.def SEMICOLON 
+	defs:  defs.def ';' 
 	additional_sections: .    (3)
 
 	TOKEN  shift 7
@@ -40,18 +40,18 @@ state 2
 
 state 3
 	defs:  def.    (7)
-	defs:  def.SEMICOLON 
+	defs:  def.';' 
 
-	SEMICOLON  shift 12
+	';'  shift 12
 	.  reduce 7 (src line 103)
 
 
 state 4
-	def:  rword.LT IDENTIFIER GT nonempty_ident_list 
+	def:  rword.'<' IDENTIFIER '>' nonempty_ident_list 
 	def:  rword.nonempty_ident_list 
 
-	LT  shift 13
 	IDENTIFIER  shift 15
+	'<'  shift 13
 	.  error
 
 	nonempty_ident_list  goto 14
@@ -105,20 +105,20 @@ state 10
 
 state 11
 	defs:  defs def.    (5)
-	defs:  defs def.SEMICOLON 
+	defs:  defs def.';' 
 
-	SEMICOLON  shift 23
+	';'  shift 23
 	.  reduce 5 (src line 95)
 
 
 state 12
-	defs:  def SEMICOLON.    (8)
+	defs:  def ';'.    (8)
 
 	.  reduce 8 (src line 107)
 
 
 state 13
-	def:  rword LT.IDENTIFIER GT nonempty_ident_list 
+	def:  rword '<'.IDENTIFIER '>' nonempty_ident_list 
 
 	IDENTIFIER  shift 24
 	.  error
@@ -158,9 +158,9 @@ state 17
 
 state 18
 	rule:  RULE_DEF labeled_clauses.    (18)
-	labeled_clauses:  labeled_clauses.OR labeled_clause 
+	labeled_clauses:  labeled_clauses.'|' labeled_clause 
 
-	OR  shift 28
+	'|'  shift 28
 	.  reduce 18 (src line 157)
 
 
@@ -192,15 +192,15 @@ state 22
 
 
 state 23
-	defs:  defs def SEMICOLON.    (6)
+	defs:  defs def ';'.    (6)
 
 	.  reduce 6 (src line 99)
 
 
 state 24
-	def:  rword LT IDENTIFIER.GT nonempty_ident_list 
+	def:  rword '<' IDENTIFIER.'>' nonempty_ident_list 
 
-	GT  shift 31
+	'>'  shift 31
 	.  error
 
 
@@ -223,7 +223,7 @@ state 27
 
 
 state 28
-	labeled_clauses:  labeled_clauses OR.labeled_clause 
+	labeled_clauses:  labeled_clauses '|'.labeled_clause 
 
 	LABEL  shift 20
 	.  error
@@ -248,7 +248,7 @@ state 30
 
 
 state 31
-	def:  rword LT IDENTIFIER GT.nonempty_ident_list 
+	def:  rword '<' IDENTIFIER '>'.nonempty_ident_list 
 
 	IDENTIFIER  shift 15
 	.  error
@@ -256,7 +256,7 @@ state 31
 	nonempty_ident_list  goto 34
 
 state 32
-	labeled_clauses:  labeled_clauses OR labeled_clause.    (22)
+	labeled_clauses:  labeled_clauses '|' labeled_clause.    (22)
 
 	.  reduce 22 (src line 176)
 
@@ -268,14 +268,14 @@ state 33
 
 
 state 34
-	def:  rword LT IDENTIFIER GT nonempty_ident_list.    (9)
+	def:  rword '<' IDENTIFIER '>' nonempty_ident_list.    (9)
 	nonempty_ident_list:  nonempty_ident_list.IDENTIFIER 
 
 	IDENTIFIER  shift 25
 	.  reduce 9 (src line 114)
 
 
-18 terminals, 12 nonterminals
+17 terminals, 12 nonterminals
 25 grammar rules, 35/8000 states
 0 shift/reduce, 0 reduce/reduce conflicts reported
 61 working sets used
@@ -286,4 +286,4 @@ memory: parser 17/120000
 2 entries saved by goto default
 Optimizer space used: output 35/120000
 35 table entries, 0 zero
-maximum spread: 18, maximum offset: 31
+maximum spread: 17, maximum offset: 31
