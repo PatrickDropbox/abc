@@ -962,8 +962,7 @@ Parser Debug States:
     Kernel Items:
       #accept: ^.grammar
     Non-kernel Items:
-      rule:.RULE_DEF id_or_char_list
-      rule:.RULE_DEF labeled_clauses
+      grammar:.defs additional_sections
       defs:.defs def
       defs:.defs def ';'
       defs:.def
@@ -972,9 +971,10 @@ Parser Debug States:
       def:.rword nonempty_id_or_char_list
       def:.START nonempty_ident_list
       def:.rule
-      grammar:.defs additional_sections
       rword:.TOKEN
       rword:.TYPE
+      rule:.RULE_DEF id_or_char_list
+      rule:.RULE_DEF labeled_clauses
     Reduce:
       (nil)
     Goto:
@@ -1005,11 +1005,11 @@ Parser Debug States:
       nonempty_id_or_char_list:.nonempty_id_or_char_list CHARACTER
       nonempty_id_or_char_list:.IDENTIFIER
       nonempty_id_or_char_list:.CHARACTER
+      id_or_char_list:.nonempty_id_or_char_list
+      id_or_char_list:., *
       labeled_clauses:.labeled_clauses '|' labeled_clause
       labeled_clauses:.labeled_clause
       labeled_clause:.LABEL id_or_char_list
-      id_or_char_list:.nonempty_id_or_char_list
-      id_or_char_list:., *
     Reduce:
       * -> [id_or_char_list]
     Goto:
@@ -1060,12 +1060,10 @@ Parser Debug States:
 
   State 8:
     Kernel Items:
+      grammar: defs.additional_sections
       defs: defs.def
       defs: defs.def ';'
-      grammar: defs.additional_sections
     Non-kernel Items:
-      rule:.RULE_DEF id_or_char_list
-      rule:.RULE_DEF labeled_clauses
       additional_sections:.additional_sections additional_section
       additional_sections:., *
       def:.rword '<' IDENTIFIER '>' nonempty_id_or_char_list
@@ -1074,6 +1072,8 @@ Parser Debug States:
       def:.rule
       rword:.TOKEN
       rword:.TYPE
+      rule:.RULE_DEF id_or_char_list
+      rule:.RULE_DEF labeled_clauses
     Reduce:
       * -> [additional_sections]
     Goto:
@@ -1208,8 +1208,8 @@ Parser Debug States:
 
   State 21:
     Kernel Items:
-      additional_sections: additional_sections.additional_section
       grammar: defs additional_sections., $
+      additional_sections: additional_sections.additional_section
     Non-kernel Items:
       additional_section:.SECTION_MARKER IDENTIFIER SECTION_CONTENT
     Reduce:
@@ -1237,9 +1237,9 @@ Parser Debug States:
 
   State 24:
     Kernel Items:
+      def: rword nonempty_id_or_char_list., *
       nonempty_id_or_char_list: nonempty_id_or_char_list.IDENTIFIER
       nonempty_id_or_char_list: nonempty_id_or_char_list.CHARACTER
-      def: rword nonempty_id_or_char_list., *
     Reduce:
       * -> [def]
     Goto:
@@ -1362,9 +1362,9 @@ Parser Debug States:
 
   State 38:
     Kernel Items:
+      def: rword '<' IDENTIFIER '>' nonempty_id_or_char_list., *
       nonempty_id_or_char_list: nonempty_id_or_char_list.IDENTIFIER
       nonempty_id_or_char_list: nonempty_id_or_char_list.CHARACTER
-      def: rword '<' IDENTIFIER '>' nonempty_id_or_char_list., *
     Reduce:
       * -> [def]
     Goto:

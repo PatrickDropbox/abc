@@ -7686,10 +7686,10 @@ Parser Debug States:
 
   State 27:
     Kernel Items:
-      function_definition: declaration_specifiers.declarator declaration_list compound_statement
-      function_definition: declaration_specifiers.declarator compound_statement
       declaration: declaration_specifiers.';'
       declaration: declaration_specifiers.init_declarator_list ';'
+      function_definition: declaration_specifiers.declarator declaration_list compound_statement
+      function_definition: declaration_specifiers.declarator compound_statement
     Reduce:
       (nil)
     Goto:
@@ -7744,12 +7744,12 @@ Parser Debug States:
 
   State 29:
     Kernel Items:
+      declarator: direct_declarator., *
       direct_declarator: direct_declarator.'[' constant_expression ']'
       direct_declarator: direct_declarator.'[' ']'
       direct_declarator: direct_declarator.'(' parameter_type_list ')'
       direct_declarator: direct_declarator.'(' identifier_list ')'
       direct_declarator: direct_declarator.'(' ')'
-      declarator: direct_declarator., *
     Reduce:
       * -> [declarator]
     Goto:
@@ -7940,9 +7940,9 @@ Parser Debug States:
 
   State 42:
     Kernel Items:
-      type_qualifier_list: type_qualifier_list.type_qualifier
       pointer: '*' type_qualifier_list., *
       pointer: '*' type_qualifier_list.pointer
+      type_qualifier_list: type_qualifier_list.type_qualifier
     Reduce:
       * -> [pointer]
     Goto:
@@ -7981,10 +7981,10 @@ Parser Debug States:
 
   State 46:
     Kernel Items:
-      function_definition: declaration_specifiers declarator.declaration_list compound_statement
-      function_definition: declaration_specifiers declarator.compound_statement
       init_declarator: declarator., *
       init_declarator: declarator.'=' initializer
+      function_definition: declaration_specifiers declarator.declaration_list compound_statement
+      function_definition: declaration_specifiers declarator.compound_statement
     Reduce:
       * -> [init_declarator]
     Goto:
@@ -8285,12 +8285,12 @@ Parser Debug States:
 
   State 56:
     Kernel Items:
+      declarator: pointer direct_declarator., *
       direct_declarator: direct_declarator.'[' constant_expression ']'
       direct_declarator: direct_declarator.'[' ']'
       direct_declarator: direct_declarator.'(' parameter_type_list ')'
       direct_declarator: direct_declarator.'(' identifier_list ')'
       direct_declarator: direct_declarator.'(' ')'
-      declarator: pointer direct_declarator., *
     Reduce:
       * -> [declarator]
     Goto:
@@ -8411,8 +8411,8 @@ Parser Debug States:
 
   State 68:
     Kernel Items:
-      enumerator_list: enumerator_list.',' enumerator
       enum_specifier: ENUM '{' enumerator_list.'}'
+      enumerator_list: enumerator_list.',' enumerator
     Reduce:
       (nil)
     Goto:
@@ -8831,8 +8831,8 @@ Parser Debug States:
 
   State 93:
     Kernel Items:
-      labeled_statement: IDENTIFIER.':' statement
       primary_expression: IDENTIFIER., *
+      labeled_statement: IDENTIFIER.':' statement
     Reduce:
       * -> [primary_expression]
     Goto:
@@ -9014,9 +9014,9 @@ Parser Debug States:
 
   State 107:
     Kernel Items:
-      declaration_list: declaration_list.declaration
       compound_statement: '{' declaration_list.'}'
       compound_statement: '{' declaration_list.statement_list '}'
+      declaration_list: declaration_list.declaration
     Reduce:
       (nil)
     Goto:
@@ -9115,8 +9115,8 @@ Parser Debug States:
 
   State 109:
     Kernel Items:
-      inclusive_or_expression: exclusive_or_expression., *
       exclusive_or_expression: exclusive_or_expression.'^' and_expression
+      inclusive_or_expression: exclusive_or_expression., *
     Reduce:
       * -> [inclusive_or_expression]
     Goto:
@@ -9175,8 +9175,8 @@ Parser Debug States:
 
   State 116:
     Kernel Items:
-      logical_or_expression: logical_and_expression., *
       logical_and_expression: logical_and_expression.AND_OP inclusive_or_expression
+      logical_or_expression: logical_and_expression., *
     Reduce:
       * -> [logical_or_expression]
     Goto:
@@ -9184,9 +9184,9 @@ Parser Debug States:
 
   State 117:
     Kernel Items:
+      logical_or_expression: logical_or_expression.OR_OP logical_and_expression
       conditional_expression: logical_or_expression., *
       conditional_expression: logical_or_expression.'?' expression ':' conditional_expression
-      logical_or_expression: logical_or_expression.OR_OP logical_and_expression
     Reduce:
       * -> [conditional_expression]
     Goto:
@@ -9195,10 +9195,10 @@ Parser Debug States:
 
   State 118:
     Kernel Items:
-      additive_expression: multiplicative_expression., *
       multiplicative_expression: multiplicative_expression.'*' cast_expression
       multiplicative_expression: multiplicative_expression.'/' cast_expression
       multiplicative_expression: multiplicative_expression.'%' cast_expression
+      additive_expression: multiplicative_expression., *
     Reduce:
       * -> [additive_expression]
     Goto:
@@ -9236,11 +9236,11 @@ Parser Debug States:
 
   State 121:
     Kernel Items:
-      equality_expression: relational_expression., *
       relational_expression: relational_expression.'<' shift_expression
       relational_expression: relational_expression.'>' shift_expression
       relational_expression: relational_expression.LE_OP shift_expression
       relational_expression: relational_expression.GE_OP shift_expression
+      equality_expression: relational_expression., *
     Reduce:
       * -> [equality_expression]
     Goto:
@@ -9259,9 +9259,9 @@ Parser Debug States:
 
   State 123:
     Kernel Items:
-      relational_expression: shift_expression., *
       shift_expression: shift_expression.LEFT_OP additive_expression
       shift_expression: shift_expression.RIGHT_OP additive_expression
+      relational_expression: shift_expression., *
     Reduce:
       * -> [relational_expression]
     Goto:
@@ -9338,8 +9338,8 @@ Parser Debug States:
 
   State 126:
     Kernel Items:
-      assignment_expression: unary_expression.assignment_operator assignment_expression
       cast_expression: unary_expression., *
+      assignment_expression: unary_expression.assignment_operator assignment_expression
     Reduce:
       * -> [cast_expression]
     Goto:
@@ -9460,9 +9460,9 @@ Parser Debug States:
 
   State 136:
     Kernel Items:
-      parameter_list: parameter_list.',' parameter_declaration
       parameter_type_list: parameter_list., ')'
       parameter_type_list: parameter_list.',' ELLIPSIS
+      parameter_list: parameter_list.',' parameter_declaration
     Reduce:
       ')' -> [parameter_type_list]
     Goto:
@@ -9542,8 +9542,8 @@ Parser Debug States:
 
   State 145:
     Kernel Items:
-      struct_declaration_list: struct_declaration_list.struct_declaration
       struct_or_union_specifier: struct_or_union '{' struct_declaration_list.'}'
+      struct_declaration_list: struct_declaration_list.struct_declaration
     Reduce:
       (nil)
     Goto:
@@ -9715,8 +9715,8 @@ Parser Debug States:
 
   State 152:
     Kernel Items:
-      enumerator_list: enumerator_list.',' enumerator
       enum_specifier: ENUM IDENTIFIER '{' enumerator_list.'}'
+      enumerator_list: enumerator_list.',' enumerator
     Reduce:
       (nil)
     Goto:
@@ -9798,8 +9798,8 @@ Parser Debug States:
 
   State 158:
     Kernel Items:
-      expression: expression.',' assignment_expression
       primary_expression: '(' expression.')'
+      expression: expression.',' assignment_expression
     Reduce:
       (nil)
     Goto:
@@ -11322,9 +11322,9 @@ Parser Debug States:
 
   State 228:
     Kernel Items:
+      declarator: pointer.direct_declarator
       abstract_declarator: pointer., *
       abstract_declarator: pointer.direct_abstract_declarator
-      declarator: pointer.direct_declarator
     Reduce:
       * -> [abstract_declarator]
     Goto:
@@ -11352,8 +11352,8 @@ Parser Debug States:
 
   State 231:
     Kernel Items:
-      parameter_list: parameter_list ','.parameter_declaration
       parameter_type_list: parameter_list ','.ELLIPSIS
+      parameter_list: parameter_list ','.parameter_declaration
     Reduce:
       (nil)
     Goto:
@@ -11459,8 +11459,8 @@ Parser Debug States:
 
   State 237:
     Kernel Items:
-      struct_declarator_list: struct_declarator_list.',' struct_declarator
       struct_declaration: specifier_qualifier_list struct_declarator_list.';'
+      struct_declarator_list: struct_declarator_list.',' struct_declarator
     Reduce:
       (nil)
     Goto:
@@ -11501,8 +11501,8 @@ Parser Debug States:
 
   State 242:
     Kernel Items:
-      struct_declaration_list: struct_declaration_list.struct_declaration
       struct_or_union_specifier: struct_or_union IDENTIFIER '{' struct_declaration_list.'}'
+      struct_declaration_list: struct_declaration_list.struct_declaration
     Reduce:
       (nil)
     Goto:
@@ -11851,10 +11851,10 @@ Parser Debug States:
 
   State 264:
     Kernel Items:
-      additive_expression: additive_expression '+' multiplicative_expression., *
       multiplicative_expression: multiplicative_expression.'*' cast_expression
       multiplicative_expression: multiplicative_expression.'/' cast_expression
       multiplicative_expression: multiplicative_expression.'%' cast_expression
+      additive_expression: additive_expression '+' multiplicative_expression., *
     Reduce:
       * -> [additive_expression]
     Goto:
@@ -11864,10 +11864,10 @@ Parser Debug States:
 
   State 265:
     Kernel Items:
-      additive_expression: additive_expression '-' multiplicative_expression., *
       multiplicative_expression: multiplicative_expression.'*' cast_expression
       multiplicative_expression: multiplicative_expression.'/' cast_expression
       multiplicative_expression: multiplicative_expression.'%' cast_expression
+      additive_expression: additive_expression '-' multiplicative_expression., *
     Reduce:
       * -> [additive_expression]
     Goto:
@@ -11896,11 +11896,11 @@ Parser Debug States:
 
   State 268:
     Kernel Items:
-      equality_expression: equality_expression EQ_OP relational_expression., *
       relational_expression: relational_expression.'<' shift_expression
       relational_expression: relational_expression.'>' shift_expression
       relational_expression: relational_expression.LE_OP shift_expression
       relational_expression: relational_expression.GE_OP shift_expression
+      equality_expression: equality_expression EQ_OP relational_expression., *
     Reduce:
       * -> [equality_expression]
     Goto:
@@ -11911,11 +11911,11 @@ Parser Debug States:
 
   State 269:
     Kernel Items:
-      equality_expression: equality_expression NE_OP relational_expression., *
       relational_expression: relational_expression.'<' shift_expression
       relational_expression: relational_expression.'>' shift_expression
       relational_expression: relational_expression.LE_OP shift_expression
       relational_expression: relational_expression.GE_OP shift_expression
+      equality_expression: equality_expression NE_OP relational_expression., *
     Reduce:
       * -> [equality_expression]
     Goto:
@@ -11943,8 +11943,8 @@ Parser Debug States:
 
   State 272:
     Kernel Items:
-      inclusive_or_expression: inclusive_or_expression '|' exclusive_or_expression., *
       exclusive_or_expression: exclusive_or_expression.'^' and_expression
+      inclusive_or_expression: inclusive_or_expression '|' exclusive_or_expression., *
     Reduce:
       * -> [inclusive_or_expression]
     Goto:
@@ -11961,8 +11961,8 @@ Parser Debug States:
 
   State 274:
     Kernel Items:
-      expression: expression.',' assignment_expression
       conditional_expression: logical_or_expression '?' expression.':' conditional_expression
+      expression: expression.',' assignment_expression
     Reduce:
       (nil)
     Goto:
@@ -11971,8 +11971,8 @@ Parser Debug States:
 
   State 275:
     Kernel Items:
-      logical_or_expression: logical_or_expression OR_OP logical_and_expression., *
       logical_and_expression: logical_and_expression.AND_OP inclusive_or_expression
+      logical_or_expression: logical_or_expression OR_OP logical_and_expression., *
     Reduce:
       * -> [logical_or_expression]
     Goto:
@@ -12038,8 +12038,8 @@ Parser Debug States:
 
   State 283:
     Kernel Items:
-      expression: expression.',' assignment_expression
       postfix_expression: postfix_expression '[' expression.']'
+      expression: expression.',' assignment_expression
     Reduce:
       (nil)
     Goto:
@@ -12056,9 +12056,9 @@ Parser Debug States:
 
   State 285:
     Kernel Items:
-      relational_expression: relational_expression '<' shift_expression., *
       shift_expression: shift_expression.LEFT_OP additive_expression
       shift_expression: shift_expression.RIGHT_OP additive_expression
+      relational_expression: relational_expression '<' shift_expression., *
     Reduce:
       * -> [relational_expression]
     Goto:
@@ -12067,9 +12067,9 @@ Parser Debug States:
 
   State 286:
     Kernel Items:
-      relational_expression: relational_expression '>' shift_expression., *
       shift_expression: shift_expression.LEFT_OP additive_expression
       shift_expression: shift_expression.RIGHT_OP additive_expression
+      relational_expression: relational_expression '>' shift_expression., *
     Reduce:
       * -> [relational_expression]
     Goto:
@@ -12078,9 +12078,9 @@ Parser Debug States:
 
   State 287:
     Kernel Items:
-      relational_expression: relational_expression GE_OP shift_expression., *
       shift_expression: shift_expression.LEFT_OP additive_expression
       shift_expression: shift_expression.RIGHT_OP additive_expression
+      relational_expression: relational_expression GE_OP shift_expression., *
     Reduce:
       * -> [relational_expression]
     Goto:
@@ -12089,9 +12089,9 @@ Parser Debug States:
 
   State 288:
     Kernel Items:
-      relational_expression: relational_expression LE_OP shift_expression., *
       shift_expression: shift_expression.LEFT_OP additive_expression
       shift_expression: shift_expression.RIGHT_OP additive_expression
+      relational_expression: relational_expression LE_OP shift_expression., *
     Reduce:
       * -> [relational_expression]
     Goto:

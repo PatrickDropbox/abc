@@ -110,6 +110,8 @@ type Clause struct {
 	// set by NewRule
 	LRLocation
 	Parent *Rule
+
+	SortId int
 }
 
 func NewClause(label *Token, body []*Token) *Clause {

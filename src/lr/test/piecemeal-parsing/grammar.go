@@ -679,8 +679,8 @@ Parser Debug States:
 
   State 10:
     Kernel Items:
-      expr: expr.op atom
       expr_list: expr_list expr., *
+      expr: expr.op atom
     Reduce:
       * -> [expr_list]
     Goto:
@@ -690,8 +690,8 @@ Parser Debug States:
 
   State 11:
     Kernel Items:
-      block: '{' expr_list.'}'
       expr_list: expr_list.expr
+      block: '{' expr_list.'}'
     Reduce:
       (nil)
     Goto:

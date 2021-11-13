@@ -78,6 +78,7 @@ func classifyDefinitions(
 
 	errStrs := []string{}
 
+	sortId := 1
 	for _, d := range parsed {
 		switch def := d.(type) {
 		case *parser.StartDeclaration:
@@ -135,6 +136,11 @@ func classifyDefinitions(
 						def.Loc().ShortString()))
 			}
 			rules[def.Name.Value] = def
+
+			for _, clause := range def.Clauses {
+				clause.SortId = sortId
+				sortId += 1
+			}
 		}
 	}
 
@@ -172,7 +178,6 @@ func bindTerms(
 
 	errStrs := []string{}
 
-	sortId := 1
 	for name, rule := range rules {
 		term, ok := terms[name]
 		if !ok {
@@ -187,11 +192,10 @@ func bindTerms(
 		clauses := []*Clause{}
 		for _, clause := range rule.Clauses {
 			clause := &Clause{
-				SortId:   sortId,
+				SortId:   clause.SortId,
 				Clause:   clause,
 				Bindings: []*Term{},
 			}
-			sortId += 1
 
 			for _, id_or_char := range clause.Body {
 				t, ok := terms[id_or_char.Value]
