@@ -8,7 +8,8 @@ import (
 
 func LRSymbolTypeToYaccTokenNum(tt parser.LRSymbolId) int {
 	switch tt {
-	case ':', '<', '>', '|', ';': return int(tt)
+	case ':', '<', '>', '|', ';':
+		return int(tt)
 	case parser.LRTokenToken:
 		return TOKEN
 	case parser.LRTypeToken:
@@ -23,6 +24,8 @@ func LRSymbolTypeToYaccTokenNum(tt parser.LRSymbolId) int {
 		return LABEL
 	case parser.LRIdentifierToken:
 		return IDENTIFIER
+	case parser.LRCharacterToken:
+		return CHARACTER
 	case parser.LRSectionMarkerToken:
 		return SECTION_MARKER
 	case parser.LRSectionContentToken:

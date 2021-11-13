@@ -52,9 +52,14 @@ func (pc *ParseContext) Lex(val *LrSymType) int {
 
 	tok := pc.Tokens[0]
 	pc.Tokens = pc.Tokens[1:]
-	val.Token = tok.(*parser.Token)
+	switch t := tok.(type) {
+	case *parser.Token:
+		val.Token = t
+	case *parser.LRGenericSymbol:
+		val.Generic_ = t
+	}
 
-	pc.currPos = val.Token.LRLocation
+	pc.currPos = tok.Loc()
 
 	return LRSymbolTypeToYaccTokenNum(tok.Id())
 }
