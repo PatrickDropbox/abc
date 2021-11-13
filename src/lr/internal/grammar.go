@@ -29,6 +29,8 @@ type Term struct {
 	Name string
 	parser.LRLocation
 
+	SymbolId parser.LRSymbolId
+
 	*parser.TermDeclaration
 
 	// Rule and ClauseBindings are nil iff the term is terminal
@@ -108,6 +110,7 @@ func classifyDefinitions(
 				terms[term.Value] = &Term{
 					Name:            term.Value,
 					LRLocation:      term.LRLocation,
+					SymbolId:        term.Id(),
 					TermDeclaration: def,
 					Rule:            nil,
 					Reachable:       false,
@@ -162,7 +165,6 @@ func bindTerms(
 	terms map[string]*Term,
 	rules map[string]*parser.Rule,
 	startRuleNames []string) (
-	map[string]*Term,
 	[]*Term,
 	[]string) {
 
@@ -187,22 +189,6 @@ func bindTerms(
 				t, ok := terms[id_or_char.Value]
 				if ok {
 					clause.Bindings = append(clause.Bindings, t)
-				} else if id_or_char.Id() == parser.LRCharacterToken {
-					term := &Term{
-						Name:       id_or_char.Value,
-						LRLocation: id_or_char.Loc(),
-						TermDeclaration: &parser.TermDeclaration{
-							IsTerminal: true,
-							ValueType:  &parser.Token{Value: Generic},
-							Terms:      []*parser.Token{id_or_char},
-						},
-						Rule:      nil,
-						Reachable: false,
-					}
-
-					terms[id_or_char.Value] = term
-
-					clause.Bindings = append(clause.Bindings, term)
 				} else {
 					errStrs = append(
 						errStrs,
@@ -249,7 +235,7 @@ func bindTerms(
 		}
 	}
 
-	return terms, startTerms, errStrs
+	return startTerms, errStrs
 }
 
 func checkReachability(starts []*Term, terms map[string]*Term) []string {
@@ -355,7 +341,7 @@ func NewGrammar(
 		errStrs = append(errStrs, "No rules specified in grammar.")
 	}
 
-	terms, startTerms, bindErrStrs := bindTerms(terms, rules, startRuleNames)
+	startTerms, bindErrStrs := bindTerms(terms, rules, startRuleNames)
 	errStrs = append(errStrs, bindErrStrs...)
 
 	errStrs = append(errStrs, checkReachability(startTerms, terms)...)

@@ -14,13 +14,13 @@
 // a single token by the lexer.
 %token <Token> LABEL
 
-%token SECTION_MARKER
+%token '<' '>' '|' ';' SECTION_MARKER
 %token <Token> CHARACTER IDENTIFIER
 
 %token <Token> SECTION_CONTENT
 
 %type rword
-%type <Tokens> nonempty_ident_list rule_body
+%type <Tokens> nonempty_ident_list nonempty_id_or_char_list id_or_char_list
 
 %type <Definition> def
 %type <Definitions> defs
@@ -56,8 +56,8 @@ defs ->
 // TODO: handle language specific boiler plate, union/struct
 def ->
     // type / token declaration
-    term_decl  : rword '<' IDENTIFIER '>' nonempty_ident_list |
-    untyped_term_decl  : rword nonempty_ident_list |
+    term_decl  : rword '<' IDENTIFIER '>' nonempty_id_or_char_list |
+    untyped_term_decl  : rword nonempty_id_or_char_list |
     // start declaration
     start_decl : START nonempty_ident_list |
     rule       : rule
@@ -70,20 +70,25 @@ nonempty_ident_list ->
     add   : nonempty_ident_list IDENTIFIER |
     ident : IDENTIFIER
 
-rule ->
-    unlabeled_clause : RULE_DEF rule_body |
-    clauses          : RULE_DEF labeled_clauses
+nonempty_id_or_char_list ->
+    add_id   : nonempty_id_or_char_list IDENTIFIER |
+    add_char : nonempty_id_or_char_list CHARACTER |
+    id       : IDENTIFIER |
+    char     : CHARACTER
 
-rule_body ->
-    add_id   : rule_body IDENTIFIER |
-    add_char : rule_body CHARACTER |
-    nil      :
+id_or_char_list ->
+    list : nonempty_id_or_char_list |
+    nil  :
+
+rule ->
+    unlabeled_clause : RULE_DEF id_or_char_list |
+    clauses          : RULE_DEF labeled_clauses
 
 labeled_clauses ->
     add    : labeled_clauses '|' labeled_clause |
     clause : labeled_clause
 
-labeled_clause -> LABEL rule_body
+labeled_clause -> LABEL id_or_char_list
 
 %%lang_specs{
 # The additional lang_specs section is specified in yaml

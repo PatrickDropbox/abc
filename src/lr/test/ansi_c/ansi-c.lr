@@ -10,6 +10,9 @@
 
 %token CASE DEFAULT IF ELSE SWITCH WHILE DO FOR GOTO CONTINUE BREAK RETURN
 
+%token '(' ')' '{' '}' '[' ']' ';' ':' ',' '='
+%token '?' '*' '/' '-' '+' '%' '&' '|' '!' '.' '^' '<' '>' '~'
+
 %type statement
 %type logical_or_expression
 %type constant_expression

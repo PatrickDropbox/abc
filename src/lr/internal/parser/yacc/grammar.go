@@ -70,7 +70,7 @@ const LrEofCode = 1
 const LrErrCode = 2
 const LrInitialStackSize = 16
 
-//line grammar.y:192
+//line grammar.y:206
 
 func init() {
 	LrErrorVerbose = true
@@ -81,55 +81,64 @@ var LrExca = [...]int{
 	-1, 1,
 	1, -1,
 	-2, 0,
+	-1, 14,
+	11, 21,
+	12, 21,
+	-2, 10,
+	-1, 38,
+	11, 21,
+	12, 21,
+	-2, 9,
 }
 
 const LrPrivate = 57344
 
-const LrLast = 35
+const LrLast = 43
 
 var LrAct = [...]int{
-	14, 19, 17, 28, 31, 15, 16, 23, 33, 13,
-	12, 26, 27, 25, 15, 30, 24, 7, 8, 5,
-	22, 9, 3, 29, 20, 11, 1, 10, 21, 18,
-	32, 6, 34, 2, 4,
+	22, 23, 15, 32, 35, 14, 16, 17, 27, 37,
+	13, 24, 20, 16, 17, 12, 16, 17, 29, 30,
+	34, 31, 28, 19, 7, 8, 5, 33, 9, 26,
+	24, 1, 3, 10, 36, 11, 38, 25, 21, 6,
+	2, 18, 4,
 }
 
 var LrPact = [...]int{
-	13, -1000, 13, -4, -6, 3, -1000, -1000, -1000, 15,
-	10, -7, -1000, 5, 2, -1000, 2, 0, -14, -1000,
-	-1000, -1000, 4, -1000, -12, -1000, -1000, -1000, 15, 0,
-	-5, 3, -1000, -1000, 2,
+	20, -1000, 20, 1, -5, 12, -1000, -1000, -1000, 2,
+	19, -6, -1000, 11, -1000, 7, -1000, -1000, 10, -1000,
+	7, -14, -1000, -1000, 5, -1000, 9, -1000, -12, -1000,
+	-1000, -1000, 21, 7, -4, 5, -1000, -1000, -1000,
 }
 
 var LrPgo = [...]int{
-	0, 34, 0, 2, 22, 33, 31, 1, 29, 28,
-	27, 26,
+	0, 42, 41, 0, 2, 32, 40, 39, 1, 38,
+	37, 33, 31,
 }
 
 var LrR1 = [...]int{
-	0, 11, 10, 10, 9, 5, 5, 5, 5, 4,
-	4, 4, 4, 1, 1, 2, 2, 6, 6, 3,
-	3, 3, 8, 8, 7,
+	0, 12, 11, 11, 10, 6, 6, 6, 6, 5,
+	5, 5, 5, 1, 1, 2, 2, 3, 3, 3,
+	3, 4, 4, 7, 7, 9, 9, 8,
 }
 
 var LrR2 = [...]int{
 	0, 2, 2, 0, 3, 2, 3, 1, 2, 5,
-	2, 2, 1, 1, 1, 2, 1, 2, 2, 2,
-	2, 0, 3, 1, 2,
+	2, 2, 1, 1, 1, 2, 1, 2, 2, 1,
+	1, 1, 0, 2, 2, 3, 1, 2,
 }
 
 var LrChk = [...]int{
-	-1000, -11, -5, -4, -1, 6, -6, 4, 5, 8,
-	-10, -4, 14, 15, -2, 11, -2, -3, -8, -7,
-	9, -9, 10, 14, 11, 11, 11, 12, 17, -3,
-	11, 16, -7, 13, -2,
+	-1000, -12, -6, -5, -1, 6, -7, 4, 5, 8,
+	-11, -5, 14, 15, -3, -4, 11, 12, -2, 11,
+	-4, -9, -3, -8, 9, -10, 10, 14, 11, 11,
+	12, 11, 17, -4, 11, 16, -8, 13, -3,
 }
 
 var LrDef = [...]int{
-	0, -2, 3, 7, 0, 0, 12, 13, 14, 21,
-	1, 5, 8, 0, 10, 16, 11, 17, 18, 23,
-	21, 2, 0, 6, 0, 15, 19, 20, 0, 24,
-	0, 0, 22, 4, 9,
+	0, -2, 3, 7, 0, 0, 12, 13, 14, 22,
+	1, 5, 8, 0, -2, 0, 19, 20, 11, 16,
+	23, 24, 21, 26, 22, 2, 0, 6, 0, 17,
+	18, 15, 0, 27, 0, 0, 25, 4, -2,
 }
 
 var LrTok1 = [...]int{
@@ -594,47 +603,65 @@ Lrdefault:
 		LrDollar = LrS[Lrpt-2 : Lrpt+1]
 //line grammar.y:154
 		{
-			LrVAL.Rule, _ = Lrlex.(*ParseContext).UnlabeledClauseToRule(LrDollar[1].Token, LrDollar[2].Tokens)
+			LrVAL.Tokens, _ = Lrlex.(*ParseContext).AddIdToNonemptyIdOrCharList(LrDollar[1].Tokens, LrDollar[2].Token)
 		}
 	case 18:
 		LrDollar = LrS[Lrpt-2 : Lrpt+1]
 //line grammar.y:158
 		{
-			LrVAL.Rule, _ = Lrlex.(*ParseContext).ClausesToRule(LrDollar[1].Token, LrDollar[2].Clauses)
+			LrVAL.Tokens, _ = Lrlex.(*ParseContext).AddCharToNonemptyIdOrCharList(LrDollar[1].Tokens, LrDollar[2].Token)
 		}
 	case 19:
-		LrDollar = LrS[Lrpt-2 : Lrpt+1]
-//line grammar.y:164
+		LrDollar = LrS[Lrpt-1 : Lrpt+1]
+//line grammar.y:162
 		{
-			LrVAL.Tokens, _ = Lrlex.(*ParseContext).AddIdToRuleBody(LrDollar[1].Tokens, LrDollar[2].Token)
+			LrVAL.Tokens, _ = Lrlex.(*ParseContext).IdToNonemptyIdOrCharList(LrDollar[1].Token)
 		}
 	case 20:
-		LrDollar = LrS[Lrpt-2 : Lrpt+1]
-//line grammar.y:168
+		LrDollar = LrS[Lrpt-1 : Lrpt+1]
+//line grammar.y:166
 		{
-			LrVAL.Tokens, _ = Lrlex.(*ParseContext).AddCharToRuleBody(LrDollar[1].Tokens, LrDollar[2].Token)
+			LrVAL.Tokens, _ = Lrlex.(*ParseContext).CharToNonemptyIdOrCharList(LrDollar[1].Token)
 		}
 	case 21:
-		LrDollar = LrS[Lrpt-0 : Lrpt+1]
-//line grammar.y:171
+		LrDollar = LrS[Lrpt-1 : Lrpt+1]
+//line grammar.y:172
 		{
-			LrVAL.Tokens, _ = Lrlex.(*ParseContext).NilToRuleBody()
+			LrVAL.Tokens, _ = Lrlex.(*ParseContext).ListToIdOrCharList(LrDollar[1].Tokens)
 		}
 	case 22:
-		LrDollar = LrS[Lrpt-3 : Lrpt+1]
-//line grammar.y:177
+		LrDollar = LrS[Lrpt-0 : Lrpt+1]
+//line grammar.y:175
 		{
-			LrVAL.Clauses, _ = Lrlex.(*ParseContext).AddToLabeledClauses(LrDollar[1].Clauses, nil, LrDollar[3].Clause)
+			LrVAL.Tokens, _ = Lrlex.(*ParseContext).NilToIdOrCharList()
 		}
 	case 23:
-		LrDollar = LrS[Lrpt-1 : Lrpt+1]
+		LrDollar = LrS[Lrpt-2 : Lrpt+1]
 //line grammar.y:181
 		{
-			LrVAL.Clauses, _ = Lrlex.(*ParseContext).ClauseToLabeledClauses(LrDollar[1].Clause)
+			LrVAL.Rule, _ = Lrlex.(*ParseContext).UnlabeledClauseToRule(LrDollar[1].Token, LrDollar[2].Tokens)
 		}
 	case 24:
 		LrDollar = LrS[Lrpt-2 : Lrpt+1]
-//line grammar.y:187
+//line grammar.y:185
+		{
+			LrVAL.Rule, _ = Lrlex.(*ParseContext).ClausesToRule(LrDollar[1].Token, LrDollar[2].Clauses)
+		}
+	case 25:
+		LrDollar = LrS[Lrpt-3 : Lrpt+1]
+//line grammar.y:191
+		{
+			LrVAL.Clauses, _ = Lrlex.(*ParseContext).AddToLabeledClauses(LrDollar[1].Clauses, nil, LrDollar[3].Clause)
+		}
+	case 26:
+		LrDollar = LrS[Lrpt-1 : Lrpt+1]
+//line grammar.y:195
+		{
+			LrVAL.Clauses, _ = Lrlex.(*ParseContext).ClauseToLabeledClauses(LrDollar[1].Clause)
+		}
+	case 27:
+		LrDollar = LrS[Lrpt-2 : Lrpt+1]
+//line grammar.y:201
 		{
 			LrVAL.Clause, _ = Lrlex.(*ParseContext).ToLabeledClause(LrDollar[1].Token, LrDollar[2].Tokens)
 		}

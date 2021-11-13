@@ -49,7 +49,7 @@ import (
 %token <Token> SECTION_CONTENT
 
 %type <Generic_> rword
-%type <Tokens> nonempty_ident_list rule_body
+%type <Tokens> nonempty_ident_list nonempty_id_or_char_list id_or_char_list
 
 %type <Definition> def
 %type <Definitions> defs
@@ -113,11 +113,11 @@ defs:
 // TODO: handle language specific boiler plate, union/struct
 def:
     // type / token declaration
-    rword '<' IDENTIFIER '>' nonempty_ident_list {
+    rword '<' IDENTIFIER '>' nonempty_id_or_char_list {
         $$, _ =  Lrlex.(*ParseContext).TermDeclToDef($1, nil, $3, nil, $5)
     }
     |
-    rword nonempty_ident_list {
+    rword nonempty_id_or_char_list {
         $$, _ =  Lrlex.(*ParseContext).UntypedTermDeclToDef($1, $2)
     }
     |
@@ -150,26 +150,40 @@ nonempty_ident_list:
     }
     ;
 
+nonempty_id_or_char_list:
+    id_or_char_list IDENTIFIER {
+        $$, _ = Lrlex.(*ParseContext).AddIdToNonemptyIdOrCharList($1, $2)
+    }
+    |
+    id_or_char_list CHARACTER {
+        $$, _ = Lrlex.(*ParseContext).AddCharToNonemptyIdOrCharList($1, $2)
+    }
+    |
+    IDENTIFIER {
+        $$, _ = Lrlex.(*ParseContext).IdToNonemptyIdOrCharList($1)
+    }
+    |
+    CHARACTER {
+        $$, _ = Lrlex.(*ParseContext).CharToNonemptyIdOrCharList($1)
+    }
+    ;
+
+id_or_char_list:
+    nonempty_id_or_char_list {
+        $$, _ = Lrlex.(*ParseContext).ListToIdOrCharList($1)
+    }
+    | {
+        $$, _ = Lrlex.(*ParseContext).NilToIdOrCharList()
+    }
+    ;
+
 rule:
-    RULE_DEF rule_body {
+    RULE_DEF id_or_char_list {
         $$, _ = Lrlex.(*ParseContext).UnlabeledClauseToRule($1, $2)
     }
     |
     RULE_DEF labeled_clauses {
         $$, _ = Lrlex.(*ParseContext).ClausesToRule($1, $2)
-    }
-    ;
-
-rule_body:
-    rule_body IDENTIFIER {
-        $$, _ = Lrlex.(*ParseContext).AddIdToRuleBody($1, $2)
-    }
-    |
-    rule_body CHARACTER {
-        $$, _ = Lrlex.(*ParseContext).AddCharToRuleBody($1, $2)
-    }
-    | {
-        $$, _ = Lrlex.(*ParseContext).NilToRuleBody()
     }
     ;
 
@@ -184,7 +198,7 @@ labeled_clauses:
     ;
 
 labeled_clause:
-    LABEL rule_body {
+    LABEL id_or_char_list {
         $$, _ = Lrlex.(*ParseContext).ToLabeledClause($1, $2)
     }
     ;

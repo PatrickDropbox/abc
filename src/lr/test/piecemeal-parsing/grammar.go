@@ -51,34 +51,34 @@ type Lexer interface {
 }
 
 type Reducer interface {
-	// 17:4: expr_list -> add: ...
+	// 18:4: expr_list -> add: ...
 	AddToExprList(ExprList_ []Expr, Expr_ Expr) ([]Expr, error)
 
-	// 18:4: expr_list -> nil: ...
+	// 19:4: expr_list -> nil: ...
 	NilToExprList() ([]Expr, error)
 
-	// 21:4: atom -> id: ...
+	// 22:4: atom -> id: ...
 	IdToAtom(Id_ *Id) (Expr, error)
 
-	// 22:4: atom -> error: ...
+	// 23:4: atom -> error: ...
 	ErrorToAtom(Error_ *Err) (Expr, error)
 
-	// 23:4: atom -> block: ...
+	// 24:4: atom -> block: ...
 	BlockToAtom(Block_ *Block) (Expr, error)
 
-	// 26:4: expr -> atom: ...
+	// 27:4: expr -> atom: ...
 	AtomToExpr(Atom_ Expr) (Expr, error)
 
-	// 27:4: expr -> binary: ...
+	// 28:4: expr -> binary: ...
 	BinaryToExpr(Expr_ Expr, Op_ *GenericSymbol, Atom_ Expr) (Expr, error)
 
-	// 30:4: op -> plus: ...
+	// 31:4: op -> plus: ...
 	PlusToOp(char *GenericSymbol) (*GenericSymbol, error)
 
-	// 31:4: op -> minus: ...
+	// 32:4: op -> minus: ...
 	MinusToOp(char *GenericSymbol) (*GenericSymbol, error)
 
-	// 33:12: block -> ...
+	// 34:12: block -> ...
 	ToBlock(char *GenericSymbol, ExprList_ []Expr, char2 *GenericSymbol) (*Block, error)
 }
 
@@ -173,10 +173,6 @@ func (i SymbolId) String() string {
 		return "$"
 	case _WildcardMarker:
 		return "*"
-	case IdToken:
-		return "ID"
-	case ErrorToken:
-		return "ERROR"
 	case '+':
 		return "'+'"
 	case '-':
@@ -185,6 +181,10 @@ func (i SymbolId) String() string {
 		return "'{'"
 	case '}':
 		return "'}'"
+	case IdToken:
+		return "ID"
+	case ErrorToken:
+		return "ERROR"
 	case ExprListType:
 		return "expr_list"
 	case AtomType:
@@ -552,9 +552,9 @@ var _ActionTable = _ActionTableType{
 	{_State1, ExprListType}:     _GotoState3Action,
 	{_State2, '{'}:              _GotoState5Action,
 	{_State2, BlockType}:        _GotoState4Action,
+	{_State3, '{'}:              _GotoState5Action,
 	{_State3, IdToken}:          _GotoState7Action,
 	{_State3, ErrorToken}:       _GotoState6Action,
-	{_State3, '{'}:              _GotoState5Action,
 	{_State3, AtomType}:         _GotoState8Action,
 	{_State3, ExprType}:         _GotoState10Action,
 	{_State3, BlockType}:        _GotoState9Action,
@@ -562,16 +562,16 @@ var _ActionTable = _ActionTableType{
 	{_State10, '+'}:             _GotoState12Action,
 	{_State10, '-'}:             _GotoState13Action,
 	{_State10, OpType}:          _GotoState14Action,
-	{_State11, IdToken}:         _GotoState7Action,
-	{_State11, ErrorToken}:      _GotoState6Action,
 	{_State11, '{'}:             _GotoState5Action,
 	{_State11, '}'}:             _GotoState15Action,
+	{_State11, IdToken}:         _GotoState7Action,
+	{_State11, ErrorToken}:      _GotoState6Action,
 	{_State11, AtomType}:        _GotoState8Action,
 	{_State11, ExprType}:        _GotoState10Action,
 	{_State11, BlockType}:       _GotoState9Action,
+	{_State14, '{'}:             _GotoState5Action,
 	{_State14, IdToken}:         _GotoState7Action,
 	{_State14, ErrorToken}:      _GotoState6Action,
-	{_State14, '{'}:             _GotoState5Action,
 	{_State14, AtomType}:        _GotoState16Action,
 	{_State14, BlockType}:       _GotoState9Action,
 	{_State1, _WildcardMarker}:  _ReduceNilToExprListAction,
@@ -589,11 +589,11 @@ var _ActionTable = _ActionTableType{
 
 var _ExpectedTerminals = map[_StateId][]SymbolId{
 	_State2:  []SymbolId{'{'},
-	_State3:  []SymbolId{IdToken, ErrorToken, '{', _EndMarker},
+	_State3:  []SymbolId{'{', IdToken, ErrorToken, _EndMarker},
 	_State4:  []SymbolId{_EndMarker},
 	_State10: []SymbolId{'+', '-'},
-	_State11: []SymbolId{IdToken, ErrorToken, '{', '}'},
-	_State14: []SymbolId{IdToken, ErrorToken, '{'},
+	_State11: []SymbolId{'{', '}', IdToken, ErrorToken},
+	_State14: []SymbolId{'{', IdToken, ErrorToken},
 }
 
 /*
@@ -622,9 +622,9 @@ Parser Debug States:
     Reduce:
       $ -> [#accept]
     Goto:
+      '{' -> State 5
       ID -> State 7
       ERROR -> State 6
-      '{' -> State 5
       atom -> State 8
       expr -> State 10
       block -> State 9
@@ -695,10 +695,10 @@ Parser Debug States:
     Reduce:
       (nil)
     Goto:
-      ID -> State 7
-      ERROR -> State 6
       '{' -> State 5
       '}' -> State 15
+      ID -> State 7
+      ERROR -> State 6
       atom -> State 8
       expr -> State 10
       block -> State 9
@@ -725,9 +725,9 @@ Parser Debug States:
     Reduce:
       (nil)
     Goto:
+      '{' -> State 5
       ID -> State 7
       ERROR -> State 6
-      '{' -> State 5
       atom -> State 16
       block -> State 9
 

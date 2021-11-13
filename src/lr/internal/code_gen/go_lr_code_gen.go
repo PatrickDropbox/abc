@@ -197,7 +197,7 @@ func (gen *goCodeGen) populateCodeGenVariables() error {
 		term.CodeGenType = gen.Obj(valueType)
 
 		symbolConst := ""
-		if term.Terms[0].Id() == parser.LRCharacterToken {
+		if term.SymbolId == parser.LRCharacterToken {
 			symbolConst = term.Name
 		} else {
 			symbolConst = gen.Prefix + snakeToCamel(term.Name)
@@ -275,9 +275,11 @@ func (gen *goCodeGen) generateTerminalSymbolIds() {
 	l("")
 	l("const (")
 	gen.PushIndent()
-	for idx, term := range gen.Terminals {
-		if term.Terms[0].Id() == parser.LRIdentifierToken {
-			l("%s = %s(%d)", term.CodeGenSymbolConst, gen.symbolId, 256+idx)
+	nextId := 256
+	for _, term := range gen.Terminals {
+		if term.SymbolId == parser.LRIdentifierToken {
+			l("%s = %s(%d)", term.CodeGenSymbolConst, gen.symbolId, nextId)
+			nextId += 1
 		}
 	}
 	gen.PopIndent()
@@ -294,7 +296,7 @@ func (gen *goCodeGen) generateNonTerminalSymbolIds() {
 	l("case %s: return \"$\"", gen.endSymbol)
 	l("case %s: return \"*\"", gen.wildcardSymbol)
 	for _, term := range gen.Terminals {
-		if term.Terms[0].Id() == parser.LRCharacterToken {
+		if term.SymbolId == parser.LRCharacterToken {
 			escaped := term.Name
 			if term.Name == "'\"'" {
 				escaped = "'\\\"'"
@@ -420,7 +422,7 @@ func (gen *goCodeGen) generateReducerInterface() {
 			params := paramList{}
 			for _, term := range clause.Bindings {
 				paramName := ""
-				if term.Terms[0].Id() == parser.LRCharacterToken {
+				if term.SymbolId == parser.LRCharacterToken {
 					paramName = "char"
 				} else {
 					// hack: append "_" to the end of the name ensures the

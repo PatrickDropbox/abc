@@ -123,15 +123,37 @@ func (Reducer) IdentToNonemptyIdentList(ident *Token) ([]*Token, error) {
 	return []*Token{ident}, nil
 }
 
-func (Reducer) AddIdToRuleBody(body []*Token, id *Token) ([]*Token, error) {
-	return append(body, id), nil
+func (Reducer) AddIdToNonemptyIdOrCharList(
+	list []*Token,
+	id *Token) (
+	[]*Token,
+	error) {
+
+	return append(list, id), nil
 }
 
-func (Reducer) AddCharToRuleBody(body []*Token, char *Token) ([]*Token, error) {
-	return append(body, char), nil
+func (Reducer) AddCharToNonemptyIdOrCharList(
+	list []*Token,
+	char *Token) (
+	[]*Token,
+	error) {
+
+	return append(list, char), nil
 }
 
-func (Reducer) NilToRuleBody() ([]*Token, error) {
+func (Reducer) IdToNonemptyIdOrCharList(id *Token) ([]*Token, error) {
+	return []*Token{id}, nil
+}
+
+func (Reducer) CharToNonemptyIdOrCharList(char *Token) ([]*Token, error) {
+	return []*Token{char}, nil
+}
+
+func (Reducer) ListToIdOrCharList(list []*Token) ([]*Token, error) {
+	return list, nil
+}
+
+func (Reducer) NilToIdOrCharList() ([]*Token, error) {
 	return []*Token{}, nil
 }
 
