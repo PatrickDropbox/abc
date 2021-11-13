@@ -44,12 +44,12 @@ import (
 %token <Token> LABEL
 
 %token <Generic_> LT GT OR SEMICOLON SECTION_MARKER
-%token <Token> IDENTIFIER
+%token <Token> IDENTIFIER CHARACTER
 
 %token <Token> SECTION_CONTENT
 
 %type <Generic_> rword
-%type <Tokens> nonempty_ident_list ident_list
+%type <Tokens> nonempty_ident_list rule_body
 
 %type <Definition> def
 %type <Definitions> defs
@@ -150,22 +150,26 @@ nonempty_ident_list:
     }
     ;
 
-ident_list:
-    nonempty_ident_list {
-        $$, _ = Lrlex.(*ParseContext).NonEmptyListToIdentList($1)
-    }
-    | {
-        $$, _ = Lrlex.(*ParseContext).NilToIdentList()
-    }
-    ;
-
 rule:
-    RULE_DEF ident_list {
+    RULE_DEF rule_body {
         $$, _ = Lrlex.(*ParseContext).UnlabeledClauseToRule($1, $2)
     }
     |
     RULE_DEF labeled_clauses {
         $$, _ = Lrlex.(*ParseContext).ClausesToRule($1, $2)
+    }
+    ;
+
+rule_body:
+    rule_body IDENTIFIER {
+        $$, _ = Lrlex.(*ParseContext).AddIdToRuleBody($1, $2)
+    }
+    |
+    rule_body CHARACTER {
+        $$, _ = Lrlex.(*ParseContext).AddCharToRuleBody($1, $2)
+    }
+    | {
+        $$, _ = Lrlex.(*ParseContext).NilToRuleBody()
     }
     ;
 
@@ -180,7 +184,7 @@ labeled_clauses:
     ;
 
 labeled_clause:
-    LABEL ident_list {
+    LABEL rule_body {
         $$, _ = Lrlex.(*ParseContext).ToLabeledClause($1, $2)
     }
     ;

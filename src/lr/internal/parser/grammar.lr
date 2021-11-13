@@ -15,12 +15,12 @@
 %token <Token> LABEL
 
 %token LT GT OR SEMICOLON SECTION_MARKER
-%token <Token> IDENTIFIER
+%token <Token> CHARACTER IDENTIFIER
 
 %token <Token> SECTION_CONTENT
 
 %type rword
-%type <Tokens> nonempty_ident_list ident_list
+%type <Tokens> nonempty_ident_list rule_body
 
 %type <Definition> def
 %type <Definitions> defs
@@ -70,19 +70,20 @@ nonempty_ident_list ->
     add   : nonempty_ident_list IDENTIFIER |
     ident : IDENTIFIER
 
-ident_list ->
-    non_empty_list : nonempty_ident_list |
-    nil   :
-
 rule ->
-    unlabeled_clause : RULE_DEF ident_list |
+    unlabeled_clause : RULE_DEF rule_body |
     clauses          : RULE_DEF labeled_clauses
+
+rule_body ->
+    add_id   : rule_body IDENTIFIER |
+    add_char : rule_body CHARACTER |
+    nil      :
 
 labeled_clauses ->
     add    : labeled_clauses OR labeled_clause |
     clause : labeled_clause
 
-labeled_clause -> LABEL ident_list
+labeled_clause -> LABEL rule_body
 
 %%lang_specs{
 # The additional lang_specs section is specified in yaml
