@@ -3,7 +3,6 @@
 // support for piecemeal block parsing.  Note that we still need to create a
 // pseudo ERROR atom as error placeholder.
 
-%token PLUS MINUS LBRACE RBRACE
 %token <Ident> ID
 %token <Err> ERROR
 
@@ -28,10 +27,10 @@ expr ->
     binary : expr op atom
 
 op ->
-    plus: PLUS |
-    minus: MINUS
+    plus: '+' |
+    minus: '-'
 
-block -> LBRACE expr_list RBRACE
+block -> '{' expr_list '}'
 
 %%lang_specs{
 # The additional lang_specs section is specified in yaml

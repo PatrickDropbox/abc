@@ -9,6 +9,13 @@ import (
 	"github.com/pattyshack/abc/src/lr/internal/parser"
 )
 
+var escapedChar = map[string]byte{
+	"'\\t'":  '\t',
+	"'\\n'":  '\n',
+	"'\\''":  '\'',
+	"'\\\\'": '\\',
+}
+
 type param struct {
 	name      string
 	paramType interface{}
@@ -189,11 +196,16 @@ func (gen *goCodeGen) populateCodeGenVariables() error {
 
 		term.CodeGenType = gen.Obj(valueType)
 
-		symbolConst := gen.Prefix + snakeToCamel(term.Name)
-		if term.IsTerminal {
-			symbolConst += "Token"
+		symbolConst := ""
+		if term.Terms[0].Id() == parser.LRCharacterToken {
+			symbolConst = term.Name
 		} else {
-			symbolConst += "Type"
+			symbolConst = gen.Prefix + snakeToCamel(term.Name)
+			if term.IsTerminal {
+				symbolConst += "Token"
+			} else {
+				symbolConst += "Type"
+			}
 		}
 
 		err := gen.check(symbolConst, term.LRLocation)
@@ -264,7 +276,9 @@ func (gen *goCodeGen) generateTerminalSymbolIds() {
 	l("const (")
 	gen.PushIndent()
 	for idx, term := range gen.Terminals {
-		l("%s = %s(%d)", term.CodeGenSymbolConst, gen.symbolId, 256+idx)
+		if term.Terms[0].Id() == parser.LRIdentifierToken {
+			l("%s = %s(%d)", term.CodeGenSymbolConst, gen.symbolId, 256+idx)
+		}
 	}
 	gen.PopIndent()
 	l(")")
@@ -280,7 +294,17 @@ func (gen *goCodeGen) generateNonTerminalSymbolIds() {
 	l("case %s: return \"$\"", gen.endSymbol)
 	l("case %s: return \"*\"", gen.wildcardSymbol)
 	for _, term := range gen.Terminals {
-		l("case %s: return \"%s\"", term.CodeGenSymbolConst, term.Name)
+		if term.Terms[0].Id() == parser.LRCharacterToken {
+			escaped := term.Name
+			if term.Name == "'\"'" {
+				escaped = "'\\\"'"
+			} else if escaped[1] == '\\' {
+				escaped = "'\\\\" + term.Name[2:]
+			}
+			l("case %s: return \"%s\"", term.CodeGenSymbolConst, escaped)
+		} else {
+			l("case %s: return \"%s\"", term.CodeGenSymbolConst, term.Name)
+		}
 	}
 	for _, term := range gen.NonTerminals {
 		l("case %s: return \"%s\"", term.CodeGenSymbolConst, term.Name)
@@ -395,11 +419,14 @@ func (gen *goCodeGen) generateReducerInterface() {
 
 			params := paramList{}
 			for _, term := range clause.Bindings {
-				paramName := term.Name
-
-				// hack: append "_" to the end of the name ensures the
-				// name is never a go keyword
-				paramName = snakeToCamel(paramName) + "_"
+				paramName := ""
+				if term.Terms[0].Id() == parser.LRCharacterToken {
+					paramName = "char"
+				} else {
+					// hack: append "_" to the end of the name ensures the
+					// name is never a go keyword
+					paramName = snakeToCamel(term.Name) + "_"
+				}
 
 				paramNameCount[paramName] += 1
 				cnt := paramNameCount[paramName]

@@ -94,13 +94,13 @@ func NewBasicLexer(input string) *BasicLexer {
 		switch str {
 		case "":
 		case "{":
-			tokens = append(tokens, &GenericSymbol{LbraceToken, Location{}})
+			tokens = append(tokens, &GenericSymbol{'{', Location{}})
 		case "}":
-			tokens = append(tokens, &GenericSymbol{RbraceToken, Location{}})
+			tokens = append(tokens, &GenericSymbol{'}', Location{}})
 		case "+":
-			tokens = append(tokens, &GenericSymbol{PlusToken, Location{}})
+			tokens = append(tokens, &GenericSymbol{'+', Location{}})
 		case "-":
-			tokens = append(tokens, &GenericSymbol{MinusToken, Location{}})
+			tokens = append(tokens, &GenericSymbol{'-', Location{}})
 		default:
 			tokens = append(
 				tokens,

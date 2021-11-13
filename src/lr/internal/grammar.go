@@ -62,7 +62,7 @@ func classifyDefinitions(
 	parsed []parser.Definition) (
 	map[string]*Term,
 	map[string]*parser.Rule,
-    []string,  // start rule(s)
+	[]string, // start rule(s)
 	[]string) { // error strings
 
 	terms := map[string]*Term{}
@@ -133,27 +133,27 @@ func classifyDefinitions(
 		}
 	}
 
-    startRules := []string{}
-    if start != nil {
-        ids := map[string]parser.LRLocation{}
-        for _, id := range start.Ids {
-            prev, ok := ids[id.Value]
-            if ok {
-                errStrs = append(
-                    errStrs,
-                    fmt.Sprintf(
-                        "Duplicate start entry: %s %s %s",
-                        id.Value,
-                        prev.ShortString(),
-                        id.Loc().ShortString()))
-            } else {
-                ids[id.Value] = id.Loc()
-                startRules = append(startRules, id.Value)
-            }
-        }
-    } else {
-        startRules = append(startRules, firstRuleName)
-    }
+	startRules := []string{}
+	if start != nil {
+		ids := map[string]parser.LRLocation{}
+		for _, id := range start.Ids {
+			prev, ok := ids[id.Value]
+			if ok {
+				errStrs = append(
+					errStrs,
+					fmt.Sprintf(
+						"Duplicate start entry: %s %s %s",
+						id.Value,
+						prev.ShortString(),
+						id.Loc().ShortString()))
+			} else {
+				ids[id.Value] = id.Loc()
+				startRules = append(startRules, id.Value)
+			}
+		}
+	} else {
+		startRules = append(startRules, firstRuleName)
+	}
 
 	return terms, rules, startRules, errStrs
 }
@@ -162,8 +162,9 @@ func bindTerms(
 	terms map[string]*Term,
 	rules map[string]*parser.Rule,
 	startRuleNames []string) (
-    []*Term,
-    []string) {
+	map[string]*Term,
+	[]*Term,
+	[]string) {
 
 	errStrs := []string{}
 
@@ -182,17 +183,33 @@ func bindTerms(
 		for _, clause := range rule.Clauses {
 			clause := &Clause{Clause: clause, Bindings: []*Term{}}
 
-			for _, id := range clause.Body {
-				t, ok := terms[id.Value]
+			for _, id_or_char := range clause.Body {
+				t, ok := terms[id_or_char.Value]
 				if ok {
 					clause.Bindings = append(clause.Bindings, t)
+				} else if id_or_char.Id() == parser.LRCharacterToken {
+					term := &Term{
+						Name:       id_or_char.Value,
+						LRLocation: id_or_char.Loc(),
+						TermDeclaration: &parser.TermDeclaration{
+							IsTerminal: true,
+							ValueType:  &parser.Token{Value: Generic},
+							Terms:      []*parser.Token{id_or_char},
+						},
+						Rule:      nil,
+						Reachable: false,
+					}
+
+					terms[id_or_char.Value] = term
+
+					clause.Bindings = append(clause.Bindings, term)
 				} else {
 					errStrs = append(
 						errStrs,
 						fmt.Sprintf(
 							"Undefined token/type: %s %v",
-							id.Value,
-							id.Loc()))
+							id_or_char.Value,
+							id_or_char.Loc()))
 				}
 			}
 
@@ -220,19 +237,19 @@ func bindTerms(
 		}
 	}
 
-    startTerms := []*Term{}
-    for _, name := range startRuleNames {
-        startTerm, ok := terms[name]
-        if !ok || startTerm.IsTerminal {
-            errStrs = append(
-                errStrs,
-                fmt.Sprintf("Invalid start rule: %s", name))
-        } else {
-            startTerms = append(startTerms, startTerm)
-        }
-    }
+	startTerms := []*Term{}
+	for _, name := range startRuleNames {
+		startTerm, ok := terms[name]
+		if !ok || startTerm.IsTerminal {
+			errStrs = append(
+				errStrs,
+				fmt.Sprintf("Invalid start rule: %s", name))
+		} else {
+			startTerms = append(startTerms, startTerm)
+		}
+	}
 
-	return startTerms, errStrs
+	return terms, startTerms, errStrs
 }
 
 func checkReachability(starts []*Term, terms map[string]*Term) []string {
@@ -241,7 +258,7 @@ func checkReachability(starts []*Term, terms map[string]*Term) []string {
 	}
 
 	exploreSet := map[string]*Term{}
-    for _, start := range starts {
+	for _, start := range starts {
 		exploreSet[start.Name] = start
 	}
 
@@ -338,7 +355,7 @@ func NewGrammar(
 		errStrs = append(errStrs, "No rules specified in grammar.")
 	}
 
-	startTerms, bindErrStrs := bindTerms(terms, rules, startRuleNames)
+	terms, startTerms, bindErrStrs := bindTerms(terms, rules, startRuleNames)
 	errStrs = append(errStrs, bindErrStrs...)
 
 	errStrs = append(errStrs, checkReachability(startTerms, terms)...)

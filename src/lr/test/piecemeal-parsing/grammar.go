@@ -10,12 +10,8 @@ import (
 type SymbolId int
 
 const (
-	PlusToken   = SymbolId(256)
-	MinusToken  = SymbolId(257)
-	LbraceToken = SymbolId(258)
-	RbraceToken = SymbolId(259)
-	IdToken     = SymbolId(260)
-	ErrorToken  = SymbolId(261)
+	IdToken    = SymbolId(256)
+	ErrorToken = SymbolId(257)
 )
 
 type Location struct {
@@ -55,35 +51,35 @@ type Lexer interface {
 }
 
 type Reducer interface {
-	// 18:4: expr_list -> add: ...
+	// 17:4: expr_list -> add: ...
 	AddToExprList(ExprList_ []Expr, Expr_ Expr) ([]Expr, error)
 
-	// 19:4: expr_list -> nil: ...
+	// 18:4: expr_list -> nil: ...
 	NilToExprList() ([]Expr, error)
 
-	// 22:4: atom -> id: ...
+	// 21:4: atom -> id: ...
 	IdToAtom(Id_ *Id) (Expr, error)
 
-	// 23:4: atom -> error: ...
+	// 22:4: atom -> error: ...
 	ErrorToAtom(Error_ *Err) (Expr, error)
 
-	// 24:4: atom -> block: ...
+	// 23:4: atom -> block: ...
 	BlockToAtom(Block_ *Block) (Expr, error)
 
-	// 27:4: expr -> atom: ...
+	// 26:4: expr -> atom: ...
 	AtomToExpr(Atom_ Expr) (Expr, error)
 
-	// 28:4: expr -> binary: ...
+	// 27:4: expr -> binary: ...
 	BinaryToExpr(Expr_ Expr, Op_ *GenericSymbol, Atom_ Expr) (Expr, error)
 
-	// 31:4: op -> plus: ...
-	PlusToOp(Plus_ *GenericSymbol) (*GenericSymbol, error)
+	// 30:4: op -> plus: ...
+	PlusToOp(char *GenericSymbol) (*GenericSymbol, error)
 
-	// 32:4: op -> minus: ...
-	MinusToOp(Minus_ *GenericSymbol) (*GenericSymbol, error)
+	// 31:4: op -> minus: ...
+	MinusToOp(char *GenericSymbol) (*GenericSymbol, error)
 
-	// 34:9: block -> ...
-	ToBlock(Lbrace_ *GenericSymbol, ExprList_ []Expr, Rbrace_ *GenericSymbol) (*Block, error)
+	// 33:12: block -> ...
+	ToBlock(char *GenericSymbol, ExprList_ []Expr, char2 *GenericSymbol) (*Block, error)
 }
 
 type ParseErrorHandler interface {
@@ -177,18 +173,18 @@ func (i SymbolId) String() string {
 		return "$"
 	case _WildcardMarker:
 		return "*"
-	case PlusToken:
-		return "PLUS"
-	case MinusToken:
-		return "MINUS"
-	case LbraceToken:
-		return "LBRACE"
-	case RbraceToken:
-		return "RBRACE"
 	case IdToken:
 		return "ID"
 	case ErrorToken:
 		return "ERROR"
+	case '+':
+		return "'+'"
+	case '-':
+		return "'-'"
+	case '{':
+		return "'{'"
+	case '}':
+		return "'}'"
 	case ExprListType:
 		return "expr_list"
 	case AtomType:
@@ -330,7 +326,7 @@ func NewSymbol(token Token) (*Symbol, error) {
 			return nil, fmt.Errorf("Invalid value type for token %s.  Expecting *Err (%v)", token.Id(), token.Loc())
 		}
 		symbol.Err = val
-	case _EndMarker, PlusToken, MinusToken, LbraceToken, RbraceToken:
+	case _EndMarker, '+', '-', '{', '}':
 		val, ok := token.(*GenericSymbol)
 		if !ok {
 			return nil, fmt.Errorf("Invalid value type for token %s.  Expecting *GenericSymbol (%v)", token.Id(), token.Loc())
@@ -554,28 +550,28 @@ var _ActionTable = _ActionTableType{
 	{_State3, _EndMarker}:       &_Action{_AcceptAction, 0, 0},
 	{_State4, _EndMarker}:       &_Action{_AcceptAction, 0, 0},
 	{_State1, ExprListType}:     _GotoState3Action,
-	{_State2, LbraceToken}:      _GotoState5Action,
+	{_State2, '{'}:              _GotoState5Action,
 	{_State2, BlockType}:        _GotoState4Action,
-	{_State3, LbraceToken}:      _GotoState5Action,
 	{_State3, IdToken}:          _GotoState7Action,
 	{_State3, ErrorToken}:       _GotoState6Action,
+	{_State3, '{'}:              _GotoState5Action,
 	{_State3, AtomType}:         _GotoState8Action,
 	{_State3, ExprType}:         _GotoState10Action,
 	{_State3, BlockType}:        _GotoState9Action,
 	{_State5, ExprListType}:     _GotoState11Action,
-	{_State10, PlusToken}:       _GotoState13Action,
-	{_State10, MinusToken}:      _GotoState12Action,
+	{_State10, '+'}:             _GotoState12Action,
+	{_State10, '-'}:             _GotoState13Action,
 	{_State10, OpType}:          _GotoState14Action,
-	{_State11, LbraceToken}:     _GotoState5Action,
-	{_State11, RbraceToken}:     _GotoState15Action,
 	{_State11, IdToken}:         _GotoState7Action,
 	{_State11, ErrorToken}:      _GotoState6Action,
+	{_State11, '{'}:             _GotoState5Action,
+	{_State11, '}'}:             _GotoState15Action,
 	{_State11, AtomType}:        _GotoState8Action,
 	{_State11, ExprType}:        _GotoState10Action,
 	{_State11, BlockType}:       _GotoState9Action,
-	{_State14, LbraceToken}:     _GotoState5Action,
 	{_State14, IdToken}:         _GotoState7Action,
 	{_State14, ErrorToken}:      _GotoState6Action,
+	{_State14, '{'}:             _GotoState5Action,
 	{_State14, AtomType}:        _GotoState16Action,
 	{_State14, BlockType}:       _GotoState9Action,
 	{_State1, _WildcardMarker}:  _ReduceNilToExprListAction,
@@ -585,19 +581,19 @@ var _ActionTable = _ActionTableType{
 	{_State8, _WildcardMarker}:  _ReduceAtomToExprAction,
 	{_State9, _WildcardMarker}:  _ReduceBlockToAtomAction,
 	{_State10, _WildcardMarker}: _ReduceAddToExprListAction,
-	{_State12, _WildcardMarker}: _ReduceMinusToOpAction,
-	{_State13, _WildcardMarker}: _ReducePlusToOpAction,
+	{_State12, _WildcardMarker}: _ReducePlusToOpAction,
+	{_State13, _WildcardMarker}: _ReduceMinusToOpAction,
 	{_State15, _WildcardMarker}: _ReduceToBlockAction,
 	{_State16, _WildcardMarker}: _ReduceBinaryToExprAction,
 }
 
 var _ExpectedTerminals = map[_StateId][]SymbolId{
-	_State2:  []SymbolId{LbraceToken},
-	_State3:  []SymbolId{LbraceToken, IdToken, ErrorToken, _EndMarker},
+	_State2:  []SymbolId{'{'},
+	_State3:  []SymbolId{IdToken, ErrorToken, '{', _EndMarker},
 	_State4:  []SymbolId{_EndMarker},
-	_State10: []SymbolId{PlusToken, MinusToken},
-	_State11: []SymbolId{LbraceToken, RbraceToken, IdToken, ErrorToken},
-	_State14: []SymbolId{LbraceToken, IdToken, ErrorToken},
+	_State10: []SymbolId{'+', '-'},
+	_State11: []SymbolId{IdToken, ErrorToken, '{', '}'},
+	_State14: []SymbolId{IdToken, ErrorToken, '{'},
 }
 
 /*
@@ -616,7 +612,7 @@ Parser Debug States:
     Reduce:
       (nil)
     Goto:
-      LBRACE -> State 5
+      '{' -> State 5
       block -> State 4
 
   State 3:
@@ -626,9 +622,9 @@ Parser Debug States:
     Reduce:
       $ -> [#accept]
     Goto:
-      LBRACE -> State 5
       ID -> State 7
       ERROR -> State 6
+      '{' -> State 5
       atom -> State 8
       expr -> State 10
       block -> State 9
@@ -643,7 +639,7 @@ Parser Debug States:
 
   State 5:
     Kernel Items:
-      block: LBRACE.expr_list RBRACE
+      block: '{'.expr_list '}'
     Reduce:
       * -> [expr_list]
     Goto:
@@ -688,28 +684,28 @@ Parser Debug States:
     Reduce:
       * -> [expr_list]
     Goto:
-      PLUS -> State 13
-      MINUS -> State 12
+      '+' -> State 12
+      '-' -> State 13
       op -> State 14
 
   State 11:
     Kernel Items:
-      block: LBRACE expr_list.RBRACE
+      block: '{' expr_list.'}'
       expr_list: expr_list.expr
     Reduce:
       (nil)
     Goto:
-      LBRACE -> State 5
-      RBRACE -> State 15
       ID -> State 7
       ERROR -> State 6
+      '{' -> State 5
+      '}' -> State 15
       atom -> State 8
       expr -> State 10
       block -> State 9
 
   State 12:
     Kernel Items:
-      op: MINUS., *
+      op: '+'., *
     Reduce:
       * -> [op]
     Goto:
@@ -717,7 +713,7 @@ Parser Debug States:
 
   State 13:
     Kernel Items:
-      op: PLUS., *
+      op: '-'., *
     Reduce:
       * -> [op]
     Goto:
@@ -729,15 +725,15 @@ Parser Debug States:
     Reduce:
       (nil)
     Goto:
-      LBRACE -> State 5
       ID -> State 7
       ERROR -> State 6
+      '{' -> State 5
       atom -> State 16
       block -> State 9
 
   State 15:
     Kernel Items:
-      block: LBRACE expr_list RBRACE., *
+      block: '{' expr_list '}'., *
     Reduce:
       * -> [block]
     Goto:
