@@ -212,7 +212,7 @@ func (items Items) Swap(i int, j int) {
 
 type stateAction struct {
 	shift  *ItemSet
-	reduce string
+	reduce *Item
 }
 
 type ItemSet struct {
@@ -243,12 +243,24 @@ func newItemSet(kernelItems Items) *ItemSet {
 }
 
 func (set *ItemSet) canMergeFrom(other *ItemSet) bool {
+	if len(set.ReduceReduceConflictSymbols) > 0 ||
+		len(set.ShiftReduceConflictSymbols) > 0 {
+
+		return false
+	}
+
+	if len(other.ReduceReduceConflictSymbols) > 0 ||
+		len(other.ShiftReduceConflictSymbols) > 0 {
+
+		return false
+	}
+
 	actions := map[string]*stateAction{}
 	for symbol, items := range set.Reduce {
 		if len(items) > 1 {
 			return false // don't merge state with reduce/reduce error
 		}
-		actions[symbol] = &stateAction{reduce: items[0].String()}
+		actions[symbol] = &stateAction{reduce: items[0]}
 	}
 
 	for symbol, next := range set.Goto {
@@ -271,7 +283,7 @@ func (set *ItemSet) canMergeFrom(other *ItemSet) bool {
 			return false
 		}
 
-		if action.reduce != items[0].String() {
+		if action.reduce.Compare(items[0]) != 0 {
 			return false // This introduces new reduce/reduce error
 		}
 	}
@@ -282,7 +294,7 @@ func (set *ItemSet) canMergeFrom(other *ItemSet) bool {
 			continue
 		}
 
-		if action.reduce != "" {
+		if action.reduce != nil {
 			// This introduces new shift/reduce error.  In theory, this should
 			// never happen
 			return false
@@ -548,6 +560,8 @@ func (states *LRStates) generateStates() {
 					panic("This should never happen")
 				}
 			}
+
+			state.computeConflictSymbols()
 
 			exploredIdx += 1
 		}
@@ -840,7 +854,6 @@ func NewLRStates(grammar *Grammar) *LRStates {
 	states.shuffleAcceptStates()
 
 	for _, state := range states.OrderedStates {
-		state.computeConflictSymbols()
 		state.compress()
 	}
 
