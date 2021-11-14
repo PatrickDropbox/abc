@@ -68,30 +68,6 @@ const (
 	CContinueToken      = CSymbolId(311)
 	CBreakToken         = CSymbolId(312)
 	CReturnToken        = CSymbolId(313)
-	CLparamToken        = CSymbolId(314)
-	CRparamToken        = CSymbolId(315)
-	CLcurlToken         = CSymbolId(316)
-	CRcurlToken         = CSymbolId(317)
-	CLbraceToken        = CSymbolId(318)
-	CRbraceToken        = CSymbolId(319)
-	CSemicolonToken     = CSymbolId(320)
-	CColonToken         = CSymbolId(321)
-	CCommaToken         = CSymbolId(322)
-	CEqToken            = CSymbolId(323)
-	CQuestionToken      = CSymbolId(324)
-	CMulToken           = CSymbolId(325)
-	CDivToken           = CSymbolId(326)
-	CMinusToken         = CSymbolId(327)
-	CPlusToken          = CSymbolId(328)
-	CModToken           = CSymbolId(329)
-	CAndToken           = CSymbolId(330)
-	COrToken            = CSymbolId(331)
-	CExclaimToken       = CSymbolId(332)
-	CDotToken           = CSymbolId(333)
-	CHatToken           = CSymbolId(334)
-	CLtToken            = CSymbolId(335)
-	CGtToken            = CSymbolId(336)
-	CTildaToken         = CSymbolId(337)
 )
 
 type CLocation struct {
@@ -132,637 +108,637 @@ type CLexer interface {
 
 type CReducer interface {
 	// 83:4: primary_expression -> a: ...
-	AToPrimaryExpression(Identifier_ Symbol) (Symbol, error)
+	AToPrimaryExpression(Identifier_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 84:4: primary_expression -> b: ...
-	BToPrimaryExpression(Constant_ Symbol) (Symbol, error)
+	BToPrimaryExpression(Constant_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 85:4: primary_expression -> c: ...
-	CToPrimaryExpression(StringLiteral_ Symbol) (Symbol, error)
+	CToPrimaryExpression(StringLiteral_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 86:4: primary_expression -> d: ...
-	DToPrimaryExpression(Lparam_ Symbol, Expression_ Symbol, Rparam_ Symbol) (Symbol, error)
+	DToPrimaryExpression(char *CGenericSymbol, Expression_ *CGenericSymbol, char2 *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 89:4: postfix_expression -> a: ...
-	AToPostfixExpression(PrimaryExpression_ Symbol) (Symbol, error)
+	AToPostfixExpression(PrimaryExpression_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 90:4: postfix_expression -> b: ...
-	BToPostfixExpression(PostfixExpression_ Symbol, Lbrace_ Symbol, Expression_ Symbol, Rbrace_ Symbol) (Symbol, error)
+	BToPostfixExpression(PostfixExpression_ *CGenericSymbol, char *CGenericSymbol, Expression_ *CGenericSymbol, char2 *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 91:4: postfix_expression -> c: ...
-	CToPostfixExpression(PostfixExpression_ Symbol, Lparam_ Symbol, Rparam_ Symbol) (Symbol, error)
+	CToPostfixExpression(PostfixExpression_ *CGenericSymbol, char *CGenericSymbol, char2 *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 92:4: postfix_expression -> d: ...
-	DToPostfixExpression(PostfixExpression_ Symbol, Lparam_ Symbol, ArgumentExpressionList_ Symbol, Rparam_ Symbol) (Symbol, error)
+	DToPostfixExpression(PostfixExpression_ *CGenericSymbol, char *CGenericSymbol, ArgumentExpressionList_ *CGenericSymbol, char2 *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 93:4: postfix_expression -> e: ...
-	EToPostfixExpression(PostfixExpression_ Symbol, Dot_ Symbol, Identifier_ Symbol) (Symbol, error)
+	EToPostfixExpression(PostfixExpression_ *CGenericSymbol, char *CGenericSymbol, Identifier_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 94:4: postfix_expression -> f: ...
-	FToPostfixExpression(PostfixExpression_ Symbol, PtrOp_ Symbol, Identifier_ Symbol) (Symbol, error)
+	FToPostfixExpression(PostfixExpression_ *CGenericSymbol, PtrOp_ *CGenericSymbol, Identifier_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 95:4: postfix_expression -> g: ...
-	GToPostfixExpression(PostfixExpression_ Symbol, IncOp_ Symbol) (Symbol, error)
+	GToPostfixExpression(PostfixExpression_ *CGenericSymbol, IncOp_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 96:4: postfix_expression -> h: ...
-	HToPostfixExpression(PostfixExpression_ Symbol, DecOp_ Symbol) (Symbol, error)
+	HToPostfixExpression(PostfixExpression_ *CGenericSymbol, DecOp_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 99:4: argument_expression_list -> a: ...
-	AToArgumentExpressionList(AssignmentExpression_ Symbol) (Symbol, error)
+	AToArgumentExpressionList(AssignmentExpression_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 100:4: argument_expression_list -> b: ...
-	BToArgumentExpressionList(ArgumentExpressionList_ Symbol, Comma_ Symbol, AssignmentExpression_ Symbol) (Symbol, error)
+	BToArgumentExpressionList(ArgumentExpressionList_ *CGenericSymbol, char *CGenericSymbol, AssignmentExpression_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 103:4: unary_expression -> a: ...
-	AToUnaryExpression(PostfixExpression_ Symbol) (Symbol, error)
+	AToUnaryExpression(PostfixExpression_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 104:4: unary_expression -> b: ...
-	BToUnaryExpression(IncOp_ Symbol, UnaryExpression_ Symbol) (Symbol, error)
+	BToUnaryExpression(IncOp_ *CGenericSymbol, UnaryExpression_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 105:4: unary_expression -> c: ...
-	CToUnaryExpression(DecOp_ Symbol, UnaryExpression_ Symbol) (Symbol, error)
+	CToUnaryExpression(DecOp_ *CGenericSymbol, UnaryExpression_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 106:4: unary_expression -> d: ...
-	DToUnaryExpression(UnaryOperator_ Symbol, CastExpression_ Symbol) (Symbol, error)
+	DToUnaryExpression(UnaryOperator_ *CGenericSymbol, CastExpression_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 107:4: unary_expression -> e: ...
-	EToUnaryExpression(Sizeof_ Symbol, UnaryExpression_ Symbol) (Symbol, error)
+	EToUnaryExpression(Sizeof_ *CGenericSymbol, UnaryExpression_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 108:4: unary_expression -> f: ...
-	FToUnaryExpression(Sizeof_ Symbol, Lparam_ Symbol, TypeName_ Symbol, Rparam_ Symbol) (Symbol, error)
+	FToUnaryExpression(Sizeof_ *CGenericSymbol, char *CGenericSymbol, TypeName_ *CGenericSymbol, char2 *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 111:4: unary_operator -> a: ...
-	AToUnaryOperator(And_ Symbol) (Symbol, error)
+	AToUnaryOperator(char *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 112:4: unary_operator -> b: ...
-	BToUnaryOperator(Mul_ Symbol) (Symbol, error)
+	BToUnaryOperator(char *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 113:4: unary_operator -> c: ...
-	CToUnaryOperator(Plus_ Symbol) (Symbol, error)
+	CToUnaryOperator(char *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 114:4: unary_operator -> d: ...
-	DToUnaryOperator(Minus_ Symbol) (Symbol, error)
+	DToUnaryOperator(char *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 115:4: unary_operator -> e: ...
-	EToUnaryOperator(Tilda_ Symbol) (Symbol, error)
+	EToUnaryOperator(char *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 116:4: unary_operator -> f: ...
-	FToUnaryOperator(Exclaim_ Symbol) (Symbol, error)
+	FToUnaryOperator(char *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 119:4: cast_expression -> a: ...
-	AToCastExpression(UnaryExpression_ Symbol) (Symbol, error)
+	AToCastExpression(UnaryExpression_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 120:4: cast_expression -> b: ...
-	BToCastExpression(Lparam_ Symbol, TypeName_ Symbol, Rparam_ Symbol, CastExpression_ Symbol) (Symbol, error)
+	BToCastExpression(char *CGenericSymbol, TypeName_ *CGenericSymbol, char2 *CGenericSymbol, CastExpression_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 123:4: multiplicative_expression -> a: ...
-	AToMultiplicativeExpression(CastExpression_ Symbol) (Symbol, error)
+	AToMultiplicativeExpression(CastExpression_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 124:4: multiplicative_expression -> b: ...
-	BToMultiplicativeExpression(MultiplicativeExpression_ Symbol, Mul_ Symbol, CastExpression_ Symbol) (Symbol, error)
+	BToMultiplicativeExpression(MultiplicativeExpression_ *CGenericSymbol, char *CGenericSymbol, CastExpression_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 125:4: multiplicative_expression -> c: ...
-	CToMultiplicativeExpression(MultiplicativeExpression_ Symbol, Div_ Symbol, CastExpression_ Symbol) (Symbol, error)
+	CToMultiplicativeExpression(MultiplicativeExpression_ *CGenericSymbol, char *CGenericSymbol, CastExpression_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 126:4: multiplicative_expression -> d: ...
-	DToMultiplicativeExpression(MultiplicativeExpression_ Symbol, Mod_ Symbol, CastExpression_ Symbol) (Symbol, error)
+	DToMultiplicativeExpression(MultiplicativeExpression_ *CGenericSymbol, char *CGenericSymbol, CastExpression_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 129:4: additive_expression -> a: ...
-	AToAdditiveExpression(MultiplicativeExpression_ Symbol) (Symbol, error)
+	AToAdditiveExpression(MultiplicativeExpression_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 130:4: additive_expression -> b: ...
-	BToAdditiveExpression(AdditiveExpression_ Symbol, Plus_ Symbol, MultiplicativeExpression_ Symbol) (Symbol, error)
+	BToAdditiveExpression(AdditiveExpression_ *CGenericSymbol, char *CGenericSymbol, MultiplicativeExpression_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 131:4: additive_expression -> c: ...
-	CToAdditiveExpression(AdditiveExpression_ Symbol, Minus_ Symbol, MultiplicativeExpression_ Symbol) (Symbol, error)
+	CToAdditiveExpression(AdditiveExpression_ *CGenericSymbol, char *CGenericSymbol, MultiplicativeExpression_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 134:4: shift_expression -> a: ...
-	AToShiftExpression(AdditiveExpression_ Symbol) (Symbol, error)
+	AToShiftExpression(AdditiveExpression_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 135:4: shift_expression -> b: ...
-	BToShiftExpression(ShiftExpression_ Symbol, LeftOp_ Symbol, AdditiveExpression_ Symbol) (Symbol, error)
+	BToShiftExpression(ShiftExpression_ *CGenericSymbol, LeftOp_ *CGenericSymbol, AdditiveExpression_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 136:4: shift_expression -> c: ...
-	CToShiftExpression(ShiftExpression_ Symbol, RightOp_ Symbol, AdditiveExpression_ Symbol) (Symbol, error)
+	CToShiftExpression(ShiftExpression_ *CGenericSymbol, RightOp_ *CGenericSymbol, AdditiveExpression_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 139:4: relational_expression -> a: ...
-	AToRelationalExpression(ShiftExpression_ Symbol) (Symbol, error)
+	AToRelationalExpression(ShiftExpression_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 140:4: relational_expression -> b: ...
-	BToRelationalExpression(RelationalExpression_ Symbol, Lt_ Symbol, ShiftExpression_ Symbol) (Symbol, error)
+	BToRelationalExpression(RelationalExpression_ *CGenericSymbol, char *CGenericSymbol, ShiftExpression_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 141:4: relational_expression -> c: ...
-	CToRelationalExpression(RelationalExpression_ Symbol, Gt_ Symbol, ShiftExpression_ Symbol) (Symbol, error)
+	CToRelationalExpression(RelationalExpression_ *CGenericSymbol, char *CGenericSymbol, ShiftExpression_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 142:4: relational_expression -> d: ...
-	DToRelationalExpression(RelationalExpression_ Symbol, LeOp_ Symbol, ShiftExpression_ Symbol) (Symbol, error)
+	DToRelationalExpression(RelationalExpression_ *CGenericSymbol, LeOp_ *CGenericSymbol, ShiftExpression_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 143:4: relational_expression -> e: ...
-	EToRelationalExpression(RelationalExpression_ Symbol, GeOp_ Symbol, ShiftExpression_ Symbol) (Symbol, error)
+	EToRelationalExpression(RelationalExpression_ *CGenericSymbol, GeOp_ *CGenericSymbol, ShiftExpression_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 146:4: equality_expression -> a: ...
-	AToEqualityExpression(RelationalExpression_ Symbol) (Symbol, error)
+	AToEqualityExpression(RelationalExpression_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 147:4: equality_expression -> b: ...
-	BToEqualityExpression(EqualityExpression_ Symbol, EqOp_ Symbol, RelationalExpression_ Symbol) (Symbol, error)
+	BToEqualityExpression(EqualityExpression_ *CGenericSymbol, EqOp_ *CGenericSymbol, RelationalExpression_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 148:4: equality_expression -> c: ...
-	CToEqualityExpression(EqualityExpression_ Symbol, NeOp_ Symbol, RelationalExpression_ Symbol) (Symbol, error)
+	CToEqualityExpression(EqualityExpression_ *CGenericSymbol, NeOp_ *CGenericSymbol, RelationalExpression_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 151:4: and_expression -> a: ...
-	AToAndExpression(EqualityExpression_ Symbol) (Symbol, error)
+	AToAndExpression(EqualityExpression_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 152:4: and_expression -> b: ...
-	BToAndExpression(AndExpression_ Symbol, And_ Symbol, EqualityExpression_ Symbol) (Symbol, error)
+	BToAndExpression(AndExpression_ *CGenericSymbol, char *CGenericSymbol, EqualityExpression_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 155:4: exclusive_or_expression -> a: ...
-	AToExclusiveOrExpression(AndExpression_ Symbol) (Symbol, error)
+	AToExclusiveOrExpression(AndExpression_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 156:4: exclusive_or_expression -> b: ...
-	BToExclusiveOrExpression(ExclusiveOrExpression_ Symbol, Hat_ Symbol, AndExpression_ Symbol) (Symbol, error)
+	BToExclusiveOrExpression(ExclusiveOrExpression_ *CGenericSymbol, char *CGenericSymbol, AndExpression_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 159:4: inclusive_or_expression -> a: ...
-	AToInclusiveOrExpression(ExclusiveOrExpression_ Symbol) (Symbol, error)
+	AToInclusiveOrExpression(ExclusiveOrExpression_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 160:4: inclusive_or_expression -> b: ...
-	BToInclusiveOrExpression(InclusiveOrExpression_ Symbol, Or_ Symbol, ExclusiveOrExpression_ Symbol) (Symbol, error)
+	BToInclusiveOrExpression(InclusiveOrExpression_ *CGenericSymbol, char *CGenericSymbol, ExclusiveOrExpression_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 163:4: logical_and_expression -> a: ...
-	AToLogicalAndExpression(InclusiveOrExpression_ Symbol) (Symbol, error)
+	AToLogicalAndExpression(InclusiveOrExpression_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 164:4: logical_and_expression -> b: ...
-	BToLogicalAndExpression(LogicalAndExpression_ Symbol, AndOp_ Symbol, InclusiveOrExpression_ Symbol) (Symbol, error)
+	BToLogicalAndExpression(LogicalAndExpression_ *CGenericSymbol, AndOp_ *CGenericSymbol, InclusiveOrExpression_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 167:4: logical_or_expression -> a: ...
-	AToLogicalOrExpression(LogicalAndExpression_ Symbol) (Symbol, error)
+	AToLogicalOrExpression(LogicalAndExpression_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 168:4: logical_or_expression -> b: ...
-	BToLogicalOrExpression(LogicalOrExpression_ Symbol, OrOp_ Symbol, LogicalAndExpression_ Symbol) (Symbol, error)
+	BToLogicalOrExpression(LogicalOrExpression_ *CGenericSymbol, OrOp_ *CGenericSymbol, LogicalAndExpression_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 171:4: conditional_expression -> a: ...
-	AToConditionalExpression(LogicalOrExpression_ Symbol) (Symbol, error)
+	AToConditionalExpression(LogicalOrExpression_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 172:4: conditional_expression -> b: ...
-	BToConditionalExpression(LogicalOrExpression_ Symbol, Question_ Symbol, Expression_ Symbol, Colon_ Symbol, ConditionalExpression_ Symbol) (Symbol, error)
+	BToConditionalExpression(LogicalOrExpression_ *CGenericSymbol, char *CGenericSymbol, Expression_ *CGenericSymbol, char2 *CGenericSymbol, ConditionalExpression_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 175:4: assignment_expression -> a: ...
-	AToAssignmentExpression(ConditionalExpression_ Symbol) (Symbol, error)
+	AToAssignmentExpression(ConditionalExpression_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 176:4: assignment_expression -> b: ...
-	BToAssignmentExpression(UnaryExpression_ Symbol, AssignmentOperator_ Symbol, AssignmentExpression_ Symbol) (Symbol, error)
+	BToAssignmentExpression(UnaryExpression_ *CGenericSymbol, AssignmentOperator_ *CGenericSymbol, AssignmentExpression_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 179:4: assignment_operator -> a: ...
-	AToAssignmentOperator(Eq_ Symbol) (Symbol, error)
+	AToAssignmentOperator(char *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 180:4: assignment_operator -> b: ...
-	BToAssignmentOperator(MulAssign_ Symbol) (Symbol, error)
+	BToAssignmentOperator(MulAssign_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 181:4: assignment_operator -> c: ...
-	CToAssignmentOperator(DivAssign_ Symbol) (Symbol, error)
+	CToAssignmentOperator(DivAssign_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 182:4: assignment_operator -> d: ...
-	DToAssignmentOperator(ModAssign_ Symbol) (Symbol, error)
+	DToAssignmentOperator(ModAssign_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 183:4: assignment_operator -> e: ...
-	EToAssignmentOperator(AddAssign_ Symbol) (Symbol, error)
+	EToAssignmentOperator(AddAssign_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 184:4: assignment_operator -> f: ...
-	FToAssignmentOperator(SubAssign_ Symbol) (Symbol, error)
+	FToAssignmentOperator(SubAssign_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 185:4: assignment_operator -> g: ...
-	GToAssignmentOperator(LeftAssign_ Symbol) (Symbol, error)
+	GToAssignmentOperator(LeftAssign_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 186:4: assignment_operator -> h: ...
-	HToAssignmentOperator(RightAssign_ Symbol) (Symbol, error)
+	HToAssignmentOperator(RightAssign_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 187:4: assignment_operator -> i: ...
-	IToAssignmentOperator(AndAssign_ Symbol) (Symbol, error)
+	IToAssignmentOperator(AndAssign_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 188:4: assignment_operator -> j: ...
-	JToAssignmentOperator(XorAssign_ Symbol) (Symbol, error)
+	JToAssignmentOperator(XorAssign_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 189:4: assignment_operator -> k: ...
-	KToAssignmentOperator(OrAssign_ Symbol) (Symbol, error)
+	KToAssignmentOperator(OrAssign_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 192:4: expression -> a: ...
-	AToExpression(AssignmentExpression_ Symbol) (Symbol, error)
+	AToExpression(AssignmentExpression_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 193:4: expression -> b: ...
-	BToExpression(Expression_ Symbol, Comma_ Symbol, AssignmentExpression_ Symbol) (Symbol, error)
+	BToExpression(Expression_ *CGenericSymbol, char *CGenericSymbol, AssignmentExpression_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 196:4: constant_expression -> a: ...
-	AToConstantExpression(ConditionalExpression_ Symbol) (Symbol, error)
+	AToConstantExpression(ConditionalExpression_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 199:4: declaration -> a: ...
-	AToDeclaration(DeclarationSpecifiers_ Symbol, Semicolon_ Symbol) (Symbol, error)
+	AToDeclaration(DeclarationSpecifiers_ *CGenericSymbol, char *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 200:4: declaration -> b: ...
-	BToDeclaration(DeclarationSpecifiers_ Symbol, InitDeclaratorList_ Symbol, Semicolon_ Symbol) (Symbol, error)
+	BToDeclaration(DeclarationSpecifiers_ *CGenericSymbol, InitDeclaratorList_ *CGenericSymbol, char *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 203:4: declaration_specifiers -> a: ...
-	AToDeclarationSpecifiers(StorageClassSpecifier_ Symbol) (Symbol, error)
+	AToDeclarationSpecifiers(StorageClassSpecifier_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 204:4: declaration_specifiers -> b: ...
-	BToDeclarationSpecifiers(StorageClassSpecifier_ Symbol, DeclarationSpecifiers_ Symbol) (Symbol, error)
+	BToDeclarationSpecifiers(StorageClassSpecifier_ *CGenericSymbol, DeclarationSpecifiers_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 205:4: declaration_specifiers -> c: ...
-	CToDeclarationSpecifiers(TypeSpecifier_ Symbol) (Symbol, error)
+	CToDeclarationSpecifiers(TypeSpecifier_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 206:4: declaration_specifiers -> d: ...
-	DToDeclarationSpecifiers(TypeSpecifier_ Symbol, DeclarationSpecifiers_ Symbol) (Symbol, error)
+	DToDeclarationSpecifiers(TypeSpecifier_ *CGenericSymbol, DeclarationSpecifiers_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 207:4: declaration_specifiers -> e: ...
-	EToDeclarationSpecifiers(TypeQualifier_ Symbol) (Symbol, error)
+	EToDeclarationSpecifiers(TypeQualifier_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 208:4: declaration_specifiers -> f: ...
-	FToDeclarationSpecifiers(TypeQualifier_ Symbol, DeclarationSpecifiers_ Symbol) (Symbol, error)
+	FToDeclarationSpecifiers(TypeQualifier_ *CGenericSymbol, DeclarationSpecifiers_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 211:4: init_declarator_list -> a: ...
-	AToInitDeclaratorList(InitDeclarator_ Symbol) (Symbol, error)
+	AToInitDeclaratorList(InitDeclarator_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 212:4: init_declarator_list -> b: ...
-	BToInitDeclaratorList(InitDeclaratorList_ Symbol, Comma_ Symbol, InitDeclarator_ Symbol) (Symbol, error)
+	BToInitDeclaratorList(InitDeclaratorList_ *CGenericSymbol, char *CGenericSymbol, InitDeclarator_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 215:4: init_declarator -> a: ...
-	AToInitDeclarator(Declarator_ Symbol) (Symbol, error)
+	AToInitDeclarator(Declarator_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 216:4: init_declarator -> b: ...
-	BToInitDeclarator(Declarator_ Symbol, Eq_ Symbol, Initializer_ Symbol) (Symbol, error)
+	BToInitDeclarator(Declarator_ *CGenericSymbol, char *CGenericSymbol, Initializer_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 219:4: storage_class_specifier -> a: ...
-	AToStorageClassSpecifier(Typedef_ Symbol) (Symbol, error)
+	AToStorageClassSpecifier(Typedef_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 220:4: storage_class_specifier -> b: ...
-	BToStorageClassSpecifier(Extern_ Symbol) (Symbol, error)
+	BToStorageClassSpecifier(Extern_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 221:4: storage_class_specifier -> c: ...
-	CToStorageClassSpecifier(Static_ Symbol) (Symbol, error)
+	CToStorageClassSpecifier(Static_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 222:4: storage_class_specifier -> d: ...
-	DToStorageClassSpecifier(Auto_ Symbol) (Symbol, error)
+	DToStorageClassSpecifier(Auto_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 223:4: storage_class_specifier -> e: ...
-	EToStorageClassSpecifier(Register_ Symbol) (Symbol, error)
+	EToStorageClassSpecifier(Register_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 226:4: type_specifier -> a: ...
-	AToTypeSpecifier(Void_ Symbol) (Symbol, error)
+	AToTypeSpecifier(Void_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 227:4: type_specifier -> b: ...
-	BToTypeSpecifier(Char_ Symbol) (Symbol, error)
+	BToTypeSpecifier(Char_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 228:4: type_specifier -> c: ...
-	CToTypeSpecifier(Short_ Symbol) (Symbol, error)
+	CToTypeSpecifier(Short_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 229:4: type_specifier -> d: ...
-	DToTypeSpecifier(Int_ Symbol) (Symbol, error)
+	DToTypeSpecifier(Int_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 230:4: type_specifier -> e: ...
-	EToTypeSpecifier(Long_ Symbol) (Symbol, error)
+	EToTypeSpecifier(Long_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 231:4: type_specifier -> f: ...
-	FToTypeSpecifier(Float_ Symbol) (Symbol, error)
+	FToTypeSpecifier(Float_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 232:4: type_specifier -> g: ...
-	GToTypeSpecifier(Double_ Symbol) (Symbol, error)
+	GToTypeSpecifier(Double_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 233:4: type_specifier -> h: ...
-	HToTypeSpecifier(Signed_ Symbol) (Symbol, error)
+	HToTypeSpecifier(Signed_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 234:4: type_specifier -> i: ...
-	IToTypeSpecifier(Unsigned_ Symbol) (Symbol, error)
+	IToTypeSpecifier(Unsigned_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 235:4: type_specifier -> j: ...
-	JToTypeSpecifier(StructOrUnionSpecifier_ Symbol) (Symbol, error)
+	JToTypeSpecifier(StructOrUnionSpecifier_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 236:4: type_specifier -> k: ...
-	KToTypeSpecifier(EnumSpecifier_ Symbol) (Symbol, error)
+	KToTypeSpecifier(EnumSpecifier_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 237:4: type_specifier -> l: ...
-	LToTypeSpecifier(TypeName_ Symbol) (Symbol, error)
+	LToTypeSpecifier(TypeName_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 240:4: struct_or_union_specifier -> a: ...
-	AToStructOrUnionSpecifier(StructOrUnion_ Symbol, Identifier_ Symbol, Lcurl_ Symbol, StructDeclarationList_ Symbol, Rcurl_ Symbol) (Symbol, error)
+	AToStructOrUnionSpecifier(StructOrUnion_ *CGenericSymbol, Identifier_ *CGenericSymbol, char *CGenericSymbol, StructDeclarationList_ *CGenericSymbol, char2 *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 241:4: struct_or_union_specifier -> b: ...
-	BToStructOrUnionSpecifier(StructOrUnion_ Symbol, Lcurl_ Symbol, StructDeclarationList_ Symbol, Rcurl_ Symbol) (Symbol, error)
+	BToStructOrUnionSpecifier(StructOrUnion_ *CGenericSymbol, char *CGenericSymbol, StructDeclarationList_ *CGenericSymbol, char2 *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 242:4: struct_or_union_specifier -> c: ...
-	CToStructOrUnionSpecifier(StructOrUnion_ Symbol, Identifier_ Symbol) (Symbol, error)
+	CToStructOrUnionSpecifier(StructOrUnion_ *CGenericSymbol, Identifier_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 245:4: struct_or_union -> a: ...
-	AToStructOrUnion(Struct_ Symbol) (Symbol, error)
+	AToStructOrUnion(Struct_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 246:4: struct_or_union -> b: ...
-	BToStructOrUnion(Union_ Symbol) (Symbol, error)
+	BToStructOrUnion(Union_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 249:4: struct_declaration_list -> a: ...
-	AToStructDeclarationList(StructDeclaration_ Symbol) (Symbol, error)
+	AToStructDeclarationList(StructDeclaration_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 250:4: struct_declaration_list -> b: ...
-	BToStructDeclarationList(StructDeclarationList_ Symbol, StructDeclaration_ Symbol) (Symbol, error)
+	BToStructDeclarationList(StructDeclarationList_ *CGenericSymbol, StructDeclaration_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 253:4: struct_declaration -> a: ...
-	AToStructDeclaration(SpecifierQualifierList_ Symbol, StructDeclaratorList_ Symbol, Semicolon_ Symbol) (Symbol, error)
+	AToStructDeclaration(SpecifierQualifierList_ *CGenericSymbol, StructDeclaratorList_ *CGenericSymbol, char *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 256:4: specifier_qualifier_list -> a: ...
-	AToSpecifierQualifierList(TypeSpecifier_ Symbol, SpecifierQualifierList_ Symbol) (Symbol, error)
+	AToSpecifierQualifierList(TypeSpecifier_ *CGenericSymbol, SpecifierQualifierList_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 257:4: specifier_qualifier_list -> b: ...
-	BToSpecifierQualifierList(TypeSpecifier_ Symbol) (Symbol, error)
+	BToSpecifierQualifierList(TypeSpecifier_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 258:4: specifier_qualifier_list -> c: ...
-	CToSpecifierQualifierList(TypeQualifier_ Symbol, SpecifierQualifierList_ Symbol) (Symbol, error)
+	CToSpecifierQualifierList(TypeQualifier_ *CGenericSymbol, SpecifierQualifierList_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 259:4: specifier_qualifier_list -> d: ...
-	DToSpecifierQualifierList(TypeQualifier_ Symbol) (Symbol, error)
+	DToSpecifierQualifierList(TypeQualifier_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 262:4: struct_declarator_list -> a: ...
-	AToStructDeclaratorList(StructDeclarator_ Symbol) (Symbol, error)
+	AToStructDeclaratorList(StructDeclarator_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 263:4: struct_declarator_list -> b: ...
-	BToStructDeclaratorList(StructDeclaratorList_ Symbol, Comma_ Symbol, StructDeclarator_ Symbol) (Symbol, error)
+	BToStructDeclaratorList(StructDeclaratorList_ *CGenericSymbol, char *CGenericSymbol, StructDeclarator_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 266:4: struct_declarator -> a: ...
-	AToStructDeclarator(Declarator_ Symbol) (Symbol, error)
+	AToStructDeclarator(Declarator_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 267:4: struct_declarator -> b: ...
-	BToStructDeclarator(Colon_ Symbol, ConstantExpression_ Symbol) (Symbol, error)
+	BToStructDeclarator(char *CGenericSymbol, ConstantExpression_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 268:4: struct_declarator -> c: ...
-	CToStructDeclarator(Declarator_ Symbol, Colon_ Symbol, ConstantExpression_ Symbol) (Symbol, error)
+	CToStructDeclarator(Declarator_ *CGenericSymbol, char *CGenericSymbol, ConstantExpression_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 271:4: enum_specifier -> a: ...
-	AToEnumSpecifier(Enum_ Symbol, Lcurl_ Symbol, EnumeratorList_ Symbol, Rcurl_ Symbol) (Symbol, error)
+	AToEnumSpecifier(Enum_ *CGenericSymbol, char *CGenericSymbol, EnumeratorList_ *CGenericSymbol, char2 *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 272:4: enum_specifier -> b: ...
-	BToEnumSpecifier(Enum_ Symbol, Identifier_ Symbol, Lcurl_ Symbol, EnumeratorList_ Symbol, Rcurl_ Symbol) (Symbol, error)
+	BToEnumSpecifier(Enum_ *CGenericSymbol, Identifier_ *CGenericSymbol, char *CGenericSymbol, EnumeratorList_ *CGenericSymbol, char2 *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 273:4: enum_specifier -> c: ...
-	CToEnumSpecifier(Enum_ Symbol, Identifier_ Symbol) (Symbol, error)
+	CToEnumSpecifier(Enum_ *CGenericSymbol, Identifier_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 276:4: enumerator_list -> a: ...
-	AToEnumeratorList(Enumerator_ Symbol) (Symbol, error)
+	AToEnumeratorList(Enumerator_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 277:4: enumerator_list -> b: ...
-	BToEnumeratorList(EnumeratorList_ Symbol, Comma_ Symbol, Enumerator_ Symbol) (Symbol, error)
+	BToEnumeratorList(EnumeratorList_ *CGenericSymbol, char *CGenericSymbol, Enumerator_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 280:4: enumerator -> a: ...
-	AToEnumerator(Identifier_ Symbol) (Symbol, error)
+	AToEnumerator(Identifier_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 281:4: enumerator -> b: ...
-	BToEnumerator(Identifier_ Symbol, Eq_ Symbol, ConstantExpression_ Symbol) (Symbol, error)
+	BToEnumerator(Identifier_ *CGenericSymbol, char *CGenericSymbol, ConstantExpression_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 284:4: type_qualifier -> a: ...
-	AToTypeQualifier(Const_ Symbol) (Symbol, error)
+	AToTypeQualifier(Const_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 285:4: type_qualifier -> b: ...
-	BToTypeQualifier(Volatile_ Symbol) (Symbol, error)
+	BToTypeQualifier(Volatile_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 288:4: declarator -> a: ...
-	AToDeclarator(Pointer_ Symbol, DirectDeclarator_ Symbol) (Symbol, error)
+	AToDeclarator(Pointer_ *CGenericSymbol, DirectDeclarator_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 289:4: declarator -> b: ...
-	BToDeclarator(DirectDeclarator_ Symbol) (Symbol, error)
+	BToDeclarator(DirectDeclarator_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 292:4: direct_declarator -> a: ...
-	AToDirectDeclarator(Identifier_ Symbol) (Symbol, error)
+	AToDirectDeclarator(Identifier_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 293:4: direct_declarator -> b: ...
-	BToDirectDeclarator(Lparam_ Symbol, Declarator_ Symbol, Rparam_ Symbol) (Symbol, error)
+	BToDirectDeclarator(char *CGenericSymbol, Declarator_ *CGenericSymbol, char2 *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 294:4: direct_declarator -> c: ...
-	CToDirectDeclarator(DirectDeclarator_ Symbol, Lbrace_ Symbol, ConstantExpression_ Symbol, Rbrace_ Symbol) (Symbol, error)
+	CToDirectDeclarator(DirectDeclarator_ *CGenericSymbol, char *CGenericSymbol, ConstantExpression_ *CGenericSymbol, char2 *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 295:4: direct_declarator -> d: ...
-	DToDirectDeclarator(DirectDeclarator_ Symbol, Lbrace_ Symbol, Rbrace_ Symbol) (Symbol, error)
+	DToDirectDeclarator(DirectDeclarator_ *CGenericSymbol, char *CGenericSymbol, char2 *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 296:4: direct_declarator -> e: ...
-	EToDirectDeclarator(DirectDeclarator_ Symbol, Lparam_ Symbol, ParameterTypeList_ Symbol, Rparam_ Symbol) (Symbol, error)
+	EToDirectDeclarator(DirectDeclarator_ *CGenericSymbol, char *CGenericSymbol, ParameterTypeList_ *CGenericSymbol, char2 *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 297:4: direct_declarator -> f: ...
-	FToDirectDeclarator(DirectDeclarator_ Symbol, Lparam_ Symbol, IdentifierList_ Symbol, Rparam_ Symbol) (Symbol, error)
+	FToDirectDeclarator(DirectDeclarator_ *CGenericSymbol, char *CGenericSymbol, IdentifierList_ *CGenericSymbol, char2 *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 298:4: direct_declarator -> g: ...
-	GToDirectDeclarator(DirectDeclarator_ Symbol, Lparam_ Symbol, Rparam_ Symbol) (Symbol, error)
+	GToDirectDeclarator(DirectDeclarator_ *CGenericSymbol, char *CGenericSymbol, char2 *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 301:4: pointer -> a: ...
-	AToPointer(Mul_ Symbol) (Symbol, error)
+	AToPointer(char *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 302:4: pointer -> b: ...
-	BToPointer(Mul_ Symbol, TypeQualifierList_ Symbol) (Symbol, error)
+	BToPointer(char *CGenericSymbol, TypeQualifierList_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 303:4: pointer -> c: ...
-	CToPointer(Mul_ Symbol, Pointer_ Symbol) (Symbol, error)
+	CToPointer(char *CGenericSymbol, Pointer_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 304:4: pointer -> d: ...
-	DToPointer(Mul_ Symbol, TypeQualifierList_ Symbol, Pointer_ Symbol) (Symbol, error)
+	DToPointer(char *CGenericSymbol, TypeQualifierList_ *CGenericSymbol, Pointer_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 307:4: type_qualifier_list -> a: ...
-	AToTypeQualifierList(TypeQualifier_ Symbol) (Symbol, error)
+	AToTypeQualifierList(TypeQualifier_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 308:4: type_qualifier_list -> b: ...
-	BToTypeQualifierList(TypeQualifierList_ Symbol, TypeQualifier_ Symbol) (Symbol, error)
+	BToTypeQualifierList(TypeQualifierList_ *CGenericSymbol, TypeQualifier_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 312:4: parameter_type_list -> a: ...
-	AToParameterTypeList(ParameterList_ Symbol) (Symbol, error)
+	AToParameterTypeList(ParameterList_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 313:4: parameter_type_list -> b: ...
-	BToParameterTypeList(ParameterList_ Symbol, Comma_ Symbol, Ellipsis_ Symbol) (Symbol, error)
+	BToParameterTypeList(ParameterList_ *CGenericSymbol, char *CGenericSymbol, Ellipsis_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 316:4: parameter_list -> a: ...
-	AToParameterList(ParameterDeclaration_ Symbol) (Symbol, error)
+	AToParameterList(ParameterDeclaration_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 317:4: parameter_list -> b: ...
-	BToParameterList(ParameterList_ Symbol, Comma_ Symbol, ParameterDeclaration_ Symbol) (Symbol, error)
+	BToParameterList(ParameterList_ *CGenericSymbol, char *CGenericSymbol, ParameterDeclaration_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 320:4: parameter_declaration -> a: ...
-	AToParameterDeclaration(DeclarationSpecifiers_ Symbol, Declarator_ Symbol) (Symbol, error)
+	AToParameterDeclaration(DeclarationSpecifiers_ *CGenericSymbol, Declarator_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 321:4: parameter_declaration -> b: ...
-	BToParameterDeclaration(DeclarationSpecifiers_ Symbol, AbstractDeclarator_ Symbol) (Symbol, error)
+	BToParameterDeclaration(DeclarationSpecifiers_ *CGenericSymbol, AbstractDeclarator_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 322:4: parameter_declaration -> c: ...
-	CToParameterDeclaration(DeclarationSpecifiers_ Symbol) (Symbol, error)
+	CToParameterDeclaration(DeclarationSpecifiers_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 325:4: identifier_list -> a: ...
-	AToIdentifierList(Identifier_ Symbol) (Symbol, error)
+	AToIdentifierList(Identifier_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 326:4: identifier_list -> b: ...
-	BToIdentifierList(IdentifierList_ Symbol, Comma_ Symbol, Identifier_ Symbol) (Symbol, error)
+	BToIdentifierList(IdentifierList_ *CGenericSymbol, char *CGenericSymbol, Identifier_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 329:4: type_name -> a: ...
-	AToTypeName(SpecifierQualifierList_ Symbol) (Symbol, error)
+	AToTypeName(SpecifierQualifierList_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 330:4: type_name -> b: ...
-	BToTypeName(SpecifierQualifierList_ Symbol, AbstractDeclarator_ Symbol) (Symbol, error)
+	BToTypeName(SpecifierQualifierList_ *CGenericSymbol, AbstractDeclarator_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 333:4: abstract_declarator -> a: ...
-	AToAbstractDeclarator(Pointer_ Symbol) (Symbol, error)
+	AToAbstractDeclarator(Pointer_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 334:4: abstract_declarator -> b: ...
-	BToAbstractDeclarator(DirectAbstractDeclarator_ Symbol) (Symbol, error)
+	BToAbstractDeclarator(DirectAbstractDeclarator_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 335:4: abstract_declarator -> c: ...
-	CToAbstractDeclarator(Pointer_ Symbol, DirectAbstractDeclarator_ Symbol) (Symbol, error)
+	CToAbstractDeclarator(Pointer_ *CGenericSymbol, DirectAbstractDeclarator_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 338:4: direct_abstract_declarator -> a: ...
-	AToDirectAbstractDeclarator(Lparam_ Symbol, AbstractDeclarator_ Symbol, Rparam_ Symbol) (Symbol, error)
+	AToDirectAbstractDeclarator(char *CGenericSymbol, AbstractDeclarator_ *CGenericSymbol, char2 *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 339:4: direct_abstract_declarator -> b: ...
-	BToDirectAbstractDeclarator(Lbrace_ Symbol, Rbrace_ Symbol) (Symbol, error)
+	BToDirectAbstractDeclarator(char *CGenericSymbol, char2 *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 340:4: direct_abstract_declarator -> c: ...
-	CToDirectAbstractDeclarator(Lbrace_ Symbol, ConstantExpression_ Symbol, Rbrace_ Symbol) (Symbol, error)
+	CToDirectAbstractDeclarator(char *CGenericSymbol, ConstantExpression_ *CGenericSymbol, char2 *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 341:4: direct_abstract_declarator -> d: ...
-	DToDirectAbstractDeclarator(DirectAbstractDeclarator_ Symbol, Lbrace_ Symbol, Rbrace_ Symbol) (Symbol, error)
+	DToDirectAbstractDeclarator(DirectAbstractDeclarator_ *CGenericSymbol, char *CGenericSymbol, char2 *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 342:4: direct_abstract_declarator -> e: ...
-	EToDirectAbstractDeclarator(DirectAbstractDeclarator_ Symbol, Lbrace_ Symbol, ConstantExpression_ Symbol, Rbrace_ Symbol) (Symbol, error)
+	EToDirectAbstractDeclarator(DirectAbstractDeclarator_ *CGenericSymbol, char *CGenericSymbol, ConstantExpression_ *CGenericSymbol, char2 *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 343:4: direct_abstract_declarator -> f: ...
-	FToDirectAbstractDeclarator(Lparam_ Symbol, Rparam_ Symbol) (Symbol, error)
+	FToDirectAbstractDeclarator(char *CGenericSymbol, char2 *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 344:4: direct_abstract_declarator -> g: ...
-	GToDirectAbstractDeclarator(Lparam_ Symbol, ParameterTypeList_ Symbol, Rparam_ Symbol) (Symbol, error)
+	GToDirectAbstractDeclarator(char *CGenericSymbol, ParameterTypeList_ *CGenericSymbol, char2 *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 345:4: direct_abstract_declarator -> h: ...
-	HToDirectAbstractDeclarator(DirectAbstractDeclarator_ Symbol, Lparam_ Symbol, Rparam_ Symbol) (Symbol, error)
+	HToDirectAbstractDeclarator(DirectAbstractDeclarator_ *CGenericSymbol, char *CGenericSymbol, char2 *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 346:4: direct_abstract_declarator -> i: ...
-	IToDirectAbstractDeclarator(DirectAbstractDeclarator_ Symbol, Lparam_ Symbol, ParameterTypeList_ Symbol, Rparam_ Symbol) (Symbol, error)
+	IToDirectAbstractDeclarator(DirectAbstractDeclarator_ *CGenericSymbol, char *CGenericSymbol, ParameterTypeList_ *CGenericSymbol, char2 *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 349:4: initializer -> a: ...
-	AToInitializer(AssignmentExpression_ Symbol) (Symbol, error)
+	AToInitializer(AssignmentExpression_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 350:4: initializer -> b: ...
-	BToInitializer(Lcurl_ Symbol, InitializerList_ Symbol, Rcurl_ Symbol) (Symbol, error)
+	BToInitializer(char *CGenericSymbol, InitializerList_ *CGenericSymbol, char2 *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 351:4: initializer -> c: ...
-	CToInitializer(Lcurl_ Symbol, InitializerList_ Symbol, Comma_ Symbol, Rcurl_ Symbol) (Symbol, error)
+	CToInitializer(char *CGenericSymbol, InitializerList_ *CGenericSymbol, char2 *CGenericSymbol, char3 *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 354:4: initializer_list -> a: ...
-	AToInitializerList(Initializer_ Symbol) (Symbol, error)
+	AToInitializerList(Initializer_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 355:4: initializer_list -> b: ...
-	BToInitializerList(InitializerList_ Symbol, Comma_ Symbol, Initializer_ Symbol) (Symbol, error)
+	BToInitializerList(InitializerList_ *CGenericSymbol, char *CGenericSymbol, Initializer_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 358:4: statement -> a: ...
-	AToStatement(LabeledStatement_ Symbol) (Symbol, error)
+	AToStatement(LabeledStatement_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 359:4: statement -> b: ...
-	BToStatement(CompoundStatement_ Symbol) (Symbol, error)
+	BToStatement(CompoundStatement_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 360:4: statement -> c: ...
-	CToStatement(ExpressionStatement_ Symbol) (Symbol, error)
+	CToStatement(ExpressionStatement_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 361:4: statement -> d: ...
-	DToStatement(SelectionStatement_ Symbol) (Symbol, error)
+	DToStatement(SelectionStatement_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 362:4: statement -> e: ...
-	EToStatement(IterationStatement_ Symbol) (Symbol, error)
+	EToStatement(IterationStatement_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 363:4: statement -> f: ...
-	FToStatement(JumpStatement_ Symbol) (Symbol, error)
+	FToStatement(JumpStatement_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 366:4: labeled_statement -> a: ...
-	AToLabeledStatement(Identifier_ Symbol, Colon_ Symbol, Statement_ Symbol) (Symbol, error)
+	AToLabeledStatement(Identifier_ *CGenericSymbol, char *CGenericSymbol, Statement_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 367:4: labeled_statement -> b: ...
-	BToLabeledStatement(Case_ Symbol, ConstantExpression_ Symbol, Colon_ Symbol, Statement_ Symbol) (Symbol, error)
+	BToLabeledStatement(Case_ *CGenericSymbol, ConstantExpression_ *CGenericSymbol, char *CGenericSymbol, Statement_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 368:4: labeled_statement -> c: ...
-	CToLabeledStatement(Default_ Symbol, Colon_ Symbol, Statement_ Symbol) (Symbol, error)
+	CToLabeledStatement(Default_ *CGenericSymbol, char *CGenericSymbol, Statement_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 371:4: compound_statement -> a: ...
-	AToCompoundStatement(Lcurl_ Symbol, Rcurl_ Symbol) (Symbol, error)
+	AToCompoundStatement(char *CGenericSymbol, char2 *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 372:4: compound_statement -> b: ...
-	BToCompoundStatement(Lcurl_ Symbol, StatementList_ Symbol, Rcurl_ Symbol) (Symbol, error)
+	BToCompoundStatement(char *CGenericSymbol, StatementList_ *CGenericSymbol, char2 *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 373:4: compound_statement -> c: ...
-	CToCompoundStatement(Lcurl_ Symbol, DeclarationList_ Symbol, Rcurl_ Symbol) (Symbol, error)
+	CToCompoundStatement(char *CGenericSymbol, DeclarationList_ *CGenericSymbol, char2 *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 374:4: compound_statement -> d: ...
-	DToCompoundStatement(Lcurl_ Symbol, DeclarationList_ Symbol, StatementList_ Symbol, Rcurl_ Symbol) (Symbol, error)
+	DToCompoundStatement(char *CGenericSymbol, DeclarationList_ *CGenericSymbol, StatementList_ *CGenericSymbol, char2 *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 377:4: declaration_list -> a: ...
-	AToDeclarationList(Declaration_ Symbol) (Symbol, error)
+	AToDeclarationList(Declaration_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 378:4: declaration_list -> b: ...
-	BToDeclarationList(DeclarationList_ Symbol, Declaration_ Symbol) (Symbol, error)
+	BToDeclarationList(DeclarationList_ *CGenericSymbol, Declaration_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 381:4: statement_list -> a: ...
-	AToStatementList(Statement_ Symbol) (Symbol, error)
+	AToStatementList(Statement_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 382:4: statement_list -> b: ...
-	BToStatementList(StatementList_ Symbol, Statement_ Symbol) (Symbol, error)
+	BToStatementList(StatementList_ *CGenericSymbol, Statement_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 385:4: expression_statement -> a: ...
-	AToExpressionStatement(Semicolon_ Symbol) (Symbol, error)
+	AToExpressionStatement(char *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 386:4: expression_statement -> b: ...
-	BToExpressionStatement(Expression_ Symbol, Semicolon_ Symbol) (Symbol, error)
+	BToExpressionStatement(Expression_ *CGenericSymbol, char *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 389:4: selection_statement -> a: ...
-	AToSelectionStatement(If_ Symbol, Lparam_ Symbol, Expression_ Symbol, Rparam_ Symbol, Statement_ Symbol) (Symbol, error)
+	AToSelectionStatement(If_ *CGenericSymbol, char *CGenericSymbol, Expression_ *CGenericSymbol, char2 *CGenericSymbol, Statement_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 390:4: selection_statement -> b: ...
-	BToSelectionStatement(If_ Symbol, Lparam_ Symbol, Expression_ Symbol, Rparam_ Symbol, Statement_ Symbol, Else_ Symbol, Statement_2 Symbol) (Symbol, error)
+	BToSelectionStatement(If_ *CGenericSymbol, char *CGenericSymbol, Expression_ *CGenericSymbol, char2 *CGenericSymbol, Statement_ *CGenericSymbol, Else_ *CGenericSymbol, Statement_2 *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 391:4: selection_statement -> c: ...
-	CToSelectionStatement(Switch_ Symbol, Lparam_ Symbol, Expression_ Symbol, Rparam_ Symbol, Statement_ Symbol) (Symbol, error)
+	CToSelectionStatement(Switch_ *CGenericSymbol, char *CGenericSymbol, Expression_ *CGenericSymbol, char2 *CGenericSymbol, Statement_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 394:4: iteration_statement -> a: ...
-	AToIterationStatement(While_ Symbol, Lparam_ Symbol, Expression_ Symbol, Rparam_ Symbol, Statement_ Symbol) (Symbol, error)
+	AToIterationStatement(While_ *CGenericSymbol, char *CGenericSymbol, Expression_ *CGenericSymbol, char2 *CGenericSymbol, Statement_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 395:4: iteration_statement -> b: ...
-	BToIterationStatement(Do_ Symbol, Statement_ Symbol, While_ Symbol, Lparam_ Symbol, Expression_ Symbol, Rparam_ Symbol, Semicolon_ Symbol) (Symbol, error)
+	BToIterationStatement(Do_ *CGenericSymbol, Statement_ *CGenericSymbol, While_ *CGenericSymbol, char *CGenericSymbol, Expression_ *CGenericSymbol, char2 *CGenericSymbol, char3 *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 396:4: iteration_statement -> c: ...
-	CToIterationStatement(For_ Symbol, Lparam_ Symbol, ExpressionStatement_ Symbol, ExpressionStatement_2 Symbol, Rparam_ Symbol, Statement_ Symbol) (Symbol, error)
+	CToIterationStatement(For_ *CGenericSymbol, char *CGenericSymbol, ExpressionStatement_ *CGenericSymbol, ExpressionStatement_2 *CGenericSymbol, char2 *CGenericSymbol, Statement_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 397:4: iteration_statement -> d: ...
-	DToIterationStatement(For_ Symbol, Lparam_ Symbol, ExpressionStatement_ Symbol, ExpressionStatement_2 Symbol, Expression_ Symbol, Rparam_ Symbol, Statement_ Symbol) (Symbol, error)
+	DToIterationStatement(For_ *CGenericSymbol, char *CGenericSymbol, ExpressionStatement_ *CGenericSymbol, ExpressionStatement_2 *CGenericSymbol, Expression_ *CGenericSymbol, char2 *CGenericSymbol, Statement_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 400:4: jump_statement -> a: ...
-	AToJumpStatement(Goto_ Symbol, Identifier_ Symbol, Semicolon_ Symbol) (Symbol, error)
+	AToJumpStatement(Goto_ *CGenericSymbol, Identifier_ *CGenericSymbol, char *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 401:4: jump_statement -> b: ...
-	BToJumpStatement(Continue_ Symbol, Semicolon_ Symbol) (Symbol, error)
+	BToJumpStatement(Continue_ *CGenericSymbol, char *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 402:4: jump_statement -> c: ...
-	CToJumpStatement(Break_ Symbol, Semicolon_ Symbol) (Symbol, error)
+	CToJumpStatement(Break_ *CGenericSymbol, char *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 403:4: jump_statement -> d: ...
-	DToJumpStatement(Return_ Symbol, Semicolon_ Symbol) (Symbol, error)
+	DToJumpStatement(Return_ *CGenericSymbol, char *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 404:4: jump_statement -> e: ...
-	EToJumpStatement(Return_ Symbol, Expression_ Symbol, Semicolon_ Symbol) (Symbol, error)
+	EToJumpStatement(Return_ *CGenericSymbol, Expression_ *CGenericSymbol, char *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 407:4: translation_unit -> a: ...
-	AToTranslationUnit(ExternalDeclaration_ Symbol) (Symbol, error)
+	AToTranslationUnit(ExternalDeclaration_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 408:4: translation_unit -> b: ...
-	BToTranslationUnit(TranslationUnit_ Symbol, ExternalDeclaration_ Symbol) (Symbol, error)
+	BToTranslationUnit(TranslationUnit_ *CGenericSymbol, ExternalDeclaration_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 411:4: external_declaration -> a: ...
-	AToExternalDeclaration(FunctionDefinition_ Symbol) (Symbol, error)
+	AToExternalDeclaration(FunctionDefinition_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 412:4: external_declaration -> b: ...
-	BToExternalDeclaration(Declaration_ Symbol) (Symbol, error)
+	BToExternalDeclaration(Declaration_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 415:4: function_definition -> a: ...
-	AToFunctionDefinition(DeclarationSpecifiers_ Symbol, Declarator_ Symbol, DeclarationList_ Symbol, CompoundStatement_ Symbol) (Symbol, error)
+	AToFunctionDefinition(DeclarationSpecifiers_ *CGenericSymbol, Declarator_ *CGenericSymbol, DeclarationList_ *CGenericSymbol, CompoundStatement_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 416:4: function_definition -> b: ...
-	BToFunctionDefinition(DeclarationSpecifiers_ Symbol, Declarator_ Symbol, CompoundStatement_ Symbol) (Symbol, error)
+	BToFunctionDefinition(DeclarationSpecifiers_ *CGenericSymbol, Declarator_ *CGenericSymbol, CompoundStatement_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 417:4: function_definition -> c: ...
-	CToFunctionDefinition(Declarator_ Symbol, DeclarationList_ Symbol, CompoundStatement_ Symbol) (Symbol, error)
+	CToFunctionDefinition(Declarator_ *CGenericSymbol, DeclarationList_ *CGenericSymbol, CompoundStatement_ *CGenericSymbol) (*CGenericSymbol, error)
 
 	// 418:4: function_definition -> d: ...
-	DToFunctionDefinition(Declarator_ Symbol, CompoundStatement_ Symbol) (Symbol, error)
+	DToFunctionDefinition(Declarator_ *CGenericSymbol, CompoundStatement_ *CGenericSymbol) (*CGenericSymbol, error)
 }
 
 type CParseErrorHandler interface {
@@ -775,40 +751,53 @@ func (CDefaultParseErrorHandler) Error(nextToken CToken, stack _CStack) error {
 	return fmt.Errorf("Syntax error: unexpected symbol %v. Expecting: %v (%v)", nextToken.Id(), _CExpectedTerminals[stack[len(stack)-1].StateId], nextToken.Loc())
 }
 
-func CParse(lexer CLexer, reducer CReducer) (Symbol, error) {
+func CParse(lexer CLexer, reducer CReducer) (*CGenericSymbol, error) {
 	return CParseWithCustomErrorHandler(lexer, reducer, CDefaultParseErrorHandler{})
 }
 
-func CParseWithCustomErrorHandler(lexer CLexer, reducer CReducer, errHandler CParseErrorHandler) (Symbol, error) {
-	var errRetVal Symbol
+func CParseWithCustomErrorHandler(lexer CLexer, reducer CReducer, errHandler CParseErrorHandler) (*CGenericSymbol, error) {
+	item, err := _CParse(lexer, reducer, errHandler, _CState1)
+	if err != nil {
+		var errRetVal *CGenericSymbol
+		return errRetVal, err
+	}
+	return item.Generic_, nil
+}
+
+// ================================================================
+// Parser internal implementation
+// User should normally avoid directly accessing the following code
+// ================================================================
+
+func _CParse(lexer CLexer, reducer CReducer, errHandler CParseErrorHandler, startState _CStateId) (*_CStackItem, error) {
 	stateStack := _CStack{
 		// Note: we don't have to populate the start symbol since its value is never accessed
-		&_CStackItem{_CState1, nil},
+		&_CStackItem{startState, nil},
 	}
 	symbolStack := &_CPseudoSymbolStack{lexer: lexer}
 
 	for {
 		nextSymbol, err := symbolStack.Top()
 		if err != nil {
-			return errRetVal, err
+			return nil, err
 		}
 
 		action, ok := _CActionTable.Get(stateStack[len(stateStack)-1].StateId, nextSymbol.Id())
 		if !ok {
-			return errRetVal, errHandler.Error(nextSymbol, stateStack)
+			return nil, errHandler.Error(nextSymbol, stateStack)
 		}
 		if action.ActionType == _CShiftAction {
 			stateStack = append(stateStack, action.ShiftItem(nextSymbol))
 
 			_, err = symbolStack.Pop()
 			if err != nil {
-				return errRetVal, err
+				return nil, err
 			}
 		} else if action.ActionType == _CReduceAction {
 			var reduceSymbol *CSymbol
 			stateStack, reduceSymbol, err = action.ReduceSymbol(reducer, stateStack)
 			if err != nil {
-				return errRetVal, err
+				return nil, err
 			}
 
 			symbolStack.Push(reduceSymbol)
@@ -816,18 +805,13 @@ func CParseWithCustomErrorHandler(lexer CLexer, reducer CReducer, errHandler CPa
 			if len(stateStack) != 2 {
 				panic("This should never happen")
 			}
-			return stateStack[1].T, nil
+			return stateStack[1], nil
 
 		} else {
 			panic("Unknown action type: " + action.ActionType.String())
 		}
 	}
 }
-
-// ================================================================
-// Parser internal implementation
-// User should normally avoid directly accessing the following code
-// ================================================================
 
 func (i CSymbolId) String() string {
 	switch i {
@@ -951,54 +935,54 @@ func (i CSymbolId) String() string {
 		return "BREAK"
 	case CReturnToken:
 		return "RETURN"
-	case CLparamToken:
-		return "LPARAM"
-	case CRparamToken:
-		return "RPARAM"
-	case CLcurlToken:
-		return "LCURL"
-	case CRcurlToken:
-		return "RCURL"
-	case CLbraceToken:
-		return "LBRACE"
-	case CRbraceToken:
-		return "RBRACE"
-	case CSemicolonToken:
-		return "SEMICOLON"
-	case CColonToken:
-		return "COLON"
-	case CCommaToken:
-		return "COMMA"
-	case CEqToken:
-		return "EQ"
-	case CQuestionToken:
-		return "QUESTION"
-	case CMulToken:
-		return "MUL"
-	case CDivToken:
-		return "DIV"
-	case CMinusToken:
-		return "MINUS"
-	case CPlusToken:
-		return "PLUS"
-	case CModToken:
-		return "MOD"
-	case CAndToken:
-		return "AND"
-	case COrToken:
-		return "OR"
-	case CExclaimToken:
-		return "EXCLAIM"
-	case CDotToken:
-		return "DOT"
-	case CHatToken:
-		return "HAT"
-	case CLtToken:
-		return "LT"
-	case CGtToken:
-		return "GT"
-	case CTildaToken:
-		return "TILDA"
+	case '(':
+		return "'('"
+	case ')':
+		return "')'"
+	case '{':
+		return "'{'"
+	case '}':
+		return "'}'"
+	case '[':
+		return "'['"
+	case ']':
+		return "']'"
+	case ';':
+		return "';'"
+	case ':':
+		return "':'"
+	case ',':
+		return "','"
+	case '=':
+		return "'='"
+	case '?':
+		return "'?'"
+	case '*':
+		return "'*'"
+	case '/':
+		return "'/'"
+	case '-':
+		return "'-'"
+	case '+':
+		return "'+'"
+	case '%':
+		return "'%'"
+	case '&':
+		return "'&'"
+	case '|':
+		return "'|'"
+	case '!':
+		return "'!'"
+	case '.':
+		return "'.'"
+	case '^':
+		return "'^'"
+	case '<':
+		return "'<'"
+	case '>':
+		return "'>'"
+	case '~':
+		return "'~'"
 	case CPrimaryExpressionType:
 		return "primary_expression"
 	case CPostfixExpressionType:
@@ -2230,8 +2214,6 @@ type CSymbol struct {
 	SymbolId_ CSymbolId
 
 	Generic_ *CGenericSymbol
-
-	T Symbol
 }
 
 func NewSymbol(token CToken) (*CSymbol, error) {
@@ -2242,18 +2224,12 @@ func NewSymbol(token CToken) (*CSymbol, error) {
 
 	symbol = &CSymbol{SymbolId_: token.Id()}
 	switch token.Id() {
-	case _CEndMarker:
+	case _CEndMarker, CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CPtrOpToken, CIncOpToken, CDecOpToken, CLeftOpToken, CRightOpToken, CLeOpToken, CGeOpToken, CEqOpToken, CNeOpToken, CAndOpToken, COrOpToken, CMulAssignToken, CDivAssignToken, CModAssignToken, CAddAssignToken, CSubAssignToken, CLeftAssignToken, CRightAssignToken, CAndAssignToken, CXorAssignToken, COrAssignToken, CTypeNameToken, CTypedefToken, CExternToken, CStaticToken, CAutoToken, CRegisterToken, CCharToken, CShortToken, CIntToken, CLongToken, CSignedToken, CUnsignedToken, CFloatToken, CDoubleToken, CConstToken, CVolatileToken, CVoidToken, CStructToken, CUnionToken, CEnumToken, CEllipsisToken, CCaseToken, CDefaultToken, CIfToken, CElseToken, CSwitchToken, CWhileToken, CDoToken, CForToken, CGotoToken, CContinueToken, CBreakToken, CReturnToken, '(', ')', '{', '}', '[', ']', ';', ':', ',', '=', '?', '*', '/', '-', '+', '%', '&', '|', '!', '.', '^', '<', '>', '~':
 		val, ok := token.(*CGenericSymbol)
 		if !ok {
 			return nil, fmt.Errorf("Invalid value type for token %s.  Expecting *CGenericSymbol (%v)", token.Id(), token.Loc())
 		}
 		symbol.Generic_ = val
-	case CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CPtrOpToken, CIncOpToken, CDecOpToken, CLeftOpToken, CRightOpToken, CLeOpToken, CGeOpToken, CEqOpToken, CNeOpToken, CAndOpToken, COrOpToken, CMulAssignToken, CDivAssignToken, CModAssignToken, CAddAssignToken, CSubAssignToken, CLeftAssignToken, CRightAssignToken, CAndAssignToken, CXorAssignToken, COrAssignToken, CTypeNameToken, CTypedefToken, CExternToken, CStaticToken, CAutoToken, CRegisterToken, CCharToken, CShortToken, CIntToken, CLongToken, CSignedToken, CUnsignedToken, CFloatToken, CDoubleToken, CConstToken, CVolatileToken, CVoidToken, CStructToken, CUnionToken, CEnumToken, CEllipsisToken, CCaseToken, CDefaultToken, CIfToken, CElseToken, CSwitchToken, CWhileToken, CDoToken, CForToken, CGotoToken, CContinueToken, CBreakToken, CReturnToken, CLparamToken, CRparamToken, CLcurlToken, CRcurlToken, CLbraceToken, CRbraceToken, CSemicolonToken, CColonToken, CCommaToken, CEqToken, CQuestionToken, CMulToken, CDivToken, CMinusToken, CPlusToken, CModToken, CAndToken, COrToken, CExclaimToken, CDotToken, CHatToken, CLtToken, CGtToken, CTildaToken:
-		val, ok := token.(Symbol)
-		if !ok {
-			return nil, fmt.Errorf("Invalid value type for token %s.  Expecting Symbol (%v)", token.Id(), token.Loc())
-		}
-		symbol.T = val
 	default:
 		return nil, fmt.Errorf("Unexpected token type: %s", symbol.Id())
 	}
@@ -2267,11 +2243,6 @@ func (s *CSymbol) Id() CSymbolId {
 func (s *CSymbol) Loc() CLocation {
 	type locator interface{ Loc() CLocation }
 	switch s.SymbolId_ {
-	case CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CPtrOpToken, CIncOpToken, CDecOpToken, CLeftOpToken, CRightOpToken, CLeOpToken, CGeOpToken, CEqOpToken, CNeOpToken, CAndOpToken, COrOpToken, CMulAssignToken, CDivAssignToken, CModAssignToken, CAddAssignToken, CSubAssignToken, CLeftAssignToken, CRightAssignToken, CAndAssignToken, CXorAssignToken, COrAssignToken, CTypeNameToken, CTypedefToken, CExternToken, CStaticToken, CAutoToken, CRegisterToken, CCharToken, CShortToken, CIntToken, CLongToken, CSignedToken, CUnsignedToken, CFloatToken, CDoubleToken, CConstToken, CVolatileToken, CVoidToken, CStructToken, CUnionToken, CEnumToken, CEllipsisToken, CCaseToken, CDefaultToken, CIfToken, CElseToken, CSwitchToken, CWhileToken, CDoToken, CForToken, CGotoToken, CContinueToken, CBreakToken, CReturnToken, CLparamToken, CRparamToken, CLcurlToken, CRcurlToken, CLbraceToken, CRbraceToken, CSemicolonToken, CColonToken, CCommaToken, CEqToken, CQuestionToken, CMulToken, CDivToken, CMinusToken, CPlusToken, CModToken, CAndToken, COrToken, CExclaimToken, CDotToken, CHatToken, CLtToken, CGtToken, CTildaToken, CPrimaryExpressionType, CPostfixExpressionType, CArgumentExpressionListType, CUnaryExpressionType, CUnaryOperatorType, CCastExpressionType, CMultiplicativeExpressionType, CAdditiveExpressionType, CShiftExpressionType, CRelationalExpressionType, CEqualityExpressionType, CAndExpressionType, CExclusiveOrExpressionType, CInclusiveOrExpressionType, CLogicalAndExpressionType, CLogicalOrExpressionType, CConditionalExpressionType, CAssignmentExpressionType, CAssignmentOperatorType, CExpressionType, CConstantExpressionType, CDeclarationType, CDeclarationSpecifiersType, CInitDeclaratorListType, CInitDeclaratorType, CStorageClassSpecifierType, CTypeSpecifierType, CStructOrUnionSpecifierType, CStructOrUnionType, CStructDeclarationListType, CStructDeclarationType, CSpecifierQualifierListType, CStructDeclaratorListType, CStructDeclaratorType, CEnumSpecifierType, CEnumeratorListType, CEnumeratorType, CTypeQualifierType, CDeclaratorType, CDirectDeclaratorType, CPointerType, CTypeQualifierListType, CParameterTypeListType, CParameterListType, CParameterDeclarationType, CIdentifierListType, CTypeNameType, CAbstractDeclaratorType, CDirectAbstractDeclaratorType, CInitializerType, CInitializerListType, CStatementType, CLabeledStatementType, CCompoundStatementType, CDeclarationListType, CStatementListType, CExpressionStatementType, CSelectionStatementType, CIterationStatementType, CJumpStatementType, CTranslationUnitType, CExternalDeclarationType, CFunctionDefinitionType:
-		loc, ok := interface{}(s.T).(locator)
-		if ok {
-			return loc.Loc()
-		}
 	}
 	if s.Generic_ != nil {
 		return s.Generic_.Loc()
@@ -2342,1057 +2313,1057 @@ func (act *_CAction) ReduceSymbol(reducer CReducer, stack _CStack) (_CStack, *CS
 		args := stack[len(stack)-1:]
 		stack = stack[:len(stack)-1]
 		symbol.SymbolId_ = CPrimaryExpressionType
-		symbol.T, err = reducer.AToPrimaryExpression(args[0].T)
+		symbol.Generic_, err = reducer.AToPrimaryExpression(args[0].Generic_)
 	case _CReduceBToPrimaryExpression:
 		args := stack[len(stack)-1:]
 		stack = stack[:len(stack)-1]
 		symbol.SymbolId_ = CPrimaryExpressionType
-		symbol.T, err = reducer.BToPrimaryExpression(args[0].T)
+		symbol.Generic_, err = reducer.BToPrimaryExpression(args[0].Generic_)
 	case _CReduceCToPrimaryExpression:
 		args := stack[len(stack)-1:]
 		stack = stack[:len(stack)-1]
 		symbol.SymbolId_ = CPrimaryExpressionType
-		symbol.T, err = reducer.CToPrimaryExpression(args[0].T)
+		symbol.Generic_, err = reducer.CToPrimaryExpression(args[0].Generic_)
 	case _CReduceDToPrimaryExpression:
 		args := stack[len(stack)-3:]
 		stack = stack[:len(stack)-3]
 		symbol.SymbolId_ = CPrimaryExpressionType
-		symbol.T, err = reducer.DToPrimaryExpression(args[0].T, args[1].T, args[2].T)
+		symbol.Generic_, err = reducer.DToPrimaryExpression(args[0].Generic_, args[1].Generic_, args[2].Generic_)
 	case _CReduceAToPostfixExpression:
 		args := stack[len(stack)-1:]
 		stack = stack[:len(stack)-1]
 		symbol.SymbolId_ = CPostfixExpressionType
-		symbol.T, err = reducer.AToPostfixExpression(args[0].T)
+		symbol.Generic_, err = reducer.AToPostfixExpression(args[0].Generic_)
 	case _CReduceBToPostfixExpression:
 		args := stack[len(stack)-4:]
 		stack = stack[:len(stack)-4]
 		symbol.SymbolId_ = CPostfixExpressionType
-		symbol.T, err = reducer.BToPostfixExpression(args[0].T, args[1].T, args[2].T, args[3].T)
+		symbol.Generic_, err = reducer.BToPostfixExpression(args[0].Generic_, args[1].Generic_, args[2].Generic_, args[3].Generic_)
 	case _CReduceCToPostfixExpression:
 		args := stack[len(stack)-3:]
 		stack = stack[:len(stack)-3]
 		symbol.SymbolId_ = CPostfixExpressionType
-		symbol.T, err = reducer.CToPostfixExpression(args[0].T, args[1].T, args[2].T)
+		symbol.Generic_, err = reducer.CToPostfixExpression(args[0].Generic_, args[1].Generic_, args[2].Generic_)
 	case _CReduceDToPostfixExpression:
 		args := stack[len(stack)-4:]
 		stack = stack[:len(stack)-4]
 		symbol.SymbolId_ = CPostfixExpressionType
-		symbol.T, err = reducer.DToPostfixExpression(args[0].T, args[1].T, args[2].T, args[3].T)
+		symbol.Generic_, err = reducer.DToPostfixExpression(args[0].Generic_, args[1].Generic_, args[2].Generic_, args[3].Generic_)
 	case _CReduceEToPostfixExpression:
 		args := stack[len(stack)-3:]
 		stack = stack[:len(stack)-3]
 		symbol.SymbolId_ = CPostfixExpressionType
-		symbol.T, err = reducer.EToPostfixExpression(args[0].T, args[1].T, args[2].T)
+		symbol.Generic_, err = reducer.EToPostfixExpression(args[0].Generic_, args[1].Generic_, args[2].Generic_)
 	case _CReduceFToPostfixExpression:
 		args := stack[len(stack)-3:]
 		stack = stack[:len(stack)-3]
 		symbol.SymbolId_ = CPostfixExpressionType
-		symbol.T, err = reducer.FToPostfixExpression(args[0].T, args[1].T, args[2].T)
+		symbol.Generic_, err = reducer.FToPostfixExpression(args[0].Generic_, args[1].Generic_, args[2].Generic_)
 	case _CReduceGToPostfixExpression:
 		args := stack[len(stack)-2:]
 		stack = stack[:len(stack)-2]
 		symbol.SymbolId_ = CPostfixExpressionType
-		symbol.T, err = reducer.GToPostfixExpression(args[0].T, args[1].T)
+		symbol.Generic_, err = reducer.GToPostfixExpression(args[0].Generic_, args[1].Generic_)
 	case _CReduceHToPostfixExpression:
 		args := stack[len(stack)-2:]
 		stack = stack[:len(stack)-2]
 		symbol.SymbolId_ = CPostfixExpressionType
-		symbol.T, err = reducer.HToPostfixExpression(args[0].T, args[1].T)
+		symbol.Generic_, err = reducer.HToPostfixExpression(args[0].Generic_, args[1].Generic_)
 	case _CReduceAToArgumentExpressionList:
 		args := stack[len(stack)-1:]
 		stack = stack[:len(stack)-1]
 		symbol.SymbolId_ = CArgumentExpressionListType
-		symbol.T, err = reducer.AToArgumentExpressionList(args[0].T)
+		symbol.Generic_, err = reducer.AToArgumentExpressionList(args[0].Generic_)
 	case _CReduceBToArgumentExpressionList:
 		args := stack[len(stack)-3:]
 		stack = stack[:len(stack)-3]
 		symbol.SymbolId_ = CArgumentExpressionListType
-		symbol.T, err = reducer.BToArgumentExpressionList(args[0].T, args[1].T, args[2].T)
+		symbol.Generic_, err = reducer.BToArgumentExpressionList(args[0].Generic_, args[1].Generic_, args[2].Generic_)
 	case _CReduceAToUnaryExpression:
 		args := stack[len(stack)-1:]
 		stack = stack[:len(stack)-1]
 		symbol.SymbolId_ = CUnaryExpressionType
-		symbol.T, err = reducer.AToUnaryExpression(args[0].T)
+		symbol.Generic_, err = reducer.AToUnaryExpression(args[0].Generic_)
 	case _CReduceBToUnaryExpression:
 		args := stack[len(stack)-2:]
 		stack = stack[:len(stack)-2]
 		symbol.SymbolId_ = CUnaryExpressionType
-		symbol.T, err = reducer.BToUnaryExpression(args[0].T, args[1].T)
+		symbol.Generic_, err = reducer.BToUnaryExpression(args[0].Generic_, args[1].Generic_)
 	case _CReduceCToUnaryExpression:
 		args := stack[len(stack)-2:]
 		stack = stack[:len(stack)-2]
 		symbol.SymbolId_ = CUnaryExpressionType
-		symbol.T, err = reducer.CToUnaryExpression(args[0].T, args[1].T)
+		symbol.Generic_, err = reducer.CToUnaryExpression(args[0].Generic_, args[1].Generic_)
 	case _CReduceDToUnaryExpression:
 		args := stack[len(stack)-2:]
 		stack = stack[:len(stack)-2]
 		symbol.SymbolId_ = CUnaryExpressionType
-		symbol.T, err = reducer.DToUnaryExpression(args[0].T, args[1].T)
+		symbol.Generic_, err = reducer.DToUnaryExpression(args[0].Generic_, args[1].Generic_)
 	case _CReduceEToUnaryExpression:
 		args := stack[len(stack)-2:]
 		stack = stack[:len(stack)-2]
 		symbol.SymbolId_ = CUnaryExpressionType
-		symbol.T, err = reducer.EToUnaryExpression(args[0].T, args[1].T)
+		symbol.Generic_, err = reducer.EToUnaryExpression(args[0].Generic_, args[1].Generic_)
 	case _CReduceFToUnaryExpression:
 		args := stack[len(stack)-4:]
 		stack = stack[:len(stack)-4]
 		symbol.SymbolId_ = CUnaryExpressionType
-		symbol.T, err = reducer.FToUnaryExpression(args[0].T, args[1].T, args[2].T, args[3].T)
+		symbol.Generic_, err = reducer.FToUnaryExpression(args[0].Generic_, args[1].Generic_, args[2].Generic_, args[3].Generic_)
 	case _CReduceAToUnaryOperator:
 		args := stack[len(stack)-1:]
 		stack = stack[:len(stack)-1]
 		symbol.SymbolId_ = CUnaryOperatorType
-		symbol.T, err = reducer.AToUnaryOperator(args[0].T)
+		symbol.Generic_, err = reducer.AToUnaryOperator(args[0].Generic_)
 	case _CReduceBToUnaryOperator:
 		args := stack[len(stack)-1:]
 		stack = stack[:len(stack)-1]
 		symbol.SymbolId_ = CUnaryOperatorType
-		symbol.T, err = reducer.BToUnaryOperator(args[0].T)
+		symbol.Generic_, err = reducer.BToUnaryOperator(args[0].Generic_)
 	case _CReduceCToUnaryOperator:
 		args := stack[len(stack)-1:]
 		stack = stack[:len(stack)-1]
 		symbol.SymbolId_ = CUnaryOperatorType
-		symbol.T, err = reducer.CToUnaryOperator(args[0].T)
+		symbol.Generic_, err = reducer.CToUnaryOperator(args[0].Generic_)
 	case _CReduceDToUnaryOperator:
 		args := stack[len(stack)-1:]
 		stack = stack[:len(stack)-1]
 		symbol.SymbolId_ = CUnaryOperatorType
-		symbol.T, err = reducer.DToUnaryOperator(args[0].T)
+		symbol.Generic_, err = reducer.DToUnaryOperator(args[0].Generic_)
 	case _CReduceEToUnaryOperator:
 		args := stack[len(stack)-1:]
 		stack = stack[:len(stack)-1]
 		symbol.SymbolId_ = CUnaryOperatorType
-		symbol.T, err = reducer.EToUnaryOperator(args[0].T)
+		symbol.Generic_, err = reducer.EToUnaryOperator(args[0].Generic_)
 	case _CReduceFToUnaryOperator:
 		args := stack[len(stack)-1:]
 		stack = stack[:len(stack)-1]
 		symbol.SymbolId_ = CUnaryOperatorType
-		symbol.T, err = reducer.FToUnaryOperator(args[0].T)
+		symbol.Generic_, err = reducer.FToUnaryOperator(args[0].Generic_)
 	case _CReduceAToCastExpression:
 		args := stack[len(stack)-1:]
 		stack = stack[:len(stack)-1]
 		symbol.SymbolId_ = CCastExpressionType
-		symbol.T, err = reducer.AToCastExpression(args[0].T)
+		symbol.Generic_, err = reducer.AToCastExpression(args[0].Generic_)
 	case _CReduceBToCastExpression:
 		args := stack[len(stack)-4:]
 		stack = stack[:len(stack)-4]
 		symbol.SymbolId_ = CCastExpressionType
-		symbol.T, err = reducer.BToCastExpression(args[0].T, args[1].T, args[2].T, args[3].T)
+		symbol.Generic_, err = reducer.BToCastExpression(args[0].Generic_, args[1].Generic_, args[2].Generic_, args[3].Generic_)
 	case _CReduceAToMultiplicativeExpression:
 		args := stack[len(stack)-1:]
 		stack = stack[:len(stack)-1]
 		symbol.SymbolId_ = CMultiplicativeExpressionType
-		symbol.T, err = reducer.AToMultiplicativeExpression(args[0].T)
+		symbol.Generic_, err = reducer.AToMultiplicativeExpression(args[0].Generic_)
 	case _CReduceBToMultiplicativeExpression:
 		args := stack[len(stack)-3:]
 		stack = stack[:len(stack)-3]
 		symbol.SymbolId_ = CMultiplicativeExpressionType
-		symbol.T, err = reducer.BToMultiplicativeExpression(args[0].T, args[1].T, args[2].T)
+		symbol.Generic_, err = reducer.BToMultiplicativeExpression(args[0].Generic_, args[1].Generic_, args[2].Generic_)
 	case _CReduceCToMultiplicativeExpression:
 		args := stack[len(stack)-3:]
 		stack = stack[:len(stack)-3]
 		symbol.SymbolId_ = CMultiplicativeExpressionType
-		symbol.T, err = reducer.CToMultiplicativeExpression(args[0].T, args[1].T, args[2].T)
+		symbol.Generic_, err = reducer.CToMultiplicativeExpression(args[0].Generic_, args[1].Generic_, args[2].Generic_)
 	case _CReduceDToMultiplicativeExpression:
 		args := stack[len(stack)-3:]
 		stack = stack[:len(stack)-3]
 		symbol.SymbolId_ = CMultiplicativeExpressionType
-		symbol.T, err = reducer.DToMultiplicativeExpression(args[0].T, args[1].T, args[2].T)
+		symbol.Generic_, err = reducer.DToMultiplicativeExpression(args[0].Generic_, args[1].Generic_, args[2].Generic_)
 	case _CReduceAToAdditiveExpression:
 		args := stack[len(stack)-1:]
 		stack = stack[:len(stack)-1]
 		symbol.SymbolId_ = CAdditiveExpressionType
-		symbol.T, err = reducer.AToAdditiveExpression(args[0].T)
+		symbol.Generic_, err = reducer.AToAdditiveExpression(args[0].Generic_)
 	case _CReduceBToAdditiveExpression:
 		args := stack[len(stack)-3:]
 		stack = stack[:len(stack)-3]
 		symbol.SymbolId_ = CAdditiveExpressionType
-		symbol.T, err = reducer.BToAdditiveExpression(args[0].T, args[1].T, args[2].T)
+		symbol.Generic_, err = reducer.BToAdditiveExpression(args[0].Generic_, args[1].Generic_, args[2].Generic_)
 	case _CReduceCToAdditiveExpression:
 		args := stack[len(stack)-3:]
 		stack = stack[:len(stack)-3]
 		symbol.SymbolId_ = CAdditiveExpressionType
-		symbol.T, err = reducer.CToAdditiveExpression(args[0].T, args[1].T, args[2].T)
+		symbol.Generic_, err = reducer.CToAdditiveExpression(args[0].Generic_, args[1].Generic_, args[2].Generic_)
 	case _CReduceAToShiftExpression:
 		args := stack[len(stack)-1:]
 		stack = stack[:len(stack)-1]
 		symbol.SymbolId_ = CShiftExpressionType
-		symbol.T, err = reducer.AToShiftExpression(args[0].T)
+		symbol.Generic_, err = reducer.AToShiftExpression(args[0].Generic_)
 	case _CReduceBToShiftExpression:
 		args := stack[len(stack)-3:]
 		stack = stack[:len(stack)-3]
 		symbol.SymbolId_ = CShiftExpressionType
-		symbol.T, err = reducer.BToShiftExpression(args[0].T, args[1].T, args[2].T)
+		symbol.Generic_, err = reducer.BToShiftExpression(args[0].Generic_, args[1].Generic_, args[2].Generic_)
 	case _CReduceCToShiftExpression:
 		args := stack[len(stack)-3:]
 		stack = stack[:len(stack)-3]
 		symbol.SymbolId_ = CShiftExpressionType
-		symbol.T, err = reducer.CToShiftExpression(args[0].T, args[1].T, args[2].T)
+		symbol.Generic_, err = reducer.CToShiftExpression(args[0].Generic_, args[1].Generic_, args[2].Generic_)
 	case _CReduceAToRelationalExpression:
 		args := stack[len(stack)-1:]
 		stack = stack[:len(stack)-1]
 		symbol.SymbolId_ = CRelationalExpressionType
-		symbol.T, err = reducer.AToRelationalExpression(args[0].T)
+		symbol.Generic_, err = reducer.AToRelationalExpression(args[0].Generic_)
 	case _CReduceBToRelationalExpression:
 		args := stack[len(stack)-3:]
 		stack = stack[:len(stack)-3]
 		symbol.SymbolId_ = CRelationalExpressionType
-		symbol.T, err = reducer.BToRelationalExpression(args[0].T, args[1].T, args[2].T)
+		symbol.Generic_, err = reducer.BToRelationalExpression(args[0].Generic_, args[1].Generic_, args[2].Generic_)
 	case _CReduceCToRelationalExpression:
 		args := stack[len(stack)-3:]
 		stack = stack[:len(stack)-3]
 		symbol.SymbolId_ = CRelationalExpressionType
-		symbol.T, err = reducer.CToRelationalExpression(args[0].T, args[1].T, args[2].T)
+		symbol.Generic_, err = reducer.CToRelationalExpression(args[0].Generic_, args[1].Generic_, args[2].Generic_)
 	case _CReduceDToRelationalExpression:
 		args := stack[len(stack)-3:]
 		stack = stack[:len(stack)-3]
 		symbol.SymbolId_ = CRelationalExpressionType
-		symbol.T, err = reducer.DToRelationalExpression(args[0].T, args[1].T, args[2].T)
+		symbol.Generic_, err = reducer.DToRelationalExpression(args[0].Generic_, args[1].Generic_, args[2].Generic_)
 	case _CReduceEToRelationalExpression:
 		args := stack[len(stack)-3:]
 		stack = stack[:len(stack)-3]
 		symbol.SymbolId_ = CRelationalExpressionType
-		symbol.T, err = reducer.EToRelationalExpression(args[0].T, args[1].T, args[2].T)
+		symbol.Generic_, err = reducer.EToRelationalExpression(args[0].Generic_, args[1].Generic_, args[2].Generic_)
 	case _CReduceAToEqualityExpression:
 		args := stack[len(stack)-1:]
 		stack = stack[:len(stack)-1]
 		symbol.SymbolId_ = CEqualityExpressionType
-		symbol.T, err = reducer.AToEqualityExpression(args[0].T)
+		symbol.Generic_, err = reducer.AToEqualityExpression(args[0].Generic_)
 	case _CReduceBToEqualityExpression:
 		args := stack[len(stack)-3:]
 		stack = stack[:len(stack)-3]
 		symbol.SymbolId_ = CEqualityExpressionType
-		symbol.T, err = reducer.BToEqualityExpression(args[0].T, args[1].T, args[2].T)
+		symbol.Generic_, err = reducer.BToEqualityExpression(args[0].Generic_, args[1].Generic_, args[2].Generic_)
 	case _CReduceCToEqualityExpression:
 		args := stack[len(stack)-3:]
 		stack = stack[:len(stack)-3]
 		symbol.SymbolId_ = CEqualityExpressionType
-		symbol.T, err = reducer.CToEqualityExpression(args[0].T, args[1].T, args[2].T)
+		symbol.Generic_, err = reducer.CToEqualityExpression(args[0].Generic_, args[1].Generic_, args[2].Generic_)
 	case _CReduceAToAndExpression:
 		args := stack[len(stack)-1:]
 		stack = stack[:len(stack)-1]
 		symbol.SymbolId_ = CAndExpressionType
-		symbol.T, err = reducer.AToAndExpression(args[0].T)
+		symbol.Generic_, err = reducer.AToAndExpression(args[0].Generic_)
 	case _CReduceBToAndExpression:
 		args := stack[len(stack)-3:]
 		stack = stack[:len(stack)-3]
 		symbol.SymbolId_ = CAndExpressionType
-		symbol.T, err = reducer.BToAndExpression(args[0].T, args[1].T, args[2].T)
+		symbol.Generic_, err = reducer.BToAndExpression(args[0].Generic_, args[1].Generic_, args[2].Generic_)
 	case _CReduceAToExclusiveOrExpression:
 		args := stack[len(stack)-1:]
 		stack = stack[:len(stack)-1]
 		symbol.SymbolId_ = CExclusiveOrExpressionType
-		symbol.T, err = reducer.AToExclusiveOrExpression(args[0].T)
+		symbol.Generic_, err = reducer.AToExclusiveOrExpression(args[0].Generic_)
 	case _CReduceBToExclusiveOrExpression:
 		args := stack[len(stack)-3:]
 		stack = stack[:len(stack)-3]
 		symbol.SymbolId_ = CExclusiveOrExpressionType
-		symbol.T, err = reducer.BToExclusiveOrExpression(args[0].T, args[1].T, args[2].T)
+		symbol.Generic_, err = reducer.BToExclusiveOrExpression(args[0].Generic_, args[1].Generic_, args[2].Generic_)
 	case _CReduceAToInclusiveOrExpression:
 		args := stack[len(stack)-1:]
 		stack = stack[:len(stack)-1]
 		symbol.SymbolId_ = CInclusiveOrExpressionType
-		symbol.T, err = reducer.AToInclusiveOrExpression(args[0].T)
+		symbol.Generic_, err = reducer.AToInclusiveOrExpression(args[0].Generic_)
 	case _CReduceBToInclusiveOrExpression:
 		args := stack[len(stack)-3:]
 		stack = stack[:len(stack)-3]
 		symbol.SymbolId_ = CInclusiveOrExpressionType
-		symbol.T, err = reducer.BToInclusiveOrExpression(args[0].T, args[1].T, args[2].T)
+		symbol.Generic_, err = reducer.BToInclusiveOrExpression(args[0].Generic_, args[1].Generic_, args[2].Generic_)
 	case _CReduceAToLogicalAndExpression:
 		args := stack[len(stack)-1:]
 		stack = stack[:len(stack)-1]
 		symbol.SymbolId_ = CLogicalAndExpressionType
-		symbol.T, err = reducer.AToLogicalAndExpression(args[0].T)
+		symbol.Generic_, err = reducer.AToLogicalAndExpression(args[0].Generic_)
 	case _CReduceBToLogicalAndExpression:
 		args := stack[len(stack)-3:]
 		stack = stack[:len(stack)-3]
 		symbol.SymbolId_ = CLogicalAndExpressionType
-		symbol.T, err = reducer.BToLogicalAndExpression(args[0].T, args[1].T, args[2].T)
+		symbol.Generic_, err = reducer.BToLogicalAndExpression(args[0].Generic_, args[1].Generic_, args[2].Generic_)
 	case _CReduceAToLogicalOrExpression:
 		args := stack[len(stack)-1:]
 		stack = stack[:len(stack)-1]
 		symbol.SymbolId_ = CLogicalOrExpressionType
-		symbol.T, err = reducer.AToLogicalOrExpression(args[0].T)
+		symbol.Generic_, err = reducer.AToLogicalOrExpression(args[0].Generic_)
 	case _CReduceBToLogicalOrExpression:
 		args := stack[len(stack)-3:]
 		stack = stack[:len(stack)-3]
 		symbol.SymbolId_ = CLogicalOrExpressionType
-		symbol.T, err = reducer.BToLogicalOrExpression(args[0].T, args[1].T, args[2].T)
+		symbol.Generic_, err = reducer.BToLogicalOrExpression(args[0].Generic_, args[1].Generic_, args[2].Generic_)
 	case _CReduceAToConditionalExpression:
 		args := stack[len(stack)-1:]
 		stack = stack[:len(stack)-1]
 		symbol.SymbolId_ = CConditionalExpressionType
-		symbol.T, err = reducer.AToConditionalExpression(args[0].T)
+		symbol.Generic_, err = reducer.AToConditionalExpression(args[0].Generic_)
 	case _CReduceBToConditionalExpression:
 		args := stack[len(stack)-5:]
 		stack = stack[:len(stack)-5]
 		symbol.SymbolId_ = CConditionalExpressionType
-		symbol.T, err = reducer.BToConditionalExpression(args[0].T, args[1].T, args[2].T, args[3].T, args[4].T)
+		symbol.Generic_, err = reducer.BToConditionalExpression(args[0].Generic_, args[1].Generic_, args[2].Generic_, args[3].Generic_, args[4].Generic_)
 	case _CReduceAToAssignmentExpression:
 		args := stack[len(stack)-1:]
 		stack = stack[:len(stack)-1]
 		symbol.SymbolId_ = CAssignmentExpressionType
-		symbol.T, err = reducer.AToAssignmentExpression(args[0].T)
+		symbol.Generic_, err = reducer.AToAssignmentExpression(args[0].Generic_)
 	case _CReduceBToAssignmentExpression:
 		args := stack[len(stack)-3:]
 		stack = stack[:len(stack)-3]
 		symbol.SymbolId_ = CAssignmentExpressionType
-		symbol.T, err = reducer.BToAssignmentExpression(args[0].T, args[1].T, args[2].T)
+		symbol.Generic_, err = reducer.BToAssignmentExpression(args[0].Generic_, args[1].Generic_, args[2].Generic_)
 	case _CReduceAToAssignmentOperator:
 		args := stack[len(stack)-1:]
 		stack = stack[:len(stack)-1]
 		symbol.SymbolId_ = CAssignmentOperatorType
-		symbol.T, err = reducer.AToAssignmentOperator(args[0].T)
+		symbol.Generic_, err = reducer.AToAssignmentOperator(args[0].Generic_)
 	case _CReduceBToAssignmentOperator:
 		args := stack[len(stack)-1:]
 		stack = stack[:len(stack)-1]
 		symbol.SymbolId_ = CAssignmentOperatorType
-		symbol.T, err = reducer.BToAssignmentOperator(args[0].T)
+		symbol.Generic_, err = reducer.BToAssignmentOperator(args[0].Generic_)
 	case _CReduceCToAssignmentOperator:
 		args := stack[len(stack)-1:]
 		stack = stack[:len(stack)-1]
 		symbol.SymbolId_ = CAssignmentOperatorType
-		symbol.T, err = reducer.CToAssignmentOperator(args[0].T)
+		symbol.Generic_, err = reducer.CToAssignmentOperator(args[0].Generic_)
 	case _CReduceDToAssignmentOperator:
 		args := stack[len(stack)-1:]
 		stack = stack[:len(stack)-1]
 		symbol.SymbolId_ = CAssignmentOperatorType
-		symbol.T, err = reducer.DToAssignmentOperator(args[0].T)
+		symbol.Generic_, err = reducer.DToAssignmentOperator(args[0].Generic_)
 	case _CReduceEToAssignmentOperator:
 		args := stack[len(stack)-1:]
 		stack = stack[:len(stack)-1]
 		symbol.SymbolId_ = CAssignmentOperatorType
-		symbol.T, err = reducer.EToAssignmentOperator(args[0].T)
+		symbol.Generic_, err = reducer.EToAssignmentOperator(args[0].Generic_)
 	case _CReduceFToAssignmentOperator:
 		args := stack[len(stack)-1:]
 		stack = stack[:len(stack)-1]
 		symbol.SymbolId_ = CAssignmentOperatorType
-		symbol.T, err = reducer.FToAssignmentOperator(args[0].T)
+		symbol.Generic_, err = reducer.FToAssignmentOperator(args[0].Generic_)
 	case _CReduceGToAssignmentOperator:
 		args := stack[len(stack)-1:]
 		stack = stack[:len(stack)-1]
 		symbol.SymbolId_ = CAssignmentOperatorType
-		symbol.T, err = reducer.GToAssignmentOperator(args[0].T)
+		symbol.Generic_, err = reducer.GToAssignmentOperator(args[0].Generic_)
 	case _CReduceHToAssignmentOperator:
 		args := stack[len(stack)-1:]
 		stack = stack[:len(stack)-1]
 		symbol.SymbolId_ = CAssignmentOperatorType
-		symbol.T, err = reducer.HToAssignmentOperator(args[0].T)
+		symbol.Generic_, err = reducer.HToAssignmentOperator(args[0].Generic_)
 	case _CReduceIToAssignmentOperator:
 		args := stack[len(stack)-1:]
 		stack = stack[:len(stack)-1]
 		symbol.SymbolId_ = CAssignmentOperatorType
-		symbol.T, err = reducer.IToAssignmentOperator(args[0].T)
+		symbol.Generic_, err = reducer.IToAssignmentOperator(args[0].Generic_)
 	case _CReduceJToAssignmentOperator:
 		args := stack[len(stack)-1:]
 		stack = stack[:len(stack)-1]
 		symbol.SymbolId_ = CAssignmentOperatorType
-		symbol.T, err = reducer.JToAssignmentOperator(args[0].T)
+		symbol.Generic_, err = reducer.JToAssignmentOperator(args[0].Generic_)
 	case _CReduceKToAssignmentOperator:
 		args := stack[len(stack)-1:]
 		stack = stack[:len(stack)-1]
 		symbol.SymbolId_ = CAssignmentOperatorType
-		symbol.T, err = reducer.KToAssignmentOperator(args[0].T)
+		symbol.Generic_, err = reducer.KToAssignmentOperator(args[0].Generic_)
 	case _CReduceAToExpression:
 		args := stack[len(stack)-1:]
 		stack = stack[:len(stack)-1]
 		symbol.SymbolId_ = CExpressionType
-		symbol.T, err = reducer.AToExpression(args[0].T)
+		symbol.Generic_, err = reducer.AToExpression(args[0].Generic_)
 	case _CReduceBToExpression:
 		args := stack[len(stack)-3:]
 		stack = stack[:len(stack)-3]
 		symbol.SymbolId_ = CExpressionType
-		symbol.T, err = reducer.BToExpression(args[0].T, args[1].T, args[2].T)
+		symbol.Generic_, err = reducer.BToExpression(args[0].Generic_, args[1].Generic_, args[2].Generic_)
 	case _CReduceAToConstantExpression:
 		args := stack[len(stack)-1:]
 		stack = stack[:len(stack)-1]
 		symbol.SymbolId_ = CConstantExpressionType
-		symbol.T, err = reducer.AToConstantExpression(args[0].T)
+		symbol.Generic_, err = reducer.AToConstantExpression(args[0].Generic_)
 	case _CReduceAToDeclaration:
 		args := stack[len(stack)-2:]
 		stack = stack[:len(stack)-2]
 		symbol.SymbolId_ = CDeclarationType
-		symbol.T, err = reducer.AToDeclaration(args[0].T, args[1].T)
+		symbol.Generic_, err = reducer.AToDeclaration(args[0].Generic_, args[1].Generic_)
 	case _CReduceBToDeclaration:
 		args := stack[len(stack)-3:]
 		stack = stack[:len(stack)-3]
 		symbol.SymbolId_ = CDeclarationType
-		symbol.T, err = reducer.BToDeclaration(args[0].T, args[1].T, args[2].T)
+		symbol.Generic_, err = reducer.BToDeclaration(args[0].Generic_, args[1].Generic_, args[2].Generic_)
 	case _CReduceAToDeclarationSpecifiers:
 		args := stack[len(stack)-1:]
 		stack = stack[:len(stack)-1]
 		symbol.SymbolId_ = CDeclarationSpecifiersType
-		symbol.T, err = reducer.AToDeclarationSpecifiers(args[0].T)
+		symbol.Generic_, err = reducer.AToDeclarationSpecifiers(args[0].Generic_)
 	case _CReduceBToDeclarationSpecifiers:
 		args := stack[len(stack)-2:]
 		stack = stack[:len(stack)-2]
 		symbol.SymbolId_ = CDeclarationSpecifiersType
-		symbol.T, err = reducer.BToDeclarationSpecifiers(args[0].T, args[1].T)
+		symbol.Generic_, err = reducer.BToDeclarationSpecifiers(args[0].Generic_, args[1].Generic_)
 	case _CReduceCToDeclarationSpecifiers:
 		args := stack[len(stack)-1:]
 		stack = stack[:len(stack)-1]
 		symbol.SymbolId_ = CDeclarationSpecifiersType
-		symbol.T, err = reducer.CToDeclarationSpecifiers(args[0].T)
+		symbol.Generic_, err = reducer.CToDeclarationSpecifiers(args[0].Generic_)
 	case _CReduceDToDeclarationSpecifiers:
 		args := stack[len(stack)-2:]
 		stack = stack[:len(stack)-2]
 		symbol.SymbolId_ = CDeclarationSpecifiersType
-		symbol.T, err = reducer.DToDeclarationSpecifiers(args[0].T, args[1].T)
+		symbol.Generic_, err = reducer.DToDeclarationSpecifiers(args[0].Generic_, args[1].Generic_)
 	case _CReduceEToDeclarationSpecifiers:
 		args := stack[len(stack)-1:]
 		stack = stack[:len(stack)-1]
 		symbol.SymbolId_ = CDeclarationSpecifiersType
-		symbol.T, err = reducer.EToDeclarationSpecifiers(args[0].T)
+		symbol.Generic_, err = reducer.EToDeclarationSpecifiers(args[0].Generic_)
 	case _CReduceFToDeclarationSpecifiers:
 		args := stack[len(stack)-2:]
 		stack = stack[:len(stack)-2]
 		symbol.SymbolId_ = CDeclarationSpecifiersType
-		symbol.T, err = reducer.FToDeclarationSpecifiers(args[0].T, args[1].T)
+		symbol.Generic_, err = reducer.FToDeclarationSpecifiers(args[0].Generic_, args[1].Generic_)
 	case _CReduceAToInitDeclaratorList:
 		args := stack[len(stack)-1:]
 		stack = stack[:len(stack)-1]
 		symbol.SymbolId_ = CInitDeclaratorListType
-		symbol.T, err = reducer.AToInitDeclaratorList(args[0].T)
+		symbol.Generic_, err = reducer.AToInitDeclaratorList(args[0].Generic_)
 	case _CReduceBToInitDeclaratorList:
 		args := stack[len(stack)-3:]
 		stack = stack[:len(stack)-3]
 		symbol.SymbolId_ = CInitDeclaratorListType
-		symbol.T, err = reducer.BToInitDeclaratorList(args[0].T, args[1].T, args[2].T)
+		symbol.Generic_, err = reducer.BToInitDeclaratorList(args[0].Generic_, args[1].Generic_, args[2].Generic_)
 	case _CReduceAToInitDeclarator:
 		args := stack[len(stack)-1:]
 		stack = stack[:len(stack)-1]
 		symbol.SymbolId_ = CInitDeclaratorType
-		symbol.T, err = reducer.AToInitDeclarator(args[0].T)
+		symbol.Generic_, err = reducer.AToInitDeclarator(args[0].Generic_)
 	case _CReduceBToInitDeclarator:
 		args := stack[len(stack)-3:]
 		stack = stack[:len(stack)-3]
 		symbol.SymbolId_ = CInitDeclaratorType
-		symbol.T, err = reducer.BToInitDeclarator(args[0].T, args[1].T, args[2].T)
+		symbol.Generic_, err = reducer.BToInitDeclarator(args[0].Generic_, args[1].Generic_, args[2].Generic_)
 	case _CReduceAToStorageClassSpecifier:
 		args := stack[len(stack)-1:]
 		stack = stack[:len(stack)-1]
 		symbol.SymbolId_ = CStorageClassSpecifierType
-		symbol.T, err = reducer.AToStorageClassSpecifier(args[0].T)
+		symbol.Generic_, err = reducer.AToStorageClassSpecifier(args[0].Generic_)
 	case _CReduceBToStorageClassSpecifier:
 		args := stack[len(stack)-1:]
 		stack = stack[:len(stack)-1]
 		symbol.SymbolId_ = CStorageClassSpecifierType
-		symbol.T, err = reducer.BToStorageClassSpecifier(args[0].T)
+		symbol.Generic_, err = reducer.BToStorageClassSpecifier(args[0].Generic_)
 	case _CReduceCToStorageClassSpecifier:
 		args := stack[len(stack)-1:]
 		stack = stack[:len(stack)-1]
 		symbol.SymbolId_ = CStorageClassSpecifierType
-		symbol.T, err = reducer.CToStorageClassSpecifier(args[0].T)
+		symbol.Generic_, err = reducer.CToStorageClassSpecifier(args[0].Generic_)
 	case _CReduceDToStorageClassSpecifier:
 		args := stack[len(stack)-1:]
 		stack = stack[:len(stack)-1]
 		symbol.SymbolId_ = CStorageClassSpecifierType
-		symbol.T, err = reducer.DToStorageClassSpecifier(args[0].T)
+		symbol.Generic_, err = reducer.DToStorageClassSpecifier(args[0].Generic_)
 	case _CReduceEToStorageClassSpecifier:
 		args := stack[len(stack)-1:]
 		stack = stack[:len(stack)-1]
 		symbol.SymbolId_ = CStorageClassSpecifierType
-		symbol.T, err = reducer.EToStorageClassSpecifier(args[0].T)
+		symbol.Generic_, err = reducer.EToStorageClassSpecifier(args[0].Generic_)
 	case _CReduceAToTypeSpecifier:
 		args := stack[len(stack)-1:]
 		stack = stack[:len(stack)-1]
 		symbol.SymbolId_ = CTypeSpecifierType
-		symbol.T, err = reducer.AToTypeSpecifier(args[0].T)
+		symbol.Generic_, err = reducer.AToTypeSpecifier(args[0].Generic_)
 	case _CReduceBToTypeSpecifier:
 		args := stack[len(stack)-1:]
 		stack = stack[:len(stack)-1]
 		symbol.SymbolId_ = CTypeSpecifierType
-		symbol.T, err = reducer.BToTypeSpecifier(args[0].T)
+		symbol.Generic_, err = reducer.BToTypeSpecifier(args[0].Generic_)
 	case _CReduceCToTypeSpecifier:
 		args := stack[len(stack)-1:]
 		stack = stack[:len(stack)-1]
 		symbol.SymbolId_ = CTypeSpecifierType
-		symbol.T, err = reducer.CToTypeSpecifier(args[0].T)
+		symbol.Generic_, err = reducer.CToTypeSpecifier(args[0].Generic_)
 	case _CReduceDToTypeSpecifier:
 		args := stack[len(stack)-1:]
 		stack = stack[:len(stack)-1]
 		symbol.SymbolId_ = CTypeSpecifierType
-		symbol.T, err = reducer.DToTypeSpecifier(args[0].T)
+		symbol.Generic_, err = reducer.DToTypeSpecifier(args[0].Generic_)
 	case _CReduceEToTypeSpecifier:
 		args := stack[len(stack)-1:]
 		stack = stack[:len(stack)-1]
 		symbol.SymbolId_ = CTypeSpecifierType
-		symbol.T, err = reducer.EToTypeSpecifier(args[0].T)
+		symbol.Generic_, err = reducer.EToTypeSpecifier(args[0].Generic_)
 	case _CReduceFToTypeSpecifier:
 		args := stack[len(stack)-1:]
 		stack = stack[:len(stack)-1]
 		symbol.SymbolId_ = CTypeSpecifierType
-		symbol.T, err = reducer.FToTypeSpecifier(args[0].T)
+		symbol.Generic_, err = reducer.FToTypeSpecifier(args[0].Generic_)
 	case _CReduceGToTypeSpecifier:
 		args := stack[len(stack)-1:]
 		stack = stack[:len(stack)-1]
 		symbol.SymbolId_ = CTypeSpecifierType
-		symbol.T, err = reducer.GToTypeSpecifier(args[0].T)
+		symbol.Generic_, err = reducer.GToTypeSpecifier(args[0].Generic_)
 	case _CReduceHToTypeSpecifier:
 		args := stack[len(stack)-1:]
 		stack = stack[:len(stack)-1]
 		symbol.SymbolId_ = CTypeSpecifierType
-		symbol.T, err = reducer.HToTypeSpecifier(args[0].T)
+		symbol.Generic_, err = reducer.HToTypeSpecifier(args[0].Generic_)
 	case _CReduceIToTypeSpecifier:
 		args := stack[len(stack)-1:]
 		stack = stack[:len(stack)-1]
 		symbol.SymbolId_ = CTypeSpecifierType
-		symbol.T, err = reducer.IToTypeSpecifier(args[0].T)
+		symbol.Generic_, err = reducer.IToTypeSpecifier(args[0].Generic_)
 	case _CReduceJToTypeSpecifier:
 		args := stack[len(stack)-1:]
 		stack = stack[:len(stack)-1]
 		symbol.SymbolId_ = CTypeSpecifierType
-		symbol.T, err = reducer.JToTypeSpecifier(args[0].T)
+		symbol.Generic_, err = reducer.JToTypeSpecifier(args[0].Generic_)
 	case _CReduceKToTypeSpecifier:
 		args := stack[len(stack)-1:]
 		stack = stack[:len(stack)-1]
 		symbol.SymbolId_ = CTypeSpecifierType
-		symbol.T, err = reducer.KToTypeSpecifier(args[0].T)
+		symbol.Generic_, err = reducer.KToTypeSpecifier(args[0].Generic_)
 	case _CReduceLToTypeSpecifier:
 		args := stack[len(stack)-1:]
 		stack = stack[:len(stack)-1]
 		symbol.SymbolId_ = CTypeSpecifierType
-		symbol.T, err = reducer.LToTypeSpecifier(args[0].T)
+		symbol.Generic_, err = reducer.LToTypeSpecifier(args[0].Generic_)
 	case _CReduceAToStructOrUnionSpecifier:
 		args := stack[len(stack)-5:]
 		stack = stack[:len(stack)-5]
 		symbol.SymbolId_ = CStructOrUnionSpecifierType
-		symbol.T, err = reducer.AToStructOrUnionSpecifier(args[0].T, args[1].T, args[2].T, args[3].T, args[4].T)
+		symbol.Generic_, err = reducer.AToStructOrUnionSpecifier(args[0].Generic_, args[1].Generic_, args[2].Generic_, args[3].Generic_, args[4].Generic_)
 	case _CReduceBToStructOrUnionSpecifier:
 		args := stack[len(stack)-4:]
 		stack = stack[:len(stack)-4]
 		symbol.SymbolId_ = CStructOrUnionSpecifierType
-		symbol.T, err = reducer.BToStructOrUnionSpecifier(args[0].T, args[1].T, args[2].T, args[3].T)
+		symbol.Generic_, err = reducer.BToStructOrUnionSpecifier(args[0].Generic_, args[1].Generic_, args[2].Generic_, args[3].Generic_)
 	case _CReduceCToStructOrUnionSpecifier:
 		args := stack[len(stack)-2:]
 		stack = stack[:len(stack)-2]
 		symbol.SymbolId_ = CStructOrUnionSpecifierType
-		symbol.T, err = reducer.CToStructOrUnionSpecifier(args[0].T, args[1].T)
+		symbol.Generic_, err = reducer.CToStructOrUnionSpecifier(args[0].Generic_, args[1].Generic_)
 	case _CReduceAToStructOrUnion:
 		args := stack[len(stack)-1:]
 		stack = stack[:len(stack)-1]
 		symbol.SymbolId_ = CStructOrUnionType
-		symbol.T, err = reducer.AToStructOrUnion(args[0].T)
+		symbol.Generic_, err = reducer.AToStructOrUnion(args[0].Generic_)
 	case _CReduceBToStructOrUnion:
 		args := stack[len(stack)-1:]
 		stack = stack[:len(stack)-1]
 		symbol.SymbolId_ = CStructOrUnionType
-		symbol.T, err = reducer.BToStructOrUnion(args[0].T)
+		symbol.Generic_, err = reducer.BToStructOrUnion(args[0].Generic_)
 	case _CReduceAToStructDeclarationList:
 		args := stack[len(stack)-1:]
 		stack = stack[:len(stack)-1]
 		symbol.SymbolId_ = CStructDeclarationListType
-		symbol.T, err = reducer.AToStructDeclarationList(args[0].T)
+		symbol.Generic_, err = reducer.AToStructDeclarationList(args[0].Generic_)
 	case _CReduceBToStructDeclarationList:
 		args := stack[len(stack)-2:]
 		stack = stack[:len(stack)-2]
 		symbol.SymbolId_ = CStructDeclarationListType
-		symbol.T, err = reducer.BToStructDeclarationList(args[0].T, args[1].T)
+		symbol.Generic_, err = reducer.BToStructDeclarationList(args[0].Generic_, args[1].Generic_)
 	case _CReduceAToStructDeclaration:
 		args := stack[len(stack)-3:]
 		stack = stack[:len(stack)-3]
 		symbol.SymbolId_ = CStructDeclarationType
-		symbol.T, err = reducer.AToStructDeclaration(args[0].T, args[1].T, args[2].T)
+		symbol.Generic_, err = reducer.AToStructDeclaration(args[0].Generic_, args[1].Generic_, args[2].Generic_)
 	case _CReduceAToSpecifierQualifierList:
 		args := stack[len(stack)-2:]
 		stack = stack[:len(stack)-2]
 		symbol.SymbolId_ = CSpecifierQualifierListType
-		symbol.T, err = reducer.AToSpecifierQualifierList(args[0].T, args[1].T)
+		symbol.Generic_, err = reducer.AToSpecifierQualifierList(args[0].Generic_, args[1].Generic_)
 	case _CReduceBToSpecifierQualifierList:
 		args := stack[len(stack)-1:]
 		stack = stack[:len(stack)-1]
 		symbol.SymbolId_ = CSpecifierQualifierListType
-		symbol.T, err = reducer.BToSpecifierQualifierList(args[0].T)
+		symbol.Generic_, err = reducer.BToSpecifierQualifierList(args[0].Generic_)
 	case _CReduceCToSpecifierQualifierList:
 		args := stack[len(stack)-2:]
 		stack = stack[:len(stack)-2]
 		symbol.SymbolId_ = CSpecifierQualifierListType
-		symbol.T, err = reducer.CToSpecifierQualifierList(args[0].T, args[1].T)
+		symbol.Generic_, err = reducer.CToSpecifierQualifierList(args[0].Generic_, args[1].Generic_)
 	case _CReduceDToSpecifierQualifierList:
 		args := stack[len(stack)-1:]
 		stack = stack[:len(stack)-1]
 		symbol.SymbolId_ = CSpecifierQualifierListType
-		symbol.T, err = reducer.DToSpecifierQualifierList(args[0].T)
+		symbol.Generic_, err = reducer.DToSpecifierQualifierList(args[0].Generic_)
 	case _CReduceAToStructDeclaratorList:
 		args := stack[len(stack)-1:]
 		stack = stack[:len(stack)-1]
 		symbol.SymbolId_ = CStructDeclaratorListType
-		symbol.T, err = reducer.AToStructDeclaratorList(args[0].T)
+		symbol.Generic_, err = reducer.AToStructDeclaratorList(args[0].Generic_)
 	case _CReduceBToStructDeclaratorList:
 		args := stack[len(stack)-3:]
 		stack = stack[:len(stack)-3]
 		symbol.SymbolId_ = CStructDeclaratorListType
-		symbol.T, err = reducer.BToStructDeclaratorList(args[0].T, args[1].T, args[2].T)
+		symbol.Generic_, err = reducer.BToStructDeclaratorList(args[0].Generic_, args[1].Generic_, args[2].Generic_)
 	case _CReduceAToStructDeclarator:
 		args := stack[len(stack)-1:]
 		stack = stack[:len(stack)-1]
 		symbol.SymbolId_ = CStructDeclaratorType
-		symbol.T, err = reducer.AToStructDeclarator(args[0].T)
+		symbol.Generic_, err = reducer.AToStructDeclarator(args[0].Generic_)
 	case _CReduceBToStructDeclarator:
 		args := stack[len(stack)-2:]
 		stack = stack[:len(stack)-2]
 		symbol.SymbolId_ = CStructDeclaratorType
-		symbol.T, err = reducer.BToStructDeclarator(args[0].T, args[1].T)
+		symbol.Generic_, err = reducer.BToStructDeclarator(args[0].Generic_, args[1].Generic_)
 	case _CReduceCToStructDeclarator:
 		args := stack[len(stack)-3:]
 		stack = stack[:len(stack)-3]
 		symbol.SymbolId_ = CStructDeclaratorType
-		symbol.T, err = reducer.CToStructDeclarator(args[0].T, args[1].T, args[2].T)
+		symbol.Generic_, err = reducer.CToStructDeclarator(args[0].Generic_, args[1].Generic_, args[2].Generic_)
 	case _CReduceAToEnumSpecifier:
 		args := stack[len(stack)-4:]
 		stack = stack[:len(stack)-4]
 		symbol.SymbolId_ = CEnumSpecifierType
-		symbol.T, err = reducer.AToEnumSpecifier(args[0].T, args[1].T, args[2].T, args[3].T)
+		symbol.Generic_, err = reducer.AToEnumSpecifier(args[0].Generic_, args[1].Generic_, args[2].Generic_, args[3].Generic_)
 	case _CReduceBToEnumSpecifier:
 		args := stack[len(stack)-5:]
 		stack = stack[:len(stack)-5]
 		symbol.SymbolId_ = CEnumSpecifierType
-		symbol.T, err = reducer.BToEnumSpecifier(args[0].T, args[1].T, args[2].T, args[3].T, args[4].T)
+		symbol.Generic_, err = reducer.BToEnumSpecifier(args[0].Generic_, args[1].Generic_, args[2].Generic_, args[3].Generic_, args[4].Generic_)
 	case _CReduceCToEnumSpecifier:
 		args := stack[len(stack)-2:]
 		stack = stack[:len(stack)-2]
 		symbol.SymbolId_ = CEnumSpecifierType
-		symbol.T, err = reducer.CToEnumSpecifier(args[0].T, args[1].T)
+		symbol.Generic_, err = reducer.CToEnumSpecifier(args[0].Generic_, args[1].Generic_)
 	case _CReduceAToEnumeratorList:
 		args := stack[len(stack)-1:]
 		stack = stack[:len(stack)-1]
 		symbol.SymbolId_ = CEnumeratorListType
-		symbol.T, err = reducer.AToEnumeratorList(args[0].T)
+		symbol.Generic_, err = reducer.AToEnumeratorList(args[0].Generic_)
 	case _CReduceBToEnumeratorList:
 		args := stack[len(stack)-3:]
 		stack = stack[:len(stack)-3]
 		symbol.SymbolId_ = CEnumeratorListType
-		symbol.T, err = reducer.BToEnumeratorList(args[0].T, args[1].T, args[2].T)
+		symbol.Generic_, err = reducer.BToEnumeratorList(args[0].Generic_, args[1].Generic_, args[2].Generic_)
 	case _CReduceAToEnumerator:
 		args := stack[len(stack)-1:]
 		stack = stack[:len(stack)-1]
 		symbol.SymbolId_ = CEnumeratorType
-		symbol.T, err = reducer.AToEnumerator(args[0].T)
+		symbol.Generic_, err = reducer.AToEnumerator(args[0].Generic_)
 	case _CReduceBToEnumerator:
 		args := stack[len(stack)-3:]
 		stack = stack[:len(stack)-3]
 		symbol.SymbolId_ = CEnumeratorType
-		symbol.T, err = reducer.BToEnumerator(args[0].T, args[1].T, args[2].T)
+		symbol.Generic_, err = reducer.BToEnumerator(args[0].Generic_, args[1].Generic_, args[2].Generic_)
 	case _CReduceAToTypeQualifier:
 		args := stack[len(stack)-1:]
 		stack = stack[:len(stack)-1]
 		symbol.SymbolId_ = CTypeQualifierType
-		symbol.T, err = reducer.AToTypeQualifier(args[0].T)
+		symbol.Generic_, err = reducer.AToTypeQualifier(args[0].Generic_)
 	case _CReduceBToTypeQualifier:
 		args := stack[len(stack)-1:]
 		stack = stack[:len(stack)-1]
 		symbol.SymbolId_ = CTypeQualifierType
-		symbol.T, err = reducer.BToTypeQualifier(args[0].T)
+		symbol.Generic_, err = reducer.BToTypeQualifier(args[0].Generic_)
 	case _CReduceAToDeclarator:
 		args := stack[len(stack)-2:]
 		stack = stack[:len(stack)-2]
 		symbol.SymbolId_ = CDeclaratorType
-		symbol.T, err = reducer.AToDeclarator(args[0].T, args[1].T)
+		symbol.Generic_, err = reducer.AToDeclarator(args[0].Generic_, args[1].Generic_)
 	case _CReduceBToDeclarator:
 		args := stack[len(stack)-1:]
 		stack = stack[:len(stack)-1]
 		symbol.SymbolId_ = CDeclaratorType
-		symbol.T, err = reducer.BToDeclarator(args[0].T)
+		symbol.Generic_, err = reducer.BToDeclarator(args[0].Generic_)
 	case _CReduceAToDirectDeclarator:
 		args := stack[len(stack)-1:]
 		stack = stack[:len(stack)-1]
 		symbol.SymbolId_ = CDirectDeclaratorType
-		symbol.T, err = reducer.AToDirectDeclarator(args[0].T)
+		symbol.Generic_, err = reducer.AToDirectDeclarator(args[0].Generic_)
 	case _CReduceBToDirectDeclarator:
 		args := stack[len(stack)-3:]
 		stack = stack[:len(stack)-3]
 		symbol.SymbolId_ = CDirectDeclaratorType
-		symbol.T, err = reducer.BToDirectDeclarator(args[0].T, args[1].T, args[2].T)
+		symbol.Generic_, err = reducer.BToDirectDeclarator(args[0].Generic_, args[1].Generic_, args[2].Generic_)
 	case _CReduceCToDirectDeclarator:
 		args := stack[len(stack)-4:]
 		stack = stack[:len(stack)-4]
 		symbol.SymbolId_ = CDirectDeclaratorType
-		symbol.T, err = reducer.CToDirectDeclarator(args[0].T, args[1].T, args[2].T, args[3].T)
+		symbol.Generic_, err = reducer.CToDirectDeclarator(args[0].Generic_, args[1].Generic_, args[2].Generic_, args[3].Generic_)
 	case _CReduceDToDirectDeclarator:
 		args := stack[len(stack)-3:]
 		stack = stack[:len(stack)-3]
 		symbol.SymbolId_ = CDirectDeclaratorType
-		symbol.T, err = reducer.DToDirectDeclarator(args[0].T, args[1].T, args[2].T)
+		symbol.Generic_, err = reducer.DToDirectDeclarator(args[0].Generic_, args[1].Generic_, args[2].Generic_)
 	case _CReduceEToDirectDeclarator:
 		args := stack[len(stack)-4:]
 		stack = stack[:len(stack)-4]
 		symbol.SymbolId_ = CDirectDeclaratorType
-		symbol.T, err = reducer.EToDirectDeclarator(args[0].T, args[1].T, args[2].T, args[3].T)
+		symbol.Generic_, err = reducer.EToDirectDeclarator(args[0].Generic_, args[1].Generic_, args[2].Generic_, args[3].Generic_)
 	case _CReduceFToDirectDeclarator:
 		args := stack[len(stack)-4:]
 		stack = stack[:len(stack)-4]
 		symbol.SymbolId_ = CDirectDeclaratorType
-		symbol.T, err = reducer.FToDirectDeclarator(args[0].T, args[1].T, args[2].T, args[3].T)
+		symbol.Generic_, err = reducer.FToDirectDeclarator(args[0].Generic_, args[1].Generic_, args[2].Generic_, args[3].Generic_)
 	case _CReduceGToDirectDeclarator:
 		args := stack[len(stack)-3:]
 		stack = stack[:len(stack)-3]
 		symbol.SymbolId_ = CDirectDeclaratorType
-		symbol.T, err = reducer.GToDirectDeclarator(args[0].T, args[1].T, args[2].T)
+		symbol.Generic_, err = reducer.GToDirectDeclarator(args[0].Generic_, args[1].Generic_, args[2].Generic_)
 	case _CReduceAToPointer:
 		args := stack[len(stack)-1:]
 		stack = stack[:len(stack)-1]
 		symbol.SymbolId_ = CPointerType
-		symbol.T, err = reducer.AToPointer(args[0].T)
+		symbol.Generic_, err = reducer.AToPointer(args[0].Generic_)
 	case _CReduceBToPointer:
 		args := stack[len(stack)-2:]
 		stack = stack[:len(stack)-2]
 		symbol.SymbolId_ = CPointerType
-		symbol.T, err = reducer.BToPointer(args[0].T, args[1].T)
+		symbol.Generic_, err = reducer.BToPointer(args[0].Generic_, args[1].Generic_)
 	case _CReduceCToPointer:
 		args := stack[len(stack)-2:]
 		stack = stack[:len(stack)-2]
 		symbol.SymbolId_ = CPointerType
-		symbol.T, err = reducer.CToPointer(args[0].T, args[1].T)
+		symbol.Generic_, err = reducer.CToPointer(args[0].Generic_, args[1].Generic_)
 	case _CReduceDToPointer:
 		args := stack[len(stack)-3:]
 		stack = stack[:len(stack)-3]
 		symbol.SymbolId_ = CPointerType
-		symbol.T, err = reducer.DToPointer(args[0].T, args[1].T, args[2].T)
+		symbol.Generic_, err = reducer.DToPointer(args[0].Generic_, args[1].Generic_, args[2].Generic_)
 	case _CReduceAToTypeQualifierList:
 		args := stack[len(stack)-1:]
 		stack = stack[:len(stack)-1]
 		symbol.SymbolId_ = CTypeQualifierListType
-		symbol.T, err = reducer.AToTypeQualifierList(args[0].T)
+		symbol.Generic_, err = reducer.AToTypeQualifierList(args[0].Generic_)
 	case _CReduceBToTypeQualifierList:
 		args := stack[len(stack)-2:]
 		stack = stack[:len(stack)-2]
 		symbol.SymbolId_ = CTypeQualifierListType
-		symbol.T, err = reducer.BToTypeQualifierList(args[0].T, args[1].T)
+		symbol.Generic_, err = reducer.BToTypeQualifierList(args[0].Generic_, args[1].Generic_)
 	case _CReduceAToParameterTypeList:
 		args := stack[len(stack)-1:]
 		stack = stack[:len(stack)-1]
 		symbol.SymbolId_ = CParameterTypeListType
-		symbol.T, err = reducer.AToParameterTypeList(args[0].T)
+		symbol.Generic_, err = reducer.AToParameterTypeList(args[0].Generic_)
 	case _CReduceBToParameterTypeList:
 		args := stack[len(stack)-3:]
 		stack = stack[:len(stack)-3]
 		symbol.SymbolId_ = CParameterTypeListType
-		symbol.T, err = reducer.BToParameterTypeList(args[0].T, args[1].T, args[2].T)
+		symbol.Generic_, err = reducer.BToParameterTypeList(args[0].Generic_, args[1].Generic_, args[2].Generic_)
 	case _CReduceAToParameterList:
 		args := stack[len(stack)-1:]
 		stack = stack[:len(stack)-1]
 		symbol.SymbolId_ = CParameterListType
-		symbol.T, err = reducer.AToParameterList(args[0].T)
+		symbol.Generic_, err = reducer.AToParameterList(args[0].Generic_)
 	case _CReduceBToParameterList:
 		args := stack[len(stack)-3:]
 		stack = stack[:len(stack)-3]
 		symbol.SymbolId_ = CParameterListType
-		symbol.T, err = reducer.BToParameterList(args[0].T, args[1].T, args[2].T)
+		symbol.Generic_, err = reducer.BToParameterList(args[0].Generic_, args[1].Generic_, args[2].Generic_)
 	case _CReduceAToParameterDeclaration:
 		args := stack[len(stack)-2:]
 		stack = stack[:len(stack)-2]
 		symbol.SymbolId_ = CParameterDeclarationType
-		symbol.T, err = reducer.AToParameterDeclaration(args[0].T, args[1].T)
+		symbol.Generic_, err = reducer.AToParameterDeclaration(args[0].Generic_, args[1].Generic_)
 	case _CReduceBToParameterDeclaration:
 		args := stack[len(stack)-2:]
 		stack = stack[:len(stack)-2]
 		symbol.SymbolId_ = CParameterDeclarationType
-		symbol.T, err = reducer.BToParameterDeclaration(args[0].T, args[1].T)
+		symbol.Generic_, err = reducer.BToParameterDeclaration(args[0].Generic_, args[1].Generic_)
 	case _CReduceCToParameterDeclaration:
 		args := stack[len(stack)-1:]
 		stack = stack[:len(stack)-1]
 		symbol.SymbolId_ = CParameterDeclarationType
-		symbol.T, err = reducer.CToParameterDeclaration(args[0].T)
+		symbol.Generic_, err = reducer.CToParameterDeclaration(args[0].Generic_)
 	case _CReduceAToIdentifierList:
 		args := stack[len(stack)-1:]
 		stack = stack[:len(stack)-1]
 		symbol.SymbolId_ = CIdentifierListType
-		symbol.T, err = reducer.AToIdentifierList(args[0].T)
+		symbol.Generic_, err = reducer.AToIdentifierList(args[0].Generic_)
 	case _CReduceBToIdentifierList:
 		args := stack[len(stack)-3:]
 		stack = stack[:len(stack)-3]
 		symbol.SymbolId_ = CIdentifierListType
-		symbol.T, err = reducer.BToIdentifierList(args[0].T, args[1].T, args[2].T)
+		symbol.Generic_, err = reducer.BToIdentifierList(args[0].Generic_, args[1].Generic_, args[2].Generic_)
 	case _CReduceAToTypeName:
 		args := stack[len(stack)-1:]
 		stack = stack[:len(stack)-1]
 		symbol.SymbolId_ = CTypeNameType
-		symbol.T, err = reducer.AToTypeName(args[0].T)
+		symbol.Generic_, err = reducer.AToTypeName(args[0].Generic_)
 	case _CReduceBToTypeName:
 		args := stack[len(stack)-2:]
 		stack = stack[:len(stack)-2]
 		symbol.SymbolId_ = CTypeNameType
-		symbol.T, err = reducer.BToTypeName(args[0].T, args[1].T)
+		symbol.Generic_, err = reducer.BToTypeName(args[0].Generic_, args[1].Generic_)
 	case _CReduceAToAbstractDeclarator:
 		args := stack[len(stack)-1:]
 		stack = stack[:len(stack)-1]
 		symbol.SymbolId_ = CAbstractDeclaratorType
-		symbol.T, err = reducer.AToAbstractDeclarator(args[0].T)
+		symbol.Generic_, err = reducer.AToAbstractDeclarator(args[0].Generic_)
 	case _CReduceBToAbstractDeclarator:
 		args := stack[len(stack)-1:]
 		stack = stack[:len(stack)-1]
 		symbol.SymbolId_ = CAbstractDeclaratorType
-		symbol.T, err = reducer.BToAbstractDeclarator(args[0].T)
+		symbol.Generic_, err = reducer.BToAbstractDeclarator(args[0].Generic_)
 	case _CReduceCToAbstractDeclarator:
 		args := stack[len(stack)-2:]
 		stack = stack[:len(stack)-2]
 		symbol.SymbolId_ = CAbstractDeclaratorType
-		symbol.T, err = reducer.CToAbstractDeclarator(args[0].T, args[1].T)
+		symbol.Generic_, err = reducer.CToAbstractDeclarator(args[0].Generic_, args[1].Generic_)
 	case _CReduceAToDirectAbstractDeclarator:
 		args := stack[len(stack)-3:]
 		stack = stack[:len(stack)-3]
 		symbol.SymbolId_ = CDirectAbstractDeclaratorType
-		symbol.T, err = reducer.AToDirectAbstractDeclarator(args[0].T, args[1].T, args[2].T)
+		symbol.Generic_, err = reducer.AToDirectAbstractDeclarator(args[0].Generic_, args[1].Generic_, args[2].Generic_)
 	case _CReduceBToDirectAbstractDeclarator:
 		args := stack[len(stack)-2:]
 		stack = stack[:len(stack)-2]
 		symbol.SymbolId_ = CDirectAbstractDeclaratorType
-		symbol.T, err = reducer.BToDirectAbstractDeclarator(args[0].T, args[1].T)
+		symbol.Generic_, err = reducer.BToDirectAbstractDeclarator(args[0].Generic_, args[1].Generic_)
 	case _CReduceCToDirectAbstractDeclarator:
 		args := stack[len(stack)-3:]
 		stack = stack[:len(stack)-3]
 		symbol.SymbolId_ = CDirectAbstractDeclaratorType
-		symbol.T, err = reducer.CToDirectAbstractDeclarator(args[0].T, args[1].T, args[2].T)
+		symbol.Generic_, err = reducer.CToDirectAbstractDeclarator(args[0].Generic_, args[1].Generic_, args[2].Generic_)
 	case _CReduceDToDirectAbstractDeclarator:
 		args := stack[len(stack)-3:]
 		stack = stack[:len(stack)-3]
 		symbol.SymbolId_ = CDirectAbstractDeclaratorType
-		symbol.T, err = reducer.DToDirectAbstractDeclarator(args[0].T, args[1].T, args[2].T)
+		symbol.Generic_, err = reducer.DToDirectAbstractDeclarator(args[0].Generic_, args[1].Generic_, args[2].Generic_)
 	case _CReduceEToDirectAbstractDeclarator:
 		args := stack[len(stack)-4:]
 		stack = stack[:len(stack)-4]
 		symbol.SymbolId_ = CDirectAbstractDeclaratorType
-		symbol.T, err = reducer.EToDirectAbstractDeclarator(args[0].T, args[1].T, args[2].T, args[3].T)
+		symbol.Generic_, err = reducer.EToDirectAbstractDeclarator(args[0].Generic_, args[1].Generic_, args[2].Generic_, args[3].Generic_)
 	case _CReduceFToDirectAbstractDeclarator:
 		args := stack[len(stack)-2:]
 		stack = stack[:len(stack)-2]
 		symbol.SymbolId_ = CDirectAbstractDeclaratorType
-		symbol.T, err = reducer.FToDirectAbstractDeclarator(args[0].T, args[1].T)
+		symbol.Generic_, err = reducer.FToDirectAbstractDeclarator(args[0].Generic_, args[1].Generic_)
 	case _CReduceGToDirectAbstractDeclarator:
 		args := stack[len(stack)-3:]
 		stack = stack[:len(stack)-3]
 		symbol.SymbolId_ = CDirectAbstractDeclaratorType
-		symbol.T, err = reducer.GToDirectAbstractDeclarator(args[0].T, args[1].T, args[2].T)
+		symbol.Generic_, err = reducer.GToDirectAbstractDeclarator(args[0].Generic_, args[1].Generic_, args[2].Generic_)
 	case _CReduceHToDirectAbstractDeclarator:
 		args := stack[len(stack)-3:]
 		stack = stack[:len(stack)-3]
 		symbol.SymbolId_ = CDirectAbstractDeclaratorType
-		symbol.T, err = reducer.HToDirectAbstractDeclarator(args[0].T, args[1].T, args[2].T)
+		symbol.Generic_, err = reducer.HToDirectAbstractDeclarator(args[0].Generic_, args[1].Generic_, args[2].Generic_)
 	case _CReduceIToDirectAbstractDeclarator:
 		args := stack[len(stack)-4:]
 		stack = stack[:len(stack)-4]
 		symbol.SymbolId_ = CDirectAbstractDeclaratorType
-		symbol.T, err = reducer.IToDirectAbstractDeclarator(args[0].T, args[1].T, args[2].T, args[3].T)
+		symbol.Generic_, err = reducer.IToDirectAbstractDeclarator(args[0].Generic_, args[1].Generic_, args[2].Generic_, args[3].Generic_)
 	case _CReduceAToInitializer:
 		args := stack[len(stack)-1:]
 		stack = stack[:len(stack)-1]
 		symbol.SymbolId_ = CInitializerType
-		symbol.T, err = reducer.AToInitializer(args[0].T)
+		symbol.Generic_, err = reducer.AToInitializer(args[0].Generic_)
 	case _CReduceBToInitializer:
 		args := stack[len(stack)-3:]
 		stack = stack[:len(stack)-3]
 		symbol.SymbolId_ = CInitializerType
-		symbol.T, err = reducer.BToInitializer(args[0].T, args[1].T, args[2].T)
+		symbol.Generic_, err = reducer.BToInitializer(args[0].Generic_, args[1].Generic_, args[2].Generic_)
 	case _CReduceCToInitializer:
 		args := stack[len(stack)-4:]
 		stack = stack[:len(stack)-4]
 		symbol.SymbolId_ = CInitializerType
-		symbol.T, err = reducer.CToInitializer(args[0].T, args[1].T, args[2].T, args[3].T)
+		symbol.Generic_, err = reducer.CToInitializer(args[0].Generic_, args[1].Generic_, args[2].Generic_, args[3].Generic_)
 	case _CReduceAToInitializerList:
 		args := stack[len(stack)-1:]
 		stack = stack[:len(stack)-1]
 		symbol.SymbolId_ = CInitializerListType
-		symbol.T, err = reducer.AToInitializerList(args[0].T)
+		symbol.Generic_, err = reducer.AToInitializerList(args[0].Generic_)
 	case _CReduceBToInitializerList:
 		args := stack[len(stack)-3:]
 		stack = stack[:len(stack)-3]
 		symbol.SymbolId_ = CInitializerListType
-		symbol.T, err = reducer.BToInitializerList(args[0].T, args[1].T, args[2].T)
+		symbol.Generic_, err = reducer.BToInitializerList(args[0].Generic_, args[1].Generic_, args[2].Generic_)
 	case _CReduceAToStatement:
 		args := stack[len(stack)-1:]
 		stack = stack[:len(stack)-1]
 		symbol.SymbolId_ = CStatementType
-		symbol.T, err = reducer.AToStatement(args[0].T)
+		symbol.Generic_, err = reducer.AToStatement(args[0].Generic_)
 	case _CReduceBToStatement:
 		args := stack[len(stack)-1:]
 		stack = stack[:len(stack)-1]
 		symbol.SymbolId_ = CStatementType
-		symbol.T, err = reducer.BToStatement(args[0].T)
+		symbol.Generic_, err = reducer.BToStatement(args[0].Generic_)
 	case _CReduceCToStatement:
 		args := stack[len(stack)-1:]
 		stack = stack[:len(stack)-1]
 		symbol.SymbolId_ = CStatementType
-		symbol.T, err = reducer.CToStatement(args[0].T)
+		symbol.Generic_, err = reducer.CToStatement(args[0].Generic_)
 	case _CReduceDToStatement:
 		args := stack[len(stack)-1:]
 		stack = stack[:len(stack)-1]
 		symbol.SymbolId_ = CStatementType
-		symbol.T, err = reducer.DToStatement(args[0].T)
+		symbol.Generic_, err = reducer.DToStatement(args[0].Generic_)
 	case _CReduceEToStatement:
 		args := stack[len(stack)-1:]
 		stack = stack[:len(stack)-1]
 		symbol.SymbolId_ = CStatementType
-		symbol.T, err = reducer.EToStatement(args[0].T)
+		symbol.Generic_, err = reducer.EToStatement(args[0].Generic_)
 	case _CReduceFToStatement:
 		args := stack[len(stack)-1:]
 		stack = stack[:len(stack)-1]
 		symbol.SymbolId_ = CStatementType
-		symbol.T, err = reducer.FToStatement(args[0].T)
+		symbol.Generic_, err = reducer.FToStatement(args[0].Generic_)
 	case _CReduceAToLabeledStatement:
 		args := stack[len(stack)-3:]
 		stack = stack[:len(stack)-3]
 		symbol.SymbolId_ = CLabeledStatementType
-		symbol.T, err = reducer.AToLabeledStatement(args[0].T, args[1].T, args[2].T)
+		symbol.Generic_, err = reducer.AToLabeledStatement(args[0].Generic_, args[1].Generic_, args[2].Generic_)
 	case _CReduceBToLabeledStatement:
 		args := stack[len(stack)-4:]
 		stack = stack[:len(stack)-4]
 		symbol.SymbolId_ = CLabeledStatementType
-		symbol.T, err = reducer.BToLabeledStatement(args[0].T, args[1].T, args[2].T, args[3].T)
+		symbol.Generic_, err = reducer.BToLabeledStatement(args[0].Generic_, args[1].Generic_, args[2].Generic_, args[3].Generic_)
 	case _CReduceCToLabeledStatement:
 		args := stack[len(stack)-3:]
 		stack = stack[:len(stack)-3]
 		symbol.SymbolId_ = CLabeledStatementType
-		symbol.T, err = reducer.CToLabeledStatement(args[0].T, args[1].T, args[2].T)
+		symbol.Generic_, err = reducer.CToLabeledStatement(args[0].Generic_, args[1].Generic_, args[2].Generic_)
 	case _CReduceAToCompoundStatement:
 		args := stack[len(stack)-2:]
 		stack = stack[:len(stack)-2]
 		symbol.SymbolId_ = CCompoundStatementType
-		symbol.T, err = reducer.AToCompoundStatement(args[0].T, args[1].T)
+		symbol.Generic_, err = reducer.AToCompoundStatement(args[0].Generic_, args[1].Generic_)
 	case _CReduceBToCompoundStatement:
 		args := stack[len(stack)-3:]
 		stack = stack[:len(stack)-3]
 		symbol.SymbolId_ = CCompoundStatementType
-		symbol.T, err = reducer.BToCompoundStatement(args[0].T, args[1].T, args[2].T)
+		symbol.Generic_, err = reducer.BToCompoundStatement(args[0].Generic_, args[1].Generic_, args[2].Generic_)
 	case _CReduceCToCompoundStatement:
 		args := stack[len(stack)-3:]
 		stack = stack[:len(stack)-3]
 		symbol.SymbolId_ = CCompoundStatementType
-		symbol.T, err = reducer.CToCompoundStatement(args[0].T, args[1].T, args[2].T)
+		symbol.Generic_, err = reducer.CToCompoundStatement(args[0].Generic_, args[1].Generic_, args[2].Generic_)
 	case _CReduceDToCompoundStatement:
 		args := stack[len(stack)-4:]
 		stack = stack[:len(stack)-4]
 		symbol.SymbolId_ = CCompoundStatementType
-		symbol.T, err = reducer.DToCompoundStatement(args[0].T, args[1].T, args[2].T, args[3].T)
+		symbol.Generic_, err = reducer.DToCompoundStatement(args[0].Generic_, args[1].Generic_, args[2].Generic_, args[3].Generic_)
 	case _CReduceAToDeclarationList:
 		args := stack[len(stack)-1:]
 		stack = stack[:len(stack)-1]
 		symbol.SymbolId_ = CDeclarationListType
-		symbol.T, err = reducer.AToDeclarationList(args[0].T)
+		symbol.Generic_, err = reducer.AToDeclarationList(args[0].Generic_)
 	case _CReduceBToDeclarationList:
 		args := stack[len(stack)-2:]
 		stack = stack[:len(stack)-2]
 		symbol.SymbolId_ = CDeclarationListType
-		symbol.T, err = reducer.BToDeclarationList(args[0].T, args[1].T)
+		symbol.Generic_, err = reducer.BToDeclarationList(args[0].Generic_, args[1].Generic_)
 	case _CReduceAToStatementList:
 		args := stack[len(stack)-1:]
 		stack = stack[:len(stack)-1]
 		symbol.SymbolId_ = CStatementListType
-		symbol.T, err = reducer.AToStatementList(args[0].T)
+		symbol.Generic_, err = reducer.AToStatementList(args[0].Generic_)
 	case _CReduceBToStatementList:
 		args := stack[len(stack)-2:]
 		stack = stack[:len(stack)-2]
 		symbol.SymbolId_ = CStatementListType
-		symbol.T, err = reducer.BToStatementList(args[0].T, args[1].T)
+		symbol.Generic_, err = reducer.BToStatementList(args[0].Generic_, args[1].Generic_)
 	case _CReduceAToExpressionStatement:
 		args := stack[len(stack)-1:]
 		stack = stack[:len(stack)-1]
 		symbol.SymbolId_ = CExpressionStatementType
-		symbol.T, err = reducer.AToExpressionStatement(args[0].T)
+		symbol.Generic_, err = reducer.AToExpressionStatement(args[0].Generic_)
 	case _CReduceBToExpressionStatement:
 		args := stack[len(stack)-2:]
 		stack = stack[:len(stack)-2]
 		symbol.SymbolId_ = CExpressionStatementType
-		symbol.T, err = reducer.BToExpressionStatement(args[0].T, args[1].T)
+		symbol.Generic_, err = reducer.BToExpressionStatement(args[0].Generic_, args[1].Generic_)
 	case _CReduceAToSelectionStatement:
 		args := stack[len(stack)-5:]
 		stack = stack[:len(stack)-5]
 		symbol.SymbolId_ = CSelectionStatementType
-		symbol.T, err = reducer.AToSelectionStatement(args[0].T, args[1].T, args[2].T, args[3].T, args[4].T)
+		symbol.Generic_, err = reducer.AToSelectionStatement(args[0].Generic_, args[1].Generic_, args[2].Generic_, args[3].Generic_, args[4].Generic_)
 	case _CReduceBToSelectionStatement:
 		args := stack[len(stack)-7:]
 		stack = stack[:len(stack)-7]
 		symbol.SymbolId_ = CSelectionStatementType
-		symbol.T, err = reducer.BToSelectionStatement(args[0].T, args[1].T, args[2].T, args[3].T, args[4].T, args[5].T, args[6].T)
+		symbol.Generic_, err = reducer.BToSelectionStatement(args[0].Generic_, args[1].Generic_, args[2].Generic_, args[3].Generic_, args[4].Generic_, args[5].Generic_, args[6].Generic_)
 	case _CReduceCToSelectionStatement:
 		args := stack[len(stack)-5:]
 		stack = stack[:len(stack)-5]
 		symbol.SymbolId_ = CSelectionStatementType
-		symbol.T, err = reducer.CToSelectionStatement(args[0].T, args[1].T, args[2].T, args[3].T, args[4].T)
+		symbol.Generic_, err = reducer.CToSelectionStatement(args[0].Generic_, args[1].Generic_, args[2].Generic_, args[3].Generic_, args[4].Generic_)
 	case _CReduceAToIterationStatement:
 		args := stack[len(stack)-5:]
 		stack = stack[:len(stack)-5]
 		symbol.SymbolId_ = CIterationStatementType
-		symbol.T, err = reducer.AToIterationStatement(args[0].T, args[1].T, args[2].T, args[3].T, args[4].T)
+		symbol.Generic_, err = reducer.AToIterationStatement(args[0].Generic_, args[1].Generic_, args[2].Generic_, args[3].Generic_, args[4].Generic_)
 	case _CReduceBToIterationStatement:
 		args := stack[len(stack)-7:]
 		stack = stack[:len(stack)-7]
 		symbol.SymbolId_ = CIterationStatementType
-		symbol.T, err = reducer.BToIterationStatement(args[0].T, args[1].T, args[2].T, args[3].T, args[4].T, args[5].T, args[6].T)
+		symbol.Generic_, err = reducer.BToIterationStatement(args[0].Generic_, args[1].Generic_, args[2].Generic_, args[3].Generic_, args[4].Generic_, args[5].Generic_, args[6].Generic_)
 	case _CReduceCToIterationStatement:
 		args := stack[len(stack)-6:]
 		stack = stack[:len(stack)-6]
 		symbol.SymbolId_ = CIterationStatementType
-		symbol.T, err = reducer.CToIterationStatement(args[0].T, args[1].T, args[2].T, args[3].T, args[4].T, args[5].T)
+		symbol.Generic_, err = reducer.CToIterationStatement(args[0].Generic_, args[1].Generic_, args[2].Generic_, args[3].Generic_, args[4].Generic_, args[5].Generic_)
 	case _CReduceDToIterationStatement:
 		args := stack[len(stack)-7:]
 		stack = stack[:len(stack)-7]
 		symbol.SymbolId_ = CIterationStatementType
-		symbol.T, err = reducer.DToIterationStatement(args[0].T, args[1].T, args[2].T, args[3].T, args[4].T, args[5].T, args[6].T)
+		symbol.Generic_, err = reducer.DToIterationStatement(args[0].Generic_, args[1].Generic_, args[2].Generic_, args[3].Generic_, args[4].Generic_, args[5].Generic_, args[6].Generic_)
 	case _CReduceAToJumpStatement:
 		args := stack[len(stack)-3:]
 		stack = stack[:len(stack)-3]
 		symbol.SymbolId_ = CJumpStatementType
-		symbol.T, err = reducer.AToJumpStatement(args[0].T, args[1].T, args[2].T)
+		symbol.Generic_, err = reducer.AToJumpStatement(args[0].Generic_, args[1].Generic_, args[2].Generic_)
 	case _CReduceBToJumpStatement:
 		args := stack[len(stack)-2:]
 		stack = stack[:len(stack)-2]
 		symbol.SymbolId_ = CJumpStatementType
-		symbol.T, err = reducer.BToJumpStatement(args[0].T, args[1].T)
+		symbol.Generic_, err = reducer.BToJumpStatement(args[0].Generic_, args[1].Generic_)
 	case _CReduceCToJumpStatement:
 		args := stack[len(stack)-2:]
 		stack = stack[:len(stack)-2]
 		symbol.SymbolId_ = CJumpStatementType
-		symbol.T, err = reducer.CToJumpStatement(args[0].T, args[1].T)
+		symbol.Generic_, err = reducer.CToJumpStatement(args[0].Generic_, args[1].Generic_)
 	case _CReduceDToJumpStatement:
 		args := stack[len(stack)-2:]
 		stack = stack[:len(stack)-2]
 		symbol.SymbolId_ = CJumpStatementType
-		symbol.T, err = reducer.DToJumpStatement(args[0].T, args[1].T)
+		symbol.Generic_, err = reducer.DToJumpStatement(args[0].Generic_, args[1].Generic_)
 	case _CReduceEToJumpStatement:
 		args := stack[len(stack)-3:]
 		stack = stack[:len(stack)-3]
 		symbol.SymbolId_ = CJumpStatementType
-		symbol.T, err = reducer.EToJumpStatement(args[0].T, args[1].T, args[2].T)
+		symbol.Generic_, err = reducer.EToJumpStatement(args[0].Generic_, args[1].Generic_, args[2].Generic_)
 	case _CReduceAToTranslationUnit:
 		args := stack[len(stack)-1:]
 		stack = stack[:len(stack)-1]
 		symbol.SymbolId_ = CTranslationUnitType
-		symbol.T, err = reducer.AToTranslationUnit(args[0].T)
+		symbol.Generic_, err = reducer.AToTranslationUnit(args[0].Generic_)
 	case _CReduceBToTranslationUnit:
 		args := stack[len(stack)-2:]
 		stack = stack[:len(stack)-2]
 		symbol.SymbolId_ = CTranslationUnitType
-		symbol.T, err = reducer.BToTranslationUnit(args[0].T, args[1].T)
+		symbol.Generic_, err = reducer.BToTranslationUnit(args[0].Generic_, args[1].Generic_)
 	case _CReduceAToExternalDeclaration:
 		args := stack[len(stack)-1:]
 		stack = stack[:len(stack)-1]
 		symbol.SymbolId_ = CExternalDeclarationType
-		symbol.T, err = reducer.AToExternalDeclaration(args[0].T)
+		symbol.Generic_, err = reducer.AToExternalDeclaration(args[0].Generic_)
 	case _CReduceBToExternalDeclaration:
 		args := stack[len(stack)-1:]
 		stack = stack[:len(stack)-1]
 		symbol.SymbolId_ = CExternalDeclarationType
-		symbol.T, err = reducer.BToExternalDeclaration(args[0].T)
+		symbol.Generic_, err = reducer.BToExternalDeclaration(args[0].Generic_)
 	case _CReduceAToFunctionDefinition:
 		args := stack[len(stack)-4:]
 		stack = stack[:len(stack)-4]
 		symbol.SymbolId_ = CFunctionDefinitionType
-		symbol.T, err = reducer.AToFunctionDefinition(args[0].T, args[1].T, args[2].T, args[3].T)
+		symbol.Generic_, err = reducer.AToFunctionDefinition(args[0].Generic_, args[1].Generic_, args[2].Generic_, args[3].Generic_)
 	case _CReduceBToFunctionDefinition:
 		args := stack[len(stack)-3:]
 		stack = stack[:len(stack)-3]
 		symbol.SymbolId_ = CFunctionDefinitionType
-		symbol.T, err = reducer.BToFunctionDefinition(args[0].T, args[1].T, args[2].T)
+		symbol.Generic_, err = reducer.BToFunctionDefinition(args[0].Generic_, args[1].Generic_, args[2].Generic_)
 	case _CReduceCToFunctionDefinition:
 		args := stack[len(stack)-3:]
 		stack = stack[:len(stack)-3]
 		symbol.SymbolId_ = CFunctionDefinitionType
-		symbol.T, err = reducer.CToFunctionDefinition(args[0].T, args[1].T, args[2].T)
+		symbol.Generic_, err = reducer.CToFunctionDefinition(args[0].Generic_, args[1].Generic_, args[2].Generic_)
 	case _CReduceDToFunctionDefinition:
 		args := stack[len(stack)-2:]
 		stack = stack[:len(stack)-2]
 		symbol.SymbolId_ = CFunctionDefinitionType
-		symbol.T, err = reducer.DToFunctionDefinition(args[0].T, args[1].T)
+		symbol.Generic_, err = reducer.DToFunctionDefinition(args[0].Generic_, args[1].Generic_)
 	default:
 		panic("Unknown reduce type: " + act.ReduceType.String())
 	}
@@ -3987,29 +3958,29 @@ func (table _CActionTableType) Get(stateId _CStateId, symbol CSymbolId) (*_CActi
 
 var _CActionTable = _CActionTableType{
 	{_CState2, _CEndMarker}:                     &_CAction{_CAcceptAction, 0, 0},
-	{_CState1, CIdentifierToken}:                _CGotoState10Action,
+	{_CState1, CIdentifierToken}:                _CGotoState12Action,
 	{_CState1, CTypeNameToken}:                  _CGotoState21Action,
 	{_CState1, CTypedefToken}:                   _CGotoState20Action,
-	{_CState1, CExternToken}:                    _CGotoState8Action,
+	{_CState1, CExternToken}:                    _CGotoState10Action,
 	{_CState1, CStaticToken}:                    _CGotoState18Action,
-	{_CState1, CAutoToken}:                      _CGotoState3Action,
+	{_CState1, CAutoToken}:                      _CGotoState5Action,
 	{_CState1, CRegisterToken}:                  _CGotoState15Action,
-	{_CState1, CCharToken}:                      _CGotoState4Action,
+	{_CState1, CCharToken}:                      _CGotoState6Action,
 	{_CState1, CShortToken}:                     _CGotoState16Action,
-	{_CState1, CIntToken}:                       _CGotoState11Action,
-	{_CState1, CLongToken}:                      _CGotoState12Action,
+	{_CState1, CIntToken}:                       _CGotoState13Action,
+	{_CState1, CLongToken}:                      _CGotoState14Action,
 	{_CState1, CSignedToken}:                    _CGotoState17Action,
 	{_CState1, CUnsignedToken}:                  _CGotoState23Action,
-	{_CState1, CFloatToken}:                     _CGotoState9Action,
-	{_CState1, CDoubleToken}:                    _CGotoState6Action,
-	{_CState1, CConstToken}:                     _CGotoState5Action,
+	{_CState1, CFloatToken}:                     _CGotoState11Action,
+	{_CState1, CDoubleToken}:                    _CGotoState8Action,
+	{_CState1, CConstToken}:                     _CGotoState7Action,
 	{_CState1, CVolatileToken}:                  _CGotoState25Action,
 	{_CState1, CVoidToken}:                      _CGotoState24Action,
 	{_CState1, CStructToken}:                    _CGotoState19Action,
 	{_CState1, CUnionToken}:                     _CGotoState22Action,
-	{_CState1, CEnumToken}:                      _CGotoState7Action,
-	{_CState1, CLparamToken}:                    _CGotoState13Action,
-	{_CState1, CMulToken}:                       _CGotoState14Action,
+	{_CState1, CEnumToken}:                      _CGotoState9Action,
+	{_CState1, '('}:                             _CGotoState3Action,
+	{_CState1, '*'}:                             _CGotoState4Action,
 	{_CState1, CDeclarationType}:                _CGotoState26Action,
 	{_CState1, CDeclarationSpecifiersType}:      _CGotoState27Action,
 	{_CState1, CStorageClassSpecifierType}:      _CGotoState34Action,
@@ -4024,29 +3995,29 @@ var _CActionTable = _CActionTableType{
 	{_CState1, CTranslationUnitType}:            _CGotoState2Action,
 	{_CState1, CExternalDeclarationType}:        _CGotoState31Action,
 	{_CState1, CFunctionDefinitionType}:         _CGotoState32Action,
-	{_CState2, CIdentifierToken}:                _CGotoState10Action,
+	{_CState2, CIdentifierToken}:                _CGotoState12Action,
 	{_CState2, CTypeNameToken}:                  _CGotoState21Action,
 	{_CState2, CTypedefToken}:                   _CGotoState20Action,
-	{_CState2, CExternToken}:                    _CGotoState8Action,
+	{_CState2, CExternToken}:                    _CGotoState10Action,
 	{_CState2, CStaticToken}:                    _CGotoState18Action,
-	{_CState2, CAutoToken}:                      _CGotoState3Action,
+	{_CState2, CAutoToken}:                      _CGotoState5Action,
 	{_CState2, CRegisterToken}:                  _CGotoState15Action,
-	{_CState2, CCharToken}:                      _CGotoState4Action,
+	{_CState2, CCharToken}:                      _CGotoState6Action,
 	{_CState2, CShortToken}:                     _CGotoState16Action,
-	{_CState2, CIntToken}:                       _CGotoState11Action,
-	{_CState2, CLongToken}:                      _CGotoState12Action,
+	{_CState2, CIntToken}:                       _CGotoState13Action,
+	{_CState2, CLongToken}:                      _CGotoState14Action,
 	{_CState2, CSignedToken}:                    _CGotoState17Action,
 	{_CState2, CUnsignedToken}:                  _CGotoState23Action,
-	{_CState2, CFloatToken}:                     _CGotoState9Action,
-	{_CState2, CDoubleToken}:                    _CGotoState6Action,
-	{_CState2, CConstToken}:                     _CGotoState5Action,
+	{_CState2, CFloatToken}:                     _CGotoState11Action,
+	{_CState2, CDoubleToken}:                    _CGotoState8Action,
+	{_CState2, CConstToken}:                     _CGotoState7Action,
 	{_CState2, CVolatileToken}:                  _CGotoState25Action,
 	{_CState2, CVoidToken}:                      _CGotoState24Action,
 	{_CState2, CStructToken}:                    _CGotoState19Action,
 	{_CState2, CUnionToken}:                     _CGotoState22Action,
-	{_CState2, CEnumToken}:                      _CGotoState7Action,
-	{_CState2, CLparamToken}:                    _CGotoState13Action,
-	{_CState2, CMulToken}:                       _CGotoState14Action,
+	{_CState2, CEnumToken}:                      _CGotoState9Action,
+	{_CState2, '('}:                             _CGotoState3Action,
+	{_CState2, '*'}:                             _CGotoState4Action,
 	{_CState2, CDeclarationType}:                _CGotoState26Action,
 	{_CState2, CDeclarationSpecifiersType}:      _CGotoState27Action,
 	{_CState2, CStorageClassSpecifierType}:      _CGotoState34Action,
@@ -4060,24 +4031,24 @@ var _CActionTable = _CActionTableType{
 	{_CState2, CPointerType}:                    _CGotoState33Action,
 	{_CState2, CExternalDeclarationType}:        _CGotoState60Action,
 	{_CState2, CFunctionDefinitionType}:         _CGotoState32Action,
-	{_CState7, CIdentifierToken}:                _CGotoState39Action,
-	{_CState7, CLcurlToken}:                     _CGotoState40Action,
-	{_CState13, CIdentifierToken}:               _CGotoState10Action,
-	{_CState13, CLparamToken}:                   _CGotoState13Action,
-	{_CState13, CMulToken}:                      _CGotoState14Action,
-	{_CState13, CDeclaratorType}:                _CGotoState41Action,
-	{_CState13, CDirectDeclaratorType}:          _CGotoState29Action,
-	{_CState13, CPointerType}:                   _CGotoState33Action,
-	{_CState14, CConstToken}:                    _CGotoState5Action,
-	{_CState14, CVolatileToken}:                 _CGotoState25Action,
-	{_CState14, CMulToken}:                      _CGotoState14Action,
-	{_CState14, CTypeQualifierType}:             _CGotoState43Action,
-	{_CState14, CPointerType}:                   _CGotoState42Action,
-	{_CState14, CTypeQualifierListType}:         _CGotoState44Action,
-	{_CState27, CIdentifierToken}:               _CGotoState10Action,
-	{_CState27, CLparamToken}:                   _CGotoState13Action,
-	{_CState27, CSemicolonToken}:                _CGotoState45Action,
-	{_CState27, CMulToken}:                      _CGotoState14Action,
+	{_CState3, CIdentifierToken}:                _CGotoState12Action,
+	{_CState3, '('}:                             _CGotoState3Action,
+	{_CState3, '*'}:                             _CGotoState4Action,
+	{_CState3, CDeclaratorType}:                 _CGotoState39Action,
+	{_CState3, CDirectDeclaratorType}:           _CGotoState29Action,
+	{_CState3, CPointerType}:                    _CGotoState33Action,
+	{_CState4, CConstToken}:                     _CGotoState7Action,
+	{_CState4, CVolatileToken}:                  _CGotoState25Action,
+	{_CState4, '*'}:                             _CGotoState4Action,
+	{_CState4, CTypeQualifierType}:              _CGotoState41Action,
+	{_CState4, CPointerType}:                    _CGotoState40Action,
+	{_CState4, CTypeQualifierListType}:          _CGotoState42Action,
+	{_CState9, CIdentifierToken}:                _CGotoState44Action,
+	{_CState9, '{'}:                             _CGotoState43Action,
+	{_CState27, CIdentifierToken}:               _CGotoState12Action,
+	{_CState27, '('}:                            _CGotoState3Action,
+	{_CState27, ';'}:                            _CGotoState45Action,
+	{_CState27, '*'}:                            _CGotoState4Action,
 	{_CState27, CInitDeclaratorListType}:        _CGotoState48Action,
 	{_CState27, CInitDeclaratorType}:            _CGotoState47Action,
 	{_CState27, CDeclaratorType}:                _CGotoState46Action,
@@ -4085,25 +4056,25 @@ var _CActionTable = _CActionTableType{
 	{_CState27, CPointerType}:                   _CGotoState33Action,
 	{_CState28, CTypeNameToken}:                 _CGotoState21Action,
 	{_CState28, CTypedefToken}:                  _CGotoState20Action,
-	{_CState28, CExternToken}:                   _CGotoState8Action,
+	{_CState28, CExternToken}:                   _CGotoState10Action,
 	{_CState28, CStaticToken}:                   _CGotoState18Action,
-	{_CState28, CAutoToken}:                     _CGotoState3Action,
+	{_CState28, CAutoToken}:                     _CGotoState5Action,
 	{_CState28, CRegisterToken}:                 _CGotoState15Action,
-	{_CState28, CCharToken}:                     _CGotoState4Action,
+	{_CState28, CCharToken}:                     _CGotoState6Action,
 	{_CState28, CShortToken}:                    _CGotoState16Action,
-	{_CState28, CIntToken}:                      _CGotoState11Action,
-	{_CState28, CLongToken}:                     _CGotoState12Action,
+	{_CState28, CIntToken}:                      _CGotoState13Action,
+	{_CState28, CLongToken}:                     _CGotoState14Action,
 	{_CState28, CSignedToken}:                   _CGotoState17Action,
 	{_CState28, CUnsignedToken}:                 _CGotoState23Action,
-	{_CState28, CFloatToken}:                    _CGotoState9Action,
-	{_CState28, CDoubleToken}:                   _CGotoState6Action,
-	{_CState28, CConstToken}:                    _CGotoState5Action,
+	{_CState28, CFloatToken}:                    _CGotoState11Action,
+	{_CState28, CDoubleToken}:                   _CGotoState8Action,
+	{_CState28, CConstToken}:                    _CGotoState7Action,
 	{_CState28, CVolatileToken}:                 _CGotoState25Action,
 	{_CState28, CVoidToken}:                     _CGotoState24Action,
 	{_CState28, CStructToken}:                   _CGotoState19Action,
 	{_CState28, CUnionToken}:                    _CGotoState22Action,
-	{_CState28, CEnumToken}:                     _CGotoState7Action,
-	{_CState28, CLcurlToken}:                    _CGotoState49Action,
+	{_CState28, CEnumToken}:                     _CGotoState9Action,
+	{_CState28, '{'}:                            _CGotoState49Action,
 	{_CState28, CDeclarationType}:               _CGotoState51Action,
 	{_CState28, CDeclarationSpecifiersType}:     _CGotoState53Action,
 	{_CState28, CStorageClassSpecifierType}:     _CGotoState34Action,
@@ -4114,31 +4085,31 @@ var _CActionTable = _CActionTableType{
 	{_CState28, CTypeQualifierType}:             _CGotoState37Action,
 	{_CState28, CCompoundStatementType}:         _CGotoState50Action,
 	{_CState28, CDeclarationListType}:           _CGotoState52Action,
-	{_CState29, CLparamToken}:                   _CGotoState55Action,
-	{_CState29, CLbraceToken}:                   _CGotoState54Action,
-	{_CState33, CIdentifierToken}:               _CGotoState10Action,
-	{_CState33, CLparamToken}:                   _CGotoState13Action,
+	{_CState29, '('}:                            _CGotoState54Action,
+	{_CState29, '['}:                            _CGotoState55Action,
+	{_CState33, CIdentifierToken}:               _CGotoState12Action,
+	{_CState33, '('}:                            _CGotoState3Action,
 	{_CState33, CDirectDeclaratorType}:          _CGotoState56Action,
 	{_CState34, CTypeNameToken}:                 _CGotoState21Action,
 	{_CState34, CTypedefToken}:                  _CGotoState20Action,
-	{_CState34, CExternToken}:                   _CGotoState8Action,
+	{_CState34, CExternToken}:                   _CGotoState10Action,
 	{_CState34, CStaticToken}:                   _CGotoState18Action,
-	{_CState34, CAutoToken}:                     _CGotoState3Action,
+	{_CState34, CAutoToken}:                     _CGotoState5Action,
 	{_CState34, CRegisterToken}:                 _CGotoState15Action,
-	{_CState34, CCharToken}:                     _CGotoState4Action,
+	{_CState34, CCharToken}:                     _CGotoState6Action,
 	{_CState34, CShortToken}:                    _CGotoState16Action,
-	{_CState34, CIntToken}:                      _CGotoState11Action,
-	{_CState34, CLongToken}:                     _CGotoState12Action,
+	{_CState34, CIntToken}:                      _CGotoState13Action,
+	{_CState34, CLongToken}:                     _CGotoState14Action,
 	{_CState34, CSignedToken}:                   _CGotoState17Action,
 	{_CState34, CUnsignedToken}:                 _CGotoState23Action,
-	{_CState34, CFloatToken}:                    _CGotoState9Action,
-	{_CState34, CDoubleToken}:                   _CGotoState6Action,
-	{_CState34, CConstToken}:                    _CGotoState5Action,
+	{_CState34, CFloatToken}:                    _CGotoState11Action,
+	{_CState34, CDoubleToken}:                   _CGotoState8Action,
+	{_CState34, CConstToken}:                    _CGotoState7Action,
 	{_CState34, CVolatileToken}:                 _CGotoState25Action,
 	{_CState34, CVoidToken}:                     _CGotoState24Action,
 	{_CState34, CStructToken}:                   _CGotoState19Action,
 	{_CState34, CUnionToken}:                    _CGotoState22Action,
-	{_CState34, CEnumToken}:                     _CGotoState7Action,
+	{_CState34, CEnumToken}:                     _CGotoState9Action,
 	{_CState34, CDeclarationSpecifiersType}:     _CGotoState57Action,
 	{_CState34, CStorageClassSpecifierType}:     _CGotoState34Action,
 	{_CState34, CTypeSpecifierType}:             _CGotoState38Action,
@@ -4146,28 +4117,28 @@ var _CActionTable = _CActionTableType{
 	{_CState34, CStructOrUnionType}:             _CGotoState35Action,
 	{_CState34, CEnumSpecifierType}:             _CGotoState30Action,
 	{_CState34, CTypeQualifierType}:             _CGotoState37Action,
-	{_CState35, CIdentifierToken}:               _CGotoState58Action,
-	{_CState35, CLcurlToken}:                    _CGotoState59Action,
+	{_CState35, CIdentifierToken}:               _CGotoState59Action,
+	{_CState35, '{'}:                            _CGotoState58Action,
 	{_CState37, CTypeNameToken}:                 _CGotoState21Action,
 	{_CState37, CTypedefToken}:                  _CGotoState20Action,
-	{_CState37, CExternToken}:                   _CGotoState8Action,
+	{_CState37, CExternToken}:                   _CGotoState10Action,
 	{_CState37, CStaticToken}:                   _CGotoState18Action,
-	{_CState37, CAutoToken}:                     _CGotoState3Action,
+	{_CState37, CAutoToken}:                     _CGotoState5Action,
 	{_CState37, CRegisterToken}:                 _CGotoState15Action,
-	{_CState37, CCharToken}:                     _CGotoState4Action,
+	{_CState37, CCharToken}:                     _CGotoState6Action,
 	{_CState37, CShortToken}:                    _CGotoState16Action,
-	{_CState37, CIntToken}:                      _CGotoState11Action,
-	{_CState37, CLongToken}:                     _CGotoState12Action,
+	{_CState37, CIntToken}:                      _CGotoState13Action,
+	{_CState37, CLongToken}:                     _CGotoState14Action,
 	{_CState37, CSignedToken}:                   _CGotoState17Action,
 	{_CState37, CUnsignedToken}:                 _CGotoState23Action,
-	{_CState37, CFloatToken}:                    _CGotoState9Action,
-	{_CState37, CDoubleToken}:                   _CGotoState6Action,
-	{_CState37, CConstToken}:                    _CGotoState5Action,
+	{_CState37, CFloatToken}:                    _CGotoState11Action,
+	{_CState37, CDoubleToken}:                   _CGotoState8Action,
+	{_CState37, CConstToken}:                    _CGotoState7Action,
 	{_CState37, CVolatileToken}:                 _CGotoState25Action,
 	{_CState37, CVoidToken}:                     _CGotoState24Action,
 	{_CState37, CStructToken}:                   _CGotoState19Action,
 	{_CState37, CUnionToken}:                    _CGotoState22Action,
-	{_CState37, CEnumToken}:                     _CGotoState7Action,
+	{_CState37, CEnumToken}:                     _CGotoState9Action,
 	{_CState37, CDeclarationSpecifiersType}:     _CGotoState61Action,
 	{_CState37, CStorageClassSpecifierType}:     _CGotoState34Action,
 	{_CState37, CTypeSpecifierType}:             _CGotoState38Action,
@@ -4177,24 +4148,24 @@ var _CActionTable = _CActionTableType{
 	{_CState37, CTypeQualifierType}:             _CGotoState37Action,
 	{_CState38, CTypeNameToken}:                 _CGotoState21Action,
 	{_CState38, CTypedefToken}:                  _CGotoState20Action,
-	{_CState38, CExternToken}:                   _CGotoState8Action,
+	{_CState38, CExternToken}:                   _CGotoState10Action,
 	{_CState38, CStaticToken}:                   _CGotoState18Action,
-	{_CState38, CAutoToken}:                     _CGotoState3Action,
+	{_CState38, CAutoToken}:                     _CGotoState5Action,
 	{_CState38, CRegisterToken}:                 _CGotoState15Action,
-	{_CState38, CCharToken}:                     _CGotoState4Action,
+	{_CState38, CCharToken}:                     _CGotoState6Action,
 	{_CState38, CShortToken}:                    _CGotoState16Action,
-	{_CState38, CIntToken}:                      _CGotoState11Action,
-	{_CState38, CLongToken}:                     _CGotoState12Action,
+	{_CState38, CIntToken}:                      _CGotoState13Action,
+	{_CState38, CLongToken}:                     _CGotoState14Action,
 	{_CState38, CSignedToken}:                   _CGotoState17Action,
 	{_CState38, CUnsignedToken}:                 _CGotoState23Action,
-	{_CState38, CFloatToken}:                    _CGotoState9Action,
-	{_CState38, CDoubleToken}:                   _CGotoState6Action,
-	{_CState38, CConstToken}:                    _CGotoState5Action,
+	{_CState38, CFloatToken}:                    _CGotoState11Action,
+	{_CState38, CDoubleToken}:                   _CGotoState8Action,
+	{_CState38, CConstToken}:                    _CGotoState7Action,
 	{_CState38, CVolatileToken}:                 _CGotoState25Action,
 	{_CState38, CVoidToken}:                     _CGotoState24Action,
 	{_CState38, CStructToken}:                   _CGotoState19Action,
 	{_CState38, CUnionToken}:                    _CGotoState22Action,
-	{_CState38, CEnumToken}:                     _CGotoState7Action,
+	{_CState38, CEnumToken}:                     _CGotoState9Action,
 	{_CState38, CDeclarationSpecifiersType}:     _CGotoState62Action,
 	{_CState38, CStorageClassSpecifierType}:     _CGotoState34Action,
 	{_CState38, CTypeSpecifierType}:             _CGotoState38Action,
@@ -4202,38 +4173,38 @@ var _CActionTable = _CActionTableType{
 	{_CState38, CStructOrUnionType}:             _CGotoState35Action,
 	{_CState38, CEnumSpecifierType}:             _CGotoState30Action,
 	{_CState38, CTypeQualifierType}:             _CGotoState37Action,
-	{_CState39, CLcurlToken}:                    _CGotoState63Action,
-	{_CState40, CIdentifierToken}:               _CGotoState64Action,
-	{_CState40, CEnumeratorListType}:            _CGotoState66Action,
-	{_CState40, CEnumeratorType}:                _CGotoState65Action,
-	{_CState41, CRparamToken}:                   _CGotoState67Action,
-	{_CState44, CConstToken}:                    _CGotoState5Action,
-	{_CState44, CVolatileToken}:                 _CGotoState25Action,
-	{_CState44, CMulToken}:                      _CGotoState14Action,
-	{_CState44, CTypeQualifierType}:             _CGotoState69Action,
-	{_CState44, CPointerType}:                   _CGotoState68Action,
+	{_CState39, ')'}:                            _CGotoState63Action,
+	{_CState42, CConstToken}:                    _CGotoState7Action,
+	{_CState42, CVolatileToken}:                 _CGotoState25Action,
+	{_CState42, '*'}:                            _CGotoState4Action,
+	{_CState42, CTypeQualifierType}:             _CGotoState65Action,
+	{_CState42, CPointerType}:                   _CGotoState64Action,
+	{_CState43, CIdentifierToken}:               _CGotoState66Action,
+	{_CState43, CEnumeratorListType}:            _CGotoState68Action,
+	{_CState43, CEnumeratorType}:                _CGotoState67Action,
+	{_CState44, '{'}:                            _CGotoState69Action,
 	{_CState46, CTypeNameToken}:                 _CGotoState21Action,
 	{_CState46, CTypedefToken}:                  _CGotoState20Action,
-	{_CState46, CExternToken}:                   _CGotoState8Action,
+	{_CState46, CExternToken}:                   _CGotoState10Action,
 	{_CState46, CStaticToken}:                   _CGotoState18Action,
-	{_CState46, CAutoToken}:                     _CGotoState3Action,
+	{_CState46, CAutoToken}:                     _CGotoState5Action,
 	{_CState46, CRegisterToken}:                 _CGotoState15Action,
-	{_CState46, CCharToken}:                     _CGotoState4Action,
+	{_CState46, CCharToken}:                     _CGotoState6Action,
 	{_CState46, CShortToken}:                    _CGotoState16Action,
-	{_CState46, CIntToken}:                      _CGotoState11Action,
-	{_CState46, CLongToken}:                     _CGotoState12Action,
+	{_CState46, CIntToken}:                      _CGotoState13Action,
+	{_CState46, CLongToken}:                     _CGotoState14Action,
 	{_CState46, CSignedToken}:                   _CGotoState17Action,
 	{_CState46, CUnsignedToken}:                 _CGotoState23Action,
-	{_CState46, CFloatToken}:                    _CGotoState9Action,
-	{_CState46, CDoubleToken}:                   _CGotoState6Action,
-	{_CState46, CConstToken}:                    _CGotoState5Action,
+	{_CState46, CFloatToken}:                    _CGotoState11Action,
+	{_CState46, CDoubleToken}:                   _CGotoState8Action,
+	{_CState46, CConstToken}:                    _CGotoState7Action,
 	{_CState46, CVolatileToken}:                 _CGotoState25Action,
 	{_CState46, CVoidToken}:                     _CGotoState24Action,
 	{_CState46, CStructToken}:                   _CGotoState19Action,
 	{_CState46, CUnionToken}:                    _CGotoState22Action,
-	{_CState46, CEnumToken}:                     _CGotoState7Action,
-	{_CState46, CLcurlToken}:                    _CGotoState49Action,
-	{_CState46, CEqToken}:                       _CGotoState70Action,
+	{_CState46, CEnumToken}:                     _CGotoState9Action,
+	{_CState46, '{'}:                            _CGotoState49Action,
+	{_CState46, '='}:                            _CGotoState70Action,
 	{_CState46, CDeclarationType}:               _CGotoState51Action,
 	{_CState46, CDeclarationSpecifiersType}:     _CGotoState53Action,
 	{_CState46, CStorageClassSpecifierType}:     _CGotoState34Action,
@@ -4244,55 +4215,55 @@ var _CActionTable = _CActionTableType{
 	{_CState46, CTypeQualifierType}:             _CGotoState37Action,
 	{_CState46, CCompoundStatementType}:         _CGotoState71Action,
 	{_CState46, CDeclarationListType}:           _CGotoState72Action,
-	{_CState48, CSemicolonToken}:                _CGotoState74Action,
-	{_CState48, CCommaToken}:                    _CGotoState73Action,
-	{_CState49, CIdentifierToken}:               _CGotoState86Action,
-	{_CState49, CConstantToken}:                 _CGotoState78Action,
-	{_CState49, CStringLiteralToken}:            _CGotoState97Action,
-	{_CState49, CSizeofToken}:                   _CGotoState96Action,
-	{_CState49, CIncOpToken}:                    _CGotoState88Action,
-	{_CState49, CDecOpToken}:                    _CGotoState80Action,
+	{_CState48, ';'}:                            _CGotoState74Action,
+	{_CState48, ','}:                            _CGotoState73Action,
+	{_CState49, CIdentifierToken}:               _CGotoState93Action,
+	{_CState49, CConstantToken}:                 _CGotoState86Action,
+	{_CState49, CStringLiteralToken}:            _CGotoState98Action,
+	{_CState49, CSizeofToken}:                   _CGotoState97Action,
+	{_CState49, CIncOpToken}:                    _CGotoState95Action,
+	{_CState49, CDecOpToken}:                    _CGotoState88Action,
 	{_CState49, CTypeNameToken}:                 _CGotoState21Action,
 	{_CState49, CTypedefToken}:                  _CGotoState20Action,
-	{_CState49, CExternToken}:                   _CGotoState8Action,
+	{_CState49, CExternToken}:                   _CGotoState10Action,
 	{_CState49, CStaticToken}:                   _CGotoState18Action,
-	{_CState49, CAutoToken}:                     _CGotoState3Action,
+	{_CState49, CAutoToken}:                     _CGotoState5Action,
 	{_CState49, CRegisterToken}:                 _CGotoState15Action,
-	{_CState49, CCharToken}:                     _CGotoState4Action,
+	{_CState49, CCharToken}:                     _CGotoState6Action,
 	{_CState49, CShortToken}:                    _CGotoState16Action,
-	{_CState49, CIntToken}:                      _CGotoState11Action,
-	{_CState49, CLongToken}:                     _CGotoState12Action,
+	{_CState49, CIntToken}:                      _CGotoState13Action,
+	{_CState49, CLongToken}:                     _CGotoState14Action,
 	{_CState49, CSignedToken}:                   _CGotoState17Action,
 	{_CState49, CUnsignedToken}:                 _CGotoState23Action,
-	{_CState49, CFloatToken}:                    _CGotoState9Action,
-	{_CState49, CDoubleToken}:                   _CGotoState6Action,
-	{_CState49, CConstToken}:                    _CGotoState5Action,
+	{_CState49, CFloatToken}:                    _CGotoState11Action,
+	{_CState49, CDoubleToken}:                   _CGotoState8Action,
+	{_CState49, CConstToken}:                    _CGotoState7Action,
 	{_CState49, CVolatileToken}:                 _CGotoState25Action,
 	{_CState49, CVoidToken}:                     _CGotoState24Action,
 	{_CState49, CStructToken}:                   _CGotoState19Action,
 	{_CState49, CUnionToken}:                    _CGotoState22Action,
-	{_CState49, CEnumToken}:                     _CGotoState7Action,
-	{_CState49, CCaseToken}:                     _CGotoState77Action,
-	{_CState49, CDefaultToken}:                  _CGotoState81Action,
-	{_CState49, CIfToken}:                       _CGotoState87Action,
-	{_CState49, CSwitchToken}:                   _CGotoState98Action,
+	{_CState49, CEnumToken}:                     _CGotoState9Action,
+	{_CState49, CCaseToken}:                     _CGotoState85Action,
+	{_CState49, CDefaultToken}:                  _CGotoState89Action,
+	{_CState49, CIfToken}:                       _CGotoState94Action,
+	{_CState49, CSwitchToken}:                   _CGotoState99Action,
 	{_CState49, CWhileToken}:                    _CGotoState100Action,
-	{_CState49, CDoToken}:                       _CGotoState82Action,
-	{_CState49, CForToken}:                      _CGotoState84Action,
-	{_CState49, CGotoToken}:                     _CGotoState85Action,
-	{_CState49, CContinueToken}:                 _CGotoState79Action,
-	{_CState49, CBreakToken}:                    _CGotoState76Action,
-	{_CState49, CReturnToken}:                   _CGotoState94Action,
-	{_CState49, CLparamToken}:                   _CGotoState89Action,
-	{_CState49, CLcurlToken}:                    _CGotoState49Action,
-	{_CState49, CRcurlToken}:                    _CGotoState93Action,
-	{_CState49, CSemicolonToken}:                _CGotoState95Action,
-	{_CState49, CMulToken}:                      _CGotoState91Action,
-	{_CState49, CMinusToken}:                    _CGotoState90Action,
-	{_CState49, CPlusToken}:                     _CGotoState92Action,
-	{_CState49, CAndToken}:                      _CGotoState75Action,
-	{_CState49, CExclaimToken}:                  _CGotoState83Action,
-	{_CState49, CTildaToken}:                    _CGotoState99Action,
+	{_CState49, CDoToken}:                       _CGotoState90Action,
+	{_CState49, CForToken}:                      _CGotoState91Action,
+	{_CState49, CGotoToken}:                     _CGotoState92Action,
+	{_CState49, CContinueToken}:                 _CGotoState87Action,
+	{_CState49, CBreakToken}:                    _CGotoState84Action,
+	{_CState49, CReturnToken}:                   _CGotoState96Action,
+	{_CState49, '('}:                            _CGotoState77Action,
+	{_CState49, '{'}:                            _CGotoState49Action,
+	{_CState49, '}'}:                            _CGotoState82Action,
+	{_CState49, ';'}:                            _CGotoState81Action,
+	{_CState49, '*'}:                            _CGotoState78Action,
+	{_CState49, '-'}:                            _CGotoState80Action,
+	{_CState49, '+'}:                            _CGotoState79Action,
+	{_CState49, '&'}:                            _CGotoState76Action,
+	{_CState49, '!'}:                            _CGotoState75Action,
+	{_CState49, '~'}:                            _CGotoState83Action,
 	{_CState49, CPrimaryExpressionType}:         _CGotoState120Action,
 	{_CState49, CPostfixExpressionType}:         _CGotoState119Action,
 	{_CState49, CUnaryExpressionType}:           _CGotoState126Action,
@@ -4330,25 +4301,25 @@ var _CActionTable = _CActionTableType{
 	{_CState49, CJumpStatementType}:             _CGotoState114Action,
 	{_CState52, CTypeNameToken}:                 _CGotoState21Action,
 	{_CState52, CTypedefToken}:                  _CGotoState20Action,
-	{_CState52, CExternToken}:                   _CGotoState8Action,
+	{_CState52, CExternToken}:                   _CGotoState10Action,
 	{_CState52, CStaticToken}:                   _CGotoState18Action,
-	{_CState52, CAutoToken}:                     _CGotoState3Action,
+	{_CState52, CAutoToken}:                     _CGotoState5Action,
 	{_CState52, CRegisterToken}:                 _CGotoState15Action,
-	{_CState52, CCharToken}:                     _CGotoState4Action,
+	{_CState52, CCharToken}:                     _CGotoState6Action,
 	{_CState52, CShortToken}:                    _CGotoState16Action,
-	{_CState52, CIntToken}:                      _CGotoState11Action,
-	{_CState52, CLongToken}:                     _CGotoState12Action,
+	{_CState52, CIntToken}:                      _CGotoState13Action,
+	{_CState52, CLongToken}:                     _CGotoState14Action,
 	{_CState52, CSignedToken}:                   _CGotoState17Action,
 	{_CState52, CUnsignedToken}:                 _CGotoState23Action,
-	{_CState52, CFloatToken}:                    _CGotoState9Action,
-	{_CState52, CDoubleToken}:                   _CGotoState6Action,
-	{_CState52, CConstToken}:                    _CGotoState5Action,
+	{_CState52, CFloatToken}:                    _CGotoState11Action,
+	{_CState52, CDoubleToken}:                   _CGotoState8Action,
+	{_CState52, CConstToken}:                    _CGotoState7Action,
 	{_CState52, CVolatileToken}:                 _CGotoState25Action,
 	{_CState52, CVoidToken}:                     _CGotoState24Action,
 	{_CState52, CStructToken}:                   _CGotoState19Action,
 	{_CState52, CUnionToken}:                    _CGotoState22Action,
-	{_CState52, CEnumToken}:                     _CGotoState7Action,
-	{_CState52, CLcurlToken}:                    _CGotoState49Action,
+	{_CState52, CEnumToken}:                     _CGotoState9Action,
+	{_CState52, '{'}:                            _CGotoState49Action,
 	{_CState52, CDeclarationType}:               _CGotoState129Action,
 	{_CState52, CDeclarationSpecifiersType}:     _CGotoState53Action,
 	{_CState52, CStorageClassSpecifierType}:     _CGotoState34Action,
@@ -4358,125 +4329,125 @@ var _CActionTable = _CActionTableType{
 	{_CState52, CEnumSpecifierType}:             _CGotoState30Action,
 	{_CState52, CTypeQualifierType}:             _CGotoState37Action,
 	{_CState52, CCompoundStatementType}:         _CGotoState128Action,
-	{_CState53, CIdentifierToken}:               _CGotoState10Action,
-	{_CState53, CLparamToken}:                   _CGotoState13Action,
-	{_CState53, CSemicolonToken}:                _CGotoState45Action,
-	{_CState53, CMulToken}:                      _CGotoState14Action,
+	{_CState53, CIdentifierToken}:               _CGotoState12Action,
+	{_CState53, '('}:                            _CGotoState3Action,
+	{_CState53, ';'}:                            _CGotoState45Action,
+	{_CState53, '*'}:                            _CGotoState4Action,
 	{_CState53, CInitDeclaratorListType}:        _CGotoState48Action,
 	{_CState53, CInitDeclaratorType}:            _CGotoState47Action,
 	{_CState53, CDeclaratorType}:                _CGotoState130Action,
 	{_CState53, CDirectDeclaratorType}:          _CGotoState29Action,
 	{_CState53, CPointerType}:                   _CGotoState33Action,
-	{_CState54, CIdentifierToken}:               _CGotoState131Action,
-	{_CState54, CConstantToken}:                 _CGotoState78Action,
-	{_CState54, CStringLiteralToken}:            _CGotoState97Action,
-	{_CState54, CSizeofToken}:                   _CGotoState96Action,
-	{_CState54, CIncOpToken}:                    _CGotoState88Action,
-	{_CState54, CDecOpToken}:                    _CGotoState80Action,
-	{_CState54, CLparamToken}:                   _CGotoState89Action,
-	{_CState54, CRbraceToken}:                   _CGotoState132Action,
-	{_CState54, CMulToken}:                      _CGotoState91Action,
-	{_CState54, CMinusToken}:                    _CGotoState90Action,
-	{_CState54, CPlusToken}:                     _CGotoState92Action,
-	{_CState54, CAndToken}:                      _CGotoState75Action,
-	{_CState54, CExclaimToken}:                  _CGotoState83Action,
-	{_CState54, CTildaToken}:                    _CGotoState99Action,
-	{_CState54, CPrimaryExpressionType}:         _CGotoState120Action,
-	{_CState54, CPostfixExpressionType}:         _CGotoState119Action,
-	{_CState54, CUnaryExpressionType}:           _CGotoState135Action,
-	{_CState54, CUnaryOperatorType}:             _CGotoState127Action,
-	{_CState54, CCastExpressionType}:            _CGotoState104Action,
-	{_CState54, CMultiplicativeExpressionType}:  _CGotoState118Action,
-	{_CState54, CAdditiveExpressionType}:        _CGotoState101Action,
-	{_CState54, CShiftExpressionType}:           _CGotoState123Action,
-	{_CState54, CRelationalExpressionType}:      _CGotoState121Action,
-	{_CState54, CEqualityExpressionType}:        _CGotoState108Action,
-	{_CState54, CAndExpressionType}:             _CGotoState102Action,
-	{_CState54, CExclusiveOrExpressionType}:     _CGotoState109Action,
-	{_CState54, CInclusiveOrExpressionType}:     _CGotoState112Action,
-	{_CState54, CLogicalAndExpressionType}:      _CGotoState116Action,
-	{_CState54, CLogicalOrExpressionType}:       _CGotoState117Action,
-	{_CState54, CConditionalExpressionType}:     _CGotoState133Action,
-	{_CState54, CConstantExpressionType}:        _CGotoState134Action,
-	{_CState55, CIdentifierToken}:               _CGotoState136Action,
-	{_CState55, CTypeNameToken}:                 _CGotoState21Action,
-	{_CState55, CTypedefToken}:                  _CGotoState20Action,
-	{_CState55, CExternToken}:                   _CGotoState8Action,
-	{_CState55, CStaticToken}:                   _CGotoState18Action,
-	{_CState55, CAutoToken}:                     _CGotoState3Action,
-	{_CState55, CRegisterToken}:                 _CGotoState15Action,
-	{_CState55, CCharToken}:                     _CGotoState4Action,
-	{_CState55, CShortToken}:                    _CGotoState16Action,
-	{_CState55, CIntToken}:                      _CGotoState11Action,
-	{_CState55, CLongToken}:                     _CGotoState12Action,
-	{_CState55, CSignedToken}:                   _CGotoState17Action,
-	{_CState55, CUnsignedToken}:                 _CGotoState23Action,
-	{_CState55, CFloatToken}:                    _CGotoState9Action,
-	{_CState55, CDoubleToken}:                   _CGotoState6Action,
-	{_CState55, CConstToken}:                    _CGotoState5Action,
-	{_CState55, CVolatileToken}:                 _CGotoState25Action,
-	{_CState55, CVoidToken}:                     _CGotoState24Action,
-	{_CState55, CStructToken}:                   _CGotoState19Action,
-	{_CState55, CUnionToken}:                    _CGotoState22Action,
-	{_CState55, CEnumToken}:                     _CGotoState7Action,
-	{_CState55, CRparamToken}:                   _CGotoState137Action,
-	{_CState55, CDeclarationSpecifiersType}:     _CGotoState138Action,
-	{_CState55, CStorageClassSpecifierType}:     _CGotoState34Action,
-	{_CState55, CTypeSpecifierType}:             _CGotoState38Action,
-	{_CState55, CStructOrUnionSpecifierType}:    _CGotoState36Action,
-	{_CState55, CStructOrUnionType}:             _CGotoState35Action,
-	{_CState55, CEnumSpecifierType}:             _CGotoState30Action,
-	{_CState55, CTypeQualifierType}:             _CGotoState37Action,
-	{_CState55, CParameterTypeListType}:         _CGotoState142Action,
-	{_CState55, CParameterListType}:             _CGotoState141Action,
-	{_CState55, CParameterDeclarationType}:      _CGotoState140Action,
-	{_CState55, CIdentifierListType}:            _CGotoState139Action,
-	{_CState56, CLparamToken}:                   _CGotoState55Action,
-	{_CState56, CLbraceToken}:                   _CGotoState54Action,
-	{_CState58, CLcurlToken}:                    _CGotoState143Action,
-	{_CState59, CTypeNameToken}:                 _CGotoState21Action,
-	{_CState59, CCharToken}:                     _CGotoState4Action,
-	{_CState59, CShortToken}:                    _CGotoState16Action,
-	{_CState59, CIntToken}:                      _CGotoState11Action,
-	{_CState59, CLongToken}:                     _CGotoState12Action,
-	{_CState59, CSignedToken}:                   _CGotoState17Action,
-	{_CState59, CUnsignedToken}:                 _CGotoState23Action,
-	{_CState59, CFloatToken}:                    _CGotoState9Action,
-	{_CState59, CDoubleToken}:                   _CGotoState6Action,
-	{_CState59, CConstToken}:                    _CGotoState5Action,
-	{_CState59, CVolatileToken}:                 _CGotoState25Action,
-	{_CState59, CVoidToken}:                     _CGotoState24Action,
-	{_CState59, CStructToken}:                   _CGotoState19Action,
-	{_CState59, CUnionToken}:                    _CGotoState22Action,
-	{_CState59, CEnumToken}:                     _CGotoState7Action,
-	{_CState59, CTypeSpecifierType}:             _CGotoState148Action,
-	{_CState59, CStructOrUnionSpecifierType}:    _CGotoState36Action,
-	{_CState59, CStructOrUnionType}:             _CGotoState35Action,
-	{_CState59, CStructDeclarationListType}:     _CGotoState146Action,
-	{_CState59, CStructDeclarationType}:         _CGotoState145Action,
-	{_CState59, CSpecifierQualifierListType}:    _CGotoState144Action,
-	{_CState59, CEnumSpecifierType}:             _CGotoState30Action,
-	{_CState59, CTypeQualifierType}:             _CGotoState147Action,
-	{_CState63, CIdentifierToken}:               _CGotoState64Action,
-	{_CState63, CEnumeratorListType}:            _CGotoState149Action,
-	{_CState63, CEnumeratorType}:                _CGotoState65Action,
-	{_CState64, CEqToken}:                       _CGotoState150Action,
-	{_CState66, CRcurlToken}:                    _CGotoState152Action,
-	{_CState66, CCommaToken}:                    _CGotoState151Action,
-	{_CState70, CIdentifierToken}:               _CGotoState131Action,
-	{_CState70, CConstantToken}:                 _CGotoState78Action,
-	{_CState70, CStringLiteralToken}:            _CGotoState97Action,
-	{_CState70, CSizeofToken}:                   _CGotoState96Action,
-	{_CState70, CIncOpToken}:                    _CGotoState88Action,
-	{_CState70, CDecOpToken}:                    _CGotoState80Action,
-	{_CState70, CLparamToken}:                   _CGotoState89Action,
-	{_CState70, CLcurlToken}:                    _CGotoState153Action,
-	{_CState70, CMulToken}:                      _CGotoState91Action,
-	{_CState70, CMinusToken}:                    _CGotoState90Action,
-	{_CState70, CPlusToken}:                     _CGotoState92Action,
-	{_CState70, CAndToken}:                      _CGotoState75Action,
-	{_CState70, CExclaimToken}:                  _CGotoState83Action,
-	{_CState70, CTildaToken}:                    _CGotoState99Action,
+	{_CState54, CIdentifierToken}:               _CGotoState132Action,
+	{_CState54, CTypeNameToken}:                 _CGotoState21Action,
+	{_CState54, CTypedefToken}:                  _CGotoState20Action,
+	{_CState54, CExternToken}:                   _CGotoState10Action,
+	{_CState54, CStaticToken}:                   _CGotoState18Action,
+	{_CState54, CAutoToken}:                     _CGotoState5Action,
+	{_CState54, CRegisterToken}:                 _CGotoState15Action,
+	{_CState54, CCharToken}:                     _CGotoState6Action,
+	{_CState54, CShortToken}:                    _CGotoState16Action,
+	{_CState54, CIntToken}:                      _CGotoState13Action,
+	{_CState54, CLongToken}:                     _CGotoState14Action,
+	{_CState54, CSignedToken}:                   _CGotoState17Action,
+	{_CState54, CUnsignedToken}:                 _CGotoState23Action,
+	{_CState54, CFloatToken}:                    _CGotoState11Action,
+	{_CState54, CDoubleToken}:                   _CGotoState8Action,
+	{_CState54, CConstToken}:                    _CGotoState7Action,
+	{_CState54, CVolatileToken}:                 _CGotoState25Action,
+	{_CState54, CVoidToken}:                     _CGotoState24Action,
+	{_CState54, CStructToken}:                   _CGotoState19Action,
+	{_CState54, CUnionToken}:                    _CGotoState22Action,
+	{_CState54, CEnumToken}:                     _CGotoState9Action,
+	{_CState54, ')'}:                            _CGotoState131Action,
+	{_CState54, CDeclarationSpecifiersType}:     _CGotoState133Action,
+	{_CState54, CStorageClassSpecifierType}:     _CGotoState34Action,
+	{_CState54, CTypeSpecifierType}:             _CGotoState38Action,
+	{_CState54, CStructOrUnionSpecifierType}:    _CGotoState36Action,
+	{_CState54, CStructOrUnionType}:             _CGotoState35Action,
+	{_CState54, CEnumSpecifierType}:             _CGotoState30Action,
+	{_CState54, CTypeQualifierType}:             _CGotoState37Action,
+	{_CState54, CParameterTypeListType}:         _CGotoState137Action,
+	{_CState54, CParameterListType}:             _CGotoState136Action,
+	{_CState54, CParameterDeclarationType}:      _CGotoState135Action,
+	{_CState54, CIdentifierListType}:            _CGotoState134Action,
+	{_CState55, CIdentifierToken}:               _CGotoState139Action,
+	{_CState55, CConstantToken}:                 _CGotoState86Action,
+	{_CState55, CStringLiteralToken}:            _CGotoState98Action,
+	{_CState55, CSizeofToken}:                   _CGotoState97Action,
+	{_CState55, CIncOpToken}:                    _CGotoState95Action,
+	{_CState55, CDecOpToken}:                    _CGotoState88Action,
+	{_CState55, '('}:                            _CGotoState77Action,
+	{_CState55, ']'}:                            _CGotoState138Action,
+	{_CState55, '*'}:                            _CGotoState78Action,
+	{_CState55, '-'}:                            _CGotoState80Action,
+	{_CState55, '+'}:                            _CGotoState79Action,
+	{_CState55, '&'}:                            _CGotoState76Action,
+	{_CState55, '!'}:                            _CGotoState75Action,
+	{_CState55, '~'}:                            _CGotoState83Action,
+	{_CState55, CPrimaryExpressionType}:         _CGotoState120Action,
+	{_CState55, CPostfixExpressionType}:         _CGotoState119Action,
+	{_CState55, CUnaryExpressionType}:           _CGotoState142Action,
+	{_CState55, CUnaryOperatorType}:             _CGotoState127Action,
+	{_CState55, CCastExpressionType}:            _CGotoState104Action,
+	{_CState55, CMultiplicativeExpressionType}:  _CGotoState118Action,
+	{_CState55, CAdditiveExpressionType}:        _CGotoState101Action,
+	{_CState55, CShiftExpressionType}:           _CGotoState123Action,
+	{_CState55, CRelationalExpressionType}:      _CGotoState121Action,
+	{_CState55, CEqualityExpressionType}:        _CGotoState108Action,
+	{_CState55, CAndExpressionType}:             _CGotoState102Action,
+	{_CState55, CExclusiveOrExpressionType}:     _CGotoState109Action,
+	{_CState55, CInclusiveOrExpressionType}:     _CGotoState112Action,
+	{_CState55, CLogicalAndExpressionType}:      _CGotoState116Action,
+	{_CState55, CLogicalOrExpressionType}:       _CGotoState117Action,
+	{_CState55, CConditionalExpressionType}:     _CGotoState140Action,
+	{_CState55, CConstantExpressionType}:        _CGotoState141Action,
+	{_CState56, '('}:                            _CGotoState54Action,
+	{_CState56, '['}:                            _CGotoState55Action,
+	{_CState58, CTypeNameToken}:                 _CGotoState21Action,
+	{_CState58, CCharToken}:                     _CGotoState6Action,
+	{_CState58, CShortToken}:                    _CGotoState16Action,
+	{_CState58, CIntToken}:                      _CGotoState13Action,
+	{_CState58, CLongToken}:                     _CGotoState14Action,
+	{_CState58, CSignedToken}:                   _CGotoState17Action,
+	{_CState58, CUnsignedToken}:                 _CGotoState23Action,
+	{_CState58, CFloatToken}:                    _CGotoState11Action,
+	{_CState58, CDoubleToken}:                   _CGotoState8Action,
+	{_CState58, CConstToken}:                    _CGotoState7Action,
+	{_CState58, CVolatileToken}:                 _CGotoState25Action,
+	{_CState58, CVoidToken}:                     _CGotoState24Action,
+	{_CState58, CStructToken}:                   _CGotoState19Action,
+	{_CState58, CUnionToken}:                    _CGotoState22Action,
+	{_CState58, CEnumToken}:                     _CGotoState9Action,
+	{_CState58, CTypeSpecifierType}:             _CGotoState147Action,
+	{_CState58, CStructOrUnionSpecifierType}:    _CGotoState36Action,
+	{_CState58, CStructOrUnionType}:             _CGotoState35Action,
+	{_CState58, CStructDeclarationListType}:     _CGotoState145Action,
+	{_CState58, CStructDeclarationType}:         _CGotoState144Action,
+	{_CState58, CSpecifierQualifierListType}:    _CGotoState143Action,
+	{_CState58, CEnumSpecifierType}:             _CGotoState30Action,
+	{_CState58, CTypeQualifierType}:             _CGotoState146Action,
+	{_CState59, '{'}:                            _CGotoState148Action,
+	{_CState66, '='}:                            _CGotoState149Action,
+	{_CState68, '}'}:                            _CGotoState151Action,
+	{_CState68, ','}:                            _CGotoState150Action,
+	{_CState69, CIdentifierToken}:               _CGotoState66Action,
+	{_CState69, CEnumeratorListType}:            _CGotoState152Action,
+	{_CState69, CEnumeratorType}:                _CGotoState67Action,
+	{_CState70, CIdentifierToken}:               _CGotoState139Action,
+	{_CState70, CConstantToken}:                 _CGotoState86Action,
+	{_CState70, CStringLiteralToken}:            _CGotoState98Action,
+	{_CState70, CSizeofToken}:                   _CGotoState97Action,
+	{_CState70, CIncOpToken}:                    _CGotoState95Action,
+	{_CState70, CDecOpToken}:                    _CGotoState88Action,
+	{_CState70, '('}:                            _CGotoState77Action,
+	{_CState70, '{'}:                            _CGotoState153Action,
+	{_CState70, '*'}:                            _CGotoState78Action,
+	{_CState70, '-'}:                            _CGotoState80Action,
+	{_CState70, '+'}:                            _CGotoState79Action,
+	{_CState70, '&'}:                            _CGotoState76Action,
+	{_CState70, '!'}:                            _CGotoState75Action,
+	{_CState70, '~'}:                            _CGotoState83Action,
 	{_CState70, CPrimaryExpressionType}:         _CGotoState120Action,
 	{_CState70, CPostfixExpressionType}:         _CGotoState119Action,
 	{_CState70, CUnaryExpressionType}:           _CGotoState126Action,
@@ -4497,25 +4468,25 @@ var _CActionTable = _CActionTableType{
 	{_CState70, CInitializerType}:               _CGotoState155Action,
 	{_CState72, CTypeNameToken}:                 _CGotoState21Action,
 	{_CState72, CTypedefToken}:                  _CGotoState20Action,
-	{_CState72, CExternToken}:                   _CGotoState8Action,
+	{_CState72, CExternToken}:                   _CGotoState10Action,
 	{_CState72, CStaticToken}:                   _CGotoState18Action,
-	{_CState72, CAutoToken}:                     _CGotoState3Action,
+	{_CState72, CAutoToken}:                     _CGotoState5Action,
 	{_CState72, CRegisterToken}:                 _CGotoState15Action,
-	{_CState72, CCharToken}:                     _CGotoState4Action,
+	{_CState72, CCharToken}:                     _CGotoState6Action,
 	{_CState72, CShortToken}:                    _CGotoState16Action,
-	{_CState72, CIntToken}:                      _CGotoState11Action,
-	{_CState72, CLongToken}:                     _CGotoState12Action,
+	{_CState72, CIntToken}:                      _CGotoState13Action,
+	{_CState72, CLongToken}:                     _CGotoState14Action,
 	{_CState72, CSignedToken}:                   _CGotoState17Action,
 	{_CState72, CUnsignedToken}:                 _CGotoState23Action,
-	{_CState72, CFloatToken}:                    _CGotoState9Action,
-	{_CState72, CDoubleToken}:                   _CGotoState6Action,
-	{_CState72, CConstToken}:                    _CGotoState5Action,
+	{_CState72, CFloatToken}:                    _CGotoState11Action,
+	{_CState72, CDoubleToken}:                   _CGotoState8Action,
+	{_CState72, CConstToken}:                    _CGotoState7Action,
 	{_CState72, CVolatileToken}:                 _CGotoState25Action,
 	{_CState72, CVoidToken}:                     _CGotoState24Action,
 	{_CState72, CStructToken}:                   _CGotoState19Action,
 	{_CState72, CUnionToken}:                    _CGotoState22Action,
-	{_CState72, CEnumToken}:                     _CGotoState7Action,
-	{_CState72, CLcurlToken}:                    _CGotoState49Action,
+	{_CState72, CEnumToken}:                     _CGotoState9Action,
+	{_CState72, '{'}:                            _CGotoState49Action,
 	{_CState72, CDeclarationType}:               _CGotoState129Action,
 	{_CState72, CDeclarationSpecifiersType}:     _CGotoState53Action,
 	{_CState72, CStorageClassSpecifierType}:     _CGotoState34Action,
@@ -4525,30 +4496,44 @@ var _CActionTable = _CActionTableType{
 	{_CState72, CEnumSpecifierType}:             _CGotoState30Action,
 	{_CState72, CTypeQualifierType}:             _CGotoState37Action,
 	{_CState72, CCompoundStatementType}:         _CGotoState156Action,
-	{_CState73, CIdentifierToken}:               _CGotoState10Action,
-	{_CState73, CLparamToken}:                   _CGotoState13Action,
-	{_CState73, CMulToken}:                      _CGotoState14Action,
+	{_CState73, CIdentifierToken}:               _CGotoState12Action,
+	{_CState73, '('}:                            _CGotoState3Action,
+	{_CState73, '*'}:                            _CGotoState4Action,
 	{_CState73, CInitDeclaratorType}:            _CGotoState157Action,
 	{_CState73, CDeclaratorType}:                _CGotoState130Action,
 	{_CState73, CDirectDeclaratorType}:          _CGotoState29Action,
 	{_CState73, CPointerType}:                   _CGotoState33Action,
-	{_CState76, CSemicolonToken}:                _CGotoState158Action,
-	{_CState77, CIdentifierToken}:               _CGotoState131Action,
-	{_CState77, CConstantToken}:                 _CGotoState78Action,
-	{_CState77, CStringLiteralToken}:            _CGotoState97Action,
-	{_CState77, CSizeofToken}:                   _CGotoState96Action,
-	{_CState77, CIncOpToken}:                    _CGotoState88Action,
-	{_CState77, CDecOpToken}:                    _CGotoState80Action,
-	{_CState77, CLparamToken}:                   _CGotoState89Action,
-	{_CState77, CMulToken}:                      _CGotoState91Action,
-	{_CState77, CMinusToken}:                    _CGotoState90Action,
-	{_CState77, CPlusToken}:                     _CGotoState92Action,
-	{_CState77, CAndToken}:                      _CGotoState75Action,
-	{_CState77, CExclaimToken}:                  _CGotoState83Action,
-	{_CState77, CTildaToken}:                    _CGotoState99Action,
+	{_CState77, CIdentifierToken}:               _CGotoState139Action,
+	{_CState77, CConstantToken}:                 _CGotoState86Action,
+	{_CState77, CStringLiteralToken}:            _CGotoState98Action,
+	{_CState77, CSizeofToken}:                   _CGotoState97Action,
+	{_CState77, CIncOpToken}:                    _CGotoState95Action,
+	{_CState77, CDecOpToken}:                    _CGotoState88Action,
+	{_CState77, CTypeNameToken}:                 _CGotoState21Action,
+	{_CState77, CCharToken}:                     _CGotoState6Action,
+	{_CState77, CShortToken}:                    _CGotoState16Action,
+	{_CState77, CIntToken}:                      _CGotoState13Action,
+	{_CState77, CLongToken}:                     _CGotoState14Action,
+	{_CState77, CSignedToken}:                   _CGotoState17Action,
+	{_CState77, CUnsignedToken}:                 _CGotoState23Action,
+	{_CState77, CFloatToken}:                    _CGotoState11Action,
+	{_CState77, CDoubleToken}:                   _CGotoState8Action,
+	{_CState77, CConstToken}:                    _CGotoState7Action,
+	{_CState77, CVolatileToken}:                 _CGotoState25Action,
+	{_CState77, CVoidToken}:                     _CGotoState24Action,
+	{_CState77, CStructToken}:                   _CGotoState19Action,
+	{_CState77, CUnionToken}:                    _CGotoState22Action,
+	{_CState77, CEnumToken}:                     _CGotoState9Action,
+	{_CState77, '('}:                            _CGotoState77Action,
+	{_CState77, '*'}:                            _CGotoState78Action,
+	{_CState77, '-'}:                            _CGotoState80Action,
+	{_CState77, '+'}:                            _CGotoState79Action,
+	{_CState77, '&'}:                            _CGotoState76Action,
+	{_CState77, '!'}:                            _CGotoState75Action,
+	{_CState77, '~'}:                            _CGotoState83Action,
 	{_CState77, CPrimaryExpressionType}:         _CGotoState120Action,
 	{_CState77, CPostfixExpressionType}:         _CGotoState119Action,
-	{_CState77, CUnaryExpressionType}:           _CGotoState135Action,
+	{_CState77, CUnaryExpressionType}:           _CGotoState126Action,
 	{_CState77, CUnaryOperatorType}:             _CGotoState127Action,
 	{_CState77, CCastExpressionType}:            _CGotoState104Action,
 	{_CState77, CMultiplicativeExpressionType}:  _CGotoState118Action,
@@ -4561,253 +4546,239 @@ var _CActionTable = _CActionTableType{
 	{_CState77, CInclusiveOrExpressionType}:     _CGotoState112Action,
 	{_CState77, CLogicalAndExpressionType}:      _CGotoState116Action,
 	{_CState77, CLogicalOrExpressionType}:       _CGotoState117Action,
-	{_CState77, CConditionalExpressionType}:     _CGotoState133Action,
-	{_CState77, CConstantExpressionType}:        _CGotoState159Action,
-	{_CState79, CSemicolonToken}:                _CGotoState160Action,
-	{_CState80, CIdentifierToken}:               _CGotoState131Action,
-	{_CState80, CConstantToken}:                 _CGotoState78Action,
-	{_CState80, CStringLiteralToken}:            _CGotoState97Action,
-	{_CState80, CSizeofToken}:                   _CGotoState96Action,
-	{_CState80, CIncOpToken}:                    _CGotoState88Action,
-	{_CState80, CDecOpToken}:                    _CGotoState80Action,
-	{_CState80, CLparamToken}:                   _CGotoState161Action,
-	{_CState80, CMulToken}:                      _CGotoState91Action,
-	{_CState80, CMinusToken}:                    _CGotoState90Action,
-	{_CState80, CPlusToken}:                     _CGotoState92Action,
-	{_CState80, CAndToken}:                      _CGotoState75Action,
-	{_CState80, CExclaimToken}:                  _CGotoState83Action,
-	{_CState80, CTildaToken}:                    _CGotoState99Action,
-	{_CState80, CPrimaryExpressionType}:         _CGotoState120Action,
-	{_CState80, CPostfixExpressionType}:         _CGotoState119Action,
-	{_CState80, CUnaryExpressionType}:           _CGotoState162Action,
-	{_CState80, CUnaryOperatorType}:             _CGotoState127Action,
-	{_CState81, CColonToken}:                    _CGotoState163Action,
-	{_CState82, CIdentifierToken}:               _CGotoState86Action,
-	{_CState82, CConstantToken}:                 _CGotoState78Action,
-	{_CState82, CStringLiteralToken}:            _CGotoState97Action,
-	{_CState82, CSizeofToken}:                   _CGotoState96Action,
-	{_CState82, CIncOpToken}:                    _CGotoState88Action,
-	{_CState82, CDecOpToken}:                    _CGotoState80Action,
-	{_CState82, CCaseToken}:                     _CGotoState77Action,
-	{_CState82, CDefaultToken}:                  _CGotoState81Action,
-	{_CState82, CIfToken}:                       _CGotoState87Action,
-	{_CState82, CSwitchToken}:                   _CGotoState98Action,
-	{_CState82, CWhileToken}:                    _CGotoState100Action,
-	{_CState82, CDoToken}:                       _CGotoState82Action,
-	{_CState82, CForToken}:                      _CGotoState84Action,
-	{_CState82, CGotoToken}:                     _CGotoState85Action,
-	{_CState82, CContinueToken}:                 _CGotoState79Action,
-	{_CState82, CBreakToken}:                    _CGotoState76Action,
-	{_CState82, CReturnToken}:                   _CGotoState94Action,
-	{_CState82, CLparamToken}:                   _CGotoState89Action,
-	{_CState82, CLcurlToken}:                    _CGotoState49Action,
-	{_CState82, CSemicolonToken}:                _CGotoState95Action,
-	{_CState82, CMulToken}:                      _CGotoState91Action,
-	{_CState82, CMinusToken}:                    _CGotoState90Action,
-	{_CState82, CPlusToken}:                     _CGotoState92Action,
-	{_CState82, CAndToken}:                      _CGotoState75Action,
-	{_CState82, CExclaimToken}:                  _CGotoState83Action,
-	{_CState82, CTildaToken}:                    _CGotoState99Action,
-	{_CState82, CPrimaryExpressionType}:         _CGotoState120Action,
-	{_CState82, CPostfixExpressionType}:         _CGotoState119Action,
-	{_CState82, CUnaryExpressionType}:           _CGotoState126Action,
-	{_CState82, CUnaryOperatorType}:             _CGotoState127Action,
-	{_CState82, CCastExpressionType}:            _CGotoState104Action,
-	{_CState82, CMultiplicativeExpressionType}:  _CGotoState118Action,
-	{_CState82, CAdditiveExpressionType}:        _CGotoState101Action,
-	{_CState82, CShiftExpressionType}:           _CGotoState123Action,
-	{_CState82, CRelationalExpressionType}:      _CGotoState121Action,
-	{_CState82, CEqualityExpressionType}:        _CGotoState108Action,
-	{_CState82, CAndExpressionType}:             _CGotoState102Action,
-	{_CState82, CExclusiveOrExpressionType}:     _CGotoState109Action,
-	{_CState82, CInclusiveOrExpressionType}:     _CGotoState112Action,
-	{_CState82, CLogicalAndExpressionType}:      _CGotoState116Action,
-	{_CState82, CLogicalOrExpressionType}:       _CGotoState117Action,
-	{_CState82, CConditionalExpressionType}:     _CGotoState106Action,
-	{_CState82, CAssignmentExpressionType}:      _CGotoState103Action,
-	{_CState82, CExpressionType}:                _CGotoState110Action,
-	{_CState82, CStatementType}:                 _CGotoState164Action,
-	{_CState82, CLabeledStatementType}:          _CGotoState115Action,
-	{_CState82, CCompoundStatementType}:         _CGotoState105Action,
-	{_CState82, CExpressionStatementType}:       _CGotoState111Action,
-	{_CState82, CSelectionStatementType}:        _CGotoState122Action,
-	{_CState82, CIterationStatementType}:        _CGotoState113Action,
-	{_CState82, CJumpStatementType}:             _CGotoState114Action,
-	{_CState84, CLparamToken}:                   _CGotoState165Action,
-	{_CState85, CIdentifierToken}:               _CGotoState166Action,
-	{_CState86, CColonToken}:                    _CGotoState167Action,
-	{_CState87, CLparamToken}:                   _CGotoState168Action,
-	{_CState88, CIdentifierToken}:               _CGotoState131Action,
-	{_CState88, CConstantToken}:                 _CGotoState78Action,
-	{_CState88, CStringLiteralToken}:            _CGotoState97Action,
-	{_CState88, CSizeofToken}:                   _CGotoState96Action,
-	{_CState88, CIncOpToken}:                    _CGotoState88Action,
-	{_CState88, CDecOpToken}:                    _CGotoState80Action,
-	{_CState88, CLparamToken}:                   _CGotoState161Action,
-	{_CState88, CMulToken}:                      _CGotoState91Action,
-	{_CState88, CMinusToken}:                    _CGotoState90Action,
-	{_CState88, CPlusToken}:                     _CGotoState92Action,
-	{_CState88, CAndToken}:                      _CGotoState75Action,
-	{_CState88, CExclaimToken}:                  _CGotoState83Action,
-	{_CState88, CTildaToken}:                    _CGotoState99Action,
+	{_CState77, CConditionalExpressionType}:     _CGotoState106Action,
+	{_CState77, CAssignmentExpressionType}:      _CGotoState103Action,
+	{_CState77, CExpressionType}:                _CGotoState158Action,
+	{_CState77, CTypeSpecifierType}:             _CGotoState147Action,
+	{_CState77, CStructOrUnionSpecifierType}:    _CGotoState36Action,
+	{_CState77, CStructOrUnionType}:             _CGotoState35Action,
+	{_CState77, CSpecifierQualifierListType}:    _CGotoState159Action,
+	{_CState77, CEnumSpecifierType}:             _CGotoState30Action,
+	{_CState77, CTypeQualifierType}:             _CGotoState146Action,
+	{_CState77, CTypeNameType}:                  _CGotoState160Action,
+	{_CState84, ';'}:                            _CGotoState161Action,
+	{_CState85, CIdentifierToken}:               _CGotoState139Action,
+	{_CState85, CConstantToken}:                 _CGotoState86Action,
+	{_CState85, CStringLiteralToken}:            _CGotoState98Action,
+	{_CState85, CSizeofToken}:                   _CGotoState97Action,
+	{_CState85, CIncOpToken}:                    _CGotoState95Action,
+	{_CState85, CDecOpToken}:                    _CGotoState88Action,
+	{_CState85, '('}:                            _CGotoState77Action,
+	{_CState85, '*'}:                            _CGotoState78Action,
+	{_CState85, '-'}:                            _CGotoState80Action,
+	{_CState85, '+'}:                            _CGotoState79Action,
+	{_CState85, '&'}:                            _CGotoState76Action,
+	{_CState85, '!'}:                            _CGotoState75Action,
+	{_CState85, '~'}:                            _CGotoState83Action,
+	{_CState85, CPrimaryExpressionType}:         _CGotoState120Action,
+	{_CState85, CPostfixExpressionType}:         _CGotoState119Action,
+	{_CState85, CUnaryExpressionType}:           _CGotoState142Action,
+	{_CState85, CUnaryOperatorType}:             _CGotoState127Action,
+	{_CState85, CCastExpressionType}:            _CGotoState104Action,
+	{_CState85, CMultiplicativeExpressionType}:  _CGotoState118Action,
+	{_CState85, CAdditiveExpressionType}:        _CGotoState101Action,
+	{_CState85, CShiftExpressionType}:           _CGotoState123Action,
+	{_CState85, CRelationalExpressionType}:      _CGotoState121Action,
+	{_CState85, CEqualityExpressionType}:        _CGotoState108Action,
+	{_CState85, CAndExpressionType}:             _CGotoState102Action,
+	{_CState85, CExclusiveOrExpressionType}:     _CGotoState109Action,
+	{_CState85, CInclusiveOrExpressionType}:     _CGotoState112Action,
+	{_CState85, CLogicalAndExpressionType}:      _CGotoState116Action,
+	{_CState85, CLogicalOrExpressionType}:       _CGotoState117Action,
+	{_CState85, CConditionalExpressionType}:     _CGotoState140Action,
+	{_CState85, CConstantExpressionType}:        _CGotoState162Action,
+	{_CState87, ';'}:                            _CGotoState163Action,
+	{_CState88, CIdentifierToken}:               _CGotoState139Action,
+	{_CState88, CConstantToken}:                 _CGotoState86Action,
+	{_CState88, CStringLiteralToken}:            _CGotoState98Action,
+	{_CState88, CSizeofToken}:                   _CGotoState97Action,
+	{_CState88, CIncOpToken}:                    _CGotoState95Action,
+	{_CState88, CDecOpToken}:                    _CGotoState88Action,
+	{_CState88, '('}:                            _CGotoState164Action,
+	{_CState88, '*'}:                            _CGotoState78Action,
+	{_CState88, '-'}:                            _CGotoState80Action,
+	{_CState88, '+'}:                            _CGotoState79Action,
+	{_CState88, '&'}:                            _CGotoState76Action,
+	{_CState88, '!'}:                            _CGotoState75Action,
+	{_CState88, '~'}:                            _CGotoState83Action,
 	{_CState88, CPrimaryExpressionType}:         _CGotoState120Action,
 	{_CState88, CPostfixExpressionType}:         _CGotoState119Action,
-	{_CState88, CUnaryExpressionType}:           _CGotoState169Action,
+	{_CState88, CUnaryExpressionType}:           _CGotoState165Action,
 	{_CState88, CUnaryOperatorType}:             _CGotoState127Action,
-	{_CState89, CIdentifierToken}:               _CGotoState131Action,
-	{_CState89, CConstantToken}:                 _CGotoState78Action,
-	{_CState89, CStringLiteralToken}:            _CGotoState97Action,
-	{_CState89, CSizeofToken}:                   _CGotoState96Action,
-	{_CState89, CIncOpToken}:                    _CGotoState88Action,
-	{_CState89, CDecOpToken}:                    _CGotoState80Action,
-	{_CState89, CTypeNameToken}:                 _CGotoState21Action,
-	{_CState89, CCharToken}:                     _CGotoState4Action,
-	{_CState89, CShortToken}:                    _CGotoState16Action,
-	{_CState89, CIntToken}:                      _CGotoState11Action,
-	{_CState89, CLongToken}:                     _CGotoState12Action,
-	{_CState89, CSignedToken}:                   _CGotoState17Action,
-	{_CState89, CUnsignedToken}:                 _CGotoState23Action,
-	{_CState89, CFloatToken}:                    _CGotoState9Action,
-	{_CState89, CDoubleToken}:                   _CGotoState6Action,
-	{_CState89, CConstToken}:                    _CGotoState5Action,
-	{_CState89, CVolatileToken}:                 _CGotoState25Action,
-	{_CState89, CVoidToken}:                     _CGotoState24Action,
-	{_CState89, CStructToken}:                   _CGotoState19Action,
-	{_CState89, CUnionToken}:                    _CGotoState22Action,
-	{_CState89, CEnumToken}:                     _CGotoState7Action,
-	{_CState89, CLparamToken}:                   _CGotoState89Action,
-	{_CState89, CMulToken}:                      _CGotoState91Action,
-	{_CState89, CMinusToken}:                    _CGotoState90Action,
-	{_CState89, CPlusToken}:                     _CGotoState92Action,
-	{_CState89, CAndToken}:                      _CGotoState75Action,
-	{_CState89, CExclaimToken}:                  _CGotoState83Action,
-	{_CState89, CTildaToken}:                    _CGotoState99Action,
-	{_CState89, CPrimaryExpressionType}:         _CGotoState120Action,
-	{_CState89, CPostfixExpressionType}:         _CGotoState119Action,
-	{_CState89, CUnaryExpressionType}:           _CGotoState126Action,
-	{_CState89, CUnaryOperatorType}:             _CGotoState127Action,
-	{_CState89, CCastExpressionType}:            _CGotoState104Action,
-	{_CState89, CMultiplicativeExpressionType}:  _CGotoState118Action,
-	{_CState89, CAdditiveExpressionType}:        _CGotoState101Action,
-	{_CState89, CShiftExpressionType}:           _CGotoState123Action,
-	{_CState89, CRelationalExpressionType}:      _CGotoState121Action,
-	{_CState89, CEqualityExpressionType}:        _CGotoState108Action,
-	{_CState89, CAndExpressionType}:             _CGotoState102Action,
-	{_CState89, CExclusiveOrExpressionType}:     _CGotoState109Action,
-	{_CState89, CInclusiveOrExpressionType}:     _CGotoState112Action,
-	{_CState89, CLogicalAndExpressionType}:      _CGotoState116Action,
-	{_CState89, CLogicalOrExpressionType}:       _CGotoState117Action,
-	{_CState89, CConditionalExpressionType}:     _CGotoState106Action,
-	{_CState89, CAssignmentExpressionType}:      _CGotoState103Action,
-	{_CState89, CExpressionType}:                _CGotoState170Action,
-	{_CState89, CTypeSpecifierType}:             _CGotoState148Action,
-	{_CState89, CStructOrUnionSpecifierType}:    _CGotoState36Action,
-	{_CState89, CStructOrUnionType}:             _CGotoState35Action,
-	{_CState89, CSpecifierQualifierListType}:    _CGotoState171Action,
-	{_CState89, CEnumSpecifierType}:             _CGotoState30Action,
-	{_CState89, CTypeQualifierType}:             _CGotoState147Action,
-	{_CState89, CTypeNameType}:                  _CGotoState172Action,
-	{_CState94, CIdentifierToken}:               _CGotoState131Action,
-	{_CState94, CConstantToken}:                 _CGotoState78Action,
-	{_CState94, CStringLiteralToken}:            _CGotoState97Action,
-	{_CState94, CSizeofToken}:                   _CGotoState96Action,
-	{_CState94, CIncOpToken}:                    _CGotoState88Action,
-	{_CState94, CDecOpToken}:                    _CGotoState80Action,
-	{_CState94, CLparamToken}:                   _CGotoState89Action,
-	{_CState94, CSemicolonToken}:                _CGotoState173Action,
-	{_CState94, CMulToken}:                      _CGotoState91Action,
-	{_CState94, CMinusToken}:                    _CGotoState90Action,
-	{_CState94, CPlusToken}:                     _CGotoState92Action,
-	{_CState94, CAndToken}:                      _CGotoState75Action,
-	{_CState94, CExclaimToken}:                  _CGotoState83Action,
-	{_CState94, CTildaToken}:                    _CGotoState99Action,
-	{_CState94, CPrimaryExpressionType}:         _CGotoState120Action,
-	{_CState94, CPostfixExpressionType}:         _CGotoState119Action,
-	{_CState94, CUnaryExpressionType}:           _CGotoState126Action,
-	{_CState94, CUnaryOperatorType}:             _CGotoState127Action,
-	{_CState94, CCastExpressionType}:            _CGotoState104Action,
-	{_CState94, CMultiplicativeExpressionType}:  _CGotoState118Action,
-	{_CState94, CAdditiveExpressionType}:        _CGotoState101Action,
-	{_CState94, CShiftExpressionType}:           _CGotoState123Action,
-	{_CState94, CRelationalExpressionType}:      _CGotoState121Action,
-	{_CState94, CEqualityExpressionType}:        _CGotoState108Action,
-	{_CState94, CAndExpressionType}:             _CGotoState102Action,
-	{_CState94, CExclusiveOrExpressionType}:     _CGotoState109Action,
-	{_CState94, CInclusiveOrExpressionType}:     _CGotoState112Action,
-	{_CState94, CLogicalAndExpressionType}:      _CGotoState116Action,
-	{_CState94, CLogicalOrExpressionType}:       _CGotoState117Action,
-	{_CState94, CConditionalExpressionType}:     _CGotoState106Action,
-	{_CState94, CAssignmentExpressionType}:      _CGotoState103Action,
-	{_CState94, CExpressionType}:                _CGotoState174Action,
-	{_CState96, CIdentifierToken}:               _CGotoState131Action,
-	{_CState96, CConstantToken}:                 _CGotoState78Action,
-	{_CState96, CStringLiteralToken}:            _CGotoState97Action,
-	{_CState96, CSizeofToken}:                   _CGotoState96Action,
-	{_CState96, CIncOpToken}:                    _CGotoState88Action,
-	{_CState96, CDecOpToken}:                    _CGotoState80Action,
-	{_CState96, CLparamToken}:                   _CGotoState175Action,
-	{_CState96, CMulToken}:                      _CGotoState91Action,
-	{_CState96, CMinusToken}:                    _CGotoState90Action,
-	{_CState96, CPlusToken}:                     _CGotoState92Action,
-	{_CState96, CAndToken}:                      _CGotoState75Action,
-	{_CState96, CExclaimToken}:                  _CGotoState83Action,
-	{_CState96, CTildaToken}:                    _CGotoState99Action,
+	{_CState89, ':'}:                            _CGotoState166Action,
+	{_CState90, CIdentifierToken}:               _CGotoState93Action,
+	{_CState90, CConstantToken}:                 _CGotoState86Action,
+	{_CState90, CStringLiteralToken}:            _CGotoState98Action,
+	{_CState90, CSizeofToken}:                   _CGotoState97Action,
+	{_CState90, CIncOpToken}:                    _CGotoState95Action,
+	{_CState90, CDecOpToken}:                    _CGotoState88Action,
+	{_CState90, CCaseToken}:                     _CGotoState85Action,
+	{_CState90, CDefaultToken}:                  _CGotoState89Action,
+	{_CState90, CIfToken}:                       _CGotoState94Action,
+	{_CState90, CSwitchToken}:                   _CGotoState99Action,
+	{_CState90, CWhileToken}:                    _CGotoState100Action,
+	{_CState90, CDoToken}:                       _CGotoState90Action,
+	{_CState90, CForToken}:                      _CGotoState91Action,
+	{_CState90, CGotoToken}:                     _CGotoState92Action,
+	{_CState90, CContinueToken}:                 _CGotoState87Action,
+	{_CState90, CBreakToken}:                    _CGotoState84Action,
+	{_CState90, CReturnToken}:                   _CGotoState96Action,
+	{_CState90, '('}:                            _CGotoState77Action,
+	{_CState90, '{'}:                            _CGotoState49Action,
+	{_CState90, ';'}:                            _CGotoState81Action,
+	{_CState90, '*'}:                            _CGotoState78Action,
+	{_CState90, '-'}:                            _CGotoState80Action,
+	{_CState90, '+'}:                            _CGotoState79Action,
+	{_CState90, '&'}:                            _CGotoState76Action,
+	{_CState90, '!'}:                            _CGotoState75Action,
+	{_CState90, '~'}:                            _CGotoState83Action,
+	{_CState90, CPrimaryExpressionType}:         _CGotoState120Action,
+	{_CState90, CPostfixExpressionType}:         _CGotoState119Action,
+	{_CState90, CUnaryExpressionType}:           _CGotoState126Action,
+	{_CState90, CUnaryOperatorType}:             _CGotoState127Action,
+	{_CState90, CCastExpressionType}:            _CGotoState104Action,
+	{_CState90, CMultiplicativeExpressionType}:  _CGotoState118Action,
+	{_CState90, CAdditiveExpressionType}:        _CGotoState101Action,
+	{_CState90, CShiftExpressionType}:           _CGotoState123Action,
+	{_CState90, CRelationalExpressionType}:      _CGotoState121Action,
+	{_CState90, CEqualityExpressionType}:        _CGotoState108Action,
+	{_CState90, CAndExpressionType}:             _CGotoState102Action,
+	{_CState90, CExclusiveOrExpressionType}:     _CGotoState109Action,
+	{_CState90, CInclusiveOrExpressionType}:     _CGotoState112Action,
+	{_CState90, CLogicalAndExpressionType}:      _CGotoState116Action,
+	{_CState90, CLogicalOrExpressionType}:       _CGotoState117Action,
+	{_CState90, CConditionalExpressionType}:     _CGotoState106Action,
+	{_CState90, CAssignmentExpressionType}:      _CGotoState103Action,
+	{_CState90, CExpressionType}:                _CGotoState110Action,
+	{_CState90, CStatementType}:                 _CGotoState167Action,
+	{_CState90, CLabeledStatementType}:          _CGotoState115Action,
+	{_CState90, CCompoundStatementType}:         _CGotoState105Action,
+	{_CState90, CExpressionStatementType}:       _CGotoState111Action,
+	{_CState90, CSelectionStatementType}:        _CGotoState122Action,
+	{_CState90, CIterationStatementType}:        _CGotoState113Action,
+	{_CState90, CJumpStatementType}:             _CGotoState114Action,
+	{_CState91, '('}:                            _CGotoState168Action,
+	{_CState92, CIdentifierToken}:               _CGotoState169Action,
+	{_CState93, ':'}:                            _CGotoState170Action,
+	{_CState94, '('}:                            _CGotoState171Action,
+	{_CState95, CIdentifierToken}:               _CGotoState139Action,
+	{_CState95, CConstantToken}:                 _CGotoState86Action,
+	{_CState95, CStringLiteralToken}:            _CGotoState98Action,
+	{_CState95, CSizeofToken}:                   _CGotoState97Action,
+	{_CState95, CIncOpToken}:                    _CGotoState95Action,
+	{_CState95, CDecOpToken}:                    _CGotoState88Action,
+	{_CState95, '('}:                            _CGotoState164Action,
+	{_CState95, '*'}:                            _CGotoState78Action,
+	{_CState95, '-'}:                            _CGotoState80Action,
+	{_CState95, '+'}:                            _CGotoState79Action,
+	{_CState95, '&'}:                            _CGotoState76Action,
+	{_CState95, '!'}:                            _CGotoState75Action,
+	{_CState95, '~'}:                            _CGotoState83Action,
+	{_CState95, CPrimaryExpressionType}:         _CGotoState120Action,
+	{_CState95, CPostfixExpressionType}:         _CGotoState119Action,
+	{_CState95, CUnaryExpressionType}:           _CGotoState172Action,
+	{_CState95, CUnaryOperatorType}:             _CGotoState127Action,
+	{_CState96, CIdentifierToken}:               _CGotoState139Action,
+	{_CState96, CConstantToken}:                 _CGotoState86Action,
+	{_CState96, CStringLiteralToken}:            _CGotoState98Action,
+	{_CState96, CSizeofToken}:                   _CGotoState97Action,
+	{_CState96, CIncOpToken}:                    _CGotoState95Action,
+	{_CState96, CDecOpToken}:                    _CGotoState88Action,
+	{_CState96, '('}:                            _CGotoState77Action,
+	{_CState96, ';'}:                            _CGotoState173Action,
+	{_CState96, '*'}:                            _CGotoState78Action,
+	{_CState96, '-'}:                            _CGotoState80Action,
+	{_CState96, '+'}:                            _CGotoState79Action,
+	{_CState96, '&'}:                            _CGotoState76Action,
+	{_CState96, '!'}:                            _CGotoState75Action,
+	{_CState96, '~'}:                            _CGotoState83Action,
 	{_CState96, CPrimaryExpressionType}:         _CGotoState120Action,
 	{_CState96, CPostfixExpressionType}:         _CGotoState119Action,
-	{_CState96, CUnaryExpressionType}:           _CGotoState176Action,
+	{_CState96, CUnaryExpressionType}:           _CGotoState126Action,
 	{_CState96, CUnaryOperatorType}:             _CGotoState127Action,
-	{_CState98, CLparamToken}:                   _CGotoState177Action,
-	{_CState100, CLparamToken}:                  _CGotoState178Action,
-	{_CState101, CMinusToken}:                   _CGotoState179Action,
-	{_CState101, CPlusToken}:                    _CGotoState180Action,
-	{_CState102, CAndToken}:                     _CGotoState181Action,
-	{_CState107, CIdentifierToken}:              _CGotoState86Action,
-	{_CState107, CConstantToken}:                _CGotoState78Action,
-	{_CState107, CStringLiteralToken}:           _CGotoState97Action,
-	{_CState107, CSizeofToken}:                  _CGotoState96Action,
-	{_CState107, CIncOpToken}:                   _CGotoState88Action,
-	{_CState107, CDecOpToken}:                   _CGotoState80Action,
+	{_CState96, CCastExpressionType}:            _CGotoState104Action,
+	{_CState96, CMultiplicativeExpressionType}:  _CGotoState118Action,
+	{_CState96, CAdditiveExpressionType}:        _CGotoState101Action,
+	{_CState96, CShiftExpressionType}:           _CGotoState123Action,
+	{_CState96, CRelationalExpressionType}:      _CGotoState121Action,
+	{_CState96, CEqualityExpressionType}:        _CGotoState108Action,
+	{_CState96, CAndExpressionType}:             _CGotoState102Action,
+	{_CState96, CExclusiveOrExpressionType}:     _CGotoState109Action,
+	{_CState96, CInclusiveOrExpressionType}:     _CGotoState112Action,
+	{_CState96, CLogicalAndExpressionType}:      _CGotoState116Action,
+	{_CState96, CLogicalOrExpressionType}:       _CGotoState117Action,
+	{_CState96, CConditionalExpressionType}:     _CGotoState106Action,
+	{_CState96, CAssignmentExpressionType}:      _CGotoState103Action,
+	{_CState96, CExpressionType}:                _CGotoState174Action,
+	{_CState97, CIdentifierToken}:               _CGotoState139Action,
+	{_CState97, CConstantToken}:                 _CGotoState86Action,
+	{_CState97, CStringLiteralToken}:            _CGotoState98Action,
+	{_CState97, CSizeofToken}:                   _CGotoState97Action,
+	{_CState97, CIncOpToken}:                    _CGotoState95Action,
+	{_CState97, CDecOpToken}:                    _CGotoState88Action,
+	{_CState97, '('}:                            _CGotoState175Action,
+	{_CState97, '*'}:                            _CGotoState78Action,
+	{_CState97, '-'}:                            _CGotoState80Action,
+	{_CState97, '+'}:                            _CGotoState79Action,
+	{_CState97, '&'}:                            _CGotoState76Action,
+	{_CState97, '!'}:                            _CGotoState75Action,
+	{_CState97, '~'}:                            _CGotoState83Action,
+	{_CState97, CPrimaryExpressionType}:         _CGotoState120Action,
+	{_CState97, CPostfixExpressionType}:         _CGotoState119Action,
+	{_CState97, CUnaryExpressionType}:           _CGotoState176Action,
+	{_CState97, CUnaryOperatorType}:             _CGotoState127Action,
+	{_CState99, '('}:                            _CGotoState177Action,
+	{_CState100, '('}:                           _CGotoState178Action,
+	{_CState101, '-'}:                           _CGotoState180Action,
+	{_CState101, '+'}:                           _CGotoState179Action,
+	{_CState102, '&'}:                           _CGotoState181Action,
+	{_CState107, CIdentifierToken}:              _CGotoState93Action,
+	{_CState107, CConstantToken}:                _CGotoState86Action,
+	{_CState107, CStringLiteralToken}:           _CGotoState98Action,
+	{_CState107, CSizeofToken}:                  _CGotoState97Action,
+	{_CState107, CIncOpToken}:                   _CGotoState95Action,
+	{_CState107, CDecOpToken}:                   _CGotoState88Action,
 	{_CState107, CTypeNameToken}:                _CGotoState21Action,
 	{_CState107, CTypedefToken}:                 _CGotoState20Action,
-	{_CState107, CExternToken}:                  _CGotoState8Action,
+	{_CState107, CExternToken}:                  _CGotoState10Action,
 	{_CState107, CStaticToken}:                  _CGotoState18Action,
-	{_CState107, CAutoToken}:                    _CGotoState3Action,
+	{_CState107, CAutoToken}:                    _CGotoState5Action,
 	{_CState107, CRegisterToken}:                _CGotoState15Action,
-	{_CState107, CCharToken}:                    _CGotoState4Action,
+	{_CState107, CCharToken}:                    _CGotoState6Action,
 	{_CState107, CShortToken}:                   _CGotoState16Action,
-	{_CState107, CIntToken}:                     _CGotoState11Action,
-	{_CState107, CLongToken}:                    _CGotoState12Action,
+	{_CState107, CIntToken}:                     _CGotoState13Action,
+	{_CState107, CLongToken}:                    _CGotoState14Action,
 	{_CState107, CSignedToken}:                  _CGotoState17Action,
 	{_CState107, CUnsignedToken}:                _CGotoState23Action,
-	{_CState107, CFloatToken}:                   _CGotoState9Action,
-	{_CState107, CDoubleToken}:                  _CGotoState6Action,
-	{_CState107, CConstToken}:                   _CGotoState5Action,
+	{_CState107, CFloatToken}:                   _CGotoState11Action,
+	{_CState107, CDoubleToken}:                  _CGotoState8Action,
+	{_CState107, CConstToken}:                   _CGotoState7Action,
 	{_CState107, CVolatileToken}:                _CGotoState25Action,
 	{_CState107, CVoidToken}:                    _CGotoState24Action,
 	{_CState107, CStructToken}:                  _CGotoState19Action,
 	{_CState107, CUnionToken}:                   _CGotoState22Action,
-	{_CState107, CEnumToken}:                    _CGotoState7Action,
-	{_CState107, CCaseToken}:                    _CGotoState77Action,
-	{_CState107, CDefaultToken}:                 _CGotoState81Action,
-	{_CState107, CIfToken}:                      _CGotoState87Action,
-	{_CState107, CSwitchToken}:                  _CGotoState98Action,
+	{_CState107, CEnumToken}:                    _CGotoState9Action,
+	{_CState107, CCaseToken}:                    _CGotoState85Action,
+	{_CState107, CDefaultToken}:                 _CGotoState89Action,
+	{_CState107, CIfToken}:                      _CGotoState94Action,
+	{_CState107, CSwitchToken}:                  _CGotoState99Action,
 	{_CState107, CWhileToken}:                   _CGotoState100Action,
-	{_CState107, CDoToken}:                      _CGotoState82Action,
-	{_CState107, CForToken}:                     _CGotoState84Action,
-	{_CState107, CGotoToken}:                    _CGotoState85Action,
-	{_CState107, CContinueToken}:                _CGotoState79Action,
-	{_CState107, CBreakToken}:                   _CGotoState76Action,
-	{_CState107, CReturnToken}:                  _CGotoState94Action,
-	{_CState107, CLparamToken}:                  _CGotoState89Action,
-	{_CState107, CLcurlToken}:                   _CGotoState49Action,
-	{_CState107, CRcurlToken}:                   _CGotoState182Action,
-	{_CState107, CSemicolonToken}:               _CGotoState95Action,
-	{_CState107, CMulToken}:                     _CGotoState91Action,
-	{_CState107, CMinusToken}:                   _CGotoState90Action,
-	{_CState107, CPlusToken}:                    _CGotoState92Action,
-	{_CState107, CAndToken}:                     _CGotoState75Action,
-	{_CState107, CExclaimToken}:                 _CGotoState83Action,
-	{_CState107, CTildaToken}:                   _CGotoState99Action,
+	{_CState107, CDoToken}:                      _CGotoState90Action,
+	{_CState107, CForToken}:                     _CGotoState91Action,
+	{_CState107, CGotoToken}:                    _CGotoState92Action,
+	{_CState107, CContinueToken}:                _CGotoState87Action,
+	{_CState107, CBreakToken}:                   _CGotoState84Action,
+	{_CState107, CReturnToken}:                  _CGotoState96Action,
+	{_CState107, '('}:                           _CGotoState77Action,
+	{_CState107, '{'}:                           _CGotoState49Action,
+	{_CState107, '}'}:                           _CGotoState182Action,
+	{_CState107, ';'}:                           _CGotoState81Action,
+	{_CState107, '*'}:                           _CGotoState78Action,
+	{_CState107, '-'}:                           _CGotoState80Action,
+	{_CState107, '+'}:                           _CGotoState79Action,
+	{_CState107, '&'}:                           _CGotoState76Action,
+	{_CState107, '!'}:                           _CGotoState75Action,
+	{_CState107, '~'}:                           _CGotoState83Action,
 	{_CState107, CPrimaryExpressionType}:        _CGotoState120Action,
 	{_CState107, CPostfixExpressionType}:        _CGotoState119Action,
 	{_CState107, CUnaryExpressionType}:          _CGotoState126Action,
@@ -4844,55 +4815,55 @@ var _CActionTable = _CActionTableType{
 	{_CState107, CJumpStatementType}:            _CGotoState114Action,
 	{_CState108, CEqOpToken}:                    _CGotoState184Action,
 	{_CState108, CNeOpToken}:                    _CGotoState185Action,
-	{_CState109, CHatToken}:                     _CGotoState186Action,
-	{_CState110, CSemicolonToken}:               _CGotoState188Action,
-	{_CState110, CCommaToken}:                   _CGotoState187Action,
-	{_CState112, COrToken}:                      _CGotoState189Action,
+	{_CState109, '^'}:                           _CGotoState186Action,
+	{_CState110, ';'}:                           _CGotoState188Action,
+	{_CState110, ','}:                           _CGotoState187Action,
+	{_CState112, '|'}:                           _CGotoState189Action,
 	{_CState116, CAndOpToken}:                   _CGotoState190Action,
-	{_CState117, COrOpToken}:                    _CGotoState191Action,
-	{_CState117, CQuestionToken}:                _CGotoState192Action,
-	{_CState118, CMulToken}:                     _CGotoState195Action,
-	{_CState118, CDivToken}:                     _CGotoState193Action,
-	{_CState118, CModToken}:                     _CGotoState194Action,
+	{_CState117, COrOpToken}:                    _CGotoState192Action,
+	{_CState117, '?'}:                           _CGotoState191Action,
+	{_CState118, '*'}:                           _CGotoState194Action,
+	{_CState118, '/'}:                           _CGotoState195Action,
+	{_CState118, '%'}:                           _CGotoState193Action,
 	{_CState119, CPtrOpToken}:                   _CGotoState201Action,
-	{_CState119, CIncOpToken}:                   _CGotoState198Action,
-	{_CState119, CDecOpToken}:                   _CGotoState196Action,
-	{_CState119, CLparamToken}:                  _CGotoState200Action,
-	{_CState119, CLbraceToken}:                  _CGotoState199Action,
-	{_CState119, CDotToken}:                     _CGotoState197Action,
-	{_CState121, CLeOpToken}:                    _CGotoState204Action,
-	{_CState121, CGeOpToken}:                    _CGotoState202Action,
-	{_CState121, CLtToken}:                      _CGotoState205Action,
-	{_CState121, CGtToken}:                      _CGotoState203Action,
+	{_CState119, CIncOpToken}:                   _CGotoState200Action,
+	{_CState119, CDecOpToken}:                   _CGotoState199Action,
+	{_CState119, '('}:                           _CGotoState196Action,
+	{_CState119, '['}:                           _CGotoState198Action,
+	{_CState119, '.'}:                           _CGotoState197Action,
+	{_CState121, CLeOpToken}:                    _CGotoState205Action,
+	{_CState121, CGeOpToken}:                    _CGotoState204Action,
+	{_CState121, '<'}:                           _CGotoState202Action,
+	{_CState121, '>'}:                           _CGotoState203Action,
 	{_CState123, CLeftOpToken}:                  _CGotoState206Action,
 	{_CState123, CRightOpToken}:                 _CGotoState207Action,
-	{_CState125, CIdentifierToken}:              _CGotoState86Action,
-	{_CState125, CConstantToken}:                _CGotoState78Action,
-	{_CState125, CStringLiteralToken}:           _CGotoState97Action,
-	{_CState125, CSizeofToken}:                  _CGotoState96Action,
-	{_CState125, CIncOpToken}:                   _CGotoState88Action,
-	{_CState125, CDecOpToken}:                   _CGotoState80Action,
-	{_CState125, CCaseToken}:                    _CGotoState77Action,
-	{_CState125, CDefaultToken}:                 _CGotoState81Action,
-	{_CState125, CIfToken}:                      _CGotoState87Action,
-	{_CState125, CSwitchToken}:                  _CGotoState98Action,
+	{_CState125, CIdentifierToken}:              _CGotoState93Action,
+	{_CState125, CConstantToken}:                _CGotoState86Action,
+	{_CState125, CStringLiteralToken}:           _CGotoState98Action,
+	{_CState125, CSizeofToken}:                  _CGotoState97Action,
+	{_CState125, CIncOpToken}:                   _CGotoState95Action,
+	{_CState125, CDecOpToken}:                   _CGotoState88Action,
+	{_CState125, CCaseToken}:                    _CGotoState85Action,
+	{_CState125, CDefaultToken}:                 _CGotoState89Action,
+	{_CState125, CIfToken}:                      _CGotoState94Action,
+	{_CState125, CSwitchToken}:                  _CGotoState99Action,
 	{_CState125, CWhileToken}:                   _CGotoState100Action,
-	{_CState125, CDoToken}:                      _CGotoState82Action,
-	{_CState125, CForToken}:                     _CGotoState84Action,
-	{_CState125, CGotoToken}:                    _CGotoState85Action,
-	{_CState125, CContinueToken}:                _CGotoState79Action,
-	{_CState125, CBreakToken}:                   _CGotoState76Action,
-	{_CState125, CReturnToken}:                  _CGotoState94Action,
-	{_CState125, CLparamToken}:                  _CGotoState89Action,
-	{_CState125, CLcurlToken}:                   _CGotoState49Action,
-	{_CState125, CRcurlToken}:                   _CGotoState208Action,
-	{_CState125, CSemicolonToken}:               _CGotoState95Action,
-	{_CState125, CMulToken}:                     _CGotoState91Action,
-	{_CState125, CMinusToken}:                   _CGotoState90Action,
-	{_CState125, CPlusToken}:                    _CGotoState92Action,
-	{_CState125, CAndToken}:                     _CGotoState75Action,
-	{_CState125, CExclaimToken}:                 _CGotoState83Action,
-	{_CState125, CTildaToken}:                   _CGotoState99Action,
+	{_CState125, CDoToken}:                      _CGotoState90Action,
+	{_CState125, CForToken}:                     _CGotoState91Action,
+	{_CState125, CGotoToken}:                    _CGotoState92Action,
+	{_CState125, CContinueToken}:                _CGotoState87Action,
+	{_CState125, CBreakToken}:                   _CGotoState84Action,
+	{_CState125, CReturnToken}:                  _CGotoState96Action,
+	{_CState125, '('}:                           _CGotoState77Action,
+	{_CState125, '{'}:                           _CGotoState49Action,
+	{_CState125, '}'}:                           _CGotoState208Action,
+	{_CState125, ';'}:                           _CGotoState81Action,
+	{_CState125, '*'}:                           _CGotoState78Action,
+	{_CState125, '-'}:                           _CGotoState80Action,
+	{_CState125, '+'}:                           _CGotoState79Action,
+	{_CState125, '&'}:                           _CGotoState76Action,
+	{_CState125, '!'}:                           _CGotoState75Action,
+	{_CState125, '~'}:                           _CGotoState83Action,
 	{_CState125, CPrimaryExpressionType}:        _CGotoState120Action,
 	{_CState125, CPostfixExpressionType}:        _CGotoState119Action,
 	{_CState125, CUnaryExpressionType}:          _CGotoState126Action,
@@ -4919,195 +4890,195 @@ var _CActionTable = _CActionTableType{
 	{_CState125, CIterationStatementType}:       _CGotoState113Action,
 	{_CState125, CJumpStatementType}:            _CGotoState114Action,
 	{_CState126, CMulAssignToken}:               _CGotoState216Action,
-	{_CState126, CDivAssignToken}:               _CGotoState212Action,
+	{_CState126, CDivAssignToken}:               _CGotoState213Action,
 	{_CState126, CModAssignToken}:               _CGotoState215Action,
-	{_CState126, CAddAssignToken}:               _CGotoState210Action,
+	{_CState126, CAddAssignToken}:               _CGotoState211Action,
 	{_CState126, CSubAssignToken}:               _CGotoState219Action,
 	{_CState126, CLeftAssignToken}:              _CGotoState214Action,
 	{_CState126, CRightAssignToken}:             _CGotoState218Action,
-	{_CState126, CAndAssignToken}:               _CGotoState211Action,
+	{_CState126, CAndAssignToken}:               _CGotoState212Action,
 	{_CState126, CXorAssignToken}:               _CGotoState220Action,
 	{_CState126, COrAssignToken}:                _CGotoState217Action,
-	{_CState126, CEqToken}:                      _CGotoState213Action,
+	{_CState126, '='}:                           _CGotoState210Action,
 	{_CState126, CAssignmentOperatorType}:       _CGotoState221Action,
-	{_CState127, CIdentifierToken}:              _CGotoState131Action,
-	{_CState127, CConstantToken}:                _CGotoState78Action,
-	{_CState127, CStringLiteralToken}:           _CGotoState97Action,
-	{_CState127, CSizeofToken}:                  _CGotoState96Action,
-	{_CState127, CIncOpToken}:                   _CGotoState88Action,
-	{_CState127, CDecOpToken}:                   _CGotoState80Action,
-	{_CState127, CLparamToken}:                  _CGotoState89Action,
-	{_CState127, CMulToken}:                     _CGotoState91Action,
-	{_CState127, CMinusToken}:                   _CGotoState90Action,
-	{_CState127, CPlusToken}:                    _CGotoState92Action,
-	{_CState127, CAndToken}:                     _CGotoState75Action,
-	{_CState127, CExclaimToken}:                 _CGotoState83Action,
-	{_CState127, CTildaToken}:                   _CGotoState99Action,
+	{_CState127, CIdentifierToken}:              _CGotoState139Action,
+	{_CState127, CConstantToken}:                _CGotoState86Action,
+	{_CState127, CStringLiteralToken}:           _CGotoState98Action,
+	{_CState127, CSizeofToken}:                  _CGotoState97Action,
+	{_CState127, CIncOpToken}:                   _CGotoState95Action,
+	{_CState127, CDecOpToken}:                   _CGotoState88Action,
+	{_CState127, '('}:                           _CGotoState77Action,
+	{_CState127, '*'}:                           _CGotoState78Action,
+	{_CState127, '-'}:                           _CGotoState80Action,
+	{_CState127, '+'}:                           _CGotoState79Action,
+	{_CState127, '&'}:                           _CGotoState76Action,
+	{_CState127, '!'}:                           _CGotoState75Action,
+	{_CState127, '~'}:                           _CGotoState83Action,
 	{_CState127, CPrimaryExpressionType}:        _CGotoState120Action,
 	{_CState127, CPostfixExpressionType}:        _CGotoState119Action,
-	{_CState127, CUnaryExpressionType}:          _CGotoState135Action,
+	{_CState127, CUnaryExpressionType}:          _CGotoState142Action,
 	{_CState127, CUnaryOperatorType}:            _CGotoState127Action,
 	{_CState127, CCastExpressionType}:           _CGotoState222Action,
-	{_CState130, CEqToken}:                      _CGotoState70Action,
-	{_CState134, CRbraceToken}:                  _CGotoState223Action,
-	{_CState138, CIdentifierToken}:              _CGotoState10Action,
-	{_CState138, CLparamToken}:                  _CGotoState225Action,
-	{_CState138, CLbraceToken}:                  _CGotoState224Action,
-	{_CState138, CMulToken}:                     _CGotoState14Action,
-	{_CState138, CDeclaratorType}:               _CGotoState227Action,
-	{_CState138, CDirectDeclaratorType}:         _CGotoState29Action,
-	{_CState138, CPointerType}:                  _CGotoState229Action,
-	{_CState138, CAbstractDeclaratorType}:       _CGotoState226Action,
-	{_CState138, CDirectAbstractDeclaratorType}: _CGotoState228Action,
-	{_CState139, CRparamToken}:                  _CGotoState231Action,
-	{_CState139, CCommaToken}:                   _CGotoState230Action,
-	{_CState141, CCommaToken}:                   _CGotoState232Action,
-	{_CState142, CRparamToken}:                  _CGotoState233Action,
-	{_CState143, CTypeNameToken}:                _CGotoState21Action,
-	{_CState143, CCharToken}:                    _CGotoState4Action,
-	{_CState143, CShortToken}:                   _CGotoState16Action,
-	{_CState143, CIntToken}:                     _CGotoState11Action,
-	{_CState143, CLongToken}:                    _CGotoState12Action,
-	{_CState143, CSignedToken}:                  _CGotoState17Action,
-	{_CState143, CUnsignedToken}:                _CGotoState23Action,
-	{_CState143, CFloatToken}:                   _CGotoState9Action,
-	{_CState143, CDoubleToken}:                  _CGotoState6Action,
-	{_CState143, CConstToken}:                   _CGotoState5Action,
-	{_CState143, CVolatileToken}:                _CGotoState25Action,
-	{_CState143, CVoidToken}:                    _CGotoState24Action,
-	{_CState143, CStructToken}:                  _CGotoState19Action,
-	{_CState143, CUnionToken}:                   _CGotoState22Action,
-	{_CState143, CEnumToken}:                    _CGotoState7Action,
-	{_CState143, CTypeSpecifierType}:            _CGotoState148Action,
-	{_CState143, CStructOrUnionSpecifierType}:   _CGotoState36Action,
-	{_CState143, CStructOrUnionType}:            _CGotoState35Action,
-	{_CState143, CStructDeclarationListType}:    _CGotoState234Action,
-	{_CState143, CStructDeclarationType}:        _CGotoState145Action,
-	{_CState143, CSpecifierQualifierListType}:   _CGotoState144Action,
-	{_CState143, CEnumSpecifierType}:            _CGotoState30Action,
-	{_CState143, CTypeQualifierType}:            _CGotoState147Action,
-	{_CState144, CIdentifierToken}:              _CGotoState10Action,
-	{_CState144, CLparamToken}:                  _CGotoState13Action,
-	{_CState144, CColonToken}:                   _CGotoState235Action,
-	{_CState144, CMulToken}:                     _CGotoState14Action,
-	{_CState144, CStructDeclaratorListType}:     _CGotoState238Action,
-	{_CState144, CStructDeclaratorType}:         _CGotoState237Action,
-	{_CState144, CDeclaratorType}:               _CGotoState236Action,
-	{_CState144, CDirectDeclaratorType}:         _CGotoState29Action,
-	{_CState144, CPointerType}:                  _CGotoState33Action,
+	{_CState130, '='}:                           _CGotoState70Action,
+	{_CState133, CIdentifierToken}:              _CGotoState12Action,
+	{_CState133, '('}:                           _CGotoState223Action,
+	{_CState133, '['}:                           _CGotoState224Action,
+	{_CState133, '*'}:                           _CGotoState4Action,
+	{_CState133, CDeclaratorType}:               _CGotoState226Action,
+	{_CState133, CDirectDeclaratorType}:         _CGotoState29Action,
+	{_CState133, CPointerType}:                  _CGotoState228Action,
+	{_CState133, CAbstractDeclaratorType}:       _CGotoState225Action,
+	{_CState133, CDirectAbstractDeclaratorType}: _CGotoState227Action,
+	{_CState134, ')'}:                           _CGotoState229Action,
+	{_CState134, ','}:                           _CGotoState230Action,
+	{_CState136, ','}:                           _CGotoState231Action,
+	{_CState137, ')'}:                           _CGotoState232Action,
+	{_CState141, ']'}:                           _CGotoState233Action,
+	{_CState143, CIdentifierToken}:              _CGotoState12Action,
+	{_CState143, '('}:                           _CGotoState3Action,
+	{_CState143, ':'}:                           _CGotoState234Action,
+	{_CState143, '*'}:                           _CGotoState4Action,
+	{_CState143, CStructDeclaratorListType}:     _CGotoState237Action,
+	{_CState143, CStructDeclaratorType}:         _CGotoState236Action,
+	{_CState143, CDeclaratorType}:               _CGotoState235Action,
+	{_CState143, CDirectDeclaratorType}:         _CGotoState29Action,
+	{_CState143, CPointerType}:                  _CGotoState33Action,
+	{_CState145, CTypeNameToken}:                _CGotoState21Action,
+	{_CState145, CCharToken}:                    _CGotoState6Action,
+	{_CState145, CShortToken}:                   _CGotoState16Action,
+	{_CState145, CIntToken}:                     _CGotoState13Action,
+	{_CState145, CLongToken}:                    _CGotoState14Action,
+	{_CState145, CSignedToken}:                  _CGotoState17Action,
+	{_CState145, CUnsignedToken}:                _CGotoState23Action,
+	{_CState145, CFloatToken}:                   _CGotoState11Action,
+	{_CState145, CDoubleToken}:                  _CGotoState8Action,
+	{_CState145, CConstToken}:                   _CGotoState7Action,
+	{_CState145, CVolatileToken}:                _CGotoState25Action,
+	{_CState145, CVoidToken}:                    _CGotoState24Action,
+	{_CState145, CStructToken}:                  _CGotoState19Action,
+	{_CState145, CUnionToken}:                   _CGotoState22Action,
+	{_CState145, CEnumToken}:                    _CGotoState9Action,
+	{_CState145, '}'}:                           _CGotoState238Action,
+	{_CState145, CTypeSpecifierType}:            _CGotoState147Action,
+	{_CState145, CStructOrUnionSpecifierType}:   _CGotoState36Action,
+	{_CState145, CStructOrUnionType}:            _CGotoState35Action,
+	{_CState145, CStructDeclarationType}:        _CGotoState239Action,
+	{_CState145, CSpecifierQualifierListType}:   _CGotoState143Action,
+	{_CState145, CEnumSpecifierType}:            _CGotoState30Action,
+	{_CState145, CTypeQualifierType}:            _CGotoState146Action,
 	{_CState146, CTypeNameToken}:                _CGotoState21Action,
-	{_CState146, CCharToken}:                    _CGotoState4Action,
+	{_CState146, CCharToken}:                    _CGotoState6Action,
 	{_CState146, CShortToken}:                   _CGotoState16Action,
-	{_CState146, CIntToken}:                     _CGotoState11Action,
-	{_CState146, CLongToken}:                    _CGotoState12Action,
+	{_CState146, CIntToken}:                     _CGotoState13Action,
+	{_CState146, CLongToken}:                    _CGotoState14Action,
 	{_CState146, CSignedToken}:                  _CGotoState17Action,
 	{_CState146, CUnsignedToken}:                _CGotoState23Action,
-	{_CState146, CFloatToken}:                   _CGotoState9Action,
-	{_CState146, CDoubleToken}:                  _CGotoState6Action,
-	{_CState146, CConstToken}:                   _CGotoState5Action,
+	{_CState146, CFloatToken}:                   _CGotoState11Action,
+	{_CState146, CDoubleToken}:                  _CGotoState8Action,
+	{_CState146, CConstToken}:                   _CGotoState7Action,
 	{_CState146, CVolatileToken}:                _CGotoState25Action,
 	{_CState146, CVoidToken}:                    _CGotoState24Action,
 	{_CState146, CStructToken}:                  _CGotoState19Action,
 	{_CState146, CUnionToken}:                   _CGotoState22Action,
-	{_CState146, CEnumToken}:                    _CGotoState7Action,
-	{_CState146, CRcurlToken}:                   _CGotoState239Action,
-	{_CState146, CTypeSpecifierType}:            _CGotoState148Action,
+	{_CState146, CEnumToken}:                    _CGotoState9Action,
+	{_CState146, CTypeSpecifierType}:            _CGotoState147Action,
 	{_CState146, CStructOrUnionSpecifierType}:   _CGotoState36Action,
 	{_CState146, CStructOrUnionType}:            _CGotoState35Action,
-	{_CState146, CStructDeclarationType}:        _CGotoState240Action,
-	{_CState146, CSpecifierQualifierListType}:   _CGotoState144Action,
+	{_CState146, CSpecifierQualifierListType}:   _CGotoState240Action,
 	{_CState146, CEnumSpecifierType}:            _CGotoState30Action,
-	{_CState146, CTypeQualifierType}:            _CGotoState147Action,
+	{_CState146, CTypeQualifierType}:            _CGotoState146Action,
 	{_CState147, CTypeNameToken}:                _CGotoState21Action,
-	{_CState147, CCharToken}:                    _CGotoState4Action,
+	{_CState147, CCharToken}:                    _CGotoState6Action,
 	{_CState147, CShortToken}:                   _CGotoState16Action,
-	{_CState147, CIntToken}:                     _CGotoState11Action,
-	{_CState147, CLongToken}:                    _CGotoState12Action,
+	{_CState147, CIntToken}:                     _CGotoState13Action,
+	{_CState147, CLongToken}:                    _CGotoState14Action,
 	{_CState147, CSignedToken}:                  _CGotoState17Action,
 	{_CState147, CUnsignedToken}:                _CGotoState23Action,
-	{_CState147, CFloatToken}:                   _CGotoState9Action,
-	{_CState147, CDoubleToken}:                  _CGotoState6Action,
-	{_CState147, CConstToken}:                   _CGotoState5Action,
+	{_CState147, CFloatToken}:                   _CGotoState11Action,
+	{_CState147, CDoubleToken}:                  _CGotoState8Action,
+	{_CState147, CConstToken}:                   _CGotoState7Action,
 	{_CState147, CVolatileToken}:                _CGotoState25Action,
 	{_CState147, CVoidToken}:                    _CGotoState24Action,
 	{_CState147, CStructToken}:                  _CGotoState19Action,
 	{_CState147, CUnionToken}:                   _CGotoState22Action,
-	{_CState147, CEnumToken}:                    _CGotoState7Action,
-	{_CState147, CTypeSpecifierType}:            _CGotoState148Action,
+	{_CState147, CEnumToken}:                    _CGotoState9Action,
+	{_CState147, CTypeSpecifierType}:            _CGotoState147Action,
 	{_CState147, CStructOrUnionSpecifierType}:   _CGotoState36Action,
 	{_CState147, CStructOrUnionType}:            _CGotoState35Action,
 	{_CState147, CSpecifierQualifierListType}:   _CGotoState241Action,
 	{_CState147, CEnumSpecifierType}:            _CGotoState30Action,
-	{_CState147, CTypeQualifierType}:            _CGotoState147Action,
+	{_CState147, CTypeQualifierType}:            _CGotoState146Action,
 	{_CState148, CTypeNameToken}:                _CGotoState21Action,
-	{_CState148, CCharToken}:                    _CGotoState4Action,
+	{_CState148, CCharToken}:                    _CGotoState6Action,
 	{_CState148, CShortToken}:                   _CGotoState16Action,
-	{_CState148, CIntToken}:                     _CGotoState11Action,
-	{_CState148, CLongToken}:                    _CGotoState12Action,
+	{_CState148, CIntToken}:                     _CGotoState13Action,
+	{_CState148, CLongToken}:                    _CGotoState14Action,
 	{_CState148, CSignedToken}:                  _CGotoState17Action,
 	{_CState148, CUnsignedToken}:                _CGotoState23Action,
-	{_CState148, CFloatToken}:                   _CGotoState9Action,
-	{_CState148, CDoubleToken}:                  _CGotoState6Action,
-	{_CState148, CConstToken}:                   _CGotoState5Action,
+	{_CState148, CFloatToken}:                   _CGotoState11Action,
+	{_CState148, CDoubleToken}:                  _CGotoState8Action,
+	{_CState148, CConstToken}:                   _CGotoState7Action,
 	{_CState148, CVolatileToken}:                _CGotoState25Action,
 	{_CState148, CVoidToken}:                    _CGotoState24Action,
 	{_CState148, CStructToken}:                  _CGotoState19Action,
 	{_CState148, CUnionToken}:                   _CGotoState22Action,
-	{_CState148, CEnumToken}:                    _CGotoState7Action,
-	{_CState148, CTypeSpecifierType}:            _CGotoState148Action,
+	{_CState148, CEnumToken}:                    _CGotoState9Action,
+	{_CState148, CTypeSpecifierType}:            _CGotoState147Action,
 	{_CState148, CStructOrUnionSpecifierType}:   _CGotoState36Action,
 	{_CState148, CStructOrUnionType}:            _CGotoState35Action,
-	{_CState148, CSpecifierQualifierListType}:   _CGotoState242Action,
+	{_CState148, CStructDeclarationListType}:    _CGotoState242Action,
+	{_CState148, CStructDeclarationType}:        _CGotoState144Action,
+	{_CState148, CSpecifierQualifierListType}:   _CGotoState143Action,
 	{_CState148, CEnumSpecifierType}:            _CGotoState30Action,
-	{_CState148, CTypeQualifierType}:            _CGotoState147Action,
-	{_CState149, CRcurlToken}:                   _CGotoState243Action,
-	{_CState149, CCommaToken}:                   _CGotoState151Action,
-	{_CState150, CIdentifierToken}:              _CGotoState131Action,
-	{_CState150, CConstantToken}:                _CGotoState78Action,
-	{_CState150, CStringLiteralToken}:           _CGotoState97Action,
-	{_CState150, CSizeofToken}:                  _CGotoState96Action,
-	{_CState150, CIncOpToken}:                   _CGotoState88Action,
-	{_CState150, CDecOpToken}:                   _CGotoState80Action,
-	{_CState150, CLparamToken}:                  _CGotoState89Action,
-	{_CState150, CMulToken}:                     _CGotoState91Action,
-	{_CState150, CMinusToken}:                   _CGotoState90Action,
-	{_CState150, CPlusToken}:                    _CGotoState92Action,
-	{_CState150, CAndToken}:                     _CGotoState75Action,
-	{_CState150, CExclaimToken}:                 _CGotoState83Action,
-	{_CState150, CTildaToken}:                   _CGotoState99Action,
-	{_CState150, CPrimaryExpressionType}:        _CGotoState120Action,
-	{_CState150, CPostfixExpressionType}:        _CGotoState119Action,
-	{_CState150, CUnaryExpressionType}:          _CGotoState135Action,
-	{_CState150, CUnaryOperatorType}:            _CGotoState127Action,
-	{_CState150, CCastExpressionType}:           _CGotoState104Action,
-	{_CState150, CMultiplicativeExpressionType}: _CGotoState118Action,
-	{_CState150, CAdditiveExpressionType}:       _CGotoState101Action,
-	{_CState150, CShiftExpressionType}:          _CGotoState123Action,
-	{_CState150, CRelationalExpressionType}:     _CGotoState121Action,
-	{_CState150, CEqualityExpressionType}:       _CGotoState108Action,
-	{_CState150, CAndExpressionType}:            _CGotoState102Action,
-	{_CState150, CExclusiveOrExpressionType}:    _CGotoState109Action,
-	{_CState150, CInclusiveOrExpressionType}:    _CGotoState112Action,
-	{_CState150, CLogicalAndExpressionType}:     _CGotoState116Action,
-	{_CState150, CLogicalOrExpressionType}:      _CGotoState117Action,
-	{_CState150, CConditionalExpressionType}:    _CGotoState133Action,
-	{_CState150, CConstantExpressionType}:       _CGotoState244Action,
-	{_CState151, CIdentifierToken}:              _CGotoState64Action,
-	{_CState151, CEnumeratorType}:               _CGotoState245Action,
-	{_CState153, CIdentifierToken}:              _CGotoState131Action,
-	{_CState153, CConstantToken}:                _CGotoState78Action,
-	{_CState153, CStringLiteralToken}:           _CGotoState97Action,
-	{_CState153, CSizeofToken}:                  _CGotoState96Action,
-	{_CState153, CIncOpToken}:                   _CGotoState88Action,
-	{_CState153, CDecOpToken}:                   _CGotoState80Action,
-	{_CState153, CLparamToken}:                  _CGotoState89Action,
-	{_CState153, CLcurlToken}:                   _CGotoState153Action,
-	{_CState153, CMulToken}:                     _CGotoState91Action,
-	{_CState153, CMinusToken}:                   _CGotoState90Action,
-	{_CState153, CPlusToken}:                    _CGotoState92Action,
-	{_CState153, CAndToken}:                     _CGotoState75Action,
-	{_CState153, CExclaimToken}:                 _CGotoState83Action,
-	{_CState153, CTildaToken}:                   _CGotoState99Action,
+	{_CState148, CTypeQualifierType}:            _CGotoState146Action,
+	{_CState149, CIdentifierToken}:              _CGotoState139Action,
+	{_CState149, CConstantToken}:                _CGotoState86Action,
+	{_CState149, CStringLiteralToken}:           _CGotoState98Action,
+	{_CState149, CSizeofToken}:                  _CGotoState97Action,
+	{_CState149, CIncOpToken}:                   _CGotoState95Action,
+	{_CState149, CDecOpToken}:                   _CGotoState88Action,
+	{_CState149, '('}:                           _CGotoState77Action,
+	{_CState149, '*'}:                           _CGotoState78Action,
+	{_CState149, '-'}:                           _CGotoState80Action,
+	{_CState149, '+'}:                           _CGotoState79Action,
+	{_CState149, '&'}:                           _CGotoState76Action,
+	{_CState149, '!'}:                           _CGotoState75Action,
+	{_CState149, '~'}:                           _CGotoState83Action,
+	{_CState149, CPrimaryExpressionType}:        _CGotoState120Action,
+	{_CState149, CPostfixExpressionType}:        _CGotoState119Action,
+	{_CState149, CUnaryExpressionType}:          _CGotoState142Action,
+	{_CState149, CUnaryOperatorType}:            _CGotoState127Action,
+	{_CState149, CCastExpressionType}:           _CGotoState104Action,
+	{_CState149, CMultiplicativeExpressionType}: _CGotoState118Action,
+	{_CState149, CAdditiveExpressionType}:       _CGotoState101Action,
+	{_CState149, CShiftExpressionType}:          _CGotoState123Action,
+	{_CState149, CRelationalExpressionType}:     _CGotoState121Action,
+	{_CState149, CEqualityExpressionType}:       _CGotoState108Action,
+	{_CState149, CAndExpressionType}:            _CGotoState102Action,
+	{_CState149, CExclusiveOrExpressionType}:    _CGotoState109Action,
+	{_CState149, CInclusiveOrExpressionType}:    _CGotoState112Action,
+	{_CState149, CLogicalAndExpressionType}:     _CGotoState116Action,
+	{_CState149, CLogicalOrExpressionType}:      _CGotoState117Action,
+	{_CState149, CConditionalExpressionType}:    _CGotoState140Action,
+	{_CState149, CConstantExpressionType}:       _CGotoState243Action,
+	{_CState150, CIdentifierToken}:              _CGotoState66Action,
+	{_CState150, CEnumeratorType}:               _CGotoState244Action,
+	{_CState152, '}'}:                           _CGotoState245Action,
+	{_CState152, ','}:                           _CGotoState150Action,
+	{_CState153, CIdentifierToken}:              _CGotoState139Action,
+	{_CState153, CConstantToken}:                _CGotoState86Action,
+	{_CState153, CStringLiteralToken}:           _CGotoState98Action,
+	{_CState153, CSizeofToken}:                  _CGotoState97Action,
+	{_CState153, CIncOpToken}:                   _CGotoState95Action,
+	{_CState153, CDecOpToken}:                   _CGotoState88Action,
+	{_CState153, '('}:                           _CGotoState77Action,
+	{_CState153, '{'}:                           _CGotoState153Action,
+	{_CState153, '*'}:                           _CGotoState78Action,
+	{_CState153, '-'}:                           _CGotoState80Action,
+	{_CState153, '+'}:                           _CGotoState79Action,
+	{_CState153, '&'}:                           _CGotoState76Action,
+	{_CState153, '!'}:                           _CGotoState75Action,
+	{_CState153, '~'}:                           _CGotoState83Action,
 	{_CState153, CPrimaryExpressionType}:        _CGotoState120Action,
 	{_CState153, CPostfixExpressionType}:        _CGotoState119Action,
 	{_CState153, CUnaryExpressionType}:          _CGotoState126Action,
@@ -5127,188 +5098,113 @@ var _CActionTable = _CActionTableType{
 	{_CState153, CAssignmentExpressionType}:     _CGotoState154Action,
 	{_CState153, CInitializerType}:              _CGotoState246Action,
 	{_CState153, CInitializerListType}:          _CGotoState247Action,
-	{_CState159, CColonToken}:                   _CGotoState248Action,
-	{_CState161, CIdentifierToken}:              _CGotoState131Action,
-	{_CState161, CConstantToken}:                _CGotoState78Action,
-	{_CState161, CStringLiteralToken}:           _CGotoState97Action,
-	{_CState161, CSizeofToken}:                  _CGotoState96Action,
-	{_CState161, CIncOpToken}:                   _CGotoState88Action,
-	{_CState161, CDecOpToken}:                   _CGotoState80Action,
-	{_CState161, CLparamToken}:                  _CGotoState89Action,
-	{_CState161, CMulToken}:                     _CGotoState91Action,
-	{_CState161, CMinusToken}:                   _CGotoState90Action,
-	{_CState161, CPlusToken}:                    _CGotoState92Action,
-	{_CState161, CAndToken}:                     _CGotoState75Action,
-	{_CState161, CExclaimToken}:                 _CGotoState83Action,
-	{_CState161, CTildaToken}:                   _CGotoState99Action,
-	{_CState161, CPrimaryExpressionType}:        _CGotoState120Action,
-	{_CState161, CPostfixExpressionType}:        _CGotoState119Action,
-	{_CState161, CUnaryExpressionType}:          _CGotoState126Action,
-	{_CState161, CUnaryOperatorType}:            _CGotoState127Action,
-	{_CState161, CCastExpressionType}:           _CGotoState104Action,
-	{_CState161, CMultiplicativeExpressionType}: _CGotoState118Action,
-	{_CState161, CAdditiveExpressionType}:       _CGotoState101Action,
-	{_CState161, CShiftExpressionType}:          _CGotoState123Action,
-	{_CState161, CRelationalExpressionType}:     _CGotoState121Action,
-	{_CState161, CEqualityExpressionType}:       _CGotoState108Action,
-	{_CState161, CAndExpressionType}:            _CGotoState102Action,
-	{_CState161, CExclusiveOrExpressionType}:    _CGotoState109Action,
-	{_CState161, CInclusiveOrExpressionType}:    _CGotoState112Action,
-	{_CState161, CLogicalAndExpressionType}:     _CGotoState116Action,
-	{_CState161, CLogicalOrExpressionType}:      _CGotoState117Action,
-	{_CState161, CConditionalExpressionType}:    _CGotoState106Action,
-	{_CState161, CAssignmentExpressionType}:     _CGotoState103Action,
-	{_CState161, CExpressionType}:               _CGotoState170Action,
-	{_CState163, CIdentifierToken}:              _CGotoState86Action,
-	{_CState163, CConstantToken}:                _CGotoState78Action,
-	{_CState163, CStringLiteralToken}:           _CGotoState97Action,
-	{_CState163, CSizeofToken}:                  _CGotoState96Action,
-	{_CState163, CIncOpToken}:                   _CGotoState88Action,
-	{_CState163, CDecOpToken}:                   _CGotoState80Action,
-	{_CState163, CCaseToken}:                    _CGotoState77Action,
-	{_CState163, CDefaultToken}:                 _CGotoState81Action,
-	{_CState163, CIfToken}:                      _CGotoState87Action,
-	{_CState163, CSwitchToken}:                  _CGotoState98Action,
-	{_CState163, CWhileToken}:                   _CGotoState100Action,
-	{_CState163, CDoToken}:                      _CGotoState82Action,
-	{_CState163, CForToken}:                     _CGotoState84Action,
-	{_CState163, CGotoToken}:                    _CGotoState85Action,
-	{_CState163, CContinueToken}:                _CGotoState79Action,
-	{_CState163, CBreakToken}:                   _CGotoState76Action,
-	{_CState163, CReturnToken}:                  _CGotoState94Action,
-	{_CState163, CLparamToken}:                  _CGotoState89Action,
-	{_CState163, CLcurlToken}:                   _CGotoState49Action,
-	{_CState163, CSemicolonToken}:               _CGotoState95Action,
-	{_CState163, CMulToken}:                     _CGotoState91Action,
-	{_CState163, CMinusToken}:                   _CGotoState90Action,
-	{_CState163, CPlusToken}:                    _CGotoState92Action,
-	{_CState163, CAndToken}:                     _CGotoState75Action,
-	{_CState163, CExclaimToken}:                 _CGotoState83Action,
-	{_CState163, CTildaToken}:                   _CGotoState99Action,
-	{_CState163, CPrimaryExpressionType}:        _CGotoState120Action,
-	{_CState163, CPostfixExpressionType}:        _CGotoState119Action,
-	{_CState163, CUnaryExpressionType}:          _CGotoState126Action,
-	{_CState163, CUnaryOperatorType}:            _CGotoState127Action,
-	{_CState163, CCastExpressionType}:           _CGotoState104Action,
-	{_CState163, CMultiplicativeExpressionType}: _CGotoState118Action,
-	{_CState163, CAdditiveExpressionType}:       _CGotoState101Action,
-	{_CState163, CShiftExpressionType}:          _CGotoState123Action,
-	{_CState163, CRelationalExpressionType}:     _CGotoState121Action,
-	{_CState163, CEqualityExpressionType}:       _CGotoState108Action,
-	{_CState163, CAndExpressionType}:            _CGotoState102Action,
-	{_CState163, CExclusiveOrExpressionType}:    _CGotoState109Action,
-	{_CState163, CInclusiveOrExpressionType}:    _CGotoState112Action,
-	{_CState163, CLogicalAndExpressionType}:     _CGotoState116Action,
-	{_CState163, CLogicalOrExpressionType}:      _CGotoState117Action,
-	{_CState163, CConditionalExpressionType}:    _CGotoState106Action,
-	{_CState163, CAssignmentExpressionType}:     _CGotoState103Action,
-	{_CState163, CExpressionType}:               _CGotoState110Action,
-	{_CState163, CStatementType}:                _CGotoState249Action,
-	{_CState163, CLabeledStatementType}:         _CGotoState115Action,
-	{_CState163, CCompoundStatementType}:        _CGotoState105Action,
-	{_CState163, CExpressionStatementType}:      _CGotoState111Action,
-	{_CState163, CSelectionStatementType}:       _CGotoState122Action,
-	{_CState163, CIterationStatementType}:       _CGotoState113Action,
-	{_CState163, CJumpStatementType}:            _CGotoState114Action,
-	{_CState164, CWhileToken}:                   _CGotoState250Action,
-	{_CState165, CIdentifierToken}:              _CGotoState131Action,
-	{_CState165, CConstantToken}:                _CGotoState78Action,
-	{_CState165, CStringLiteralToken}:           _CGotoState97Action,
-	{_CState165, CSizeofToken}:                  _CGotoState96Action,
-	{_CState165, CIncOpToken}:                   _CGotoState88Action,
-	{_CState165, CDecOpToken}:                   _CGotoState80Action,
-	{_CState165, CLparamToken}:                  _CGotoState89Action,
-	{_CState165, CSemicolonToken}:               _CGotoState95Action,
-	{_CState165, CMulToken}:                     _CGotoState91Action,
-	{_CState165, CMinusToken}:                   _CGotoState90Action,
-	{_CState165, CPlusToken}:                    _CGotoState92Action,
-	{_CState165, CAndToken}:                     _CGotoState75Action,
-	{_CState165, CExclaimToken}:                 _CGotoState83Action,
-	{_CState165, CTildaToken}:                   _CGotoState99Action,
-	{_CState165, CPrimaryExpressionType}:        _CGotoState120Action,
-	{_CState165, CPostfixExpressionType}:        _CGotoState119Action,
-	{_CState165, CUnaryExpressionType}:          _CGotoState126Action,
-	{_CState165, CUnaryOperatorType}:            _CGotoState127Action,
-	{_CState165, CCastExpressionType}:           _CGotoState104Action,
-	{_CState165, CMultiplicativeExpressionType}: _CGotoState118Action,
-	{_CState165, CAdditiveExpressionType}:       _CGotoState101Action,
-	{_CState165, CShiftExpressionType}:          _CGotoState123Action,
-	{_CState165, CRelationalExpressionType}:     _CGotoState121Action,
-	{_CState165, CEqualityExpressionType}:       _CGotoState108Action,
-	{_CState165, CAndExpressionType}:            _CGotoState102Action,
-	{_CState165, CExclusiveOrExpressionType}:    _CGotoState109Action,
-	{_CState165, CInclusiveOrExpressionType}:    _CGotoState112Action,
-	{_CState165, CLogicalAndExpressionType}:     _CGotoState116Action,
-	{_CState165, CLogicalOrExpressionType}:      _CGotoState117Action,
-	{_CState165, CConditionalExpressionType}:    _CGotoState106Action,
-	{_CState165, CAssignmentExpressionType}:     _CGotoState103Action,
-	{_CState165, CExpressionType}:               _CGotoState110Action,
-	{_CState165, CExpressionStatementType}:      _CGotoState251Action,
-	{_CState166, CSemicolonToken}:               _CGotoState252Action,
-	{_CState167, CIdentifierToken}:              _CGotoState86Action,
-	{_CState167, CConstantToken}:                _CGotoState78Action,
-	{_CState167, CStringLiteralToken}:           _CGotoState97Action,
-	{_CState167, CSizeofToken}:                  _CGotoState96Action,
-	{_CState167, CIncOpToken}:                   _CGotoState88Action,
-	{_CState167, CDecOpToken}:                   _CGotoState80Action,
-	{_CState167, CCaseToken}:                    _CGotoState77Action,
-	{_CState167, CDefaultToken}:                 _CGotoState81Action,
-	{_CState167, CIfToken}:                      _CGotoState87Action,
-	{_CState167, CSwitchToken}:                  _CGotoState98Action,
-	{_CState167, CWhileToken}:                   _CGotoState100Action,
-	{_CState167, CDoToken}:                      _CGotoState82Action,
-	{_CState167, CForToken}:                     _CGotoState84Action,
-	{_CState167, CGotoToken}:                    _CGotoState85Action,
-	{_CState167, CContinueToken}:                _CGotoState79Action,
-	{_CState167, CBreakToken}:                   _CGotoState76Action,
-	{_CState167, CReturnToken}:                  _CGotoState94Action,
-	{_CState167, CLparamToken}:                  _CGotoState89Action,
-	{_CState167, CLcurlToken}:                   _CGotoState49Action,
-	{_CState167, CSemicolonToken}:               _CGotoState95Action,
-	{_CState167, CMulToken}:                     _CGotoState91Action,
-	{_CState167, CMinusToken}:                   _CGotoState90Action,
-	{_CState167, CPlusToken}:                    _CGotoState92Action,
-	{_CState167, CAndToken}:                     _CGotoState75Action,
-	{_CState167, CExclaimToken}:                 _CGotoState83Action,
-	{_CState167, CTildaToken}:                   _CGotoState99Action,
-	{_CState167, CPrimaryExpressionType}:        _CGotoState120Action,
-	{_CState167, CPostfixExpressionType}:        _CGotoState119Action,
-	{_CState167, CUnaryExpressionType}:          _CGotoState126Action,
-	{_CState167, CUnaryOperatorType}:            _CGotoState127Action,
-	{_CState167, CCastExpressionType}:           _CGotoState104Action,
-	{_CState167, CMultiplicativeExpressionType}: _CGotoState118Action,
-	{_CState167, CAdditiveExpressionType}:       _CGotoState101Action,
-	{_CState167, CShiftExpressionType}:          _CGotoState123Action,
-	{_CState167, CRelationalExpressionType}:     _CGotoState121Action,
-	{_CState167, CEqualityExpressionType}:       _CGotoState108Action,
-	{_CState167, CAndExpressionType}:            _CGotoState102Action,
-	{_CState167, CExclusiveOrExpressionType}:    _CGotoState109Action,
-	{_CState167, CInclusiveOrExpressionType}:    _CGotoState112Action,
-	{_CState167, CLogicalAndExpressionType}:     _CGotoState116Action,
-	{_CState167, CLogicalOrExpressionType}:      _CGotoState117Action,
-	{_CState167, CConditionalExpressionType}:    _CGotoState106Action,
-	{_CState167, CAssignmentExpressionType}:     _CGotoState103Action,
-	{_CState167, CExpressionType}:               _CGotoState110Action,
-	{_CState167, CStatementType}:                _CGotoState253Action,
-	{_CState167, CLabeledStatementType}:         _CGotoState115Action,
-	{_CState167, CCompoundStatementType}:        _CGotoState105Action,
-	{_CState167, CExpressionStatementType}:      _CGotoState111Action,
-	{_CState167, CSelectionStatementType}:       _CGotoState122Action,
-	{_CState167, CIterationStatementType}:       _CGotoState113Action,
-	{_CState167, CJumpStatementType}:            _CGotoState114Action,
-	{_CState168, CIdentifierToken}:              _CGotoState131Action,
-	{_CState168, CConstantToken}:                _CGotoState78Action,
-	{_CState168, CStringLiteralToken}:           _CGotoState97Action,
-	{_CState168, CSizeofToken}:                  _CGotoState96Action,
-	{_CState168, CIncOpToken}:                   _CGotoState88Action,
-	{_CState168, CDecOpToken}:                   _CGotoState80Action,
-	{_CState168, CLparamToken}:                  _CGotoState89Action,
-	{_CState168, CMulToken}:                     _CGotoState91Action,
-	{_CState168, CMinusToken}:                   _CGotoState90Action,
-	{_CState168, CPlusToken}:                    _CGotoState92Action,
-	{_CState168, CAndToken}:                     _CGotoState75Action,
-	{_CState168, CExclaimToken}:                 _CGotoState83Action,
-	{_CState168, CTildaToken}:                   _CGotoState99Action,
+	{_CState158, ')'}:                           _CGotoState248Action,
+	{_CState158, ','}:                           _CGotoState187Action,
+	{_CState159, '('}:                           _CGotoState249Action,
+	{_CState159, '['}:                           _CGotoState224Action,
+	{_CState159, '*'}:                           _CGotoState4Action,
+	{_CState159, CPointerType}:                  _CGotoState251Action,
+	{_CState159, CAbstractDeclaratorType}:       _CGotoState250Action,
+	{_CState159, CDirectAbstractDeclaratorType}: _CGotoState227Action,
+	{_CState160, ')'}:                           _CGotoState252Action,
+	{_CState162, ':'}:                           _CGotoState253Action,
+	{_CState164, CIdentifierToken}:              _CGotoState139Action,
+	{_CState164, CConstantToken}:                _CGotoState86Action,
+	{_CState164, CStringLiteralToken}:           _CGotoState98Action,
+	{_CState164, CSizeofToken}:                  _CGotoState97Action,
+	{_CState164, CIncOpToken}:                   _CGotoState95Action,
+	{_CState164, CDecOpToken}:                   _CGotoState88Action,
+	{_CState164, '('}:                           _CGotoState77Action,
+	{_CState164, '*'}:                           _CGotoState78Action,
+	{_CState164, '-'}:                           _CGotoState80Action,
+	{_CState164, '+'}:                           _CGotoState79Action,
+	{_CState164, '&'}:                           _CGotoState76Action,
+	{_CState164, '!'}:                           _CGotoState75Action,
+	{_CState164, '~'}:                           _CGotoState83Action,
+	{_CState164, CPrimaryExpressionType}:        _CGotoState120Action,
+	{_CState164, CPostfixExpressionType}:        _CGotoState119Action,
+	{_CState164, CUnaryExpressionType}:          _CGotoState126Action,
+	{_CState164, CUnaryOperatorType}:            _CGotoState127Action,
+	{_CState164, CCastExpressionType}:           _CGotoState104Action,
+	{_CState164, CMultiplicativeExpressionType}: _CGotoState118Action,
+	{_CState164, CAdditiveExpressionType}:       _CGotoState101Action,
+	{_CState164, CShiftExpressionType}:          _CGotoState123Action,
+	{_CState164, CRelationalExpressionType}:     _CGotoState121Action,
+	{_CState164, CEqualityExpressionType}:       _CGotoState108Action,
+	{_CState164, CAndExpressionType}:            _CGotoState102Action,
+	{_CState164, CExclusiveOrExpressionType}:    _CGotoState109Action,
+	{_CState164, CInclusiveOrExpressionType}:    _CGotoState112Action,
+	{_CState164, CLogicalAndExpressionType}:     _CGotoState116Action,
+	{_CState164, CLogicalOrExpressionType}:      _CGotoState117Action,
+	{_CState164, CConditionalExpressionType}:    _CGotoState106Action,
+	{_CState164, CAssignmentExpressionType}:     _CGotoState103Action,
+	{_CState164, CExpressionType}:               _CGotoState158Action,
+	{_CState166, CIdentifierToken}:              _CGotoState93Action,
+	{_CState166, CConstantToken}:                _CGotoState86Action,
+	{_CState166, CStringLiteralToken}:           _CGotoState98Action,
+	{_CState166, CSizeofToken}:                  _CGotoState97Action,
+	{_CState166, CIncOpToken}:                   _CGotoState95Action,
+	{_CState166, CDecOpToken}:                   _CGotoState88Action,
+	{_CState166, CCaseToken}:                    _CGotoState85Action,
+	{_CState166, CDefaultToken}:                 _CGotoState89Action,
+	{_CState166, CIfToken}:                      _CGotoState94Action,
+	{_CState166, CSwitchToken}:                  _CGotoState99Action,
+	{_CState166, CWhileToken}:                   _CGotoState100Action,
+	{_CState166, CDoToken}:                      _CGotoState90Action,
+	{_CState166, CForToken}:                     _CGotoState91Action,
+	{_CState166, CGotoToken}:                    _CGotoState92Action,
+	{_CState166, CContinueToken}:                _CGotoState87Action,
+	{_CState166, CBreakToken}:                   _CGotoState84Action,
+	{_CState166, CReturnToken}:                  _CGotoState96Action,
+	{_CState166, '('}:                           _CGotoState77Action,
+	{_CState166, '{'}:                           _CGotoState49Action,
+	{_CState166, ';'}:                           _CGotoState81Action,
+	{_CState166, '*'}:                           _CGotoState78Action,
+	{_CState166, '-'}:                           _CGotoState80Action,
+	{_CState166, '+'}:                           _CGotoState79Action,
+	{_CState166, '&'}:                           _CGotoState76Action,
+	{_CState166, '!'}:                           _CGotoState75Action,
+	{_CState166, '~'}:                           _CGotoState83Action,
+	{_CState166, CPrimaryExpressionType}:        _CGotoState120Action,
+	{_CState166, CPostfixExpressionType}:        _CGotoState119Action,
+	{_CState166, CUnaryExpressionType}:          _CGotoState126Action,
+	{_CState166, CUnaryOperatorType}:            _CGotoState127Action,
+	{_CState166, CCastExpressionType}:           _CGotoState104Action,
+	{_CState166, CMultiplicativeExpressionType}: _CGotoState118Action,
+	{_CState166, CAdditiveExpressionType}:       _CGotoState101Action,
+	{_CState166, CShiftExpressionType}:          _CGotoState123Action,
+	{_CState166, CRelationalExpressionType}:     _CGotoState121Action,
+	{_CState166, CEqualityExpressionType}:       _CGotoState108Action,
+	{_CState166, CAndExpressionType}:            _CGotoState102Action,
+	{_CState166, CExclusiveOrExpressionType}:    _CGotoState109Action,
+	{_CState166, CInclusiveOrExpressionType}:    _CGotoState112Action,
+	{_CState166, CLogicalAndExpressionType}:     _CGotoState116Action,
+	{_CState166, CLogicalOrExpressionType}:      _CGotoState117Action,
+	{_CState166, CConditionalExpressionType}:    _CGotoState106Action,
+	{_CState166, CAssignmentExpressionType}:     _CGotoState103Action,
+	{_CState166, CExpressionType}:               _CGotoState110Action,
+	{_CState166, CStatementType}:                _CGotoState254Action,
+	{_CState166, CLabeledStatementType}:         _CGotoState115Action,
+	{_CState166, CCompoundStatementType}:        _CGotoState105Action,
+	{_CState166, CExpressionStatementType}:      _CGotoState111Action,
+	{_CState166, CSelectionStatementType}:       _CGotoState122Action,
+	{_CState166, CIterationStatementType}:       _CGotoState113Action,
+	{_CState166, CJumpStatementType}:            _CGotoState114Action,
+	{_CState167, CWhileToken}:                   _CGotoState255Action,
+	{_CState168, CIdentifierToken}:              _CGotoState139Action,
+	{_CState168, CConstantToken}:                _CGotoState86Action,
+	{_CState168, CStringLiteralToken}:           _CGotoState98Action,
+	{_CState168, CSizeofToken}:                  _CGotoState97Action,
+	{_CState168, CIncOpToken}:                   _CGotoState95Action,
+	{_CState168, CDecOpToken}:                   _CGotoState88Action,
+	{_CState168, '('}:                           _CGotoState77Action,
+	{_CState168, ';'}:                           _CGotoState81Action,
+	{_CState168, '*'}:                           _CGotoState78Action,
+	{_CState168, '-'}:                           _CGotoState80Action,
+	{_CState168, '+'}:                           _CGotoState79Action,
+	{_CState168, '&'}:                           _CGotoState76Action,
+	{_CState168, '!'}:                           _CGotoState75Action,
+	{_CState168, '~'}:                           _CGotoState83Action,
 	{_CState168, CPrimaryExpressionType}:        _CGotoState120Action,
 	{_CState168, CPostfixExpressionType}:        _CGotoState119Action,
 	{_CState168, CUnaryExpressionType}:          _CGotoState126Action,
@@ -5326,46 +5222,121 @@ var _CActionTable = _CActionTableType{
 	{_CState168, CLogicalOrExpressionType}:      _CGotoState117Action,
 	{_CState168, CConditionalExpressionType}:    _CGotoState106Action,
 	{_CState168, CAssignmentExpressionType}:     _CGotoState103Action,
-	{_CState168, CExpressionType}:               _CGotoState254Action,
-	{_CState170, CRparamToken}:                  _CGotoState255Action,
-	{_CState170, CCommaToken}:                   _CGotoState187Action,
-	{_CState171, CLparamToken}:                  _CGotoState256Action,
-	{_CState171, CLbraceToken}:                  _CGotoState224Action,
-	{_CState171, CMulToken}:                     _CGotoState14Action,
-	{_CState171, CPointerType}:                  _CGotoState258Action,
-	{_CState171, CAbstractDeclaratorType}:       _CGotoState257Action,
-	{_CState171, CDirectAbstractDeclaratorType}: _CGotoState228Action,
-	{_CState172, CRparamToken}:                  _CGotoState259Action,
-	{_CState174, CSemicolonToken}:               _CGotoState260Action,
-	{_CState174, CCommaToken}:                   _CGotoState187Action,
-	{_CState175, CIdentifierToken}:              _CGotoState131Action,
-	{_CState175, CConstantToken}:                _CGotoState78Action,
-	{_CState175, CStringLiteralToken}:           _CGotoState97Action,
-	{_CState175, CSizeofToken}:                  _CGotoState96Action,
-	{_CState175, CIncOpToken}:                   _CGotoState88Action,
-	{_CState175, CDecOpToken}:                   _CGotoState80Action,
+	{_CState168, CExpressionType}:               _CGotoState110Action,
+	{_CState168, CExpressionStatementType}:      _CGotoState256Action,
+	{_CState169, ';'}:                           _CGotoState257Action,
+	{_CState170, CIdentifierToken}:              _CGotoState93Action,
+	{_CState170, CConstantToken}:                _CGotoState86Action,
+	{_CState170, CStringLiteralToken}:           _CGotoState98Action,
+	{_CState170, CSizeofToken}:                  _CGotoState97Action,
+	{_CState170, CIncOpToken}:                   _CGotoState95Action,
+	{_CState170, CDecOpToken}:                   _CGotoState88Action,
+	{_CState170, CCaseToken}:                    _CGotoState85Action,
+	{_CState170, CDefaultToken}:                 _CGotoState89Action,
+	{_CState170, CIfToken}:                      _CGotoState94Action,
+	{_CState170, CSwitchToken}:                  _CGotoState99Action,
+	{_CState170, CWhileToken}:                   _CGotoState100Action,
+	{_CState170, CDoToken}:                      _CGotoState90Action,
+	{_CState170, CForToken}:                     _CGotoState91Action,
+	{_CState170, CGotoToken}:                    _CGotoState92Action,
+	{_CState170, CContinueToken}:                _CGotoState87Action,
+	{_CState170, CBreakToken}:                   _CGotoState84Action,
+	{_CState170, CReturnToken}:                  _CGotoState96Action,
+	{_CState170, '('}:                           _CGotoState77Action,
+	{_CState170, '{'}:                           _CGotoState49Action,
+	{_CState170, ';'}:                           _CGotoState81Action,
+	{_CState170, '*'}:                           _CGotoState78Action,
+	{_CState170, '-'}:                           _CGotoState80Action,
+	{_CState170, '+'}:                           _CGotoState79Action,
+	{_CState170, '&'}:                           _CGotoState76Action,
+	{_CState170, '!'}:                           _CGotoState75Action,
+	{_CState170, '~'}:                           _CGotoState83Action,
+	{_CState170, CPrimaryExpressionType}:        _CGotoState120Action,
+	{_CState170, CPostfixExpressionType}:        _CGotoState119Action,
+	{_CState170, CUnaryExpressionType}:          _CGotoState126Action,
+	{_CState170, CUnaryOperatorType}:            _CGotoState127Action,
+	{_CState170, CCastExpressionType}:           _CGotoState104Action,
+	{_CState170, CMultiplicativeExpressionType}: _CGotoState118Action,
+	{_CState170, CAdditiveExpressionType}:       _CGotoState101Action,
+	{_CState170, CShiftExpressionType}:          _CGotoState123Action,
+	{_CState170, CRelationalExpressionType}:     _CGotoState121Action,
+	{_CState170, CEqualityExpressionType}:       _CGotoState108Action,
+	{_CState170, CAndExpressionType}:            _CGotoState102Action,
+	{_CState170, CExclusiveOrExpressionType}:    _CGotoState109Action,
+	{_CState170, CInclusiveOrExpressionType}:    _CGotoState112Action,
+	{_CState170, CLogicalAndExpressionType}:     _CGotoState116Action,
+	{_CState170, CLogicalOrExpressionType}:      _CGotoState117Action,
+	{_CState170, CConditionalExpressionType}:    _CGotoState106Action,
+	{_CState170, CAssignmentExpressionType}:     _CGotoState103Action,
+	{_CState170, CExpressionType}:               _CGotoState110Action,
+	{_CState170, CStatementType}:                _CGotoState258Action,
+	{_CState170, CLabeledStatementType}:         _CGotoState115Action,
+	{_CState170, CCompoundStatementType}:        _CGotoState105Action,
+	{_CState170, CExpressionStatementType}:      _CGotoState111Action,
+	{_CState170, CSelectionStatementType}:       _CGotoState122Action,
+	{_CState170, CIterationStatementType}:       _CGotoState113Action,
+	{_CState170, CJumpStatementType}:            _CGotoState114Action,
+	{_CState171, CIdentifierToken}:              _CGotoState139Action,
+	{_CState171, CConstantToken}:                _CGotoState86Action,
+	{_CState171, CStringLiteralToken}:           _CGotoState98Action,
+	{_CState171, CSizeofToken}:                  _CGotoState97Action,
+	{_CState171, CIncOpToken}:                   _CGotoState95Action,
+	{_CState171, CDecOpToken}:                   _CGotoState88Action,
+	{_CState171, '('}:                           _CGotoState77Action,
+	{_CState171, '*'}:                           _CGotoState78Action,
+	{_CState171, '-'}:                           _CGotoState80Action,
+	{_CState171, '+'}:                           _CGotoState79Action,
+	{_CState171, '&'}:                           _CGotoState76Action,
+	{_CState171, '!'}:                           _CGotoState75Action,
+	{_CState171, '~'}:                           _CGotoState83Action,
+	{_CState171, CPrimaryExpressionType}:        _CGotoState120Action,
+	{_CState171, CPostfixExpressionType}:        _CGotoState119Action,
+	{_CState171, CUnaryExpressionType}:          _CGotoState126Action,
+	{_CState171, CUnaryOperatorType}:            _CGotoState127Action,
+	{_CState171, CCastExpressionType}:           _CGotoState104Action,
+	{_CState171, CMultiplicativeExpressionType}: _CGotoState118Action,
+	{_CState171, CAdditiveExpressionType}:       _CGotoState101Action,
+	{_CState171, CShiftExpressionType}:          _CGotoState123Action,
+	{_CState171, CRelationalExpressionType}:     _CGotoState121Action,
+	{_CState171, CEqualityExpressionType}:       _CGotoState108Action,
+	{_CState171, CAndExpressionType}:            _CGotoState102Action,
+	{_CState171, CExclusiveOrExpressionType}:    _CGotoState109Action,
+	{_CState171, CInclusiveOrExpressionType}:    _CGotoState112Action,
+	{_CState171, CLogicalAndExpressionType}:     _CGotoState116Action,
+	{_CState171, CLogicalOrExpressionType}:      _CGotoState117Action,
+	{_CState171, CConditionalExpressionType}:    _CGotoState106Action,
+	{_CState171, CAssignmentExpressionType}:     _CGotoState103Action,
+	{_CState171, CExpressionType}:               _CGotoState259Action,
+	{_CState174, ';'}:                           _CGotoState260Action,
+	{_CState174, ','}:                           _CGotoState187Action,
+	{_CState175, CIdentifierToken}:              _CGotoState139Action,
+	{_CState175, CConstantToken}:                _CGotoState86Action,
+	{_CState175, CStringLiteralToken}:           _CGotoState98Action,
+	{_CState175, CSizeofToken}:                  _CGotoState97Action,
+	{_CState175, CIncOpToken}:                   _CGotoState95Action,
+	{_CState175, CDecOpToken}:                   _CGotoState88Action,
 	{_CState175, CTypeNameToken}:                _CGotoState21Action,
-	{_CState175, CCharToken}:                    _CGotoState4Action,
+	{_CState175, CCharToken}:                    _CGotoState6Action,
 	{_CState175, CShortToken}:                   _CGotoState16Action,
-	{_CState175, CIntToken}:                     _CGotoState11Action,
-	{_CState175, CLongToken}:                    _CGotoState12Action,
+	{_CState175, CIntToken}:                     _CGotoState13Action,
+	{_CState175, CLongToken}:                    _CGotoState14Action,
 	{_CState175, CSignedToken}:                  _CGotoState17Action,
 	{_CState175, CUnsignedToken}:                _CGotoState23Action,
-	{_CState175, CFloatToken}:                   _CGotoState9Action,
-	{_CState175, CDoubleToken}:                  _CGotoState6Action,
-	{_CState175, CConstToken}:                   _CGotoState5Action,
+	{_CState175, CFloatToken}:                   _CGotoState11Action,
+	{_CState175, CDoubleToken}:                  _CGotoState8Action,
+	{_CState175, CConstToken}:                   _CGotoState7Action,
 	{_CState175, CVolatileToken}:                _CGotoState25Action,
 	{_CState175, CVoidToken}:                    _CGotoState24Action,
 	{_CState175, CStructToken}:                  _CGotoState19Action,
 	{_CState175, CUnionToken}:                   _CGotoState22Action,
-	{_CState175, CEnumToken}:                    _CGotoState7Action,
-	{_CState175, CLparamToken}:                  _CGotoState89Action,
-	{_CState175, CMulToken}:                     _CGotoState91Action,
-	{_CState175, CMinusToken}:                   _CGotoState90Action,
-	{_CState175, CPlusToken}:                    _CGotoState92Action,
-	{_CState175, CAndToken}:                     _CGotoState75Action,
-	{_CState175, CExclaimToken}:                 _CGotoState83Action,
-	{_CState175, CTildaToken}:                   _CGotoState99Action,
+	{_CState175, CEnumToken}:                    _CGotoState9Action,
+	{_CState175, '('}:                           _CGotoState77Action,
+	{_CState175, '*'}:                           _CGotoState78Action,
+	{_CState175, '-'}:                           _CGotoState80Action,
+	{_CState175, '+'}:                           _CGotoState79Action,
+	{_CState175, '&'}:                           _CGotoState76Action,
+	{_CState175, '!'}:                           _CGotoState75Action,
+	{_CState175, '~'}:                           _CGotoState83Action,
 	{_CState175, CPrimaryExpressionType}:        _CGotoState120Action,
 	{_CState175, CPostfixExpressionType}:        _CGotoState119Action,
 	{_CState175, CUnaryExpressionType}:          _CGotoState126Action,
@@ -5383,27 +5354,27 @@ var _CActionTable = _CActionTableType{
 	{_CState175, CLogicalOrExpressionType}:      _CGotoState117Action,
 	{_CState175, CConditionalExpressionType}:    _CGotoState106Action,
 	{_CState175, CAssignmentExpressionType}:     _CGotoState103Action,
-	{_CState175, CExpressionType}:               _CGotoState170Action,
-	{_CState175, CTypeSpecifierType}:            _CGotoState148Action,
+	{_CState175, CExpressionType}:               _CGotoState158Action,
+	{_CState175, CTypeSpecifierType}:            _CGotoState147Action,
 	{_CState175, CStructOrUnionSpecifierType}:   _CGotoState36Action,
 	{_CState175, CStructOrUnionType}:            _CGotoState35Action,
-	{_CState175, CSpecifierQualifierListType}:   _CGotoState171Action,
+	{_CState175, CSpecifierQualifierListType}:   _CGotoState159Action,
 	{_CState175, CEnumSpecifierType}:            _CGotoState30Action,
-	{_CState175, CTypeQualifierType}:            _CGotoState147Action,
+	{_CState175, CTypeQualifierType}:            _CGotoState146Action,
 	{_CState175, CTypeNameType}:                 _CGotoState261Action,
-	{_CState177, CIdentifierToken}:              _CGotoState131Action,
-	{_CState177, CConstantToken}:                _CGotoState78Action,
-	{_CState177, CStringLiteralToken}:           _CGotoState97Action,
-	{_CState177, CSizeofToken}:                  _CGotoState96Action,
-	{_CState177, CIncOpToken}:                   _CGotoState88Action,
-	{_CState177, CDecOpToken}:                   _CGotoState80Action,
-	{_CState177, CLparamToken}:                  _CGotoState89Action,
-	{_CState177, CMulToken}:                     _CGotoState91Action,
-	{_CState177, CMinusToken}:                   _CGotoState90Action,
-	{_CState177, CPlusToken}:                    _CGotoState92Action,
-	{_CState177, CAndToken}:                     _CGotoState75Action,
-	{_CState177, CExclaimToken}:                 _CGotoState83Action,
-	{_CState177, CTildaToken}:                   _CGotoState99Action,
+	{_CState177, CIdentifierToken}:              _CGotoState139Action,
+	{_CState177, CConstantToken}:                _CGotoState86Action,
+	{_CState177, CStringLiteralToken}:           _CGotoState98Action,
+	{_CState177, CSizeofToken}:                  _CGotoState97Action,
+	{_CState177, CIncOpToken}:                   _CGotoState95Action,
+	{_CState177, CDecOpToken}:                   _CGotoState88Action,
+	{_CState177, '('}:                           _CGotoState77Action,
+	{_CState177, '*'}:                           _CGotoState78Action,
+	{_CState177, '-'}:                           _CGotoState80Action,
+	{_CState177, '+'}:                           _CGotoState79Action,
+	{_CState177, '&'}:                           _CGotoState76Action,
+	{_CState177, '!'}:                           _CGotoState75Action,
+	{_CState177, '~'}:                           _CGotoState83Action,
 	{_CState177, CPrimaryExpressionType}:        _CGotoState120Action,
 	{_CState177, CPostfixExpressionType}:        _CGotoState119Action,
 	{_CState177, CUnaryExpressionType}:          _CGotoState126Action,
@@ -5422,19 +5393,19 @@ var _CActionTable = _CActionTableType{
 	{_CState177, CConditionalExpressionType}:    _CGotoState106Action,
 	{_CState177, CAssignmentExpressionType}:     _CGotoState103Action,
 	{_CState177, CExpressionType}:               _CGotoState262Action,
-	{_CState178, CIdentifierToken}:              _CGotoState131Action,
-	{_CState178, CConstantToken}:                _CGotoState78Action,
-	{_CState178, CStringLiteralToken}:           _CGotoState97Action,
-	{_CState178, CSizeofToken}:                  _CGotoState96Action,
-	{_CState178, CIncOpToken}:                   _CGotoState88Action,
-	{_CState178, CDecOpToken}:                   _CGotoState80Action,
-	{_CState178, CLparamToken}:                  _CGotoState89Action,
-	{_CState178, CMulToken}:                     _CGotoState91Action,
-	{_CState178, CMinusToken}:                   _CGotoState90Action,
-	{_CState178, CPlusToken}:                    _CGotoState92Action,
-	{_CState178, CAndToken}:                     _CGotoState75Action,
-	{_CState178, CExclaimToken}:                 _CGotoState83Action,
-	{_CState178, CTildaToken}:                   _CGotoState99Action,
+	{_CState178, CIdentifierToken}:              _CGotoState139Action,
+	{_CState178, CConstantToken}:                _CGotoState86Action,
+	{_CState178, CStringLiteralToken}:           _CGotoState98Action,
+	{_CState178, CSizeofToken}:                  _CGotoState97Action,
+	{_CState178, CIncOpToken}:                   _CGotoState95Action,
+	{_CState178, CDecOpToken}:                   _CGotoState88Action,
+	{_CState178, '('}:                           _CGotoState77Action,
+	{_CState178, '*'}:                           _CGotoState78Action,
+	{_CState178, '-'}:                           _CGotoState80Action,
+	{_CState178, '+'}:                           _CGotoState79Action,
+	{_CState178, '&'}:                           _CGotoState76Action,
+	{_CState178, '!'}:                           _CGotoState75Action,
+	{_CState178, '~'}:                           _CGotoState83Action,
 	{_CState178, CPrimaryExpressionType}:        _CGotoState120Action,
 	{_CState178, CPostfixExpressionType}:        _CGotoState119Action,
 	{_CState178, CUnaryExpressionType}:          _CGotoState126Action,
@@ -5453,60 +5424,60 @@ var _CActionTable = _CActionTableType{
 	{_CState178, CConditionalExpressionType}:    _CGotoState106Action,
 	{_CState178, CAssignmentExpressionType}:     _CGotoState103Action,
 	{_CState178, CExpressionType}:               _CGotoState263Action,
-	{_CState179, CIdentifierToken}:              _CGotoState131Action,
-	{_CState179, CConstantToken}:                _CGotoState78Action,
-	{_CState179, CStringLiteralToken}:           _CGotoState97Action,
-	{_CState179, CSizeofToken}:                  _CGotoState96Action,
-	{_CState179, CIncOpToken}:                   _CGotoState88Action,
-	{_CState179, CDecOpToken}:                   _CGotoState80Action,
-	{_CState179, CLparamToken}:                  _CGotoState89Action,
-	{_CState179, CMulToken}:                     _CGotoState91Action,
-	{_CState179, CMinusToken}:                   _CGotoState90Action,
-	{_CState179, CPlusToken}:                    _CGotoState92Action,
-	{_CState179, CAndToken}:                     _CGotoState75Action,
-	{_CState179, CExclaimToken}:                 _CGotoState83Action,
-	{_CState179, CTildaToken}:                   _CGotoState99Action,
+	{_CState179, CIdentifierToken}:              _CGotoState139Action,
+	{_CState179, CConstantToken}:                _CGotoState86Action,
+	{_CState179, CStringLiteralToken}:           _CGotoState98Action,
+	{_CState179, CSizeofToken}:                  _CGotoState97Action,
+	{_CState179, CIncOpToken}:                   _CGotoState95Action,
+	{_CState179, CDecOpToken}:                   _CGotoState88Action,
+	{_CState179, '('}:                           _CGotoState77Action,
+	{_CState179, '*'}:                           _CGotoState78Action,
+	{_CState179, '-'}:                           _CGotoState80Action,
+	{_CState179, '+'}:                           _CGotoState79Action,
+	{_CState179, '&'}:                           _CGotoState76Action,
+	{_CState179, '!'}:                           _CGotoState75Action,
+	{_CState179, '~'}:                           _CGotoState83Action,
 	{_CState179, CPrimaryExpressionType}:        _CGotoState120Action,
 	{_CState179, CPostfixExpressionType}:        _CGotoState119Action,
-	{_CState179, CUnaryExpressionType}:          _CGotoState135Action,
+	{_CState179, CUnaryExpressionType}:          _CGotoState142Action,
 	{_CState179, CUnaryOperatorType}:            _CGotoState127Action,
 	{_CState179, CCastExpressionType}:           _CGotoState104Action,
 	{_CState179, CMultiplicativeExpressionType}: _CGotoState264Action,
-	{_CState180, CIdentifierToken}:              _CGotoState131Action,
-	{_CState180, CConstantToken}:                _CGotoState78Action,
-	{_CState180, CStringLiteralToken}:           _CGotoState97Action,
-	{_CState180, CSizeofToken}:                  _CGotoState96Action,
-	{_CState180, CIncOpToken}:                   _CGotoState88Action,
-	{_CState180, CDecOpToken}:                   _CGotoState80Action,
-	{_CState180, CLparamToken}:                  _CGotoState89Action,
-	{_CState180, CMulToken}:                     _CGotoState91Action,
-	{_CState180, CMinusToken}:                   _CGotoState90Action,
-	{_CState180, CPlusToken}:                    _CGotoState92Action,
-	{_CState180, CAndToken}:                     _CGotoState75Action,
-	{_CState180, CExclaimToken}:                 _CGotoState83Action,
-	{_CState180, CTildaToken}:                   _CGotoState99Action,
+	{_CState180, CIdentifierToken}:              _CGotoState139Action,
+	{_CState180, CConstantToken}:                _CGotoState86Action,
+	{_CState180, CStringLiteralToken}:           _CGotoState98Action,
+	{_CState180, CSizeofToken}:                  _CGotoState97Action,
+	{_CState180, CIncOpToken}:                   _CGotoState95Action,
+	{_CState180, CDecOpToken}:                   _CGotoState88Action,
+	{_CState180, '('}:                           _CGotoState77Action,
+	{_CState180, '*'}:                           _CGotoState78Action,
+	{_CState180, '-'}:                           _CGotoState80Action,
+	{_CState180, '+'}:                           _CGotoState79Action,
+	{_CState180, '&'}:                           _CGotoState76Action,
+	{_CState180, '!'}:                           _CGotoState75Action,
+	{_CState180, '~'}:                           _CGotoState83Action,
 	{_CState180, CPrimaryExpressionType}:        _CGotoState120Action,
 	{_CState180, CPostfixExpressionType}:        _CGotoState119Action,
-	{_CState180, CUnaryExpressionType}:          _CGotoState135Action,
+	{_CState180, CUnaryExpressionType}:          _CGotoState142Action,
 	{_CState180, CUnaryOperatorType}:            _CGotoState127Action,
 	{_CState180, CCastExpressionType}:           _CGotoState104Action,
 	{_CState180, CMultiplicativeExpressionType}: _CGotoState265Action,
-	{_CState181, CIdentifierToken}:              _CGotoState131Action,
-	{_CState181, CConstantToken}:                _CGotoState78Action,
-	{_CState181, CStringLiteralToken}:           _CGotoState97Action,
-	{_CState181, CSizeofToken}:                  _CGotoState96Action,
-	{_CState181, CIncOpToken}:                   _CGotoState88Action,
-	{_CState181, CDecOpToken}:                   _CGotoState80Action,
-	{_CState181, CLparamToken}:                  _CGotoState89Action,
-	{_CState181, CMulToken}:                     _CGotoState91Action,
-	{_CState181, CMinusToken}:                   _CGotoState90Action,
-	{_CState181, CPlusToken}:                    _CGotoState92Action,
-	{_CState181, CAndToken}:                     _CGotoState75Action,
-	{_CState181, CExclaimToken}:                 _CGotoState83Action,
-	{_CState181, CTildaToken}:                   _CGotoState99Action,
+	{_CState181, CIdentifierToken}:              _CGotoState139Action,
+	{_CState181, CConstantToken}:                _CGotoState86Action,
+	{_CState181, CStringLiteralToken}:           _CGotoState98Action,
+	{_CState181, CSizeofToken}:                  _CGotoState97Action,
+	{_CState181, CIncOpToken}:                   _CGotoState95Action,
+	{_CState181, CDecOpToken}:                   _CGotoState88Action,
+	{_CState181, '('}:                           _CGotoState77Action,
+	{_CState181, '*'}:                           _CGotoState78Action,
+	{_CState181, '-'}:                           _CGotoState80Action,
+	{_CState181, '+'}:                           _CGotoState79Action,
+	{_CState181, '&'}:                           _CGotoState76Action,
+	{_CState181, '!'}:                           _CGotoState75Action,
+	{_CState181, '~'}:                           _CGotoState83Action,
 	{_CState181, CPrimaryExpressionType}:        _CGotoState120Action,
 	{_CState181, CPostfixExpressionType}:        _CGotoState119Action,
-	{_CState181, CUnaryExpressionType}:          _CGotoState135Action,
+	{_CState181, CUnaryExpressionType}:          _CGotoState142Action,
 	{_CState181, CUnaryOperatorType}:            _CGotoState127Action,
 	{_CState181, CCastExpressionType}:           _CGotoState104Action,
 	{_CState181, CMultiplicativeExpressionType}: _CGotoState118Action,
@@ -5514,33 +5485,33 @@ var _CActionTable = _CActionTableType{
 	{_CState181, CShiftExpressionType}:          _CGotoState123Action,
 	{_CState181, CRelationalExpressionType}:     _CGotoState121Action,
 	{_CState181, CEqualityExpressionType}:       _CGotoState266Action,
-	{_CState183, CIdentifierToken}:              _CGotoState86Action,
-	{_CState183, CConstantToken}:                _CGotoState78Action,
-	{_CState183, CStringLiteralToken}:           _CGotoState97Action,
-	{_CState183, CSizeofToken}:                  _CGotoState96Action,
-	{_CState183, CIncOpToken}:                   _CGotoState88Action,
-	{_CState183, CDecOpToken}:                   _CGotoState80Action,
-	{_CState183, CCaseToken}:                    _CGotoState77Action,
-	{_CState183, CDefaultToken}:                 _CGotoState81Action,
-	{_CState183, CIfToken}:                      _CGotoState87Action,
-	{_CState183, CSwitchToken}:                  _CGotoState98Action,
+	{_CState183, CIdentifierToken}:              _CGotoState93Action,
+	{_CState183, CConstantToken}:                _CGotoState86Action,
+	{_CState183, CStringLiteralToken}:           _CGotoState98Action,
+	{_CState183, CSizeofToken}:                  _CGotoState97Action,
+	{_CState183, CIncOpToken}:                   _CGotoState95Action,
+	{_CState183, CDecOpToken}:                   _CGotoState88Action,
+	{_CState183, CCaseToken}:                    _CGotoState85Action,
+	{_CState183, CDefaultToken}:                 _CGotoState89Action,
+	{_CState183, CIfToken}:                      _CGotoState94Action,
+	{_CState183, CSwitchToken}:                  _CGotoState99Action,
 	{_CState183, CWhileToken}:                   _CGotoState100Action,
-	{_CState183, CDoToken}:                      _CGotoState82Action,
-	{_CState183, CForToken}:                     _CGotoState84Action,
-	{_CState183, CGotoToken}:                    _CGotoState85Action,
-	{_CState183, CContinueToken}:                _CGotoState79Action,
-	{_CState183, CBreakToken}:                   _CGotoState76Action,
-	{_CState183, CReturnToken}:                  _CGotoState94Action,
-	{_CState183, CLparamToken}:                  _CGotoState89Action,
-	{_CState183, CLcurlToken}:                   _CGotoState49Action,
-	{_CState183, CRcurlToken}:                   _CGotoState267Action,
-	{_CState183, CSemicolonToken}:               _CGotoState95Action,
-	{_CState183, CMulToken}:                     _CGotoState91Action,
-	{_CState183, CMinusToken}:                   _CGotoState90Action,
-	{_CState183, CPlusToken}:                    _CGotoState92Action,
-	{_CState183, CAndToken}:                     _CGotoState75Action,
-	{_CState183, CExclaimToken}:                 _CGotoState83Action,
-	{_CState183, CTildaToken}:                   _CGotoState99Action,
+	{_CState183, CDoToken}:                      _CGotoState90Action,
+	{_CState183, CForToken}:                     _CGotoState91Action,
+	{_CState183, CGotoToken}:                    _CGotoState92Action,
+	{_CState183, CContinueToken}:                _CGotoState87Action,
+	{_CState183, CBreakToken}:                   _CGotoState84Action,
+	{_CState183, CReturnToken}:                  _CGotoState96Action,
+	{_CState183, '('}:                           _CGotoState77Action,
+	{_CState183, '{'}:                           _CGotoState49Action,
+	{_CState183, '}'}:                           _CGotoState267Action,
+	{_CState183, ';'}:                           _CGotoState81Action,
+	{_CState183, '*'}:                           _CGotoState78Action,
+	{_CState183, '-'}:                           _CGotoState80Action,
+	{_CState183, '+'}:                           _CGotoState79Action,
+	{_CState183, '&'}:                           _CGotoState76Action,
+	{_CState183, '!'}:                           _CGotoState75Action,
+	{_CState183, '~'}:                           _CGotoState83Action,
 	{_CState183, CPrimaryExpressionType}:        _CGotoState120Action,
 	{_CState183, CPostfixExpressionType}:        _CGotoState119Action,
 	{_CState183, CUnaryExpressionType}:          _CGotoState126Action,
@@ -5566,66 +5537,66 @@ var _CActionTable = _CActionTableType{
 	{_CState183, CSelectionStatementType}:       _CGotoState122Action,
 	{_CState183, CIterationStatementType}:       _CGotoState113Action,
 	{_CState183, CJumpStatementType}:            _CGotoState114Action,
-	{_CState184, CIdentifierToken}:              _CGotoState131Action,
-	{_CState184, CConstantToken}:                _CGotoState78Action,
-	{_CState184, CStringLiteralToken}:           _CGotoState97Action,
-	{_CState184, CSizeofToken}:                  _CGotoState96Action,
-	{_CState184, CIncOpToken}:                   _CGotoState88Action,
-	{_CState184, CDecOpToken}:                   _CGotoState80Action,
-	{_CState184, CLparamToken}:                  _CGotoState89Action,
-	{_CState184, CMulToken}:                     _CGotoState91Action,
-	{_CState184, CMinusToken}:                   _CGotoState90Action,
-	{_CState184, CPlusToken}:                    _CGotoState92Action,
-	{_CState184, CAndToken}:                     _CGotoState75Action,
-	{_CState184, CExclaimToken}:                 _CGotoState83Action,
-	{_CState184, CTildaToken}:                   _CGotoState99Action,
+	{_CState184, CIdentifierToken}:              _CGotoState139Action,
+	{_CState184, CConstantToken}:                _CGotoState86Action,
+	{_CState184, CStringLiteralToken}:           _CGotoState98Action,
+	{_CState184, CSizeofToken}:                  _CGotoState97Action,
+	{_CState184, CIncOpToken}:                   _CGotoState95Action,
+	{_CState184, CDecOpToken}:                   _CGotoState88Action,
+	{_CState184, '('}:                           _CGotoState77Action,
+	{_CState184, '*'}:                           _CGotoState78Action,
+	{_CState184, '-'}:                           _CGotoState80Action,
+	{_CState184, '+'}:                           _CGotoState79Action,
+	{_CState184, '&'}:                           _CGotoState76Action,
+	{_CState184, '!'}:                           _CGotoState75Action,
+	{_CState184, '~'}:                           _CGotoState83Action,
 	{_CState184, CPrimaryExpressionType}:        _CGotoState120Action,
 	{_CState184, CPostfixExpressionType}:        _CGotoState119Action,
-	{_CState184, CUnaryExpressionType}:          _CGotoState135Action,
+	{_CState184, CUnaryExpressionType}:          _CGotoState142Action,
 	{_CState184, CUnaryOperatorType}:            _CGotoState127Action,
 	{_CState184, CCastExpressionType}:           _CGotoState104Action,
 	{_CState184, CMultiplicativeExpressionType}: _CGotoState118Action,
 	{_CState184, CAdditiveExpressionType}:       _CGotoState101Action,
 	{_CState184, CShiftExpressionType}:          _CGotoState123Action,
 	{_CState184, CRelationalExpressionType}:     _CGotoState268Action,
-	{_CState185, CIdentifierToken}:              _CGotoState131Action,
-	{_CState185, CConstantToken}:                _CGotoState78Action,
-	{_CState185, CStringLiteralToken}:           _CGotoState97Action,
-	{_CState185, CSizeofToken}:                  _CGotoState96Action,
-	{_CState185, CIncOpToken}:                   _CGotoState88Action,
-	{_CState185, CDecOpToken}:                   _CGotoState80Action,
-	{_CState185, CLparamToken}:                  _CGotoState89Action,
-	{_CState185, CMulToken}:                     _CGotoState91Action,
-	{_CState185, CMinusToken}:                   _CGotoState90Action,
-	{_CState185, CPlusToken}:                    _CGotoState92Action,
-	{_CState185, CAndToken}:                     _CGotoState75Action,
-	{_CState185, CExclaimToken}:                 _CGotoState83Action,
-	{_CState185, CTildaToken}:                   _CGotoState99Action,
+	{_CState185, CIdentifierToken}:              _CGotoState139Action,
+	{_CState185, CConstantToken}:                _CGotoState86Action,
+	{_CState185, CStringLiteralToken}:           _CGotoState98Action,
+	{_CState185, CSizeofToken}:                  _CGotoState97Action,
+	{_CState185, CIncOpToken}:                   _CGotoState95Action,
+	{_CState185, CDecOpToken}:                   _CGotoState88Action,
+	{_CState185, '('}:                           _CGotoState77Action,
+	{_CState185, '*'}:                           _CGotoState78Action,
+	{_CState185, '-'}:                           _CGotoState80Action,
+	{_CState185, '+'}:                           _CGotoState79Action,
+	{_CState185, '&'}:                           _CGotoState76Action,
+	{_CState185, '!'}:                           _CGotoState75Action,
+	{_CState185, '~'}:                           _CGotoState83Action,
 	{_CState185, CPrimaryExpressionType}:        _CGotoState120Action,
 	{_CState185, CPostfixExpressionType}:        _CGotoState119Action,
-	{_CState185, CUnaryExpressionType}:          _CGotoState135Action,
+	{_CState185, CUnaryExpressionType}:          _CGotoState142Action,
 	{_CState185, CUnaryOperatorType}:            _CGotoState127Action,
 	{_CState185, CCastExpressionType}:           _CGotoState104Action,
 	{_CState185, CMultiplicativeExpressionType}: _CGotoState118Action,
 	{_CState185, CAdditiveExpressionType}:       _CGotoState101Action,
 	{_CState185, CShiftExpressionType}:          _CGotoState123Action,
 	{_CState185, CRelationalExpressionType}:     _CGotoState269Action,
-	{_CState186, CIdentifierToken}:              _CGotoState131Action,
-	{_CState186, CConstantToken}:                _CGotoState78Action,
-	{_CState186, CStringLiteralToken}:           _CGotoState97Action,
-	{_CState186, CSizeofToken}:                  _CGotoState96Action,
-	{_CState186, CIncOpToken}:                   _CGotoState88Action,
-	{_CState186, CDecOpToken}:                   _CGotoState80Action,
-	{_CState186, CLparamToken}:                  _CGotoState89Action,
-	{_CState186, CMulToken}:                     _CGotoState91Action,
-	{_CState186, CMinusToken}:                   _CGotoState90Action,
-	{_CState186, CPlusToken}:                    _CGotoState92Action,
-	{_CState186, CAndToken}:                     _CGotoState75Action,
-	{_CState186, CExclaimToken}:                 _CGotoState83Action,
-	{_CState186, CTildaToken}:                   _CGotoState99Action,
+	{_CState186, CIdentifierToken}:              _CGotoState139Action,
+	{_CState186, CConstantToken}:                _CGotoState86Action,
+	{_CState186, CStringLiteralToken}:           _CGotoState98Action,
+	{_CState186, CSizeofToken}:                  _CGotoState97Action,
+	{_CState186, CIncOpToken}:                   _CGotoState95Action,
+	{_CState186, CDecOpToken}:                   _CGotoState88Action,
+	{_CState186, '('}:                           _CGotoState77Action,
+	{_CState186, '*'}:                           _CGotoState78Action,
+	{_CState186, '-'}:                           _CGotoState80Action,
+	{_CState186, '+'}:                           _CGotoState79Action,
+	{_CState186, '&'}:                           _CGotoState76Action,
+	{_CState186, '!'}:                           _CGotoState75Action,
+	{_CState186, '~'}:                           _CGotoState83Action,
 	{_CState186, CPrimaryExpressionType}:        _CGotoState120Action,
 	{_CState186, CPostfixExpressionType}:        _CGotoState119Action,
-	{_CState186, CUnaryExpressionType}:          _CGotoState135Action,
+	{_CState186, CUnaryExpressionType}:          _CGotoState142Action,
 	{_CState186, CUnaryOperatorType}:            _CGotoState127Action,
 	{_CState186, CCastExpressionType}:           _CGotoState104Action,
 	{_CState186, CMultiplicativeExpressionType}: _CGotoState118Action,
@@ -5634,19 +5605,19 @@ var _CActionTable = _CActionTableType{
 	{_CState186, CRelationalExpressionType}:     _CGotoState121Action,
 	{_CState186, CEqualityExpressionType}:       _CGotoState108Action,
 	{_CState186, CAndExpressionType}:            _CGotoState270Action,
-	{_CState187, CIdentifierToken}:              _CGotoState131Action,
-	{_CState187, CConstantToken}:                _CGotoState78Action,
-	{_CState187, CStringLiteralToken}:           _CGotoState97Action,
-	{_CState187, CSizeofToken}:                  _CGotoState96Action,
-	{_CState187, CIncOpToken}:                   _CGotoState88Action,
-	{_CState187, CDecOpToken}:                   _CGotoState80Action,
-	{_CState187, CLparamToken}:                  _CGotoState89Action,
-	{_CState187, CMulToken}:                     _CGotoState91Action,
-	{_CState187, CMinusToken}:                   _CGotoState90Action,
-	{_CState187, CPlusToken}:                    _CGotoState92Action,
-	{_CState187, CAndToken}:                     _CGotoState75Action,
-	{_CState187, CExclaimToken}:                 _CGotoState83Action,
-	{_CState187, CTildaToken}:                   _CGotoState99Action,
+	{_CState187, CIdentifierToken}:              _CGotoState139Action,
+	{_CState187, CConstantToken}:                _CGotoState86Action,
+	{_CState187, CStringLiteralToken}:           _CGotoState98Action,
+	{_CState187, CSizeofToken}:                  _CGotoState97Action,
+	{_CState187, CIncOpToken}:                   _CGotoState95Action,
+	{_CState187, CDecOpToken}:                   _CGotoState88Action,
+	{_CState187, '('}:                           _CGotoState77Action,
+	{_CState187, '*'}:                           _CGotoState78Action,
+	{_CState187, '-'}:                           _CGotoState80Action,
+	{_CState187, '+'}:                           _CGotoState79Action,
+	{_CState187, '&'}:                           _CGotoState76Action,
+	{_CState187, '!'}:                           _CGotoState75Action,
+	{_CState187, '~'}:                           _CGotoState83Action,
 	{_CState187, CPrimaryExpressionType}:        _CGotoState120Action,
 	{_CState187, CPostfixExpressionType}:        _CGotoState119Action,
 	{_CState187, CUnaryExpressionType}:          _CGotoState126Action,
@@ -5664,22 +5635,22 @@ var _CActionTable = _CActionTableType{
 	{_CState187, CLogicalOrExpressionType}:      _CGotoState117Action,
 	{_CState187, CConditionalExpressionType}:    _CGotoState106Action,
 	{_CState187, CAssignmentExpressionType}:     _CGotoState271Action,
-	{_CState189, CIdentifierToken}:              _CGotoState131Action,
-	{_CState189, CConstantToken}:                _CGotoState78Action,
-	{_CState189, CStringLiteralToken}:           _CGotoState97Action,
-	{_CState189, CSizeofToken}:                  _CGotoState96Action,
-	{_CState189, CIncOpToken}:                   _CGotoState88Action,
-	{_CState189, CDecOpToken}:                   _CGotoState80Action,
-	{_CState189, CLparamToken}:                  _CGotoState89Action,
-	{_CState189, CMulToken}:                     _CGotoState91Action,
-	{_CState189, CMinusToken}:                   _CGotoState90Action,
-	{_CState189, CPlusToken}:                    _CGotoState92Action,
-	{_CState189, CAndToken}:                     _CGotoState75Action,
-	{_CState189, CExclaimToken}:                 _CGotoState83Action,
-	{_CState189, CTildaToken}:                   _CGotoState99Action,
+	{_CState189, CIdentifierToken}:              _CGotoState139Action,
+	{_CState189, CConstantToken}:                _CGotoState86Action,
+	{_CState189, CStringLiteralToken}:           _CGotoState98Action,
+	{_CState189, CSizeofToken}:                  _CGotoState97Action,
+	{_CState189, CIncOpToken}:                   _CGotoState95Action,
+	{_CState189, CDecOpToken}:                   _CGotoState88Action,
+	{_CState189, '('}:                           _CGotoState77Action,
+	{_CState189, '*'}:                           _CGotoState78Action,
+	{_CState189, '-'}:                           _CGotoState80Action,
+	{_CState189, '+'}:                           _CGotoState79Action,
+	{_CState189, '&'}:                           _CGotoState76Action,
+	{_CState189, '!'}:                           _CGotoState75Action,
+	{_CState189, '~'}:                           _CGotoState83Action,
 	{_CState189, CPrimaryExpressionType}:        _CGotoState120Action,
 	{_CState189, CPostfixExpressionType}:        _CGotoState119Action,
-	{_CState189, CUnaryExpressionType}:          _CGotoState135Action,
+	{_CState189, CUnaryExpressionType}:          _CGotoState142Action,
 	{_CState189, CUnaryOperatorType}:            _CGotoState127Action,
 	{_CState189, CCastExpressionType}:           _CGotoState104Action,
 	{_CState189, CMultiplicativeExpressionType}: _CGotoState118Action,
@@ -5689,22 +5660,22 @@ var _CActionTable = _CActionTableType{
 	{_CState189, CEqualityExpressionType}:       _CGotoState108Action,
 	{_CState189, CAndExpressionType}:            _CGotoState102Action,
 	{_CState189, CExclusiveOrExpressionType}:    _CGotoState272Action,
-	{_CState190, CIdentifierToken}:              _CGotoState131Action,
-	{_CState190, CConstantToken}:                _CGotoState78Action,
-	{_CState190, CStringLiteralToken}:           _CGotoState97Action,
-	{_CState190, CSizeofToken}:                  _CGotoState96Action,
-	{_CState190, CIncOpToken}:                   _CGotoState88Action,
-	{_CState190, CDecOpToken}:                   _CGotoState80Action,
-	{_CState190, CLparamToken}:                  _CGotoState89Action,
-	{_CState190, CMulToken}:                     _CGotoState91Action,
-	{_CState190, CMinusToken}:                   _CGotoState90Action,
-	{_CState190, CPlusToken}:                    _CGotoState92Action,
-	{_CState190, CAndToken}:                     _CGotoState75Action,
-	{_CState190, CExclaimToken}:                 _CGotoState83Action,
-	{_CState190, CTildaToken}:                   _CGotoState99Action,
+	{_CState190, CIdentifierToken}:              _CGotoState139Action,
+	{_CState190, CConstantToken}:                _CGotoState86Action,
+	{_CState190, CStringLiteralToken}:           _CGotoState98Action,
+	{_CState190, CSizeofToken}:                  _CGotoState97Action,
+	{_CState190, CIncOpToken}:                   _CGotoState95Action,
+	{_CState190, CDecOpToken}:                   _CGotoState88Action,
+	{_CState190, '('}:                           _CGotoState77Action,
+	{_CState190, '*'}:                           _CGotoState78Action,
+	{_CState190, '-'}:                           _CGotoState80Action,
+	{_CState190, '+'}:                           _CGotoState79Action,
+	{_CState190, '&'}:                           _CGotoState76Action,
+	{_CState190, '!'}:                           _CGotoState75Action,
+	{_CState190, '~'}:                           _CGotoState83Action,
 	{_CState190, CPrimaryExpressionType}:        _CGotoState120Action,
 	{_CState190, CPostfixExpressionType}:        _CGotoState119Action,
-	{_CState190, CUnaryExpressionType}:          _CGotoState135Action,
+	{_CState190, CUnaryExpressionType}:          _CGotoState142Action,
 	{_CState190, CUnaryOperatorType}:            _CGotoState127Action,
 	{_CState190, CCastExpressionType}:           _CGotoState104Action,
 	{_CState190, CMultiplicativeExpressionType}: _CGotoState118Action,
@@ -5715,22 +5686,22 @@ var _CActionTable = _CActionTableType{
 	{_CState190, CAndExpressionType}:            _CGotoState102Action,
 	{_CState190, CExclusiveOrExpressionType}:    _CGotoState109Action,
 	{_CState190, CInclusiveOrExpressionType}:    _CGotoState273Action,
-	{_CState191, CIdentifierToken}:              _CGotoState131Action,
-	{_CState191, CConstantToken}:                _CGotoState78Action,
-	{_CState191, CStringLiteralToken}:           _CGotoState97Action,
-	{_CState191, CSizeofToken}:                  _CGotoState96Action,
-	{_CState191, CIncOpToken}:                   _CGotoState88Action,
-	{_CState191, CDecOpToken}:                   _CGotoState80Action,
-	{_CState191, CLparamToken}:                  _CGotoState89Action,
-	{_CState191, CMulToken}:                     _CGotoState91Action,
-	{_CState191, CMinusToken}:                   _CGotoState90Action,
-	{_CState191, CPlusToken}:                    _CGotoState92Action,
-	{_CState191, CAndToken}:                     _CGotoState75Action,
-	{_CState191, CExclaimToken}:                 _CGotoState83Action,
-	{_CState191, CTildaToken}:                   _CGotoState99Action,
+	{_CState191, CIdentifierToken}:              _CGotoState139Action,
+	{_CState191, CConstantToken}:                _CGotoState86Action,
+	{_CState191, CStringLiteralToken}:           _CGotoState98Action,
+	{_CState191, CSizeofToken}:                  _CGotoState97Action,
+	{_CState191, CIncOpToken}:                   _CGotoState95Action,
+	{_CState191, CDecOpToken}:                   _CGotoState88Action,
+	{_CState191, '('}:                           _CGotoState77Action,
+	{_CState191, '*'}:                           _CGotoState78Action,
+	{_CState191, '-'}:                           _CGotoState80Action,
+	{_CState191, '+'}:                           _CGotoState79Action,
+	{_CState191, '&'}:                           _CGotoState76Action,
+	{_CState191, '!'}:                           _CGotoState75Action,
+	{_CState191, '~'}:                           _CGotoState83Action,
 	{_CState191, CPrimaryExpressionType}:        _CGotoState120Action,
 	{_CState191, CPostfixExpressionType}:        _CGotoState119Action,
-	{_CState191, CUnaryExpressionType}:          _CGotoState135Action,
+	{_CState191, CUnaryExpressionType}:          _CGotoState126Action,
 	{_CState191, CUnaryOperatorType}:            _CGotoState127Action,
 	{_CState191, CCastExpressionType}:           _CGotoState104Action,
 	{_CState191, CMultiplicativeExpressionType}: _CGotoState118Action,
@@ -5741,23 +5712,27 @@ var _CActionTable = _CActionTableType{
 	{_CState191, CAndExpressionType}:            _CGotoState102Action,
 	{_CState191, CExclusiveOrExpressionType}:    _CGotoState109Action,
 	{_CState191, CInclusiveOrExpressionType}:    _CGotoState112Action,
-	{_CState191, CLogicalAndExpressionType}:     _CGotoState274Action,
-	{_CState192, CIdentifierToken}:              _CGotoState131Action,
-	{_CState192, CConstantToken}:                _CGotoState78Action,
-	{_CState192, CStringLiteralToken}:           _CGotoState97Action,
-	{_CState192, CSizeofToken}:                  _CGotoState96Action,
-	{_CState192, CIncOpToken}:                   _CGotoState88Action,
-	{_CState192, CDecOpToken}:                   _CGotoState80Action,
-	{_CState192, CLparamToken}:                  _CGotoState89Action,
-	{_CState192, CMulToken}:                     _CGotoState91Action,
-	{_CState192, CMinusToken}:                   _CGotoState90Action,
-	{_CState192, CPlusToken}:                    _CGotoState92Action,
-	{_CState192, CAndToken}:                     _CGotoState75Action,
-	{_CState192, CExclaimToken}:                 _CGotoState83Action,
-	{_CState192, CTildaToken}:                   _CGotoState99Action,
+	{_CState191, CLogicalAndExpressionType}:     _CGotoState116Action,
+	{_CState191, CLogicalOrExpressionType}:      _CGotoState117Action,
+	{_CState191, CConditionalExpressionType}:    _CGotoState106Action,
+	{_CState191, CAssignmentExpressionType}:     _CGotoState103Action,
+	{_CState191, CExpressionType}:               _CGotoState274Action,
+	{_CState192, CIdentifierToken}:              _CGotoState139Action,
+	{_CState192, CConstantToken}:                _CGotoState86Action,
+	{_CState192, CStringLiteralToken}:           _CGotoState98Action,
+	{_CState192, CSizeofToken}:                  _CGotoState97Action,
+	{_CState192, CIncOpToken}:                   _CGotoState95Action,
+	{_CState192, CDecOpToken}:                   _CGotoState88Action,
+	{_CState192, '('}:                           _CGotoState77Action,
+	{_CState192, '*'}:                           _CGotoState78Action,
+	{_CState192, '-'}:                           _CGotoState80Action,
+	{_CState192, '+'}:                           _CGotoState79Action,
+	{_CState192, '&'}:                           _CGotoState76Action,
+	{_CState192, '!'}:                           _CGotoState75Action,
+	{_CState192, '~'}:                           _CGotoState83Action,
 	{_CState192, CPrimaryExpressionType}:        _CGotoState120Action,
 	{_CState192, CPostfixExpressionType}:        _CGotoState119Action,
-	{_CState192, CUnaryExpressionType}:          _CGotoState126Action,
+	{_CState192, CUnaryExpressionType}:          _CGotoState142Action,
 	{_CState192, CUnaryOperatorType}:            _CGotoState127Action,
 	{_CState192, CCastExpressionType}:           _CGotoState104Action,
 	{_CState192, CMultiplicativeExpressionType}: _CGotoState118Action,
@@ -5768,267 +5743,263 @@ var _CActionTable = _CActionTableType{
 	{_CState192, CAndExpressionType}:            _CGotoState102Action,
 	{_CState192, CExclusiveOrExpressionType}:    _CGotoState109Action,
 	{_CState192, CInclusiveOrExpressionType}:    _CGotoState112Action,
-	{_CState192, CLogicalAndExpressionType}:     _CGotoState116Action,
-	{_CState192, CLogicalOrExpressionType}:      _CGotoState117Action,
-	{_CState192, CConditionalExpressionType}:    _CGotoState106Action,
-	{_CState192, CAssignmentExpressionType}:     _CGotoState103Action,
-	{_CState192, CExpressionType}:               _CGotoState275Action,
-	{_CState193, CIdentifierToken}:              _CGotoState131Action,
-	{_CState193, CConstantToken}:                _CGotoState78Action,
-	{_CState193, CStringLiteralToken}:           _CGotoState97Action,
-	{_CState193, CSizeofToken}:                  _CGotoState96Action,
-	{_CState193, CIncOpToken}:                   _CGotoState88Action,
-	{_CState193, CDecOpToken}:                   _CGotoState80Action,
-	{_CState193, CLparamToken}:                  _CGotoState89Action,
-	{_CState193, CMulToken}:                     _CGotoState91Action,
-	{_CState193, CMinusToken}:                   _CGotoState90Action,
-	{_CState193, CPlusToken}:                    _CGotoState92Action,
-	{_CState193, CAndToken}:                     _CGotoState75Action,
-	{_CState193, CExclaimToken}:                 _CGotoState83Action,
-	{_CState193, CTildaToken}:                   _CGotoState99Action,
+	{_CState192, CLogicalAndExpressionType}:     _CGotoState275Action,
+	{_CState193, CIdentifierToken}:              _CGotoState139Action,
+	{_CState193, CConstantToken}:                _CGotoState86Action,
+	{_CState193, CStringLiteralToken}:           _CGotoState98Action,
+	{_CState193, CSizeofToken}:                  _CGotoState97Action,
+	{_CState193, CIncOpToken}:                   _CGotoState95Action,
+	{_CState193, CDecOpToken}:                   _CGotoState88Action,
+	{_CState193, '('}:                           _CGotoState77Action,
+	{_CState193, '*'}:                           _CGotoState78Action,
+	{_CState193, '-'}:                           _CGotoState80Action,
+	{_CState193, '+'}:                           _CGotoState79Action,
+	{_CState193, '&'}:                           _CGotoState76Action,
+	{_CState193, '!'}:                           _CGotoState75Action,
+	{_CState193, '~'}:                           _CGotoState83Action,
 	{_CState193, CPrimaryExpressionType}:        _CGotoState120Action,
 	{_CState193, CPostfixExpressionType}:        _CGotoState119Action,
-	{_CState193, CUnaryExpressionType}:          _CGotoState135Action,
+	{_CState193, CUnaryExpressionType}:          _CGotoState142Action,
 	{_CState193, CUnaryOperatorType}:            _CGotoState127Action,
 	{_CState193, CCastExpressionType}:           _CGotoState276Action,
-	{_CState194, CIdentifierToken}:              _CGotoState131Action,
-	{_CState194, CConstantToken}:                _CGotoState78Action,
-	{_CState194, CStringLiteralToken}:           _CGotoState97Action,
-	{_CState194, CSizeofToken}:                  _CGotoState96Action,
-	{_CState194, CIncOpToken}:                   _CGotoState88Action,
-	{_CState194, CDecOpToken}:                   _CGotoState80Action,
-	{_CState194, CLparamToken}:                  _CGotoState89Action,
-	{_CState194, CMulToken}:                     _CGotoState91Action,
-	{_CState194, CMinusToken}:                   _CGotoState90Action,
-	{_CState194, CPlusToken}:                    _CGotoState92Action,
-	{_CState194, CAndToken}:                     _CGotoState75Action,
-	{_CState194, CExclaimToken}:                 _CGotoState83Action,
-	{_CState194, CTildaToken}:                   _CGotoState99Action,
+	{_CState194, CIdentifierToken}:              _CGotoState139Action,
+	{_CState194, CConstantToken}:                _CGotoState86Action,
+	{_CState194, CStringLiteralToken}:           _CGotoState98Action,
+	{_CState194, CSizeofToken}:                  _CGotoState97Action,
+	{_CState194, CIncOpToken}:                   _CGotoState95Action,
+	{_CState194, CDecOpToken}:                   _CGotoState88Action,
+	{_CState194, '('}:                           _CGotoState77Action,
+	{_CState194, '*'}:                           _CGotoState78Action,
+	{_CState194, '-'}:                           _CGotoState80Action,
+	{_CState194, '+'}:                           _CGotoState79Action,
+	{_CState194, '&'}:                           _CGotoState76Action,
+	{_CState194, '!'}:                           _CGotoState75Action,
+	{_CState194, '~'}:                           _CGotoState83Action,
 	{_CState194, CPrimaryExpressionType}:        _CGotoState120Action,
 	{_CState194, CPostfixExpressionType}:        _CGotoState119Action,
-	{_CState194, CUnaryExpressionType}:          _CGotoState135Action,
+	{_CState194, CUnaryExpressionType}:          _CGotoState142Action,
 	{_CState194, CUnaryOperatorType}:            _CGotoState127Action,
 	{_CState194, CCastExpressionType}:           _CGotoState277Action,
-	{_CState195, CIdentifierToken}:              _CGotoState131Action,
-	{_CState195, CConstantToken}:                _CGotoState78Action,
-	{_CState195, CStringLiteralToken}:           _CGotoState97Action,
-	{_CState195, CSizeofToken}:                  _CGotoState96Action,
-	{_CState195, CIncOpToken}:                   _CGotoState88Action,
-	{_CState195, CDecOpToken}:                   _CGotoState80Action,
-	{_CState195, CLparamToken}:                  _CGotoState89Action,
-	{_CState195, CMulToken}:                     _CGotoState91Action,
-	{_CState195, CMinusToken}:                   _CGotoState90Action,
-	{_CState195, CPlusToken}:                    _CGotoState92Action,
-	{_CState195, CAndToken}:                     _CGotoState75Action,
-	{_CState195, CExclaimToken}:                 _CGotoState83Action,
-	{_CState195, CTildaToken}:                   _CGotoState99Action,
+	{_CState195, CIdentifierToken}:              _CGotoState139Action,
+	{_CState195, CConstantToken}:                _CGotoState86Action,
+	{_CState195, CStringLiteralToken}:           _CGotoState98Action,
+	{_CState195, CSizeofToken}:                  _CGotoState97Action,
+	{_CState195, CIncOpToken}:                   _CGotoState95Action,
+	{_CState195, CDecOpToken}:                   _CGotoState88Action,
+	{_CState195, '('}:                           _CGotoState77Action,
+	{_CState195, '*'}:                           _CGotoState78Action,
+	{_CState195, '-'}:                           _CGotoState80Action,
+	{_CState195, '+'}:                           _CGotoState79Action,
+	{_CState195, '&'}:                           _CGotoState76Action,
+	{_CState195, '!'}:                           _CGotoState75Action,
+	{_CState195, '~'}:                           _CGotoState83Action,
 	{_CState195, CPrimaryExpressionType}:        _CGotoState120Action,
 	{_CState195, CPostfixExpressionType}:        _CGotoState119Action,
-	{_CState195, CUnaryExpressionType}:          _CGotoState135Action,
+	{_CState195, CUnaryExpressionType}:          _CGotoState142Action,
 	{_CState195, CUnaryOperatorType}:            _CGotoState127Action,
 	{_CState195, CCastExpressionType}:           _CGotoState278Action,
-	{_CState197, CIdentifierToken}:              _CGotoState279Action,
-	{_CState199, CIdentifierToken}:              _CGotoState131Action,
-	{_CState199, CConstantToken}:                _CGotoState78Action,
-	{_CState199, CStringLiteralToken}:           _CGotoState97Action,
-	{_CState199, CSizeofToken}:                  _CGotoState96Action,
-	{_CState199, CIncOpToken}:                   _CGotoState88Action,
-	{_CState199, CDecOpToken}:                   _CGotoState80Action,
-	{_CState199, CLparamToken}:                  _CGotoState89Action,
-	{_CState199, CMulToken}:                     _CGotoState91Action,
-	{_CState199, CMinusToken}:                   _CGotoState90Action,
-	{_CState199, CPlusToken}:                    _CGotoState92Action,
-	{_CState199, CAndToken}:                     _CGotoState75Action,
-	{_CState199, CExclaimToken}:                 _CGotoState83Action,
-	{_CState199, CTildaToken}:                   _CGotoState99Action,
-	{_CState199, CPrimaryExpressionType}:        _CGotoState120Action,
-	{_CState199, CPostfixExpressionType}:        _CGotoState119Action,
-	{_CState199, CUnaryExpressionType}:          _CGotoState126Action,
-	{_CState199, CUnaryOperatorType}:            _CGotoState127Action,
-	{_CState199, CCastExpressionType}:           _CGotoState104Action,
-	{_CState199, CMultiplicativeExpressionType}: _CGotoState118Action,
-	{_CState199, CAdditiveExpressionType}:       _CGotoState101Action,
-	{_CState199, CShiftExpressionType}:          _CGotoState123Action,
-	{_CState199, CRelationalExpressionType}:     _CGotoState121Action,
-	{_CState199, CEqualityExpressionType}:       _CGotoState108Action,
-	{_CState199, CAndExpressionType}:            _CGotoState102Action,
-	{_CState199, CExclusiveOrExpressionType}:    _CGotoState109Action,
-	{_CState199, CInclusiveOrExpressionType}:    _CGotoState112Action,
-	{_CState199, CLogicalAndExpressionType}:     _CGotoState116Action,
-	{_CState199, CLogicalOrExpressionType}:      _CGotoState117Action,
-	{_CState199, CConditionalExpressionType}:    _CGotoState106Action,
-	{_CState199, CAssignmentExpressionType}:     _CGotoState103Action,
-	{_CState199, CExpressionType}:               _CGotoState280Action,
-	{_CState200, CIdentifierToken}:              _CGotoState131Action,
-	{_CState200, CConstantToken}:                _CGotoState78Action,
-	{_CState200, CStringLiteralToken}:           _CGotoState97Action,
-	{_CState200, CSizeofToken}:                  _CGotoState96Action,
-	{_CState200, CIncOpToken}:                   _CGotoState88Action,
-	{_CState200, CDecOpToken}:                   _CGotoState80Action,
-	{_CState200, CLparamToken}:                  _CGotoState89Action,
-	{_CState200, CRparamToken}:                  _CGotoState281Action,
-	{_CState200, CMulToken}:                     _CGotoState91Action,
-	{_CState200, CMinusToken}:                   _CGotoState90Action,
-	{_CState200, CPlusToken}:                    _CGotoState92Action,
-	{_CState200, CAndToken}:                     _CGotoState75Action,
-	{_CState200, CExclaimToken}:                 _CGotoState83Action,
-	{_CState200, CTildaToken}:                   _CGotoState99Action,
-	{_CState200, CPrimaryExpressionType}:        _CGotoState120Action,
-	{_CState200, CPostfixExpressionType}:        _CGotoState119Action,
-	{_CState200, CArgumentExpressionListType}:   _CGotoState282Action,
-	{_CState200, CUnaryExpressionType}:          _CGotoState126Action,
-	{_CState200, CUnaryOperatorType}:            _CGotoState127Action,
-	{_CState200, CCastExpressionType}:           _CGotoState104Action,
-	{_CState200, CMultiplicativeExpressionType}: _CGotoState118Action,
-	{_CState200, CAdditiveExpressionType}:       _CGotoState101Action,
-	{_CState200, CShiftExpressionType}:          _CGotoState123Action,
-	{_CState200, CRelationalExpressionType}:     _CGotoState121Action,
-	{_CState200, CEqualityExpressionType}:       _CGotoState108Action,
-	{_CState200, CAndExpressionType}:            _CGotoState102Action,
-	{_CState200, CExclusiveOrExpressionType}:    _CGotoState109Action,
-	{_CState200, CInclusiveOrExpressionType}:    _CGotoState112Action,
-	{_CState200, CLogicalAndExpressionType}:     _CGotoState116Action,
-	{_CState200, CLogicalOrExpressionType}:      _CGotoState117Action,
-	{_CState200, CConditionalExpressionType}:    _CGotoState106Action,
-	{_CState200, CAssignmentExpressionType}:     _CGotoState283Action,
+	{_CState196, CIdentifierToken}:              _CGotoState139Action,
+	{_CState196, CConstantToken}:                _CGotoState86Action,
+	{_CState196, CStringLiteralToken}:           _CGotoState98Action,
+	{_CState196, CSizeofToken}:                  _CGotoState97Action,
+	{_CState196, CIncOpToken}:                   _CGotoState95Action,
+	{_CState196, CDecOpToken}:                   _CGotoState88Action,
+	{_CState196, '('}:                           _CGotoState77Action,
+	{_CState196, ')'}:                           _CGotoState279Action,
+	{_CState196, '*'}:                           _CGotoState78Action,
+	{_CState196, '-'}:                           _CGotoState80Action,
+	{_CState196, '+'}:                           _CGotoState79Action,
+	{_CState196, '&'}:                           _CGotoState76Action,
+	{_CState196, '!'}:                           _CGotoState75Action,
+	{_CState196, '~'}:                           _CGotoState83Action,
+	{_CState196, CPrimaryExpressionType}:        _CGotoState120Action,
+	{_CState196, CPostfixExpressionType}:        _CGotoState119Action,
+	{_CState196, CArgumentExpressionListType}:   _CGotoState280Action,
+	{_CState196, CUnaryExpressionType}:          _CGotoState126Action,
+	{_CState196, CUnaryOperatorType}:            _CGotoState127Action,
+	{_CState196, CCastExpressionType}:           _CGotoState104Action,
+	{_CState196, CMultiplicativeExpressionType}: _CGotoState118Action,
+	{_CState196, CAdditiveExpressionType}:       _CGotoState101Action,
+	{_CState196, CShiftExpressionType}:          _CGotoState123Action,
+	{_CState196, CRelationalExpressionType}:     _CGotoState121Action,
+	{_CState196, CEqualityExpressionType}:       _CGotoState108Action,
+	{_CState196, CAndExpressionType}:            _CGotoState102Action,
+	{_CState196, CExclusiveOrExpressionType}:    _CGotoState109Action,
+	{_CState196, CInclusiveOrExpressionType}:    _CGotoState112Action,
+	{_CState196, CLogicalAndExpressionType}:     _CGotoState116Action,
+	{_CState196, CLogicalOrExpressionType}:      _CGotoState117Action,
+	{_CState196, CConditionalExpressionType}:    _CGotoState106Action,
+	{_CState196, CAssignmentExpressionType}:     _CGotoState281Action,
+	{_CState197, CIdentifierToken}:              _CGotoState282Action,
+	{_CState198, CIdentifierToken}:              _CGotoState139Action,
+	{_CState198, CConstantToken}:                _CGotoState86Action,
+	{_CState198, CStringLiteralToken}:           _CGotoState98Action,
+	{_CState198, CSizeofToken}:                  _CGotoState97Action,
+	{_CState198, CIncOpToken}:                   _CGotoState95Action,
+	{_CState198, CDecOpToken}:                   _CGotoState88Action,
+	{_CState198, '('}:                           _CGotoState77Action,
+	{_CState198, '*'}:                           _CGotoState78Action,
+	{_CState198, '-'}:                           _CGotoState80Action,
+	{_CState198, '+'}:                           _CGotoState79Action,
+	{_CState198, '&'}:                           _CGotoState76Action,
+	{_CState198, '!'}:                           _CGotoState75Action,
+	{_CState198, '~'}:                           _CGotoState83Action,
+	{_CState198, CPrimaryExpressionType}:        _CGotoState120Action,
+	{_CState198, CPostfixExpressionType}:        _CGotoState119Action,
+	{_CState198, CUnaryExpressionType}:          _CGotoState126Action,
+	{_CState198, CUnaryOperatorType}:            _CGotoState127Action,
+	{_CState198, CCastExpressionType}:           _CGotoState104Action,
+	{_CState198, CMultiplicativeExpressionType}: _CGotoState118Action,
+	{_CState198, CAdditiveExpressionType}:       _CGotoState101Action,
+	{_CState198, CShiftExpressionType}:          _CGotoState123Action,
+	{_CState198, CRelationalExpressionType}:     _CGotoState121Action,
+	{_CState198, CEqualityExpressionType}:       _CGotoState108Action,
+	{_CState198, CAndExpressionType}:            _CGotoState102Action,
+	{_CState198, CExclusiveOrExpressionType}:    _CGotoState109Action,
+	{_CState198, CInclusiveOrExpressionType}:    _CGotoState112Action,
+	{_CState198, CLogicalAndExpressionType}:     _CGotoState116Action,
+	{_CState198, CLogicalOrExpressionType}:      _CGotoState117Action,
+	{_CState198, CConditionalExpressionType}:    _CGotoState106Action,
+	{_CState198, CAssignmentExpressionType}:     _CGotoState103Action,
+	{_CState198, CExpressionType}:               _CGotoState283Action,
 	{_CState201, CIdentifierToken}:              _CGotoState284Action,
-	{_CState202, CIdentifierToken}:              _CGotoState131Action,
-	{_CState202, CConstantToken}:                _CGotoState78Action,
-	{_CState202, CStringLiteralToken}:           _CGotoState97Action,
-	{_CState202, CSizeofToken}:                  _CGotoState96Action,
-	{_CState202, CIncOpToken}:                   _CGotoState88Action,
-	{_CState202, CDecOpToken}:                   _CGotoState80Action,
-	{_CState202, CLparamToken}:                  _CGotoState89Action,
-	{_CState202, CMulToken}:                     _CGotoState91Action,
-	{_CState202, CMinusToken}:                   _CGotoState90Action,
-	{_CState202, CPlusToken}:                    _CGotoState92Action,
-	{_CState202, CAndToken}:                     _CGotoState75Action,
-	{_CState202, CExclaimToken}:                 _CGotoState83Action,
-	{_CState202, CTildaToken}:                   _CGotoState99Action,
+	{_CState202, CIdentifierToken}:              _CGotoState139Action,
+	{_CState202, CConstantToken}:                _CGotoState86Action,
+	{_CState202, CStringLiteralToken}:           _CGotoState98Action,
+	{_CState202, CSizeofToken}:                  _CGotoState97Action,
+	{_CState202, CIncOpToken}:                   _CGotoState95Action,
+	{_CState202, CDecOpToken}:                   _CGotoState88Action,
+	{_CState202, '('}:                           _CGotoState77Action,
+	{_CState202, '*'}:                           _CGotoState78Action,
+	{_CState202, '-'}:                           _CGotoState80Action,
+	{_CState202, '+'}:                           _CGotoState79Action,
+	{_CState202, '&'}:                           _CGotoState76Action,
+	{_CState202, '!'}:                           _CGotoState75Action,
+	{_CState202, '~'}:                           _CGotoState83Action,
 	{_CState202, CPrimaryExpressionType}:        _CGotoState120Action,
 	{_CState202, CPostfixExpressionType}:        _CGotoState119Action,
-	{_CState202, CUnaryExpressionType}:          _CGotoState135Action,
+	{_CState202, CUnaryExpressionType}:          _CGotoState142Action,
 	{_CState202, CUnaryOperatorType}:            _CGotoState127Action,
 	{_CState202, CCastExpressionType}:           _CGotoState104Action,
 	{_CState202, CMultiplicativeExpressionType}: _CGotoState118Action,
 	{_CState202, CAdditiveExpressionType}:       _CGotoState101Action,
 	{_CState202, CShiftExpressionType}:          _CGotoState285Action,
-	{_CState203, CIdentifierToken}:              _CGotoState131Action,
-	{_CState203, CConstantToken}:                _CGotoState78Action,
-	{_CState203, CStringLiteralToken}:           _CGotoState97Action,
-	{_CState203, CSizeofToken}:                  _CGotoState96Action,
-	{_CState203, CIncOpToken}:                   _CGotoState88Action,
-	{_CState203, CDecOpToken}:                   _CGotoState80Action,
-	{_CState203, CLparamToken}:                  _CGotoState89Action,
-	{_CState203, CMulToken}:                     _CGotoState91Action,
-	{_CState203, CMinusToken}:                   _CGotoState90Action,
-	{_CState203, CPlusToken}:                    _CGotoState92Action,
-	{_CState203, CAndToken}:                     _CGotoState75Action,
-	{_CState203, CExclaimToken}:                 _CGotoState83Action,
-	{_CState203, CTildaToken}:                   _CGotoState99Action,
+	{_CState203, CIdentifierToken}:              _CGotoState139Action,
+	{_CState203, CConstantToken}:                _CGotoState86Action,
+	{_CState203, CStringLiteralToken}:           _CGotoState98Action,
+	{_CState203, CSizeofToken}:                  _CGotoState97Action,
+	{_CState203, CIncOpToken}:                   _CGotoState95Action,
+	{_CState203, CDecOpToken}:                   _CGotoState88Action,
+	{_CState203, '('}:                           _CGotoState77Action,
+	{_CState203, '*'}:                           _CGotoState78Action,
+	{_CState203, '-'}:                           _CGotoState80Action,
+	{_CState203, '+'}:                           _CGotoState79Action,
+	{_CState203, '&'}:                           _CGotoState76Action,
+	{_CState203, '!'}:                           _CGotoState75Action,
+	{_CState203, '~'}:                           _CGotoState83Action,
 	{_CState203, CPrimaryExpressionType}:        _CGotoState120Action,
 	{_CState203, CPostfixExpressionType}:        _CGotoState119Action,
-	{_CState203, CUnaryExpressionType}:          _CGotoState135Action,
+	{_CState203, CUnaryExpressionType}:          _CGotoState142Action,
 	{_CState203, CUnaryOperatorType}:            _CGotoState127Action,
 	{_CState203, CCastExpressionType}:           _CGotoState104Action,
 	{_CState203, CMultiplicativeExpressionType}: _CGotoState118Action,
 	{_CState203, CAdditiveExpressionType}:       _CGotoState101Action,
 	{_CState203, CShiftExpressionType}:          _CGotoState286Action,
-	{_CState204, CIdentifierToken}:              _CGotoState131Action,
-	{_CState204, CConstantToken}:                _CGotoState78Action,
-	{_CState204, CStringLiteralToken}:           _CGotoState97Action,
-	{_CState204, CSizeofToken}:                  _CGotoState96Action,
-	{_CState204, CIncOpToken}:                   _CGotoState88Action,
-	{_CState204, CDecOpToken}:                   _CGotoState80Action,
-	{_CState204, CLparamToken}:                  _CGotoState89Action,
-	{_CState204, CMulToken}:                     _CGotoState91Action,
-	{_CState204, CMinusToken}:                   _CGotoState90Action,
-	{_CState204, CPlusToken}:                    _CGotoState92Action,
-	{_CState204, CAndToken}:                     _CGotoState75Action,
-	{_CState204, CExclaimToken}:                 _CGotoState83Action,
-	{_CState204, CTildaToken}:                   _CGotoState99Action,
+	{_CState204, CIdentifierToken}:              _CGotoState139Action,
+	{_CState204, CConstantToken}:                _CGotoState86Action,
+	{_CState204, CStringLiteralToken}:           _CGotoState98Action,
+	{_CState204, CSizeofToken}:                  _CGotoState97Action,
+	{_CState204, CIncOpToken}:                   _CGotoState95Action,
+	{_CState204, CDecOpToken}:                   _CGotoState88Action,
+	{_CState204, '('}:                           _CGotoState77Action,
+	{_CState204, '*'}:                           _CGotoState78Action,
+	{_CState204, '-'}:                           _CGotoState80Action,
+	{_CState204, '+'}:                           _CGotoState79Action,
+	{_CState204, '&'}:                           _CGotoState76Action,
+	{_CState204, '!'}:                           _CGotoState75Action,
+	{_CState204, '~'}:                           _CGotoState83Action,
 	{_CState204, CPrimaryExpressionType}:        _CGotoState120Action,
 	{_CState204, CPostfixExpressionType}:        _CGotoState119Action,
-	{_CState204, CUnaryExpressionType}:          _CGotoState135Action,
+	{_CState204, CUnaryExpressionType}:          _CGotoState142Action,
 	{_CState204, CUnaryOperatorType}:            _CGotoState127Action,
 	{_CState204, CCastExpressionType}:           _CGotoState104Action,
 	{_CState204, CMultiplicativeExpressionType}: _CGotoState118Action,
 	{_CState204, CAdditiveExpressionType}:       _CGotoState101Action,
 	{_CState204, CShiftExpressionType}:          _CGotoState287Action,
-	{_CState205, CIdentifierToken}:              _CGotoState131Action,
-	{_CState205, CConstantToken}:                _CGotoState78Action,
-	{_CState205, CStringLiteralToken}:           _CGotoState97Action,
-	{_CState205, CSizeofToken}:                  _CGotoState96Action,
-	{_CState205, CIncOpToken}:                   _CGotoState88Action,
-	{_CState205, CDecOpToken}:                   _CGotoState80Action,
-	{_CState205, CLparamToken}:                  _CGotoState89Action,
-	{_CState205, CMulToken}:                     _CGotoState91Action,
-	{_CState205, CMinusToken}:                   _CGotoState90Action,
-	{_CState205, CPlusToken}:                    _CGotoState92Action,
-	{_CState205, CAndToken}:                     _CGotoState75Action,
-	{_CState205, CExclaimToken}:                 _CGotoState83Action,
-	{_CState205, CTildaToken}:                   _CGotoState99Action,
+	{_CState205, CIdentifierToken}:              _CGotoState139Action,
+	{_CState205, CConstantToken}:                _CGotoState86Action,
+	{_CState205, CStringLiteralToken}:           _CGotoState98Action,
+	{_CState205, CSizeofToken}:                  _CGotoState97Action,
+	{_CState205, CIncOpToken}:                   _CGotoState95Action,
+	{_CState205, CDecOpToken}:                   _CGotoState88Action,
+	{_CState205, '('}:                           _CGotoState77Action,
+	{_CState205, '*'}:                           _CGotoState78Action,
+	{_CState205, '-'}:                           _CGotoState80Action,
+	{_CState205, '+'}:                           _CGotoState79Action,
+	{_CState205, '&'}:                           _CGotoState76Action,
+	{_CState205, '!'}:                           _CGotoState75Action,
+	{_CState205, '~'}:                           _CGotoState83Action,
 	{_CState205, CPrimaryExpressionType}:        _CGotoState120Action,
 	{_CState205, CPostfixExpressionType}:        _CGotoState119Action,
-	{_CState205, CUnaryExpressionType}:          _CGotoState135Action,
+	{_CState205, CUnaryExpressionType}:          _CGotoState142Action,
 	{_CState205, CUnaryOperatorType}:            _CGotoState127Action,
 	{_CState205, CCastExpressionType}:           _CGotoState104Action,
 	{_CState205, CMultiplicativeExpressionType}: _CGotoState118Action,
 	{_CState205, CAdditiveExpressionType}:       _CGotoState101Action,
 	{_CState205, CShiftExpressionType}:          _CGotoState288Action,
-	{_CState206, CIdentifierToken}:              _CGotoState131Action,
-	{_CState206, CConstantToken}:                _CGotoState78Action,
-	{_CState206, CStringLiteralToken}:           _CGotoState97Action,
-	{_CState206, CSizeofToken}:                  _CGotoState96Action,
-	{_CState206, CIncOpToken}:                   _CGotoState88Action,
-	{_CState206, CDecOpToken}:                   _CGotoState80Action,
-	{_CState206, CLparamToken}:                  _CGotoState89Action,
-	{_CState206, CMulToken}:                     _CGotoState91Action,
-	{_CState206, CMinusToken}:                   _CGotoState90Action,
-	{_CState206, CPlusToken}:                    _CGotoState92Action,
-	{_CState206, CAndToken}:                     _CGotoState75Action,
-	{_CState206, CExclaimToken}:                 _CGotoState83Action,
-	{_CState206, CTildaToken}:                   _CGotoState99Action,
+	{_CState206, CIdentifierToken}:              _CGotoState139Action,
+	{_CState206, CConstantToken}:                _CGotoState86Action,
+	{_CState206, CStringLiteralToken}:           _CGotoState98Action,
+	{_CState206, CSizeofToken}:                  _CGotoState97Action,
+	{_CState206, CIncOpToken}:                   _CGotoState95Action,
+	{_CState206, CDecOpToken}:                   _CGotoState88Action,
+	{_CState206, '('}:                           _CGotoState77Action,
+	{_CState206, '*'}:                           _CGotoState78Action,
+	{_CState206, '-'}:                           _CGotoState80Action,
+	{_CState206, '+'}:                           _CGotoState79Action,
+	{_CState206, '&'}:                           _CGotoState76Action,
+	{_CState206, '!'}:                           _CGotoState75Action,
+	{_CState206, '~'}:                           _CGotoState83Action,
 	{_CState206, CPrimaryExpressionType}:        _CGotoState120Action,
 	{_CState206, CPostfixExpressionType}:        _CGotoState119Action,
-	{_CState206, CUnaryExpressionType}:          _CGotoState135Action,
+	{_CState206, CUnaryExpressionType}:          _CGotoState142Action,
 	{_CState206, CUnaryOperatorType}:            _CGotoState127Action,
 	{_CState206, CCastExpressionType}:           _CGotoState104Action,
 	{_CState206, CMultiplicativeExpressionType}: _CGotoState118Action,
 	{_CState206, CAdditiveExpressionType}:       _CGotoState289Action,
-	{_CState207, CIdentifierToken}:              _CGotoState131Action,
-	{_CState207, CConstantToken}:                _CGotoState78Action,
-	{_CState207, CStringLiteralToken}:           _CGotoState97Action,
-	{_CState207, CSizeofToken}:                  _CGotoState96Action,
-	{_CState207, CIncOpToken}:                   _CGotoState88Action,
-	{_CState207, CDecOpToken}:                   _CGotoState80Action,
-	{_CState207, CLparamToken}:                  _CGotoState89Action,
-	{_CState207, CMulToken}:                     _CGotoState91Action,
-	{_CState207, CMinusToken}:                   _CGotoState90Action,
-	{_CState207, CPlusToken}:                    _CGotoState92Action,
-	{_CState207, CAndToken}:                     _CGotoState75Action,
-	{_CState207, CExclaimToken}:                 _CGotoState83Action,
-	{_CState207, CTildaToken}:                   _CGotoState99Action,
+	{_CState207, CIdentifierToken}:              _CGotoState139Action,
+	{_CState207, CConstantToken}:                _CGotoState86Action,
+	{_CState207, CStringLiteralToken}:           _CGotoState98Action,
+	{_CState207, CSizeofToken}:                  _CGotoState97Action,
+	{_CState207, CIncOpToken}:                   _CGotoState95Action,
+	{_CState207, CDecOpToken}:                   _CGotoState88Action,
+	{_CState207, '('}:                           _CGotoState77Action,
+	{_CState207, '*'}:                           _CGotoState78Action,
+	{_CState207, '-'}:                           _CGotoState80Action,
+	{_CState207, '+'}:                           _CGotoState79Action,
+	{_CState207, '&'}:                           _CGotoState76Action,
+	{_CState207, '!'}:                           _CGotoState75Action,
+	{_CState207, '~'}:                           _CGotoState83Action,
 	{_CState207, CPrimaryExpressionType}:        _CGotoState120Action,
 	{_CState207, CPostfixExpressionType}:        _CGotoState119Action,
-	{_CState207, CUnaryExpressionType}:          _CGotoState135Action,
+	{_CState207, CUnaryExpressionType}:          _CGotoState142Action,
 	{_CState207, CUnaryOperatorType}:            _CGotoState127Action,
 	{_CState207, CCastExpressionType}:           _CGotoState104Action,
 	{_CState207, CMultiplicativeExpressionType}: _CGotoState118Action,
 	{_CState207, CAdditiveExpressionType}:       _CGotoState290Action,
-	{_CState221, CIdentifierToken}:              _CGotoState131Action,
-	{_CState221, CConstantToken}:                _CGotoState78Action,
-	{_CState221, CStringLiteralToken}:           _CGotoState97Action,
-	{_CState221, CSizeofToken}:                  _CGotoState96Action,
-	{_CState221, CIncOpToken}:                   _CGotoState88Action,
-	{_CState221, CDecOpToken}:                   _CGotoState80Action,
-	{_CState221, CLparamToken}:                  _CGotoState89Action,
-	{_CState221, CMulToken}:                     _CGotoState91Action,
-	{_CState221, CMinusToken}:                   _CGotoState90Action,
-	{_CState221, CPlusToken}:                    _CGotoState92Action,
-	{_CState221, CAndToken}:                     _CGotoState75Action,
-	{_CState221, CExclaimToken}:                 _CGotoState83Action,
-	{_CState221, CTildaToken}:                   _CGotoState99Action,
+	{_CState221, CIdentifierToken}:              _CGotoState139Action,
+	{_CState221, CConstantToken}:                _CGotoState86Action,
+	{_CState221, CStringLiteralToken}:           _CGotoState98Action,
+	{_CState221, CSizeofToken}:                  _CGotoState97Action,
+	{_CState221, CIncOpToken}:                   _CGotoState95Action,
+	{_CState221, CDecOpToken}:                   _CGotoState88Action,
+	{_CState221, '('}:                           _CGotoState77Action,
+	{_CState221, '*'}:                           _CGotoState78Action,
+	{_CState221, '-'}:                           _CGotoState80Action,
+	{_CState221, '+'}:                           _CGotoState79Action,
+	{_CState221, '&'}:                           _CGotoState76Action,
+	{_CState221, '!'}:                           _CGotoState75Action,
+	{_CState221, '~'}:                           _CGotoState83Action,
 	{_CState221, CPrimaryExpressionType}:        _CGotoState120Action,
 	{_CState221, CPostfixExpressionType}:        _CGotoState119Action,
 	{_CState221, CUnaryExpressionType}:          _CGotoState126Action,
@@ -6046,23 +6017,63 @@ var _CActionTable = _CActionTableType{
 	{_CState221, CLogicalOrExpressionType}:      _CGotoState117Action,
 	{_CState221, CConditionalExpressionType}:    _CGotoState106Action,
 	{_CState221, CAssignmentExpressionType}:     _CGotoState291Action,
-	{_CState224, CIdentifierToken}:              _CGotoState131Action,
-	{_CState224, CConstantToken}:                _CGotoState78Action,
-	{_CState224, CStringLiteralToken}:           _CGotoState97Action,
-	{_CState224, CSizeofToken}:                  _CGotoState96Action,
-	{_CState224, CIncOpToken}:                   _CGotoState88Action,
-	{_CState224, CDecOpToken}:                   _CGotoState80Action,
-	{_CState224, CLparamToken}:                  _CGotoState89Action,
-	{_CState224, CRbraceToken}:                  _CGotoState292Action,
-	{_CState224, CMulToken}:                     _CGotoState91Action,
-	{_CState224, CMinusToken}:                   _CGotoState90Action,
-	{_CState224, CPlusToken}:                    _CGotoState92Action,
-	{_CState224, CAndToken}:                     _CGotoState75Action,
-	{_CState224, CExclaimToken}:                 _CGotoState83Action,
-	{_CState224, CTildaToken}:                   _CGotoState99Action,
+	{_CState223, CIdentifierToken}:              _CGotoState12Action,
+	{_CState223, CTypeNameToken}:                _CGotoState21Action,
+	{_CState223, CTypedefToken}:                 _CGotoState20Action,
+	{_CState223, CExternToken}:                  _CGotoState10Action,
+	{_CState223, CStaticToken}:                  _CGotoState18Action,
+	{_CState223, CAutoToken}:                    _CGotoState5Action,
+	{_CState223, CRegisterToken}:                _CGotoState15Action,
+	{_CState223, CCharToken}:                    _CGotoState6Action,
+	{_CState223, CShortToken}:                   _CGotoState16Action,
+	{_CState223, CIntToken}:                     _CGotoState13Action,
+	{_CState223, CLongToken}:                    _CGotoState14Action,
+	{_CState223, CSignedToken}:                  _CGotoState17Action,
+	{_CState223, CUnsignedToken}:                _CGotoState23Action,
+	{_CState223, CFloatToken}:                   _CGotoState11Action,
+	{_CState223, CDoubleToken}:                  _CGotoState8Action,
+	{_CState223, CConstToken}:                   _CGotoState7Action,
+	{_CState223, CVolatileToken}:                _CGotoState25Action,
+	{_CState223, CVoidToken}:                    _CGotoState24Action,
+	{_CState223, CStructToken}:                  _CGotoState19Action,
+	{_CState223, CUnionToken}:                   _CGotoState22Action,
+	{_CState223, CEnumToken}:                    _CGotoState9Action,
+	{_CState223, '('}:                           _CGotoState223Action,
+	{_CState223, ')'}:                           _CGotoState292Action,
+	{_CState223, '['}:                           _CGotoState224Action,
+	{_CState223, '*'}:                           _CGotoState4Action,
+	{_CState223, CDeclarationSpecifiersType}:    _CGotoState133Action,
+	{_CState223, CStorageClassSpecifierType}:    _CGotoState34Action,
+	{_CState223, CTypeSpecifierType}:            _CGotoState38Action,
+	{_CState223, CStructOrUnionSpecifierType}:   _CGotoState36Action,
+	{_CState223, CStructOrUnionType}:            _CGotoState35Action,
+	{_CState223, CEnumSpecifierType}:            _CGotoState30Action,
+	{_CState223, CTypeQualifierType}:            _CGotoState37Action,
+	{_CState223, CDeclaratorType}:               _CGotoState39Action,
+	{_CState223, CDirectDeclaratorType}:         _CGotoState29Action,
+	{_CState223, CPointerType}:                  _CGotoState228Action,
+	{_CState223, CParameterTypeListType}:        _CGotoState294Action,
+	{_CState223, CParameterListType}:            _CGotoState136Action,
+	{_CState223, CParameterDeclarationType}:     _CGotoState135Action,
+	{_CState223, CAbstractDeclaratorType}:       _CGotoState293Action,
+	{_CState223, CDirectAbstractDeclaratorType}: _CGotoState227Action,
+	{_CState224, CIdentifierToken}:              _CGotoState139Action,
+	{_CState224, CConstantToken}:                _CGotoState86Action,
+	{_CState224, CStringLiteralToken}:           _CGotoState98Action,
+	{_CState224, CSizeofToken}:                  _CGotoState97Action,
+	{_CState224, CIncOpToken}:                   _CGotoState95Action,
+	{_CState224, CDecOpToken}:                   _CGotoState88Action,
+	{_CState224, '('}:                           _CGotoState77Action,
+	{_CState224, ']'}:                           _CGotoState295Action,
+	{_CState224, '*'}:                           _CGotoState78Action,
+	{_CState224, '-'}:                           _CGotoState80Action,
+	{_CState224, '+'}:                           _CGotoState79Action,
+	{_CState224, '&'}:                           _CGotoState76Action,
+	{_CState224, '!'}:                           _CGotoState75Action,
+	{_CState224, '~'}:                           _CGotoState83Action,
 	{_CState224, CPrimaryExpressionType}:        _CGotoState120Action,
 	{_CState224, CPostfixExpressionType}:        _CGotoState119Action,
-	{_CState224, CUnaryExpressionType}:          _CGotoState135Action,
+	{_CState224, CUnaryExpressionType}:          _CGotoState142Action,
 	{_CState224, CUnaryOperatorType}:            _CGotoState127Action,
 	{_CState224, CCastExpressionType}:           _CGotoState104Action,
 	{_CState224, CMultiplicativeExpressionType}: _CGotoState118Action,
@@ -6075,319 +6086,279 @@ var _CActionTable = _CActionTableType{
 	{_CState224, CInclusiveOrExpressionType}:    _CGotoState112Action,
 	{_CState224, CLogicalAndExpressionType}:     _CGotoState116Action,
 	{_CState224, CLogicalOrExpressionType}:      _CGotoState117Action,
-	{_CState224, CConditionalExpressionType}:    _CGotoState133Action,
-	{_CState224, CConstantExpressionType}:       _CGotoState293Action,
-	{_CState225, CIdentifierToken}:              _CGotoState10Action,
-	{_CState225, CTypeNameToken}:                _CGotoState21Action,
-	{_CState225, CTypedefToken}:                 _CGotoState20Action,
-	{_CState225, CExternToken}:                  _CGotoState8Action,
-	{_CState225, CStaticToken}:                  _CGotoState18Action,
-	{_CState225, CAutoToken}:                    _CGotoState3Action,
-	{_CState225, CRegisterToken}:                _CGotoState15Action,
-	{_CState225, CCharToken}:                    _CGotoState4Action,
-	{_CState225, CShortToken}:                   _CGotoState16Action,
-	{_CState225, CIntToken}:                     _CGotoState11Action,
-	{_CState225, CLongToken}:                    _CGotoState12Action,
-	{_CState225, CSignedToken}:                  _CGotoState17Action,
-	{_CState225, CUnsignedToken}:                _CGotoState23Action,
-	{_CState225, CFloatToken}:                   _CGotoState9Action,
-	{_CState225, CDoubleToken}:                  _CGotoState6Action,
-	{_CState225, CConstToken}:                   _CGotoState5Action,
-	{_CState225, CVolatileToken}:                _CGotoState25Action,
-	{_CState225, CVoidToken}:                    _CGotoState24Action,
-	{_CState225, CStructToken}:                  _CGotoState19Action,
-	{_CState225, CUnionToken}:                   _CGotoState22Action,
-	{_CState225, CEnumToken}:                    _CGotoState7Action,
-	{_CState225, CLparamToken}:                  _CGotoState225Action,
-	{_CState225, CRparamToken}:                  _CGotoState294Action,
-	{_CState225, CLbraceToken}:                  _CGotoState224Action,
-	{_CState225, CMulToken}:                     _CGotoState14Action,
-	{_CState225, CDeclarationSpecifiersType}:    _CGotoState138Action,
-	{_CState225, CStorageClassSpecifierType}:    _CGotoState34Action,
-	{_CState225, CTypeSpecifierType}:            _CGotoState38Action,
-	{_CState225, CStructOrUnionSpecifierType}:   _CGotoState36Action,
-	{_CState225, CStructOrUnionType}:            _CGotoState35Action,
-	{_CState225, CEnumSpecifierType}:            _CGotoState30Action,
-	{_CState225, CTypeQualifierType}:            _CGotoState37Action,
-	{_CState225, CDeclaratorType}:               _CGotoState41Action,
-	{_CState225, CDirectDeclaratorType}:         _CGotoState29Action,
-	{_CState225, CPointerType}:                  _CGotoState229Action,
-	{_CState225, CParameterTypeListType}:        _CGotoState296Action,
-	{_CState225, CParameterListType}:            _CGotoState141Action,
-	{_CState225, CParameterDeclarationType}:     _CGotoState140Action,
-	{_CState225, CAbstractDeclaratorType}:       _CGotoState295Action,
-	{_CState225, CDirectAbstractDeclaratorType}: _CGotoState228Action,
-	{_CState228, CLparamToken}:                  _CGotoState298Action,
-	{_CState228, CLbraceToken}:                  _CGotoState297Action,
-	{_CState229, CIdentifierToken}:              _CGotoState10Action,
-	{_CState229, CLparamToken}:                  _CGotoState225Action,
-	{_CState229, CLbraceToken}:                  _CGotoState224Action,
-	{_CState229, CDirectDeclaratorType}:         _CGotoState56Action,
-	{_CState229, CDirectAbstractDeclaratorType}: _CGotoState299Action,
+	{_CState224, CConditionalExpressionType}:    _CGotoState140Action,
+	{_CState224, CConstantExpressionType}:       _CGotoState296Action,
+	{_CState227, '('}:                           _CGotoState297Action,
+	{_CState227, '['}:                           _CGotoState298Action,
+	{_CState228, CIdentifierToken}:              _CGotoState12Action,
+	{_CState228, '('}:                           _CGotoState223Action,
+	{_CState228, '['}:                           _CGotoState224Action,
+	{_CState228, CDirectDeclaratorType}:         _CGotoState56Action,
+	{_CState228, CDirectAbstractDeclaratorType}: _CGotoState299Action,
 	{_CState230, CIdentifierToken}:              _CGotoState300Action,
-	{_CState232, CTypeNameToken}:                _CGotoState21Action,
-	{_CState232, CTypedefToken}:                 _CGotoState20Action,
-	{_CState232, CExternToken}:                  _CGotoState8Action,
-	{_CState232, CStaticToken}:                  _CGotoState18Action,
-	{_CState232, CAutoToken}:                    _CGotoState3Action,
-	{_CState232, CRegisterToken}:                _CGotoState15Action,
-	{_CState232, CCharToken}:                    _CGotoState4Action,
-	{_CState232, CShortToken}:                   _CGotoState16Action,
-	{_CState232, CIntToken}:                     _CGotoState11Action,
-	{_CState232, CLongToken}:                    _CGotoState12Action,
-	{_CState232, CSignedToken}:                  _CGotoState17Action,
-	{_CState232, CUnsignedToken}:                _CGotoState23Action,
-	{_CState232, CFloatToken}:                   _CGotoState9Action,
-	{_CState232, CDoubleToken}:                  _CGotoState6Action,
-	{_CState232, CConstToken}:                   _CGotoState5Action,
-	{_CState232, CVolatileToken}:                _CGotoState25Action,
-	{_CState232, CVoidToken}:                    _CGotoState24Action,
-	{_CState232, CStructToken}:                  _CGotoState19Action,
-	{_CState232, CUnionToken}:                   _CGotoState22Action,
-	{_CState232, CEnumToken}:                    _CGotoState7Action,
-	{_CState232, CEllipsisToken}:                _CGotoState301Action,
-	{_CState232, CDeclarationSpecifiersType}:    _CGotoState138Action,
-	{_CState232, CStorageClassSpecifierType}:    _CGotoState34Action,
-	{_CState232, CTypeSpecifierType}:            _CGotoState38Action,
-	{_CState232, CStructOrUnionSpecifierType}:   _CGotoState36Action,
-	{_CState232, CStructOrUnionType}:            _CGotoState35Action,
-	{_CState232, CEnumSpecifierType}:            _CGotoState30Action,
-	{_CState232, CTypeQualifierType}:            _CGotoState37Action,
-	{_CState232, CParameterDeclarationType}:     _CGotoState302Action,
-	{_CState234, CTypeNameToken}:                _CGotoState21Action,
-	{_CState234, CCharToken}:                    _CGotoState4Action,
-	{_CState234, CShortToken}:                   _CGotoState16Action,
-	{_CState234, CIntToken}:                     _CGotoState11Action,
-	{_CState234, CLongToken}:                    _CGotoState12Action,
-	{_CState234, CSignedToken}:                  _CGotoState17Action,
-	{_CState234, CUnsignedToken}:                _CGotoState23Action,
-	{_CState234, CFloatToken}:                   _CGotoState9Action,
-	{_CState234, CDoubleToken}:                  _CGotoState6Action,
-	{_CState234, CConstToken}:                   _CGotoState5Action,
-	{_CState234, CVolatileToken}:                _CGotoState25Action,
-	{_CState234, CVoidToken}:                    _CGotoState24Action,
-	{_CState234, CStructToken}:                  _CGotoState19Action,
-	{_CState234, CUnionToken}:                   _CGotoState22Action,
-	{_CState234, CEnumToken}:                    _CGotoState7Action,
-	{_CState234, CRcurlToken}:                   _CGotoState303Action,
-	{_CState234, CTypeSpecifierType}:            _CGotoState148Action,
-	{_CState234, CStructOrUnionSpecifierType}:   _CGotoState36Action,
-	{_CState234, CStructOrUnionType}:            _CGotoState35Action,
-	{_CState234, CStructDeclarationType}:        _CGotoState240Action,
-	{_CState234, CSpecifierQualifierListType}:   _CGotoState144Action,
-	{_CState234, CEnumSpecifierType}:            _CGotoState30Action,
-	{_CState234, CTypeQualifierType}:            _CGotoState147Action,
-	{_CState235, CIdentifierToken}:              _CGotoState131Action,
-	{_CState235, CConstantToken}:                _CGotoState78Action,
-	{_CState235, CStringLiteralToken}:           _CGotoState97Action,
-	{_CState235, CSizeofToken}:                  _CGotoState96Action,
-	{_CState235, CIncOpToken}:                   _CGotoState88Action,
-	{_CState235, CDecOpToken}:                   _CGotoState80Action,
-	{_CState235, CLparamToken}:                  _CGotoState89Action,
-	{_CState235, CMulToken}:                     _CGotoState91Action,
-	{_CState235, CMinusToken}:                   _CGotoState90Action,
-	{_CState235, CPlusToken}:                    _CGotoState92Action,
-	{_CState235, CAndToken}:                     _CGotoState75Action,
-	{_CState235, CExclaimToken}:                 _CGotoState83Action,
-	{_CState235, CTildaToken}:                   _CGotoState99Action,
-	{_CState235, CPrimaryExpressionType}:        _CGotoState120Action,
-	{_CState235, CPostfixExpressionType}:        _CGotoState119Action,
-	{_CState235, CUnaryExpressionType}:          _CGotoState135Action,
-	{_CState235, CUnaryOperatorType}:            _CGotoState127Action,
-	{_CState235, CCastExpressionType}:           _CGotoState104Action,
-	{_CState235, CMultiplicativeExpressionType}: _CGotoState118Action,
-	{_CState235, CAdditiveExpressionType}:       _CGotoState101Action,
-	{_CState235, CShiftExpressionType}:          _CGotoState123Action,
-	{_CState235, CRelationalExpressionType}:     _CGotoState121Action,
-	{_CState235, CEqualityExpressionType}:       _CGotoState108Action,
-	{_CState235, CAndExpressionType}:            _CGotoState102Action,
-	{_CState235, CExclusiveOrExpressionType}:    _CGotoState109Action,
-	{_CState235, CInclusiveOrExpressionType}:    _CGotoState112Action,
-	{_CState235, CLogicalAndExpressionType}:     _CGotoState116Action,
-	{_CState235, CLogicalOrExpressionType}:      _CGotoState117Action,
-	{_CState235, CConditionalExpressionType}:    _CGotoState133Action,
-	{_CState235, CConstantExpressionType}:       _CGotoState304Action,
-	{_CState236, CColonToken}:                   _CGotoState305Action,
-	{_CState238, CSemicolonToken}:               _CGotoState307Action,
-	{_CState238, CCommaToken}:                   _CGotoState306Action,
-	{_CState247, CRcurlToken}:                   _CGotoState309Action,
-	{_CState247, CCommaToken}:                   _CGotoState308Action,
-	{_CState248, CIdentifierToken}:              _CGotoState86Action,
-	{_CState248, CConstantToken}:                _CGotoState78Action,
-	{_CState248, CStringLiteralToken}:           _CGotoState97Action,
-	{_CState248, CSizeofToken}:                  _CGotoState96Action,
-	{_CState248, CIncOpToken}:                   _CGotoState88Action,
-	{_CState248, CDecOpToken}:                   _CGotoState80Action,
-	{_CState248, CCaseToken}:                    _CGotoState77Action,
-	{_CState248, CDefaultToken}:                 _CGotoState81Action,
-	{_CState248, CIfToken}:                      _CGotoState87Action,
-	{_CState248, CSwitchToken}:                  _CGotoState98Action,
-	{_CState248, CWhileToken}:                   _CGotoState100Action,
-	{_CState248, CDoToken}:                      _CGotoState82Action,
-	{_CState248, CForToken}:                     _CGotoState84Action,
-	{_CState248, CGotoToken}:                    _CGotoState85Action,
-	{_CState248, CContinueToken}:                _CGotoState79Action,
-	{_CState248, CBreakToken}:                   _CGotoState76Action,
-	{_CState248, CReturnToken}:                  _CGotoState94Action,
-	{_CState248, CLparamToken}:                  _CGotoState89Action,
-	{_CState248, CLcurlToken}:                   _CGotoState49Action,
-	{_CState248, CSemicolonToken}:               _CGotoState95Action,
-	{_CState248, CMulToken}:                     _CGotoState91Action,
-	{_CState248, CMinusToken}:                   _CGotoState90Action,
-	{_CState248, CPlusToken}:                    _CGotoState92Action,
-	{_CState248, CAndToken}:                     _CGotoState75Action,
-	{_CState248, CExclaimToken}:                 _CGotoState83Action,
-	{_CState248, CTildaToken}:                   _CGotoState99Action,
-	{_CState248, CPrimaryExpressionType}:        _CGotoState120Action,
-	{_CState248, CPostfixExpressionType}:        _CGotoState119Action,
-	{_CState248, CUnaryExpressionType}:          _CGotoState126Action,
-	{_CState248, CUnaryOperatorType}:            _CGotoState127Action,
-	{_CState248, CCastExpressionType}:           _CGotoState104Action,
-	{_CState248, CMultiplicativeExpressionType}: _CGotoState118Action,
-	{_CState248, CAdditiveExpressionType}:       _CGotoState101Action,
-	{_CState248, CShiftExpressionType}:          _CGotoState123Action,
-	{_CState248, CRelationalExpressionType}:     _CGotoState121Action,
-	{_CState248, CEqualityExpressionType}:       _CGotoState108Action,
-	{_CState248, CAndExpressionType}:            _CGotoState102Action,
-	{_CState248, CExclusiveOrExpressionType}:    _CGotoState109Action,
-	{_CState248, CInclusiveOrExpressionType}:    _CGotoState112Action,
-	{_CState248, CLogicalAndExpressionType}:     _CGotoState116Action,
-	{_CState248, CLogicalOrExpressionType}:      _CGotoState117Action,
-	{_CState248, CConditionalExpressionType}:    _CGotoState106Action,
-	{_CState248, CAssignmentExpressionType}:     _CGotoState103Action,
-	{_CState248, CExpressionType}:               _CGotoState110Action,
-	{_CState248, CStatementType}:                _CGotoState310Action,
-	{_CState248, CLabeledStatementType}:         _CGotoState115Action,
-	{_CState248, CCompoundStatementType}:        _CGotoState105Action,
-	{_CState248, CExpressionStatementType}:      _CGotoState111Action,
-	{_CState248, CSelectionStatementType}:       _CGotoState122Action,
-	{_CState248, CIterationStatementType}:       _CGotoState113Action,
-	{_CState248, CJumpStatementType}:            _CGotoState114Action,
-	{_CState250, CLparamToken}:                  _CGotoState311Action,
-	{_CState251, CIdentifierToken}:              _CGotoState131Action,
-	{_CState251, CConstantToken}:                _CGotoState78Action,
-	{_CState251, CStringLiteralToken}:           _CGotoState97Action,
-	{_CState251, CSizeofToken}:                  _CGotoState96Action,
-	{_CState251, CIncOpToken}:                   _CGotoState88Action,
-	{_CState251, CDecOpToken}:                   _CGotoState80Action,
-	{_CState251, CLparamToken}:                  _CGotoState89Action,
-	{_CState251, CSemicolonToken}:               _CGotoState95Action,
-	{_CState251, CMulToken}:                     _CGotoState91Action,
-	{_CState251, CMinusToken}:                   _CGotoState90Action,
-	{_CState251, CPlusToken}:                    _CGotoState92Action,
-	{_CState251, CAndToken}:                     _CGotoState75Action,
-	{_CState251, CExclaimToken}:                 _CGotoState83Action,
-	{_CState251, CTildaToken}:                   _CGotoState99Action,
-	{_CState251, CPrimaryExpressionType}:        _CGotoState120Action,
-	{_CState251, CPostfixExpressionType}:        _CGotoState119Action,
-	{_CState251, CUnaryExpressionType}:          _CGotoState126Action,
-	{_CState251, CUnaryOperatorType}:            _CGotoState127Action,
-	{_CState251, CCastExpressionType}:           _CGotoState104Action,
-	{_CState251, CMultiplicativeExpressionType}: _CGotoState118Action,
-	{_CState251, CAdditiveExpressionType}:       _CGotoState101Action,
-	{_CState251, CShiftExpressionType}:          _CGotoState123Action,
-	{_CState251, CRelationalExpressionType}:     _CGotoState121Action,
-	{_CState251, CEqualityExpressionType}:       _CGotoState108Action,
-	{_CState251, CAndExpressionType}:            _CGotoState102Action,
-	{_CState251, CExclusiveOrExpressionType}:    _CGotoState109Action,
-	{_CState251, CInclusiveOrExpressionType}:    _CGotoState112Action,
-	{_CState251, CLogicalAndExpressionType}:     _CGotoState116Action,
-	{_CState251, CLogicalOrExpressionType}:      _CGotoState117Action,
-	{_CState251, CConditionalExpressionType}:    _CGotoState106Action,
-	{_CState251, CAssignmentExpressionType}:     _CGotoState103Action,
-	{_CState251, CExpressionType}:               _CGotoState110Action,
-	{_CState251, CExpressionStatementType}:      _CGotoState312Action,
-	{_CState254, CRparamToken}:                  _CGotoState313Action,
-	{_CState254, CCommaToken}:                   _CGotoState187Action,
-	{_CState256, CTypeNameToken}:                _CGotoState21Action,
-	{_CState256, CTypedefToken}:                 _CGotoState20Action,
-	{_CState256, CExternToken}:                  _CGotoState8Action,
-	{_CState256, CStaticToken}:                  _CGotoState18Action,
-	{_CState256, CAutoToken}:                    _CGotoState3Action,
-	{_CState256, CRegisterToken}:                _CGotoState15Action,
-	{_CState256, CCharToken}:                    _CGotoState4Action,
-	{_CState256, CShortToken}:                   _CGotoState16Action,
-	{_CState256, CIntToken}:                     _CGotoState11Action,
-	{_CState256, CLongToken}:                    _CGotoState12Action,
-	{_CState256, CSignedToken}:                  _CGotoState17Action,
-	{_CState256, CUnsignedToken}:                _CGotoState23Action,
-	{_CState256, CFloatToken}:                   _CGotoState9Action,
-	{_CState256, CDoubleToken}:                  _CGotoState6Action,
-	{_CState256, CConstToken}:                   _CGotoState5Action,
-	{_CState256, CVolatileToken}:                _CGotoState25Action,
-	{_CState256, CVoidToken}:                    _CGotoState24Action,
-	{_CState256, CStructToken}:                  _CGotoState19Action,
-	{_CState256, CUnionToken}:                   _CGotoState22Action,
-	{_CState256, CEnumToken}:                    _CGotoState7Action,
-	{_CState256, CLparamToken}:                  _CGotoState256Action,
-	{_CState256, CRparamToken}:                  _CGotoState294Action,
-	{_CState256, CLbraceToken}:                  _CGotoState224Action,
-	{_CState256, CMulToken}:                     _CGotoState14Action,
-	{_CState256, CDeclarationSpecifiersType}:    _CGotoState138Action,
-	{_CState256, CStorageClassSpecifierType}:    _CGotoState34Action,
-	{_CState256, CTypeSpecifierType}:            _CGotoState38Action,
-	{_CState256, CStructOrUnionSpecifierType}:   _CGotoState36Action,
-	{_CState256, CStructOrUnionType}:            _CGotoState35Action,
-	{_CState256, CEnumSpecifierType}:            _CGotoState30Action,
-	{_CState256, CTypeQualifierType}:            _CGotoState37Action,
-	{_CState256, CPointerType}:                  _CGotoState258Action,
-	{_CState256, CParameterTypeListType}:        _CGotoState296Action,
-	{_CState256, CParameterListType}:            _CGotoState141Action,
-	{_CState256, CParameterDeclarationType}:     _CGotoState140Action,
-	{_CState256, CAbstractDeclaratorType}:       _CGotoState295Action,
-	{_CState256, CDirectAbstractDeclaratorType}: _CGotoState228Action,
-	{_CState258, CLparamToken}:                  _CGotoState256Action,
-	{_CState258, CLbraceToken}:                  _CGotoState224Action,
-	{_CState258, CDirectAbstractDeclaratorType}: _CGotoState299Action,
-	{_CState259, CIdentifierToken}:              _CGotoState131Action,
-	{_CState259, CConstantToken}:                _CGotoState78Action,
-	{_CState259, CStringLiteralToken}:           _CGotoState97Action,
-	{_CState259, CSizeofToken}:                  _CGotoState96Action,
-	{_CState259, CIncOpToken}:                   _CGotoState88Action,
-	{_CState259, CDecOpToken}:                   _CGotoState80Action,
-	{_CState259, CLparamToken}:                  _CGotoState89Action,
-	{_CState259, CMulToken}:                     _CGotoState91Action,
-	{_CState259, CMinusToken}:                   _CGotoState90Action,
-	{_CState259, CPlusToken}:                    _CGotoState92Action,
-	{_CState259, CAndToken}:                     _CGotoState75Action,
-	{_CState259, CExclaimToken}:                 _CGotoState83Action,
-	{_CState259, CTildaToken}:                   _CGotoState99Action,
-	{_CState259, CPrimaryExpressionType}:        _CGotoState120Action,
-	{_CState259, CPostfixExpressionType}:        _CGotoState119Action,
-	{_CState259, CUnaryExpressionType}:          _CGotoState135Action,
-	{_CState259, CUnaryOperatorType}:            _CGotoState127Action,
-	{_CState259, CCastExpressionType}:           _CGotoState314Action,
-	{_CState261, CRparamToken}:                  _CGotoState315Action,
-	{_CState262, CRparamToken}:                  _CGotoState316Action,
-	{_CState262, CCommaToken}:                   _CGotoState187Action,
-	{_CState263, CRparamToken}:                  _CGotoState317Action,
-	{_CState263, CCommaToken}:                   _CGotoState187Action,
-	{_CState264, CMulToken}:                     _CGotoState195Action,
-	{_CState264, CDivToken}:                     _CGotoState193Action,
-	{_CState264, CModToken}:                     _CGotoState194Action,
-	{_CState265, CMulToken}:                     _CGotoState195Action,
-	{_CState265, CDivToken}:                     _CGotoState193Action,
-	{_CState265, CModToken}:                     _CGotoState194Action,
+	{_CState231, CTypeNameToken}:                _CGotoState21Action,
+	{_CState231, CTypedefToken}:                 _CGotoState20Action,
+	{_CState231, CExternToken}:                  _CGotoState10Action,
+	{_CState231, CStaticToken}:                  _CGotoState18Action,
+	{_CState231, CAutoToken}:                    _CGotoState5Action,
+	{_CState231, CRegisterToken}:                _CGotoState15Action,
+	{_CState231, CCharToken}:                    _CGotoState6Action,
+	{_CState231, CShortToken}:                   _CGotoState16Action,
+	{_CState231, CIntToken}:                     _CGotoState13Action,
+	{_CState231, CLongToken}:                    _CGotoState14Action,
+	{_CState231, CSignedToken}:                  _CGotoState17Action,
+	{_CState231, CUnsignedToken}:                _CGotoState23Action,
+	{_CState231, CFloatToken}:                   _CGotoState11Action,
+	{_CState231, CDoubleToken}:                  _CGotoState8Action,
+	{_CState231, CConstToken}:                   _CGotoState7Action,
+	{_CState231, CVolatileToken}:                _CGotoState25Action,
+	{_CState231, CVoidToken}:                    _CGotoState24Action,
+	{_CState231, CStructToken}:                  _CGotoState19Action,
+	{_CState231, CUnionToken}:                   _CGotoState22Action,
+	{_CState231, CEnumToken}:                    _CGotoState9Action,
+	{_CState231, CEllipsisToken}:                _CGotoState301Action,
+	{_CState231, CDeclarationSpecifiersType}:    _CGotoState133Action,
+	{_CState231, CStorageClassSpecifierType}:    _CGotoState34Action,
+	{_CState231, CTypeSpecifierType}:            _CGotoState38Action,
+	{_CState231, CStructOrUnionSpecifierType}:   _CGotoState36Action,
+	{_CState231, CStructOrUnionType}:            _CGotoState35Action,
+	{_CState231, CEnumSpecifierType}:            _CGotoState30Action,
+	{_CState231, CTypeQualifierType}:            _CGotoState37Action,
+	{_CState231, CParameterDeclarationType}:     _CGotoState302Action,
+	{_CState234, CIdentifierToken}:              _CGotoState139Action,
+	{_CState234, CConstantToken}:                _CGotoState86Action,
+	{_CState234, CStringLiteralToken}:           _CGotoState98Action,
+	{_CState234, CSizeofToken}:                  _CGotoState97Action,
+	{_CState234, CIncOpToken}:                   _CGotoState95Action,
+	{_CState234, CDecOpToken}:                   _CGotoState88Action,
+	{_CState234, '('}:                           _CGotoState77Action,
+	{_CState234, '*'}:                           _CGotoState78Action,
+	{_CState234, '-'}:                           _CGotoState80Action,
+	{_CState234, '+'}:                           _CGotoState79Action,
+	{_CState234, '&'}:                           _CGotoState76Action,
+	{_CState234, '!'}:                           _CGotoState75Action,
+	{_CState234, '~'}:                           _CGotoState83Action,
+	{_CState234, CPrimaryExpressionType}:        _CGotoState120Action,
+	{_CState234, CPostfixExpressionType}:        _CGotoState119Action,
+	{_CState234, CUnaryExpressionType}:          _CGotoState142Action,
+	{_CState234, CUnaryOperatorType}:            _CGotoState127Action,
+	{_CState234, CCastExpressionType}:           _CGotoState104Action,
+	{_CState234, CMultiplicativeExpressionType}: _CGotoState118Action,
+	{_CState234, CAdditiveExpressionType}:       _CGotoState101Action,
+	{_CState234, CShiftExpressionType}:          _CGotoState123Action,
+	{_CState234, CRelationalExpressionType}:     _CGotoState121Action,
+	{_CState234, CEqualityExpressionType}:       _CGotoState108Action,
+	{_CState234, CAndExpressionType}:            _CGotoState102Action,
+	{_CState234, CExclusiveOrExpressionType}:    _CGotoState109Action,
+	{_CState234, CInclusiveOrExpressionType}:    _CGotoState112Action,
+	{_CState234, CLogicalAndExpressionType}:     _CGotoState116Action,
+	{_CState234, CLogicalOrExpressionType}:      _CGotoState117Action,
+	{_CState234, CConditionalExpressionType}:    _CGotoState140Action,
+	{_CState234, CConstantExpressionType}:       _CGotoState303Action,
+	{_CState235, ':'}:                           _CGotoState304Action,
+	{_CState237, ';'}:                           _CGotoState306Action,
+	{_CState237, ','}:                           _CGotoState305Action,
+	{_CState242, CTypeNameToken}:                _CGotoState21Action,
+	{_CState242, CCharToken}:                    _CGotoState6Action,
+	{_CState242, CShortToken}:                   _CGotoState16Action,
+	{_CState242, CIntToken}:                     _CGotoState13Action,
+	{_CState242, CLongToken}:                    _CGotoState14Action,
+	{_CState242, CSignedToken}:                  _CGotoState17Action,
+	{_CState242, CUnsignedToken}:                _CGotoState23Action,
+	{_CState242, CFloatToken}:                   _CGotoState11Action,
+	{_CState242, CDoubleToken}:                  _CGotoState8Action,
+	{_CState242, CConstToken}:                   _CGotoState7Action,
+	{_CState242, CVolatileToken}:                _CGotoState25Action,
+	{_CState242, CVoidToken}:                    _CGotoState24Action,
+	{_CState242, CStructToken}:                  _CGotoState19Action,
+	{_CState242, CUnionToken}:                   _CGotoState22Action,
+	{_CState242, CEnumToken}:                    _CGotoState9Action,
+	{_CState242, '}'}:                           _CGotoState307Action,
+	{_CState242, CTypeSpecifierType}:            _CGotoState147Action,
+	{_CState242, CStructOrUnionSpecifierType}:   _CGotoState36Action,
+	{_CState242, CStructOrUnionType}:            _CGotoState35Action,
+	{_CState242, CStructDeclarationType}:        _CGotoState239Action,
+	{_CState242, CSpecifierQualifierListType}:   _CGotoState143Action,
+	{_CState242, CEnumSpecifierType}:            _CGotoState30Action,
+	{_CState242, CTypeQualifierType}:            _CGotoState146Action,
+	{_CState247, '}'}:                           _CGotoState309Action,
+	{_CState247, ','}:                           _CGotoState308Action,
+	{_CState249, CTypeNameToken}:                _CGotoState21Action,
+	{_CState249, CTypedefToken}:                 _CGotoState20Action,
+	{_CState249, CExternToken}:                  _CGotoState10Action,
+	{_CState249, CStaticToken}:                  _CGotoState18Action,
+	{_CState249, CAutoToken}:                    _CGotoState5Action,
+	{_CState249, CRegisterToken}:                _CGotoState15Action,
+	{_CState249, CCharToken}:                    _CGotoState6Action,
+	{_CState249, CShortToken}:                   _CGotoState16Action,
+	{_CState249, CIntToken}:                     _CGotoState13Action,
+	{_CState249, CLongToken}:                    _CGotoState14Action,
+	{_CState249, CSignedToken}:                  _CGotoState17Action,
+	{_CState249, CUnsignedToken}:                _CGotoState23Action,
+	{_CState249, CFloatToken}:                   _CGotoState11Action,
+	{_CState249, CDoubleToken}:                  _CGotoState8Action,
+	{_CState249, CConstToken}:                   _CGotoState7Action,
+	{_CState249, CVolatileToken}:                _CGotoState25Action,
+	{_CState249, CVoidToken}:                    _CGotoState24Action,
+	{_CState249, CStructToken}:                  _CGotoState19Action,
+	{_CState249, CUnionToken}:                   _CGotoState22Action,
+	{_CState249, CEnumToken}:                    _CGotoState9Action,
+	{_CState249, '('}:                           _CGotoState249Action,
+	{_CState249, ')'}:                           _CGotoState292Action,
+	{_CState249, '['}:                           _CGotoState224Action,
+	{_CState249, '*'}:                           _CGotoState4Action,
+	{_CState249, CDeclarationSpecifiersType}:    _CGotoState133Action,
+	{_CState249, CStorageClassSpecifierType}:    _CGotoState34Action,
+	{_CState249, CTypeSpecifierType}:            _CGotoState38Action,
+	{_CState249, CStructOrUnionSpecifierType}:   _CGotoState36Action,
+	{_CState249, CStructOrUnionType}:            _CGotoState35Action,
+	{_CState249, CEnumSpecifierType}:            _CGotoState30Action,
+	{_CState249, CTypeQualifierType}:            _CGotoState37Action,
+	{_CState249, CPointerType}:                  _CGotoState251Action,
+	{_CState249, CParameterTypeListType}:        _CGotoState294Action,
+	{_CState249, CParameterListType}:            _CGotoState136Action,
+	{_CState249, CParameterDeclarationType}:     _CGotoState135Action,
+	{_CState249, CAbstractDeclaratorType}:       _CGotoState293Action,
+	{_CState249, CDirectAbstractDeclaratorType}: _CGotoState227Action,
+	{_CState251, '('}:                           _CGotoState249Action,
+	{_CState251, '['}:                           _CGotoState224Action,
+	{_CState251, CDirectAbstractDeclaratorType}: _CGotoState299Action,
+	{_CState252, CIdentifierToken}:              _CGotoState139Action,
+	{_CState252, CConstantToken}:                _CGotoState86Action,
+	{_CState252, CStringLiteralToken}:           _CGotoState98Action,
+	{_CState252, CSizeofToken}:                  _CGotoState97Action,
+	{_CState252, CIncOpToken}:                   _CGotoState95Action,
+	{_CState252, CDecOpToken}:                   _CGotoState88Action,
+	{_CState252, '('}:                           _CGotoState77Action,
+	{_CState252, '*'}:                           _CGotoState78Action,
+	{_CState252, '-'}:                           _CGotoState80Action,
+	{_CState252, '+'}:                           _CGotoState79Action,
+	{_CState252, '&'}:                           _CGotoState76Action,
+	{_CState252, '!'}:                           _CGotoState75Action,
+	{_CState252, '~'}:                           _CGotoState83Action,
+	{_CState252, CPrimaryExpressionType}:        _CGotoState120Action,
+	{_CState252, CPostfixExpressionType}:        _CGotoState119Action,
+	{_CState252, CUnaryExpressionType}:          _CGotoState142Action,
+	{_CState252, CUnaryOperatorType}:            _CGotoState127Action,
+	{_CState252, CCastExpressionType}:           _CGotoState310Action,
+	{_CState253, CIdentifierToken}:              _CGotoState93Action,
+	{_CState253, CConstantToken}:                _CGotoState86Action,
+	{_CState253, CStringLiteralToken}:           _CGotoState98Action,
+	{_CState253, CSizeofToken}:                  _CGotoState97Action,
+	{_CState253, CIncOpToken}:                   _CGotoState95Action,
+	{_CState253, CDecOpToken}:                   _CGotoState88Action,
+	{_CState253, CCaseToken}:                    _CGotoState85Action,
+	{_CState253, CDefaultToken}:                 _CGotoState89Action,
+	{_CState253, CIfToken}:                      _CGotoState94Action,
+	{_CState253, CSwitchToken}:                  _CGotoState99Action,
+	{_CState253, CWhileToken}:                   _CGotoState100Action,
+	{_CState253, CDoToken}:                      _CGotoState90Action,
+	{_CState253, CForToken}:                     _CGotoState91Action,
+	{_CState253, CGotoToken}:                    _CGotoState92Action,
+	{_CState253, CContinueToken}:                _CGotoState87Action,
+	{_CState253, CBreakToken}:                   _CGotoState84Action,
+	{_CState253, CReturnToken}:                  _CGotoState96Action,
+	{_CState253, '('}:                           _CGotoState77Action,
+	{_CState253, '{'}:                           _CGotoState49Action,
+	{_CState253, ';'}:                           _CGotoState81Action,
+	{_CState253, '*'}:                           _CGotoState78Action,
+	{_CState253, '-'}:                           _CGotoState80Action,
+	{_CState253, '+'}:                           _CGotoState79Action,
+	{_CState253, '&'}:                           _CGotoState76Action,
+	{_CState253, '!'}:                           _CGotoState75Action,
+	{_CState253, '~'}:                           _CGotoState83Action,
+	{_CState253, CPrimaryExpressionType}:        _CGotoState120Action,
+	{_CState253, CPostfixExpressionType}:        _CGotoState119Action,
+	{_CState253, CUnaryExpressionType}:          _CGotoState126Action,
+	{_CState253, CUnaryOperatorType}:            _CGotoState127Action,
+	{_CState253, CCastExpressionType}:           _CGotoState104Action,
+	{_CState253, CMultiplicativeExpressionType}: _CGotoState118Action,
+	{_CState253, CAdditiveExpressionType}:       _CGotoState101Action,
+	{_CState253, CShiftExpressionType}:          _CGotoState123Action,
+	{_CState253, CRelationalExpressionType}:     _CGotoState121Action,
+	{_CState253, CEqualityExpressionType}:       _CGotoState108Action,
+	{_CState253, CAndExpressionType}:            _CGotoState102Action,
+	{_CState253, CExclusiveOrExpressionType}:    _CGotoState109Action,
+	{_CState253, CInclusiveOrExpressionType}:    _CGotoState112Action,
+	{_CState253, CLogicalAndExpressionType}:     _CGotoState116Action,
+	{_CState253, CLogicalOrExpressionType}:      _CGotoState117Action,
+	{_CState253, CConditionalExpressionType}:    _CGotoState106Action,
+	{_CState253, CAssignmentExpressionType}:     _CGotoState103Action,
+	{_CState253, CExpressionType}:               _CGotoState110Action,
+	{_CState253, CStatementType}:                _CGotoState311Action,
+	{_CState253, CLabeledStatementType}:         _CGotoState115Action,
+	{_CState253, CCompoundStatementType}:        _CGotoState105Action,
+	{_CState253, CExpressionStatementType}:      _CGotoState111Action,
+	{_CState253, CSelectionStatementType}:       _CGotoState122Action,
+	{_CState253, CIterationStatementType}:       _CGotoState113Action,
+	{_CState253, CJumpStatementType}:            _CGotoState114Action,
+	{_CState255, '('}:                           _CGotoState312Action,
+	{_CState256, CIdentifierToken}:              _CGotoState139Action,
+	{_CState256, CConstantToken}:                _CGotoState86Action,
+	{_CState256, CStringLiteralToken}:           _CGotoState98Action,
+	{_CState256, CSizeofToken}:                  _CGotoState97Action,
+	{_CState256, CIncOpToken}:                   _CGotoState95Action,
+	{_CState256, CDecOpToken}:                   _CGotoState88Action,
+	{_CState256, '('}:                           _CGotoState77Action,
+	{_CState256, ';'}:                           _CGotoState81Action,
+	{_CState256, '*'}:                           _CGotoState78Action,
+	{_CState256, '-'}:                           _CGotoState80Action,
+	{_CState256, '+'}:                           _CGotoState79Action,
+	{_CState256, '&'}:                           _CGotoState76Action,
+	{_CState256, '!'}:                           _CGotoState75Action,
+	{_CState256, '~'}:                           _CGotoState83Action,
+	{_CState256, CPrimaryExpressionType}:        _CGotoState120Action,
+	{_CState256, CPostfixExpressionType}:        _CGotoState119Action,
+	{_CState256, CUnaryExpressionType}:          _CGotoState126Action,
+	{_CState256, CUnaryOperatorType}:            _CGotoState127Action,
+	{_CState256, CCastExpressionType}:           _CGotoState104Action,
+	{_CState256, CMultiplicativeExpressionType}: _CGotoState118Action,
+	{_CState256, CAdditiveExpressionType}:       _CGotoState101Action,
+	{_CState256, CShiftExpressionType}:          _CGotoState123Action,
+	{_CState256, CRelationalExpressionType}:     _CGotoState121Action,
+	{_CState256, CEqualityExpressionType}:       _CGotoState108Action,
+	{_CState256, CAndExpressionType}:            _CGotoState102Action,
+	{_CState256, CExclusiveOrExpressionType}:    _CGotoState109Action,
+	{_CState256, CInclusiveOrExpressionType}:    _CGotoState112Action,
+	{_CState256, CLogicalAndExpressionType}:     _CGotoState116Action,
+	{_CState256, CLogicalOrExpressionType}:      _CGotoState117Action,
+	{_CState256, CConditionalExpressionType}:    _CGotoState106Action,
+	{_CState256, CAssignmentExpressionType}:     _CGotoState103Action,
+	{_CState256, CExpressionType}:               _CGotoState110Action,
+	{_CState256, CExpressionStatementType}:      _CGotoState313Action,
+	{_CState259, ')'}:                           _CGotoState314Action,
+	{_CState259, ','}:                           _CGotoState187Action,
+	{_CState261, ')'}:                           _CGotoState315Action,
+	{_CState262, ')'}:                           _CGotoState316Action,
+	{_CState262, ','}:                           _CGotoState187Action,
+	{_CState263, ')'}:                           _CGotoState317Action,
+	{_CState263, ','}:                           _CGotoState187Action,
+	{_CState264, '*'}:                           _CGotoState194Action,
+	{_CState264, '/'}:                           _CGotoState195Action,
+	{_CState264, '%'}:                           _CGotoState193Action,
+	{_CState265, '*'}:                           _CGotoState194Action,
+	{_CState265, '/'}:                           _CGotoState195Action,
+	{_CState265, '%'}:                           _CGotoState193Action,
 	{_CState266, CEqOpToken}:                    _CGotoState184Action,
 	{_CState266, CNeOpToken}:                    _CGotoState185Action,
-	{_CState268, CLeOpToken}:                    _CGotoState204Action,
-	{_CState268, CGeOpToken}:                    _CGotoState202Action,
-	{_CState268, CLtToken}:                      _CGotoState205Action,
-	{_CState268, CGtToken}:                      _CGotoState203Action,
-	{_CState269, CLeOpToken}:                    _CGotoState204Action,
-	{_CState269, CGeOpToken}:                    _CGotoState202Action,
-	{_CState269, CLtToken}:                      _CGotoState205Action,
-	{_CState269, CGtToken}:                      _CGotoState203Action,
-	{_CState270, CAndToken}:                     _CGotoState181Action,
-	{_CState272, CHatToken}:                     _CGotoState186Action,
-	{_CState273, COrToken}:                      _CGotoState189Action,
-	{_CState274, CAndOpToken}:                   _CGotoState190Action,
-	{_CState275, CColonToken}:                   _CGotoState318Action,
-	{_CState275, CCommaToken}:                   _CGotoState187Action,
-	{_CState280, CRbraceToken}:                  _CGotoState319Action,
-	{_CState280, CCommaToken}:                   _CGotoState187Action,
-	{_CState282, CRparamToken}:                  _CGotoState321Action,
-	{_CState282, CCommaToken}:                   _CGotoState320Action,
+	{_CState268, CLeOpToken}:                    _CGotoState205Action,
+	{_CState268, CGeOpToken}:                    _CGotoState204Action,
+	{_CState268, '<'}:                           _CGotoState202Action,
+	{_CState268, '>'}:                           _CGotoState203Action,
+	{_CState269, CLeOpToken}:                    _CGotoState205Action,
+	{_CState269, CGeOpToken}:                    _CGotoState204Action,
+	{_CState269, '<'}:                           _CGotoState202Action,
+	{_CState269, '>'}:                           _CGotoState203Action,
+	{_CState270, '&'}:                           _CGotoState181Action,
+	{_CState272, '^'}:                           _CGotoState186Action,
+	{_CState273, '|'}:                           _CGotoState189Action,
+	{_CState274, ':'}:                           _CGotoState318Action,
+	{_CState274, ','}:                           _CGotoState187Action,
+	{_CState275, CAndOpToken}:                   _CGotoState190Action,
+	{_CState280, ')'}:                           _CGotoState319Action,
+	{_CState280, ','}:                           _CGotoState320Action,
+	{_CState283, ']'}:                           _CGotoState321Action,
+	{_CState283, ','}:                           _CGotoState187Action,
 	{_CState285, CLeftOpToken}:                  _CGotoState206Action,
 	{_CState285, CRightOpToken}:                 _CGotoState207Action,
 	{_CState286, CLeftOpToken}:                  _CGotoState206Action,
@@ -6396,130 +6367,130 @@ var _CActionTable = _CActionTableType{
 	{_CState287, CRightOpToken}:                 _CGotoState207Action,
 	{_CState288, CLeftOpToken}:                  _CGotoState206Action,
 	{_CState288, CRightOpToken}:                 _CGotoState207Action,
-	{_CState289, CMinusToken}:                   _CGotoState179Action,
-	{_CState289, CPlusToken}:                    _CGotoState180Action,
-	{_CState290, CMinusToken}:                   _CGotoState179Action,
-	{_CState290, CPlusToken}:                    _CGotoState180Action,
-	{_CState293, CRbraceToken}:                  _CGotoState322Action,
-	{_CState295, CRparamToken}:                  _CGotoState323Action,
-	{_CState296, CRparamToken}:                  _CGotoState324Action,
-	{_CState297, CIdentifierToken}:              _CGotoState131Action,
-	{_CState297, CConstantToken}:                _CGotoState78Action,
-	{_CState297, CStringLiteralToken}:           _CGotoState97Action,
-	{_CState297, CSizeofToken}:                  _CGotoState96Action,
-	{_CState297, CIncOpToken}:                   _CGotoState88Action,
-	{_CState297, CDecOpToken}:                   _CGotoState80Action,
-	{_CState297, CLparamToken}:                  _CGotoState89Action,
-	{_CState297, CRbraceToken}:                  _CGotoState325Action,
-	{_CState297, CMulToken}:                     _CGotoState91Action,
-	{_CState297, CMinusToken}:                   _CGotoState90Action,
-	{_CState297, CPlusToken}:                    _CGotoState92Action,
-	{_CState297, CAndToken}:                     _CGotoState75Action,
-	{_CState297, CExclaimToken}:                 _CGotoState83Action,
-	{_CState297, CTildaToken}:                   _CGotoState99Action,
-	{_CState297, CPrimaryExpressionType}:        _CGotoState120Action,
-	{_CState297, CPostfixExpressionType}:        _CGotoState119Action,
-	{_CState297, CUnaryExpressionType}:          _CGotoState135Action,
-	{_CState297, CUnaryOperatorType}:            _CGotoState127Action,
-	{_CState297, CCastExpressionType}:           _CGotoState104Action,
-	{_CState297, CMultiplicativeExpressionType}: _CGotoState118Action,
-	{_CState297, CAdditiveExpressionType}:       _CGotoState101Action,
-	{_CState297, CShiftExpressionType}:          _CGotoState123Action,
-	{_CState297, CRelationalExpressionType}:     _CGotoState121Action,
-	{_CState297, CEqualityExpressionType}:       _CGotoState108Action,
-	{_CState297, CAndExpressionType}:            _CGotoState102Action,
-	{_CState297, CExclusiveOrExpressionType}:    _CGotoState109Action,
-	{_CState297, CInclusiveOrExpressionType}:    _CGotoState112Action,
-	{_CState297, CLogicalAndExpressionType}:     _CGotoState116Action,
-	{_CState297, CLogicalOrExpressionType}:      _CGotoState117Action,
-	{_CState297, CConditionalExpressionType}:    _CGotoState133Action,
-	{_CState297, CConstantExpressionType}:       _CGotoState326Action,
-	{_CState298, CTypeNameToken}:                _CGotoState21Action,
-	{_CState298, CTypedefToken}:                 _CGotoState20Action,
-	{_CState298, CExternToken}:                  _CGotoState8Action,
-	{_CState298, CStaticToken}:                  _CGotoState18Action,
-	{_CState298, CAutoToken}:                    _CGotoState3Action,
-	{_CState298, CRegisterToken}:                _CGotoState15Action,
-	{_CState298, CCharToken}:                    _CGotoState4Action,
-	{_CState298, CShortToken}:                   _CGotoState16Action,
-	{_CState298, CIntToken}:                     _CGotoState11Action,
-	{_CState298, CLongToken}:                    _CGotoState12Action,
-	{_CState298, CSignedToken}:                  _CGotoState17Action,
-	{_CState298, CUnsignedToken}:                _CGotoState23Action,
-	{_CState298, CFloatToken}:                   _CGotoState9Action,
-	{_CState298, CDoubleToken}:                  _CGotoState6Action,
-	{_CState298, CConstToken}:                   _CGotoState5Action,
-	{_CState298, CVolatileToken}:                _CGotoState25Action,
-	{_CState298, CVoidToken}:                    _CGotoState24Action,
-	{_CState298, CStructToken}:                  _CGotoState19Action,
-	{_CState298, CUnionToken}:                   _CGotoState22Action,
-	{_CState298, CEnumToken}:                    _CGotoState7Action,
-	{_CState298, CRparamToken}:                  _CGotoState327Action,
-	{_CState298, CDeclarationSpecifiersType}:    _CGotoState138Action,
-	{_CState298, CStorageClassSpecifierType}:    _CGotoState34Action,
-	{_CState298, CTypeSpecifierType}:            _CGotoState38Action,
-	{_CState298, CStructOrUnionSpecifierType}:   _CGotoState36Action,
-	{_CState298, CStructOrUnionType}:            _CGotoState35Action,
-	{_CState298, CEnumSpecifierType}:            _CGotoState30Action,
-	{_CState298, CTypeQualifierType}:            _CGotoState37Action,
-	{_CState298, CParameterTypeListType}:        _CGotoState328Action,
-	{_CState298, CParameterListType}:            _CGotoState141Action,
-	{_CState298, CParameterDeclarationType}:     _CGotoState140Action,
-	{_CState299, CLparamToken}:                  _CGotoState298Action,
-	{_CState299, CLbraceToken}:                  _CGotoState297Action,
-	{_CState305, CIdentifierToken}:              _CGotoState131Action,
-	{_CState305, CConstantToken}:                _CGotoState78Action,
-	{_CState305, CStringLiteralToken}:           _CGotoState97Action,
-	{_CState305, CSizeofToken}:                  _CGotoState96Action,
-	{_CState305, CIncOpToken}:                   _CGotoState88Action,
-	{_CState305, CDecOpToken}:                   _CGotoState80Action,
-	{_CState305, CLparamToken}:                  _CGotoState89Action,
-	{_CState305, CMulToken}:                     _CGotoState91Action,
-	{_CState305, CMinusToken}:                   _CGotoState90Action,
-	{_CState305, CPlusToken}:                    _CGotoState92Action,
-	{_CState305, CAndToken}:                     _CGotoState75Action,
-	{_CState305, CExclaimToken}:                 _CGotoState83Action,
-	{_CState305, CTildaToken}:                   _CGotoState99Action,
-	{_CState305, CPrimaryExpressionType}:        _CGotoState120Action,
-	{_CState305, CPostfixExpressionType}:        _CGotoState119Action,
-	{_CState305, CUnaryExpressionType}:          _CGotoState135Action,
-	{_CState305, CUnaryOperatorType}:            _CGotoState127Action,
-	{_CState305, CCastExpressionType}:           _CGotoState104Action,
-	{_CState305, CMultiplicativeExpressionType}: _CGotoState118Action,
-	{_CState305, CAdditiveExpressionType}:       _CGotoState101Action,
-	{_CState305, CShiftExpressionType}:          _CGotoState123Action,
-	{_CState305, CRelationalExpressionType}:     _CGotoState121Action,
-	{_CState305, CEqualityExpressionType}:       _CGotoState108Action,
-	{_CState305, CAndExpressionType}:            _CGotoState102Action,
-	{_CState305, CExclusiveOrExpressionType}:    _CGotoState109Action,
-	{_CState305, CInclusiveOrExpressionType}:    _CGotoState112Action,
-	{_CState305, CLogicalAndExpressionType}:     _CGotoState116Action,
-	{_CState305, CLogicalOrExpressionType}:      _CGotoState117Action,
-	{_CState305, CConditionalExpressionType}:    _CGotoState133Action,
-	{_CState305, CConstantExpressionType}:       _CGotoState329Action,
-	{_CState306, CIdentifierToken}:              _CGotoState10Action,
-	{_CState306, CLparamToken}:                  _CGotoState13Action,
-	{_CState306, CColonToken}:                   _CGotoState235Action,
-	{_CState306, CMulToken}:                     _CGotoState14Action,
-	{_CState306, CStructDeclaratorType}:         _CGotoState330Action,
-	{_CState306, CDeclaratorType}:               _CGotoState236Action,
-	{_CState306, CDirectDeclaratorType}:         _CGotoState29Action,
-	{_CState306, CPointerType}:                  _CGotoState33Action,
-	{_CState308, CIdentifierToken}:              _CGotoState131Action,
-	{_CState308, CConstantToken}:                _CGotoState78Action,
-	{_CState308, CStringLiteralToken}:           _CGotoState97Action,
-	{_CState308, CSizeofToken}:                  _CGotoState96Action,
-	{_CState308, CIncOpToken}:                   _CGotoState88Action,
-	{_CState308, CDecOpToken}:                   _CGotoState80Action,
-	{_CState308, CLparamToken}:                  _CGotoState89Action,
-	{_CState308, CLcurlToken}:                   _CGotoState153Action,
-	{_CState308, CRcurlToken}:                   _CGotoState331Action,
-	{_CState308, CMulToken}:                     _CGotoState91Action,
-	{_CState308, CMinusToken}:                   _CGotoState90Action,
-	{_CState308, CPlusToken}:                    _CGotoState92Action,
-	{_CState308, CAndToken}:                     _CGotoState75Action,
-	{_CState308, CExclaimToken}:                 _CGotoState83Action,
-	{_CState308, CTildaToken}:                   _CGotoState99Action,
+	{_CState289, '-'}:                           _CGotoState180Action,
+	{_CState289, '+'}:                           _CGotoState179Action,
+	{_CState290, '-'}:                           _CGotoState180Action,
+	{_CState290, '+'}:                           _CGotoState179Action,
+	{_CState293, ')'}:                           _CGotoState322Action,
+	{_CState294, ')'}:                           _CGotoState323Action,
+	{_CState296, ']'}:                           _CGotoState324Action,
+	{_CState297, CTypeNameToken}:                _CGotoState21Action,
+	{_CState297, CTypedefToken}:                 _CGotoState20Action,
+	{_CState297, CExternToken}:                  _CGotoState10Action,
+	{_CState297, CStaticToken}:                  _CGotoState18Action,
+	{_CState297, CAutoToken}:                    _CGotoState5Action,
+	{_CState297, CRegisterToken}:                _CGotoState15Action,
+	{_CState297, CCharToken}:                    _CGotoState6Action,
+	{_CState297, CShortToken}:                   _CGotoState16Action,
+	{_CState297, CIntToken}:                     _CGotoState13Action,
+	{_CState297, CLongToken}:                    _CGotoState14Action,
+	{_CState297, CSignedToken}:                  _CGotoState17Action,
+	{_CState297, CUnsignedToken}:                _CGotoState23Action,
+	{_CState297, CFloatToken}:                   _CGotoState11Action,
+	{_CState297, CDoubleToken}:                  _CGotoState8Action,
+	{_CState297, CConstToken}:                   _CGotoState7Action,
+	{_CState297, CVolatileToken}:                _CGotoState25Action,
+	{_CState297, CVoidToken}:                    _CGotoState24Action,
+	{_CState297, CStructToken}:                  _CGotoState19Action,
+	{_CState297, CUnionToken}:                   _CGotoState22Action,
+	{_CState297, CEnumToken}:                    _CGotoState9Action,
+	{_CState297, ')'}:                           _CGotoState325Action,
+	{_CState297, CDeclarationSpecifiersType}:    _CGotoState133Action,
+	{_CState297, CStorageClassSpecifierType}:    _CGotoState34Action,
+	{_CState297, CTypeSpecifierType}:            _CGotoState38Action,
+	{_CState297, CStructOrUnionSpecifierType}:   _CGotoState36Action,
+	{_CState297, CStructOrUnionType}:            _CGotoState35Action,
+	{_CState297, CEnumSpecifierType}:            _CGotoState30Action,
+	{_CState297, CTypeQualifierType}:            _CGotoState37Action,
+	{_CState297, CParameterTypeListType}:        _CGotoState326Action,
+	{_CState297, CParameterListType}:            _CGotoState136Action,
+	{_CState297, CParameterDeclarationType}:     _CGotoState135Action,
+	{_CState298, CIdentifierToken}:              _CGotoState139Action,
+	{_CState298, CConstantToken}:                _CGotoState86Action,
+	{_CState298, CStringLiteralToken}:           _CGotoState98Action,
+	{_CState298, CSizeofToken}:                  _CGotoState97Action,
+	{_CState298, CIncOpToken}:                   _CGotoState95Action,
+	{_CState298, CDecOpToken}:                   _CGotoState88Action,
+	{_CState298, '('}:                           _CGotoState77Action,
+	{_CState298, ']'}:                           _CGotoState327Action,
+	{_CState298, '*'}:                           _CGotoState78Action,
+	{_CState298, '-'}:                           _CGotoState80Action,
+	{_CState298, '+'}:                           _CGotoState79Action,
+	{_CState298, '&'}:                           _CGotoState76Action,
+	{_CState298, '!'}:                           _CGotoState75Action,
+	{_CState298, '~'}:                           _CGotoState83Action,
+	{_CState298, CPrimaryExpressionType}:        _CGotoState120Action,
+	{_CState298, CPostfixExpressionType}:        _CGotoState119Action,
+	{_CState298, CUnaryExpressionType}:          _CGotoState142Action,
+	{_CState298, CUnaryOperatorType}:            _CGotoState127Action,
+	{_CState298, CCastExpressionType}:           _CGotoState104Action,
+	{_CState298, CMultiplicativeExpressionType}: _CGotoState118Action,
+	{_CState298, CAdditiveExpressionType}:       _CGotoState101Action,
+	{_CState298, CShiftExpressionType}:          _CGotoState123Action,
+	{_CState298, CRelationalExpressionType}:     _CGotoState121Action,
+	{_CState298, CEqualityExpressionType}:       _CGotoState108Action,
+	{_CState298, CAndExpressionType}:            _CGotoState102Action,
+	{_CState298, CExclusiveOrExpressionType}:    _CGotoState109Action,
+	{_CState298, CInclusiveOrExpressionType}:    _CGotoState112Action,
+	{_CState298, CLogicalAndExpressionType}:     _CGotoState116Action,
+	{_CState298, CLogicalOrExpressionType}:      _CGotoState117Action,
+	{_CState298, CConditionalExpressionType}:    _CGotoState140Action,
+	{_CState298, CConstantExpressionType}:       _CGotoState328Action,
+	{_CState299, '('}:                           _CGotoState297Action,
+	{_CState299, '['}:                           _CGotoState298Action,
+	{_CState304, CIdentifierToken}:              _CGotoState139Action,
+	{_CState304, CConstantToken}:                _CGotoState86Action,
+	{_CState304, CStringLiteralToken}:           _CGotoState98Action,
+	{_CState304, CSizeofToken}:                  _CGotoState97Action,
+	{_CState304, CIncOpToken}:                   _CGotoState95Action,
+	{_CState304, CDecOpToken}:                   _CGotoState88Action,
+	{_CState304, '('}:                           _CGotoState77Action,
+	{_CState304, '*'}:                           _CGotoState78Action,
+	{_CState304, '-'}:                           _CGotoState80Action,
+	{_CState304, '+'}:                           _CGotoState79Action,
+	{_CState304, '&'}:                           _CGotoState76Action,
+	{_CState304, '!'}:                           _CGotoState75Action,
+	{_CState304, '~'}:                           _CGotoState83Action,
+	{_CState304, CPrimaryExpressionType}:        _CGotoState120Action,
+	{_CState304, CPostfixExpressionType}:        _CGotoState119Action,
+	{_CState304, CUnaryExpressionType}:          _CGotoState142Action,
+	{_CState304, CUnaryOperatorType}:            _CGotoState127Action,
+	{_CState304, CCastExpressionType}:           _CGotoState104Action,
+	{_CState304, CMultiplicativeExpressionType}: _CGotoState118Action,
+	{_CState304, CAdditiveExpressionType}:       _CGotoState101Action,
+	{_CState304, CShiftExpressionType}:          _CGotoState123Action,
+	{_CState304, CRelationalExpressionType}:     _CGotoState121Action,
+	{_CState304, CEqualityExpressionType}:       _CGotoState108Action,
+	{_CState304, CAndExpressionType}:            _CGotoState102Action,
+	{_CState304, CExclusiveOrExpressionType}:    _CGotoState109Action,
+	{_CState304, CInclusiveOrExpressionType}:    _CGotoState112Action,
+	{_CState304, CLogicalAndExpressionType}:     _CGotoState116Action,
+	{_CState304, CLogicalOrExpressionType}:      _CGotoState117Action,
+	{_CState304, CConditionalExpressionType}:    _CGotoState140Action,
+	{_CState304, CConstantExpressionType}:       _CGotoState329Action,
+	{_CState305, CIdentifierToken}:              _CGotoState12Action,
+	{_CState305, '('}:                           _CGotoState3Action,
+	{_CState305, ':'}:                           _CGotoState234Action,
+	{_CState305, '*'}:                           _CGotoState4Action,
+	{_CState305, CStructDeclaratorType}:         _CGotoState330Action,
+	{_CState305, CDeclaratorType}:               _CGotoState235Action,
+	{_CState305, CDirectDeclaratorType}:         _CGotoState29Action,
+	{_CState305, CPointerType}:                  _CGotoState33Action,
+	{_CState308, CIdentifierToken}:              _CGotoState139Action,
+	{_CState308, CConstantToken}:                _CGotoState86Action,
+	{_CState308, CStringLiteralToken}:           _CGotoState98Action,
+	{_CState308, CSizeofToken}:                  _CGotoState97Action,
+	{_CState308, CIncOpToken}:                   _CGotoState95Action,
+	{_CState308, CDecOpToken}:                   _CGotoState88Action,
+	{_CState308, '('}:                           _CGotoState77Action,
+	{_CState308, '{'}:                           _CGotoState153Action,
+	{_CState308, '}'}:                           _CGotoState331Action,
+	{_CState308, '*'}:                           _CGotoState78Action,
+	{_CState308, '-'}:                           _CGotoState80Action,
+	{_CState308, '+'}:                           _CGotoState79Action,
+	{_CState308, '&'}:                           _CGotoState76Action,
+	{_CState308, '!'}:                           _CGotoState75Action,
+	{_CState308, '~'}:                           _CGotoState83Action,
 	{_CState308, CPrimaryExpressionType}:        _CGotoState120Action,
 	{_CState308, CPostfixExpressionType}:        _CGotoState119Action,
 	{_CState308, CUnaryExpressionType}:          _CGotoState126Action,
@@ -6538,51 +6509,19 @@ var _CActionTable = _CActionTableType{
 	{_CState308, CConditionalExpressionType}:    _CGotoState106Action,
 	{_CState308, CAssignmentExpressionType}:     _CGotoState154Action,
 	{_CState308, CInitializerType}:              _CGotoState332Action,
-	{_CState311, CIdentifierToken}:              _CGotoState131Action,
-	{_CState311, CConstantToken}:                _CGotoState78Action,
-	{_CState311, CStringLiteralToken}:           _CGotoState97Action,
-	{_CState311, CSizeofToken}:                  _CGotoState96Action,
-	{_CState311, CIncOpToken}:                   _CGotoState88Action,
-	{_CState311, CDecOpToken}:                   _CGotoState80Action,
-	{_CState311, CLparamToken}:                  _CGotoState89Action,
-	{_CState311, CMulToken}:                     _CGotoState91Action,
-	{_CState311, CMinusToken}:                   _CGotoState90Action,
-	{_CState311, CPlusToken}:                    _CGotoState92Action,
-	{_CState311, CAndToken}:                     _CGotoState75Action,
-	{_CState311, CExclaimToken}:                 _CGotoState83Action,
-	{_CState311, CTildaToken}:                   _CGotoState99Action,
-	{_CState311, CPrimaryExpressionType}:        _CGotoState120Action,
-	{_CState311, CPostfixExpressionType}:        _CGotoState119Action,
-	{_CState311, CUnaryExpressionType}:          _CGotoState126Action,
-	{_CState311, CUnaryOperatorType}:            _CGotoState127Action,
-	{_CState311, CCastExpressionType}:           _CGotoState104Action,
-	{_CState311, CMultiplicativeExpressionType}: _CGotoState118Action,
-	{_CState311, CAdditiveExpressionType}:       _CGotoState101Action,
-	{_CState311, CShiftExpressionType}:          _CGotoState123Action,
-	{_CState311, CRelationalExpressionType}:     _CGotoState121Action,
-	{_CState311, CEqualityExpressionType}:       _CGotoState108Action,
-	{_CState311, CAndExpressionType}:            _CGotoState102Action,
-	{_CState311, CExclusiveOrExpressionType}:    _CGotoState109Action,
-	{_CState311, CInclusiveOrExpressionType}:    _CGotoState112Action,
-	{_CState311, CLogicalAndExpressionType}:     _CGotoState116Action,
-	{_CState311, CLogicalOrExpressionType}:      _CGotoState117Action,
-	{_CState311, CConditionalExpressionType}:    _CGotoState106Action,
-	{_CState311, CAssignmentExpressionType}:     _CGotoState103Action,
-	{_CState311, CExpressionType}:               _CGotoState333Action,
-	{_CState312, CIdentifierToken}:              _CGotoState131Action,
-	{_CState312, CConstantToken}:                _CGotoState78Action,
-	{_CState312, CStringLiteralToken}:           _CGotoState97Action,
-	{_CState312, CSizeofToken}:                  _CGotoState96Action,
-	{_CState312, CIncOpToken}:                   _CGotoState88Action,
-	{_CState312, CDecOpToken}:                   _CGotoState80Action,
-	{_CState312, CLparamToken}:                  _CGotoState89Action,
-	{_CState312, CRparamToken}:                  _CGotoState334Action,
-	{_CState312, CMulToken}:                     _CGotoState91Action,
-	{_CState312, CMinusToken}:                   _CGotoState90Action,
-	{_CState312, CPlusToken}:                    _CGotoState92Action,
-	{_CState312, CAndToken}:                     _CGotoState75Action,
-	{_CState312, CExclaimToken}:                 _CGotoState83Action,
-	{_CState312, CTildaToken}:                   _CGotoState99Action,
+	{_CState312, CIdentifierToken}:              _CGotoState139Action,
+	{_CState312, CConstantToken}:                _CGotoState86Action,
+	{_CState312, CStringLiteralToken}:           _CGotoState98Action,
+	{_CState312, CSizeofToken}:                  _CGotoState97Action,
+	{_CState312, CIncOpToken}:                   _CGotoState95Action,
+	{_CState312, CDecOpToken}:                   _CGotoState88Action,
+	{_CState312, '('}:                           _CGotoState77Action,
+	{_CState312, '*'}:                           _CGotoState78Action,
+	{_CState312, '-'}:                           _CGotoState80Action,
+	{_CState312, '+'}:                           _CGotoState79Action,
+	{_CState312, '&'}:                           _CGotoState76Action,
+	{_CState312, '!'}:                           _CGotoState75Action,
+	{_CState312, '~'}:                           _CGotoState83Action,
 	{_CState312, CPrimaryExpressionType}:        _CGotoState120Action,
 	{_CState312, CPostfixExpressionType}:        _CGotoState119Action,
 	{_CState312, CUnaryExpressionType}:          _CGotoState126Action,
@@ -6600,33 +6539,21 @@ var _CActionTable = _CActionTableType{
 	{_CState312, CLogicalOrExpressionType}:      _CGotoState117Action,
 	{_CState312, CConditionalExpressionType}:    _CGotoState106Action,
 	{_CState312, CAssignmentExpressionType}:     _CGotoState103Action,
-	{_CState312, CExpressionType}:               _CGotoState335Action,
-	{_CState313, CIdentifierToken}:              _CGotoState86Action,
-	{_CState313, CConstantToken}:                _CGotoState78Action,
-	{_CState313, CStringLiteralToken}:           _CGotoState97Action,
-	{_CState313, CSizeofToken}:                  _CGotoState96Action,
-	{_CState313, CIncOpToken}:                   _CGotoState88Action,
-	{_CState313, CDecOpToken}:                   _CGotoState80Action,
-	{_CState313, CCaseToken}:                    _CGotoState77Action,
-	{_CState313, CDefaultToken}:                 _CGotoState81Action,
-	{_CState313, CIfToken}:                      _CGotoState87Action,
-	{_CState313, CSwitchToken}:                  _CGotoState98Action,
-	{_CState313, CWhileToken}:                   _CGotoState100Action,
-	{_CState313, CDoToken}:                      _CGotoState82Action,
-	{_CState313, CForToken}:                     _CGotoState84Action,
-	{_CState313, CGotoToken}:                    _CGotoState85Action,
-	{_CState313, CContinueToken}:                _CGotoState79Action,
-	{_CState313, CBreakToken}:                   _CGotoState76Action,
-	{_CState313, CReturnToken}:                  _CGotoState94Action,
-	{_CState313, CLparamToken}:                  _CGotoState89Action,
-	{_CState313, CLcurlToken}:                   _CGotoState49Action,
-	{_CState313, CSemicolonToken}:               _CGotoState95Action,
-	{_CState313, CMulToken}:                     _CGotoState91Action,
-	{_CState313, CMinusToken}:                   _CGotoState90Action,
-	{_CState313, CPlusToken}:                    _CGotoState92Action,
-	{_CState313, CAndToken}:                     _CGotoState75Action,
-	{_CState313, CExclaimToken}:                 _CGotoState83Action,
-	{_CState313, CTildaToken}:                   _CGotoState99Action,
+	{_CState312, CExpressionType}:               _CGotoState333Action,
+	{_CState313, CIdentifierToken}:              _CGotoState139Action,
+	{_CState313, CConstantToken}:                _CGotoState86Action,
+	{_CState313, CStringLiteralToken}:           _CGotoState98Action,
+	{_CState313, CSizeofToken}:                  _CGotoState97Action,
+	{_CState313, CIncOpToken}:                   _CGotoState95Action,
+	{_CState313, CDecOpToken}:                   _CGotoState88Action,
+	{_CState313, '('}:                           _CGotoState77Action,
+	{_CState313, ')'}:                           _CGotoState334Action,
+	{_CState313, '*'}:                           _CGotoState78Action,
+	{_CState313, '-'}:                           _CGotoState80Action,
+	{_CState313, '+'}:                           _CGotoState79Action,
+	{_CState313, '&'}:                           _CGotoState76Action,
+	{_CState313, '!'}:                           _CGotoState75Action,
+	{_CState313, '~'}:                           _CGotoState83Action,
 	{_CState313, CPrimaryExpressionType}:        _CGotoState120Action,
 	{_CState313, CPostfixExpressionType}:        _CGotoState119Action,
 	{_CState313, CUnaryExpressionType}:          _CGotoState126Action,
@@ -6644,40 +6571,84 @@ var _CActionTable = _CActionTableType{
 	{_CState313, CLogicalOrExpressionType}:      _CGotoState117Action,
 	{_CState313, CConditionalExpressionType}:    _CGotoState106Action,
 	{_CState313, CAssignmentExpressionType}:     _CGotoState103Action,
-	{_CState313, CExpressionType}:               _CGotoState110Action,
-	{_CState313, CStatementType}:                _CGotoState338Action,
-	{_CState313, CLabeledStatementType}:         _CGotoState115Action,
-	{_CState313, CCompoundStatementType}:        _CGotoState105Action,
-	{_CState313, CExpressionStatementType}:      _CGotoState111Action,
-	{_CState313, CSelectionStatementType}:       _CGotoState122Action,
-	{_CState313, CIterationStatementType}:       _CGotoState113Action,
-	{_CState313, CJumpStatementType}:            _CGotoState114Action,
-	{_CState316, CIdentifierToken}:              _CGotoState86Action,
-	{_CState316, CConstantToken}:                _CGotoState78Action,
-	{_CState316, CStringLiteralToken}:           _CGotoState97Action,
-	{_CState316, CSizeofToken}:                  _CGotoState96Action,
-	{_CState316, CIncOpToken}:                   _CGotoState88Action,
-	{_CState316, CDecOpToken}:                   _CGotoState80Action,
-	{_CState316, CCaseToken}:                    _CGotoState77Action,
-	{_CState316, CDefaultToken}:                 _CGotoState81Action,
-	{_CState316, CIfToken}:                      _CGotoState87Action,
-	{_CState316, CSwitchToken}:                  _CGotoState98Action,
+	{_CState313, CExpressionType}:               _CGotoState335Action,
+	{_CState314, CIdentifierToken}:              _CGotoState93Action,
+	{_CState314, CConstantToken}:                _CGotoState86Action,
+	{_CState314, CStringLiteralToken}:           _CGotoState98Action,
+	{_CState314, CSizeofToken}:                  _CGotoState97Action,
+	{_CState314, CIncOpToken}:                   _CGotoState95Action,
+	{_CState314, CDecOpToken}:                   _CGotoState88Action,
+	{_CState314, CCaseToken}:                    _CGotoState85Action,
+	{_CState314, CDefaultToken}:                 _CGotoState89Action,
+	{_CState314, CIfToken}:                      _CGotoState94Action,
+	{_CState314, CSwitchToken}:                  _CGotoState99Action,
+	{_CState314, CWhileToken}:                   _CGotoState100Action,
+	{_CState314, CDoToken}:                      _CGotoState90Action,
+	{_CState314, CForToken}:                     _CGotoState91Action,
+	{_CState314, CGotoToken}:                    _CGotoState92Action,
+	{_CState314, CContinueToken}:                _CGotoState87Action,
+	{_CState314, CBreakToken}:                   _CGotoState84Action,
+	{_CState314, CReturnToken}:                  _CGotoState96Action,
+	{_CState314, '('}:                           _CGotoState77Action,
+	{_CState314, '{'}:                           _CGotoState49Action,
+	{_CState314, ';'}:                           _CGotoState81Action,
+	{_CState314, '*'}:                           _CGotoState78Action,
+	{_CState314, '-'}:                           _CGotoState80Action,
+	{_CState314, '+'}:                           _CGotoState79Action,
+	{_CState314, '&'}:                           _CGotoState76Action,
+	{_CState314, '!'}:                           _CGotoState75Action,
+	{_CState314, '~'}:                           _CGotoState83Action,
+	{_CState314, CPrimaryExpressionType}:        _CGotoState120Action,
+	{_CState314, CPostfixExpressionType}:        _CGotoState119Action,
+	{_CState314, CUnaryExpressionType}:          _CGotoState126Action,
+	{_CState314, CUnaryOperatorType}:            _CGotoState127Action,
+	{_CState314, CCastExpressionType}:           _CGotoState104Action,
+	{_CState314, CMultiplicativeExpressionType}: _CGotoState118Action,
+	{_CState314, CAdditiveExpressionType}:       _CGotoState101Action,
+	{_CState314, CShiftExpressionType}:          _CGotoState123Action,
+	{_CState314, CRelationalExpressionType}:     _CGotoState121Action,
+	{_CState314, CEqualityExpressionType}:       _CGotoState108Action,
+	{_CState314, CAndExpressionType}:            _CGotoState102Action,
+	{_CState314, CExclusiveOrExpressionType}:    _CGotoState109Action,
+	{_CState314, CInclusiveOrExpressionType}:    _CGotoState112Action,
+	{_CState314, CLogicalAndExpressionType}:     _CGotoState116Action,
+	{_CState314, CLogicalOrExpressionType}:      _CGotoState117Action,
+	{_CState314, CConditionalExpressionType}:    _CGotoState106Action,
+	{_CState314, CAssignmentExpressionType}:     _CGotoState103Action,
+	{_CState314, CExpressionType}:               _CGotoState110Action,
+	{_CState314, CStatementType}:                _CGotoState338Action,
+	{_CState314, CLabeledStatementType}:         _CGotoState115Action,
+	{_CState314, CCompoundStatementType}:        _CGotoState105Action,
+	{_CState314, CExpressionStatementType}:      _CGotoState111Action,
+	{_CState314, CSelectionStatementType}:       _CGotoState122Action,
+	{_CState314, CIterationStatementType}:       _CGotoState113Action,
+	{_CState314, CJumpStatementType}:            _CGotoState114Action,
+	{_CState316, CIdentifierToken}:              _CGotoState93Action,
+	{_CState316, CConstantToken}:                _CGotoState86Action,
+	{_CState316, CStringLiteralToken}:           _CGotoState98Action,
+	{_CState316, CSizeofToken}:                  _CGotoState97Action,
+	{_CState316, CIncOpToken}:                   _CGotoState95Action,
+	{_CState316, CDecOpToken}:                   _CGotoState88Action,
+	{_CState316, CCaseToken}:                    _CGotoState85Action,
+	{_CState316, CDefaultToken}:                 _CGotoState89Action,
+	{_CState316, CIfToken}:                      _CGotoState94Action,
+	{_CState316, CSwitchToken}:                  _CGotoState99Action,
 	{_CState316, CWhileToken}:                   _CGotoState100Action,
-	{_CState316, CDoToken}:                      _CGotoState82Action,
-	{_CState316, CForToken}:                     _CGotoState84Action,
-	{_CState316, CGotoToken}:                    _CGotoState85Action,
-	{_CState316, CContinueToken}:                _CGotoState79Action,
-	{_CState316, CBreakToken}:                   _CGotoState76Action,
-	{_CState316, CReturnToken}:                  _CGotoState94Action,
-	{_CState316, CLparamToken}:                  _CGotoState89Action,
-	{_CState316, CLcurlToken}:                   _CGotoState49Action,
-	{_CState316, CSemicolonToken}:               _CGotoState95Action,
-	{_CState316, CMulToken}:                     _CGotoState91Action,
-	{_CState316, CMinusToken}:                   _CGotoState90Action,
-	{_CState316, CPlusToken}:                    _CGotoState92Action,
-	{_CState316, CAndToken}:                     _CGotoState75Action,
-	{_CState316, CExclaimToken}:                 _CGotoState83Action,
-	{_CState316, CTildaToken}:                   _CGotoState99Action,
+	{_CState316, CDoToken}:                      _CGotoState90Action,
+	{_CState316, CForToken}:                     _CGotoState91Action,
+	{_CState316, CGotoToken}:                    _CGotoState92Action,
+	{_CState316, CContinueToken}:                _CGotoState87Action,
+	{_CState316, CBreakToken}:                   _CGotoState84Action,
+	{_CState316, CReturnToken}:                  _CGotoState96Action,
+	{_CState316, '('}:                           _CGotoState77Action,
+	{_CState316, '{'}:                           _CGotoState49Action,
+	{_CState316, ';'}:                           _CGotoState81Action,
+	{_CState316, '*'}:                           _CGotoState78Action,
+	{_CState316, '-'}:                           _CGotoState80Action,
+	{_CState316, '+'}:                           _CGotoState79Action,
+	{_CState316, '&'}:                           _CGotoState76Action,
+	{_CState316, '!'}:                           _CGotoState75Action,
+	{_CState316, '~'}:                           _CGotoState83Action,
 	{_CState316, CPrimaryExpressionType}:        _CGotoState120Action,
 	{_CState316, CPostfixExpressionType}:        _CGotoState119Action,
 	{_CState316, CUnaryExpressionType}:          _CGotoState126Action,
@@ -6703,32 +6674,32 @@ var _CActionTable = _CActionTableType{
 	{_CState316, CSelectionStatementType}:       _CGotoState122Action,
 	{_CState316, CIterationStatementType}:       _CGotoState113Action,
 	{_CState316, CJumpStatementType}:            _CGotoState114Action,
-	{_CState317, CIdentifierToken}:              _CGotoState86Action,
-	{_CState317, CConstantToken}:                _CGotoState78Action,
-	{_CState317, CStringLiteralToken}:           _CGotoState97Action,
-	{_CState317, CSizeofToken}:                  _CGotoState96Action,
-	{_CState317, CIncOpToken}:                   _CGotoState88Action,
-	{_CState317, CDecOpToken}:                   _CGotoState80Action,
-	{_CState317, CCaseToken}:                    _CGotoState77Action,
-	{_CState317, CDefaultToken}:                 _CGotoState81Action,
-	{_CState317, CIfToken}:                      _CGotoState87Action,
-	{_CState317, CSwitchToken}:                  _CGotoState98Action,
+	{_CState317, CIdentifierToken}:              _CGotoState93Action,
+	{_CState317, CConstantToken}:                _CGotoState86Action,
+	{_CState317, CStringLiteralToken}:           _CGotoState98Action,
+	{_CState317, CSizeofToken}:                  _CGotoState97Action,
+	{_CState317, CIncOpToken}:                   _CGotoState95Action,
+	{_CState317, CDecOpToken}:                   _CGotoState88Action,
+	{_CState317, CCaseToken}:                    _CGotoState85Action,
+	{_CState317, CDefaultToken}:                 _CGotoState89Action,
+	{_CState317, CIfToken}:                      _CGotoState94Action,
+	{_CState317, CSwitchToken}:                  _CGotoState99Action,
 	{_CState317, CWhileToken}:                   _CGotoState100Action,
-	{_CState317, CDoToken}:                      _CGotoState82Action,
-	{_CState317, CForToken}:                     _CGotoState84Action,
-	{_CState317, CGotoToken}:                    _CGotoState85Action,
-	{_CState317, CContinueToken}:                _CGotoState79Action,
-	{_CState317, CBreakToken}:                   _CGotoState76Action,
-	{_CState317, CReturnToken}:                  _CGotoState94Action,
-	{_CState317, CLparamToken}:                  _CGotoState89Action,
-	{_CState317, CLcurlToken}:                   _CGotoState49Action,
-	{_CState317, CSemicolonToken}:               _CGotoState95Action,
-	{_CState317, CMulToken}:                     _CGotoState91Action,
-	{_CState317, CMinusToken}:                   _CGotoState90Action,
-	{_CState317, CPlusToken}:                    _CGotoState92Action,
-	{_CState317, CAndToken}:                     _CGotoState75Action,
-	{_CState317, CExclaimToken}:                 _CGotoState83Action,
-	{_CState317, CTildaToken}:                   _CGotoState99Action,
+	{_CState317, CDoToken}:                      _CGotoState90Action,
+	{_CState317, CForToken}:                     _CGotoState91Action,
+	{_CState317, CGotoToken}:                    _CGotoState92Action,
+	{_CState317, CContinueToken}:                _CGotoState87Action,
+	{_CState317, CBreakToken}:                   _CGotoState84Action,
+	{_CState317, CReturnToken}:                  _CGotoState96Action,
+	{_CState317, '('}:                           _CGotoState77Action,
+	{_CState317, '{'}:                           _CGotoState49Action,
+	{_CState317, ';'}:                           _CGotoState81Action,
+	{_CState317, '*'}:                           _CGotoState78Action,
+	{_CState317, '-'}:                           _CGotoState80Action,
+	{_CState317, '+'}:                           _CGotoState79Action,
+	{_CState317, '&'}:                           _CGotoState76Action,
+	{_CState317, '!'}:                           _CGotoState75Action,
+	{_CState317, '~'}:                           _CGotoState83Action,
 	{_CState317, CPrimaryExpressionType}:        _CGotoState120Action,
 	{_CState317, CPostfixExpressionType}:        _CGotoState119Action,
 	{_CState317, CUnaryExpressionType}:          _CGotoState126Action,
@@ -6754,22 +6725,22 @@ var _CActionTable = _CActionTableType{
 	{_CState317, CSelectionStatementType}:       _CGotoState122Action,
 	{_CState317, CIterationStatementType}:       _CGotoState113Action,
 	{_CState317, CJumpStatementType}:            _CGotoState114Action,
-	{_CState318, CIdentifierToken}:              _CGotoState131Action,
-	{_CState318, CConstantToken}:                _CGotoState78Action,
-	{_CState318, CStringLiteralToken}:           _CGotoState97Action,
-	{_CState318, CSizeofToken}:                  _CGotoState96Action,
-	{_CState318, CIncOpToken}:                   _CGotoState88Action,
-	{_CState318, CDecOpToken}:                   _CGotoState80Action,
-	{_CState318, CLparamToken}:                  _CGotoState89Action,
-	{_CState318, CMulToken}:                     _CGotoState91Action,
-	{_CState318, CMinusToken}:                   _CGotoState90Action,
-	{_CState318, CPlusToken}:                    _CGotoState92Action,
-	{_CState318, CAndToken}:                     _CGotoState75Action,
-	{_CState318, CExclaimToken}:                 _CGotoState83Action,
-	{_CState318, CTildaToken}:                   _CGotoState99Action,
+	{_CState318, CIdentifierToken}:              _CGotoState139Action,
+	{_CState318, CConstantToken}:                _CGotoState86Action,
+	{_CState318, CStringLiteralToken}:           _CGotoState98Action,
+	{_CState318, CSizeofToken}:                  _CGotoState97Action,
+	{_CState318, CIncOpToken}:                   _CGotoState95Action,
+	{_CState318, CDecOpToken}:                   _CGotoState88Action,
+	{_CState318, '('}:                           _CGotoState77Action,
+	{_CState318, '*'}:                           _CGotoState78Action,
+	{_CState318, '-'}:                           _CGotoState80Action,
+	{_CState318, '+'}:                           _CGotoState79Action,
+	{_CState318, '&'}:                           _CGotoState76Action,
+	{_CState318, '!'}:                           _CGotoState75Action,
+	{_CState318, '~'}:                           _CGotoState83Action,
 	{_CState318, CPrimaryExpressionType}:        _CGotoState120Action,
 	{_CState318, CPostfixExpressionType}:        _CGotoState119Action,
-	{_CState318, CUnaryExpressionType}:          _CGotoState135Action,
+	{_CState318, CUnaryExpressionType}:          _CGotoState142Action,
 	{_CState318, CUnaryOperatorType}:            _CGotoState127Action,
 	{_CState318, CCastExpressionType}:           _CGotoState104Action,
 	{_CState318, CMultiplicativeExpressionType}: _CGotoState118Action,
@@ -6783,19 +6754,19 @@ var _CActionTable = _CActionTableType{
 	{_CState318, CLogicalAndExpressionType}:     _CGotoState116Action,
 	{_CState318, CLogicalOrExpressionType}:      _CGotoState117Action,
 	{_CState318, CConditionalExpressionType}:    _CGotoState341Action,
-	{_CState320, CIdentifierToken}:              _CGotoState131Action,
-	{_CState320, CConstantToken}:                _CGotoState78Action,
-	{_CState320, CStringLiteralToken}:           _CGotoState97Action,
-	{_CState320, CSizeofToken}:                  _CGotoState96Action,
-	{_CState320, CIncOpToken}:                   _CGotoState88Action,
-	{_CState320, CDecOpToken}:                   _CGotoState80Action,
-	{_CState320, CLparamToken}:                  _CGotoState89Action,
-	{_CState320, CMulToken}:                     _CGotoState91Action,
-	{_CState320, CMinusToken}:                   _CGotoState90Action,
-	{_CState320, CPlusToken}:                    _CGotoState92Action,
-	{_CState320, CAndToken}:                     _CGotoState75Action,
-	{_CState320, CExclaimToken}:                 _CGotoState83Action,
-	{_CState320, CTildaToken}:                   _CGotoState99Action,
+	{_CState320, CIdentifierToken}:              _CGotoState139Action,
+	{_CState320, CConstantToken}:                _CGotoState86Action,
+	{_CState320, CStringLiteralToken}:           _CGotoState98Action,
+	{_CState320, CSizeofToken}:                  _CGotoState97Action,
+	{_CState320, CIncOpToken}:                   _CGotoState95Action,
+	{_CState320, CDecOpToken}:                   _CGotoState88Action,
+	{_CState320, '('}:                           _CGotoState77Action,
+	{_CState320, '*'}:                           _CGotoState78Action,
+	{_CState320, '-'}:                           _CGotoState80Action,
+	{_CState320, '+'}:                           _CGotoState79Action,
+	{_CState320, '&'}:                           _CGotoState76Action,
+	{_CState320, '!'}:                           _CGotoState75Action,
+	{_CState320, '~'}:                           _CGotoState83Action,
 	{_CState320, CPrimaryExpressionType}:        _CGotoState120Action,
 	{_CState320, CPostfixExpressionType}:        _CGotoState119Action,
 	{_CState320, CUnaryExpressionType}:          _CGotoState126Action,
@@ -6813,36 +6784,36 @@ var _CActionTable = _CActionTableType{
 	{_CState320, CLogicalOrExpressionType}:      _CGotoState117Action,
 	{_CState320, CConditionalExpressionType}:    _CGotoState106Action,
 	{_CState320, CAssignmentExpressionType}:     _CGotoState342Action,
-	{_CState326, CRbraceToken}:                  _CGotoState343Action,
-	{_CState328, CRparamToken}:                  _CGotoState344Action,
-	{_CState333, CRparamToken}:                  _CGotoState345Action,
-	{_CState333, CCommaToken}:                   _CGotoState187Action,
-	{_CState334, CIdentifierToken}:              _CGotoState86Action,
-	{_CState334, CConstantToken}:                _CGotoState78Action,
-	{_CState334, CStringLiteralToken}:           _CGotoState97Action,
-	{_CState334, CSizeofToken}:                  _CGotoState96Action,
-	{_CState334, CIncOpToken}:                   _CGotoState88Action,
-	{_CState334, CDecOpToken}:                   _CGotoState80Action,
-	{_CState334, CCaseToken}:                    _CGotoState77Action,
-	{_CState334, CDefaultToken}:                 _CGotoState81Action,
-	{_CState334, CIfToken}:                      _CGotoState87Action,
-	{_CState334, CSwitchToken}:                  _CGotoState98Action,
+	{_CState326, ')'}:                           _CGotoState343Action,
+	{_CState328, ']'}:                           _CGotoState344Action,
+	{_CState333, ')'}:                           _CGotoState345Action,
+	{_CState333, ','}:                           _CGotoState187Action,
+	{_CState334, CIdentifierToken}:              _CGotoState93Action,
+	{_CState334, CConstantToken}:                _CGotoState86Action,
+	{_CState334, CStringLiteralToken}:           _CGotoState98Action,
+	{_CState334, CSizeofToken}:                  _CGotoState97Action,
+	{_CState334, CIncOpToken}:                   _CGotoState95Action,
+	{_CState334, CDecOpToken}:                   _CGotoState88Action,
+	{_CState334, CCaseToken}:                    _CGotoState85Action,
+	{_CState334, CDefaultToken}:                 _CGotoState89Action,
+	{_CState334, CIfToken}:                      _CGotoState94Action,
+	{_CState334, CSwitchToken}:                  _CGotoState99Action,
 	{_CState334, CWhileToken}:                   _CGotoState100Action,
-	{_CState334, CDoToken}:                      _CGotoState82Action,
-	{_CState334, CForToken}:                     _CGotoState84Action,
-	{_CState334, CGotoToken}:                    _CGotoState85Action,
-	{_CState334, CContinueToken}:                _CGotoState79Action,
-	{_CState334, CBreakToken}:                   _CGotoState76Action,
-	{_CState334, CReturnToken}:                  _CGotoState94Action,
-	{_CState334, CLparamToken}:                  _CGotoState89Action,
-	{_CState334, CLcurlToken}:                   _CGotoState49Action,
-	{_CState334, CSemicolonToken}:               _CGotoState95Action,
-	{_CState334, CMulToken}:                     _CGotoState91Action,
-	{_CState334, CMinusToken}:                   _CGotoState90Action,
-	{_CState334, CPlusToken}:                    _CGotoState92Action,
-	{_CState334, CAndToken}:                     _CGotoState75Action,
-	{_CState334, CExclaimToken}:                 _CGotoState83Action,
-	{_CState334, CTildaToken}:                   _CGotoState99Action,
+	{_CState334, CDoToken}:                      _CGotoState90Action,
+	{_CState334, CForToken}:                     _CGotoState91Action,
+	{_CState334, CGotoToken}:                    _CGotoState92Action,
+	{_CState334, CContinueToken}:                _CGotoState87Action,
+	{_CState334, CBreakToken}:                   _CGotoState84Action,
+	{_CState334, CReturnToken}:                  _CGotoState96Action,
+	{_CState334, '('}:                           _CGotoState77Action,
+	{_CState334, '{'}:                           _CGotoState49Action,
+	{_CState334, ';'}:                           _CGotoState81Action,
+	{_CState334, '*'}:                           _CGotoState78Action,
+	{_CState334, '-'}:                           _CGotoState80Action,
+	{_CState334, '+'}:                           _CGotoState79Action,
+	{_CState334, '&'}:                           _CGotoState76Action,
+	{_CState334, '!'}:                           _CGotoState75Action,
+	{_CState334, '~'}:                           _CGotoState83Action,
 	{_CState334, CPrimaryExpressionType}:        _CGotoState120Action,
 	{_CState334, CPostfixExpressionType}:        _CGotoState119Action,
 	{_CState334, CUnaryExpressionType}:          _CGotoState126Action,
@@ -6868,38 +6839,38 @@ var _CActionTable = _CActionTableType{
 	{_CState334, CSelectionStatementType}:       _CGotoState122Action,
 	{_CState334, CIterationStatementType}:       _CGotoState113Action,
 	{_CState334, CJumpStatementType}:            _CGotoState114Action,
-	{_CState335, CRparamToken}:                  _CGotoState347Action,
-	{_CState335, CCommaToken}:                   _CGotoState187Action,
+	{_CState335, ')'}:                           _CGotoState347Action,
+	{_CState335, ','}:                           _CGotoState187Action,
 	{_CState336, CElseToken}:                    _CGotoState348Action,
 	{_CState337, CElseToken}:                    _CGotoState348Action,
 	{_CState338, CElseToken}:                    _CGotoState348Action,
-	{_CState345, CSemicolonToken}:               _CGotoState349Action,
-	{_CState347, CIdentifierToken}:              _CGotoState86Action,
-	{_CState347, CConstantToken}:                _CGotoState78Action,
-	{_CState347, CStringLiteralToken}:           _CGotoState97Action,
-	{_CState347, CSizeofToken}:                  _CGotoState96Action,
-	{_CState347, CIncOpToken}:                   _CGotoState88Action,
-	{_CState347, CDecOpToken}:                   _CGotoState80Action,
-	{_CState347, CCaseToken}:                    _CGotoState77Action,
-	{_CState347, CDefaultToken}:                 _CGotoState81Action,
-	{_CState347, CIfToken}:                      _CGotoState87Action,
-	{_CState347, CSwitchToken}:                  _CGotoState98Action,
+	{_CState345, ';'}:                           _CGotoState349Action,
+	{_CState347, CIdentifierToken}:              _CGotoState93Action,
+	{_CState347, CConstantToken}:                _CGotoState86Action,
+	{_CState347, CStringLiteralToken}:           _CGotoState98Action,
+	{_CState347, CSizeofToken}:                  _CGotoState97Action,
+	{_CState347, CIncOpToken}:                   _CGotoState95Action,
+	{_CState347, CDecOpToken}:                   _CGotoState88Action,
+	{_CState347, CCaseToken}:                    _CGotoState85Action,
+	{_CState347, CDefaultToken}:                 _CGotoState89Action,
+	{_CState347, CIfToken}:                      _CGotoState94Action,
+	{_CState347, CSwitchToken}:                  _CGotoState99Action,
 	{_CState347, CWhileToken}:                   _CGotoState100Action,
-	{_CState347, CDoToken}:                      _CGotoState82Action,
-	{_CState347, CForToken}:                     _CGotoState84Action,
-	{_CState347, CGotoToken}:                    _CGotoState85Action,
-	{_CState347, CContinueToken}:                _CGotoState79Action,
-	{_CState347, CBreakToken}:                   _CGotoState76Action,
-	{_CState347, CReturnToken}:                  _CGotoState94Action,
-	{_CState347, CLparamToken}:                  _CGotoState89Action,
-	{_CState347, CLcurlToken}:                   _CGotoState49Action,
-	{_CState347, CSemicolonToken}:               _CGotoState95Action,
-	{_CState347, CMulToken}:                     _CGotoState91Action,
-	{_CState347, CMinusToken}:                   _CGotoState90Action,
-	{_CState347, CPlusToken}:                    _CGotoState92Action,
-	{_CState347, CAndToken}:                     _CGotoState75Action,
-	{_CState347, CExclaimToken}:                 _CGotoState83Action,
-	{_CState347, CTildaToken}:                   _CGotoState99Action,
+	{_CState347, CDoToken}:                      _CGotoState90Action,
+	{_CState347, CForToken}:                     _CGotoState91Action,
+	{_CState347, CGotoToken}:                    _CGotoState92Action,
+	{_CState347, CContinueToken}:                _CGotoState87Action,
+	{_CState347, CBreakToken}:                   _CGotoState84Action,
+	{_CState347, CReturnToken}:                  _CGotoState96Action,
+	{_CState347, '('}:                           _CGotoState77Action,
+	{_CState347, '{'}:                           _CGotoState49Action,
+	{_CState347, ';'}:                           _CGotoState81Action,
+	{_CState347, '*'}:                           _CGotoState78Action,
+	{_CState347, '-'}:                           _CGotoState80Action,
+	{_CState347, '+'}:                           _CGotoState79Action,
+	{_CState347, '&'}:                           _CGotoState76Action,
+	{_CState347, '!'}:                           _CGotoState75Action,
+	{_CState347, '~'}:                           _CGotoState83Action,
 	{_CState347, CPrimaryExpressionType}:        _CGotoState120Action,
 	{_CState347, CPostfixExpressionType}:        _CGotoState119Action,
 	{_CState347, CUnaryExpressionType}:          _CGotoState126Action,
@@ -6925,32 +6896,32 @@ var _CActionTable = _CActionTableType{
 	{_CState347, CSelectionStatementType}:       _CGotoState122Action,
 	{_CState347, CIterationStatementType}:       _CGotoState113Action,
 	{_CState347, CJumpStatementType}:            _CGotoState114Action,
-	{_CState348, CIdentifierToken}:              _CGotoState86Action,
-	{_CState348, CConstantToken}:                _CGotoState78Action,
-	{_CState348, CStringLiteralToken}:           _CGotoState97Action,
-	{_CState348, CSizeofToken}:                  _CGotoState96Action,
-	{_CState348, CIncOpToken}:                   _CGotoState88Action,
-	{_CState348, CDecOpToken}:                   _CGotoState80Action,
-	{_CState348, CCaseToken}:                    _CGotoState77Action,
-	{_CState348, CDefaultToken}:                 _CGotoState81Action,
-	{_CState348, CIfToken}:                      _CGotoState87Action,
-	{_CState348, CSwitchToken}:                  _CGotoState98Action,
+	{_CState348, CIdentifierToken}:              _CGotoState93Action,
+	{_CState348, CConstantToken}:                _CGotoState86Action,
+	{_CState348, CStringLiteralToken}:           _CGotoState98Action,
+	{_CState348, CSizeofToken}:                  _CGotoState97Action,
+	{_CState348, CIncOpToken}:                   _CGotoState95Action,
+	{_CState348, CDecOpToken}:                   _CGotoState88Action,
+	{_CState348, CCaseToken}:                    _CGotoState85Action,
+	{_CState348, CDefaultToken}:                 _CGotoState89Action,
+	{_CState348, CIfToken}:                      _CGotoState94Action,
+	{_CState348, CSwitchToken}:                  _CGotoState99Action,
 	{_CState348, CWhileToken}:                   _CGotoState100Action,
-	{_CState348, CDoToken}:                      _CGotoState82Action,
-	{_CState348, CForToken}:                     _CGotoState84Action,
-	{_CState348, CGotoToken}:                    _CGotoState85Action,
-	{_CState348, CContinueToken}:                _CGotoState79Action,
-	{_CState348, CBreakToken}:                   _CGotoState76Action,
-	{_CState348, CReturnToken}:                  _CGotoState94Action,
-	{_CState348, CLparamToken}:                  _CGotoState89Action,
-	{_CState348, CLcurlToken}:                   _CGotoState49Action,
-	{_CState348, CSemicolonToken}:               _CGotoState95Action,
-	{_CState348, CMulToken}:                     _CGotoState91Action,
-	{_CState348, CMinusToken}:                   _CGotoState90Action,
-	{_CState348, CPlusToken}:                    _CGotoState92Action,
-	{_CState348, CAndToken}:                     _CGotoState75Action,
-	{_CState348, CExclaimToken}:                 _CGotoState83Action,
-	{_CState348, CTildaToken}:                   _CGotoState99Action,
+	{_CState348, CDoToken}:                      _CGotoState90Action,
+	{_CState348, CForToken}:                     _CGotoState91Action,
+	{_CState348, CGotoToken}:                    _CGotoState92Action,
+	{_CState348, CContinueToken}:                _CGotoState87Action,
+	{_CState348, CBreakToken}:                   _CGotoState84Action,
+	{_CState348, CReturnToken}:                  _CGotoState96Action,
+	{_CState348, '('}:                           _CGotoState77Action,
+	{_CState348, '{'}:                           _CGotoState49Action,
+	{_CState348, ';'}:                           _CGotoState81Action,
+	{_CState348, '*'}:                           _CGotoState78Action,
+	{_CState348, '-'}:                           _CGotoState80Action,
+	{_CState348, '+'}:                           _CGotoState79Action,
+	{_CState348, '&'}:                           _CGotoState76Action,
+	{_CState348, '!'}:                           _CGotoState75Action,
+	{_CState348, '~'}:                           _CGotoState83Action,
 	{_CState348, CPrimaryExpressionType}:        _CGotoState120Action,
 	{_CState348, CPostfixExpressionType}:        _CGotoState119Action,
 	{_CState348, CUnaryExpressionType}:          _CGotoState126Action,
@@ -6976,16 +6947,16 @@ var _CActionTable = _CActionTableType{
 	{_CState348, CSelectionStatementType}:       _CGotoState122Action,
 	{_CState348, CIterationStatementType}:       _CGotoState113Action,
 	{_CState348, CJumpStatementType}:            _CGotoState114Action,
-	{_CState3, _CWildcardMarker}:                _CReduceDToStorageClassSpecifierAction,
-	{_CState4, _CWildcardMarker}:                _CReduceBToTypeSpecifierAction,
-	{_CState5, _CWildcardMarker}:                _CReduceAToTypeQualifierAction,
-	{_CState6, _CWildcardMarker}:                _CReduceGToTypeSpecifierAction,
-	{_CState8, _CWildcardMarker}:                _CReduceBToStorageClassSpecifierAction,
-	{_CState9, _CWildcardMarker}:                _CReduceFToTypeSpecifierAction,
-	{_CState10, _CWildcardMarker}:               _CReduceAToDirectDeclaratorAction,
-	{_CState11, _CWildcardMarker}:               _CReduceDToTypeSpecifierAction,
-	{_CState12, _CWildcardMarker}:               _CReduceEToTypeSpecifierAction,
-	{_CState14, _CWildcardMarker}:               _CReduceAToPointerAction,
+	{_CState4, _CWildcardMarker}:                _CReduceAToPointerAction,
+	{_CState5, _CWildcardMarker}:                _CReduceDToStorageClassSpecifierAction,
+	{_CState6, _CWildcardMarker}:                _CReduceBToTypeSpecifierAction,
+	{_CState7, _CWildcardMarker}:                _CReduceAToTypeQualifierAction,
+	{_CState8, _CWildcardMarker}:                _CReduceGToTypeSpecifierAction,
+	{_CState10, _CWildcardMarker}:               _CReduceBToStorageClassSpecifierAction,
+	{_CState11, _CWildcardMarker}:               _CReduceFToTypeSpecifierAction,
+	{_CState12, _CWildcardMarker}:               _CReduceAToDirectDeclaratorAction,
+	{_CState13, _CWildcardMarker}:               _CReduceDToTypeSpecifierAction,
+	{_CState14, _CWildcardMarker}:               _CReduceEToTypeSpecifierAction,
 	{_CState15, _CWildcardMarker}:               _CReduceEToStorageClassSpecifierAction,
 	{_CState16, _CWildcardMarker}:               _CReduceCToTypeSpecifierAction,
 	{_CState17, _CWildcardMarker}:               _CReduceHToTypeSpecifierAction,
@@ -7006,10 +6977,10 @@ var _CActionTable = _CActionTableType{
 	{_CState36, _CWildcardMarker}:               _CReduceJToTypeSpecifierAction,
 	{_CState37, _CWildcardMarker}:               _CReduceEToDeclarationSpecifiersAction,
 	{_CState38, _CWildcardMarker}:               _CReduceCToDeclarationSpecifiersAction,
-	{_CState39, _CWildcardMarker}:               _CReduceCToEnumSpecifierAction,
-	{_CState42, _CWildcardMarker}:               _CReduceCToPointerAction,
-	{_CState43, _CWildcardMarker}:               _CReduceAToTypeQualifierListAction,
-	{_CState44, _CWildcardMarker}:               _CReduceBToPointerAction,
+	{_CState40, _CWildcardMarker}:               _CReduceCToPointerAction,
+	{_CState41, _CWildcardMarker}:               _CReduceAToTypeQualifierListAction,
+	{_CState42, _CWildcardMarker}:               _CReduceBToPointerAction,
+	{_CState44, _CWildcardMarker}:               _CReduceCToEnumSpecifierAction,
 	{_CState45, _CWildcardMarker}:               _CReduceAToDeclarationAction,
 	{_CState46, _CWildcardMarker}:               _CReduceAToInitDeclaratorAction,
 	{_CState47, _CWildcardMarker}:               _CReduceAToInitDeclaratorListAction,
@@ -7017,28 +6988,28 @@ var _CActionTable = _CActionTableType{
 	{_CState51, _CWildcardMarker}:               _CReduceAToDeclarationListAction,
 	{_CState56, _CWildcardMarker}:               _CReduceAToDeclaratorAction,
 	{_CState57, _CWildcardMarker}:               _CReduceBToDeclarationSpecifiersAction,
-	{_CState58, _CWildcardMarker}:               _CReduceCToStructOrUnionSpecifierAction,
+	{_CState59, _CWildcardMarker}:               _CReduceCToStructOrUnionSpecifierAction,
 	{_CState60, _CWildcardMarker}:               _CReduceBToTranslationUnitAction,
 	{_CState61, _CWildcardMarker}:               _CReduceFToDeclarationSpecifiersAction,
 	{_CState62, _CWildcardMarker}:               _CReduceDToDeclarationSpecifiersAction,
-	{_CState64, _CWildcardMarker}:               _CReduceAToEnumeratorAction,
-	{_CState65, _CWildcardMarker}:               _CReduceAToEnumeratorListAction,
-	{_CState67, _CWildcardMarker}:               _CReduceBToDirectDeclaratorAction,
-	{_CState68, _CWildcardMarker}:               _CReduceDToPointerAction,
-	{_CState69, _CWildcardMarker}:               _CReduceBToTypeQualifierListAction,
+	{_CState63, _CWildcardMarker}:               _CReduceBToDirectDeclaratorAction,
+	{_CState64, _CWildcardMarker}:               _CReduceDToPointerAction,
+	{_CState65, _CWildcardMarker}:               _CReduceBToTypeQualifierListAction,
+	{_CState66, _CWildcardMarker}:               _CReduceAToEnumeratorAction,
+	{_CState67, _CWildcardMarker}:               _CReduceAToEnumeratorListAction,
 	{_CState71, _CWildcardMarker}:               _CReduceBToFunctionDefinitionAction,
 	{_CState74, _CWildcardMarker}:               _CReduceBToDeclarationAction,
-	{_CState75, _CWildcardMarker}:               _CReduceAToUnaryOperatorAction,
-	{_CState78, _CWildcardMarker}:               _CReduceBToPrimaryExpressionAction,
-	{_CState83, _CWildcardMarker}:               _CReduceFToUnaryOperatorAction,
-	{_CState86, _CWildcardMarker}:               _CReduceAToPrimaryExpressionAction,
-	{_CState90, _CWildcardMarker}:               _CReduceDToUnaryOperatorAction,
-	{_CState91, _CWildcardMarker}:               _CReduceBToUnaryOperatorAction,
-	{_CState92, _CWildcardMarker}:               _CReduceCToUnaryOperatorAction,
-	{_CState93, _CWildcardMarker}:               _CReduceAToCompoundStatementAction,
-	{_CState95, _CWildcardMarker}:               _CReduceAToExpressionStatementAction,
-	{_CState97, _CWildcardMarker}:               _CReduceCToPrimaryExpressionAction,
-	{_CState99, _CWildcardMarker}:               _CReduceEToUnaryOperatorAction,
+	{_CState75, _CWildcardMarker}:               _CReduceFToUnaryOperatorAction,
+	{_CState76, _CWildcardMarker}:               _CReduceAToUnaryOperatorAction,
+	{_CState78, _CWildcardMarker}:               _CReduceBToUnaryOperatorAction,
+	{_CState79, _CWildcardMarker}:               _CReduceCToUnaryOperatorAction,
+	{_CState80, _CWildcardMarker}:               _CReduceDToUnaryOperatorAction,
+	{_CState81, _CWildcardMarker}:               _CReduceAToExpressionStatementAction,
+	{_CState82, _CWildcardMarker}:               _CReduceAToCompoundStatementAction,
+	{_CState83, _CWildcardMarker}:               _CReduceEToUnaryOperatorAction,
+	{_CState86, _CWildcardMarker}:               _CReduceBToPrimaryExpressionAction,
+	{_CState93, _CWildcardMarker}:               _CReduceAToPrimaryExpressionAction,
+	{_CState98, _CWildcardMarker}:               _CReduceCToPrimaryExpressionAction,
 	{_CState101, _CWildcardMarker}:              _CReduceAToShiftExpressionAction,
 	{_CState102, _CWildcardMarker}:              _CReduceAToExclusiveOrExpressionAction,
 	{_CState103, _CWildcardMarker}:              _CReduceAToExpressionAction,
@@ -7065,40 +7036,40 @@ var _CActionTable = _CActionTableType{
 	{_CState128, _CWildcardMarker}:              _CReduceCToFunctionDefinitionAction,
 	{_CState129, _CWildcardMarker}:              _CReduceBToDeclarationListAction,
 	{_CState130, _CWildcardMarker}:              _CReduceAToInitDeclaratorAction,
-	{_CState131, _CWildcardMarker}:              _CReduceAToPrimaryExpressionAction,
-	{_CState132, _CWildcardMarker}:              _CReduceDToDirectDeclaratorAction,
-	{_CState133, _CWildcardMarker}:              _CReduceAToConstantExpressionAction,
-	{_CState135, _CWildcardMarker}:              _CReduceAToCastExpressionAction,
-	{_CState136, _CWildcardMarker}:              _CReduceAToIdentifierListAction,
-	{_CState137, _CWildcardMarker}:              _CReduceGToDirectDeclaratorAction,
-	{_CState138, _CWildcardMarker}:              _CReduceCToParameterDeclarationAction,
-	{_CState140, _CWildcardMarker}:              _CReduceAToParameterListAction,
-	{_CState141, CRparamToken}:                  _CReduceAToParameterTypeListAction,
-	{_CState145, _CWildcardMarker}:              _CReduceAToStructDeclarationListAction,
-	{_CState147, _CWildcardMarker}:              _CReduceDToSpecifierQualifierListAction,
-	{_CState148, _CWildcardMarker}:              _CReduceBToSpecifierQualifierListAction,
-	{_CState152, _CWildcardMarker}:              _CReduceAToEnumSpecifierAction,
+	{_CState131, _CWildcardMarker}:              _CReduceGToDirectDeclaratorAction,
+	{_CState132, _CWildcardMarker}:              _CReduceAToIdentifierListAction,
+	{_CState133, _CWildcardMarker}:              _CReduceCToParameterDeclarationAction,
+	{_CState135, _CWildcardMarker}:              _CReduceAToParameterListAction,
+	{_CState136, ')'}:                           _CReduceAToParameterTypeListAction,
+	{_CState138, _CWildcardMarker}:              _CReduceDToDirectDeclaratorAction,
+	{_CState139, _CWildcardMarker}:              _CReduceAToPrimaryExpressionAction,
+	{_CState140, _CWildcardMarker}:              _CReduceAToConstantExpressionAction,
+	{_CState142, _CWildcardMarker}:              _CReduceAToCastExpressionAction,
+	{_CState144, _CWildcardMarker}:              _CReduceAToStructDeclarationListAction,
+	{_CState146, _CWildcardMarker}:              _CReduceDToSpecifierQualifierListAction,
+	{_CState147, _CWildcardMarker}:              _CReduceBToSpecifierQualifierListAction,
+	{_CState151, _CWildcardMarker}:              _CReduceAToEnumSpecifierAction,
 	{_CState154, _CWildcardMarker}:              _CReduceAToInitializerAction,
 	{_CState155, _CWildcardMarker}:              _CReduceBToInitDeclaratorAction,
 	{_CState156, _CWildcardMarker}:              _CReduceAToFunctionDefinitionAction,
 	{_CState157, _CWildcardMarker}:              _CReduceBToInitDeclaratorListAction,
-	{_CState158, _CWildcardMarker}:              _CReduceCToJumpStatementAction,
-	{_CState160, _CWildcardMarker}:              _CReduceBToJumpStatementAction,
-	{_CState162, _CWildcardMarker}:              _CReduceCToUnaryExpressionAction,
-	{_CState169, _CWildcardMarker}:              _CReduceBToUnaryExpressionAction,
-	{_CState171, CRparamToken}:                  _CReduceAToTypeNameAction,
+	{_CState159, ')'}:                           _CReduceAToTypeNameAction,
+	{_CState161, _CWildcardMarker}:              _CReduceCToJumpStatementAction,
+	{_CState163, _CWildcardMarker}:              _CReduceBToJumpStatementAction,
+	{_CState165, _CWildcardMarker}:              _CReduceCToUnaryExpressionAction,
+	{_CState172, _CWildcardMarker}:              _CReduceBToUnaryExpressionAction,
 	{_CState173, _CWildcardMarker}:              _CReduceDToJumpStatementAction,
 	{_CState176, _CWildcardMarker}:              _CReduceEToUnaryExpressionAction,
 	{_CState182, _CWildcardMarker}:              _CReduceCToCompoundStatementAction,
 	{_CState188, _CWildcardMarker}:              _CReduceBToExpressionStatementAction,
-	{_CState196, _CWildcardMarker}:              _CReduceHToPostfixExpressionAction,
-	{_CState198, _CWildcardMarker}:              _CReduceGToPostfixExpressionAction,
+	{_CState199, _CWildcardMarker}:              _CReduceHToPostfixExpressionAction,
+	{_CState200, _CWildcardMarker}:              _CReduceGToPostfixExpressionAction,
 	{_CState208, _CWildcardMarker}:              _CReduceBToCompoundStatementAction,
 	{_CState209, _CWildcardMarker}:              _CReduceBToStatementListAction,
-	{_CState210, _CWildcardMarker}:              _CReduceEToAssignmentOperatorAction,
-	{_CState211, _CWildcardMarker}:              _CReduceIToAssignmentOperatorAction,
-	{_CState212, _CWildcardMarker}:              _CReduceCToAssignmentOperatorAction,
-	{_CState213, _CWildcardMarker}:              _CReduceAToAssignmentOperatorAction,
+	{_CState210, _CWildcardMarker}:              _CReduceAToAssignmentOperatorAction,
+	{_CState211, _CWildcardMarker}:              _CReduceEToAssignmentOperatorAction,
+	{_CState212, _CWildcardMarker}:              _CReduceIToAssignmentOperatorAction,
+	{_CState213, _CWildcardMarker}:              _CReduceCToAssignmentOperatorAction,
 	{_CState214, _CWildcardMarker}:              _CReduceGToAssignmentOperatorAction,
 	{_CState215, _CWildcardMarker}:              _CReduceDToAssignmentOperatorAction,
 	{_CState216, _CWildcardMarker}:              _CReduceBToAssignmentOperatorAction,
@@ -7107,32 +7078,32 @@ var _CActionTable = _CActionTableType{
 	{_CState219, _CWildcardMarker}:              _CReduceFToAssignmentOperatorAction,
 	{_CState220, _CWildcardMarker}:              _CReduceJToAssignmentOperatorAction,
 	{_CState222, _CWildcardMarker}:              _CReduceDToUnaryExpressionAction,
-	{_CState223, _CWildcardMarker}:              _CReduceCToDirectDeclaratorAction,
-	{_CState226, _CWildcardMarker}:              _CReduceBToParameterDeclarationAction,
-	{_CState227, _CWildcardMarker}:              _CReduceAToParameterDeclarationAction,
-	{_CState228, _CWildcardMarker}:              _CReduceBToAbstractDeclaratorAction,
-	{_CState229, _CWildcardMarker}:              _CReduceAToAbstractDeclaratorAction,
-	{_CState231, _CWildcardMarker}:              _CReduceFToDirectDeclaratorAction,
-	{_CState233, _CWildcardMarker}:              _CReduceEToDirectDeclaratorAction,
-	{_CState236, _CWildcardMarker}:              _CReduceAToStructDeclaratorAction,
-	{_CState237, _CWildcardMarker}:              _CReduceAToStructDeclaratorListAction,
-	{_CState239, _CWildcardMarker}:              _CReduceBToStructOrUnionSpecifierAction,
-	{_CState240, _CWildcardMarker}:              _CReduceBToStructDeclarationListAction,
-	{_CState241, _CWildcardMarker}:              _CReduceCToSpecifierQualifierListAction,
-	{_CState242, _CWildcardMarker}:              _CReduceAToSpecifierQualifierListAction,
-	{_CState243, _CWildcardMarker}:              _CReduceBToEnumSpecifierAction,
-	{_CState244, _CWildcardMarker}:              _CReduceBToEnumeratorAction,
-	{_CState245, _CWildcardMarker}:              _CReduceBToEnumeratorListAction,
+	{_CState225, _CWildcardMarker}:              _CReduceBToParameterDeclarationAction,
+	{_CState226, _CWildcardMarker}:              _CReduceAToParameterDeclarationAction,
+	{_CState227, _CWildcardMarker}:              _CReduceBToAbstractDeclaratorAction,
+	{_CState228, _CWildcardMarker}:              _CReduceAToAbstractDeclaratorAction,
+	{_CState229, _CWildcardMarker}:              _CReduceFToDirectDeclaratorAction,
+	{_CState232, _CWildcardMarker}:              _CReduceEToDirectDeclaratorAction,
+	{_CState233, _CWildcardMarker}:              _CReduceCToDirectDeclaratorAction,
+	{_CState235, _CWildcardMarker}:              _CReduceAToStructDeclaratorAction,
+	{_CState236, _CWildcardMarker}:              _CReduceAToStructDeclaratorListAction,
+	{_CState238, _CWildcardMarker}:              _CReduceBToStructOrUnionSpecifierAction,
+	{_CState239, _CWildcardMarker}:              _CReduceBToStructDeclarationListAction,
+	{_CState240, _CWildcardMarker}:              _CReduceCToSpecifierQualifierListAction,
+	{_CState241, _CWildcardMarker}:              _CReduceAToSpecifierQualifierListAction,
+	{_CState243, _CWildcardMarker}:              _CReduceBToEnumeratorAction,
+	{_CState244, _CWildcardMarker}:              _CReduceBToEnumeratorListAction,
+	{_CState245, _CWildcardMarker}:              _CReduceBToEnumSpecifierAction,
 	{_CState246, _CWildcardMarker}:              _CReduceAToInitializerListAction,
-	{_CState249, _CWildcardMarker}:              _CReduceCToLabeledStatementAction,
-	{_CState252, _CWildcardMarker}:              _CReduceAToJumpStatementAction,
-	{_CState253, _CWildcardMarker}:              _CReduceAToLabeledStatementAction,
-	{_CState255, _CWildcardMarker}:              _CReduceDToPrimaryExpressionAction,
-	{_CState257, CRparamToken}:                  _CReduceBToTypeNameAction,
-	{_CState258, CRparamToken}:                  _CReduceAToAbstractDeclaratorAction,
+	{_CState248, _CWildcardMarker}:              _CReduceDToPrimaryExpressionAction,
+	{_CState250, ')'}:                           _CReduceBToTypeNameAction,
+	{_CState251, ')'}:                           _CReduceAToAbstractDeclaratorAction,
+	{_CState254, _CWildcardMarker}:              _CReduceCToLabeledStatementAction,
+	{_CState257, _CWildcardMarker}:              _CReduceAToJumpStatementAction,
+	{_CState258, _CWildcardMarker}:              _CReduceAToLabeledStatementAction,
 	{_CState260, _CWildcardMarker}:              _CReduceEToJumpStatementAction,
-	{_CState264, _CWildcardMarker}:              _CReduceCToAdditiveExpressionAction,
-	{_CState265, _CWildcardMarker}:              _CReduceBToAdditiveExpressionAction,
+	{_CState264, _CWildcardMarker}:              _CReduceBToAdditiveExpressionAction,
+	{_CState265, _CWildcardMarker}:              _CReduceCToAdditiveExpressionAction,
 	{_CState266, _CWildcardMarker}:              _CReduceBToAndExpressionAction,
 	{_CState267, _CWildcardMarker}:              _CReduceDToCompoundStatementAction,
 	{_CState268, _CWildcardMarker}:              _CReduceBToEqualityExpressionAction,
@@ -7141,47 +7112,56 @@ var _CActionTable = _CActionTableType{
 	{_CState271, _CWildcardMarker}:              _CReduceBToExpressionAction,
 	{_CState272, _CWildcardMarker}:              _CReduceBToInclusiveOrExpressionAction,
 	{_CState273, _CWildcardMarker}:              _CReduceBToLogicalAndExpressionAction,
-	{_CState274, _CWildcardMarker}:              _CReduceBToLogicalOrExpressionAction,
-	{_CState276, _CWildcardMarker}:              _CReduceCToMultiplicativeExpressionAction,
-	{_CState277, _CWildcardMarker}:              _CReduceDToMultiplicativeExpressionAction,
-	{_CState278, _CWildcardMarker}:              _CReduceBToMultiplicativeExpressionAction,
-	{_CState279, _CWildcardMarker}:              _CReduceEToPostfixExpressionAction,
-	{_CState281, _CWildcardMarker}:              _CReduceCToPostfixExpressionAction,
-	{_CState283, _CWildcardMarker}:              _CReduceAToArgumentExpressionListAction,
+	{_CState275, _CWildcardMarker}:              _CReduceBToLogicalOrExpressionAction,
+	{_CState276, _CWildcardMarker}:              _CReduceDToMultiplicativeExpressionAction,
+	{_CState277, _CWildcardMarker}:              _CReduceBToMultiplicativeExpressionAction,
+	{_CState278, _CWildcardMarker}:              _CReduceCToMultiplicativeExpressionAction,
+	{_CState279, _CWildcardMarker}:              _CReduceCToPostfixExpressionAction,
+	{_CState281, _CWildcardMarker}:              _CReduceAToArgumentExpressionListAction,
+	{_CState282, _CWildcardMarker}:              _CReduceEToPostfixExpressionAction,
 	{_CState284, _CWildcardMarker}:              _CReduceFToPostfixExpressionAction,
-	{_CState285, _CWildcardMarker}:              _CReduceEToRelationalExpressionAction,
+	{_CState285, _CWildcardMarker}:              _CReduceBToRelationalExpressionAction,
 	{_CState286, _CWildcardMarker}:              _CReduceCToRelationalExpressionAction,
-	{_CState287, _CWildcardMarker}:              _CReduceDToRelationalExpressionAction,
-	{_CState288, _CWildcardMarker}:              _CReduceBToRelationalExpressionAction,
+	{_CState287, _CWildcardMarker}:              _CReduceEToRelationalExpressionAction,
+	{_CState288, _CWildcardMarker}:              _CReduceDToRelationalExpressionAction,
 	{_CState289, _CWildcardMarker}:              _CReduceBToShiftExpressionAction,
 	{_CState290, _CWildcardMarker}:              _CReduceCToShiftExpressionAction,
 	{_CState291, _CWildcardMarker}:              _CReduceBToAssignmentExpressionAction,
-	{_CState292, _CWildcardMarker}:              _CReduceBToDirectAbstractDeclaratorAction,
-	{_CState294, _CWildcardMarker}:              _CReduceFToDirectAbstractDeclaratorAction,
+	{_CState292, _CWildcardMarker}:              _CReduceFToDirectAbstractDeclaratorAction,
+	{_CState295, _CWildcardMarker}:              _CReduceBToDirectAbstractDeclaratorAction,
 	{_CState299, _CWildcardMarker}:              _CReduceCToAbstractDeclaratorAction,
 	{_CState300, _CWildcardMarker}:              _CReduceBToIdentifierListAction,
-	{_CState301, CRparamToken}:                  _CReduceBToParameterTypeListAction,
+	{_CState301, ')'}:                           _CReduceBToParameterTypeListAction,
 	{_CState302, _CWildcardMarker}:              _CReduceBToParameterListAction,
-	{_CState303, _CWildcardMarker}:              _CReduceAToStructOrUnionSpecifierAction,
-	{_CState304, _CWildcardMarker}:              _CReduceBToStructDeclaratorAction,
-	{_CState307, _CWildcardMarker}:              _CReduceAToStructDeclarationAction,
+	{_CState303, _CWildcardMarker}:              _CReduceBToStructDeclaratorAction,
+	{_CState306, _CWildcardMarker}:              _CReduceAToStructDeclarationAction,
+	{_CState307, _CWildcardMarker}:              _CReduceAToStructOrUnionSpecifierAction,
 	{_CState309, _CWildcardMarker}:              _CReduceBToInitializerAction,
-	{_CState310, _CWildcardMarker}:              _CReduceBToLabeledStatementAction,
-	{_CState314, _CWildcardMarker}:              _CReduceBToCastExpressionAction,
+	{_CState310, _CWildcardMarker}:              _CReduceBToCastExpressionAction,
+	{_CState311, _CWildcardMarker}:              _CReduceBToLabeledStatementAction,
 	{_CState315, _CWildcardMarker}:              _CReduceFToUnaryExpressionAction,
-	{_CState319, _CWildcardMarker}:              _CReduceBToPostfixExpressionAction,
-	{_CState321, _CWildcardMarker}:              _CReduceDToPostfixExpressionAction,
-	{_CState322, _CWildcardMarker}:              _CReduceCToDirectAbstractDeclaratorAction,
-	{_CState323, _CWildcardMarker}:              _CReduceAToDirectAbstractDeclaratorAction,
-	{_CState324, _CWildcardMarker}:              _CReduceGToDirectAbstractDeclaratorAction,
-	{_CState325, _CWildcardMarker}:              _CReduceDToDirectAbstractDeclaratorAction,
-	{_CState327, _CWildcardMarker}:              _CReduceHToDirectAbstractDeclaratorAction,
+	{_CState319, _CWildcardMarker}:              _CReduceDToPostfixExpressionAction,
+	{_CState321, _CWildcardMarker}:              _CReduceBToPostfixExpressionAction,
+	{_CState322, _CWildcardMarker}:              _CReduceAToDirectAbstractDeclaratorAction,
+	{_CState323, _CWildcardMarker}:              _CReduceGToDirectAbstractDeclaratorAction,
+	{_CState324, _CWildcardMarker}:              _CReduceCToDirectAbstractDeclaratorAction,
+	{_CState325, _CWildcardMarker}:              _CReduceHToDirectAbstractDeclaratorAction,
+	{_CState327, _CWildcardMarker}:              _CReduceDToDirectAbstractDeclaratorAction,
 	{_CState329, _CWildcardMarker}:              _CReduceCToStructDeclaratorAction,
 	{_CState330, _CWildcardMarker}:              _CReduceBToStructDeclaratorListAction,
 	{_CState331, _CWildcardMarker}:              _CReduceCToInitializerAction,
 	{_CState332, _CWildcardMarker}:              _CReduceBToInitializerListAction,
 	{_CState336, _CWildcardMarker}:              _CReduceAToSelectionStatementAction,
-	{_CState337, CAndToken}:                     _CReduceAToSelectionStatementAction,
+	{_CState337, '!'}:                           _CReduceAToSelectionStatementAction,
+	{_CState337, '&'}:                           _CReduceAToSelectionStatementAction,
+	{_CState337, '('}:                           _CReduceAToSelectionStatementAction,
+	{_CState337, '*'}:                           _CReduceAToSelectionStatementAction,
+	{_CState337, '+'}:                           _CReduceAToSelectionStatementAction,
+	{_CState337, '-'}:                           _CReduceAToSelectionStatementAction,
+	{_CState337, ';'}:                           _CReduceAToSelectionStatementAction,
+	{_CState337, '{'}:                           _CReduceAToSelectionStatementAction,
+	{_CState337, '}'}:                           _CReduceAToSelectionStatementAction,
+	{_CState337, '~'}:                           _CReduceAToSelectionStatementAction,
 	{_CState337, CBreakToken}:                   _CReduceAToSelectionStatementAction,
 	{_CState337, CCaseToken}:                    _CReduceAToSelectionStatementAction,
 	{_CState337, CConstantToken}:                _CReduceAToSelectionStatementAction,
@@ -7190,24 +7170,15 @@ var _CActionTable = _CActionTableType{
 	{_CState337, CDefaultToken}:                 _CReduceAToSelectionStatementAction,
 	{_CState337, CDoToken}:                      _CReduceAToSelectionStatementAction,
 	{_CState337, CElseToken}:                    _CReduceAToSelectionStatementAction,
-	{_CState337, CExclaimToken}:                 _CReduceAToSelectionStatementAction,
 	{_CState337, CForToken}:                     _CReduceAToSelectionStatementAction,
 	{_CState337, CGotoToken}:                    _CReduceAToSelectionStatementAction,
 	{_CState337, CIdentifierToken}:              _CReduceAToSelectionStatementAction,
 	{_CState337, CIfToken}:                      _CReduceAToSelectionStatementAction,
 	{_CState337, CIncOpToken}:                   _CReduceAToSelectionStatementAction,
-	{_CState337, CLcurlToken}:                   _CReduceAToSelectionStatementAction,
-	{_CState337, CLparamToken}:                  _CReduceAToSelectionStatementAction,
-	{_CState337, CMinusToken}:                   _CReduceAToSelectionStatementAction,
-	{_CState337, CMulToken}:                     _CReduceAToSelectionStatementAction,
-	{_CState337, CPlusToken}:                    _CReduceAToSelectionStatementAction,
-	{_CState337, CRcurlToken}:                   _CReduceAToSelectionStatementAction,
 	{_CState337, CReturnToken}:                  _CReduceAToSelectionStatementAction,
-	{_CState337, CSemicolonToken}:               _CReduceAToSelectionStatementAction,
 	{_CState337, CSizeofToken}:                  _CReduceAToSelectionStatementAction,
 	{_CState337, CStringLiteralToken}:           _CReduceAToSelectionStatementAction,
 	{_CState337, CSwitchToken}:                  _CReduceAToSelectionStatementAction,
-	{_CState337, CTildaToken}:                   _CReduceAToSelectionStatementAction,
 	{_CState337, CWhileToken}:                   _CReduceAToSelectionStatementAction,
 	{_CState338, CElseToken}:                    _CReduceAToSelectionStatementAction,
 	{_CState338, CWhileToken}:                   _CReduceAToSelectionStatementAction,
@@ -7215,8 +7186,8 @@ var _CActionTable = _CActionTableType{
 	{_CState340, _CWildcardMarker}:              _CReduceAToIterationStatementAction,
 	{_CState341, _CWildcardMarker}:              _CReduceBToConditionalExpressionAction,
 	{_CState342, _CWildcardMarker}:              _CReduceBToArgumentExpressionListAction,
-	{_CState343, _CWildcardMarker}:              _CReduceEToDirectAbstractDeclaratorAction,
-	{_CState344, _CWildcardMarker}:              _CReduceIToDirectAbstractDeclaratorAction,
+	{_CState343, _CWildcardMarker}:              _CReduceIToDirectAbstractDeclaratorAction,
+	{_CState344, _CWildcardMarker}:              _CReduceEToDirectAbstractDeclaratorAction,
 	{_CState346, _CWildcardMarker}:              _CReduceCToIterationStatementAction,
 	{_CState349, _CWildcardMarker}:              _CReduceBToIterationStatementAction,
 	{_CState350, _CWildcardMarker}:              _CReduceDToIterationStatementAction,
@@ -7224,195 +7195,195 @@ var _CActionTable = _CActionTableType{
 }
 
 var _CExpectedTerminals = map[_CStateId][]CSymbolId{
-	_CState1:   []CSymbolId{CIdentifierToken, CTypeNameToken, CTypedefToken, CExternToken, CStaticToken, CAutoToken, CRegisterToken, CCharToken, CShortToken, CIntToken, CLongToken, CSignedToken, CUnsignedToken, CFloatToken, CDoubleToken, CConstToken, CVolatileToken, CVoidToken, CStructToken, CUnionToken, CEnumToken, CLparamToken, CMulToken},
-	_CState2:   []CSymbolId{CIdentifierToken, CTypeNameToken, CTypedefToken, CExternToken, CStaticToken, CAutoToken, CRegisterToken, CCharToken, CShortToken, CIntToken, CLongToken, CSignedToken, CUnsignedToken, CFloatToken, CDoubleToken, CConstToken, CVolatileToken, CVoidToken, CStructToken, CUnionToken, CEnumToken, CLparamToken, CMulToken, _CEndMarker},
-	_CState7:   []CSymbolId{CIdentifierToken, CLcurlToken},
-	_CState13:  []CSymbolId{CIdentifierToken, CLparamToken, CMulToken},
-	_CState14:  []CSymbolId{CConstToken, CVolatileToken, CMulToken},
-	_CState27:  []CSymbolId{CIdentifierToken, CLparamToken, CSemicolonToken, CMulToken},
-	_CState28:  []CSymbolId{CTypeNameToken, CTypedefToken, CExternToken, CStaticToken, CAutoToken, CRegisterToken, CCharToken, CShortToken, CIntToken, CLongToken, CSignedToken, CUnsignedToken, CFloatToken, CDoubleToken, CConstToken, CVolatileToken, CVoidToken, CStructToken, CUnionToken, CEnumToken, CLcurlToken},
-	_CState29:  []CSymbolId{CLparamToken, CLbraceToken},
-	_CState33:  []CSymbolId{CIdentifierToken, CLparamToken},
+	_CState1:   []CSymbolId{CIdentifierToken, CTypeNameToken, CTypedefToken, CExternToken, CStaticToken, CAutoToken, CRegisterToken, CCharToken, CShortToken, CIntToken, CLongToken, CSignedToken, CUnsignedToken, CFloatToken, CDoubleToken, CConstToken, CVolatileToken, CVoidToken, CStructToken, CUnionToken, CEnumToken, '(', '*'},
+	_CState2:   []CSymbolId{CIdentifierToken, CTypeNameToken, CTypedefToken, CExternToken, CStaticToken, CAutoToken, CRegisterToken, CCharToken, CShortToken, CIntToken, CLongToken, CSignedToken, CUnsignedToken, CFloatToken, CDoubleToken, CConstToken, CVolatileToken, CVoidToken, CStructToken, CUnionToken, CEnumToken, '(', '*', _CEndMarker},
+	_CState3:   []CSymbolId{CIdentifierToken, '(', '*'},
+	_CState4:   []CSymbolId{CConstToken, CVolatileToken, '*'},
+	_CState9:   []CSymbolId{CIdentifierToken, '{'},
+	_CState27:  []CSymbolId{CIdentifierToken, '(', ';', '*'},
+	_CState28:  []CSymbolId{CTypeNameToken, CTypedefToken, CExternToken, CStaticToken, CAutoToken, CRegisterToken, CCharToken, CShortToken, CIntToken, CLongToken, CSignedToken, CUnsignedToken, CFloatToken, CDoubleToken, CConstToken, CVolatileToken, CVoidToken, CStructToken, CUnionToken, CEnumToken, '{'},
+	_CState29:  []CSymbolId{'(', '['},
+	_CState33:  []CSymbolId{CIdentifierToken, '('},
 	_CState34:  []CSymbolId{CTypeNameToken, CTypedefToken, CExternToken, CStaticToken, CAutoToken, CRegisterToken, CCharToken, CShortToken, CIntToken, CLongToken, CSignedToken, CUnsignedToken, CFloatToken, CDoubleToken, CConstToken, CVolatileToken, CVoidToken, CStructToken, CUnionToken, CEnumToken},
-	_CState35:  []CSymbolId{CIdentifierToken, CLcurlToken},
+	_CState35:  []CSymbolId{CIdentifierToken, '{'},
 	_CState37:  []CSymbolId{CTypeNameToken, CTypedefToken, CExternToken, CStaticToken, CAutoToken, CRegisterToken, CCharToken, CShortToken, CIntToken, CLongToken, CSignedToken, CUnsignedToken, CFloatToken, CDoubleToken, CConstToken, CVolatileToken, CVoidToken, CStructToken, CUnionToken, CEnumToken},
 	_CState38:  []CSymbolId{CTypeNameToken, CTypedefToken, CExternToken, CStaticToken, CAutoToken, CRegisterToken, CCharToken, CShortToken, CIntToken, CLongToken, CSignedToken, CUnsignedToken, CFloatToken, CDoubleToken, CConstToken, CVolatileToken, CVoidToken, CStructToken, CUnionToken, CEnumToken},
-	_CState39:  []CSymbolId{CLcurlToken},
-	_CState40:  []CSymbolId{CIdentifierToken},
-	_CState41:  []CSymbolId{CRparamToken},
-	_CState44:  []CSymbolId{CConstToken, CVolatileToken, CMulToken},
-	_CState46:  []CSymbolId{CTypeNameToken, CTypedefToken, CExternToken, CStaticToken, CAutoToken, CRegisterToken, CCharToken, CShortToken, CIntToken, CLongToken, CSignedToken, CUnsignedToken, CFloatToken, CDoubleToken, CConstToken, CVolatileToken, CVoidToken, CStructToken, CUnionToken, CEnumToken, CLcurlToken, CEqToken},
-	_CState48:  []CSymbolId{CSemicolonToken, CCommaToken},
-	_CState49:  []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, CTypeNameToken, CTypedefToken, CExternToken, CStaticToken, CAutoToken, CRegisterToken, CCharToken, CShortToken, CIntToken, CLongToken, CSignedToken, CUnsignedToken, CFloatToken, CDoubleToken, CConstToken, CVolatileToken, CVoidToken, CStructToken, CUnionToken, CEnumToken, CCaseToken, CDefaultToken, CIfToken, CSwitchToken, CWhileToken, CDoToken, CForToken, CGotoToken, CContinueToken, CBreakToken, CReturnToken, CLparamToken, CLcurlToken, CRcurlToken, CSemicolonToken, CMulToken, CMinusToken, CPlusToken, CAndToken, CExclaimToken, CTildaToken},
-	_CState52:  []CSymbolId{CTypeNameToken, CTypedefToken, CExternToken, CStaticToken, CAutoToken, CRegisterToken, CCharToken, CShortToken, CIntToken, CLongToken, CSignedToken, CUnsignedToken, CFloatToken, CDoubleToken, CConstToken, CVolatileToken, CVoidToken, CStructToken, CUnionToken, CEnumToken, CLcurlToken},
-	_CState53:  []CSymbolId{CIdentifierToken, CLparamToken, CSemicolonToken, CMulToken},
-	_CState54:  []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, CLparamToken, CRbraceToken, CMulToken, CMinusToken, CPlusToken, CAndToken, CExclaimToken, CTildaToken},
-	_CState55:  []CSymbolId{CIdentifierToken, CTypeNameToken, CTypedefToken, CExternToken, CStaticToken, CAutoToken, CRegisterToken, CCharToken, CShortToken, CIntToken, CLongToken, CSignedToken, CUnsignedToken, CFloatToken, CDoubleToken, CConstToken, CVolatileToken, CVoidToken, CStructToken, CUnionToken, CEnumToken, CRparamToken},
-	_CState56:  []CSymbolId{CLparamToken, CLbraceToken},
-	_CState58:  []CSymbolId{CLcurlToken},
-	_CState59:  []CSymbolId{CTypeNameToken, CCharToken, CShortToken, CIntToken, CLongToken, CSignedToken, CUnsignedToken, CFloatToken, CDoubleToken, CConstToken, CVolatileToken, CVoidToken, CStructToken, CUnionToken, CEnumToken},
-	_CState63:  []CSymbolId{CIdentifierToken},
-	_CState64:  []CSymbolId{CEqToken},
-	_CState66:  []CSymbolId{CRcurlToken, CCommaToken},
-	_CState70:  []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, CLparamToken, CLcurlToken, CMulToken, CMinusToken, CPlusToken, CAndToken, CExclaimToken, CTildaToken},
-	_CState72:  []CSymbolId{CTypeNameToken, CTypedefToken, CExternToken, CStaticToken, CAutoToken, CRegisterToken, CCharToken, CShortToken, CIntToken, CLongToken, CSignedToken, CUnsignedToken, CFloatToken, CDoubleToken, CConstToken, CVolatileToken, CVoidToken, CStructToken, CUnionToken, CEnumToken, CLcurlToken},
-	_CState73:  []CSymbolId{CIdentifierToken, CLparamToken, CMulToken},
-	_CState76:  []CSymbolId{CSemicolonToken},
-	_CState77:  []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, CLparamToken, CMulToken, CMinusToken, CPlusToken, CAndToken, CExclaimToken, CTildaToken},
-	_CState79:  []CSymbolId{CSemicolonToken},
-	_CState80:  []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, CLparamToken, CMulToken, CMinusToken, CPlusToken, CAndToken, CExclaimToken, CTildaToken},
-	_CState81:  []CSymbolId{CColonToken},
-	_CState82:  []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, CCaseToken, CDefaultToken, CIfToken, CSwitchToken, CWhileToken, CDoToken, CForToken, CGotoToken, CContinueToken, CBreakToken, CReturnToken, CLparamToken, CLcurlToken, CSemicolonToken, CMulToken, CMinusToken, CPlusToken, CAndToken, CExclaimToken, CTildaToken},
-	_CState84:  []CSymbolId{CLparamToken},
-	_CState85:  []CSymbolId{CIdentifierToken},
-	_CState86:  []CSymbolId{CColonToken},
-	_CState87:  []CSymbolId{CLparamToken},
-	_CState88:  []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, CLparamToken, CMulToken, CMinusToken, CPlusToken, CAndToken, CExclaimToken, CTildaToken},
-	_CState89:  []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, CTypeNameToken, CCharToken, CShortToken, CIntToken, CLongToken, CSignedToken, CUnsignedToken, CFloatToken, CDoubleToken, CConstToken, CVolatileToken, CVoidToken, CStructToken, CUnionToken, CEnumToken, CLparamToken, CMulToken, CMinusToken, CPlusToken, CAndToken, CExclaimToken, CTildaToken},
-	_CState94:  []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, CLparamToken, CSemicolonToken, CMulToken, CMinusToken, CPlusToken, CAndToken, CExclaimToken, CTildaToken},
-	_CState96:  []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, CLparamToken, CMulToken, CMinusToken, CPlusToken, CAndToken, CExclaimToken, CTildaToken},
-	_CState98:  []CSymbolId{CLparamToken},
-	_CState100: []CSymbolId{CLparamToken},
-	_CState101: []CSymbolId{CMinusToken, CPlusToken},
-	_CState102: []CSymbolId{CAndToken},
-	_CState107: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, CTypeNameToken, CTypedefToken, CExternToken, CStaticToken, CAutoToken, CRegisterToken, CCharToken, CShortToken, CIntToken, CLongToken, CSignedToken, CUnsignedToken, CFloatToken, CDoubleToken, CConstToken, CVolatileToken, CVoidToken, CStructToken, CUnionToken, CEnumToken, CCaseToken, CDefaultToken, CIfToken, CSwitchToken, CWhileToken, CDoToken, CForToken, CGotoToken, CContinueToken, CBreakToken, CReturnToken, CLparamToken, CLcurlToken, CRcurlToken, CSemicolonToken, CMulToken, CMinusToken, CPlusToken, CAndToken, CExclaimToken, CTildaToken},
+	_CState39:  []CSymbolId{')'},
+	_CState42:  []CSymbolId{CConstToken, CVolatileToken, '*'},
+	_CState43:  []CSymbolId{CIdentifierToken},
+	_CState44:  []CSymbolId{'{'},
+	_CState46:  []CSymbolId{CTypeNameToken, CTypedefToken, CExternToken, CStaticToken, CAutoToken, CRegisterToken, CCharToken, CShortToken, CIntToken, CLongToken, CSignedToken, CUnsignedToken, CFloatToken, CDoubleToken, CConstToken, CVolatileToken, CVoidToken, CStructToken, CUnionToken, CEnumToken, '{', '='},
+	_CState48:  []CSymbolId{';', ','},
+	_CState49:  []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, CTypeNameToken, CTypedefToken, CExternToken, CStaticToken, CAutoToken, CRegisterToken, CCharToken, CShortToken, CIntToken, CLongToken, CSignedToken, CUnsignedToken, CFloatToken, CDoubleToken, CConstToken, CVolatileToken, CVoidToken, CStructToken, CUnionToken, CEnumToken, CCaseToken, CDefaultToken, CIfToken, CSwitchToken, CWhileToken, CDoToken, CForToken, CGotoToken, CContinueToken, CBreakToken, CReturnToken, '(', '{', '}', ';', '*', '-', '+', '&', '!', '~'},
+	_CState52:  []CSymbolId{CTypeNameToken, CTypedefToken, CExternToken, CStaticToken, CAutoToken, CRegisterToken, CCharToken, CShortToken, CIntToken, CLongToken, CSignedToken, CUnsignedToken, CFloatToken, CDoubleToken, CConstToken, CVolatileToken, CVoidToken, CStructToken, CUnionToken, CEnumToken, '{'},
+	_CState53:  []CSymbolId{CIdentifierToken, '(', ';', '*'},
+	_CState54:  []CSymbolId{CIdentifierToken, CTypeNameToken, CTypedefToken, CExternToken, CStaticToken, CAutoToken, CRegisterToken, CCharToken, CShortToken, CIntToken, CLongToken, CSignedToken, CUnsignedToken, CFloatToken, CDoubleToken, CConstToken, CVolatileToken, CVoidToken, CStructToken, CUnionToken, CEnumToken, ')'},
+	_CState55:  []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, '(', ']', '*', '-', '+', '&', '!', '~'},
+	_CState56:  []CSymbolId{'(', '['},
+	_CState58:  []CSymbolId{CTypeNameToken, CCharToken, CShortToken, CIntToken, CLongToken, CSignedToken, CUnsignedToken, CFloatToken, CDoubleToken, CConstToken, CVolatileToken, CVoidToken, CStructToken, CUnionToken, CEnumToken},
+	_CState59:  []CSymbolId{'{'},
+	_CState66:  []CSymbolId{'='},
+	_CState68:  []CSymbolId{'}', ','},
+	_CState69:  []CSymbolId{CIdentifierToken},
+	_CState70:  []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, '(', '{', '*', '-', '+', '&', '!', '~'},
+	_CState72:  []CSymbolId{CTypeNameToken, CTypedefToken, CExternToken, CStaticToken, CAutoToken, CRegisterToken, CCharToken, CShortToken, CIntToken, CLongToken, CSignedToken, CUnsignedToken, CFloatToken, CDoubleToken, CConstToken, CVolatileToken, CVoidToken, CStructToken, CUnionToken, CEnumToken, '{'},
+	_CState73:  []CSymbolId{CIdentifierToken, '(', '*'},
+	_CState77:  []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, CTypeNameToken, CCharToken, CShortToken, CIntToken, CLongToken, CSignedToken, CUnsignedToken, CFloatToken, CDoubleToken, CConstToken, CVolatileToken, CVoidToken, CStructToken, CUnionToken, CEnumToken, '(', '*', '-', '+', '&', '!', '~'},
+	_CState84:  []CSymbolId{';'},
+	_CState85:  []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, '(', '*', '-', '+', '&', '!', '~'},
+	_CState87:  []CSymbolId{';'},
+	_CState88:  []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, '(', '*', '-', '+', '&', '!', '~'},
+	_CState89:  []CSymbolId{':'},
+	_CState90:  []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, CCaseToken, CDefaultToken, CIfToken, CSwitchToken, CWhileToken, CDoToken, CForToken, CGotoToken, CContinueToken, CBreakToken, CReturnToken, '(', '{', ';', '*', '-', '+', '&', '!', '~'},
+	_CState91:  []CSymbolId{'('},
+	_CState92:  []CSymbolId{CIdentifierToken},
+	_CState93:  []CSymbolId{':'},
+	_CState94:  []CSymbolId{'('},
+	_CState95:  []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, '(', '*', '-', '+', '&', '!', '~'},
+	_CState96:  []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, '(', ';', '*', '-', '+', '&', '!', '~'},
+	_CState97:  []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, '(', '*', '-', '+', '&', '!', '~'},
+	_CState99:  []CSymbolId{'('},
+	_CState100: []CSymbolId{'('},
+	_CState101: []CSymbolId{'-', '+'},
+	_CState102: []CSymbolId{'&'},
+	_CState107: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, CTypeNameToken, CTypedefToken, CExternToken, CStaticToken, CAutoToken, CRegisterToken, CCharToken, CShortToken, CIntToken, CLongToken, CSignedToken, CUnsignedToken, CFloatToken, CDoubleToken, CConstToken, CVolatileToken, CVoidToken, CStructToken, CUnionToken, CEnumToken, CCaseToken, CDefaultToken, CIfToken, CSwitchToken, CWhileToken, CDoToken, CForToken, CGotoToken, CContinueToken, CBreakToken, CReturnToken, '(', '{', '}', ';', '*', '-', '+', '&', '!', '~'},
 	_CState108: []CSymbolId{CEqOpToken, CNeOpToken},
-	_CState109: []CSymbolId{CHatToken},
-	_CState110: []CSymbolId{CSemicolonToken, CCommaToken},
-	_CState112: []CSymbolId{COrToken},
+	_CState109: []CSymbolId{'^'},
+	_CState110: []CSymbolId{';', ','},
+	_CState112: []CSymbolId{'|'},
 	_CState116: []CSymbolId{CAndOpToken},
-	_CState117: []CSymbolId{COrOpToken, CQuestionToken},
-	_CState118: []CSymbolId{CMulToken, CDivToken, CModToken},
-	_CState119: []CSymbolId{CPtrOpToken, CIncOpToken, CDecOpToken, CLparamToken, CLbraceToken, CDotToken},
-	_CState121: []CSymbolId{CLeOpToken, CGeOpToken, CLtToken, CGtToken},
+	_CState117: []CSymbolId{COrOpToken, '?'},
+	_CState118: []CSymbolId{'*', '/', '%'},
+	_CState119: []CSymbolId{CPtrOpToken, CIncOpToken, CDecOpToken, '(', '[', '.'},
+	_CState121: []CSymbolId{CLeOpToken, CGeOpToken, '<', '>'},
 	_CState123: []CSymbolId{CLeftOpToken, CRightOpToken},
-	_CState125: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, CCaseToken, CDefaultToken, CIfToken, CSwitchToken, CWhileToken, CDoToken, CForToken, CGotoToken, CContinueToken, CBreakToken, CReturnToken, CLparamToken, CLcurlToken, CRcurlToken, CSemicolonToken, CMulToken, CMinusToken, CPlusToken, CAndToken, CExclaimToken, CTildaToken},
-	_CState126: []CSymbolId{CMulAssignToken, CDivAssignToken, CModAssignToken, CAddAssignToken, CSubAssignToken, CLeftAssignToken, CRightAssignToken, CAndAssignToken, CXorAssignToken, COrAssignToken, CEqToken},
-	_CState127: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, CLparamToken, CMulToken, CMinusToken, CPlusToken, CAndToken, CExclaimToken, CTildaToken},
-	_CState130: []CSymbolId{CEqToken},
-	_CState134: []CSymbolId{CRbraceToken},
-	_CState138: []CSymbolId{CIdentifierToken, CLparamToken, CLbraceToken, CMulToken},
-	_CState139: []CSymbolId{CRparamToken, CCommaToken},
-	_CState141: []CSymbolId{CCommaToken, CRparamToken},
-	_CState142: []CSymbolId{CRparamToken},
-	_CState143: []CSymbolId{CTypeNameToken, CCharToken, CShortToken, CIntToken, CLongToken, CSignedToken, CUnsignedToken, CFloatToken, CDoubleToken, CConstToken, CVolatileToken, CVoidToken, CStructToken, CUnionToken, CEnumToken},
-	_CState144: []CSymbolId{CIdentifierToken, CLparamToken, CColonToken, CMulToken},
-	_CState146: []CSymbolId{CTypeNameToken, CCharToken, CShortToken, CIntToken, CLongToken, CSignedToken, CUnsignedToken, CFloatToken, CDoubleToken, CConstToken, CVolatileToken, CVoidToken, CStructToken, CUnionToken, CEnumToken, CRcurlToken},
+	_CState125: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, CCaseToken, CDefaultToken, CIfToken, CSwitchToken, CWhileToken, CDoToken, CForToken, CGotoToken, CContinueToken, CBreakToken, CReturnToken, '(', '{', '}', ';', '*', '-', '+', '&', '!', '~'},
+	_CState126: []CSymbolId{CMulAssignToken, CDivAssignToken, CModAssignToken, CAddAssignToken, CSubAssignToken, CLeftAssignToken, CRightAssignToken, CAndAssignToken, CXorAssignToken, COrAssignToken, '='},
+	_CState127: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, '(', '*', '-', '+', '&', '!', '~'},
+	_CState130: []CSymbolId{'='},
+	_CState133: []CSymbolId{CIdentifierToken, '(', '[', '*'},
+	_CState134: []CSymbolId{')', ','},
+	_CState136: []CSymbolId{',', ')'},
+	_CState137: []CSymbolId{')'},
+	_CState141: []CSymbolId{']'},
+	_CState143: []CSymbolId{CIdentifierToken, '(', ':', '*'},
+	_CState145: []CSymbolId{CTypeNameToken, CCharToken, CShortToken, CIntToken, CLongToken, CSignedToken, CUnsignedToken, CFloatToken, CDoubleToken, CConstToken, CVolatileToken, CVoidToken, CStructToken, CUnionToken, CEnumToken, '}'},
+	_CState146: []CSymbolId{CTypeNameToken, CCharToken, CShortToken, CIntToken, CLongToken, CSignedToken, CUnsignedToken, CFloatToken, CDoubleToken, CConstToken, CVolatileToken, CVoidToken, CStructToken, CUnionToken, CEnumToken},
 	_CState147: []CSymbolId{CTypeNameToken, CCharToken, CShortToken, CIntToken, CLongToken, CSignedToken, CUnsignedToken, CFloatToken, CDoubleToken, CConstToken, CVolatileToken, CVoidToken, CStructToken, CUnionToken, CEnumToken},
 	_CState148: []CSymbolId{CTypeNameToken, CCharToken, CShortToken, CIntToken, CLongToken, CSignedToken, CUnsignedToken, CFloatToken, CDoubleToken, CConstToken, CVolatileToken, CVoidToken, CStructToken, CUnionToken, CEnumToken},
-	_CState149: []CSymbolId{CRcurlToken, CCommaToken},
-	_CState150: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, CLparamToken, CMulToken, CMinusToken, CPlusToken, CAndToken, CExclaimToken, CTildaToken},
-	_CState151: []CSymbolId{CIdentifierToken},
-	_CState153: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, CLparamToken, CLcurlToken, CMulToken, CMinusToken, CPlusToken, CAndToken, CExclaimToken, CTildaToken},
-	_CState159: []CSymbolId{CColonToken},
-	_CState161: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, CLparamToken, CMulToken, CMinusToken, CPlusToken, CAndToken, CExclaimToken, CTildaToken},
-	_CState163: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, CCaseToken, CDefaultToken, CIfToken, CSwitchToken, CWhileToken, CDoToken, CForToken, CGotoToken, CContinueToken, CBreakToken, CReturnToken, CLparamToken, CLcurlToken, CSemicolonToken, CMulToken, CMinusToken, CPlusToken, CAndToken, CExclaimToken, CTildaToken},
-	_CState164: []CSymbolId{CWhileToken},
-	_CState165: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, CLparamToken, CSemicolonToken, CMulToken, CMinusToken, CPlusToken, CAndToken, CExclaimToken, CTildaToken},
-	_CState166: []CSymbolId{CSemicolonToken},
-	_CState167: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, CCaseToken, CDefaultToken, CIfToken, CSwitchToken, CWhileToken, CDoToken, CForToken, CGotoToken, CContinueToken, CBreakToken, CReturnToken, CLparamToken, CLcurlToken, CSemicolonToken, CMulToken, CMinusToken, CPlusToken, CAndToken, CExclaimToken, CTildaToken},
-	_CState168: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, CLparamToken, CMulToken, CMinusToken, CPlusToken, CAndToken, CExclaimToken, CTildaToken},
-	_CState170: []CSymbolId{CRparamToken, CCommaToken},
-	_CState171: []CSymbolId{CLparamToken, CLbraceToken, CMulToken, CRparamToken},
-	_CState172: []CSymbolId{CRparamToken},
-	_CState174: []CSymbolId{CSemicolonToken, CCommaToken},
-	_CState175: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, CTypeNameToken, CCharToken, CShortToken, CIntToken, CLongToken, CSignedToken, CUnsignedToken, CFloatToken, CDoubleToken, CConstToken, CVolatileToken, CVoidToken, CStructToken, CUnionToken, CEnumToken, CLparamToken, CMulToken, CMinusToken, CPlusToken, CAndToken, CExclaimToken, CTildaToken},
-	_CState177: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, CLparamToken, CMulToken, CMinusToken, CPlusToken, CAndToken, CExclaimToken, CTildaToken},
-	_CState178: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, CLparamToken, CMulToken, CMinusToken, CPlusToken, CAndToken, CExclaimToken, CTildaToken},
-	_CState179: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, CLparamToken, CMulToken, CMinusToken, CPlusToken, CAndToken, CExclaimToken, CTildaToken},
-	_CState180: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, CLparamToken, CMulToken, CMinusToken, CPlusToken, CAndToken, CExclaimToken, CTildaToken},
-	_CState181: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, CLparamToken, CMulToken, CMinusToken, CPlusToken, CAndToken, CExclaimToken, CTildaToken},
-	_CState183: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, CCaseToken, CDefaultToken, CIfToken, CSwitchToken, CWhileToken, CDoToken, CForToken, CGotoToken, CContinueToken, CBreakToken, CReturnToken, CLparamToken, CLcurlToken, CRcurlToken, CSemicolonToken, CMulToken, CMinusToken, CPlusToken, CAndToken, CExclaimToken, CTildaToken},
-	_CState184: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, CLparamToken, CMulToken, CMinusToken, CPlusToken, CAndToken, CExclaimToken, CTildaToken},
-	_CState185: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, CLparamToken, CMulToken, CMinusToken, CPlusToken, CAndToken, CExclaimToken, CTildaToken},
-	_CState186: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, CLparamToken, CMulToken, CMinusToken, CPlusToken, CAndToken, CExclaimToken, CTildaToken},
-	_CState187: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, CLparamToken, CMulToken, CMinusToken, CPlusToken, CAndToken, CExclaimToken, CTildaToken},
-	_CState189: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, CLparamToken, CMulToken, CMinusToken, CPlusToken, CAndToken, CExclaimToken, CTildaToken},
-	_CState190: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, CLparamToken, CMulToken, CMinusToken, CPlusToken, CAndToken, CExclaimToken, CTildaToken},
-	_CState191: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, CLparamToken, CMulToken, CMinusToken, CPlusToken, CAndToken, CExclaimToken, CTildaToken},
-	_CState192: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, CLparamToken, CMulToken, CMinusToken, CPlusToken, CAndToken, CExclaimToken, CTildaToken},
-	_CState193: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, CLparamToken, CMulToken, CMinusToken, CPlusToken, CAndToken, CExclaimToken, CTildaToken},
-	_CState194: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, CLparamToken, CMulToken, CMinusToken, CPlusToken, CAndToken, CExclaimToken, CTildaToken},
-	_CState195: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, CLparamToken, CMulToken, CMinusToken, CPlusToken, CAndToken, CExclaimToken, CTildaToken},
+	_CState149: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, '(', '*', '-', '+', '&', '!', '~'},
+	_CState150: []CSymbolId{CIdentifierToken},
+	_CState152: []CSymbolId{'}', ','},
+	_CState153: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, '(', '{', '*', '-', '+', '&', '!', '~'},
+	_CState158: []CSymbolId{')', ','},
+	_CState159: []CSymbolId{'(', '[', '*', ')'},
+	_CState160: []CSymbolId{')'},
+	_CState162: []CSymbolId{':'},
+	_CState164: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, '(', '*', '-', '+', '&', '!', '~'},
+	_CState166: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, CCaseToken, CDefaultToken, CIfToken, CSwitchToken, CWhileToken, CDoToken, CForToken, CGotoToken, CContinueToken, CBreakToken, CReturnToken, '(', '{', ';', '*', '-', '+', '&', '!', '~'},
+	_CState167: []CSymbolId{CWhileToken},
+	_CState168: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, '(', ';', '*', '-', '+', '&', '!', '~'},
+	_CState169: []CSymbolId{';'},
+	_CState170: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, CCaseToken, CDefaultToken, CIfToken, CSwitchToken, CWhileToken, CDoToken, CForToken, CGotoToken, CContinueToken, CBreakToken, CReturnToken, '(', '{', ';', '*', '-', '+', '&', '!', '~'},
+	_CState171: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, '(', '*', '-', '+', '&', '!', '~'},
+	_CState174: []CSymbolId{';', ','},
+	_CState175: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, CTypeNameToken, CCharToken, CShortToken, CIntToken, CLongToken, CSignedToken, CUnsignedToken, CFloatToken, CDoubleToken, CConstToken, CVolatileToken, CVoidToken, CStructToken, CUnionToken, CEnumToken, '(', '*', '-', '+', '&', '!', '~'},
+	_CState177: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, '(', '*', '-', '+', '&', '!', '~'},
+	_CState178: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, '(', '*', '-', '+', '&', '!', '~'},
+	_CState179: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, '(', '*', '-', '+', '&', '!', '~'},
+	_CState180: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, '(', '*', '-', '+', '&', '!', '~'},
+	_CState181: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, '(', '*', '-', '+', '&', '!', '~'},
+	_CState183: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, CCaseToken, CDefaultToken, CIfToken, CSwitchToken, CWhileToken, CDoToken, CForToken, CGotoToken, CContinueToken, CBreakToken, CReturnToken, '(', '{', '}', ';', '*', '-', '+', '&', '!', '~'},
+	_CState184: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, '(', '*', '-', '+', '&', '!', '~'},
+	_CState185: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, '(', '*', '-', '+', '&', '!', '~'},
+	_CState186: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, '(', '*', '-', '+', '&', '!', '~'},
+	_CState187: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, '(', '*', '-', '+', '&', '!', '~'},
+	_CState189: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, '(', '*', '-', '+', '&', '!', '~'},
+	_CState190: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, '(', '*', '-', '+', '&', '!', '~'},
+	_CState191: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, '(', '*', '-', '+', '&', '!', '~'},
+	_CState192: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, '(', '*', '-', '+', '&', '!', '~'},
+	_CState193: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, '(', '*', '-', '+', '&', '!', '~'},
+	_CState194: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, '(', '*', '-', '+', '&', '!', '~'},
+	_CState195: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, '(', '*', '-', '+', '&', '!', '~'},
+	_CState196: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, '(', ')', '*', '-', '+', '&', '!', '~'},
 	_CState197: []CSymbolId{CIdentifierToken},
-	_CState199: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, CLparamToken, CMulToken, CMinusToken, CPlusToken, CAndToken, CExclaimToken, CTildaToken},
-	_CState200: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, CLparamToken, CRparamToken, CMulToken, CMinusToken, CPlusToken, CAndToken, CExclaimToken, CTildaToken},
+	_CState198: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, '(', '*', '-', '+', '&', '!', '~'},
 	_CState201: []CSymbolId{CIdentifierToken},
-	_CState202: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, CLparamToken, CMulToken, CMinusToken, CPlusToken, CAndToken, CExclaimToken, CTildaToken},
-	_CState203: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, CLparamToken, CMulToken, CMinusToken, CPlusToken, CAndToken, CExclaimToken, CTildaToken},
-	_CState204: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, CLparamToken, CMulToken, CMinusToken, CPlusToken, CAndToken, CExclaimToken, CTildaToken},
-	_CState205: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, CLparamToken, CMulToken, CMinusToken, CPlusToken, CAndToken, CExclaimToken, CTildaToken},
-	_CState206: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, CLparamToken, CMulToken, CMinusToken, CPlusToken, CAndToken, CExclaimToken, CTildaToken},
-	_CState207: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, CLparamToken, CMulToken, CMinusToken, CPlusToken, CAndToken, CExclaimToken, CTildaToken},
-	_CState221: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, CLparamToken, CMulToken, CMinusToken, CPlusToken, CAndToken, CExclaimToken, CTildaToken},
-	_CState224: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, CLparamToken, CRbraceToken, CMulToken, CMinusToken, CPlusToken, CAndToken, CExclaimToken, CTildaToken},
-	_CState225: []CSymbolId{CIdentifierToken, CTypeNameToken, CTypedefToken, CExternToken, CStaticToken, CAutoToken, CRegisterToken, CCharToken, CShortToken, CIntToken, CLongToken, CSignedToken, CUnsignedToken, CFloatToken, CDoubleToken, CConstToken, CVolatileToken, CVoidToken, CStructToken, CUnionToken, CEnumToken, CLparamToken, CRparamToken, CLbraceToken, CMulToken},
-	_CState228: []CSymbolId{CLparamToken, CLbraceToken},
-	_CState229: []CSymbolId{CIdentifierToken, CLparamToken, CLbraceToken},
+	_CState202: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, '(', '*', '-', '+', '&', '!', '~'},
+	_CState203: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, '(', '*', '-', '+', '&', '!', '~'},
+	_CState204: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, '(', '*', '-', '+', '&', '!', '~'},
+	_CState205: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, '(', '*', '-', '+', '&', '!', '~'},
+	_CState206: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, '(', '*', '-', '+', '&', '!', '~'},
+	_CState207: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, '(', '*', '-', '+', '&', '!', '~'},
+	_CState221: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, '(', '*', '-', '+', '&', '!', '~'},
+	_CState223: []CSymbolId{CIdentifierToken, CTypeNameToken, CTypedefToken, CExternToken, CStaticToken, CAutoToken, CRegisterToken, CCharToken, CShortToken, CIntToken, CLongToken, CSignedToken, CUnsignedToken, CFloatToken, CDoubleToken, CConstToken, CVolatileToken, CVoidToken, CStructToken, CUnionToken, CEnumToken, '(', ')', '[', '*'},
+	_CState224: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, '(', ']', '*', '-', '+', '&', '!', '~'},
+	_CState227: []CSymbolId{'(', '['},
+	_CState228: []CSymbolId{CIdentifierToken, '(', '['},
 	_CState230: []CSymbolId{CIdentifierToken},
-	_CState232: []CSymbolId{CTypeNameToken, CTypedefToken, CExternToken, CStaticToken, CAutoToken, CRegisterToken, CCharToken, CShortToken, CIntToken, CLongToken, CSignedToken, CUnsignedToken, CFloatToken, CDoubleToken, CConstToken, CVolatileToken, CVoidToken, CStructToken, CUnionToken, CEnumToken, CEllipsisToken},
-	_CState234: []CSymbolId{CTypeNameToken, CCharToken, CShortToken, CIntToken, CLongToken, CSignedToken, CUnsignedToken, CFloatToken, CDoubleToken, CConstToken, CVolatileToken, CVoidToken, CStructToken, CUnionToken, CEnumToken, CRcurlToken},
-	_CState235: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, CLparamToken, CMulToken, CMinusToken, CPlusToken, CAndToken, CExclaimToken, CTildaToken},
-	_CState236: []CSymbolId{CColonToken},
-	_CState238: []CSymbolId{CSemicolonToken, CCommaToken},
-	_CState247: []CSymbolId{CRcurlToken, CCommaToken},
-	_CState248: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, CCaseToken, CDefaultToken, CIfToken, CSwitchToken, CWhileToken, CDoToken, CForToken, CGotoToken, CContinueToken, CBreakToken, CReturnToken, CLparamToken, CLcurlToken, CSemicolonToken, CMulToken, CMinusToken, CPlusToken, CAndToken, CExclaimToken, CTildaToken},
-	_CState250: []CSymbolId{CLparamToken},
-	_CState251: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, CLparamToken, CSemicolonToken, CMulToken, CMinusToken, CPlusToken, CAndToken, CExclaimToken, CTildaToken},
-	_CState254: []CSymbolId{CRparamToken, CCommaToken},
-	_CState256: []CSymbolId{CTypeNameToken, CTypedefToken, CExternToken, CStaticToken, CAutoToken, CRegisterToken, CCharToken, CShortToken, CIntToken, CLongToken, CSignedToken, CUnsignedToken, CFloatToken, CDoubleToken, CConstToken, CVolatileToken, CVoidToken, CStructToken, CUnionToken, CEnumToken, CLparamToken, CRparamToken, CLbraceToken, CMulToken},
-	_CState257: []CSymbolId{CRparamToken},
-	_CState258: []CSymbolId{CLparamToken, CLbraceToken, CRparamToken},
-	_CState259: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, CLparamToken, CMulToken, CMinusToken, CPlusToken, CAndToken, CExclaimToken, CTildaToken},
-	_CState261: []CSymbolId{CRparamToken},
-	_CState262: []CSymbolId{CRparamToken, CCommaToken},
-	_CState263: []CSymbolId{CRparamToken, CCommaToken},
-	_CState264: []CSymbolId{CMulToken, CDivToken, CModToken},
-	_CState265: []CSymbolId{CMulToken, CDivToken, CModToken},
+	_CState231: []CSymbolId{CTypeNameToken, CTypedefToken, CExternToken, CStaticToken, CAutoToken, CRegisterToken, CCharToken, CShortToken, CIntToken, CLongToken, CSignedToken, CUnsignedToken, CFloatToken, CDoubleToken, CConstToken, CVolatileToken, CVoidToken, CStructToken, CUnionToken, CEnumToken, CEllipsisToken},
+	_CState234: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, '(', '*', '-', '+', '&', '!', '~'},
+	_CState235: []CSymbolId{':'},
+	_CState237: []CSymbolId{';', ','},
+	_CState242: []CSymbolId{CTypeNameToken, CCharToken, CShortToken, CIntToken, CLongToken, CSignedToken, CUnsignedToken, CFloatToken, CDoubleToken, CConstToken, CVolatileToken, CVoidToken, CStructToken, CUnionToken, CEnumToken, '}'},
+	_CState247: []CSymbolId{'}', ','},
+	_CState249: []CSymbolId{CTypeNameToken, CTypedefToken, CExternToken, CStaticToken, CAutoToken, CRegisterToken, CCharToken, CShortToken, CIntToken, CLongToken, CSignedToken, CUnsignedToken, CFloatToken, CDoubleToken, CConstToken, CVolatileToken, CVoidToken, CStructToken, CUnionToken, CEnumToken, '(', ')', '[', '*'},
+	_CState250: []CSymbolId{')'},
+	_CState251: []CSymbolId{'(', '[', ')'},
+	_CState252: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, '(', '*', '-', '+', '&', '!', '~'},
+	_CState253: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, CCaseToken, CDefaultToken, CIfToken, CSwitchToken, CWhileToken, CDoToken, CForToken, CGotoToken, CContinueToken, CBreakToken, CReturnToken, '(', '{', ';', '*', '-', '+', '&', '!', '~'},
+	_CState255: []CSymbolId{'('},
+	_CState256: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, '(', ';', '*', '-', '+', '&', '!', '~'},
+	_CState259: []CSymbolId{')', ','},
+	_CState261: []CSymbolId{')'},
+	_CState262: []CSymbolId{')', ','},
+	_CState263: []CSymbolId{')', ','},
+	_CState264: []CSymbolId{'*', '/', '%'},
+	_CState265: []CSymbolId{'*', '/', '%'},
 	_CState266: []CSymbolId{CEqOpToken, CNeOpToken},
-	_CState268: []CSymbolId{CLeOpToken, CGeOpToken, CLtToken, CGtToken},
-	_CState269: []CSymbolId{CLeOpToken, CGeOpToken, CLtToken, CGtToken},
-	_CState270: []CSymbolId{CAndToken},
-	_CState272: []CSymbolId{CHatToken},
-	_CState273: []CSymbolId{COrToken},
-	_CState274: []CSymbolId{CAndOpToken},
-	_CState275: []CSymbolId{CColonToken, CCommaToken},
-	_CState280: []CSymbolId{CRbraceToken, CCommaToken},
-	_CState282: []CSymbolId{CRparamToken, CCommaToken},
+	_CState268: []CSymbolId{CLeOpToken, CGeOpToken, '<', '>'},
+	_CState269: []CSymbolId{CLeOpToken, CGeOpToken, '<', '>'},
+	_CState270: []CSymbolId{'&'},
+	_CState272: []CSymbolId{'^'},
+	_CState273: []CSymbolId{'|'},
+	_CState274: []CSymbolId{':', ','},
+	_CState275: []CSymbolId{CAndOpToken},
+	_CState280: []CSymbolId{')', ','},
+	_CState283: []CSymbolId{']', ','},
 	_CState285: []CSymbolId{CLeftOpToken, CRightOpToken},
 	_CState286: []CSymbolId{CLeftOpToken, CRightOpToken},
 	_CState287: []CSymbolId{CLeftOpToken, CRightOpToken},
 	_CState288: []CSymbolId{CLeftOpToken, CRightOpToken},
-	_CState289: []CSymbolId{CMinusToken, CPlusToken},
-	_CState290: []CSymbolId{CMinusToken, CPlusToken},
-	_CState293: []CSymbolId{CRbraceToken},
-	_CState295: []CSymbolId{CRparamToken},
-	_CState296: []CSymbolId{CRparamToken},
-	_CState297: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, CLparamToken, CRbraceToken, CMulToken, CMinusToken, CPlusToken, CAndToken, CExclaimToken, CTildaToken},
-	_CState298: []CSymbolId{CTypeNameToken, CTypedefToken, CExternToken, CStaticToken, CAutoToken, CRegisterToken, CCharToken, CShortToken, CIntToken, CLongToken, CSignedToken, CUnsignedToken, CFloatToken, CDoubleToken, CConstToken, CVolatileToken, CVoidToken, CStructToken, CUnionToken, CEnumToken, CRparamToken},
-	_CState299: []CSymbolId{CLparamToken, CLbraceToken},
-	_CState301: []CSymbolId{CRparamToken},
-	_CState305: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, CLparamToken, CMulToken, CMinusToken, CPlusToken, CAndToken, CExclaimToken, CTildaToken},
-	_CState306: []CSymbolId{CIdentifierToken, CLparamToken, CColonToken, CMulToken},
-	_CState308: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, CLparamToken, CLcurlToken, CRcurlToken, CMulToken, CMinusToken, CPlusToken, CAndToken, CExclaimToken, CTildaToken},
-	_CState311: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, CLparamToken, CMulToken, CMinusToken, CPlusToken, CAndToken, CExclaimToken, CTildaToken},
-	_CState312: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, CLparamToken, CRparamToken, CMulToken, CMinusToken, CPlusToken, CAndToken, CExclaimToken, CTildaToken},
-	_CState313: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, CCaseToken, CDefaultToken, CIfToken, CSwitchToken, CWhileToken, CDoToken, CForToken, CGotoToken, CContinueToken, CBreakToken, CReturnToken, CLparamToken, CLcurlToken, CSemicolonToken, CMulToken, CMinusToken, CPlusToken, CAndToken, CExclaimToken, CTildaToken},
-	_CState316: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, CCaseToken, CDefaultToken, CIfToken, CSwitchToken, CWhileToken, CDoToken, CForToken, CGotoToken, CContinueToken, CBreakToken, CReturnToken, CLparamToken, CLcurlToken, CSemicolonToken, CMulToken, CMinusToken, CPlusToken, CAndToken, CExclaimToken, CTildaToken},
-	_CState317: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, CCaseToken, CDefaultToken, CIfToken, CSwitchToken, CWhileToken, CDoToken, CForToken, CGotoToken, CContinueToken, CBreakToken, CReturnToken, CLparamToken, CLcurlToken, CSemicolonToken, CMulToken, CMinusToken, CPlusToken, CAndToken, CExclaimToken, CTildaToken},
-	_CState318: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, CLparamToken, CMulToken, CMinusToken, CPlusToken, CAndToken, CExclaimToken, CTildaToken},
-	_CState320: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, CLparamToken, CMulToken, CMinusToken, CPlusToken, CAndToken, CExclaimToken, CTildaToken},
-	_CState326: []CSymbolId{CRbraceToken},
-	_CState328: []CSymbolId{CRparamToken},
-	_CState333: []CSymbolId{CRparamToken, CCommaToken},
-	_CState334: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, CCaseToken, CDefaultToken, CIfToken, CSwitchToken, CWhileToken, CDoToken, CForToken, CGotoToken, CContinueToken, CBreakToken, CReturnToken, CLparamToken, CLcurlToken, CSemicolonToken, CMulToken, CMinusToken, CPlusToken, CAndToken, CExclaimToken, CTildaToken},
-	_CState335: []CSymbolId{CRparamToken, CCommaToken},
+	_CState289: []CSymbolId{'-', '+'},
+	_CState290: []CSymbolId{'-', '+'},
+	_CState293: []CSymbolId{')'},
+	_CState294: []CSymbolId{')'},
+	_CState296: []CSymbolId{']'},
+	_CState297: []CSymbolId{CTypeNameToken, CTypedefToken, CExternToken, CStaticToken, CAutoToken, CRegisterToken, CCharToken, CShortToken, CIntToken, CLongToken, CSignedToken, CUnsignedToken, CFloatToken, CDoubleToken, CConstToken, CVolatileToken, CVoidToken, CStructToken, CUnionToken, CEnumToken, ')'},
+	_CState298: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, '(', ']', '*', '-', '+', '&', '!', '~'},
+	_CState299: []CSymbolId{'(', '['},
+	_CState301: []CSymbolId{')'},
+	_CState304: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, '(', '*', '-', '+', '&', '!', '~'},
+	_CState305: []CSymbolId{CIdentifierToken, '(', ':', '*'},
+	_CState308: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, '(', '{', '}', '*', '-', '+', '&', '!', '~'},
+	_CState312: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, '(', '*', '-', '+', '&', '!', '~'},
+	_CState313: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, '(', ')', '*', '-', '+', '&', '!', '~'},
+	_CState314: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, CCaseToken, CDefaultToken, CIfToken, CSwitchToken, CWhileToken, CDoToken, CForToken, CGotoToken, CContinueToken, CBreakToken, CReturnToken, '(', '{', ';', '*', '-', '+', '&', '!', '~'},
+	_CState316: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, CCaseToken, CDefaultToken, CIfToken, CSwitchToken, CWhileToken, CDoToken, CForToken, CGotoToken, CContinueToken, CBreakToken, CReturnToken, '(', '{', ';', '*', '-', '+', '&', '!', '~'},
+	_CState317: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, CCaseToken, CDefaultToken, CIfToken, CSwitchToken, CWhileToken, CDoToken, CForToken, CGotoToken, CContinueToken, CBreakToken, CReturnToken, '(', '{', ';', '*', '-', '+', '&', '!', '~'},
+	_CState318: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, '(', '*', '-', '+', '&', '!', '~'},
+	_CState320: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, '(', '*', '-', '+', '&', '!', '~'},
+	_CState326: []CSymbolId{')'},
+	_CState328: []CSymbolId{']'},
+	_CState333: []CSymbolId{')', ','},
+	_CState334: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, CCaseToken, CDefaultToken, CIfToken, CSwitchToken, CWhileToken, CDoToken, CForToken, CGotoToken, CContinueToken, CBreakToken, CReturnToken, '(', '{', ';', '*', '-', '+', '&', '!', '~'},
+	_CState335: []CSymbolId{')', ','},
 	_CState336: []CSymbolId{CElseToken},
-	_CState337: []CSymbolId{CElseToken, CAndToken, CBreakToken, CCaseToken, CConstantToken, CContinueToken, CDecOpToken, CDefaultToken, CDoToken, CElseToken, CExclaimToken, CForToken, CGotoToken, CIdentifierToken, CIfToken, CIncOpToken, CLcurlToken, CLparamToken, CMinusToken, CMulToken, CPlusToken, CRcurlToken, CReturnToken, CSemicolonToken, CSizeofToken, CStringLiteralToken, CSwitchToken, CTildaToken, CWhileToken},
+	_CState337: []CSymbolId{CElseToken, '!', '&', '(', '*', '+', '-', ';', '{', '}', '~', CBreakToken, CCaseToken, CConstantToken, CContinueToken, CDecOpToken, CDefaultToken, CDoToken, CElseToken, CForToken, CGotoToken, CIdentifierToken, CIfToken, CIncOpToken, CReturnToken, CSizeofToken, CStringLiteralToken, CSwitchToken, CWhileToken},
 	_CState338: []CSymbolId{CElseToken, CElseToken, CWhileToken},
-	_CState345: []CSymbolId{CSemicolonToken},
-	_CState347: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, CCaseToken, CDefaultToken, CIfToken, CSwitchToken, CWhileToken, CDoToken, CForToken, CGotoToken, CContinueToken, CBreakToken, CReturnToken, CLparamToken, CLcurlToken, CSemicolonToken, CMulToken, CMinusToken, CPlusToken, CAndToken, CExclaimToken, CTildaToken},
-	_CState348: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, CCaseToken, CDefaultToken, CIfToken, CSwitchToken, CWhileToken, CDoToken, CForToken, CGotoToken, CContinueToken, CBreakToken, CReturnToken, CLparamToken, CLcurlToken, CSemicolonToken, CMulToken, CMinusToken, CPlusToken, CAndToken, CExclaimToken, CTildaToken},
+	_CState345: []CSymbolId{';'},
+	_CState347: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, CCaseToken, CDefaultToken, CIfToken, CSwitchToken, CWhileToken, CDoToken, CForToken, CGotoToken, CContinueToken, CBreakToken, CReturnToken, '(', '{', ';', '*', '-', '+', '&', '!', '~'},
+	_CState348: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, CCaseToken, CDefaultToken, CIfToken, CSwitchToken, CWhileToken, CDoToken, CForToken, CGotoToken, CContinueToken, CBreakToken, CReturnToken, '(', '{', ';', '*', '-', '+', '&', '!', '~'},
 }
 
 /*
@@ -7423,29 +7394,29 @@ Parser Debug States:
     Reduce:
       (nil)
     Goto:
-      IDENTIFIER -> State 10
+      IDENTIFIER -> State 12
       TYPE_NAME -> State 21
       TYPEDEF -> State 20
-      EXTERN -> State 8
+      EXTERN -> State 10
       STATIC -> State 18
-      AUTO -> State 3
+      AUTO -> State 5
       REGISTER -> State 15
-      CHAR -> State 4
+      CHAR -> State 6
       SHORT -> State 16
-      INT -> State 11
-      LONG -> State 12
+      INT -> State 13
+      LONG -> State 14
       SIGNED -> State 17
       UNSIGNED -> State 23
-      FLOAT -> State 9
-      DOUBLE -> State 6
-      CONST -> State 5
+      FLOAT -> State 11
+      DOUBLE -> State 8
+      CONST -> State 7
       VOLATILE -> State 25
       VOID -> State 24
       STRUCT -> State 19
       UNION -> State 22
-      ENUM -> State 7
-      LPARAM -> State 13
-      MUL -> State 14
+      ENUM -> State 9
+      '(' -> State 3
+      '*' -> State 4
       declaration -> State 26
       declaration_specifiers -> State 27
       storage_class_specifier -> State 34
@@ -7468,29 +7439,29 @@ Parser Debug States:
     Reduce:
       $ -> [#accept]
     Goto:
-      IDENTIFIER -> State 10
+      IDENTIFIER -> State 12
       TYPE_NAME -> State 21
       TYPEDEF -> State 20
-      EXTERN -> State 8
+      EXTERN -> State 10
       STATIC -> State 18
-      AUTO -> State 3
+      AUTO -> State 5
       REGISTER -> State 15
-      CHAR -> State 4
+      CHAR -> State 6
       SHORT -> State 16
-      INT -> State 11
-      LONG -> State 12
+      INT -> State 13
+      LONG -> State 14
       SIGNED -> State 17
       UNSIGNED -> State 23
-      FLOAT -> State 9
-      DOUBLE -> State 6
-      CONST -> State 5
+      FLOAT -> State 11
+      DOUBLE -> State 8
+      CONST -> State 7
       VOLATILE -> State 25
       VOID -> State 24
       STRUCT -> State 19
       UNION -> State 22
-      ENUM -> State 7
-      LPARAM -> State 13
-      MUL -> State 14
+      ENUM -> State 9
+      '(' -> State 3
+      '*' -> State 4
       declaration -> State 26
       declaration_specifiers -> State 27
       storage_class_specifier -> State 34
@@ -7507,13 +7478,42 @@ Parser Debug States:
 
   State 3:
     Kernel Items:
+      direct_declarator: '('.declarator ')'
+    Reduce:
+      (nil)
+    Goto:
+      IDENTIFIER -> State 12
+      '(' -> State 3
+      '*' -> State 4
+      declarator -> State 39
+      direct_declarator -> State 29
+      pointer -> State 33
+
+  State 4:
+    Kernel Items:
+      pointer: '*'., *
+      pointer: '*'.type_qualifier_list
+      pointer: '*'.pointer
+      pointer: '*'.type_qualifier_list pointer
+    Reduce:
+      * -> [pointer]
+    Goto:
+      CONST -> State 7
+      VOLATILE -> State 25
+      '*' -> State 4
+      type_qualifier -> State 41
+      pointer -> State 40
+      type_qualifier_list -> State 42
+
+  State 5:
+    Kernel Items:
       storage_class_specifier: AUTO., *
     Reduce:
       * -> [storage_class_specifier]
     Goto:
       (nil)
 
-  State 4:
+  State 6:
     Kernel Items:
       type_specifier: CHAR., *
     Reduce:
@@ -7521,7 +7521,7 @@ Parser Debug States:
     Goto:
       (nil)
 
-  State 5:
+  State 7:
     Kernel Items:
       type_qualifier: CONST., *
     Reduce:
@@ -7529,7 +7529,7 @@ Parser Debug States:
     Goto:
       (nil)
 
-  State 6:
+  State 8:
     Kernel Items:
       type_specifier: DOUBLE., *
     Reduce:
@@ -7537,18 +7537,18 @@ Parser Debug States:
     Goto:
       (nil)
 
-  State 7:
+  State 9:
     Kernel Items:
+      enum_specifier: ENUM.'{' enumerator_list '}'
+      enum_specifier: ENUM.IDENTIFIER '{' enumerator_list '}'
       enum_specifier: ENUM.IDENTIFIER
-      enum_specifier: ENUM.IDENTIFIER LCURL enumerator_list RCURL
-      enum_specifier: ENUM.LCURL enumerator_list RCURL
     Reduce:
       (nil)
     Goto:
-      IDENTIFIER -> State 39
-      LCURL -> State 40
+      IDENTIFIER -> State 44
+      '{' -> State 43
 
-  State 8:
+  State 10:
     Kernel Items:
       storage_class_specifier: EXTERN., *
     Reduce:
@@ -7556,7 +7556,7 @@ Parser Debug States:
     Goto:
       (nil)
 
-  State 9:
+  State 11:
     Kernel Items:
       type_specifier: FLOAT., *
     Reduce:
@@ -7564,7 +7564,7 @@ Parser Debug States:
     Goto:
       (nil)
 
-  State 10:
+  State 12:
     Kernel Items:
       direct_declarator: IDENTIFIER., *
     Reduce:
@@ -7572,7 +7572,7 @@ Parser Debug States:
     Goto:
       (nil)
 
-  State 11:
+  State 13:
     Kernel Items:
       type_specifier: INT., *
     Reduce:
@@ -7580,42 +7580,13 @@ Parser Debug States:
     Goto:
       (nil)
 
-  State 12:
+  State 14:
     Kernel Items:
       type_specifier: LONG., *
     Reduce:
       * -> [type_specifier]
     Goto:
       (nil)
-
-  State 13:
-    Kernel Items:
-      direct_declarator: LPARAM.declarator RPARAM
-    Reduce:
-      (nil)
-    Goto:
-      IDENTIFIER -> State 10
-      LPARAM -> State 13
-      MUL -> State 14
-      declarator -> State 41
-      direct_declarator -> State 29
-      pointer -> State 33
-
-  State 14:
-    Kernel Items:
-      pointer: MUL., *
-      pointer: MUL.pointer
-      pointer: MUL.type_qualifier_list
-      pointer: MUL.type_qualifier_list pointer
-    Reduce:
-      * -> [pointer]
-    Goto:
-      CONST -> State 5
-      VOLATILE -> State 25
-      MUL -> State 14
-      type_qualifier -> State 43
-      pointer -> State 42
-      type_qualifier_list -> State 44
 
   State 15:
     Kernel Items:
@@ -7715,17 +7686,17 @@ Parser Debug States:
 
   State 27:
     Kernel Items:
-      declaration: declaration_specifiers.SEMICOLON
-      declaration: declaration_specifiers.init_declarator_list SEMICOLON
-      function_definition: declaration_specifiers.declarator compound_statement
+      declaration: declaration_specifiers.';'
+      declaration: declaration_specifiers.init_declarator_list ';'
       function_definition: declaration_specifiers.declarator declaration_list compound_statement
+      function_definition: declaration_specifiers.declarator compound_statement
     Reduce:
       (nil)
     Goto:
-      IDENTIFIER -> State 10
-      LPARAM -> State 13
-      SEMICOLON -> State 45
-      MUL -> State 14
+      IDENTIFIER -> State 12
+      '(' -> State 3
+      ';' -> State 45
+      '*' -> State 4
       init_declarator_list -> State 48
       init_declarator -> State 47
       declarator -> State 46
@@ -7734,32 +7705,32 @@ Parser Debug States:
 
   State 28:
     Kernel Items:
-      function_definition: declarator.compound_statement
       function_definition: declarator.declaration_list compound_statement
+      function_definition: declarator.compound_statement
     Reduce:
       (nil)
     Goto:
       TYPE_NAME -> State 21
       TYPEDEF -> State 20
-      EXTERN -> State 8
+      EXTERN -> State 10
       STATIC -> State 18
-      AUTO -> State 3
+      AUTO -> State 5
       REGISTER -> State 15
-      CHAR -> State 4
+      CHAR -> State 6
       SHORT -> State 16
-      INT -> State 11
-      LONG -> State 12
+      INT -> State 13
+      LONG -> State 14
       SIGNED -> State 17
       UNSIGNED -> State 23
-      FLOAT -> State 9
-      DOUBLE -> State 6
-      CONST -> State 5
+      FLOAT -> State 11
+      DOUBLE -> State 8
+      CONST -> State 7
       VOLATILE -> State 25
       VOID -> State 24
       STRUCT -> State 19
       UNION -> State 22
-      ENUM -> State 7
-      LCURL -> State 49
+      ENUM -> State 9
+      '{' -> State 49
       declaration -> State 51
       declaration_specifiers -> State 53
       storage_class_specifier -> State 34
@@ -7774,16 +7745,16 @@ Parser Debug States:
   State 29:
     Kernel Items:
       declarator: direct_declarator., *
-      direct_declarator: direct_declarator.LBRACE RBRACE
-      direct_declarator: direct_declarator.LBRACE constant_expression RBRACE
-      direct_declarator: direct_declarator.LPARAM RPARAM
-      direct_declarator: direct_declarator.LPARAM identifier_list RPARAM
-      direct_declarator: direct_declarator.LPARAM parameter_type_list RPARAM
+      direct_declarator: direct_declarator.'[' constant_expression ']'
+      direct_declarator: direct_declarator.'[' ']'
+      direct_declarator: direct_declarator.'(' parameter_type_list ')'
+      direct_declarator: direct_declarator.'(' identifier_list ')'
+      direct_declarator: direct_declarator.'(' ')'
     Reduce:
       * -> [declarator]
     Goto:
-      LPARAM -> State 55
-      LBRACE -> State 54
+      '(' -> State 54
+      '[' -> State 55
 
   State 30:
     Kernel Items:
@@ -7815,8 +7786,8 @@ Parser Debug States:
     Reduce:
       (nil)
     Goto:
-      IDENTIFIER -> State 10
-      LPARAM -> State 13
+      IDENTIFIER -> State 12
+      '(' -> State 3
       direct_declarator -> State 56
 
   State 34:
@@ -7828,24 +7799,24 @@ Parser Debug States:
     Goto:
       TYPE_NAME -> State 21
       TYPEDEF -> State 20
-      EXTERN -> State 8
+      EXTERN -> State 10
       STATIC -> State 18
-      AUTO -> State 3
+      AUTO -> State 5
       REGISTER -> State 15
-      CHAR -> State 4
+      CHAR -> State 6
       SHORT -> State 16
-      INT -> State 11
-      LONG -> State 12
+      INT -> State 13
+      LONG -> State 14
       SIGNED -> State 17
       UNSIGNED -> State 23
-      FLOAT -> State 9
-      DOUBLE -> State 6
-      CONST -> State 5
+      FLOAT -> State 11
+      DOUBLE -> State 8
+      CONST -> State 7
       VOLATILE -> State 25
       VOID -> State 24
       STRUCT -> State 19
       UNION -> State 22
-      ENUM -> State 7
+      ENUM -> State 9
       declaration_specifiers -> State 57
       storage_class_specifier -> State 34
       type_specifier -> State 38
@@ -7856,14 +7827,14 @@ Parser Debug States:
 
   State 35:
     Kernel Items:
+      struct_or_union_specifier: struct_or_union.IDENTIFIER '{' struct_declaration_list '}'
+      struct_or_union_specifier: struct_or_union.'{' struct_declaration_list '}'
       struct_or_union_specifier: struct_or_union.IDENTIFIER
-      struct_or_union_specifier: struct_or_union.IDENTIFIER LCURL struct_declaration_list RCURL
-      struct_or_union_specifier: struct_or_union.LCURL struct_declaration_list RCURL
     Reduce:
       (nil)
     Goto:
-      IDENTIFIER -> State 58
-      LCURL -> State 59
+      IDENTIFIER -> State 59
+      '{' -> State 58
 
   State 36:
     Kernel Items:
@@ -7882,24 +7853,24 @@ Parser Debug States:
     Goto:
       TYPE_NAME -> State 21
       TYPEDEF -> State 20
-      EXTERN -> State 8
+      EXTERN -> State 10
       STATIC -> State 18
-      AUTO -> State 3
+      AUTO -> State 5
       REGISTER -> State 15
-      CHAR -> State 4
+      CHAR -> State 6
       SHORT -> State 16
-      INT -> State 11
-      LONG -> State 12
+      INT -> State 13
+      LONG -> State 14
       SIGNED -> State 17
       UNSIGNED -> State 23
-      FLOAT -> State 9
-      DOUBLE -> State 6
-      CONST -> State 5
+      FLOAT -> State 11
+      DOUBLE -> State 8
+      CONST -> State 7
       VOLATILE -> State 25
       VOID -> State 24
       STRUCT -> State 19
       UNION -> State 22
-      ENUM -> State 7
+      ENUM -> State 9
       declaration_specifiers -> State 61
       storage_class_specifier -> State 34
       type_specifier -> State 38
@@ -7917,24 +7888,24 @@ Parser Debug States:
     Goto:
       TYPE_NAME -> State 21
       TYPEDEF -> State 20
-      EXTERN -> State 8
+      EXTERN -> State 10
       STATIC -> State 18
-      AUTO -> State 3
+      AUTO -> State 5
       REGISTER -> State 15
-      CHAR -> State 4
+      CHAR -> State 6
       SHORT -> State 16
-      INT -> State 11
-      LONG -> State 12
+      INT -> State 13
+      LONG -> State 14
       SIGNED -> State 17
       UNSIGNED -> State 23
-      FLOAT -> State 9
-      DOUBLE -> State 6
-      CONST -> State 5
+      FLOAT -> State 11
+      DOUBLE -> State 8
+      CONST -> State 7
       VOLATILE -> State 25
       VOID -> State 24
       STRUCT -> State 19
       UNION -> State 22
-      ENUM -> State 7
+      ENUM -> State 9
       declaration_specifiers -> State 62
       storage_class_specifier -> State 34
       type_specifier -> State 38
@@ -7945,40 +7916,21 @@ Parser Debug States:
 
   State 39:
     Kernel Items:
-      enum_specifier: ENUM IDENTIFIER., *
-      enum_specifier: ENUM IDENTIFIER.LCURL enumerator_list RCURL
+      direct_declarator: '(' declarator.')'
     Reduce:
-      * -> [enum_specifier]
+      (nil)
     Goto:
-      LCURL -> State 63
+      ')' -> State 63
 
   State 40:
     Kernel Items:
-      enum_specifier: ENUM LCURL.enumerator_list RCURL
-    Reduce:
-      (nil)
-    Goto:
-      IDENTIFIER -> State 64
-      enumerator_list -> State 66
-      enumerator -> State 65
-
-  State 41:
-    Kernel Items:
-      direct_declarator: LPARAM declarator.RPARAM
-    Reduce:
-      (nil)
-    Goto:
-      RPARAM -> State 67
-
-  State 42:
-    Kernel Items:
-      pointer: MUL pointer., *
+      pointer: '*' pointer., *
     Reduce:
       * -> [pointer]
     Goto:
       (nil)
 
-  State 43:
+  State 41:
     Kernel Items:
       type_qualifier_list: type_qualifier., *
     Reduce:
@@ -7986,23 +7938,42 @@ Parser Debug States:
     Goto:
       (nil)
 
-  State 44:
+  State 42:
     Kernel Items:
-      pointer: MUL type_qualifier_list., *
-      pointer: MUL type_qualifier_list.pointer
+      pointer: '*' type_qualifier_list., *
+      pointer: '*' type_qualifier_list.pointer
       type_qualifier_list: type_qualifier_list.type_qualifier
     Reduce:
       * -> [pointer]
     Goto:
-      CONST -> State 5
+      CONST -> State 7
       VOLATILE -> State 25
-      MUL -> State 14
-      type_qualifier -> State 69
-      pointer -> State 68
+      '*' -> State 4
+      type_qualifier -> State 65
+      pointer -> State 64
+
+  State 43:
+    Kernel Items:
+      enum_specifier: ENUM '{'.enumerator_list '}'
+    Reduce:
+      (nil)
+    Goto:
+      IDENTIFIER -> State 66
+      enumerator_list -> State 68
+      enumerator -> State 67
+
+  State 44:
+    Kernel Items:
+      enum_specifier: ENUM IDENTIFIER.'{' enumerator_list '}'
+      enum_specifier: ENUM IDENTIFIER., *
+    Reduce:
+      * -> [enum_specifier]
+    Goto:
+      '{' -> State 69
 
   State 45:
     Kernel Items:
-      declaration: declaration_specifiers SEMICOLON., *
+      declaration: declaration_specifiers ';'., *
     Reduce:
       * -> [declaration]
     Goto:
@@ -8010,35 +7981,35 @@ Parser Debug States:
 
   State 46:
     Kernel Items:
-      function_definition: declaration_specifiers declarator.compound_statement
-      function_definition: declaration_specifiers declarator.declaration_list compound_statement
       init_declarator: declarator., *
-      init_declarator: declarator.EQ initializer
+      init_declarator: declarator.'=' initializer
+      function_definition: declaration_specifiers declarator.declaration_list compound_statement
+      function_definition: declaration_specifiers declarator.compound_statement
     Reduce:
       * -> [init_declarator]
     Goto:
       TYPE_NAME -> State 21
       TYPEDEF -> State 20
-      EXTERN -> State 8
+      EXTERN -> State 10
       STATIC -> State 18
-      AUTO -> State 3
+      AUTO -> State 5
       REGISTER -> State 15
-      CHAR -> State 4
+      CHAR -> State 6
       SHORT -> State 16
-      INT -> State 11
-      LONG -> State 12
+      INT -> State 13
+      LONG -> State 14
       SIGNED -> State 17
       UNSIGNED -> State 23
-      FLOAT -> State 9
-      DOUBLE -> State 6
-      CONST -> State 5
+      FLOAT -> State 11
+      DOUBLE -> State 8
+      CONST -> State 7
       VOLATILE -> State 25
       VOID -> State 24
       STRUCT -> State 19
       UNION -> State 22
-      ENUM -> State 7
-      LCURL -> State 49
-      EQ -> State 70
+      ENUM -> State 9
+      '{' -> State 49
+      '=' -> State 70
       declaration -> State 51
       declaration_specifiers -> State 53
       storage_class_specifier -> State 34
@@ -8060,70 +8031,70 @@ Parser Debug States:
 
   State 48:
     Kernel Items:
-      declaration: declaration_specifiers init_declarator_list.SEMICOLON
-      init_declarator_list: init_declarator_list.COMMA init_declarator
+      declaration: declaration_specifiers init_declarator_list.';'
+      init_declarator_list: init_declarator_list.',' init_declarator
     Reduce:
       (nil)
     Goto:
-      SEMICOLON -> State 74
-      COMMA -> State 73
+      ';' -> State 74
+      ',' -> State 73
 
   State 49:
     Kernel Items:
-      compound_statement: LCURL.RCURL
-      compound_statement: LCURL.declaration_list RCURL
-      compound_statement: LCURL.declaration_list statement_list RCURL
-      compound_statement: LCURL.statement_list RCURL
+      compound_statement: '{'.'}'
+      compound_statement: '{'.statement_list '}'
+      compound_statement: '{'.declaration_list '}'
+      compound_statement: '{'.declaration_list statement_list '}'
     Reduce:
       (nil)
     Goto:
-      IDENTIFIER -> State 86
-      CONSTANT -> State 78
-      STRING_LITERAL -> State 97
-      SIZEOF -> State 96
-      INC_OP -> State 88
-      DEC_OP -> State 80
+      IDENTIFIER -> State 93
+      CONSTANT -> State 86
+      STRING_LITERAL -> State 98
+      SIZEOF -> State 97
+      INC_OP -> State 95
+      DEC_OP -> State 88
       TYPE_NAME -> State 21
       TYPEDEF -> State 20
-      EXTERN -> State 8
+      EXTERN -> State 10
       STATIC -> State 18
-      AUTO -> State 3
+      AUTO -> State 5
       REGISTER -> State 15
-      CHAR -> State 4
+      CHAR -> State 6
       SHORT -> State 16
-      INT -> State 11
-      LONG -> State 12
+      INT -> State 13
+      LONG -> State 14
       SIGNED -> State 17
       UNSIGNED -> State 23
-      FLOAT -> State 9
-      DOUBLE -> State 6
-      CONST -> State 5
+      FLOAT -> State 11
+      DOUBLE -> State 8
+      CONST -> State 7
       VOLATILE -> State 25
       VOID -> State 24
       STRUCT -> State 19
       UNION -> State 22
-      ENUM -> State 7
-      CASE -> State 77
-      DEFAULT -> State 81
-      IF -> State 87
-      SWITCH -> State 98
+      ENUM -> State 9
+      CASE -> State 85
+      DEFAULT -> State 89
+      IF -> State 94
+      SWITCH -> State 99
       WHILE -> State 100
-      DO -> State 82
-      FOR -> State 84
-      GOTO -> State 85
-      CONTINUE -> State 79
-      BREAK -> State 76
-      RETURN -> State 94
-      LPARAM -> State 89
-      LCURL -> State 49
-      RCURL -> State 93
-      SEMICOLON -> State 95
-      MUL -> State 91
-      MINUS -> State 90
-      PLUS -> State 92
-      AND -> State 75
-      EXCLAIM -> State 83
-      TILDA -> State 99
+      DO -> State 90
+      FOR -> State 91
+      GOTO -> State 92
+      CONTINUE -> State 87
+      BREAK -> State 84
+      RETURN -> State 96
+      '(' -> State 77
+      '{' -> State 49
+      '}' -> State 82
+      ';' -> State 81
+      '*' -> State 78
+      '-' -> State 80
+      '+' -> State 79
+      '&' -> State 76
+      '!' -> State 75
+      '~' -> State 83
       primary_expression -> State 120
       postfix_expression -> State 119
       unary_expression -> State 126
@@ -8185,25 +8156,25 @@ Parser Debug States:
     Goto:
       TYPE_NAME -> State 21
       TYPEDEF -> State 20
-      EXTERN -> State 8
+      EXTERN -> State 10
       STATIC -> State 18
-      AUTO -> State 3
+      AUTO -> State 5
       REGISTER -> State 15
-      CHAR -> State 4
+      CHAR -> State 6
       SHORT -> State 16
-      INT -> State 11
-      LONG -> State 12
+      INT -> State 13
+      LONG -> State 14
       SIGNED -> State 17
       UNSIGNED -> State 23
-      FLOAT -> State 9
-      DOUBLE -> State 6
-      CONST -> State 5
+      FLOAT -> State 11
+      DOUBLE -> State 8
+      CONST -> State 7
       VOLATILE -> State 25
       VOID -> State 24
       STRUCT -> State 19
       UNION -> State 22
-      ENUM -> State 7
-      LCURL -> State 49
+      ENUM -> State 9
+      '{' -> State 49
       declaration -> State 129
       declaration_specifiers -> State 53
       storage_class_specifier -> State 34
@@ -8216,15 +8187,15 @@ Parser Debug States:
 
   State 53:
     Kernel Items:
-      declaration: declaration_specifiers.SEMICOLON
-      declaration: declaration_specifiers.init_declarator_list SEMICOLON
+      declaration: declaration_specifiers.';'
+      declaration: declaration_specifiers.init_declarator_list ';'
     Reduce:
       (nil)
     Goto:
-      IDENTIFIER -> State 10
-      LPARAM -> State 13
-      SEMICOLON -> State 45
-      MUL -> State 14
+      IDENTIFIER -> State 12
+      '(' -> State 3
+      ';' -> State 45
+      '*' -> State 4
       init_declarator_list -> State 48
       init_declarator -> State 47
       declarator -> State 130
@@ -8233,28 +8204,70 @@ Parser Debug States:
 
   State 54:
     Kernel Items:
-      direct_declarator: direct_declarator LBRACE.RBRACE
-      direct_declarator: direct_declarator LBRACE.constant_expression RBRACE
+      direct_declarator: direct_declarator '('.parameter_type_list ')'
+      direct_declarator: direct_declarator '('.identifier_list ')'
+      direct_declarator: direct_declarator '('.')'
     Reduce:
       (nil)
     Goto:
-      IDENTIFIER -> State 131
-      CONSTANT -> State 78
-      STRING_LITERAL -> State 97
-      SIZEOF -> State 96
-      INC_OP -> State 88
-      DEC_OP -> State 80
-      LPARAM -> State 89
-      RBRACE -> State 132
-      MUL -> State 91
-      MINUS -> State 90
-      PLUS -> State 92
-      AND -> State 75
-      EXCLAIM -> State 83
-      TILDA -> State 99
+      IDENTIFIER -> State 132
+      TYPE_NAME -> State 21
+      TYPEDEF -> State 20
+      EXTERN -> State 10
+      STATIC -> State 18
+      AUTO -> State 5
+      REGISTER -> State 15
+      CHAR -> State 6
+      SHORT -> State 16
+      INT -> State 13
+      LONG -> State 14
+      SIGNED -> State 17
+      UNSIGNED -> State 23
+      FLOAT -> State 11
+      DOUBLE -> State 8
+      CONST -> State 7
+      VOLATILE -> State 25
+      VOID -> State 24
+      STRUCT -> State 19
+      UNION -> State 22
+      ENUM -> State 9
+      ')' -> State 131
+      declaration_specifiers -> State 133
+      storage_class_specifier -> State 34
+      type_specifier -> State 38
+      struct_or_union_specifier -> State 36
+      struct_or_union -> State 35
+      enum_specifier -> State 30
+      type_qualifier -> State 37
+      parameter_type_list -> State 137
+      parameter_list -> State 136
+      parameter_declaration -> State 135
+      identifier_list -> State 134
+
+  State 55:
+    Kernel Items:
+      direct_declarator: direct_declarator '['.constant_expression ']'
+      direct_declarator: direct_declarator '['.']'
+    Reduce:
+      (nil)
+    Goto:
+      IDENTIFIER -> State 139
+      CONSTANT -> State 86
+      STRING_LITERAL -> State 98
+      SIZEOF -> State 97
+      INC_OP -> State 95
+      DEC_OP -> State 88
+      '(' -> State 77
+      ']' -> State 138
+      '*' -> State 78
+      '-' -> State 80
+      '+' -> State 79
+      '&' -> State 76
+      '!' -> State 75
+      '~' -> State 83
       primary_expression -> State 120
       postfix_expression -> State 119
-      unary_expression -> State 135
+      unary_expression -> State 142
       unary_operator -> State 127
       cast_expression -> State 104
       multiplicative_expression -> State 118
@@ -8267,64 +8280,22 @@ Parser Debug States:
       inclusive_or_expression -> State 112
       logical_and_expression -> State 116
       logical_or_expression -> State 117
-      conditional_expression -> State 133
-      constant_expression -> State 134
-
-  State 55:
-    Kernel Items:
-      direct_declarator: direct_declarator LPARAM.RPARAM
-      direct_declarator: direct_declarator LPARAM.identifier_list RPARAM
-      direct_declarator: direct_declarator LPARAM.parameter_type_list RPARAM
-    Reduce:
-      (nil)
-    Goto:
-      IDENTIFIER -> State 136
-      TYPE_NAME -> State 21
-      TYPEDEF -> State 20
-      EXTERN -> State 8
-      STATIC -> State 18
-      AUTO -> State 3
-      REGISTER -> State 15
-      CHAR -> State 4
-      SHORT -> State 16
-      INT -> State 11
-      LONG -> State 12
-      SIGNED -> State 17
-      UNSIGNED -> State 23
-      FLOAT -> State 9
-      DOUBLE -> State 6
-      CONST -> State 5
-      VOLATILE -> State 25
-      VOID -> State 24
-      STRUCT -> State 19
-      UNION -> State 22
-      ENUM -> State 7
-      RPARAM -> State 137
-      declaration_specifiers -> State 138
-      storage_class_specifier -> State 34
-      type_specifier -> State 38
-      struct_or_union_specifier -> State 36
-      struct_or_union -> State 35
-      enum_specifier -> State 30
-      type_qualifier -> State 37
-      parameter_type_list -> State 142
-      parameter_list -> State 141
-      parameter_declaration -> State 140
-      identifier_list -> State 139
+      conditional_expression -> State 140
+      constant_expression -> State 141
 
   State 56:
     Kernel Items:
       declarator: pointer direct_declarator., *
-      direct_declarator: direct_declarator.LBRACE RBRACE
-      direct_declarator: direct_declarator.LBRACE constant_expression RBRACE
-      direct_declarator: direct_declarator.LPARAM RPARAM
-      direct_declarator: direct_declarator.LPARAM identifier_list RPARAM
-      direct_declarator: direct_declarator.LPARAM parameter_type_list RPARAM
+      direct_declarator: direct_declarator.'[' constant_expression ']'
+      direct_declarator: direct_declarator.'[' ']'
+      direct_declarator: direct_declarator.'(' parameter_type_list ')'
+      direct_declarator: direct_declarator.'(' identifier_list ')'
+      direct_declarator: direct_declarator.'(' ')'
     Reduce:
       * -> [declarator]
     Goto:
-      LPARAM -> State 55
-      LBRACE -> State 54
+      '(' -> State 54
+      '[' -> State 55
 
   State 57:
     Kernel Items:
@@ -8336,42 +8307,42 @@ Parser Debug States:
 
   State 58:
     Kernel Items:
-      struct_or_union_specifier: struct_or_union IDENTIFIER., *
-      struct_or_union_specifier: struct_or_union IDENTIFIER.LCURL struct_declaration_list RCURL
-    Reduce:
-      * -> [struct_or_union_specifier]
-    Goto:
-      LCURL -> State 143
-
-  State 59:
-    Kernel Items:
-      struct_or_union_specifier: struct_or_union LCURL.struct_declaration_list RCURL
+      struct_or_union_specifier: struct_or_union '{'.struct_declaration_list '}'
     Reduce:
       (nil)
     Goto:
       TYPE_NAME -> State 21
-      CHAR -> State 4
+      CHAR -> State 6
       SHORT -> State 16
-      INT -> State 11
-      LONG -> State 12
+      INT -> State 13
+      LONG -> State 14
       SIGNED -> State 17
       UNSIGNED -> State 23
-      FLOAT -> State 9
-      DOUBLE -> State 6
-      CONST -> State 5
+      FLOAT -> State 11
+      DOUBLE -> State 8
+      CONST -> State 7
       VOLATILE -> State 25
       VOID -> State 24
       STRUCT -> State 19
       UNION -> State 22
-      ENUM -> State 7
-      type_specifier -> State 148
+      ENUM -> State 9
+      type_specifier -> State 147
       struct_or_union_specifier -> State 36
       struct_or_union -> State 35
-      struct_declaration_list -> State 146
-      struct_declaration -> State 145
-      specifier_qualifier_list -> State 144
+      struct_declaration_list -> State 145
+      struct_declaration -> State 144
+      specifier_qualifier_list -> State 143
       enum_specifier -> State 30
-      type_qualifier -> State 147
+      type_qualifier -> State 146
+
+  State 59:
+    Kernel Items:
+      struct_or_union_specifier: struct_or_union IDENTIFIER.'{' struct_declaration_list '}'
+      struct_or_union_specifier: struct_or_union IDENTIFIER., *
+    Reduce:
+      * -> [struct_or_union_specifier]
+    Goto:
+      '{' -> State 148
 
   State 60:
     Kernel Items:
@@ -8399,58 +8370,21 @@ Parser Debug States:
 
   State 63:
     Kernel Items:
-      enum_specifier: ENUM IDENTIFIER LCURL.enumerator_list RCURL
-    Reduce:
-      (nil)
-    Goto:
-      IDENTIFIER -> State 64
-      enumerator_list -> State 149
-      enumerator -> State 65
-
-  State 64:
-    Kernel Items:
-      enumerator: IDENTIFIER., *
-      enumerator: IDENTIFIER.EQ constant_expression
-    Reduce:
-      * -> [enumerator]
-    Goto:
-      EQ -> State 150
-
-  State 65:
-    Kernel Items:
-      enumerator_list: enumerator., *
-    Reduce:
-      * -> [enumerator_list]
-    Goto:
-      (nil)
-
-  State 66:
-    Kernel Items:
-      enum_specifier: ENUM LCURL enumerator_list.RCURL
-      enumerator_list: enumerator_list.COMMA enumerator
-    Reduce:
-      (nil)
-    Goto:
-      RCURL -> State 152
-      COMMA -> State 151
-
-  State 67:
-    Kernel Items:
-      direct_declarator: LPARAM declarator RPARAM., *
+      direct_declarator: '(' declarator ')'., *
     Reduce:
       * -> [direct_declarator]
     Goto:
       (nil)
 
-  State 68:
+  State 64:
     Kernel Items:
-      pointer: MUL type_qualifier_list pointer., *
+      pointer: '*' type_qualifier_list pointer., *
     Reduce:
       * -> [pointer]
     Goto:
       (nil)
 
-  State 69:
+  State 65:
     Kernel Items:
       type_qualifier_list: type_qualifier_list type_qualifier., *
     Reduce:
@@ -8458,26 +8392,63 @@ Parser Debug States:
     Goto:
       (nil)
 
-  State 70:
+  State 66:
     Kernel Items:
-      init_declarator: declarator EQ.initializer
+      enumerator: IDENTIFIER., *
+      enumerator: IDENTIFIER.'=' constant_expression
+    Reduce:
+      * -> [enumerator]
+    Goto:
+      '=' -> State 149
+
+  State 67:
+    Kernel Items:
+      enumerator_list: enumerator., *
+    Reduce:
+      * -> [enumerator_list]
+    Goto:
+      (nil)
+
+  State 68:
+    Kernel Items:
+      enum_specifier: ENUM '{' enumerator_list.'}'
+      enumerator_list: enumerator_list.',' enumerator
     Reduce:
       (nil)
     Goto:
-      IDENTIFIER -> State 131
-      CONSTANT -> State 78
-      STRING_LITERAL -> State 97
-      SIZEOF -> State 96
-      INC_OP -> State 88
-      DEC_OP -> State 80
-      LPARAM -> State 89
-      LCURL -> State 153
-      MUL -> State 91
-      MINUS -> State 90
-      PLUS -> State 92
-      AND -> State 75
-      EXCLAIM -> State 83
-      TILDA -> State 99
+      '}' -> State 151
+      ',' -> State 150
+
+  State 69:
+    Kernel Items:
+      enum_specifier: ENUM IDENTIFIER '{'.enumerator_list '}'
+    Reduce:
+      (nil)
+    Goto:
+      IDENTIFIER -> State 66
+      enumerator_list -> State 152
+      enumerator -> State 67
+
+  State 70:
+    Kernel Items:
+      init_declarator: declarator '='.initializer
+    Reduce:
+      (nil)
+    Goto:
+      IDENTIFIER -> State 139
+      CONSTANT -> State 86
+      STRING_LITERAL -> State 98
+      SIZEOF -> State 97
+      INC_OP -> State 95
+      DEC_OP -> State 88
+      '(' -> State 77
+      '{' -> State 153
+      '*' -> State 78
+      '-' -> State 80
+      '+' -> State 79
+      '&' -> State 76
+      '!' -> State 75
+      '~' -> State 83
       primary_expression -> State 120
       postfix_expression -> State 119
       unary_expression -> State 126
@@ -8514,25 +8485,25 @@ Parser Debug States:
     Goto:
       TYPE_NAME -> State 21
       TYPEDEF -> State 20
-      EXTERN -> State 8
+      EXTERN -> State 10
       STATIC -> State 18
-      AUTO -> State 3
+      AUTO -> State 5
       REGISTER -> State 15
-      CHAR -> State 4
+      CHAR -> State 6
       SHORT -> State 16
-      INT -> State 11
-      LONG -> State 12
+      INT -> State 13
+      LONG -> State 14
       SIGNED -> State 17
       UNSIGNED -> State 23
-      FLOAT -> State 9
-      DOUBLE -> State 6
-      CONST -> State 5
+      FLOAT -> State 11
+      DOUBLE -> State 8
+      CONST -> State 7
       VOLATILE -> State 25
       VOID -> State 24
       STRUCT -> State 19
       UNION -> State 22
-      ENUM -> State 7
-      LCURL -> State 49
+      ENUM -> State 9
+      '{' -> State 49
       declaration -> State 129
       declaration_specifiers -> State 53
       storage_class_specifier -> State 34
@@ -8545,13 +8516,13 @@ Parser Debug States:
 
   State 73:
     Kernel Items:
-      init_declarator_list: init_declarator_list COMMA.init_declarator
+      init_declarator_list: init_declarator_list ','.init_declarator
     Reduce:
       (nil)
     Goto:
-      IDENTIFIER -> State 10
-      LPARAM -> State 13
-      MUL -> State 14
+      IDENTIFIER -> State 12
+      '(' -> State 3
+      '*' -> State 4
       init_declarator -> State 157
       declarator -> State 130
       direct_declarator -> State 29
@@ -8559,7 +8530,7 @@ Parser Debug States:
 
   State 74:
     Kernel Items:
-      declaration: declaration_specifiers init_declarator_list SEMICOLON., *
+      declaration: declaration_specifiers init_declarator_list ';'., *
     Reduce:
       * -> [declaration]
     Goto:
@@ -8567,7 +8538,7 @@ Parser Debug States:
 
   State 75:
     Kernel Items:
-      unary_operator: AND., *
+      unary_operator: '!'., *
     Reduce:
       * -> [unary_operator]
     Goto:
@@ -8575,34 +8546,50 @@ Parser Debug States:
 
   State 76:
     Kernel Items:
-      jump_statement: BREAK.SEMICOLON
+      unary_operator: '&'., *
     Reduce:
-      (nil)
+      * -> [unary_operator]
     Goto:
-      SEMICOLON -> State 158
+      (nil)
 
   State 77:
     Kernel Items:
-      labeled_statement: CASE.constant_expression COLON statement
+      primary_expression: '('.expression ')'
+      cast_expression: '('.type_name ')' cast_expression
     Reduce:
       (nil)
     Goto:
-      IDENTIFIER -> State 131
-      CONSTANT -> State 78
-      STRING_LITERAL -> State 97
-      SIZEOF -> State 96
-      INC_OP -> State 88
-      DEC_OP -> State 80
-      LPARAM -> State 89
-      MUL -> State 91
-      MINUS -> State 90
-      PLUS -> State 92
-      AND -> State 75
-      EXCLAIM -> State 83
-      TILDA -> State 99
+      IDENTIFIER -> State 139
+      CONSTANT -> State 86
+      STRING_LITERAL -> State 98
+      SIZEOF -> State 97
+      INC_OP -> State 95
+      DEC_OP -> State 88
+      TYPE_NAME -> State 21
+      CHAR -> State 6
+      SHORT -> State 16
+      INT -> State 13
+      LONG -> State 14
+      SIGNED -> State 17
+      UNSIGNED -> State 23
+      FLOAT -> State 11
+      DOUBLE -> State 8
+      CONST -> State 7
+      VOLATILE -> State 25
+      VOID -> State 24
+      STRUCT -> State 19
+      UNION -> State 22
+      ENUM -> State 9
+      '(' -> State 77
+      '*' -> State 78
+      '-' -> State 80
+      '+' -> State 79
+      '&' -> State 76
+      '!' -> State 75
+      '~' -> State 83
       primary_expression -> State 120
       postfix_expression -> State 119
-      unary_expression -> State 135
+      unary_expression -> State 126
       unary_operator -> State 127
       cast_expression -> State 104
       multiplicative_expression -> State 118
@@ -8615,10 +8602,111 @@ Parser Debug States:
       inclusive_or_expression -> State 112
       logical_and_expression -> State 116
       logical_or_expression -> State 117
-      conditional_expression -> State 133
-      constant_expression -> State 159
+      conditional_expression -> State 106
+      assignment_expression -> State 103
+      expression -> State 158
+      type_specifier -> State 147
+      struct_or_union_specifier -> State 36
+      struct_or_union -> State 35
+      specifier_qualifier_list -> State 159
+      enum_specifier -> State 30
+      type_qualifier -> State 146
+      type_name -> State 160
 
   State 78:
+    Kernel Items:
+      unary_operator: '*'., *
+    Reduce:
+      * -> [unary_operator]
+    Goto:
+      (nil)
+
+  State 79:
+    Kernel Items:
+      unary_operator: '+'., *
+    Reduce:
+      * -> [unary_operator]
+    Goto:
+      (nil)
+
+  State 80:
+    Kernel Items:
+      unary_operator: '-'., *
+    Reduce:
+      * -> [unary_operator]
+    Goto:
+      (nil)
+
+  State 81:
+    Kernel Items:
+      expression_statement: ';'., *
+    Reduce:
+      * -> [expression_statement]
+    Goto:
+      (nil)
+
+  State 82:
+    Kernel Items:
+      compound_statement: '{' '}'., *
+    Reduce:
+      * -> [compound_statement]
+    Goto:
+      (nil)
+
+  State 83:
+    Kernel Items:
+      unary_operator: '~'., *
+    Reduce:
+      * -> [unary_operator]
+    Goto:
+      (nil)
+
+  State 84:
+    Kernel Items:
+      jump_statement: BREAK.';'
+    Reduce:
+      (nil)
+    Goto:
+      ';' -> State 161
+
+  State 85:
+    Kernel Items:
+      labeled_statement: CASE.constant_expression ':' statement
+    Reduce:
+      (nil)
+    Goto:
+      IDENTIFIER -> State 139
+      CONSTANT -> State 86
+      STRING_LITERAL -> State 98
+      SIZEOF -> State 97
+      INC_OP -> State 95
+      DEC_OP -> State 88
+      '(' -> State 77
+      '*' -> State 78
+      '-' -> State 80
+      '+' -> State 79
+      '&' -> State 76
+      '!' -> State 75
+      '~' -> State 83
+      primary_expression -> State 120
+      postfix_expression -> State 119
+      unary_expression -> State 142
+      unary_operator -> State 127
+      cast_expression -> State 104
+      multiplicative_expression -> State 118
+      additive_expression -> State 101
+      shift_expression -> State 123
+      relational_expression -> State 121
+      equality_expression -> State 108
+      and_expression -> State 102
+      exclusive_or_expression -> State 109
+      inclusive_or_expression -> State 112
+      logical_and_expression -> State 116
+      logical_or_expression -> State 117
+      conditional_expression -> State 140
+      constant_expression -> State 162
+
+  State 86:
     Kernel Items:
       primary_expression: CONSTANT., *
     Reduce:
@@ -8626,78 +8714,78 @@ Parser Debug States:
     Goto:
       (nil)
 
-  State 79:
+  State 87:
     Kernel Items:
-      jump_statement: CONTINUE.SEMICOLON
+      jump_statement: CONTINUE.';'
     Reduce:
       (nil)
     Goto:
-      SEMICOLON -> State 160
+      ';' -> State 163
 
-  State 80:
+  State 88:
     Kernel Items:
       unary_expression: DEC_OP.unary_expression
     Reduce:
       (nil)
     Goto:
-      IDENTIFIER -> State 131
-      CONSTANT -> State 78
-      STRING_LITERAL -> State 97
-      SIZEOF -> State 96
-      INC_OP -> State 88
-      DEC_OP -> State 80
-      LPARAM -> State 161
-      MUL -> State 91
-      MINUS -> State 90
-      PLUS -> State 92
-      AND -> State 75
-      EXCLAIM -> State 83
-      TILDA -> State 99
+      IDENTIFIER -> State 139
+      CONSTANT -> State 86
+      STRING_LITERAL -> State 98
+      SIZEOF -> State 97
+      INC_OP -> State 95
+      DEC_OP -> State 88
+      '(' -> State 164
+      '*' -> State 78
+      '-' -> State 80
+      '+' -> State 79
+      '&' -> State 76
+      '!' -> State 75
+      '~' -> State 83
       primary_expression -> State 120
       postfix_expression -> State 119
-      unary_expression -> State 162
+      unary_expression -> State 165
       unary_operator -> State 127
 
-  State 81:
+  State 89:
     Kernel Items:
-      labeled_statement: DEFAULT.COLON statement
+      labeled_statement: DEFAULT.':' statement
     Reduce:
       (nil)
     Goto:
-      COLON -> State 163
+      ':' -> State 166
 
-  State 82:
+  State 90:
     Kernel Items:
-      iteration_statement: DO.statement WHILE LPARAM expression RPARAM SEMICOLON
+      iteration_statement: DO.statement WHILE '(' expression ')' ';'
     Reduce:
       (nil)
     Goto:
-      IDENTIFIER -> State 86
-      CONSTANT -> State 78
-      STRING_LITERAL -> State 97
-      SIZEOF -> State 96
-      INC_OP -> State 88
-      DEC_OP -> State 80
-      CASE -> State 77
-      DEFAULT -> State 81
-      IF -> State 87
-      SWITCH -> State 98
+      IDENTIFIER -> State 93
+      CONSTANT -> State 86
+      STRING_LITERAL -> State 98
+      SIZEOF -> State 97
+      INC_OP -> State 95
+      DEC_OP -> State 88
+      CASE -> State 85
+      DEFAULT -> State 89
+      IF -> State 94
+      SWITCH -> State 99
       WHILE -> State 100
-      DO -> State 82
-      FOR -> State 84
-      GOTO -> State 85
-      CONTINUE -> State 79
-      BREAK -> State 76
-      RETURN -> State 94
-      LPARAM -> State 89
-      LCURL -> State 49
-      SEMICOLON -> State 95
-      MUL -> State 91
-      MINUS -> State 90
-      PLUS -> State 92
-      AND -> State 75
-      EXCLAIM -> State 83
-      TILDA -> State 99
+      DO -> State 90
+      FOR -> State 91
+      GOTO -> State 92
+      CONTINUE -> State 87
+      BREAK -> State 84
+      RETURN -> State 96
+      '(' -> State 77
+      '{' -> State 49
+      ';' -> State 81
+      '*' -> State 78
+      '-' -> State 80
+      '+' -> State 79
+      '&' -> State 76
+      '!' -> State 75
+      '~' -> State 83
       primary_expression -> State 120
       postfix_expression -> State 119
       unary_expression -> State 126
@@ -8716,7 +8804,7 @@ Parser Debug States:
       conditional_expression -> State 106
       assignment_expression -> State 103
       expression -> State 110
-      statement -> State 164
+      statement -> State 167
       labeled_statement -> State 115
       compound_statement -> State 105
       expression_statement -> State 111
@@ -8724,187 +8812,86 @@ Parser Debug States:
       iteration_statement -> State 113
       jump_statement -> State 114
 
-  State 83:
+  State 91:
     Kernel Items:
-      unary_operator: EXCLAIM., *
-    Reduce:
-      * -> [unary_operator]
-    Goto:
-      (nil)
-
-  State 84:
-    Kernel Items:
-      iteration_statement: FOR.LPARAM expression_statement expression_statement RPARAM statement
-      iteration_statement: FOR.LPARAM expression_statement expression_statement expression RPARAM statement
+      iteration_statement: FOR.'(' expression_statement expression_statement ')' statement
+      iteration_statement: FOR.'(' expression_statement expression_statement expression ')' statement
     Reduce:
       (nil)
     Goto:
-      LPARAM -> State 165
+      '(' -> State 168
 
-  State 85:
+  State 92:
     Kernel Items:
-      jump_statement: GOTO.IDENTIFIER SEMICOLON
+      jump_statement: GOTO.IDENTIFIER ';'
     Reduce:
       (nil)
     Goto:
-      IDENTIFIER -> State 166
+      IDENTIFIER -> State 169
 
-  State 86:
+  State 93:
     Kernel Items:
-      labeled_statement: IDENTIFIER.COLON statement
       primary_expression: IDENTIFIER., *
+      labeled_statement: IDENTIFIER.':' statement
     Reduce:
       * -> [primary_expression]
     Goto:
-      COLON -> State 167
+      ':' -> State 170
 
-  State 87:
+  State 94:
     Kernel Items:
-      selection_statement: IF.LPARAM expression RPARAM statement
-      selection_statement: IF.LPARAM expression RPARAM statement ELSE statement
+      selection_statement: IF.'(' expression ')' statement
+      selection_statement: IF.'(' expression ')' statement ELSE statement
     Reduce:
       (nil)
     Goto:
-      LPARAM -> State 168
+      '(' -> State 171
 
-  State 88:
+  State 95:
     Kernel Items:
       unary_expression: INC_OP.unary_expression
     Reduce:
       (nil)
     Goto:
-      IDENTIFIER -> State 131
-      CONSTANT -> State 78
-      STRING_LITERAL -> State 97
-      SIZEOF -> State 96
-      INC_OP -> State 88
-      DEC_OP -> State 80
-      LPARAM -> State 161
-      MUL -> State 91
-      MINUS -> State 90
-      PLUS -> State 92
-      AND -> State 75
-      EXCLAIM -> State 83
-      TILDA -> State 99
+      IDENTIFIER -> State 139
+      CONSTANT -> State 86
+      STRING_LITERAL -> State 98
+      SIZEOF -> State 97
+      INC_OP -> State 95
+      DEC_OP -> State 88
+      '(' -> State 164
+      '*' -> State 78
+      '-' -> State 80
+      '+' -> State 79
+      '&' -> State 76
+      '!' -> State 75
+      '~' -> State 83
       primary_expression -> State 120
       postfix_expression -> State 119
-      unary_expression -> State 169
+      unary_expression -> State 172
       unary_operator -> State 127
 
-  State 89:
+  State 96:
     Kernel Items:
-      cast_expression: LPARAM.type_name RPARAM cast_expression
-      primary_expression: LPARAM.expression RPARAM
+      jump_statement: RETURN.';'
+      jump_statement: RETURN.expression ';'
     Reduce:
       (nil)
     Goto:
-      IDENTIFIER -> State 131
-      CONSTANT -> State 78
-      STRING_LITERAL -> State 97
-      SIZEOF -> State 96
-      INC_OP -> State 88
-      DEC_OP -> State 80
-      TYPE_NAME -> State 21
-      CHAR -> State 4
-      SHORT -> State 16
-      INT -> State 11
-      LONG -> State 12
-      SIGNED -> State 17
-      UNSIGNED -> State 23
-      FLOAT -> State 9
-      DOUBLE -> State 6
-      CONST -> State 5
-      VOLATILE -> State 25
-      VOID -> State 24
-      STRUCT -> State 19
-      UNION -> State 22
-      ENUM -> State 7
-      LPARAM -> State 89
-      MUL -> State 91
-      MINUS -> State 90
-      PLUS -> State 92
-      AND -> State 75
-      EXCLAIM -> State 83
-      TILDA -> State 99
-      primary_expression -> State 120
-      postfix_expression -> State 119
-      unary_expression -> State 126
-      unary_operator -> State 127
-      cast_expression -> State 104
-      multiplicative_expression -> State 118
-      additive_expression -> State 101
-      shift_expression -> State 123
-      relational_expression -> State 121
-      equality_expression -> State 108
-      and_expression -> State 102
-      exclusive_or_expression -> State 109
-      inclusive_or_expression -> State 112
-      logical_and_expression -> State 116
-      logical_or_expression -> State 117
-      conditional_expression -> State 106
-      assignment_expression -> State 103
-      expression -> State 170
-      type_specifier -> State 148
-      struct_or_union_specifier -> State 36
-      struct_or_union -> State 35
-      specifier_qualifier_list -> State 171
-      enum_specifier -> State 30
-      type_qualifier -> State 147
-      type_name -> State 172
-
-  State 90:
-    Kernel Items:
-      unary_operator: MINUS., *
-    Reduce:
-      * -> [unary_operator]
-    Goto:
-      (nil)
-
-  State 91:
-    Kernel Items:
-      unary_operator: MUL., *
-    Reduce:
-      * -> [unary_operator]
-    Goto:
-      (nil)
-
-  State 92:
-    Kernel Items:
-      unary_operator: PLUS., *
-    Reduce:
-      * -> [unary_operator]
-    Goto:
-      (nil)
-
-  State 93:
-    Kernel Items:
-      compound_statement: LCURL RCURL., *
-    Reduce:
-      * -> [compound_statement]
-    Goto:
-      (nil)
-
-  State 94:
-    Kernel Items:
-      jump_statement: RETURN.SEMICOLON
-      jump_statement: RETURN.expression SEMICOLON
-    Reduce:
-      (nil)
-    Goto:
-      IDENTIFIER -> State 131
-      CONSTANT -> State 78
-      STRING_LITERAL -> State 97
-      SIZEOF -> State 96
-      INC_OP -> State 88
-      DEC_OP -> State 80
-      LPARAM -> State 89
-      SEMICOLON -> State 173
-      MUL -> State 91
-      MINUS -> State 90
-      PLUS -> State 92
-      AND -> State 75
-      EXCLAIM -> State 83
-      TILDA -> State 99
+      IDENTIFIER -> State 139
+      CONSTANT -> State 86
+      STRING_LITERAL -> State 98
+      SIZEOF -> State 97
+      INC_OP -> State 95
+      DEC_OP -> State 88
+      '(' -> State 77
+      ';' -> State 173
+      '*' -> State 78
+      '-' -> State 80
+      '+' -> State 79
+      '&' -> State 76
+      '!' -> State 75
+      '~' -> State 83
       primary_expression -> State 120
       postfix_expression -> State 119
       unary_expression -> State 126
@@ -8924,40 +8911,32 @@ Parser Debug States:
       assignment_expression -> State 103
       expression -> State 174
 
-  State 95:
+  State 97:
     Kernel Items:
-      expression_statement: SEMICOLON., *
-    Reduce:
-      * -> [expression_statement]
-    Goto:
-      (nil)
-
-  State 96:
-    Kernel Items:
-      unary_expression: SIZEOF.LPARAM type_name RPARAM
       unary_expression: SIZEOF.unary_expression
+      unary_expression: SIZEOF.'(' type_name ')'
     Reduce:
       (nil)
     Goto:
-      IDENTIFIER -> State 131
-      CONSTANT -> State 78
-      STRING_LITERAL -> State 97
-      SIZEOF -> State 96
-      INC_OP -> State 88
-      DEC_OP -> State 80
-      LPARAM -> State 175
-      MUL -> State 91
-      MINUS -> State 90
-      PLUS -> State 92
-      AND -> State 75
-      EXCLAIM -> State 83
-      TILDA -> State 99
+      IDENTIFIER -> State 139
+      CONSTANT -> State 86
+      STRING_LITERAL -> State 98
+      SIZEOF -> State 97
+      INC_OP -> State 95
+      DEC_OP -> State 88
+      '(' -> State 175
+      '*' -> State 78
+      '-' -> State 80
+      '+' -> State 79
+      '&' -> State 76
+      '!' -> State 75
+      '~' -> State 83
       primary_expression -> State 120
       postfix_expression -> State 119
       unary_expression -> State 176
       unary_operator -> State 127
 
-  State 97:
+  State 98:
     Kernel Items:
       primary_expression: STRING_LITERAL., *
     Reduce:
@@ -8965,49 +8944,41 @@ Parser Debug States:
     Goto:
       (nil)
 
-  State 98:
-    Kernel Items:
-      selection_statement: SWITCH.LPARAM expression RPARAM statement
-    Reduce:
-      (nil)
-    Goto:
-      LPARAM -> State 177
-
   State 99:
     Kernel Items:
-      unary_operator: TILDA., *
+      selection_statement: SWITCH.'(' expression ')' statement
     Reduce:
-      * -> [unary_operator]
-    Goto:
       (nil)
+    Goto:
+      '(' -> State 177
 
   State 100:
     Kernel Items:
-      iteration_statement: WHILE.LPARAM expression RPARAM statement
+      iteration_statement: WHILE.'(' expression ')' statement
     Reduce:
       (nil)
     Goto:
-      LPARAM -> State 178
+      '(' -> State 178
 
   State 101:
     Kernel Items:
-      additive_expression: additive_expression.MINUS multiplicative_expression
-      additive_expression: additive_expression.PLUS multiplicative_expression
+      additive_expression: additive_expression.'+' multiplicative_expression
+      additive_expression: additive_expression.'-' multiplicative_expression
       shift_expression: additive_expression., *
     Reduce:
       * -> [shift_expression]
     Goto:
-      MINUS -> State 179
-      PLUS -> State 180
+      '-' -> State 180
+      '+' -> State 179
 
   State 102:
     Kernel Items:
-      and_expression: and_expression.AND equality_expression
+      and_expression: and_expression.'&' equality_expression
       exclusive_or_expression: and_expression., *
     Reduce:
       * -> [exclusive_or_expression]
     Goto:
-      AND -> State 181
+      '&' -> State 181
 
   State 103:
     Kernel Items:
@@ -9043,59 +9014,59 @@ Parser Debug States:
 
   State 107:
     Kernel Items:
-      compound_statement: LCURL declaration_list.RCURL
-      compound_statement: LCURL declaration_list.statement_list RCURL
+      compound_statement: '{' declaration_list.'}'
+      compound_statement: '{' declaration_list.statement_list '}'
       declaration_list: declaration_list.declaration
     Reduce:
       (nil)
     Goto:
-      IDENTIFIER -> State 86
-      CONSTANT -> State 78
-      STRING_LITERAL -> State 97
-      SIZEOF -> State 96
-      INC_OP -> State 88
-      DEC_OP -> State 80
+      IDENTIFIER -> State 93
+      CONSTANT -> State 86
+      STRING_LITERAL -> State 98
+      SIZEOF -> State 97
+      INC_OP -> State 95
+      DEC_OP -> State 88
       TYPE_NAME -> State 21
       TYPEDEF -> State 20
-      EXTERN -> State 8
+      EXTERN -> State 10
       STATIC -> State 18
-      AUTO -> State 3
+      AUTO -> State 5
       REGISTER -> State 15
-      CHAR -> State 4
+      CHAR -> State 6
       SHORT -> State 16
-      INT -> State 11
-      LONG -> State 12
+      INT -> State 13
+      LONG -> State 14
       SIGNED -> State 17
       UNSIGNED -> State 23
-      FLOAT -> State 9
-      DOUBLE -> State 6
-      CONST -> State 5
+      FLOAT -> State 11
+      DOUBLE -> State 8
+      CONST -> State 7
       VOLATILE -> State 25
       VOID -> State 24
       STRUCT -> State 19
       UNION -> State 22
-      ENUM -> State 7
-      CASE -> State 77
-      DEFAULT -> State 81
-      IF -> State 87
-      SWITCH -> State 98
+      ENUM -> State 9
+      CASE -> State 85
+      DEFAULT -> State 89
+      IF -> State 94
+      SWITCH -> State 99
       WHILE -> State 100
-      DO -> State 82
-      FOR -> State 84
-      GOTO -> State 85
-      CONTINUE -> State 79
-      BREAK -> State 76
-      RETURN -> State 94
-      LPARAM -> State 89
-      LCURL -> State 49
-      RCURL -> State 182
-      SEMICOLON -> State 95
-      MUL -> State 91
-      MINUS -> State 90
-      PLUS -> State 92
-      AND -> State 75
-      EXCLAIM -> State 83
-      TILDA -> State 99
+      DO -> State 90
+      FOR -> State 91
+      GOTO -> State 92
+      CONTINUE -> State 87
+      BREAK -> State 84
+      RETURN -> State 96
+      '(' -> State 77
+      '{' -> State 49
+      '}' -> State 182
+      ';' -> State 81
+      '*' -> State 78
+      '-' -> State 80
+      '+' -> State 79
+      '&' -> State 76
+      '!' -> State 75
+      '~' -> State 83
       primary_expression -> State 120
       postfix_expression -> State 119
       unary_expression -> State 126
@@ -9133,9 +9104,9 @@ Parser Debug States:
 
   State 108:
     Kernel Items:
-      and_expression: equality_expression., *
       equality_expression: equality_expression.EQ_OP relational_expression
       equality_expression: equality_expression.NE_OP relational_expression
+      and_expression: equality_expression., *
     Reduce:
       * -> [and_expression]
     Goto:
@@ -9144,22 +9115,22 @@ Parser Debug States:
 
   State 109:
     Kernel Items:
-      exclusive_or_expression: exclusive_or_expression.HAT and_expression
+      exclusive_or_expression: exclusive_or_expression.'^' and_expression
       inclusive_or_expression: exclusive_or_expression., *
     Reduce:
       * -> [inclusive_or_expression]
     Goto:
-      HAT -> State 186
+      '^' -> State 186
 
   State 110:
     Kernel Items:
-      expression: expression.COMMA assignment_expression
-      expression_statement: expression.SEMICOLON
+      expression: expression.',' assignment_expression
+      expression_statement: expression.';'
     Reduce:
       (nil)
     Goto:
-      SEMICOLON -> State 188
-      COMMA -> State 187
+      ';' -> State 188
+      ',' -> State 187
 
   State 111:
     Kernel Items:
@@ -9171,12 +9142,12 @@ Parser Debug States:
 
   State 112:
     Kernel Items:
-      inclusive_or_expression: inclusive_or_expression.OR exclusive_or_expression
+      inclusive_or_expression: inclusive_or_expression.'|' exclusive_or_expression
       logical_and_expression: inclusive_or_expression., *
     Reduce:
       * -> [logical_and_expression]
     Goto:
-      OR -> State 189
+      '|' -> State 189
 
   State 113:
     Kernel Items:
@@ -9213,47 +9184,47 @@ Parser Debug States:
 
   State 117:
     Kernel Items:
-      conditional_expression: logical_or_expression., *
-      conditional_expression: logical_or_expression.QUESTION expression COLON conditional_expression
       logical_or_expression: logical_or_expression.OR_OP logical_and_expression
+      conditional_expression: logical_or_expression., *
+      conditional_expression: logical_or_expression.'?' expression ':' conditional_expression
     Reduce:
       * -> [conditional_expression]
     Goto:
-      OR_OP -> State 191
-      QUESTION -> State 192
+      OR_OP -> State 192
+      '?' -> State 191
 
   State 118:
     Kernel Items:
+      multiplicative_expression: multiplicative_expression.'*' cast_expression
+      multiplicative_expression: multiplicative_expression.'/' cast_expression
+      multiplicative_expression: multiplicative_expression.'%' cast_expression
       additive_expression: multiplicative_expression., *
-      multiplicative_expression: multiplicative_expression.DIV cast_expression
-      multiplicative_expression: multiplicative_expression.MOD cast_expression
-      multiplicative_expression: multiplicative_expression.MUL cast_expression
     Reduce:
       * -> [additive_expression]
     Goto:
-      MUL -> State 195
-      DIV -> State 193
-      MOD -> State 194
+      '*' -> State 194
+      '/' -> State 195
+      '%' -> State 193
 
   State 119:
     Kernel Items:
-      postfix_expression: postfix_expression.DEC_OP
-      postfix_expression: postfix_expression.DOT IDENTIFIER
-      postfix_expression: postfix_expression.INC_OP
-      postfix_expression: postfix_expression.LBRACE expression RBRACE
-      postfix_expression: postfix_expression.LPARAM RPARAM
-      postfix_expression: postfix_expression.LPARAM argument_expression_list RPARAM
+      postfix_expression: postfix_expression.'[' expression ']'
+      postfix_expression: postfix_expression.'(' ')'
+      postfix_expression: postfix_expression.'(' argument_expression_list ')'
+      postfix_expression: postfix_expression.'.' IDENTIFIER
       postfix_expression: postfix_expression.PTR_OP IDENTIFIER
+      postfix_expression: postfix_expression.INC_OP
+      postfix_expression: postfix_expression.DEC_OP
       unary_expression: postfix_expression., *
     Reduce:
       * -> [unary_expression]
     Goto:
       PTR_OP -> State 201
-      INC_OP -> State 198
-      DEC_OP -> State 196
-      LPARAM -> State 200
-      LBRACE -> State 199
-      DOT -> State 197
+      INC_OP -> State 200
+      DEC_OP -> State 199
+      '(' -> State 196
+      '[' -> State 198
+      '.' -> State 197
 
   State 120:
     Kernel Items:
@@ -9265,18 +9236,18 @@ Parser Debug States:
 
   State 121:
     Kernel Items:
-      equality_expression: relational_expression., *
-      relational_expression: relational_expression.GE_OP shift_expression
-      relational_expression: relational_expression.GT shift_expression
+      relational_expression: relational_expression.'<' shift_expression
+      relational_expression: relational_expression.'>' shift_expression
       relational_expression: relational_expression.LE_OP shift_expression
-      relational_expression: relational_expression.LT shift_expression
+      relational_expression: relational_expression.GE_OP shift_expression
+      equality_expression: relational_expression., *
     Reduce:
       * -> [equality_expression]
     Goto:
-      LE_OP -> State 204
-      GE_OP -> State 202
-      LT -> State 205
-      GT -> State 203
+      LE_OP -> State 205
+      GE_OP -> State 204
+      '<' -> State 202
+      '>' -> State 203
 
   State 122:
     Kernel Items:
@@ -9288,9 +9259,9 @@ Parser Debug States:
 
   State 123:
     Kernel Items:
-      relational_expression: shift_expression., *
       shift_expression: shift_expression.LEFT_OP additive_expression
       shift_expression: shift_expression.RIGHT_OP additive_expression
+      relational_expression: shift_expression., *
     Reduce:
       * -> [relational_expression]
     Goto:
@@ -9307,38 +9278,38 @@ Parser Debug States:
 
   State 125:
     Kernel Items:
-      compound_statement: LCURL statement_list.RCURL
+      compound_statement: '{' statement_list.'}'
       statement_list: statement_list.statement
     Reduce:
       (nil)
     Goto:
-      IDENTIFIER -> State 86
-      CONSTANT -> State 78
-      STRING_LITERAL -> State 97
-      SIZEOF -> State 96
-      INC_OP -> State 88
-      DEC_OP -> State 80
-      CASE -> State 77
-      DEFAULT -> State 81
-      IF -> State 87
-      SWITCH -> State 98
+      IDENTIFIER -> State 93
+      CONSTANT -> State 86
+      STRING_LITERAL -> State 98
+      SIZEOF -> State 97
+      INC_OP -> State 95
+      DEC_OP -> State 88
+      CASE -> State 85
+      DEFAULT -> State 89
+      IF -> State 94
+      SWITCH -> State 99
       WHILE -> State 100
-      DO -> State 82
-      FOR -> State 84
-      GOTO -> State 85
-      CONTINUE -> State 79
-      BREAK -> State 76
-      RETURN -> State 94
-      LPARAM -> State 89
-      LCURL -> State 49
-      RCURL -> State 208
-      SEMICOLON -> State 95
-      MUL -> State 91
-      MINUS -> State 90
-      PLUS -> State 92
-      AND -> State 75
-      EXCLAIM -> State 83
-      TILDA -> State 99
+      DO -> State 90
+      FOR -> State 91
+      GOTO -> State 92
+      CONTINUE -> State 87
+      BREAK -> State 84
+      RETURN -> State 96
+      '(' -> State 77
+      '{' -> State 49
+      '}' -> State 208
+      ';' -> State 81
+      '*' -> State 78
+      '-' -> State 80
+      '+' -> State 79
+      '&' -> State 76
+      '!' -> State 75
+      '~' -> State 83
       primary_expression -> State 120
       postfix_expression -> State 119
       unary_expression -> State 126
@@ -9367,22 +9338,22 @@ Parser Debug States:
 
   State 126:
     Kernel Items:
-      assignment_expression: unary_expression.assignment_operator assignment_expression
       cast_expression: unary_expression., *
+      assignment_expression: unary_expression.assignment_operator assignment_expression
     Reduce:
       * -> [cast_expression]
     Goto:
       MUL_ASSIGN -> State 216
-      DIV_ASSIGN -> State 212
+      DIV_ASSIGN -> State 213
       MOD_ASSIGN -> State 215
-      ADD_ASSIGN -> State 210
+      ADD_ASSIGN -> State 211
       SUB_ASSIGN -> State 219
       LEFT_ASSIGN -> State 214
       RIGHT_ASSIGN -> State 218
-      AND_ASSIGN -> State 211
+      AND_ASSIGN -> State 212
       XOR_ASSIGN -> State 220
       OR_ASSIGN -> State 217
-      EQ -> State 213
+      '=' -> State 210
       assignment_operator -> State 221
 
   State 127:
@@ -9391,22 +9362,22 @@ Parser Debug States:
     Reduce:
       (nil)
     Goto:
-      IDENTIFIER -> State 131
-      CONSTANT -> State 78
-      STRING_LITERAL -> State 97
-      SIZEOF -> State 96
-      INC_OP -> State 88
-      DEC_OP -> State 80
-      LPARAM -> State 89
-      MUL -> State 91
-      MINUS -> State 90
-      PLUS -> State 92
-      AND -> State 75
-      EXCLAIM -> State 83
-      TILDA -> State 99
+      IDENTIFIER -> State 139
+      CONSTANT -> State 86
+      STRING_LITERAL -> State 98
+      SIZEOF -> State 97
+      INC_OP -> State 95
+      DEC_OP -> State 88
+      '(' -> State 77
+      '*' -> State 78
+      '-' -> State 80
+      '+' -> State 79
+      '&' -> State 76
+      '!' -> State 75
+      '~' -> State 83
       primary_expression -> State 120
       postfix_expression -> State 119
-      unary_expression -> State 135
+      unary_expression -> State 142
       unary_operator -> State 127
       cast_expression -> State 222
 
@@ -9429,53 +9400,21 @@ Parser Debug States:
   State 130:
     Kernel Items:
       init_declarator: declarator., *
-      init_declarator: declarator.EQ initializer
+      init_declarator: declarator.'=' initializer
     Reduce:
       * -> [init_declarator]
     Goto:
-      EQ -> State 70
+      '=' -> State 70
 
   State 131:
     Kernel Items:
-      primary_expression: IDENTIFIER., *
-    Reduce:
-      * -> [primary_expression]
-    Goto:
-      (nil)
-
-  State 132:
-    Kernel Items:
-      direct_declarator: direct_declarator LBRACE RBRACE., *
+      direct_declarator: direct_declarator '(' ')'., *
     Reduce:
       * -> [direct_declarator]
     Goto:
       (nil)
 
-  State 133:
-    Kernel Items:
-      constant_expression: conditional_expression., *
-    Reduce:
-      * -> [constant_expression]
-    Goto:
-      (nil)
-
-  State 134:
-    Kernel Items:
-      direct_declarator: direct_declarator LBRACE constant_expression.RBRACE
-    Reduce:
-      (nil)
-    Goto:
-      RBRACE -> State 223
-
-  State 135:
-    Kernel Items:
-      cast_expression: unary_expression., *
-    Reduce:
-      * -> [cast_expression]
-    Goto:
-      (nil)
-
-  State 136:
+  State 132:
     Kernel Items:
       identifier_list: IDENTIFIER., *
     Reduce:
@@ -9483,43 +9422,35 @@ Parser Debug States:
     Goto:
       (nil)
 
-  State 137:
+  State 133:
     Kernel Items:
-      direct_declarator: direct_declarator LPARAM RPARAM., *
-    Reduce:
-      * -> [direct_declarator]
-    Goto:
-      (nil)
-
-  State 138:
-    Kernel Items:
-      parameter_declaration: declaration_specifiers., *
-      parameter_declaration: declaration_specifiers.abstract_declarator
       parameter_declaration: declaration_specifiers.declarator
+      parameter_declaration: declaration_specifiers.abstract_declarator
+      parameter_declaration: declaration_specifiers., *
     Reduce:
       * -> [parameter_declaration]
     Goto:
-      IDENTIFIER -> State 10
-      LPARAM -> State 225
-      LBRACE -> State 224
-      MUL -> State 14
-      declarator -> State 227
+      IDENTIFIER -> State 12
+      '(' -> State 223
+      '[' -> State 224
+      '*' -> State 4
+      declarator -> State 226
       direct_declarator -> State 29
-      pointer -> State 229
-      abstract_declarator -> State 226
-      direct_abstract_declarator -> State 228
+      pointer -> State 228
+      abstract_declarator -> State 225
+      direct_abstract_declarator -> State 227
 
-  State 139:
+  State 134:
     Kernel Items:
-      direct_declarator: direct_declarator LPARAM identifier_list.RPARAM
-      identifier_list: identifier_list.COMMA IDENTIFIER
+      direct_declarator: direct_declarator '(' identifier_list.')'
+      identifier_list: identifier_list.',' IDENTIFIER
     Reduce:
       (nil)
     Goto:
-      RPARAM -> State 231
-      COMMA -> State 230
+      ')' -> State 229
+      ',' -> State 230
 
-  State 140:
+  State 135:
     Kernel Items:
       parameter_list: parameter_declaration., *
     Reduce:
@@ -9527,71 +9458,81 @@ Parser Debug States:
     Goto:
       (nil)
 
+  State 136:
+    Kernel Items:
+      parameter_type_list: parameter_list., ')'
+      parameter_type_list: parameter_list.',' ELLIPSIS
+      parameter_list: parameter_list.',' parameter_declaration
+    Reduce:
+      ')' -> [parameter_type_list]
+    Goto:
+      ',' -> State 231
+
+  State 137:
+    Kernel Items:
+      direct_declarator: direct_declarator '(' parameter_type_list.')'
+    Reduce:
+      (nil)
+    Goto:
+      ')' -> State 232
+
+  State 138:
+    Kernel Items:
+      direct_declarator: direct_declarator '[' ']'., *
+    Reduce:
+      * -> [direct_declarator]
+    Goto:
+      (nil)
+
+  State 139:
+    Kernel Items:
+      primary_expression: IDENTIFIER., *
+    Reduce:
+      * -> [primary_expression]
+    Goto:
+      (nil)
+
+  State 140:
+    Kernel Items:
+      constant_expression: conditional_expression., *
+    Reduce:
+      * -> [constant_expression]
+    Goto:
+      (nil)
+
   State 141:
     Kernel Items:
-      parameter_list: parameter_list.COMMA parameter_declaration
-      parameter_type_list: parameter_list., RPARAM
-      parameter_type_list: parameter_list.COMMA ELLIPSIS
+      direct_declarator: direct_declarator '[' constant_expression.']'
     Reduce:
-      RPARAM -> [parameter_type_list]
+      (nil)
     Goto:
-      COMMA -> State 232
+      ']' -> State 233
 
   State 142:
     Kernel Items:
-      direct_declarator: direct_declarator LPARAM parameter_type_list.RPARAM
+      cast_expression: unary_expression., *
     Reduce:
-      (nil)
+      * -> [cast_expression]
     Goto:
-      RPARAM -> State 233
+      (nil)
 
   State 143:
     Kernel Items:
-      struct_or_union_specifier: struct_or_union IDENTIFIER LCURL.struct_declaration_list RCURL
+      struct_declaration: specifier_qualifier_list.struct_declarator_list ';'
     Reduce:
       (nil)
     Goto:
-      TYPE_NAME -> State 21
-      CHAR -> State 4
-      SHORT -> State 16
-      INT -> State 11
-      LONG -> State 12
-      SIGNED -> State 17
-      UNSIGNED -> State 23
-      FLOAT -> State 9
-      DOUBLE -> State 6
-      CONST -> State 5
-      VOLATILE -> State 25
-      VOID -> State 24
-      STRUCT -> State 19
-      UNION -> State 22
-      ENUM -> State 7
-      type_specifier -> State 148
-      struct_or_union_specifier -> State 36
-      struct_or_union -> State 35
-      struct_declaration_list -> State 234
-      struct_declaration -> State 145
-      specifier_qualifier_list -> State 144
-      enum_specifier -> State 30
-      type_qualifier -> State 147
-
-  State 144:
-    Kernel Items:
-      struct_declaration: specifier_qualifier_list.struct_declarator_list SEMICOLON
-    Reduce:
-      (nil)
-    Goto:
-      IDENTIFIER -> State 10
-      LPARAM -> State 13
-      COLON -> State 235
-      MUL -> State 14
-      struct_declarator_list -> State 238
-      struct_declarator -> State 237
-      declarator -> State 236
+      IDENTIFIER -> State 12
+      '(' -> State 3
+      ':' -> State 234
+      '*' -> State 4
+      struct_declarator_list -> State 237
+      struct_declarator -> State 236
+      declarator -> State 235
       direct_declarator -> State 29
       pointer -> State 33
 
-  State 145:
+  State 144:
     Kernel Items:
       struct_declaration_list: struct_declaration., *
     Reduce:
@@ -9599,127 +9540,147 @@ Parser Debug States:
     Goto:
       (nil)
 
-  State 146:
+  State 145:
     Kernel Items:
+      struct_or_union_specifier: struct_or_union '{' struct_declaration_list.'}'
       struct_declaration_list: struct_declaration_list.struct_declaration
-      struct_or_union_specifier: struct_or_union LCURL struct_declaration_list.RCURL
     Reduce:
       (nil)
     Goto:
       TYPE_NAME -> State 21
-      CHAR -> State 4
+      CHAR -> State 6
       SHORT -> State 16
-      INT -> State 11
-      LONG -> State 12
+      INT -> State 13
+      LONG -> State 14
       SIGNED -> State 17
       UNSIGNED -> State 23
-      FLOAT -> State 9
-      DOUBLE -> State 6
-      CONST -> State 5
+      FLOAT -> State 11
+      DOUBLE -> State 8
+      CONST -> State 7
       VOLATILE -> State 25
       VOID -> State 24
       STRUCT -> State 19
       UNION -> State 22
-      ENUM -> State 7
-      RCURL -> State 239
-      type_specifier -> State 148
+      ENUM -> State 9
+      '}' -> State 238
+      type_specifier -> State 147
       struct_or_union_specifier -> State 36
       struct_or_union -> State 35
-      struct_declaration -> State 240
-      specifier_qualifier_list -> State 144
+      struct_declaration -> State 239
+      specifier_qualifier_list -> State 143
       enum_specifier -> State 30
-      type_qualifier -> State 147
+      type_qualifier -> State 146
 
-  State 147:
+  State 146:
     Kernel Items:
-      specifier_qualifier_list: type_qualifier., *
       specifier_qualifier_list: type_qualifier.specifier_qualifier_list
+      specifier_qualifier_list: type_qualifier., *
     Reduce:
       * -> [specifier_qualifier_list]
     Goto:
       TYPE_NAME -> State 21
-      CHAR -> State 4
+      CHAR -> State 6
       SHORT -> State 16
-      INT -> State 11
-      LONG -> State 12
+      INT -> State 13
+      LONG -> State 14
       SIGNED -> State 17
       UNSIGNED -> State 23
-      FLOAT -> State 9
-      DOUBLE -> State 6
-      CONST -> State 5
+      FLOAT -> State 11
+      DOUBLE -> State 8
+      CONST -> State 7
       VOLATILE -> State 25
       VOID -> State 24
       STRUCT -> State 19
       UNION -> State 22
-      ENUM -> State 7
-      type_specifier -> State 148
+      ENUM -> State 9
+      type_specifier -> State 147
+      struct_or_union_specifier -> State 36
+      struct_or_union -> State 35
+      specifier_qualifier_list -> State 240
+      enum_specifier -> State 30
+      type_qualifier -> State 146
+
+  State 147:
+    Kernel Items:
+      specifier_qualifier_list: type_specifier.specifier_qualifier_list
+      specifier_qualifier_list: type_specifier., *
+    Reduce:
+      * -> [specifier_qualifier_list]
+    Goto:
+      TYPE_NAME -> State 21
+      CHAR -> State 6
+      SHORT -> State 16
+      INT -> State 13
+      LONG -> State 14
+      SIGNED -> State 17
+      UNSIGNED -> State 23
+      FLOAT -> State 11
+      DOUBLE -> State 8
+      CONST -> State 7
+      VOLATILE -> State 25
+      VOID -> State 24
+      STRUCT -> State 19
+      UNION -> State 22
+      ENUM -> State 9
+      type_specifier -> State 147
       struct_or_union_specifier -> State 36
       struct_or_union -> State 35
       specifier_qualifier_list -> State 241
       enum_specifier -> State 30
-      type_qualifier -> State 147
+      type_qualifier -> State 146
 
   State 148:
     Kernel Items:
-      specifier_qualifier_list: type_specifier., *
-      specifier_qualifier_list: type_specifier.specifier_qualifier_list
+      struct_or_union_specifier: struct_or_union IDENTIFIER '{'.struct_declaration_list '}'
     Reduce:
-      * -> [specifier_qualifier_list]
+      (nil)
     Goto:
       TYPE_NAME -> State 21
-      CHAR -> State 4
+      CHAR -> State 6
       SHORT -> State 16
-      INT -> State 11
-      LONG -> State 12
+      INT -> State 13
+      LONG -> State 14
       SIGNED -> State 17
       UNSIGNED -> State 23
-      FLOAT -> State 9
-      DOUBLE -> State 6
-      CONST -> State 5
+      FLOAT -> State 11
+      DOUBLE -> State 8
+      CONST -> State 7
       VOLATILE -> State 25
       VOID -> State 24
       STRUCT -> State 19
       UNION -> State 22
-      ENUM -> State 7
-      type_specifier -> State 148
+      ENUM -> State 9
+      type_specifier -> State 147
       struct_or_union_specifier -> State 36
       struct_or_union -> State 35
-      specifier_qualifier_list -> State 242
+      struct_declaration_list -> State 242
+      struct_declaration -> State 144
+      specifier_qualifier_list -> State 143
       enum_specifier -> State 30
-      type_qualifier -> State 147
+      type_qualifier -> State 146
 
   State 149:
     Kernel Items:
-      enum_specifier: ENUM IDENTIFIER LCURL enumerator_list.RCURL
-      enumerator_list: enumerator_list.COMMA enumerator
+      enumerator: IDENTIFIER '='.constant_expression
     Reduce:
       (nil)
     Goto:
-      RCURL -> State 243
-      COMMA -> State 151
-
-  State 150:
-    Kernel Items:
-      enumerator: IDENTIFIER EQ.constant_expression
-    Reduce:
-      (nil)
-    Goto:
-      IDENTIFIER -> State 131
-      CONSTANT -> State 78
-      STRING_LITERAL -> State 97
-      SIZEOF -> State 96
-      INC_OP -> State 88
-      DEC_OP -> State 80
-      LPARAM -> State 89
-      MUL -> State 91
-      MINUS -> State 90
-      PLUS -> State 92
-      AND -> State 75
-      EXCLAIM -> State 83
-      TILDA -> State 99
+      IDENTIFIER -> State 139
+      CONSTANT -> State 86
+      STRING_LITERAL -> State 98
+      SIZEOF -> State 97
+      INC_OP -> State 95
+      DEC_OP -> State 88
+      '(' -> State 77
+      '*' -> State 78
+      '-' -> State 80
+      '+' -> State 79
+      '&' -> State 76
+      '!' -> State 75
+      '~' -> State 83
       primary_expression -> State 120
       postfix_expression -> State 119
-      unary_expression -> State 135
+      unary_expression -> State 142
       unary_operator -> State 127
       cast_expression -> State 104
       multiplicative_expression -> State 118
@@ -9732,47 +9693,57 @@ Parser Debug States:
       inclusive_or_expression -> State 112
       logical_and_expression -> State 116
       logical_or_expression -> State 117
-      conditional_expression -> State 133
-      constant_expression -> State 244
+      conditional_expression -> State 140
+      constant_expression -> State 243
 
-  State 151:
+  State 150:
     Kernel Items:
-      enumerator_list: enumerator_list COMMA.enumerator
+      enumerator_list: enumerator_list ','.enumerator
     Reduce:
       (nil)
     Goto:
-      IDENTIFIER -> State 64
-      enumerator -> State 245
+      IDENTIFIER -> State 66
+      enumerator -> State 244
 
-  State 152:
+  State 151:
     Kernel Items:
-      enum_specifier: ENUM LCURL enumerator_list RCURL., *
+      enum_specifier: ENUM '{' enumerator_list '}'., *
     Reduce:
       * -> [enum_specifier]
     Goto:
       (nil)
 
-  State 153:
+  State 152:
     Kernel Items:
-      initializer: LCURL.initializer_list COMMA RCURL
-      initializer: LCURL.initializer_list RCURL
+      enum_specifier: ENUM IDENTIFIER '{' enumerator_list.'}'
+      enumerator_list: enumerator_list.',' enumerator
     Reduce:
       (nil)
     Goto:
-      IDENTIFIER -> State 131
-      CONSTANT -> State 78
-      STRING_LITERAL -> State 97
-      SIZEOF -> State 96
-      INC_OP -> State 88
-      DEC_OP -> State 80
-      LPARAM -> State 89
-      LCURL -> State 153
-      MUL -> State 91
-      MINUS -> State 90
-      PLUS -> State 92
-      AND -> State 75
-      EXCLAIM -> State 83
-      TILDA -> State 99
+      '}' -> State 245
+      ',' -> State 150
+
+  State 153:
+    Kernel Items:
+      initializer: '{'.initializer_list '}'
+      initializer: '{'.initializer_list ',' '}'
+    Reduce:
+      (nil)
+    Goto:
+      IDENTIFIER -> State 139
+      CONSTANT -> State 86
+      STRING_LITERAL -> State 98
+      SIZEOF -> State 97
+      INC_OP -> State 95
+      DEC_OP -> State 88
+      '(' -> State 77
+      '{' -> State 153
+      '*' -> State 78
+      '-' -> State 80
+      '+' -> State 79
+      '&' -> State 76
+      '!' -> State 75
+      '~' -> State 83
       primary_expression -> State 120
       postfix_expression -> State 119
       unary_expression -> State 126
@@ -9803,7 +9774,7 @@ Parser Debug States:
 
   State 155:
     Kernel Items:
-      init_declarator: declarator EQ initializer., *
+      init_declarator: declarator '=' initializer., *
     Reduce:
       * -> [init_declarator]
     Goto:
@@ -9819,7 +9790,7 @@ Parser Debug States:
 
   State 157:
     Kernel Items:
-      init_declarator_list: init_declarator_list COMMA init_declarator., *
+      init_declarator_list: init_declarator_list ',' init_declarator., *
     Reduce:
       * -> [init_declarator_list]
     Goto:
@@ -9827,47 +9798,79 @@ Parser Debug States:
 
   State 158:
     Kernel Items:
-      jump_statement: BREAK SEMICOLON., *
+      primary_expression: '(' expression.')'
+      expression: expression.',' assignment_expression
     Reduce:
-      * -> [jump_statement]
-    Goto:
       (nil)
+    Goto:
+      ')' -> State 248
+      ',' -> State 187
 
   State 159:
     Kernel Items:
-      labeled_statement: CASE constant_expression.COLON statement
+      type_name: specifier_qualifier_list., ')'
+      type_name: specifier_qualifier_list.abstract_declarator
     Reduce:
-      (nil)
+      ')' -> [type_name]
     Goto:
-      COLON -> State 248
+      '(' -> State 249
+      '[' -> State 224
+      '*' -> State 4
+      pointer -> State 251
+      abstract_declarator -> State 250
+      direct_abstract_declarator -> State 227
 
   State 160:
     Kernel Items:
-      jump_statement: CONTINUE SEMICOLON., *
+      cast_expression: '(' type_name.')' cast_expression
+    Reduce:
+      (nil)
+    Goto:
+      ')' -> State 252
+
+  State 161:
+    Kernel Items:
+      jump_statement: BREAK ';'., *
     Reduce:
       * -> [jump_statement]
     Goto:
       (nil)
 
-  State 161:
+  State 162:
     Kernel Items:
-      primary_expression: LPARAM.expression RPARAM
+      labeled_statement: CASE constant_expression.':' statement
     Reduce:
       (nil)
     Goto:
-      IDENTIFIER -> State 131
-      CONSTANT -> State 78
-      STRING_LITERAL -> State 97
-      SIZEOF -> State 96
-      INC_OP -> State 88
-      DEC_OP -> State 80
-      LPARAM -> State 89
-      MUL -> State 91
-      MINUS -> State 90
-      PLUS -> State 92
-      AND -> State 75
-      EXCLAIM -> State 83
-      TILDA -> State 99
+      ':' -> State 253
+
+  State 163:
+    Kernel Items:
+      jump_statement: CONTINUE ';'., *
+    Reduce:
+      * -> [jump_statement]
+    Goto:
+      (nil)
+
+  State 164:
+    Kernel Items:
+      primary_expression: '('.expression ')'
+    Reduce:
+      (nil)
+    Goto:
+      IDENTIFIER -> State 139
+      CONSTANT -> State 86
+      STRING_LITERAL -> State 98
+      SIZEOF -> State 97
+      INC_OP -> State 95
+      DEC_OP -> State 88
+      '(' -> State 77
+      '*' -> State 78
+      '-' -> State 80
+      '+' -> State 79
+      '&' -> State 76
+      '!' -> State 75
+      '~' -> State 83
       primary_expression -> State 120
       postfix_expression -> State 119
       unary_expression -> State 126
@@ -9885,9 +9888,9 @@ Parser Debug States:
       logical_or_expression -> State 117
       conditional_expression -> State 106
       assignment_expression -> State 103
-      expression -> State 170
+      expression -> State 158
 
-  State 162:
+  State 165:
     Kernel Items:
       unary_expression: DEC_OP unary_expression., *
     Reduce:
@@ -9895,38 +9898,38 @@ Parser Debug States:
     Goto:
       (nil)
 
-  State 163:
+  State 166:
     Kernel Items:
-      labeled_statement: DEFAULT COLON.statement
+      labeled_statement: DEFAULT ':'.statement
     Reduce:
       (nil)
     Goto:
-      IDENTIFIER -> State 86
-      CONSTANT -> State 78
-      STRING_LITERAL -> State 97
-      SIZEOF -> State 96
-      INC_OP -> State 88
-      DEC_OP -> State 80
-      CASE -> State 77
-      DEFAULT -> State 81
-      IF -> State 87
-      SWITCH -> State 98
+      IDENTIFIER -> State 93
+      CONSTANT -> State 86
+      STRING_LITERAL -> State 98
+      SIZEOF -> State 97
+      INC_OP -> State 95
+      DEC_OP -> State 88
+      CASE -> State 85
+      DEFAULT -> State 89
+      IF -> State 94
+      SWITCH -> State 99
       WHILE -> State 100
-      DO -> State 82
-      FOR -> State 84
-      GOTO -> State 85
-      CONTINUE -> State 79
-      BREAK -> State 76
-      RETURN -> State 94
-      LPARAM -> State 89
-      LCURL -> State 49
-      SEMICOLON -> State 95
-      MUL -> State 91
-      MINUS -> State 90
-      PLUS -> State 92
-      AND -> State 75
-      EXCLAIM -> State 83
-      TILDA -> State 99
+      DO -> State 90
+      FOR -> State 91
+      GOTO -> State 92
+      CONTINUE -> State 87
+      BREAK -> State 84
+      RETURN -> State 96
+      '(' -> State 77
+      '{' -> State 49
+      ';' -> State 81
+      '*' -> State 78
+      '-' -> State 80
+      '+' -> State 79
+      '&' -> State 76
+      '!' -> State 75
+      '~' -> State 83
       primary_expression -> State 120
       postfix_expression -> State 119
       unary_expression -> State 126
@@ -9945,103 +9948,43 @@ Parser Debug States:
       conditional_expression -> State 106
       assignment_expression -> State 103
       expression -> State 110
-      statement -> State 249
+      statement -> State 254
       labeled_statement -> State 115
       compound_statement -> State 105
       expression_statement -> State 111
       selection_statement -> State 122
       iteration_statement -> State 113
       jump_statement -> State 114
-
-  State 164:
-    Kernel Items:
-      iteration_statement: DO statement.WHILE LPARAM expression RPARAM SEMICOLON
-    Reduce:
-      (nil)
-    Goto:
-      WHILE -> State 250
-
-  State 165:
-    Kernel Items:
-      iteration_statement: FOR LPARAM.expression_statement expression_statement RPARAM statement
-      iteration_statement: FOR LPARAM.expression_statement expression_statement expression RPARAM statement
-    Reduce:
-      (nil)
-    Goto:
-      IDENTIFIER -> State 131
-      CONSTANT -> State 78
-      STRING_LITERAL -> State 97
-      SIZEOF -> State 96
-      INC_OP -> State 88
-      DEC_OP -> State 80
-      LPARAM -> State 89
-      SEMICOLON -> State 95
-      MUL -> State 91
-      MINUS -> State 90
-      PLUS -> State 92
-      AND -> State 75
-      EXCLAIM -> State 83
-      TILDA -> State 99
-      primary_expression -> State 120
-      postfix_expression -> State 119
-      unary_expression -> State 126
-      unary_operator -> State 127
-      cast_expression -> State 104
-      multiplicative_expression -> State 118
-      additive_expression -> State 101
-      shift_expression -> State 123
-      relational_expression -> State 121
-      equality_expression -> State 108
-      and_expression -> State 102
-      exclusive_or_expression -> State 109
-      inclusive_or_expression -> State 112
-      logical_and_expression -> State 116
-      logical_or_expression -> State 117
-      conditional_expression -> State 106
-      assignment_expression -> State 103
-      expression -> State 110
-      expression_statement -> State 251
-
-  State 166:
-    Kernel Items:
-      jump_statement: GOTO IDENTIFIER.SEMICOLON
-    Reduce:
-      (nil)
-    Goto:
-      SEMICOLON -> State 252
 
   State 167:
     Kernel Items:
-      labeled_statement: IDENTIFIER COLON.statement
+      iteration_statement: DO statement.WHILE '(' expression ')' ';'
     Reduce:
       (nil)
     Goto:
-      IDENTIFIER -> State 86
-      CONSTANT -> State 78
-      STRING_LITERAL -> State 97
-      SIZEOF -> State 96
-      INC_OP -> State 88
-      DEC_OP -> State 80
-      CASE -> State 77
-      DEFAULT -> State 81
-      IF -> State 87
-      SWITCH -> State 98
-      WHILE -> State 100
-      DO -> State 82
-      FOR -> State 84
-      GOTO -> State 85
-      CONTINUE -> State 79
-      BREAK -> State 76
-      RETURN -> State 94
-      LPARAM -> State 89
-      LCURL -> State 49
-      SEMICOLON -> State 95
-      MUL -> State 91
-      MINUS -> State 90
-      PLUS -> State 92
-      AND -> State 75
-      EXCLAIM -> State 83
-      TILDA -> State 99
+      WHILE -> State 255
+
+  State 168:
+    Kernel Items:
+      iteration_statement: FOR '('.expression_statement expression_statement ')' statement
+      iteration_statement: FOR '('.expression_statement expression_statement expression ')' statement
+    Reduce:
+      (nil)
+    Goto:
+      IDENTIFIER -> State 139
+      CONSTANT -> State 86
+      STRING_LITERAL -> State 98
+      SIZEOF -> State 97
+      INC_OP -> State 95
+      DEC_OP -> State 88
+      '(' -> State 77
+      ';' -> State 81
+      '*' -> State 78
+      '-' -> State 80
+      '+' -> State 79
+      '&' -> State 76
+      '!' -> State 75
+      '~' -> State 83
       primary_expression -> State 120
       postfix_expression -> State 119
       unary_expression -> State 126
@@ -10060,34 +10003,48 @@ Parser Debug States:
       conditional_expression -> State 106
       assignment_expression -> State 103
       expression -> State 110
-      statement -> State 253
-      labeled_statement -> State 115
-      compound_statement -> State 105
-      expression_statement -> State 111
-      selection_statement -> State 122
-      iteration_statement -> State 113
-      jump_statement -> State 114
+      expression_statement -> State 256
 
-  State 168:
+  State 169:
     Kernel Items:
-      selection_statement: IF LPARAM.expression RPARAM statement
-      selection_statement: IF LPARAM.expression RPARAM statement ELSE statement
+      jump_statement: GOTO IDENTIFIER.';'
     Reduce:
       (nil)
     Goto:
-      IDENTIFIER -> State 131
-      CONSTANT -> State 78
-      STRING_LITERAL -> State 97
-      SIZEOF -> State 96
-      INC_OP -> State 88
-      DEC_OP -> State 80
-      LPARAM -> State 89
-      MUL -> State 91
-      MINUS -> State 90
-      PLUS -> State 92
-      AND -> State 75
-      EXCLAIM -> State 83
-      TILDA -> State 99
+      ';' -> State 257
+
+  State 170:
+    Kernel Items:
+      labeled_statement: IDENTIFIER ':'.statement
+    Reduce:
+      (nil)
+    Goto:
+      IDENTIFIER -> State 93
+      CONSTANT -> State 86
+      STRING_LITERAL -> State 98
+      SIZEOF -> State 97
+      INC_OP -> State 95
+      DEC_OP -> State 88
+      CASE -> State 85
+      DEFAULT -> State 89
+      IF -> State 94
+      SWITCH -> State 99
+      WHILE -> State 100
+      DO -> State 90
+      FOR -> State 91
+      GOTO -> State 92
+      CONTINUE -> State 87
+      BREAK -> State 84
+      RETURN -> State 96
+      '(' -> State 77
+      '{' -> State 49
+      ';' -> State 81
+      '*' -> State 78
+      '-' -> State 80
+      '+' -> State 79
+      '&' -> State 76
+      '!' -> State 75
+      '~' -> State 83
       primary_expression -> State 120
       postfix_expression -> State 119
       unary_expression -> State 126
@@ -10105,9 +10062,55 @@ Parser Debug States:
       logical_or_expression -> State 117
       conditional_expression -> State 106
       assignment_expression -> State 103
-      expression -> State 254
+      expression -> State 110
+      statement -> State 258
+      labeled_statement -> State 115
+      compound_statement -> State 105
+      expression_statement -> State 111
+      selection_statement -> State 122
+      iteration_statement -> State 113
+      jump_statement -> State 114
 
-  State 169:
+  State 171:
+    Kernel Items:
+      selection_statement: IF '('.expression ')' statement
+      selection_statement: IF '('.expression ')' statement ELSE statement
+    Reduce:
+      (nil)
+    Goto:
+      IDENTIFIER -> State 139
+      CONSTANT -> State 86
+      STRING_LITERAL -> State 98
+      SIZEOF -> State 97
+      INC_OP -> State 95
+      DEC_OP -> State 88
+      '(' -> State 77
+      '*' -> State 78
+      '-' -> State 80
+      '+' -> State 79
+      '&' -> State 76
+      '!' -> State 75
+      '~' -> State 83
+      primary_expression -> State 120
+      postfix_expression -> State 119
+      unary_expression -> State 126
+      unary_operator -> State 127
+      cast_expression -> State 104
+      multiplicative_expression -> State 118
+      additive_expression -> State 101
+      shift_expression -> State 123
+      relational_expression -> State 121
+      equality_expression -> State 108
+      and_expression -> State 102
+      exclusive_or_expression -> State 109
+      inclusive_or_expression -> State 112
+      logical_and_expression -> State 116
+      logical_or_expression -> State 117
+      conditional_expression -> State 106
+      assignment_expression -> State 103
+      expression -> State 259
+
+  State 172:
     Kernel Items:
       unary_expression: INC_OP unary_expression., *
     Reduce:
@@ -10115,41 +10118,9 @@ Parser Debug States:
     Goto:
       (nil)
 
-  State 170:
-    Kernel Items:
-      expression: expression.COMMA assignment_expression
-      primary_expression: LPARAM expression.RPARAM
-    Reduce:
-      (nil)
-    Goto:
-      RPARAM -> State 255
-      COMMA -> State 187
-
-  State 171:
-    Kernel Items:
-      type_name: specifier_qualifier_list., RPARAM
-      type_name: specifier_qualifier_list.abstract_declarator
-    Reduce:
-      RPARAM -> [type_name]
-    Goto:
-      LPARAM -> State 256
-      LBRACE -> State 224
-      MUL -> State 14
-      pointer -> State 258
-      abstract_declarator -> State 257
-      direct_abstract_declarator -> State 228
-
-  State 172:
-    Kernel Items:
-      cast_expression: LPARAM type_name.RPARAM cast_expression
-    Reduce:
-      (nil)
-    Goto:
-      RPARAM -> State 259
-
   State 173:
     Kernel Items:
-      jump_statement: RETURN SEMICOLON., *
+      jump_statement: RETURN ';'., *
     Reduce:
       * -> [jump_statement]
     Goto:
@@ -10157,49 +10128,49 @@ Parser Debug States:
 
   State 174:
     Kernel Items:
-      expression: expression.COMMA assignment_expression
-      jump_statement: RETURN expression.SEMICOLON
+      expression: expression.',' assignment_expression
+      jump_statement: RETURN expression.';'
     Reduce:
       (nil)
     Goto:
-      SEMICOLON -> State 260
-      COMMA -> State 187
+      ';' -> State 260
+      ',' -> State 187
 
   State 175:
     Kernel Items:
-      primary_expression: LPARAM.expression RPARAM
-      unary_expression: SIZEOF LPARAM.type_name RPARAM
+      primary_expression: '('.expression ')'
+      unary_expression: SIZEOF '('.type_name ')'
     Reduce:
       (nil)
     Goto:
-      IDENTIFIER -> State 131
-      CONSTANT -> State 78
-      STRING_LITERAL -> State 97
-      SIZEOF -> State 96
-      INC_OP -> State 88
-      DEC_OP -> State 80
+      IDENTIFIER -> State 139
+      CONSTANT -> State 86
+      STRING_LITERAL -> State 98
+      SIZEOF -> State 97
+      INC_OP -> State 95
+      DEC_OP -> State 88
       TYPE_NAME -> State 21
-      CHAR -> State 4
+      CHAR -> State 6
       SHORT -> State 16
-      INT -> State 11
-      LONG -> State 12
+      INT -> State 13
+      LONG -> State 14
       SIGNED -> State 17
       UNSIGNED -> State 23
-      FLOAT -> State 9
-      DOUBLE -> State 6
-      CONST -> State 5
+      FLOAT -> State 11
+      DOUBLE -> State 8
+      CONST -> State 7
       VOLATILE -> State 25
       VOID -> State 24
       STRUCT -> State 19
       UNION -> State 22
-      ENUM -> State 7
-      LPARAM -> State 89
-      MUL -> State 91
-      MINUS -> State 90
-      PLUS -> State 92
-      AND -> State 75
-      EXCLAIM -> State 83
-      TILDA -> State 99
+      ENUM -> State 9
+      '(' -> State 77
+      '*' -> State 78
+      '-' -> State 80
+      '+' -> State 79
+      '&' -> State 76
+      '!' -> State 75
+      '~' -> State 83
       primary_expression -> State 120
       postfix_expression -> State 119
       unary_expression -> State 126
@@ -10217,13 +10188,13 @@ Parser Debug States:
       logical_or_expression -> State 117
       conditional_expression -> State 106
       assignment_expression -> State 103
-      expression -> State 170
-      type_specifier -> State 148
+      expression -> State 158
+      type_specifier -> State 147
       struct_or_union_specifier -> State 36
       struct_or_union -> State 35
-      specifier_qualifier_list -> State 171
+      specifier_qualifier_list -> State 159
       enum_specifier -> State 30
-      type_qualifier -> State 147
+      type_qualifier -> State 146
       type_name -> State 261
 
   State 176:
@@ -10236,23 +10207,23 @@ Parser Debug States:
 
   State 177:
     Kernel Items:
-      selection_statement: SWITCH LPARAM.expression RPARAM statement
+      selection_statement: SWITCH '('.expression ')' statement
     Reduce:
       (nil)
     Goto:
-      IDENTIFIER -> State 131
-      CONSTANT -> State 78
-      STRING_LITERAL -> State 97
-      SIZEOF -> State 96
-      INC_OP -> State 88
-      DEC_OP -> State 80
-      LPARAM -> State 89
-      MUL -> State 91
-      MINUS -> State 90
-      PLUS -> State 92
-      AND -> State 75
-      EXCLAIM -> State 83
-      TILDA -> State 99
+      IDENTIFIER -> State 139
+      CONSTANT -> State 86
+      STRING_LITERAL -> State 98
+      SIZEOF -> State 97
+      INC_OP -> State 95
+      DEC_OP -> State 88
+      '(' -> State 77
+      '*' -> State 78
+      '-' -> State 80
+      '+' -> State 79
+      '&' -> State 76
+      '!' -> State 75
+      '~' -> State 83
       primary_expression -> State 120
       postfix_expression -> State 119
       unary_expression -> State 126
@@ -10274,23 +10245,23 @@ Parser Debug States:
 
   State 178:
     Kernel Items:
-      iteration_statement: WHILE LPARAM.expression RPARAM statement
+      iteration_statement: WHILE '('.expression ')' statement
     Reduce:
       (nil)
     Goto:
-      IDENTIFIER -> State 131
-      CONSTANT -> State 78
-      STRING_LITERAL -> State 97
-      SIZEOF -> State 96
-      INC_OP -> State 88
-      DEC_OP -> State 80
-      LPARAM -> State 89
-      MUL -> State 91
-      MINUS -> State 90
-      PLUS -> State 92
-      AND -> State 75
-      EXCLAIM -> State 83
-      TILDA -> State 99
+      IDENTIFIER -> State 139
+      CONSTANT -> State 86
+      STRING_LITERAL -> State 98
+      SIZEOF -> State 97
+      INC_OP -> State 95
+      DEC_OP -> State 88
+      '(' -> State 77
+      '*' -> State 78
+      '-' -> State 80
+      '+' -> State 79
+      '&' -> State 76
+      '!' -> State 75
+      '~' -> State 83
       primary_expression -> State 120
       postfix_expression -> State 119
       unary_expression -> State 126
@@ -10312,78 +10283,78 @@ Parser Debug States:
 
   State 179:
     Kernel Items:
-      additive_expression: additive_expression MINUS.multiplicative_expression
+      additive_expression: additive_expression '+'.multiplicative_expression
     Reduce:
       (nil)
     Goto:
-      IDENTIFIER -> State 131
-      CONSTANT -> State 78
-      STRING_LITERAL -> State 97
-      SIZEOF -> State 96
-      INC_OP -> State 88
-      DEC_OP -> State 80
-      LPARAM -> State 89
-      MUL -> State 91
-      MINUS -> State 90
-      PLUS -> State 92
-      AND -> State 75
-      EXCLAIM -> State 83
-      TILDA -> State 99
+      IDENTIFIER -> State 139
+      CONSTANT -> State 86
+      STRING_LITERAL -> State 98
+      SIZEOF -> State 97
+      INC_OP -> State 95
+      DEC_OP -> State 88
+      '(' -> State 77
+      '*' -> State 78
+      '-' -> State 80
+      '+' -> State 79
+      '&' -> State 76
+      '!' -> State 75
+      '~' -> State 83
       primary_expression -> State 120
       postfix_expression -> State 119
-      unary_expression -> State 135
+      unary_expression -> State 142
       unary_operator -> State 127
       cast_expression -> State 104
       multiplicative_expression -> State 264
 
   State 180:
     Kernel Items:
-      additive_expression: additive_expression PLUS.multiplicative_expression
+      additive_expression: additive_expression '-'.multiplicative_expression
     Reduce:
       (nil)
     Goto:
-      IDENTIFIER -> State 131
-      CONSTANT -> State 78
-      STRING_LITERAL -> State 97
-      SIZEOF -> State 96
-      INC_OP -> State 88
-      DEC_OP -> State 80
-      LPARAM -> State 89
-      MUL -> State 91
-      MINUS -> State 90
-      PLUS -> State 92
-      AND -> State 75
-      EXCLAIM -> State 83
-      TILDA -> State 99
+      IDENTIFIER -> State 139
+      CONSTANT -> State 86
+      STRING_LITERAL -> State 98
+      SIZEOF -> State 97
+      INC_OP -> State 95
+      DEC_OP -> State 88
+      '(' -> State 77
+      '*' -> State 78
+      '-' -> State 80
+      '+' -> State 79
+      '&' -> State 76
+      '!' -> State 75
+      '~' -> State 83
       primary_expression -> State 120
       postfix_expression -> State 119
-      unary_expression -> State 135
+      unary_expression -> State 142
       unary_operator -> State 127
       cast_expression -> State 104
       multiplicative_expression -> State 265
 
   State 181:
     Kernel Items:
-      and_expression: and_expression AND.equality_expression
+      and_expression: and_expression '&'.equality_expression
     Reduce:
       (nil)
     Goto:
-      IDENTIFIER -> State 131
-      CONSTANT -> State 78
-      STRING_LITERAL -> State 97
-      SIZEOF -> State 96
-      INC_OP -> State 88
-      DEC_OP -> State 80
-      LPARAM -> State 89
-      MUL -> State 91
-      MINUS -> State 90
-      PLUS -> State 92
-      AND -> State 75
-      EXCLAIM -> State 83
-      TILDA -> State 99
+      IDENTIFIER -> State 139
+      CONSTANT -> State 86
+      STRING_LITERAL -> State 98
+      SIZEOF -> State 97
+      INC_OP -> State 95
+      DEC_OP -> State 88
+      '(' -> State 77
+      '*' -> State 78
+      '-' -> State 80
+      '+' -> State 79
+      '&' -> State 76
+      '!' -> State 75
+      '~' -> State 83
       primary_expression -> State 120
       postfix_expression -> State 119
-      unary_expression -> State 135
+      unary_expression -> State 142
       unary_operator -> State 127
       cast_expression -> State 104
       multiplicative_expression -> State 118
@@ -10394,7 +10365,7 @@ Parser Debug States:
 
   State 182:
     Kernel Items:
-      compound_statement: LCURL declaration_list RCURL., *
+      compound_statement: '{' declaration_list '}'., *
     Reduce:
       * -> [compound_statement]
     Goto:
@@ -10402,38 +10373,38 @@ Parser Debug States:
 
   State 183:
     Kernel Items:
-      compound_statement: LCURL declaration_list statement_list.RCURL
+      compound_statement: '{' declaration_list statement_list.'}'
       statement_list: statement_list.statement
     Reduce:
       (nil)
     Goto:
-      IDENTIFIER -> State 86
-      CONSTANT -> State 78
-      STRING_LITERAL -> State 97
-      SIZEOF -> State 96
-      INC_OP -> State 88
-      DEC_OP -> State 80
-      CASE -> State 77
-      DEFAULT -> State 81
-      IF -> State 87
-      SWITCH -> State 98
+      IDENTIFIER -> State 93
+      CONSTANT -> State 86
+      STRING_LITERAL -> State 98
+      SIZEOF -> State 97
+      INC_OP -> State 95
+      DEC_OP -> State 88
+      CASE -> State 85
+      DEFAULT -> State 89
+      IF -> State 94
+      SWITCH -> State 99
       WHILE -> State 100
-      DO -> State 82
-      FOR -> State 84
-      GOTO -> State 85
-      CONTINUE -> State 79
-      BREAK -> State 76
-      RETURN -> State 94
-      LPARAM -> State 89
-      LCURL -> State 49
-      RCURL -> State 267
-      SEMICOLON -> State 95
-      MUL -> State 91
-      MINUS -> State 90
-      PLUS -> State 92
-      AND -> State 75
-      EXCLAIM -> State 83
-      TILDA -> State 99
+      DO -> State 90
+      FOR -> State 91
+      GOTO -> State 92
+      CONTINUE -> State 87
+      BREAK -> State 84
+      RETURN -> State 96
+      '(' -> State 77
+      '{' -> State 49
+      '}' -> State 267
+      ';' -> State 81
+      '*' -> State 78
+      '-' -> State 80
+      '+' -> State 79
+      '&' -> State 76
+      '!' -> State 75
+      '~' -> State 83
       primary_expression -> State 120
       postfix_expression -> State 119
       unary_expression -> State 126
@@ -10466,22 +10437,22 @@ Parser Debug States:
     Reduce:
       (nil)
     Goto:
-      IDENTIFIER -> State 131
-      CONSTANT -> State 78
-      STRING_LITERAL -> State 97
-      SIZEOF -> State 96
-      INC_OP -> State 88
-      DEC_OP -> State 80
-      LPARAM -> State 89
-      MUL -> State 91
-      MINUS -> State 90
-      PLUS -> State 92
-      AND -> State 75
-      EXCLAIM -> State 83
-      TILDA -> State 99
+      IDENTIFIER -> State 139
+      CONSTANT -> State 86
+      STRING_LITERAL -> State 98
+      SIZEOF -> State 97
+      INC_OP -> State 95
+      DEC_OP -> State 88
+      '(' -> State 77
+      '*' -> State 78
+      '-' -> State 80
+      '+' -> State 79
+      '&' -> State 76
+      '!' -> State 75
+      '~' -> State 83
       primary_expression -> State 120
       postfix_expression -> State 119
-      unary_expression -> State 135
+      unary_expression -> State 142
       unary_operator -> State 127
       cast_expression -> State 104
       multiplicative_expression -> State 118
@@ -10495,22 +10466,22 @@ Parser Debug States:
     Reduce:
       (nil)
     Goto:
-      IDENTIFIER -> State 131
-      CONSTANT -> State 78
-      STRING_LITERAL -> State 97
-      SIZEOF -> State 96
-      INC_OP -> State 88
-      DEC_OP -> State 80
-      LPARAM -> State 89
-      MUL -> State 91
-      MINUS -> State 90
-      PLUS -> State 92
-      AND -> State 75
-      EXCLAIM -> State 83
-      TILDA -> State 99
+      IDENTIFIER -> State 139
+      CONSTANT -> State 86
+      STRING_LITERAL -> State 98
+      SIZEOF -> State 97
+      INC_OP -> State 95
+      DEC_OP -> State 88
+      '(' -> State 77
+      '*' -> State 78
+      '-' -> State 80
+      '+' -> State 79
+      '&' -> State 76
+      '!' -> State 75
+      '~' -> State 83
       primary_expression -> State 120
       postfix_expression -> State 119
-      unary_expression -> State 135
+      unary_expression -> State 142
       unary_operator -> State 127
       cast_expression -> State 104
       multiplicative_expression -> State 118
@@ -10520,26 +10491,26 @@ Parser Debug States:
 
   State 186:
     Kernel Items:
-      exclusive_or_expression: exclusive_or_expression HAT.and_expression
+      exclusive_or_expression: exclusive_or_expression '^'.and_expression
     Reduce:
       (nil)
     Goto:
-      IDENTIFIER -> State 131
-      CONSTANT -> State 78
-      STRING_LITERAL -> State 97
-      SIZEOF -> State 96
-      INC_OP -> State 88
-      DEC_OP -> State 80
-      LPARAM -> State 89
-      MUL -> State 91
-      MINUS -> State 90
-      PLUS -> State 92
-      AND -> State 75
-      EXCLAIM -> State 83
-      TILDA -> State 99
+      IDENTIFIER -> State 139
+      CONSTANT -> State 86
+      STRING_LITERAL -> State 98
+      SIZEOF -> State 97
+      INC_OP -> State 95
+      DEC_OP -> State 88
+      '(' -> State 77
+      '*' -> State 78
+      '-' -> State 80
+      '+' -> State 79
+      '&' -> State 76
+      '!' -> State 75
+      '~' -> State 83
       primary_expression -> State 120
       postfix_expression -> State 119
-      unary_expression -> State 135
+      unary_expression -> State 142
       unary_operator -> State 127
       cast_expression -> State 104
       multiplicative_expression -> State 118
@@ -10551,23 +10522,23 @@ Parser Debug States:
 
   State 187:
     Kernel Items:
-      expression: expression COMMA.assignment_expression
+      expression: expression ','.assignment_expression
     Reduce:
       (nil)
     Goto:
-      IDENTIFIER -> State 131
-      CONSTANT -> State 78
-      STRING_LITERAL -> State 97
-      SIZEOF -> State 96
-      INC_OP -> State 88
-      DEC_OP -> State 80
-      LPARAM -> State 89
-      MUL -> State 91
-      MINUS -> State 90
-      PLUS -> State 92
-      AND -> State 75
-      EXCLAIM -> State 83
-      TILDA -> State 99
+      IDENTIFIER -> State 139
+      CONSTANT -> State 86
+      STRING_LITERAL -> State 98
+      SIZEOF -> State 97
+      INC_OP -> State 95
+      DEC_OP -> State 88
+      '(' -> State 77
+      '*' -> State 78
+      '-' -> State 80
+      '+' -> State 79
+      '&' -> State 76
+      '!' -> State 75
+      '~' -> State 83
       primary_expression -> State 120
       postfix_expression -> State 119
       unary_expression -> State 126
@@ -10588,7 +10559,7 @@ Parser Debug States:
 
   State 188:
     Kernel Items:
-      expression_statement: expression SEMICOLON., *
+      expression_statement: expression ';'., *
     Reduce:
       * -> [expression_statement]
     Goto:
@@ -10596,26 +10567,26 @@ Parser Debug States:
 
   State 189:
     Kernel Items:
-      inclusive_or_expression: inclusive_or_expression OR.exclusive_or_expression
+      inclusive_or_expression: inclusive_or_expression '|'.exclusive_or_expression
     Reduce:
       (nil)
     Goto:
-      IDENTIFIER -> State 131
-      CONSTANT -> State 78
-      STRING_LITERAL -> State 97
-      SIZEOF -> State 96
-      INC_OP -> State 88
-      DEC_OP -> State 80
-      LPARAM -> State 89
-      MUL -> State 91
-      MINUS -> State 90
-      PLUS -> State 92
-      AND -> State 75
-      EXCLAIM -> State 83
-      TILDA -> State 99
+      IDENTIFIER -> State 139
+      CONSTANT -> State 86
+      STRING_LITERAL -> State 98
+      SIZEOF -> State 97
+      INC_OP -> State 95
+      DEC_OP -> State 88
+      '(' -> State 77
+      '*' -> State 78
+      '-' -> State 80
+      '+' -> State 79
+      '&' -> State 76
+      '!' -> State 75
+      '~' -> State 83
       primary_expression -> State 120
       postfix_expression -> State 119
-      unary_expression -> State 135
+      unary_expression -> State 142
       unary_operator -> State 127
       cast_expression -> State 104
       multiplicative_expression -> State 118
@@ -10632,22 +10603,22 @@ Parser Debug States:
     Reduce:
       (nil)
     Goto:
-      IDENTIFIER -> State 131
-      CONSTANT -> State 78
-      STRING_LITERAL -> State 97
-      SIZEOF -> State 96
-      INC_OP -> State 88
-      DEC_OP -> State 80
-      LPARAM -> State 89
-      MUL -> State 91
-      MINUS -> State 90
-      PLUS -> State 92
-      AND -> State 75
-      EXCLAIM -> State 83
-      TILDA -> State 99
+      IDENTIFIER -> State 139
+      CONSTANT -> State 86
+      STRING_LITERAL -> State 98
+      SIZEOF -> State 97
+      INC_OP -> State 95
+      DEC_OP -> State 88
+      '(' -> State 77
+      '*' -> State 78
+      '-' -> State 80
+      '+' -> State 79
+      '&' -> State 76
+      '!' -> State 75
+      '~' -> State 83
       primary_expression -> State 120
       postfix_expression -> State 119
-      unary_expression -> State 135
+      unary_expression -> State 142
       unary_operator -> State 127
       cast_expression -> State 104
       multiplicative_expression -> State 118
@@ -10661,57 +10632,23 @@ Parser Debug States:
 
   State 191:
     Kernel Items:
-      logical_or_expression: logical_or_expression OR_OP.logical_and_expression
+      conditional_expression: logical_or_expression '?'.expression ':' conditional_expression
     Reduce:
       (nil)
     Goto:
-      IDENTIFIER -> State 131
-      CONSTANT -> State 78
-      STRING_LITERAL -> State 97
-      SIZEOF -> State 96
-      INC_OP -> State 88
-      DEC_OP -> State 80
-      LPARAM -> State 89
-      MUL -> State 91
-      MINUS -> State 90
-      PLUS -> State 92
-      AND -> State 75
-      EXCLAIM -> State 83
-      TILDA -> State 99
-      primary_expression -> State 120
-      postfix_expression -> State 119
-      unary_expression -> State 135
-      unary_operator -> State 127
-      cast_expression -> State 104
-      multiplicative_expression -> State 118
-      additive_expression -> State 101
-      shift_expression -> State 123
-      relational_expression -> State 121
-      equality_expression -> State 108
-      and_expression -> State 102
-      exclusive_or_expression -> State 109
-      inclusive_or_expression -> State 112
-      logical_and_expression -> State 274
-
-  State 192:
-    Kernel Items:
-      conditional_expression: logical_or_expression QUESTION.expression COLON conditional_expression
-    Reduce:
-      (nil)
-    Goto:
-      IDENTIFIER -> State 131
-      CONSTANT -> State 78
-      STRING_LITERAL -> State 97
-      SIZEOF -> State 96
-      INC_OP -> State 88
-      DEC_OP -> State 80
-      LPARAM -> State 89
-      MUL -> State 91
-      MINUS -> State 90
-      PLUS -> State 92
-      AND -> State 75
-      EXCLAIM -> State 83
-      TILDA -> State 99
+      IDENTIFIER -> State 139
+      CONSTANT -> State 86
+      STRING_LITERAL -> State 98
+      SIZEOF -> State 97
+      INC_OP -> State 95
+      DEC_OP -> State 88
+      '(' -> State 77
+      '*' -> State 78
+      '-' -> State 80
+      '+' -> State 79
+      '&' -> State 76
+      '!' -> State 75
+      '~' -> State 83
       primary_expression -> State 120
       postfix_expression -> State 119
       unary_expression -> State 126
@@ -10729,84 +10666,204 @@ Parser Debug States:
       logical_or_expression -> State 117
       conditional_expression -> State 106
       assignment_expression -> State 103
-      expression -> State 275
+      expression -> State 274
 
-  State 193:
+  State 192:
     Kernel Items:
-      multiplicative_expression: multiplicative_expression DIV.cast_expression
+      logical_or_expression: logical_or_expression OR_OP.logical_and_expression
     Reduce:
       (nil)
     Goto:
-      IDENTIFIER -> State 131
-      CONSTANT -> State 78
-      STRING_LITERAL -> State 97
-      SIZEOF -> State 96
-      INC_OP -> State 88
-      DEC_OP -> State 80
-      LPARAM -> State 89
-      MUL -> State 91
-      MINUS -> State 90
-      PLUS -> State 92
-      AND -> State 75
-      EXCLAIM -> State 83
-      TILDA -> State 99
+      IDENTIFIER -> State 139
+      CONSTANT -> State 86
+      STRING_LITERAL -> State 98
+      SIZEOF -> State 97
+      INC_OP -> State 95
+      DEC_OP -> State 88
+      '(' -> State 77
+      '*' -> State 78
+      '-' -> State 80
+      '+' -> State 79
+      '&' -> State 76
+      '!' -> State 75
+      '~' -> State 83
       primary_expression -> State 120
       postfix_expression -> State 119
-      unary_expression -> State 135
+      unary_expression -> State 142
+      unary_operator -> State 127
+      cast_expression -> State 104
+      multiplicative_expression -> State 118
+      additive_expression -> State 101
+      shift_expression -> State 123
+      relational_expression -> State 121
+      equality_expression -> State 108
+      and_expression -> State 102
+      exclusive_or_expression -> State 109
+      inclusive_or_expression -> State 112
+      logical_and_expression -> State 275
+
+  State 193:
+    Kernel Items:
+      multiplicative_expression: multiplicative_expression '%'.cast_expression
+    Reduce:
+      (nil)
+    Goto:
+      IDENTIFIER -> State 139
+      CONSTANT -> State 86
+      STRING_LITERAL -> State 98
+      SIZEOF -> State 97
+      INC_OP -> State 95
+      DEC_OP -> State 88
+      '(' -> State 77
+      '*' -> State 78
+      '-' -> State 80
+      '+' -> State 79
+      '&' -> State 76
+      '!' -> State 75
+      '~' -> State 83
+      primary_expression -> State 120
+      postfix_expression -> State 119
+      unary_expression -> State 142
       unary_operator -> State 127
       cast_expression -> State 276
 
   State 194:
     Kernel Items:
-      multiplicative_expression: multiplicative_expression MOD.cast_expression
+      multiplicative_expression: multiplicative_expression '*'.cast_expression
     Reduce:
       (nil)
     Goto:
-      IDENTIFIER -> State 131
-      CONSTANT -> State 78
-      STRING_LITERAL -> State 97
-      SIZEOF -> State 96
-      INC_OP -> State 88
-      DEC_OP -> State 80
-      LPARAM -> State 89
-      MUL -> State 91
-      MINUS -> State 90
-      PLUS -> State 92
-      AND -> State 75
-      EXCLAIM -> State 83
-      TILDA -> State 99
+      IDENTIFIER -> State 139
+      CONSTANT -> State 86
+      STRING_LITERAL -> State 98
+      SIZEOF -> State 97
+      INC_OP -> State 95
+      DEC_OP -> State 88
+      '(' -> State 77
+      '*' -> State 78
+      '-' -> State 80
+      '+' -> State 79
+      '&' -> State 76
+      '!' -> State 75
+      '~' -> State 83
       primary_expression -> State 120
       postfix_expression -> State 119
-      unary_expression -> State 135
+      unary_expression -> State 142
       unary_operator -> State 127
       cast_expression -> State 277
 
   State 195:
     Kernel Items:
-      multiplicative_expression: multiplicative_expression MUL.cast_expression
+      multiplicative_expression: multiplicative_expression '/'.cast_expression
     Reduce:
       (nil)
     Goto:
-      IDENTIFIER -> State 131
-      CONSTANT -> State 78
-      STRING_LITERAL -> State 97
-      SIZEOF -> State 96
-      INC_OP -> State 88
-      DEC_OP -> State 80
-      LPARAM -> State 89
-      MUL -> State 91
-      MINUS -> State 90
-      PLUS -> State 92
-      AND -> State 75
-      EXCLAIM -> State 83
-      TILDA -> State 99
+      IDENTIFIER -> State 139
+      CONSTANT -> State 86
+      STRING_LITERAL -> State 98
+      SIZEOF -> State 97
+      INC_OP -> State 95
+      DEC_OP -> State 88
+      '(' -> State 77
+      '*' -> State 78
+      '-' -> State 80
+      '+' -> State 79
+      '&' -> State 76
+      '!' -> State 75
+      '~' -> State 83
       primary_expression -> State 120
       postfix_expression -> State 119
-      unary_expression -> State 135
+      unary_expression -> State 142
       unary_operator -> State 127
       cast_expression -> State 278
 
   State 196:
+    Kernel Items:
+      postfix_expression: postfix_expression '('.')'
+      postfix_expression: postfix_expression '('.argument_expression_list ')'
+    Reduce:
+      (nil)
+    Goto:
+      IDENTIFIER -> State 139
+      CONSTANT -> State 86
+      STRING_LITERAL -> State 98
+      SIZEOF -> State 97
+      INC_OP -> State 95
+      DEC_OP -> State 88
+      '(' -> State 77
+      ')' -> State 279
+      '*' -> State 78
+      '-' -> State 80
+      '+' -> State 79
+      '&' -> State 76
+      '!' -> State 75
+      '~' -> State 83
+      primary_expression -> State 120
+      postfix_expression -> State 119
+      argument_expression_list -> State 280
+      unary_expression -> State 126
+      unary_operator -> State 127
+      cast_expression -> State 104
+      multiplicative_expression -> State 118
+      additive_expression -> State 101
+      shift_expression -> State 123
+      relational_expression -> State 121
+      equality_expression -> State 108
+      and_expression -> State 102
+      exclusive_or_expression -> State 109
+      inclusive_or_expression -> State 112
+      logical_and_expression -> State 116
+      logical_or_expression -> State 117
+      conditional_expression -> State 106
+      assignment_expression -> State 281
+
+  State 197:
+    Kernel Items:
+      postfix_expression: postfix_expression '.'.IDENTIFIER
+    Reduce:
+      (nil)
+    Goto:
+      IDENTIFIER -> State 282
+
+  State 198:
+    Kernel Items:
+      postfix_expression: postfix_expression '['.expression ']'
+    Reduce:
+      (nil)
+    Goto:
+      IDENTIFIER -> State 139
+      CONSTANT -> State 86
+      STRING_LITERAL -> State 98
+      SIZEOF -> State 97
+      INC_OP -> State 95
+      DEC_OP -> State 88
+      '(' -> State 77
+      '*' -> State 78
+      '-' -> State 80
+      '+' -> State 79
+      '&' -> State 76
+      '!' -> State 75
+      '~' -> State 83
+      primary_expression -> State 120
+      postfix_expression -> State 119
+      unary_expression -> State 126
+      unary_operator -> State 127
+      cast_expression -> State 104
+      multiplicative_expression -> State 118
+      additive_expression -> State 101
+      shift_expression -> State 123
+      relational_expression -> State 121
+      equality_expression -> State 108
+      and_expression -> State 102
+      exclusive_or_expression -> State 109
+      inclusive_or_expression -> State 112
+      logical_and_expression -> State 116
+      logical_or_expression -> State 117
+      conditional_expression -> State 106
+      assignment_expression -> State 103
+      expression -> State 283
+
+  State 199:
     Kernel Items:
       postfix_expression: postfix_expression DEC_OP., *
     Reduce:
@@ -10814,99 +10871,13 @@ Parser Debug States:
     Goto:
       (nil)
 
-  State 197:
-    Kernel Items:
-      postfix_expression: postfix_expression DOT.IDENTIFIER
-    Reduce:
-      (nil)
-    Goto:
-      IDENTIFIER -> State 279
-
-  State 198:
+  State 200:
     Kernel Items:
       postfix_expression: postfix_expression INC_OP., *
     Reduce:
       * -> [postfix_expression]
     Goto:
       (nil)
-
-  State 199:
-    Kernel Items:
-      postfix_expression: postfix_expression LBRACE.expression RBRACE
-    Reduce:
-      (nil)
-    Goto:
-      IDENTIFIER -> State 131
-      CONSTANT -> State 78
-      STRING_LITERAL -> State 97
-      SIZEOF -> State 96
-      INC_OP -> State 88
-      DEC_OP -> State 80
-      LPARAM -> State 89
-      MUL -> State 91
-      MINUS -> State 90
-      PLUS -> State 92
-      AND -> State 75
-      EXCLAIM -> State 83
-      TILDA -> State 99
-      primary_expression -> State 120
-      postfix_expression -> State 119
-      unary_expression -> State 126
-      unary_operator -> State 127
-      cast_expression -> State 104
-      multiplicative_expression -> State 118
-      additive_expression -> State 101
-      shift_expression -> State 123
-      relational_expression -> State 121
-      equality_expression -> State 108
-      and_expression -> State 102
-      exclusive_or_expression -> State 109
-      inclusive_or_expression -> State 112
-      logical_and_expression -> State 116
-      logical_or_expression -> State 117
-      conditional_expression -> State 106
-      assignment_expression -> State 103
-      expression -> State 280
-
-  State 200:
-    Kernel Items:
-      postfix_expression: postfix_expression LPARAM.RPARAM
-      postfix_expression: postfix_expression LPARAM.argument_expression_list RPARAM
-    Reduce:
-      (nil)
-    Goto:
-      IDENTIFIER -> State 131
-      CONSTANT -> State 78
-      STRING_LITERAL -> State 97
-      SIZEOF -> State 96
-      INC_OP -> State 88
-      DEC_OP -> State 80
-      LPARAM -> State 89
-      RPARAM -> State 281
-      MUL -> State 91
-      MINUS -> State 90
-      PLUS -> State 92
-      AND -> State 75
-      EXCLAIM -> State 83
-      TILDA -> State 99
-      primary_expression -> State 120
-      postfix_expression -> State 119
-      argument_expression_list -> State 282
-      unary_expression -> State 126
-      unary_operator -> State 127
-      cast_expression -> State 104
-      multiplicative_expression -> State 118
-      additive_expression -> State 101
-      shift_expression -> State 123
-      relational_expression -> State 121
-      equality_expression -> State 108
-      and_expression -> State 102
-      exclusive_or_expression -> State 109
-      inclusive_or_expression -> State 112
-      logical_and_expression -> State 116
-      logical_or_expression -> State 117
-      conditional_expression -> State 106
-      assignment_expression -> State 283
 
   State 201:
     Kernel Items:
@@ -10918,26 +10889,26 @@ Parser Debug States:
 
   State 202:
     Kernel Items:
-      relational_expression: relational_expression GE_OP.shift_expression
+      relational_expression: relational_expression '<'.shift_expression
     Reduce:
       (nil)
     Goto:
-      IDENTIFIER -> State 131
-      CONSTANT -> State 78
-      STRING_LITERAL -> State 97
-      SIZEOF -> State 96
-      INC_OP -> State 88
-      DEC_OP -> State 80
-      LPARAM -> State 89
-      MUL -> State 91
-      MINUS -> State 90
-      PLUS -> State 92
-      AND -> State 75
-      EXCLAIM -> State 83
-      TILDA -> State 99
+      IDENTIFIER -> State 139
+      CONSTANT -> State 86
+      STRING_LITERAL -> State 98
+      SIZEOF -> State 97
+      INC_OP -> State 95
+      DEC_OP -> State 88
+      '(' -> State 77
+      '*' -> State 78
+      '-' -> State 80
+      '+' -> State 79
+      '&' -> State 76
+      '!' -> State 75
+      '~' -> State 83
       primary_expression -> State 120
       postfix_expression -> State 119
-      unary_expression -> State 135
+      unary_expression -> State 142
       unary_operator -> State 127
       cast_expression -> State 104
       multiplicative_expression -> State 118
@@ -10946,26 +10917,26 @@ Parser Debug States:
 
   State 203:
     Kernel Items:
-      relational_expression: relational_expression GT.shift_expression
+      relational_expression: relational_expression '>'.shift_expression
     Reduce:
       (nil)
     Goto:
-      IDENTIFIER -> State 131
-      CONSTANT -> State 78
-      STRING_LITERAL -> State 97
-      SIZEOF -> State 96
-      INC_OP -> State 88
-      DEC_OP -> State 80
-      LPARAM -> State 89
-      MUL -> State 91
-      MINUS -> State 90
-      PLUS -> State 92
-      AND -> State 75
-      EXCLAIM -> State 83
-      TILDA -> State 99
+      IDENTIFIER -> State 139
+      CONSTANT -> State 86
+      STRING_LITERAL -> State 98
+      SIZEOF -> State 97
+      INC_OP -> State 95
+      DEC_OP -> State 88
+      '(' -> State 77
+      '*' -> State 78
+      '-' -> State 80
+      '+' -> State 79
+      '&' -> State 76
+      '!' -> State 75
+      '~' -> State 83
       primary_expression -> State 120
       postfix_expression -> State 119
-      unary_expression -> State 135
+      unary_expression -> State 142
       unary_operator -> State 127
       cast_expression -> State 104
       multiplicative_expression -> State 118
@@ -10974,26 +10945,26 @@ Parser Debug States:
 
   State 204:
     Kernel Items:
-      relational_expression: relational_expression LE_OP.shift_expression
+      relational_expression: relational_expression GE_OP.shift_expression
     Reduce:
       (nil)
     Goto:
-      IDENTIFIER -> State 131
-      CONSTANT -> State 78
-      STRING_LITERAL -> State 97
-      SIZEOF -> State 96
-      INC_OP -> State 88
-      DEC_OP -> State 80
-      LPARAM -> State 89
-      MUL -> State 91
-      MINUS -> State 90
-      PLUS -> State 92
-      AND -> State 75
-      EXCLAIM -> State 83
-      TILDA -> State 99
+      IDENTIFIER -> State 139
+      CONSTANT -> State 86
+      STRING_LITERAL -> State 98
+      SIZEOF -> State 97
+      INC_OP -> State 95
+      DEC_OP -> State 88
+      '(' -> State 77
+      '*' -> State 78
+      '-' -> State 80
+      '+' -> State 79
+      '&' -> State 76
+      '!' -> State 75
+      '~' -> State 83
       primary_expression -> State 120
       postfix_expression -> State 119
-      unary_expression -> State 135
+      unary_expression -> State 142
       unary_operator -> State 127
       cast_expression -> State 104
       multiplicative_expression -> State 118
@@ -11002,26 +10973,26 @@ Parser Debug States:
 
   State 205:
     Kernel Items:
-      relational_expression: relational_expression LT.shift_expression
+      relational_expression: relational_expression LE_OP.shift_expression
     Reduce:
       (nil)
     Goto:
-      IDENTIFIER -> State 131
-      CONSTANT -> State 78
-      STRING_LITERAL -> State 97
-      SIZEOF -> State 96
-      INC_OP -> State 88
-      DEC_OP -> State 80
-      LPARAM -> State 89
-      MUL -> State 91
-      MINUS -> State 90
-      PLUS -> State 92
-      AND -> State 75
-      EXCLAIM -> State 83
-      TILDA -> State 99
+      IDENTIFIER -> State 139
+      CONSTANT -> State 86
+      STRING_LITERAL -> State 98
+      SIZEOF -> State 97
+      INC_OP -> State 95
+      DEC_OP -> State 88
+      '(' -> State 77
+      '*' -> State 78
+      '-' -> State 80
+      '+' -> State 79
+      '&' -> State 76
+      '!' -> State 75
+      '~' -> State 83
       primary_expression -> State 120
       postfix_expression -> State 119
-      unary_expression -> State 135
+      unary_expression -> State 142
       unary_operator -> State 127
       cast_expression -> State 104
       multiplicative_expression -> State 118
@@ -11034,22 +11005,22 @@ Parser Debug States:
     Reduce:
       (nil)
     Goto:
-      IDENTIFIER -> State 131
-      CONSTANT -> State 78
-      STRING_LITERAL -> State 97
-      SIZEOF -> State 96
-      INC_OP -> State 88
-      DEC_OP -> State 80
-      LPARAM -> State 89
-      MUL -> State 91
-      MINUS -> State 90
-      PLUS -> State 92
-      AND -> State 75
-      EXCLAIM -> State 83
-      TILDA -> State 99
+      IDENTIFIER -> State 139
+      CONSTANT -> State 86
+      STRING_LITERAL -> State 98
+      SIZEOF -> State 97
+      INC_OP -> State 95
+      DEC_OP -> State 88
+      '(' -> State 77
+      '*' -> State 78
+      '-' -> State 80
+      '+' -> State 79
+      '&' -> State 76
+      '!' -> State 75
+      '~' -> State 83
       primary_expression -> State 120
       postfix_expression -> State 119
-      unary_expression -> State 135
+      unary_expression -> State 142
       unary_operator -> State 127
       cast_expression -> State 104
       multiplicative_expression -> State 118
@@ -11061,22 +11032,22 @@ Parser Debug States:
     Reduce:
       (nil)
     Goto:
-      IDENTIFIER -> State 131
-      CONSTANT -> State 78
-      STRING_LITERAL -> State 97
-      SIZEOF -> State 96
-      INC_OP -> State 88
-      DEC_OP -> State 80
-      LPARAM -> State 89
-      MUL -> State 91
-      MINUS -> State 90
-      PLUS -> State 92
-      AND -> State 75
-      EXCLAIM -> State 83
-      TILDA -> State 99
+      IDENTIFIER -> State 139
+      CONSTANT -> State 86
+      STRING_LITERAL -> State 98
+      SIZEOF -> State 97
+      INC_OP -> State 95
+      DEC_OP -> State 88
+      '(' -> State 77
+      '*' -> State 78
+      '-' -> State 80
+      '+' -> State 79
+      '&' -> State 76
+      '!' -> State 75
+      '~' -> State 83
       primary_expression -> State 120
       postfix_expression -> State 119
-      unary_expression -> State 135
+      unary_expression -> State 142
       unary_operator -> State 127
       cast_expression -> State 104
       multiplicative_expression -> State 118
@@ -11084,7 +11055,7 @@ Parser Debug States:
 
   State 208:
     Kernel Items:
-      compound_statement: LCURL statement_list RCURL., *
+      compound_statement: '{' statement_list '}'., *
     Reduce:
       * -> [compound_statement]
     Goto:
@@ -11100,7 +11071,7 @@ Parser Debug States:
 
   State 210:
     Kernel Items:
-      assignment_operator: ADD_ASSIGN., *
+      assignment_operator: '='., *
     Reduce:
       * -> [assignment_operator]
     Goto:
@@ -11108,7 +11079,7 @@ Parser Debug States:
 
   State 211:
     Kernel Items:
-      assignment_operator: AND_ASSIGN., *
+      assignment_operator: ADD_ASSIGN., *
     Reduce:
       * -> [assignment_operator]
     Goto:
@@ -11116,7 +11087,7 @@ Parser Debug States:
 
   State 212:
     Kernel Items:
-      assignment_operator: DIV_ASSIGN., *
+      assignment_operator: AND_ASSIGN., *
     Reduce:
       * -> [assignment_operator]
     Goto:
@@ -11124,7 +11095,7 @@ Parser Debug States:
 
   State 213:
     Kernel Items:
-      assignment_operator: EQ., *
+      assignment_operator: DIV_ASSIGN., *
     Reduce:
       * -> [assignment_operator]
     Goto:
@@ -11192,19 +11163,19 @@ Parser Debug States:
     Reduce:
       (nil)
     Goto:
-      IDENTIFIER -> State 131
-      CONSTANT -> State 78
-      STRING_LITERAL -> State 97
-      SIZEOF -> State 96
-      INC_OP -> State 88
-      DEC_OP -> State 80
-      LPARAM -> State 89
-      MUL -> State 91
-      MINUS -> State 90
-      PLUS -> State 92
-      AND -> State 75
-      EXCLAIM -> State 83
-      TILDA -> State 99
+      IDENTIFIER -> State 139
+      CONSTANT -> State 86
+      STRING_LITERAL -> State 98
+      SIZEOF -> State 97
+      INC_OP -> State 95
+      DEC_OP -> State 88
+      '(' -> State 77
+      '*' -> State 78
+      '-' -> State 80
+      '+' -> State 79
+      '&' -> State 76
+      '!' -> State 75
+      '~' -> State 83
       primary_expression -> State 120
       postfix_expression -> State 119
       unary_expression -> State 126
@@ -11233,36 +11204,78 @@ Parser Debug States:
 
   State 223:
     Kernel Items:
-      direct_declarator: direct_declarator LBRACE constant_expression RBRACE., *
+      direct_declarator: '('.declarator ')'
+      direct_abstract_declarator: '('.abstract_declarator ')'
+      direct_abstract_declarator: '('.')'
+      direct_abstract_declarator: '('.parameter_type_list ')'
     Reduce:
-      * -> [direct_declarator]
-    Goto:
       (nil)
+    Goto:
+      IDENTIFIER -> State 12
+      TYPE_NAME -> State 21
+      TYPEDEF -> State 20
+      EXTERN -> State 10
+      STATIC -> State 18
+      AUTO -> State 5
+      REGISTER -> State 15
+      CHAR -> State 6
+      SHORT -> State 16
+      INT -> State 13
+      LONG -> State 14
+      SIGNED -> State 17
+      UNSIGNED -> State 23
+      FLOAT -> State 11
+      DOUBLE -> State 8
+      CONST -> State 7
+      VOLATILE -> State 25
+      VOID -> State 24
+      STRUCT -> State 19
+      UNION -> State 22
+      ENUM -> State 9
+      '(' -> State 223
+      ')' -> State 292
+      '[' -> State 224
+      '*' -> State 4
+      declaration_specifiers -> State 133
+      storage_class_specifier -> State 34
+      type_specifier -> State 38
+      struct_or_union_specifier -> State 36
+      struct_or_union -> State 35
+      enum_specifier -> State 30
+      type_qualifier -> State 37
+      declarator -> State 39
+      direct_declarator -> State 29
+      pointer -> State 228
+      parameter_type_list -> State 294
+      parameter_list -> State 136
+      parameter_declaration -> State 135
+      abstract_declarator -> State 293
+      direct_abstract_declarator -> State 227
 
   State 224:
     Kernel Items:
-      direct_abstract_declarator: LBRACE.RBRACE
-      direct_abstract_declarator: LBRACE.constant_expression RBRACE
+      direct_abstract_declarator: '['.']'
+      direct_abstract_declarator: '['.constant_expression ']'
     Reduce:
       (nil)
     Goto:
-      IDENTIFIER -> State 131
-      CONSTANT -> State 78
-      STRING_LITERAL -> State 97
-      SIZEOF -> State 96
-      INC_OP -> State 88
-      DEC_OP -> State 80
-      LPARAM -> State 89
-      RBRACE -> State 292
-      MUL -> State 91
-      MINUS -> State 90
-      PLUS -> State 92
-      AND -> State 75
-      EXCLAIM -> State 83
-      TILDA -> State 99
+      IDENTIFIER -> State 139
+      CONSTANT -> State 86
+      STRING_LITERAL -> State 98
+      SIZEOF -> State 97
+      INC_OP -> State 95
+      DEC_OP -> State 88
+      '(' -> State 77
+      ']' -> State 295
+      '*' -> State 78
+      '-' -> State 80
+      '+' -> State 79
+      '&' -> State 76
+      '!' -> State 75
+      '~' -> State 83
       primary_expression -> State 120
       postfix_expression -> State 119
-      unary_expression -> State 135
+      unary_expression -> State 142
       unary_operator -> State 127
       cast_expression -> State 104
       multiplicative_expression -> State 118
@@ -11275,60 +11288,10 @@ Parser Debug States:
       inclusive_or_expression -> State 112
       logical_and_expression -> State 116
       logical_or_expression -> State 117
-      conditional_expression -> State 133
-      constant_expression -> State 293
+      conditional_expression -> State 140
+      constant_expression -> State 296
 
   State 225:
-    Kernel Items:
-      direct_abstract_declarator: LPARAM.RPARAM
-      direct_abstract_declarator: LPARAM.abstract_declarator RPARAM
-      direct_abstract_declarator: LPARAM.parameter_type_list RPARAM
-      direct_declarator: LPARAM.declarator RPARAM
-    Reduce:
-      (nil)
-    Goto:
-      IDENTIFIER -> State 10
-      TYPE_NAME -> State 21
-      TYPEDEF -> State 20
-      EXTERN -> State 8
-      STATIC -> State 18
-      AUTO -> State 3
-      REGISTER -> State 15
-      CHAR -> State 4
-      SHORT -> State 16
-      INT -> State 11
-      LONG -> State 12
-      SIGNED -> State 17
-      UNSIGNED -> State 23
-      FLOAT -> State 9
-      DOUBLE -> State 6
-      CONST -> State 5
-      VOLATILE -> State 25
-      VOID -> State 24
-      STRUCT -> State 19
-      UNION -> State 22
-      ENUM -> State 7
-      LPARAM -> State 225
-      RPARAM -> State 294
-      LBRACE -> State 224
-      MUL -> State 14
-      declaration_specifiers -> State 138
-      storage_class_specifier -> State 34
-      type_specifier -> State 38
-      struct_or_union_specifier -> State 36
-      struct_or_union -> State 35
-      enum_specifier -> State 30
-      type_qualifier -> State 37
-      declarator -> State 41
-      direct_declarator -> State 29
-      pointer -> State 229
-      parameter_type_list -> State 296
-      parameter_list -> State 141
-      parameter_declaration -> State 140
-      abstract_declarator -> State 295
-      direct_abstract_declarator -> State 228
-
-  State 226:
     Kernel Items:
       parameter_declaration: declaration_specifiers abstract_declarator., *
     Reduce:
@@ -11336,7 +11299,7 @@ Parser Debug States:
     Goto:
       (nil)
 
-  State 227:
+  State 226:
     Kernel Items:
       parameter_declaration: declaration_specifiers declarator., *
     Reduce:
@@ -11344,36 +11307,44 @@ Parser Debug States:
     Goto:
       (nil)
 
-  State 228:
+  State 227:
     Kernel Items:
       abstract_declarator: direct_abstract_declarator., *
-      direct_abstract_declarator: direct_abstract_declarator.LBRACE RBRACE
-      direct_abstract_declarator: direct_abstract_declarator.LBRACE constant_expression RBRACE
-      direct_abstract_declarator: direct_abstract_declarator.LPARAM RPARAM
-      direct_abstract_declarator: direct_abstract_declarator.LPARAM parameter_type_list RPARAM
+      direct_abstract_declarator: direct_abstract_declarator.'[' ']'
+      direct_abstract_declarator: direct_abstract_declarator.'[' constant_expression ']'
+      direct_abstract_declarator: direct_abstract_declarator.'(' ')'
+      direct_abstract_declarator: direct_abstract_declarator.'(' parameter_type_list ')'
     Reduce:
       * -> [abstract_declarator]
     Goto:
-      LPARAM -> State 298
-      LBRACE -> State 297
+      '(' -> State 297
+      '[' -> State 298
 
-  State 229:
+  State 228:
     Kernel Items:
+      declarator: pointer.direct_declarator
       abstract_declarator: pointer., *
       abstract_declarator: pointer.direct_abstract_declarator
-      declarator: pointer.direct_declarator
     Reduce:
       * -> [abstract_declarator]
     Goto:
-      IDENTIFIER -> State 10
-      LPARAM -> State 225
-      LBRACE -> State 224
+      IDENTIFIER -> State 12
+      '(' -> State 223
+      '[' -> State 224
       direct_declarator -> State 56
       direct_abstract_declarator -> State 299
 
+  State 229:
+    Kernel Items:
+      direct_declarator: direct_declarator '(' identifier_list ')'., *
+    Reduce:
+      * -> [direct_declarator]
+    Goto:
+      (nil)
+
   State 230:
     Kernel Items:
-      identifier_list: identifier_list COMMA.IDENTIFIER
+      identifier_list: identifier_list ','.IDENTIFIER
     Reduce:
       (nil)
     Goto:
@@ -11381,41 +11352,33 @@ Parser Debug States:
 
   State 231:
     Kernel Items:
-      direct_declarator: direct_declarator LPARAM identifier_list RPARAM., *
-    Reduce:
-      * -> [direct_declarator]
-    Goto:
-      (nil)
-
-  State 232:
-    Kernel Items:
-      parameter_list: parameter_list COMMA.parameter_declaration
-      parameter_type_list: parameter_list COMMA.ELLIPSIS
+      parameter_type_list: parameter_list ','.ELLIPSIS
+      parameter_list: parameter_list ','.parameter_declaration
     Reduce:
       (nil)
     Goto:
       TYPE_NAME -> State 21
       TYPEDEF -> State 20
-      EXTERN -> State 8
+      EXTERN -> State 10
       STATIC -> State 18
-      AUTO -> State 3
+      AUTO -> State 5
       REGISTER -> State 15
-      CHAR -> State 4
+      CHAR -> State 6
       SHORT -> State 16
-      INT -> State 11
-      LONG -> State 12
+      INT -> State 13
+      LONG -> State 14
       SIGNED -> State 17
       UNSIGNED -> State 23
-      FLOAT -> State 9
-      DOUBLE -> State 6
-      CONST -> State 5
+      FLOAT -> State 11
+      DOUBLE -> State 8
+      CONST -> State 7
       VOLATILE -> State 25
       VOID -> State 24
       STRUCT -> State 19
       UNION -> State 22
-      ENUM -> State 7
+      ENUM -> State 9
       ELLIPSIS -> State 301
-      declaration_specifiers -> State 138
+      declaration_specifiers -> State 133
       storage_class_specifier -> State 34
       type_specifier -> State 38
       struct_or_union_specifier -> State 36
@@ -11424,9 +11387,17 @@ Parser Debug States:
       type_qualifier -> State 37
       parameter_declaration -> State 302
 
+  State 232:
+    Kernel Items:
+      direct_declarator: direct_declarator '(' parameter_type_list ')'., *
+    Reduce:
+      * -> [direct_declarator]
+    Goto:
+      (nil)
+
   State 233:
     Kernel Items:
-      direct_declarator: direct_declarator LPARAM parameter_type_list RPARAM., *
+      direct_declarator: direct_declarator '[' constant_expression ']'., *
     Reduce:
       * -> [direct_declarator]
     Goto:
@@ -11434,57 +11405,26 @@ Parser Debug States:
 
   State 234:
     Kernel Items:
-      struct_declaration_list: struct_declaration_list.struct_declaration
-      struct_or_union_specifier: struct_or_union IDENTIFIER LCURL struct_declaration_list.RCURL
+      struct_declarator: ':'.constant_expression
     Reduce:
       (nil)
     Goto:
-      TYPE_NAME -> State 21
-      CHAR -> State 4
-      SHORT -> State 16
-      INT -> State 11
-      LONG -> State 12
-      SIGNED -> State 17
-      UNSIGNED -> State 23
-      FLOAT -> State 9
-      DOUBLE -> State 6
-      CONST -> State 5
-      VOLATILE -> State 25
-      VOID -> State 24
-      STRUCT -> State 19
-      UNION -> State 22
-      ENUM -> State 7
-      RCURL -> State 303
-      type_specifier -> State 148
-      struct_or_union_specifier -> State 36
-      struct_or_union -> State 35
-      struct_declaration -> State 240
-      specifier_qualifier_list -> State 144
-      enum_specifier -> State 30
-      type_qualifier -> State 147
-
-  State 235:
-    Kernel Items:
-      struct_declarator: COLON.constant_expression
-    Reduce:
-      (nil)
-    Goto:
-      IDENTIFIER -> State 131
-      CONSTANT -> State 78
-      STRING_LITERAL -> State 97
-      SIZEOF -> State 96
-      INC_OP -> State 88
-      DEC_OP -> State 80
-      LPARAM -> State 89
-      MUL -> State 91
-      MINUS -> State 90
-      PLUS -> State 92
-      AND -> State 75
-      EXCLAIM -> State 83
-      TILDA -> State 99
+      IDENTIFIER -> State 139
+      CONSTANT -> State 86
+      STRING_LITERAL -> State 98
+      SIZEOF -> State 97
+      INC_OP -> State 95
+      DEC_OP -> State 88
+      '(' -> State 77
+      '*' -> State 78
+      '-' -> State 80
+      '+' -> State 79
+      '&' -> State 76
+      '!' -> State 75
+      '~' -> State 83
       primary_expression -> State 120
       postfix_expression -> State 119
-      unary_expression -> State 135
+      unary_expression -> State 142
       unary_operator -> State 127
       cast_expression -> State 104
       multiplicative_expression -> State 118
@@ -11497,19 +11437,19 @@ Parser Debug States:
       inclusive_or_expression -> State 112
       logical_and_expression -> State 116
       logical_or_expression -> State 117
-      conditional_expression -> State 133
-      constant_expression -> State 304
+      conditional_expression -> State 140
+      constant_expression -> State 303
 
-  State 236:
+  State 235:
     Kernel Items:
       struct_declarator: declarator., *
-      struct_declarator: declarator.COLON constant_expression
+      struct_declarator: declarator.':' constant_expression
     Reduce:
       * -> [struct_declarator]
     Goto:
-      COLON -> State 305
+      ':' -> State 304
 
-  State 237:
+  State 236:
     Kernel Items:
       struct_declarator_list: struct_declarator., *
     Reduce:
@@ -11517,25 +11457,25 @@ Parser Debug States:
     Goto:
       (nil)
 
-  State 238:
+  State 237:
     Kernel Items:
-      struct_declaration: specifier_qualifier_list struct_declarator_list.SEMICOLON
-      struct_declarator_list: struct_declarator_list.COMMA struct_declarator
+      struct_declaration: specifier_qualifier_list struct_declarator_list.';'
+      struct_declarator_list: struct_declarator_list.',' struct_declarator
     Reduce:
       (nil)
     Goto:
-      SEMICOLON -> State 307
-      COMMA -> State 306
+      ';' -> State 306
+      ',' -> State 305
 
-  State 239:
+  State 238:
     Kernel Items:
-      struct_or_union_specifier: struct_or_union LCURL struct_declaration_list RCURL., *
+      struct_or_union_specifier: struct_or_union '{' struct_declaration_list '}'., *
     Reduce:
       * -> [struct_or_union_specifier]
     Goto:
       (nil)
 
-  State 240:
+  State 239:
     Kernel Items:
       struct_declaration_list: struct_declaration_list struct_declaration., *
     Reduce:
@@ -11543,7 +11483,7 @@ Parser Debug States:
     Goto:
       (nil)
 
-  State 241:
+  State 240:
     Kernel Items:
       specifier_qualifier_list: type_qualifier specifier_qualifier_list., *
     Reduce:
@@ -11551,7 +11491,7 @@ Parser Debug States:
     Goto:
       (nil)
 
-  State 242:
+  State 241:
     Kernel Items:
       specifier_qualifier_list: type_specifier specifier_qualifier_list., *
     Reduce:
@@ -11559,27 +11499,58 @@ Parser Debug States:
     Goto:
       (nil)
 
+  State 242:
+    Kernel Items:
+      struct_or_union_specifier: struct_or_union IDENTIFIER '{' struct_declaration_list.'}'
+      struct_declaration_list: struct_declaration_list.struct_declaration
+    Reduce:
+      (nil)
+    Goto:
+      TYPE_NAME -> State 21
+      CHAR -> State 6
+      SHORT -> State 16
+      INT -> State 13
+      LONG -> State 14
+      SIGNED -> State 17
+      UNSIGNED -> State 23
+      FLOAT -> State 11
+      DOUBLE -> State 8
+      CONST -> State 7
+      VOLATILE -> State 25
+      VOID -> State 24
+      STRUCT -> State 19
+      UNION -> State 22
+      ENUM -> State 9
+      '}' -> State 307
+      type_specifier -> State 147
+      struct_or_union_specifier -> State 36
+      struct_or_union -> State 35
+      struct_declaration -> State 239
+      specifier_qualifier_list -> State 143
+      enum_specifier -> State 30
+      type_qualifier -> State 146
+
   State 243:
     Kernel Items:
-      enum_specifier: ENUM IDENTIFIER LCURL enumerator_list RCURL., *
-    Reduce:
-      * -> [enum_specifier]
-    Goto:
-      (nil)
-
-  State 244:
-    Kernel Items:
-      enumerator: IDENTIFIER EQ constant_expression., *
+      enumerator: IDENTIFIER '=' constant_expression., *
     Reduce:
       * -> [enumerator]
     Goto:
       (nil)
 
-  State 245:
+  State 244:
     Kernel Items:
-      enumerator_list: enumerator_list COMMA enumerator., *
+      enumerator_list: enumerator_list ',' enumerator., *
     Reduce:
       * -> [enumerator_list]
+    Goto:
+      (nil)
+
+  State 245:
+    Kernel Items:
+      enum_specifier: ENUM IDENTIFIER '{' enumerator_list '}'., *
+    Reduce:
+      * -> [enum_specifier]
     Goto:
       (nil)
 
@@ -11593,47 +11564,145 @@ Parser Debug States:
 
   State 247:
     Kernel Items:
-      initializer: LCURL initializer_list.COMMA RCURL
-      initializer: LCURL initializer_list.RCURL
-      initializer_list: initializer_list.COMMA initializer
+      initializer: '{' initializer_list.'}'
+      initializer: '{' initializer_list.',' '}'
+      initializer_list: initializer_list.',' initializer
     Reduce:
       (nil)
     Goto:
-      RCURL -> State 309
-      COMMA -> State 308
+      '}' -> State 309
+      ',' -> State 308
 
   State 248:
     Kernel Items:
-      labeled_statement: CASE constant_expression COLON.statement
+      primary_expression: '(' expression ')'., *
+    Reduce:
+      * -> [primary_expression]
+    Goto:
+      (nil)
+
+  State 249:
+    Kernel Items:
+      direct_abstract_declarator: '('.abstract_declarator ')'
+      direct_abstract_declarator: '('.')'
+      direct_abstract_declarator: '('.parameter_type_list ')'
     Reduce:
       (nil)
     Goto:
-      IDENTIFIER -> State 86
-      CONSTANT -> State 78
-      STRING_LITERAL -> State 97
-      SIZEOF -> State 96
-      INC_OP -> State 88
-      DEC_OP -> State 80
-      CASE -> State 77
-      DEFAULT -> State 81
-      IF -> State 87
-      SWITCH -> State 98
+      TYPE_NAME -> State 21
+      TYPEDEF -> State 20
+      EXTERN -> State 10
+      STATIC -> State 18
+      AUTO -> State 5
+      REGISTER -> State 15
+      CHAR -> State 6
+      SHORT -> State 16
+      INT -> State 13
+      LONG -> State 14
+      SIGNED -> State 17
+      UNSIGNED -> State 23
+      FLOAT -> State 11
+      DOUBLE -> State 8
+      CONST -> State 7
+      VOLATILE -> State 25
+      VOID -> State 24
+      STRUCT -> State 19
+      UNION -> State 22
+      ENUM -> State 9
+      '(' -> State 249
+      ')' -> State 292
+      '[' -> State 224
+      '*' -> State 4
+      declaration_specifiers -> State 133
+      storage_class_specifier -> State 34
+      type_specifier -> State 38
+      struct_or_union_specifier -> State 36
+      struct_or_union -> State 35
+      enum_specifier -> State 30
+      type_qualifier -> State 37
+      pointer -> State 251
+      parameter_type_list -> State 294
+      parameter_list -> State 136
+      parameter_declaration -> State 135
+      abstract_declarator -> State 293
+      direct_abstract_declarator -> State 227
+
+  State 250:
+    Kernel Items:
+      type_name: specifier_qualifier_list abstract_declarator., ')'
+    Reduce:
+      ')' -> [type_name]
+    Goto:
+      (nil)
+
+  State 251:
+    Kernel Items:
+      abstract_declarator: pointer., ')'
+      abstract_declarator: pointer.direct_abstract_declarator
+    Reduce:
+      ')' -> [abstract_declarator]
+    Goto:
+      '(' -> State 249
+      '[' -> State 224
+      direct_abstract_declarator -> State 299
+
+  State 252:
+    Kernel Items:
+      cast_expression: '(' type_name ')'.cast_expression
+    Reduce:
+      (nil)
+    Goto:
+      IDENTIFIER -> State 139
+      CONSTANT -> State 86
+      STRING_LITERAL -> State 98
+      SIZEOF -> State 97
+      INC_OP -> State 95
+      DEC_OP -> State 88
+      '(' -> State 77
+      '*' -> State 78
+      '-' -> State 80
+      '+' -> State 79
+      '&' -> State 76
+      '!' -> State 75
+      '~' -> State 83
+      primary_expression -> State 120
+      postfix_expression -> State 119
+      unary_expression -> State 142
+      unary_operator -> State 127
+      cast_expression -> State 310
+
+  State 253:
+    Kernel Items:
+      labeled_statement: CASE constant_expression ':'.statement
+    Reduce:
+      (nil)
+    Goto:
+      IDENTIFIER -> State 93
+      CONSTANT -> State 86
+      STRING_LITERAL -> State 98
+      SIZEOF -> State 97
+      INC_OP -> State 95
+      DEC_OP -> State 88
+      CASE -> State 85
+      DEFAULT -> State 89
+      IF -> State 94
+      SWITCH -> State 99
       WHILE -> State 100
-      DO -> State 82
-      FOR -> State 84
-      GOTO -> State 85
-      CONTINUE -> State 79
-      BREAK -> State 76
-      RETURN -> State 94
-      LPARAM -> State 89
-      LCURL -> State 49
-      SEMICOLON -> State 95
-      MUL -> State 91
-      MINUS -> State 90
-      PLUS -> State 92
-      AND -> State 75
-      EXCLAIM -> State 83
-      TILDA -> State 99
+      DO -> State 90
+      FOR -> State 91
+      GOTO -> State 92
+      CONTINUE -> State 87
+      BREAK -> State 84
+      RETURN -> State 96
+      '(' -> State 77
+      '{' -> State 49
+      ';' -> State 81
+      '*' -> State 78
+      '-' -> State 80
+      '+' -> State 79
+      '&' -> State 76
+      '!' -> State 75
+      '~' -> State 83
       primary_expression -> State 120
       postfix_expression -> State 119
       unary_expression -> State 126
@@ -11652,7 +11721,7 @@ Parser Debug States:
       conditional_expression -> State 106
       assignment_expression -> State 103
       expression -> State 110
-      statement -> State 310
+      statement -> State 311
       labeled_statement -> State 115
       compound_statement -> State 105
       expression_statement -> State 111
@@ -11660,43 +11729,43 @@ Parser Debug States:
       iteration_statement -> State 113
       jump_statement -> State 114
 
-  State 249:
+  State 254:
     Kernel Items:
-      labeled_statement: DEFAULT COLON statement., *
+      labeled_statement: DEFAULT ':' statement., *
     Reduce:
       * -> [labeled_statement]
     Goto:
       (nil)
 
-  State 250:
+  State 255:
     Kernel Items:
-      iteration_statement: DO statement WHILE.LPARAM expression RPARAM SEMICOLON
+      iteration_statement: DO statement WHILE.'(' expression ')' ';'
     Reduce:
       (nil)
     Goto:
-      LPARAM -> State 311
+      '(' -> State 312
 
-  State 251:
+  State 256:
     Kernel Items:
-      iteration_statement: FOR LPARAM expression_statement.expression_statement RPARAM statement
-      iteration_statement: FOR LPARAM expression_statement.expression_statement expression RPARAM statement
+      iteration_statement: FOR '(' expression_statement.expression_statement ')' statement
+      iteration_statement: FOR '(' expression_statement.expression_statement expression ')' statement
     Reduce:
       (nil)
     Goto:
-      IDENTIFIER -> State 131
-      CONSTANT -> State 78
-      STRING_LITERAL -> State 97
-      SIZEOF -> State 96
-      INC_OP -> State 88
-      DEC_OP -> State 80
-      LPARAM -> State 89
-      SEMICOLON -> State 95
-      MUL -> State 91
-      MINUS -> State 90
-      PLUS -> State 92
-      AND -> State 75
-      EXCLAIM -> State 83
-      TILDA -> State 99
+      IDENTIFIER -> State 139
+      CONSTANT -> State 86
+      STRING_LITERAL -> State 98
+      SIZEOF -> State 97
+      INC_OP -> State 95
+      DEC_OP -> State 88
+      '(' -> State 77
+      ';' -> State 81
+      '*' -> State 78
+      '-' -> State 80
+      '+' -> State 79
+      '&' -> State 76
+      '!' -> State 75
+      '~' -> State 83
       primary_expression -> State 120
       postfix_expression -> State 119
       unary_expression -> State 126
@@ -11715,136 +11784,38 @@ Parser Debug States:
       conditional_expression -> State 106
       assignment_expression -> State 103
       expression -> State 110
-      expression_statement -> State 312
+      expression_statement -> State 313
 
-  State 252:
+  State 257:
     Kernel Items:
-      jump_statement: GOTO IDENTIFIER SEMICOLON., *
+      jump_statement: GOTO IDENTIFIER ';'., *
     Reduce:
       * -> [jump_statement]
     Goto:
       (nil)
 
-  State 253:
+  State 258:
     Kernel Items:
-      labeled_statement: IDENTIFIER COLON statement., *
+      labeled_statement: IDENTIFIER ':' statement., *
     Reduce:
       * -> [labeled_statement]
     Goto:
       (nil)
 
-  State 254:
-    Kernel Items:
-      expression: expression.COMMA assignment_expression
-      selection_statement: IF LPARAM expression.RPARAM statement
-      selection_statement: IF LPARAM expression.RPARAM statement ELSE statement
-    Reduce:
-      (nil)
-    Goto:
-      RPARAM -> State 313
-      COMMA -> State 187
-
-  State 255:
-    Kernel Items:
-      primary_expression: LPARAM expression RPARAM., *
-    Reduce:
-      * -> [primary_expression]
-    Goto:
-      (nil)
-
-  State 256:
-    Kernel Items:
-      direct_abstract_declarator: LPARAM.RPARAM
-      direct_abstract_declarator: LPARAM.abstract_declarator RPARAM
-      direct_abstract_declarator: LPARAM.parameter_type_list RPARAM
-    Reduce:
-      (nil)
-    Goto:
-      TYPE_NAME -> State 21
-      TYPEDEF -> State 20
-      EXTERN -> State 8
-      STATIC -> State 18
-      AUTO -> State 3
-      REGISTER -> State 15
-      CHAR -> State 4
-      SHORT -> State 16
-      INT -> State 11
-      LONG -> State 12
-      SIGNED -> State 17
-      UNSIGNED -> State 23
-      FLOAT -> State 9
-      DOUBLE -> State 6
-      CONST -> State 5
-      VOLATILE -> State 25
-      VOID -> State 24
-      STRUCT -> State 19
-      UNION -> State 22
-      ENUM -> State 7
-      LPARAM -> State 256
-      RPARAM -> State 294
-      LBRACE -> State 224
-      MUL -> State 14
-      declaration_specifiers -> State 138
-      storage_class_specifier -> State 34
-      type_specifier -> State 38
-      struct_or_union_specifier -> State 36
-      struct_or_union -> State 35
-      enum_specifier -> State 30
-      type_qualifier -> State 37
-      pointer -> State 258
-      parameter_type_list -> State 296
-      parameter_list -> State 141
-      parameter_declaration -> State 140
-      abstract_declarator -> State 295
-      direct_abstract_declarator -> State 228
-
-  State 257:
-    Kernel Items:
-      type_name: specifier_qualifier_list abstract_declarator., RPARAM
-    Reduce:
-      RPARAM -> [type_name]
-    Goto:
-      (nil)
-
-  State 258:
-    Kernel Items:
-      abstract_declarator: pointer., RPARAM
-      abstract_declarator: pointer.direct_abstract_declarator
-    Reduce:
-      RPARAM -> [abstract_declarator]
-    Goto:
-      LPARAM -> State 256
-      LBRACE -> State 224
-      direct_abstract_declarator -> State 299
-
   State 259:
     Kernel Items:
-      cast_expression: LPARAM type_name RPARAM.cast_expression
+      expression: expression.',' assignment_expression
+      selection_statement: IF '(' expression.')' statement
+      selection_statement: IF '(' expression.')' statement ELSE statement
     Reduce:
       (nil)
     Goto:
-      IDENTIFIER -> State 131
-      CONSTANT -> State 78
-      STRING_LITERAL -> State 97
-      SIZEOF -> State 96
-      INC_OP -> State 88
-      DEC_OP -> State 80
-      LPARAM -> State 89
-      MUL -> State 91
-      MINUS -> State 90
-      PLUS -> State 92
-      AND -> State 75
-      EXCLAIM -> State 83
-      TILDA -> State 99
-      primary_expression -> State 120
-      postfix_expression -> State 119
-      unary_expression -> State 135
-      unary_operator -> State 127
-      cast_expression -> State 314
+      ')' -> State 314
+      ',' -> State 187
 
   State 260:
     Kernel Items:
-      jump_statement: RETURN expression SEMICOLON., *
+      jump_statement: RETURN expression ';'., *
     Reduce:
       * -> [jump_statement]
     Goto:
@@ -11852,63 +11823,63 @@ Parser Debug States:
 
   State 261:
     Kernel Items:
-      unary_expression: SIZEOF LPARAM type_name.RPARAM
+      unary_expression: SIZEOF '(' type_name.')'
     Reduce:
       (nil)
     Goto:
-      RPARAM -> State 315
+      ')' -> State 315
 
   State 262:
     Kernel Items:
-      expression: expression.COMMA assignment_expression
-      selection_statement: SWITCH LPARAM expression.RPARAM statement
+      expression: expression.',' assignment_expression
+      selection_statement: SWITCH '(' expression.')' statement
     Reduce:
       (nil)
     Goto:
-      RPARAM -> State 316
-      COMMA -> State 187
+      ')' -> State 316
+      ',' -> State 187
 
   State 263:
     Kernel Items:
-      expression: expression.COMMA assignment_expression
-      iteration_statement: WHILE LPARAM expression.RPARAM statement
+      expression: expression.',' assignment_expression
+      iteration_statement: WHILE '(' expression.')' statement
     Reduce:
       (nil)
     Goto:
-      RPARAM -> State 317
-      COMMA -> State 187
+      ')' -> State 317
+      ',' -> State 187
 
   State 264:
     Kernel Items:
-      additive_expression: additive_expression MINUS multiplicative_expression., *
-      multiplicative_expression: multiplicative_expression.DIV cast_expression
-      multiplicative_expression: multiplicative_expression.MOD cast_expression
-      multiplicative_expression: multiplicative_expression.MUL cast_expression
+      multiplicative_expression: multiplicative_expression.'*' cast_expression
+      multiplicative_expression: multiplicative_expression.'/' cast_expression
+      multiplicative_expression: multiplicative_expression.'%' cast_expression
+      additive_expression: additive_expression '+' multiplicative_expression., *
     Reduce:
       * -> [additive_expression]
     Goto:
-      MUL -> State 195
-      DIV -> State 193
-      MOD -> State 194
+      '*' -> State 194
+      '/' -> State 195
+      '%' -> State 193
 
   State 265:
     Kernel Items:
-      additive_expression: additive_expression PLUS multiplicative_expression., *
-      multiplicative_expression: multiplicative_expression.DIV cast_expression
-      multiplicative_expression: multiplicative_expression.MOD cast_expression
-      multiplicative_expression: multiplicative_expression.MUL cast_expression
+      multiplicative_expression: multiplicative_expression.'*' cast_expression
+      multiplicative_expression: multiplicative_expression.'/' cast_expression
+      multiplicative_expression: multiplicative_expression.'%' cast_expression
+      additive_expression: additive_expression '-' multiplicative_expression., *
     Reduce:
       * -> [additive_expression]
     Goto:
-      MUL -> State 195
-      DIV -> State 193
-      MOD -> State 194
+      '*' -> State 194
+      '/' -> State 195
+      '%' -> State 193
 
   State 266:
     Kernel Items:
-      and_expression: and_expression AND equality_expression., *
       equality_expression: equality_expression.EQ_OP relational_expression
       equality_expression: equality_expression.NE_OP relational_expression
+      and_expression: and_expression '&' equality_expression., *
     Reduce:
       * -> [and_expression]
     Goto:
@@ -11917,7 +11888,7 @@ Parser Debug States:
 
   State 267:
     Kernel Items:
-      compound_statement: LCURL declaration_list statement_list RCURL., *
+      compound_statement: '{' declaration_list statement_list '}'., *
     Reduce:
       * -> [compound_statement]
     Goto:
@@ -11925,46 +11896,46 @@ Parser Debug States:
 
   State 268:
     Kernel Items:
-      equality_expression: equality_expression EQ_OP relational_expression., *
-      relational_expression: relational_expression.GE_OP shift_expression
-      relational_expression: relational_expression.GT shift_expression
+      relational_expression: relational_expression.'<' shift_expression
+      relational_expression: relational_expression.'>' shift_expression
       relational_expression: relational_expression.LE_OP shift_expression
-      relational_expression: relational_expression.LT shift_expression
+      relational_expression: relational_expression.GE_OP shift_expression
+      equality_expression: equality_expression EQ_OP relational_expression., *
     Reduce:
       * -> [equality_expression]
     Goto:
-      LE_OP -> State 204
-      GE_OP -> State 202
-      LT -> State 205
-      GT -> State 203
+      LE_OP -> State 205
+      GE_OP -> State 204
+      '<' -> State 202
+      '>' -> State 203
 
   State 269:
     Kernel Items:
-      equality_expression: equality_expression NE_OP relational_expression., *
-      relational_expression: relational_expression.GE_OP shift_expression
-      relational_expression: relational_expression.GT shift_expression
+      relational_expression: relational_expression.'<' shift_expression
+      relational_expression: relational_expression.'>' shift_expression
       relational_expression: relational_expression.LE_OP shift_expression
-      relational_expression: relational_expression.LT shift_expression
+      relational_expression: relational_expression.GE_OP shift_expression
+      equality_expression: equality_expression NE_OP relational_expression., *
     Reduce:
       * -> [equality_expression]
     Goto:
-      LE_OP -> State 204
-      GE_OP -> State 202
-      LT -> State 205
-      GT -> State 203
+      LE_OP -> State 205
+      GE_OP -> State 204
+      '<' -> State 202
+      '>' -> State 203
 
   State 270:
     Kernel Items:
-      and_expression: and_expression.AND equality_expression
-      exclusive_or_expression: exclusive_or_expression HAT and_expression., *
+      and_expression: and_expression.'&' equality_expression
+      exclusive_or_expression: exclusive_or_expression '^' and_expression., *
     Reduce:
       * -> [exclusive_or_expression]
     Goto:
-      AND -> State 181
+      '&' -> State 181
 
   State 271:
     Kernel Items:
-      expression: expression COMMA assignment_expression., *
+      expression: expression ',' assignment_expression., *
     Reduce:
       * -> [expression]
     Goto:
@@ -11972,23 +11943,33 @@ Parser Debug States:
 
   State 272:
     Kernel Items:
-      exclusive_or_expression: exclusive_or_expression.HAT and_expression
-      inclusive_or_expression: inclusive_or_expression OR exclusive_or_expression., *
+      exclusive_or_expression: exclusive_or_expression.'^' and_expression
+      inclusive_or_expression: inclusive_or_expression '|' exclusive_or_expression., *
     Reduce:
       * -> [inclusive_or_expression]
     Goto:
-      HAT -> State 186
+      '^' -> State 186
 
   State 273:
     Kernel Items:
-      inclusive_or_expression: inclusive_or_expression.OR exclusive_or_expression
+      inclusive_or_expression: inclusive_or_expression.'|' exclusive_or_expression
       logical_and_expression: logical_and_expression AND_OP inclusive_or_expression., *
     Reduce:
       * -> [logical_and_expression]
     Goto:
-      OR -> State 189
+      '|' -> State 189
 
   State 274:
+    Kernel Items:
+      conditional_expression: logical_or_expression '?' expression.':' conditional_expression
+      expression: expression.',' assignment_expression
+    Reduce:
+      (nil)
+    Goto:
+      ':' -> State 318
+      ',' -> State 187
+
+  State 275:
     Kernel Items:
       logical_and_expression: logical_and_expression.AND_OP inclusive_or_expression
       logical_or_expression: logical_or_expression OR_OP logical_and_expression., *
@@ -11997,19 +11978,9 @@ Parser Debug States:
     Goto:
       AND_OP -> State 190
 
-  State 275:
-    Kernel Items:
-      conditional_expression: logical_or_expression QUESTION expression.COLON conditional_expression
-      expression: expression.COMMA assignment_expression
-    Reduce:
-      (nil)
-    Goto:
-      COLON -> State 318
-      COMMA -> State 187
-
   State 276:
     Kernel Items:
-      multiplicative_expression: multiplicative_expression DIV cast_expression., *
+      multiplicative_expression: multiplicative_expression '%' cast_expression., *
     Reduce:
       * -> [multiplicative_expression]
     Goto:
@@ -12017,7 +11988,7 @@ Parser Debug States:
 
   State 277:
     Kernel Items:
-      multiplicative_expression: multiplicative_expression MOD cast_expression., *
+      multiplicative_expression: multiplicative_expression '*' cast_expression., *
     Reduce:
       * -> [multiplicative_expression]
     Goto:
@@ -12025,7 +11996,7 @@ Parser Debug States:
 
   State 278:
     Kernel Items:
-      multiplicative_expression: multiplicative_expression MUL cast_expression., *
+      multiplicative_expression: multiplicative_expression '/' cast_expression., *
     Reduce:
       * -> [multiplicative_expression]
     Goto:
@@ -12033,7 +12004,7 @@ Parser Debug States:
 
   State 279:
     Kernel Items:
-      postfix_expression: postfix_expression DOT IDENTIFIER., *
+      postfix_expression: postfix_expression '(' ')'., *
     Reduce:
       * -> [postfix_expression]
     Goto:
@@ -12041,39 +12012,39 @@ Parser Debug States:
 
   State 280:
     Kernel Items:
-      expression: expression.COMMA assignment_expression
-      postfix_expression: postfix_expression LBRACE expression.RBRACE
+      postfix_expression: postfix_expression '(' argument_expression_list.')'
+      argument_expression_list: argument_expression_list.',' assignment_expression
     Reduce:
       (nil)
     Goto:
-      RBRACE -> State 319
-      COMMA -> State 187
+      ')' -> State 319
+      ',' -> State 320
 
   State 281:
-    Kernel Items:
-      postfix_expression: postfix_expression LPARAM RPARAM., *
-    Reduce:
-      * -> [postfix_expression]
-    Goto:
-      (nil)
-
-  State 282:
-    Kernel Items:
-      argument_expression_list: argument_expression_list.COMMA assignment_expression
-      postfix_expression: postfix_expression LPARAM argument_expression_list.RPARAM
-    Reduce:
-      (nil)
-    Goto:
-      RPARAM -> State 321
-      COMMA -> State 320
-
-  State 283:
     Kernel Items:
       argument_expression_list: assignment_expression., *
     Reduce:
       * -> [argument_expression_list]
     Goto:
       (nil)
+
+  State 282:
+    Kernel Items:
+      postfix_expression: postfix_expression '.' IDENTIFIER., *
+    Reduce:
+      * -> [postfix_expression]
+    Goto:
+      (nil)
+
+  State 283:
+    Kernel Items:
+      postfix_expression: postfix_expression '[' expression.']'
+      expression: expression.',' assignment_expression
+    Reduce:
+      (nil)
+    Goto:
+      ']' -> State 321
+      ',' -> State 187
 
   State 284:
     Kernel Items:
@@ -12085,9 +12056,9 @@ Parser Debug States:
 
   State 285:
     Kernel Items:
-      relational_expression: relational_expression GE_OP shift_expression., *
       shift_expression: shift_expression.LEFT_OP additive_expression
       shift_expression: shift_expression.RIGHT_OP additive_expression
+      relational_expression: relational_expression '<' shift_expression., *
     Reduce:
       * -> [relational_expression]
     Goto:
@@ -12096,9 +12067,9 @@ Parser Debug States:
 
   State 286:
     Kernel Items:
-      relational_expression: relational_expression GT shift_expression., *
       shift_expression: shift_expression.LEFT_OP additive_expression
       shift_expression: shift_expression.RIGHT_OP additive_expression
+      relational_expression: relational_expression '>' shift_expression., *
     Reduce:
       * -> [relational_expression]
     Goto:
@@ -12107,9 +12078,9 @@ Parser Debug States:
 
   State 287:
     Kernel Items:
-      relational_expression: relational_expression LE_OP shift_expression., *
       shift_expression: shift_expression.LEFT_OP additive_expression
       shift_expression: shift_expression.RIGHT_OP additive_expression
+      relational_expression: relational_expression GE_OP shift_expression., *
     Reduce:
       * -> [relational_expression]
     Goto:
@@ -12118,9 +12089,9 @@ Parser Debug States:
 
   State 288:
     Kernel Items:
-      relational_expression: relational_expression LT shift_expression., *
       shift_expression: shift_expression.LEFT_OP additive_expression
       shift_expression: shift_expression.RIGHT_OP additive_expression
+      relational_expression: relational_expression LE_OP shift_expression., *
     Reduce:
       * -> [relational_expression]
     Goto:
@@ -12129,25 +12100,25 @@ Parser Debug States:
 
   State 289:
     Kernel Items:
-      additive_expression: additive_expression.MINUS multiplicative_expression
-      additive_expression: additive_expression.PLUS multiplicative_expression
+      additive_expression: additive_expression.'+' multiplicative_expression
+      additive_expression: additive_expression.'-' multiplicative_expression
       shift_expression: shift_expression LEFT_OP additive_expression., *
     Reduce:
       * -> [shift_expression]
     Goto:
-      MINUS -> State 179
-      PLUS -> State 180
+      '-' -> State 180
+      '+' -> State 179
 
   State 290:
     Kernel Items:
-      additive_expression: additive_expression.MINUS multiplicative_expression
-      additive_expression: additive_expression.PLUS multiplicative_expression
+      additive_expression: additive_expression.'+' multiplicative_expression
+      additive_expression: additive_expression.'-' multiplicative_expression
       shift_expression: shift_expression RIGHT_OP additive_expression., *
     Reduce:
       * -> [shift_expression]
     Goto:
-      MINUS -> State 179
-      PLUS -> State 180
+      '-' -> State 180
+      '+' -> State 179
 
   State 291:
     Kernel Items:
@@ -12159,7 +12130,7 @@ Parser Debug States:
 
   State 292:
     Kernel Items:
-      direct_abstract_declarator: LBRACE RBRACE., *
+      direct_abstract_declarator: '(' ')'., *
     Reduce:
       * -> [direct_abstract_declarator]
     Goto:
@@ -12167,60 +12138,99 @@ Parser Debug States:
 
   State 293:
     Kernel Items:
-      direct_abstract_declarator: LBRACE constant_expression.RBRACE
+      direct_abstract_declarator: '(' abstract_declarator.')'
     Reduce:
       (nil)
     Goto:
-      RBRACE -> State 322
+      ')' -> State 322
 
   State 294:
     Kernel Items:
-      direct_abstract_declarator: LPARAM RPARAM., *
+      direct_abstract_declarator: '(' parameter_type_list.')'
+    Reduce:
+      (nil)
+    Goto:
+      ')' -> State 323
+
+  State 295:
+    Kernel Items:
+      direct_abstract_declarator: '[' ']'., *
     Reduce:
       * -> [direct_abstract_declarator]
     Goto:
       (nil)
 
-  State 295:
-    Kernel Items:
-      direct_abstract_declarator: LPARAM abstract_declarator.RPARAM
-    Reduce:
-      (nil)
-    Goto:
-      RPARAM -> State 323
-
   State 296:
     Kernel Items:
-      direct_abstract_declarator: LPARAM parameter_type_list.RPARAM
+      direct_abstract_declarator: '[' constant_expression.']'
     Reduce:
       (nil)
     Goto:
-      RPARAM -> State 324
+      ']' -> State 324
 
   State 297:
     Kernel Items:
-      direct_abstract_declarator: direct_abstract_declarator LBRACE.RBRACE
-      direct_abstract_declarator: direct_abstract_declarator LBRACE.constant_expression RBRACE
+      direct_abstract_declarator: direct_abstract_declarator '('.')'
+      direct_abstract_declarator: direct_abstract_declarator '('.parameter_type_list ')'
     Reduce:
       (nil)
     Goto:
-      IDENTIFIER -> State 131
-      CONSTANT -> State 78
-      STRING_LITERAL -> State 97
-      SIZEOF -> State 96
-      INC_OP -> State 88
-      DEC_OP -> State 80
-      LPARAM -> State 89
-      RBRACE -> State 325
-      MUL -> State 91
-      MINUS -> State 90
-      PLUS -> State 92
-      AND -> State 75
-      EXCLAIM -> State 83
-      TILDA -> State 99
+      TYPE_NAME -> State 21
+      TYPEDEF -> State 20
+      EXTERN -> State 10
+      STATIC -> State 18
+      AUTO -> State 5
+      REGISTER -> State 15
+      CHAR -> State 6
+      SHORT -> State 16
+      INT -> State 13
+      LONG -> State 14
+      SIGNED -> State 17
+      UNSIGNED -> State 23
+      FLOAT -> State 11
+      DOUBLE -> State 8
+      CONST -> State 7
+      VOLATILE -> State 25
+      VOID -> State 24
+      STRUCT -> State 19
+      UNION -> State 22
+      ENUM -> State 9
+      ')' -> State 325
+      declaration_specifiers -> State 133
+      storage_class_specifier -> State 34
+      type_specifier -> State 38
+      struct_or_union_specifier -> State 36
+      struct_or_union -> State 35
+      enum_specifier -> State 30
+      type_qualifier -> State 37
+      parameter_type_list -> State 326
+      parameter_list -> State 136
+      parameter_declaration -> State 135
+
+  State 298:
+    Kernel Items:
+      direct_abstract_declarator: direct_abstract_declarator '['.']'
+      direct_abstract_declarator: direct_abstract_declarator '['.constant_expression ']'
+    Reduce:
+      (nil)
+    Goto:
+      IDENTIFIER -> State 139
+      CONSTANT -> State 86
+      STRING_LITERAL -> State 98
+      SIZEOF -> State 97
+      INC_OP -> State 95
+      DEC_OP -> State 88
+      '(' -> State 77
+      ']' -> State 327
+      '*' -> State 78
+      '-' -> State 80
+      '+' -> State 79
+      '&' -> State 76
+      '!' -> State 75
+      '~' -> State 83
       primary_expression -> State 120
       postfix_expression -> State 119
-      unary_expression -> State 135
+      unary_expression -> State 142
       unary_operator -> State 127
       cast_expression -> State 104
       multiplicative_expression -> State 118
@@ -12233,64 +12243,25 @@ Parser Debug States:
       inclusive_or_expression -> State 112
       logical_and_expression -> State 116
       logical_or_expression -> State 117
-      conditional_expression -> State 133
-      constant_expression -> State 326
-
-  State 298:
-    Kernel Items:
-      direct_abstract_declarator: direct_abstract_declarator LPARAM.RPARAM
-      direct_abstract_declarator: direct_abstract_declarator LPARAM.parameter_type_list RPARAM
-    Reduce:
-      (nil)
-    Goto:
-      TYPE_NAME -> State 21
-      TYPEDEF -> State 20
-      EXTERN -> State 8
-      STATIC -> State 18
-      AUTO -> State 3
-      REGISTER -> State 15
-      CHAR -> State 4
-      SHORT -> State 16
-      INT -> State 11
-      LONG -> State 12
-      SIGNED -> State 17
-      UNSIGNED -> State 23
-      FLOAT -> State 9
-      DOUBLE -> State 6
-      CONST -> State 5
-      VOLATILE -> State 25
-      VOID -> State 24
-      STRUCT -> State 19
-      UNION -> State 22
-      ENUM -> State 7
-      RPARAM -> State 327
-      declaration_specifiers -> State 138
-      storage_class_specifier -> State 34
-      type_specifier -> State 38
-      struct_or_union_specifier -> State 36
-      struct_or_union -> State 35
-      enum_specifier -> State 30
-      type_qualifier -> State 37
-      parameter_type_list -> State 328
-      parameter_list -> State 141
-      parameter_declaration -> State 140
+      conditional_expression -> State 140
+      constant_expression -> State 328
 
   State 299:
     Kernel Items:
       abstract_declarator: pointer direct_abstract_declarator., *
-      direct_abstract_declarator: direct_abstract_declarator.LBRACE RBRACE
-      direct_abstract_declarator: direct_abstract_declarator.LBRACE constant_expression RBRACE
-      direct_abstract_declarator: direct_abstract_declarator.LPARAM RPARAM
-      direct_abstract_declarator: direct_abstract_declarator.LPARAM parameter_type_list RPARAM
+      direct_abstract_declarator: direct_abstract_declarator.'[' ']'
+      direct_abstract_declarator: direct_abstract_declarator.'[' constant_expression ']'
+      direct_abstract_declarator: direct_abstract_declarator.'(' ')'
+      direct_abstract_declarator: direct_abstract_declarator.'(' parameter_type_list ')'
     Reduce:
       * -> [abstract_declarator]
     Goto:
-      LPARAM -> State 298
-      LBRACE -> State 297
+      '(' -> State 297
+      '[' -> State 298
 
   State 300:
     Kernel Items:
-      identifier_list: identifier_list COMMA IDENTIFIER., *
+      identifier_list: identifier_list ',' IDENTIFIER., *
     Reduce:
       * -> [identifier_list]
     Goto:
@@ -12298,15 +12269,15 @@ Parser Debug States:
 
   State 301:
     Kernel Items:
-      parameter_type_list: parameter_list COMMA ELLIPSIS., RPARAM
+      parameter_type_list: parameter_list ',' ELLIPSIS., ')'
     Reduce:
-      RPARAM -> [parameter_type_list]
+      ')' -> [parameter_type_list]
     Goto:
       (nil)
 
   State 302:
     Kernel Items:
-      parameter_list: parameter_list COMMA parameter_declaration., *
+      parameter_list: parameter_list ',' parameter_declaration., *
     Reduce:
       * -> [parameter_list]
     Goto:
@@ -12314,42 +12285,34 @@ Parser Debug States:
 
   State 303:
     Kernel Items:
-      struct_or_union_specifier: struct_or_union IDENTIFIER LCURL struct_declaration_list RCURL., *
-    Reduce:
-      * -> [struct_or_union_specifier]
-    Goto:
-      (nil)
-
-  State 304:
-    Kernel Items:
-      struct_declarator: COLON constant_expression., *
+      struct_declarator: ':' constant_expression., *
     Reduce:
       * -> [struct_declarator]
     Goto:
       (nil)
 
-  State 305:
+  State 304:
     Kernel Items:
-      struct_declarator: declarator COLON.constant_expression
+      struct_declarator: declarator ':'.constant_expression
     Reduce:
       (nil)
     Goto:
-      IDENTIFIER -> State 131
-      CONSTANT -> State 78
-      STRING_LITERAL -> State 97
-      SIZEOF -> State 96
-      INC_OP -> State 88
-      DEC_OP -> State 80
-      LPARAM -> State 89
-      MUL -> State 91
-      MINUS -> State 90
-      PLUS -> State 92
-      AND -> State 75
-      EXCLAIM -> State 83
-      TILDA -> State 99
+      IDENTIFIER -> State 139
+      CONSTANT -> State 86
+      STRING_LITERAL -> State 98
+      SIZEOF -> State 97
+      INC_OP -> State 95
+      DEC_OP -> State 88
+      '(' -> State 77
+      '*' -> State 78
+      '-' -> State 80
+      '+' -> State 79
+      '&' -> State 76
+      '!' -> State 75
+      '~' -> State 83
       primary_expression -> State 120
       postfix_expression -> State 119
-      unary_expression -> State 135
+      unary_expression -> State 142
       unary_operator -> State 127
       cast_expression -> State 104
       multiplicative_expression -> State 118
@@ -12362,54 +12325,62 @@ Parser Debug States:
       inclusive_or_expression -> State 112
       logical_and_expression -> State 116
       logical_or_expression -> State 117
-      conditional_expression -> State 133
+      conditional_expression -> State 140
       constant_expression -> State 329
 
-  State 306:
+  State 305:
     Kernel Items:
-      struct_declarator_list: struct_declarator_list COMMA.struct_declarator
+      struct_declarator_list: struct_declarator_list ','.struct_declarator
     Reduce:
       (nil)
     Goto:
-      IDENTIFIER -> State 10
-      LPARAM -> State 13
-      COLON -> State 235
-      MUL -> State 14
+      IDENTIFIER -> State 12
+      '(' -> State 3
+      ':' -> State 234
+      '*' -> State 4
       struct_declarator -> State 330
-      declarator -> State 236
+      declarator -> State 235
       direct_declarator -> State 29
       pointer -> State 33
 
-  State 307:
+  State 306:
     Kernel Items:
-      struct_declaration: specifier_qualifier_list struct_declarator_list SEMICOLON., *
+      struct_declaration: specifier_qualifier_list struct_declarator_list ';'., *
     Reduce:
       * -> [struct_declaration]
     Goto:
       (nil)
 
+  State 307:
+    Kernel Items:
+      struct_or_union_specifier: struct_or_union IDENTIFIER '{' struct_declaration_list '}'., *
+    Reduce:
+      * -> [struct_or_union_specifier]
+    Goto:
+      (nil)
+
   State 308:
     Kernel Items:
-      initializer: LCURL initializer_list COMMA.RCURL
-      initializer_list: initializer_list COMMA.initializer
+      initializer: '{' initializer_list ','.'}'
+      initializer_list: initializer_list ','.initializer
     Reduce:
       (nil)
     Goto:
-      IDENTIFIER -> State 131
-      CONSTANT -> State 78
-      STRING_LITERAL -> State 97
-      SIZEOF -> State 96
-      INC_OP -> State 88
-      DEC_OP -> State 80
-      LPARAM -> State 89
-      LCURL -> State 153
-      RCURL -> State 331
-      MUL -> State 91
-      MINUS -> State 90
-      PLUS -> State 92
-      AND -> State 75
-      EXCLAIM -> State 83
-      TILDA -> State 99
+      IDENTIFIER -> State 139
+      CONSTANT -> State 86
+      STRING_LITERAL -> State 98
+      SIZEOF -> State 97
+      INC_OP -> State 95
+      DEC_OP -> State 88
+      '(' -> State 77
+      '{' -> State 153
+      '}' -> State 331
+      '*' -> State 78
+      '-' -> State 80
+      '+' -> State 79
+      '&' -> State 76
+      '!' -> State 75
+      '~' -> State 83
       primary_expression -> State 120
       postfix_expression -> State 119
       unary_expression -> State 126
@@ -12431,7 +12402,7 @@ Parser Debug States:
 
   State 309:
     Kernel Items:
-      initializer: LCURL initializer_list RCURL., *
+      initializer: '{' initializer_list '}'., *
     Reduce:
       * -> [initializer]
     Goto:
@@ -12439,31 +12410,39 @@ Parser Debug States:
 
   State 310:
     Kernel Items:
-      labeled_statement: CASE constant_expression COLON statement., *
+      cast_expression: '(' type_name ')' cast_expression., *
     Reduce:
-      * -> [labeled_statement]
+      * -> [cast_expression]
     Goto:
       (nil)
 
   State 311:
     Kernel Items:
-      iteration_statement: DO statement WHILE LPARAM.expression RPARAM SEMICOLON
+      labeled_statement: CASE constant_expression ':' statement., *
+    Reduce:
+      * -> [labeled_statement]
+    Goto:
+      (nil)
+
+  State 312:
+    Kernel Items:
+      iteration_statement: DO statement WHILE '('.expression ')' ';'
     Reduce:
       (nil)
     Goto:
-      IDENTIFIER -> State 131
-      CONSTANT -> State 78
-      STRING_LITERAL -> State 97
-      SIZEOF -> State 96
-      INC_OP -> State 88
-      DEC_OP -> State 80
-      LPARAM -> State 89
-      MUL -> State 91
-      MINUS -> State 90
-      PLUS -> State 92
-      AND -> State 75
-      EXCLAIM -> State 83
-      TILDA -> State 99
+      IDENTIFIER -> State 139
+      CONSTANT -> State 86
+      STRING_LITERAL -> State 98
+      SIZEOF -> State 97
+      INC_OP -> State 95
+      DEC_OP -> State 88
+      '(' -> State 77
+      '*' -> State 78
+      '-' -> State 80
+      '+' -> State 79
+      '&' -> State 76
+      '!' -> State 75
+      '~' -> State 83
       primary_expression -> State 120
       postfix_expression -> State 119
       unary_expression -> State 126
@@ -12483,27 +12462,27 @@ Parser Debug States:
       assignment_expression -> State 103
       expression -> State 333
 
-  State 312:
+  State 313:
     Kernel Items:
-      iteration_statement: FOR LPARAM expression_statement expression_statement.RPARAM statement
-      iteration_statement: FOR LPARAM expression_statement expression_statement.expression RPARAM statement
+      iteration_statement: FOR '(' expression_statement expression_statement.')' statement
+      iteration_statement: FOR '(' expression_statement expression_statement.expression ')' statement
     Reduce:
       (nil)
     Goto:
-      IDENTIFIER -> State 131
-      CONSTANT -> State 78
-      STRING_LITERAL -> State 97
-      SIZEOF -> State 96
-      INC_OP -> State 88
-      DEC_OP -> State 80
-      LPARAM -> State 89
-      RPARAM -> State 334
-      MUL -> State 91
-      MINUS -> State 90
-      PLUS -> State 92
-      AND -> State 75
-      EXCLAIM -> State 83
-      TILDA -> State 99
+      IDENTIFIER -> State 139
+      CONSTANT -> State 86
+      STRING_LITERAL -> State 98
+      SIZEOF -> State 97
+      INC_OP -> State 95
+      DEC_OP -> State 88
+      '(' -> State 77
+      ')' -> State 334
+      '*' -> State 78
+      '-' -> State 80
+      '+' -> State 79
+      '&' -> State 76
+      '!' -> State 75
+      '~' -> State 83
       primary_expression -> State 120
       postfix_expression -> State 119
       unary_expression -> State 126
@@ -12523,39 +12502,39 @@ Parser Debug States:
       assignment_expression -> State 103
       expression -> State 335
 
-  State 313:
+  State 314:
     Kernel Items:
-      selection_statement: IF LPARAM expression RPARAM.statement
-      selection_statement: IF LPARAM expression RPARAM.statement ELSE statement
+      selection_statement: IF '(' expression ')'.statement
+      selection_statement: IF '(' expression ')'.statement ELSE statement
     Reduce:
       (nil)
     Goto:
-      IDENTIFIER -> State 86
-      CONSTANT -> State 78
-      STRING_LITERAL -> State 97
-      SIZEOF -> State 96
-      INC_OP -> State 88
-      DEC_OP -> State 80
-      CASE -> State 77
-      DEFAULT -> State 81
-      IF -> State 87
-      SWITCH -> State 98
+      IDENTIFIER -> State 93
+      CONSTANT -> State 86
+      STRING_LITERAL -> State 98
+      SIZEOF -> State 97
+      INC_OP -> State 95
+      DEC_OP -> State 88
+      CASE -> State 85
+      DEFAULT -> State 89
+      IF -> State 94
+      SWITCH -> State 99
       WHILE -> State 100
-      DO -> State 82
-      FOR -> State 84
-      GOTO -> State 85
-      CONTINUE -> State 79
-      BREAK -> State 76
-      RETURN -> State 94
-      LPARAM -> State 89
-      LCURL -> State 49
-      SEMICOLON -> State 95
-      MUL -> State 91
-      MINUS -> State 90
-      PLUS -> State 92
-      AND -> State 75
-      EXCLAIM -> State 83
-      TILDA -> State 99
+      DO -> State 90
+      FOR -> State 91
+      GOTO -> State 92
+      CONTINUE -> State 87
+      BREAK -> State 84
+      RETURN -> State 96
+      '(' -> State 77
+      '{' -> State 49
+      ';' -> State 81
+      '*' -> State 78
+      '-' -> State 80
+      '+' -> State 79
+      '&' -> State 76
+      '!' -> State 75
+      '~' -> State 83
       primary_expression -> State 120
       postfix_expression -> State 119
       unary_expression -> State 126
@@ -12582,17 +12561,9 @@ Parser Debug States:
       iteration_statement -> State 113
       jump_statement -> State 114
 
-  State 314:
-    Kernel Items:
-      cast_expression: LPARAM type_name RPARAM cast_expression., *
-    Reduce:
-      * -> [cast_expression]
-    Goto:
-      (nil)
-
   State 315:
     Kernel Items:
-      unary_expression: SIZEOF LPARAM type_name RPARAM., *
+      unary_expression: SIZEOF '(' type_name ')'., *
     Reduce:
       * -> [unary_expression]
     Goto:
@@ -12600,36 +12571,36 @@ Parser Debug States:
 
   State 316:
     Kernel Items:
-      selection_statement: SWITCH LPARAM expression RPARAM.statement
+      selection_statement: SWITCH '(' expression ')'.statement
     Reduce:
       (nil)
     Goto:
-      IDENTIFIER -> State 86
-      CONSTANT -> State 78
-      STRING_LITERAL -> State 97
-      SIZEOF -> State 96
-      INC_OP -> State 88
-      DEC_OP -> State 80
-      CASE -> State 77
-      DEFAULT -> State 81
-      IF -> State 87
-      SWITCH -> State 98
+      IDENTIFIER -> State 93
+      CONSTANT -> State 86
+      STRING_LITERAL -> State 98
+      SIZEOF -> State 97
+      INC_OP -> State 95
+      DEC_OP -> State 88
+      CASE -> State 85
+      DEFAULT -> State 89
+      IF -> State 94
+      SWITCH -> State 99
       WHILE -> State 100
-      DO -> State 82
-      FOR -> State 84
-      GOTO -> State 85
-      CONTINUE -> State 79
-      BREAK -> State 76
-      RETURN -> State 94
-      LPARAM -> State 89
-      LCURL -> State 49
-      SEMICOLON -> State 95
-      MUL -> State 91
-      MINUS -> State 90
-      PLUS -> State 92
-      AND -> State 75
-      EXCLAIM -> State 83
-      TILDA -> State 99
+      DO -> State 90
+      FOR -> State 91
+      GOTO -> State 92
+      CONTINUE -> State 87
+      BREAK -> State 84
+      RETURN -> State 96
+      '(' -> State 77
+      '{' -> State 49
+      ';' -> State 81
+      '*' -> State 78
+      '-' -> State 80
+      '+' -> State 79
+      '&' -> State 76
+      '!' -> State 75
+      '~' -> State 83
       primary_expression -> State 120
       postfix_expression -> State 119
       unary_expression -> State 126
@@ -12658,36 +12629,36 @@ Parser Debug States:
 
   State 317:
     Kernel Items:
-      iteration_statement: WHILE LPARAM expression RPARAM.statement
+      iteration_statement: WHILE '(' expression ')'.statement
     Reduce:
       (nil)
     Goto:
-      IDENTIFIER -> State 86
-      CONSTANT -> State 78
-      STRING_LITERAL -> State 97
-      SIZEOF -> State 96
-      INC_OP -> State 88
-      DEC_OP -> State 80
-      CASE -> State 77
-      DEFAULT -> State 81
-      IF -> State 87
-      SWITCH -> State 98
+      IDENTIFIER -> State 93
+      CONSTANT -> State 86
+      STRING_LITERAL -> State 98
+      SIZEOF -> State 97
+      INC_OP -> State 95
+      DEC_OP -> State 88
+      CASE -> State 85
+      DEFAULT -> State 89
+      IF -> State 94
+      SWITCH -> State 99
       WHILE -> State 100
-      DO -> State 82
-      FOR -> State 84
-      GOTO -> State 85
-      CONTINUE -> State 79
-      BREAK -> State 76
-      RETURN -> State 94
-      LPARAM -> State 89
-      LCURL -> State 49
-      SEMICOLON -> State 95
-      MUL -> State 91
-      MINUS -> State 90
-      PLUS -> State 92
-      AND -> State 75
-      EXCLAIM -> State 83
-      TILDA -> State 99
+      DO -> State 90
+      FOR -> State 91
+      GOTO -> State 92
+      CONTINUE -> State 87
+      BREAK -> State 84
+      RETURN -> State 96
+      '(' -> State 77
+      '{' -> State 49
+      ';' -> State 81
+      '*' -> State 78
+      '-' -> State 80
+      '+' -> State 79
+      '&' -> State 76
+      '!' -> State 75
+      '~' -> State 83
       primary_expression -> State 120
       postfix_expression -> State 119
       unary_expression -> State 126
@@ -12716,26 +12687,26 @@ Parser Debug States:
 
   State 318:
     Kernel Items:
-      conditional_expression: logical_or_expression QUESTION expression COLON.conditional_expression
+      conditional_expression: logical_or_expression '?' expression ':'.conditional_expression
     Reduce:
       (nil)
     Goto:
-      IDENTIFIER -> State 131
-      CONSTANT -> State 78
-      STRING_LITERAL -> State 97
-      SIZEOF -> State 96
-      INC_OP -> State 88
-      DEC_OP -> State 80
-      LPARAM -> State 89
-      MUL -> State 91
-      MINUS -> State 90
-      PLUS -> State 92
-      AND -> State 75
-      EXCLAIM -> State 83
-      TILDA -> State 99
+      IDENTIFIER -> State 139
+      CONSTANT -> State 86
+      STRING_LITERAL -> State 98
+      SIZEOF -> State 97
+      INC_OP -> State 95
+      DEC_OP -> State 88
+      '(' -> State 77
+      '*' -> State 78
+      '-' -> State 80
+      '+' -> State 79
+      '&' -> State 76
+      '!' -> State 75
+      '~' -> State 83
       primary_expression -> State 120
       postfix_expression -> State 119
-      unary_expression -> State 135
+      unary_expression -> State 142
       unary_operator -> State 127
       cast_expression -> State 104
       multiplicative_expression -> State 118
@@ -12752,7 +12723,7 @@ Parser Debug States:
 
   State 319:
     Kernel Items:
-      postfix_expression: postfix_expression LBRACE expression RBRACE., *
+      postfix_expression: postfix_expression '(' argument_expression_list ')'., *
     Reduce:
       * -> [postfix_expression]
     Goto:
@@ -12760,23 +12731,23 @@ Parser Debug States:
 
   State 320:
     Kernel Items:
-      argument_expression_list: argument_expression_list COMMA.assignment_expression
+      argument_expression_list: argument_expression_list ','.assignment_expression
     Reduce:
       (nil)
     Goto:
-      IDENTIFIER -> State 131
-      CONSTANT -> State 78
-      STRING_LITERAL -> State 97
-      SIZEOF -> State 96
-      INC_OP -> State 88
-      DEC_OP -> State 80
-      LPARAM -> State 89
-      MUL -> State 91
-      MINUS -> State 90
-      PLUS -> State 92
-      AND -> State 75
-      EXCLAIM -> State 83
-      TILDA -> State 99
+      IDENTIFIER -> State 139
+      CONSTANT -> State 86
+      STRING_LITERAL -> State 98
+      SIZEOF -> State 97
+      INC_OP -> State 95
+      DEC_OP -> State 88
+      '(' -> State 77
+      '*' -> State 78
+      '-' -> State 80
+      '+' -> State 79
+      '&' -> State 76
+      '!' -> State 75
+      '~' -> State 83
       primary_expression -> State 120
       postfix_expression -> State 119
       unary_expression -> State 126
@@ -12797,7 +12768,7 @@ Parser Debug States:
 
   State 321:
     Kernel Items:
-      postfix_expression: postfix_expression LPARAM argument_expression_list RPARAM., *
+      postfix_expression: postfix_expression '[' expression ']'., *
     Reduce:
       * -> [postfix_expression]
     Goto:
@@ -12805,7 +12776,7 @@ Parser Debug States:
 
   State 322:
     Kernel Items:
-      direct_abstract_declarator: LBRACE constant_expression RBRACE., *
+      direct_abstract_declarator: '(' abstract_declarator ')'., *
     Reduce:
       * -> [direct_abstract_declarator]
     Goto:
@@ -12813,7 +12784,7 @@ Parser Debug States:
 
   State 323:
     Kernel Items:
-      direct_abstract_declarator: LPARAM abstract_declarator RPARAM., *
+      direct_abstract_declarator: '(' parameter_type_list ')'., *
     Reduce:
       * -> [direct_abstract_declarator]
     Goto:
@@ -12821,7 +12792,7 @@ Parser Debug States:
 
   State 324:
     Kernel Items:
-      direct_abstract_declarator: LPARAM parameter_type_list RPARAM., *
+      direct_abstract_declarator: '[' constant_expression ']'., *
     Reduce:
       * -> [direct_abstract_declarator]
     Goto:
@@ -12829,7 +12800,7 @@ Parser Debug States:
 
   State 325:
     Kernel Items:
-      direct_abstract_declarator: direct_abstract_declarator LBRACE RBRACE., *
+      direct_abstract_declarator: direct_abstract_declarator '(' ')'., *
     Reduce:
       * -> [direct_abstract_declarator]
     Goto:
@@ -12837,15 +12808,15 @@ Parser Debug States:
 
   State 326:
     Kernel Items:
-      direct_abstract_declarator: direct_abstract_declarator LBRACE constant_expression.RBRACE
+      direct_abstract_declarator: direct_abstract_declarator '(' parameter_type_list.')'
     Reduce:
       (nil)
     Goto:
-      RBRACE -> State 343
+      ')' -> State 343
 
   State 327:
     Kernel Items:
-      direct_abstract_declarator: direct_abstract_declarator LPARAM RPARAM., *
+      direct_abstract_declarator: direct_abstract_declarator '[' ']'., *
     Reduce:
       * -> [direct_abstract_declarator]
     Goto:
@@ -12853,15 +12824,15 @@ Parser Debug States:
 
   State 328:
     Kernel Items:
-      direct_abstract_declarator: direct_abstract_declarator LPARAM parameter_type_list.RPARAM
+      direct_abstract_declarator: direct_abstract_declarator '[' constant_expression.']'
     Reduce:
       (nil)
     Goto:
-      RPARAM -> State 344
+      ']' -> State 344
 
   State 329:
     Kernel Items:
-      struct_declarator: declarator COLON constant_expression., *
+      struct_declarator: declarator ':' constant_expression., *
     Reduce:
       * -> [struct_declarator]
     Goto:
@@ -12869,7 +12840,7 @@ Parser Debug States:
 
   State 330:
     Kernel Items:
-      struct_declarator_list: struct_declarator_list COMMA struct_declarator., *
+      struct_declarator_list: struct_declarator_list ',' struct_declarator., *
     Reduce:
       * -> [struct_declarator_list]
     Goto:
@@ -12877,7 +12848,7 @@ Parser Debug States:
 
   State 331:
     Kernel Items:
-      initializer: LCURL initializer_list COMMA RCURL., *
+      initializer: '{' initializer_list ',' '}'., *
     Reduce:
       * -> [initializer]
     Goto:
@@ -12885,7 +12856,7 @@ Parser Debug States:
 
   State 332:
     Kernel Items:
-      initializer_list: initializer_list COMMA initializer., *
+      initializer_list: initializer_list ',' initializer., *
     Reduce:
       * -> [initializer_list]
     Goto:
@@ -12893,46 +12864,46 @@ Parser Debug States:
 
   State 333:
     Kernel Items:
-      expression: expression.COMMA assignment_expression
-      iteration_statement: DO statement WHILE LPARAM expression.RPARAM SEMICOLON
+      expression: expression.',' assignment_expression
+      iteration_statement: DO statement WHILE '(' expression.')' ';'
     Reduce:
       (nil)
     Goto:
-      RPARAM -> State 345
-      COMMA -> State 187
+      ')' -> State 345
+      ',' -> State 187
 
   State 334:
     Kernel Items:
-      iteration_statement: FOR LPARAM expression_statement expression_statement RPARAM.statement
+      iteration_statement: FOR '(' expression_statement expression_statement ')'.statement
     Reduce:
       (nil)
     Goto:
-      IDENTIFIER -> State 86
-      CONSTANT -> State 78
-      STRING_LITERAL -> State 97
-      SIZEOF -> State 96
-      INC_OP -> State 88
-      DEC_OP -> State 80
-      CASE -> State 77
-      DEFAULT -> State 81
-      IF -> State 87
-      SWITCH -> State 98
+      IDENTIFIER -> State 93
+      CONSTANT -> State 86
+      STRING_LITERAL -> State 98
+      SIZEOF -> State 97
+      INC_OP -> State 95
+      DEC_OP -> State 88
+      CASE -> State 85
+      DEFAULT -> State 89
+      IF -> State 94
+      SWITCH -> State 99
       WHILE -> State 100
-      DO -> State 82
-      FOR -> State 84
-      GOTO -> State 85
-      CONTINUE -> State 79
-      BREAK -> State 76
-      RETURN -> State 94
-      LPARAM -> State 89
-      LCURL -> State 49
-      SEMICOLON -> State 95
-      MUL -> State 91
-      MINUS -> State 90
-      PLUS -> State 92
-      AND -> State 75
-      EXCLAIM -> State 83
-      TILDA -> State 99
+      DO -> State 90
+      FOR -> State 91
+      GOTO -> State 92
+      CONTINUE -> State 87
+      BREAK -> State 84
+      RETURN -> State 96
+      '(' -> State 77
+      '{' -> State 49
+      ';' -> State 81
+      '*' -> State 78
+      '-' -> State 80
+      '+' -> State 79
+      '&' -> State 76
+      '!' -> State 75
+      '~' -> State 83
       primary_expression -> State 120
       postfix_expression -> State 119
       unary_expression -> State 126
@@ -12961,18 +12932,18 @@ Parser Debug States:
 
   State 335:
     Kernel Items:
-      expression: expression.COMMA assignment_expression
-      iteration_statement: FOR LPARAM expression_statement expression_statement expression.RPARAM statement
+      expression: expression.',' assignment_expression
+      iteration_statement: FOR '(' expression_statement expression_statement expression.')' statement
     Reduce:
       (nil)
     Goto:
-      RPARAM -> State 347
-      COMMA -> State 187
+      ')' -> State 347
+      ',' -> State 187
 
   State 336:
     Kernel Items:
-      selection_statement: IF LPARAM expression RPARAM statement., *
-      selection_statement: IF LPARAM expression RPARAM statement.ELSE statement
+      selection_statement: IF '(' expression ')' statement., *
+      selection_statement: IF '(' expression ')' statement.ELSE statement
     Reduce:
       * -> [selection_statement]
     Goto:
@@ -12980,62 +12951,62 @@ Parser Debug States:
 
   State 337:
     Kernel Items:
-      selection_statement: IF LPARAM expression RPARAM statement., AND
-      selection_statement: IF LPARAM expression RPARAM statement., BREAK
-      selection_statement: IF LPARAM expression RPARAM statement., CASE
-      selection_statement: IF LPARAM expression RPARAM statement., CONSTANT
-      selection_statement: IF LPARAM expression RPARAM statement., CONTINUE
-      selection_statement: IF LPARAM expression RPARAM statement., DEC_OP
-      selection_statement: IF LPARAM expression RPARAM statement., DEFAULT
-      selection_statement: IF LPARAM expression RPARAM statement., DO
-      selection_statement: IF LPARAM expression RPARAM statement., ELSE
-      selection_statement: IF LPARAM expression RPARAM statement., EXCLAIM
-      selection_statement: IF LPARAM expression RPARAM statement., FOR
-      selection_statement: IF LPARAM expression RPARAM statement., GOTO
-      selection_statement: IF LPARAM expression RPARAM statement., IDENTIFIER
-      selection_statement: IF LPARAM expression RPARAM statement., IF
-      selection_statement: IF LPARAM expression RPARAM statement., INC_OP
-      selection_statement: IF LPARAM expression RPARAM statement., LCURL
-      selection_statement: IF LPARAM expression RPARAM statement., LPARAM
-      selection_statement: IF LPARAM expression RPARAM statement., MINUS
-      selection_statement: IF LPARAM expression RPARAM statement., MUL
-      selection_statement: IF LPARAM expression RPARAM statement., PLUS
-      selection_statement: IF LPARAM expression RPARAM statement., RCURL
-      selection_statement: IF LPARAM expression RPARAM statement., RETURN
-      selection_statement: IF LPARAM expression RPARAM statement., SEMICOLON
-      selection_statement: IF LPARAM expression RPARAM statement., SIZEOF
-      selection_statement: IF LPARAM expression RPARAM statement., STRING_LITERAL
-      selection_statement: IF LPARAM expression RPARAM statement., SWITCH
-      selection_statement: IF LPARAM expression RPARAM statement., TILDA
-      selection_statement: IF LPARAM expression RPARAM statement., WHILE
-      selection_statement: IF LPARAM expression RPARAM statement.ELSE statement , AND
-      selection_statement: IF LPARAM expression RPARAM statement.ELSE statement , BREAK
-      selection_statement: IF LPARAM expression RPARAM statement.ELSE statement , CASE
-      selection_statement: IF LPARAM expression RPARAM statement.ELSE statement , CONSTANT
-      selection_statement: IF LPARAM expression RPARAM statement.ELSE statement , CONTINUE
-      selection_statement: IF LPARAM expression RPARAM statement.ELSE statement , DEC_OP
-      selection_statement: IF LPARAM expression RPARAM statement.ELSE statement , DEFAULT
-      selection_statement: IF LPARAM expression RPARAM statement.ELSE statement , DO
-      selection_statement: IF LPARAM expression RPARAM statement.ELSE statement , ELSE
-      selection_statement: IF LPARAM expression RPARAM statement.ELSE statement , EXCLAIM
-      selection_statement: IF LPARAM expression RPARAM statement.ELSE statement , FOR
-      selection_statement: IF LPARAM expression RPARAM statement.ELSE statement , GOTO
-      selection_statement: IF LPARAM expression RPARAM statement.ELSE statement , IDENTIFIER
-      selection_statement: IF LPARAM expression RPARAM statement.ELSE statement , IF
-      selection_statement: IF LPARAM expression RPARAM statement.ELSE statement , INC_OP
-      selection_statement: IF LPARAM expression RPARAM statement.ELSE statement , LCURL
-      selection_statement: IF LPARAM expression RPARAM statement.ELSE statement , LPARAM
-      selection_statement: IF LPARAM expression RPARAM statement.ELSE statement , MINUS
-      selection_statement: IF LPARAM expression RPARAM statement.ELSE statement , MUL
-      selection_statement: IF LPARAM expression RPARAM statement.ELSE statement , PLUS
-      selection_statement: IF LPARAM expression RPARAM statement.ELSE statement , RCURL
-      selection_statement: IF LPARAM expression RPARAM statement.ELSE statement , RETURN
-      selection_statement: IF LPARAM expression RPARAM statement.ELSE statement , SEMICOLON
-      selection_statement: IF LPARAM expression RPARAM statement.ELSE statement , SIZEOF
-      selection_statement: IF LPARAM expression RPARAM statement.ELSE statement , STRING_LITERAL
-      selection_statement: IF LPARAM expression RPARAM statement.ELSE statement , SWITCH
-      selection_statement: IF LPARAM expression RPARAM statement.ELSE statement , TILDA
-      selection_statement: IF LPARAM expression RPARAM statement.ELSE statement , WHILE
+      selection_statement: IF '(' expression ')' statement., '!'
+      selection_statement: IF '(' expression ')' statement., '&'
+      selection_statement: IF '(' expression ')' statement., '('
+      selection_statement: IF '(' expression ')' statement., '*'
+      selection_statement: IF '(' expression ')' statement., '+'
+      selection_statement: IF '(' expression ')' statement., '-'
+      selection_statement: IF '(' expression ')' statement., ';'
+      selection_statement: IF '(' expression ')' statement., '{'
+      selection_statement: IF '(' expression ')' statement., '}'
+      selection_statement: IF '(' expression ')' statement., '~'
+      selection_statement: IF '(' expression ')' statement., BREAK
+      selection_statement: IF '(' expression ')' statement., CASE
+      selection_statement: IF '(' expression ')' statement., CONSTANT
+      selection_statement: IF '(' expression ')' statement., CONTINUE
+      selection_statement: IF '(' expression ')' statement., DEC_OP
+      selection_statement: IF '(' expression ')' statement., DEFAULT
+      selection_statement: IF '(' expression ')' statement., DO
+      selection_statement: IF '(' expression ')' statement., ELSE
+      selection_statement: IF '(' expression ')' statement., FOR
+      selection_statement: IF '(' expression ')' statement., GOTO
+      selection_statement: IF '(' expression ')' statement., IDENTIFIER
+      selection_statement: IF '(' expression ')' statement., IF
+      selection_statement: IF '(' expression ')' statement., INC_OP
+      selection_statement: IF '(' expression ')' statement., RETURN
+      selection_statement: IF '(' expression ')' statement., SIZEOF
+      selection_statement: IF '(' expression ')' statement., STRING_LITERAL
+      selection_statement: IF '(' expression ')' statement., SWITCH
+      selection_statement: IF '(' expression ')' statement., WHILE
+      selection_statement: IF '(' expression ')' statement.ELSE statement , '!'
+      selection_statement: IF '(' expression ')' statement.ELSE statement , '&'
+      selection_statement: IF '(' expression ')' statement.ELSE statement , '('
+      selection_statement: IF '(' expression ')' statement.ELSE statement , '*'
+      selection_statement: IF '(' expression ')' statement.ELSE statement , '+'
+      selection_statement: IF '(' expression ')' statement.ELSE statement , '-'
+      selection_statement: IF '(' expression ')' statement.ELSE statement , ';'
+      selection_statement: IF '(' expression ')' statement.ELSE statement , '{'
+      selection_statement: IF '(' expression ')' statement.ELSE statement , '}'
+      selection_statement: IF '(' expression ')' statement.ELSE statement , '~'
+      selection_statement: IF '(' expression ')' statement.ELSE statement , BREAK
+      selection_statement: IF '(' expression ')' statement.ELSE statement , CASE
+      selection_statement: IF '(' expression ')' statement.ELSE statement , CONSTANT
+      selection_statement: IF '(' expression ')' statement.ELSE statement , CONTINUE
+      selection_statement: IF '(' expression ')' statement.ELSE statement , DEC_OP
+      selection_statement: IF '(' expression ')' statement.ELSE statement , DEFAULT
+      selection_statement: IF '(' expression ')' statement.ELSE statement , DO
+      selection_statement: IF '(' expression ')' statement.ELSE statement , ELSE
+      selection_statement: IF '(' expression ')' statement.ELSE statement , FOR
+      selection_statement: IF '(' expression ')' statement.ELSE statement , GOTO
+      selection_statement: IF '(' expression ')' statement.ELSE statement , IDENTIFIER
+      selection_statement: IF '(' expression ')' statement.ELSE statement , IF
+      selection_statement: IF '(' expression ')' statement.ELSE statement , INC_OP
+      selection_statement: IF '(' expression ')' statement.ELSE statement , RETURN
+      selection_statement: IF '(' expression ')' statement.ELSE statement , SIZEOF
+      selection_statement: IF '(' expression ')' statement.ELSE statement , STRING_LITERAL
+      selection_statement: IF '(' expression ')' statement.ELSE statement , SWITCH
+      selection_statement: IF '(' expression ')' statement.ELSE statement , WHILE
     Reduce:
       IDENTIFIER -> [selection_statement]
       CONSTANT -> [selection_statement]
@@ -13055,16 +13026,16 @@ Parser Debug States:
       CONTINUE -> [selection_statement]
       BREAK -> [selection_statement]
       RETURN -> [selection_statement]
-      LPARAM -> [selection_statement]
-      LCURL -> [selection_statement]
-      RCURL -> [selection_statement]
-      SEMICOLON -> [selection_statement]
-      MUL -> [selection_statement]
-      MINUS -> [selection_statement]
-      PLUS -> [selection_statement]
-      AND -> [selection_statement]
-      EXCLAIM -> [selection_statement]
-      TILDA -> [selection_statement]
+      '(' -> [selection_statement]
+      '{' -> [selection_statement]
+      '}' -> [selection_statement]
+      ';' -> [selection_statement]
+      '*' -> [selection_statement]
+      '-' -> [selection_statement]
+      '+' -> [selection_statement]
+      '&' -> [selection_statement]
+      '!' -> [selection_statement]
+      '~' -> [selection_statement]
     Goto:
       ELSE -> State 348
     Shift/reduce conflict symbols:
@@ -13072,10 +13043,10 @@ Parser Debug States:
 
   State 338:
     Kernel Items:
-      selection_statement: IF LPARAM expression RPARAM statement., ELSE
-      selection_statement: IF LPARAM expression RPARAM statement., WHILE
-      selection_statement: IF LPARAM expression RPARAM statement.ELSE statement , ELSE
-      selection_statement: IF LPARAM expression RPARAM statement.ELSE statement , WHILE
+      selection_statement: IF '(' expression ')' statement., ELSE
+      selection_statement: IF '(' expression ')' statement., WHILE
+      selection_statement: IF '(' expression ')' statement.ELSE statement , ELSE
+      selection_statement: IF '(' expression ')' statement.ELSE statement , WHILE
     Reduce:
       ELSE -> [selection_statement]
       WHILE -> [selection_statement]
@@ -13086,7 +13057,7 @@ Parser Debug States:
 
   State 339:
     Kernel Items:
-      selection_statement: SWITCH LPARAM expression RPARAM statement., *
+      selection_statement: SWITCH '(' expression ')' statement., *
     Reduce:
       * -> [selection_statement]
     Goto:
@@ -13094,7 +13065,7 @@ Parser Debug States:
 
   State 340:
     Kernel Items:
-      iteration_statement: WHILE LPARAM expression RPARAM statement., *
+      iteration_statement: WHILE '(' expression ')' statement., *
     Reduce:
       * -> [iteration_statement]
     Goto:
@@ -13102,7 +13073,7 @@ Parser Debug States:
 
   State 341:
     Kernel Items:
-      conditional_expression: logical_or_expression QUESTION expression COLON conditional_expression., *
+      conditional_expression: logical_or_expression '?' expression ':' conditional_expression., *
     Reduce:
       * -> [conditional_expression]
     Goto:
@@ -13110,7 +13081,7 @@ Parser Debug States:
 
   State 342:
     Kernel Items:
-      argument_expression_list: argument_expression_list COMMA assignment_expression., *
+      argument_expression_list: argument_expression_list ',' assignment_expression., *
     Reduce:
       * -> [argument_expression_list]
     Goto:
@@ -13118,7 +13089,7 @@ Parser Debug States:
 
   State 343:
     Kernel Items:
-      direct_abstract_declarator: direct_abstract_declarator LBRACE constant_expression RBRACE., *
+      direct_abstract_declarator: direct_abstract_declarator '(' parameter_type_list ')'., *
     Reduce:
       * -> [direct_abstract_declarator]
     Goto:
@@ -13126,7 +13097,7 @@ Parser Debug States:
 
   State 344:
     Kernel Items:
-      direct_abstract_declarator: direct_abstract_declarator LPARAM parameter_type_list RPARAM., *
+      direct_abstract_declarator: direct_abstract_declarator '[' constant_expression ']'., *
     Reduce:
       * -> [direct_abstract_declarator]
     Goto:
@@ -13134,15 +13105,15 @@ Parser Debug States:
 
   State 345:
     Kernel Items:
-      iteration_statement: DO statement WHILE LPARAM expression RPARAM.SEMICOLON
+      iteration_statement: DO statement WHILE '(' expression ')'.';'
     Reduce:
       (nil)
     Goto:
-      SEMICOLON -> State 349
+      ';' -> State 349
 
   State 346:
     Kernel Items:
-      iteration_statement: FOR LPARAM expression_statement expression_statement RPARAM statement., *
+      iteration_statement: FOR '(' expression_statement expression_statement ')' statement., *
     Reduce:
       * -> [iteration_statement]
     Goto:
@@ -13150,36 +13121,36 @@ Parser Debug States:
 
   State 347:
     Kernel Items:
-      iteration_statement: FOR LPARAM expression_statement expression_statement expression RPARAM.statement
+      iteration_statement: FOR '(' expression_statement expression_statement expression ')'.statement
     Reduce:
       (nil)
     Goto:
-      IDENTIFIER -> State 86
-      CONSTANT -> State 78
-      STRING_LITERAL -> State 97
-      SIZEOF -> State 96
-      INC_OP -> State 88
-      DEC_OP -> State 80
-      CASE -> State 77
-      DEFAULT -> State 81
-      IF -> State 87
-      SWITCH -> State 98
+      IDENTIFIER -> State 93
+      CONSTANT -> State 86
+      STRING_LITERAL -> State 98
+      SIZEOF -> State 97
+      INC_OP -> State 95
+      DEC_OP -> State 88
+      CASE -> State 85
+      DEFAULT -> State 89
+      IF -> State 94
+      SWITCH -> State 99
       WHILE -> State 100
-      DO -> State 82
-      FOR -> State 84
-      GOTO -> State 85
-      CONTINUE -> State 79
-      BREAK -> State 76
-      RETURN -> State 94
-      LPARAM -> State 89
-      LCURL -> State 49
-      SEMICOLON -> State 95
-      MUL -> State 91
-      MINUS -> State 90
-      PLUS -> State 92
-      AND -> State 75
-      EXCLAIM -> State 83
-      TILDA -> State 99
+      DO -> State 90
+      FOR -> State 91
+      GOTO -> State 92
+      CONTINUE -> State 87
+      BREAK -> State 84
+      RETURN -> State 96
+      '(' -> State 77
+      '{' -> State 49
+      ';' -> State 81
+      '*' -> State 78
+      '-' -> State 80
+      '+' -> State 79
+      '&' -> State 76
+      '!' -> State 75
+      '~' -> State 83
       primary_expression -> State 120
       postfix_expression -> State 119
       unary_expression -> State 126
@@ -13208,36 +13179,36 @@ Parser Debug States:
 
   State 348:
     Kernel Items:
-      selection_statement: IF LPARAM expression RPARAM statement ELSE.statement
+      selection_statement: IF '(' expression ')' statement ELSE.statement
     Reduce:
       (nil)
     Goto:
-      IDENTIFIER -> State 86
-      CONSTANT -> State 78
-      STRING_LITERAL -> State 97
-      SIZEOF -> State 96
-      INC_OP -> State 88
-      DEC_OP -> State 80
-      CASE -> State 77
-      DEFAULT -> State 81
-      IF -> State 87
-      SWITCH -> State 98
+      IDENTIFIER -> State 93
+      CONSTANT -> State 86
+      STRING_LITERAL -> State 98
+      SIZEOF -> State 97
+      INC_OP -> State 95
+      DEC_OP -> State 88
+      CASE -> State 85
+      DEFAULT -> State 89
+      IF -> State 94
+      SWITCH -> State 99
       WHILE -> State 100
-      DO -> State 82
-      FOR -> State 84
-      GOTO -> State 85
-      CONTINUE -> State 79
-      BREAK -> State 76
-      RETURN -> State 94
-      LPARAM -> State 89
-      LCURL -> State 49
-      SEMICOLON -> State 95
-      MUL -> State 91
-      MINUS -> State 90
-      PLUS -> State 92
-      AND -> State 75
-      EXCLAIM -> State 83
-      TILDA -> State 99
+      DO -> State 90
+      FOR -> State 91
+      GOTO -> State 92
+      CONTINUE -> State 87
+      BREAK -> State 84
+      RETURN -> State 96
+      '(' -> State 77
+      '{' -> State 49
+      ';' -> State 81
+      '*' -> State 78
+      '-' -> State 80
+      '+' -> State 79
+      '&' -> State 76
+      '!' -> State 75
+      '~' -> State 83
       primary_expression -> State 120
       postfix_expression -> State 119
       unary_expression -> State 126
@@ -13266,7 +13237,7 @@ Parser Debug States:
 
   State 349:
     Kernel Items:
-      iteration_statement: DO statement WHILE LPARAM expression RPARAM SEMICOLON., *
+      iteration_statement: DO statement WHILE '(' expression ')' ';'., *
     Reduce:
       * -> [iteration_statement]
     Goto:
@@ -13274,7 +13245,7 @@ Parser Debug States:
 
   State 350:
     Kernel Items:
-      iteration_statement: FOR LPARAM expression_statement expression_statement expression RPARAM statement., *
+      iteration_statement: FOR '(' expression_statement expression_statement expression ')' statement., *
     Reduce:
       * -> [iteration_statement]
     Goto:
@@ -13282,7 +13253,7 @@ Parser Debug States:
 
   State 351:
     Kernel Items:
-      selection_statement: IF LPARAM expression RPARAM statement ELSE statement., *
+      selection_statement: IF '(' expression ')' statement ELSE statement., *
     Reduce:
       * -> [selection_statement]
     Goto:

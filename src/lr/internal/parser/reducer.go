@@ -123,15 +123,37 @@ func (Reducer) IdentToNonemptyIdentList(ident *Token) ([]*Token, error) {
 	return []*Token{ident}, nil
 }
 
-func (Reducer) NonEmptyListToIdentList(
-	nonEmptyList []*Token) (
+func (Reducer) AddIdToNonemptyIdOrCharList(
+	list []*Token,
+	id *Token) (
 	[]*Token,
 	error) {
 
-	return nonEmptyList, nil
+	return append(list, id), nil
 }
 
-func (Reducer) NilToIdentList() ([]*Token, error) {
+func (Reducer) AddCharToNonemptyIdOrCharList(
+	list []*Token,
+	char *Token) (
+	[]*Token,
+	error) {
+
+	return append(list, char), nil
+}
+
+func (Reducer) IdToNonemptyIdOrCharList(id *Token) ([]*Token, error) {
+	return []*Token{id}, nil
+}
+
+func (Reducer) CharToNonemptyIdOrCharList(char *Token) ([]*Token, error) {
+	return []*Token{char}, nil
+}
+
+func (Reducer) ListToIdOrCharList(list []*Token) ([]*Token, error) {
+	return list, nil
+}
+
+func (Reducer) NilToIdOrCharList() ([]*Token, error) {
 	return []*Token{}, nil
 }
 

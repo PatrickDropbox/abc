@@ -15,7 +15,10 @@ const (
 )
 
 type Clause struct {
-	*parser.Clause
+	SortId int // 0 is reserved for the start rule.
+	parser.LRLocation
+
+	Label string
 
 	Bindings []*Term
 
@@ -29,12 +32,14 @@ type Term struct {
 	Name string
 	parser.LRLocation
 
-	*parser.TermDeclaration
+	SymbolId parser.LRSymbolId
 
-	// Rule and ClauseBindings are nil iff the term is terminal
-	*parser.Rule
+	IsTerminal bool
 
-	Clauses []*Clause
+	ValueType string
+
+	RuleLocation parser.LRLocation
+	Clauses      []*Clause
 
 	Reachable bool
 
@@ -62,7 +67,7 @@ func classifyDefinitions(
 	parsed []parser.Definition) (
 	map[string]*Term,
 	map[string]*parser.Rule,
-    []string,  // start rule(s)
+	[]string, // start rule(s)
 	[]string) { // error strings
 
 	terms := map[string]*Term{}
@@ -74,6 +79,7 @@ func classifyDefinitions(
 
 	errStrs := []string{}
 
+	sortId := 1
 	for _, d := range parsed {
 		switch def := d.(type) {
 		case *parser.StartDeclaration:
@@ -90,10 +96,6 @@ func classifyDefinitions(
 
 		case *parser.TermDeclaration:
 			for _, term := range def.Terms {
-				if def.ValueType == nil {
-					def.ValueType = &parser.Token{Value: Generic}
-				}
-
 				prev, ok := terms[term.Value]
 				if ok {
 					errStrs = append(
@@ -105,12 +107,18 @@ func classifyDefinitions(
 							term.LRLocation.ShortString()))
 				}
 
+				valueType := Generic
+				if def.ValueType != nil {
+					valueType = def.ValueType.Value
+				}
+
 				terms[term.Value] = &Term{
-					Name:            term.Value,
-					LRLocation:      term.LRLocation,
-					TermDeclaration: def,
-					Rule:            nil,
-					Reachable:       false,
+					Name:       term.Value,
+					LRLocation: term.LRLocation,
+					SymbolId:   term.Id(),
+					IsTerminal: def.IsTerminal,
+					ValueType:  valueType,
+					Reachable:  false,
 				}
 			}
 
@@ -130,30 +138,35 @@ func classifyDefinitions(
 						def.Loc().ShortString()))
 			}
 			rules[def.Name.Value] = def
+
+			for _, clause := range def.Clauses {
+				clause.SortId = sortId
+				sortId += 1
+			}
 		}
 	}
 
-    startRules := []string{}
-    if start != nil {
-        ids := map[string]parser.LRLocation{}
-        for _, id := range start.Ids {
-            prev, ok := ids[id.Value]
-            if ok {
-                errStrs = append(
-                    errStrs,
-                    fmt.Sprintf(
-                        "Duplicate start entry: %s %s %s",
-                        id.Value,
-                        prev.ShortString(),
-                        id.Loc().ShortString()))
-            } else {
-                ids[id.Value] = id.Loc()
-                startRules = append(startRules, id.Value)
-            }
-        }
-    } else {
-        startRules = append(startRules, firstRuleName)
-    }
+	startRules := []string{}
+	if start != nil {
+		ids := map[string]parser.LRLocation{}
+		for _, id := range start.Ids {
+			prev, ok := ids[id.Value]
+			if ok {
+				errStrs = append(
+					errStrs,
+					fmt.Sprintf(
+						"Duplicate start entry: %s %s %s",
+						id.Value,
+						prev.ShortString(),
+						id.Loc().ShortString()))
+			} else {
+				ids[id.Value] = id.Loc()
+				startRules = append(startRules, id.Value)
+			}
+		}
+	} else {
+		startRules = append(startRules, firstRuleName)
+	}
 
 	return terms, rules, startRules, errStrs
 }
@@ -162,8 +175,8 @@ func bindTerms(
 	terms map[string]*Term,
 	rules map[string]*parser.Rule,
 	startRuleNames []string) (
-    []*Term,
-    []string) {
+	[]*Term,
+	[]string) {
 
 	errStrs := []string{}
 
@@ -176,14 +189,23 @@ func bindTerms(
 			continue
 		}
 
-		term.Rule = rule
+		term.RuleLocation = rule.Loc()
 
 		clauses := []*Clause{}
-		for _, clause := range rule.Clauses {
-			clause := &Clause{Clause: clause, Bindings: []*Term{}}
+		for _, parsedClause := range rule.Clauses {
+			label := ""
+			if parsedClause.Label != nil {
+				label = parsedClause.Label.Value
+			}
+			clause := &Clause{
+				SortId:     parsedClause.SortId,
+				LRLocation: parsedClause.LRLocation,
+				Label:      label,
+				Bindings:   []*Term{},
+			}
 
-			for _, id := range clause.Body {
-				t, ok := terms[id.Value]
+			for _, id_or_char := range parsedClause.Body {
+				t, ok := terms[id_or_char.Value]
 				if ok {
 					clause.Bindings = append(clause.Bindings, t)
 				} else {
@@ -191,8 +213,8 @@ func bindTerms(
 						errStrs,
 						fmt.Sprintf(
 							"Undefined token/type: %s %v",
-							id.Value,
-							id.Loc()))
+							id_or_char.Value,
+							id_or_char.Loc()))
 				}
 			}
 
@@ -203,34 +225,35 @@ func bindTerms(
 	}
 
 	for name, term := range terms {
-		if !term.IsTerminal && term.Rule == nil {
+		rule, ok := rules[name]
+		if !term.IsTerminal && !ok {
 			errStrs = append(
 				errStrs,
 				fmt.Sprintf(
 					"No rule specified for type: %s %v",
 					name,
 					term.LRLocation))
-		} else if term.IsTerminal && term.Rule != nil {
+		} else if term.IsTerminal && ok {
 			errStrs = append(
 				errStrs,
 				fmt.Sprintf(
 					"token cannot have associated rule: %s %v",
 					name,
-					term.Rule.Loc()))
+					rule.Loc()))
 		}
 	}
 
-    startTerms := []*Term{}
-    for _, name := range startRuleNames {
-        startTerm, ok := terms[name]
-        if !ok || startTerm.IsTerminal {
-            errStrs = append(
-                errStrs,
-                fmt.Sprintf("Invalid start rule: %s", name))
-        } else {
-            startTerms = append(startTerms, startTerm)
-        }
-    }
+	startTerms := []*Term{}
+	for _, name := range startRuleNames {
+		startTerm, ok := terms[name]
+		if !ok || startTerm.IsTerminal {
+			errStrs = append(
+				errStrs,
+				fmt.Sprintf("Invalid start rule: %s", name))
+		} else {
+			startTerms = append(startTerms, startTerm)
+		}
+	}
 
 	return startTerms, errStrs
 }
@@ -241,7 +264,7 @@ func checkReachability(starts []*Term, terms map[string]*Term) []string {
 	}
 
 	exploreSet := map[string]*Term{}
-    for _, start := range starts {
+	for _, start := range starts {
 		exploreSet[start.Name] = start
 	}
 

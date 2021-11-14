@@ -1,81 +1,81 @@
-%token<T> IDENTIFIER CONSTANT STRING_LITERAL SIZEOF
-%token<T> PTR_OP INC_OP DEC_OP LEFT_OP RIGHT_OP LE_OP GE_OP EQ_OP NE_OP
-%token<T> AND_OP OR_OP MUL_ASSIGN DIV_ASSIGN MOD_ASSIGN ADD_ASSIGN
-%token<T> SUB_ASSIGN LEFT_ASSIGN RIGHT_ASSIGN AND_ASSIGN
-%token<T> XOR_ASSIGN OR_ASSIGN TYPE_NAME
+%token IDENTIFIER CONSTANT STRING_LITERAL SIZEOF
+%token PTR_OP INC_OP DEC_OP LEFT_OP RIGHT_OP LE_OP GE_OP EQ_OP NE_OP
+%token AND_OP OR_OP MUL_ASSIGN DIV_ASSIGN MOD_ASSIGN ADD_ASSIGN
+%token SUB_ASSIGN LEFT_ASSIGN RIGHT_ASSIGN AND_ASSIGN
+%token XOR_ASSIGN OR_ASSIGN TYPE_NAME
 
-%token<T> TYPEDEF EXTERN STATIC AUTO REGISTER
-%token<T> CHAR SHORT INT LONG SIGNED UNSIGNED FLOAT DOUBLE CONST VOLATILE VOID
-%token<T> STRUCT UNION ENUM ELLIPSIS
+%token TYPEDEF EXTERN STATIC AUTO REGISTER
+%token CHAR SHORT INT LONG SIGNED UNSIGNED FLOAT DOUBLE CONST VOLATILE VOID
+%token STRUCT UNION ENUM ELLIPSIS
 
-%token<T> CASE DEFAULT IF ELSE SWITCH WHILE DO FOR GOTO CONTINUE BREAK RETURN
+%token CASE DEFAULT IF ELSE SWITCH WHILE DO FOR GOTO CONTINUE BREAK RETURN
 
-%token<T> LPARAM RPARAM LCURL RCURL LBRACE RBRACE SEMICOLON COLON COMMA EQ
-%token<T> QUESTION MUL DIV MINUS PLUS MOD AND OR EXCLAIM DOT HAT LT GT TILDA
+%token '(' ')' '{' '}' '[' ']' ';' ':' ',' '='
+%token '?' '*' '/' '-' '+' '%' '&' '|' '!' '.' '^' '<' '>' '~'
 
-%type<T> statement
-%type<T> logical_or_expression
-%type<T> constant_expression
-%type<T> struct_or_union_specifier
-%type<T> unary_expression
-%type<T> additive_expression
-%type<T> enumerator
-%type<T> assignment_operator
-%type<T> specifier_qualifier_list
-%type<T> struct_declarator_list
-%type<T> external_declaration
-%type<T> expression
-%type<T> direct_abstract_declarator
-%type<T> inclusive_or_expression
-%type<T> parameter_declaration
-%type<T> argument_expression_list
-%type<T> shift_expression
-%type<T> relational_expression
-%type<T> struct_or_union
-%type<T> parameter_list
-%type<T> cast_expression
-%type<T> multiplicative_expression
-%type<T> struct_declaration
-%type<T> enum_specifier
-%type<T> enumerator_list
-%type<T> type_qualifier_list
-%type<T> parameter_type_list
-%type<T> conditional_expression
-%type<T> init_declarator_list
-%type<T> declaration
-%type<T> declaration_specifiers
-%type<T> pointer
-%type<T> abstract_declarator
-%type<T> labeled_statement
-%type<T> selection_statement
-%type<T> exclusive_or_expression
-%type<T> assignment_expression
-%type<T> jump_statement
-%type<T> unary_operator
-%type<T> statement_list
-%type<T> type_name
-%type<T> initializer
-%type<T> initializer_list
-%type<T> iteration_statement
-%type<T> postfix_expression
-%type<T> type_specifier
-%type<T> translation_unit
-%type<T> equality_expression
-%type<T> struct_declaration_list
-%type<T> type_qualifier
-%type<T> declarator
-%type<T> identifier_list
-%type<T> function_definition
-%type<T> logical_and_expression
-%type<T> struct_declarator
-%type<T> direct_declarator
-%type<T> primary_expression
-%type<T> init_declarator
-%type<T> compound_statement
-%type<T> declaration_list
-%type<T> expression_statement
-%type<T> and_expression
-%type<T> storage_class_specifier
+%type statement
+%type logical_or_expression
+%type constant_expression
+%type struct_or_union_specifier
+%type unary_expression
+%type additive_expression
+%type enumerator
+%type assignment_operator
+%type specifier_qualifier_list
+%type struct_declarator_list
+%type external_declaration
+%type expression
+%type direct_abstract_declarator
+%type inclusive_or_expression
+%type parameter_declaration
+%type argument_expression_list
+%type shift_expression
+%type relational_expression
+%type struct_or_union
+%type parameter_list
+%type cast_expression
+%type multiplicative_expression
+%type struct_declaration
+%type enum_specifier
+%type enumerator_list
+%type type_qualifier_list
+%type parameter_type_list
+%type conditional_expression
+%type init_declarator_list
+%type declaration
+%type declaration_specifiers
+%type pointer
+%type abstract_declarator
+%type labeled_statement
+%type selection_statement
+%type exclusive_or_expression
+%type assignment_expression
+%type jump_statement
+%type unary_operator
+%type statement_list
+%type type_name
+%type initializer
+%type initializer_list
+%type iteration_statement
+%type postfix_expression
+%type type_specifier
+%type translation_unit
+%type equality_expression
+%type struct_declaration_list
+%type type_qualifier
+%type declarator
+%type identifier_list
+%type function_definition
+%type logical_and_expression
+%type struct_declarator
+%type direct_declarator
+%type primary_expression
+%type init_declarator
+%type compound_statement
+%type declaration_list
+%type expression_statement
+%type and_expression
+%type storage_class_specifier
 
 %start translation_unit
 
@@ -83,21 +83,21 @@ primary_expression ->
     a: IDENTIFIER |
     b: CONSTANT |
     c: STRING_LITERAL |
-    d: LPARAM expression RPARAM
+    d: '(' expression ')'
 
 postfix_expression ->
     a: primary_expression |
-    b: postfix_expression LBRACE expression RBRACE |
-    c: postfix_expression LPARAM RPARAM |
-    d: postfix_expression LPARAM argument_expression_list RPARAM |
-    e: postfix_expression DOT IDENTIFIER |
+    b: postfix_expression '[' expression ']' |
+    c: postfix_expression '(' ')' |
+    d: postfix_expression '(' argument_expression_list ')' |
+    e: postfix_expression '.' IDENTIFIER |
     f: postfix_expression PTR_OP IDENTIFIER |
     g: postfix_expression INC_OP |
     h: postfix_expression DEC_OP
 
 argument_expression_list ->
     a: assignment_expression |
-    b: argument_expression_list COMMA assignment_expression
+    b: argument_expression_list ',' assignment_expression
 
 unary_expression ->
     a: postfix_expression |
@@ -105,30 +105,30 @@ unary_expression ->
     c: DEC_OP unary_expression |
     d: unary_operator cast_expression |
     e: SIZEOF unary_expression |
-    f: SIZEOF LPARAM type_name RPARAM
+    f: SIZEOF '(' type_name ')'
 
 unary_operator ->
-    a: AND |
-    b: MUL |
-    c: PLUS |
-    d: MINUS |
-    e: TILDA |
-    f: EXCLAIM
+    a: '&' |
+    b: '*' |
+    c: '+' |
+    d: '-' |
+    e: '~' |
+    f: '!'
 
 cast_expression ->
     a: unary_expression |
-    b: LPARAM type_name RPARAM cast_expression
+    b: '(' type_name ')' cast_expression
 
 multiplicative_expression ->
     a: cast_expression |
-    b: multiplicative_expression MUL cast_expression |
-    c: multiplicative_expression DIV cast_expression |
-    d: multiplicative_expression MOD cast_expression
+    b: multiplicative_expression '*' cast_expression |
+    c: multiplicative_expression '/' cast_expression |
+    d: multiplicative_expression '%' cast_expression
 
 additive_expression ->
     a: multiplicative_expression |
-    b: additive_expression PLUS multiplicative_expression |
-    c: additive_expression MINUS multiplicative_expression
+    b: additive_expression '+' multiplicative_expression |
+    c: additive_expression '-' multiplicative_expression
 
 shift_expression ->
     a: additive_expression |
@@ -137,8 +137,8 @@ shift_expression ->
 
 relational_expression ->
     a: shift_expression |
-    b: relational_expression LT shift_expression |
-    c: relational_expression GT shift_expression |
+    b: relational_expression '<' shift_expression |
+    c: relational_expression '>' shift_expression |
     d: relational_expression LE_OP shift_expression |
     e: relational_expression GE_OP shift_expression
 
@@ -149,15 +149,15 @@ equality_expression ->
 
 and_expression ->
     a: equality_expression |
-    b: and_expression AND equality_expression
+    b: and_expression '&' equality_expression
 
 exclusive_or_expression ->
     a: and_expression |
-    b: exclusive_or_expression HAT and_expression
+    b: exclusive_or_expression '^' and_expression
 
 inclusive_or_expression ->
     a: exclusive_or_expression |
-    b: inclusive_or_expression OR exclusive_or_expression
+    b: inclusive_or_expression '|' exclusive_or_expression
 
 logical_and_expression ->
     a: inclusive_or_expression |
@@ -169,14 +169,14 @@ logical_or_expression ->
 
 conditional_expression ->
     a: logical_or_expression |
-    b: logical_or_expression QUESTION expression COLON conditional_expression
+    b: logical_or_expression '?' expression ':' conditional_expression
 
 assignment_expression ->
     a: conditional_expression |
     b: unary_expression assignment_operator assignment_expression
 
 assignment_operator ->
-    a: EQ |
+    a: '=' |
     b: MUL_ASSIGN |
     c: DIV_ASSIGN |
     d: MOD_ASSIGN |
@@ -190,14 +190,14 @@ assignment_operator ->
 
 expression ->
     a: assignment_expression |
-    b: expression COMMA assignment_expression
+    b: expression ',' assignment_expression
 
 constant_expression ->
     a: conditional_expression
 
 declaration ->
-    a: declaration_specifiers SEMICOLON |
-    b: declaration_specifiers init_declarator_list SEMICOLON
+    a: declaration_specifiers ';' |
+    b: declaration_specifiers init_declarator_list ';'
 
 declaration_specifiers ->
     a: storage_class_specifier |
@@ -209,11 +209,11 @@ declaration_specifiers ->
 
 init_declarator_list ->
     a: init_declarator |
-    b: init_declarator_list COMMA init_declarator
+    b: init_declarator_list ',' init_declarator
 
 init_declarator ->
     a: declarator |
-    b: declarator EQ initializer
+    b: declarator '=' initializer
 
 storage_class_specifier ->
     a: TYPEDEF |
@@ -237,8 +237,8 @@ type_specifier ->
     l: TYPE_NAME
 
 struct_or_union_specifier ->
-    a: struct_or_union IDENTIFIER LCURL struct_declaration_list RCURL |
-    b: struct_or_union LCURL struct_declaration_list RCURL |
+    a: struct_or_union IDENTIFIER '{' struct_declaration_list '}' |
+    b: struct_or_union '{' struct_declaration_list '}' |
     c: struct_or_union IDENTIFIER
 
 struct_or_union ->
@@ -250,7 +250,7 @@ struct_declaration_list ->
     b: struct_declaration_list struct_declaration
 
 struct_declaration ->
-    a: specifier_qualifier_list struct_declarator_list SEMICOLON
+    a: specifier_qualifier_list struct_declarator_list ';'
 
 specifier_qualifier_list ->
     a: type_specifier specifier_qualifier_list |
@@ -260,25 +260,25 @@ specifier_qualifier_list ->
 
 struct_declarator_list ->
     a: struct_declarator |
-    b: struct_declarator_list COMMA struct_declarator
+    b: struct_declarator_list ',' struct_declarator
 
 struct_declarator ->
     a: declarator |
-    b: COLON constant_expression |
-    c: declarator COLON constant_expression
+    b: ':' constant_expression |
+    c: declarator ':' constant_expression
 
 enum_specifier ->
-    a: ENUM LCURL enumerator_list RCURL |
-    b: ENUM IDENTIFIER LCURL enumerator_list RCURL |
+    a: ENUM '{' enumerator_list '}' |
+    b: ENUM IDENTIFIER '{' enumerator_list '}' |
     c: ENUM IDENTIFIER
 
 enumerator_list ->
     a: enumerator |
-    b: enumerator_list COMMA enumerator
+    b: enumerator_list ',' enumerator
 
 enumerator ->
     a: IDENTIFIER |
-    b: IDENTIFIER EQ constant_expression
+    b: IDENTIFIER '=' constant_expression
 
 type_qualifier ->
     a: CONST |
@@ -290,18 +290,18 @@ declarator ->
 
 direct_declarator ->
     a: IDENTIFIER |
-    b: LPARAM declarator RPARAM |
-    c: direct_declarator LBRACE constant_expression RBRACE |
-    d: direct_declarator LBRACE RBRACE |
-    e: direct_declarator LPARAM parameter_type_list RPARAM |
-    f: direct_declarator LPARAM identifier_list RPARAM |
-    g: direct_declarator LPARAM RPARAM
+    b: '(' declarator ')' |
+    c: direct_declarator '[' constant_expression ']' |
+    d: direct_declarator '[' ']' |
+    e: direct_declarator '(' parameter_type_list ')' |
+    f: direct_declarator '(' identifier_list ')' |
+    g: direct_declarator '(' ')'
 
 pointer ->
-    a: MUL |
-    b: MUL type_qualifier_list |
-    c: MUL pointer |
-    d: MUL type_qualifier_list pointer
+    a: '*' |
+    b: '*' type_qualifier_list |
+    c: '*' pointer |
+    d: '*' type_qualifier_list pointer
 
 type_qualifier_list ->
     a: type_qualifier |
@@ -310,11 +310,11 @@ type_qualifier_list ->
 
 parameter_type_list ->
     a: parameter_list |
-    b: parameter_list COMMA ELLIPSIS
+    b: parameter_list ',' ELLIPSIS
 
 parameter_list ->
     a: parameter_declaration |
-    b: parameter_list COMMA parameter_declaration
+    b: parameter_list ',' parameter_declaration
 
 parameter_declaration ->
     a: declaration_specifiers declarator |
@@ -323,7 +323,7 @@ parameter_declaration ->
 
 identifier_list ->
     a: IDENTIFIER |
-    b: identifier_list COMMA IDENTIFIER
+    b: identifier_list ',' IDENTIFIER
 
 type_name ->
     a: specifier_qualifier_list |
@@ -335,24 +335,24 @@ abstract_declarator ->
     c: pointer direct_abstract_declarator
 
 direct_abstract_declarator ->
-    a: LPARAM abstract_declarator RPARAM |
-    b: LBRACE RBRACE |
-    c: LBRACE constant_expression RBRACE |
-    d: direct_abstract_declarator LBRACE RBRACE |
-    e: direct_abstract_declarator LBRACE constant_expression RBRACE |
-    f: LPARAM RPARAM |
-    g: LPARAM parameter_type_list RPARAM |
-    h: direct_abstract_declarator LPARAM RPARAM |
-    i: direct_abstract_declarator LPARAM parameter_type_list RPARAM
+    a: '(' abstract_declarator ')' |
+    b: '[' ']' |
+    c: '[' constant_expression ']' |
+    d: direct_abstract_declarator '[' ']' |
+    e: direct_abstract_declarator '[' constant_expression ']' |
+    f: '(' ')' |
+    g: '(' parameter_type_list ')' |
+    h: direct_abstract_declarator '(' ')' |
+    i: direct_abstract_declarator '(' parameter_type_list ')'
 
 initializer ->
     a: assignment_expression |
-    b: LCURL initializer_list RCURL |
-    c: LCURL initializer_list COMMA RCURL
+    b: '{' initializer_list '}' |
+    c: '{' initializer_list ',' '}'
 
 initializer_list ->
     a: initializer |
-    b: initializer_list COMMA initializer
+    b: initializer_list ',' initializer
 
 statement ->
     a: labeled_statement |
@@ -363,15 +363,15 @@ statement ->
     f: jump_statement
 
 labeled_statement ->
-    a: IDENTIFIER COLON statement |
-    b: CASE constant_expression COLON statement |
-    c: DEFAULT COLON statement
+    a: IDENTIFIER ':' statement |
+    b: CASE constant_expression ':' statement |
+    c: DEFAULT ':' statement
 
 compound_statement ->
-    a: LCURL RCURL |
-    b: LCURL statement_list RCURL |
-    c: LCURL declaration_list RCURL |
-    d: LCURL declaration_list statement_list RCURL
+    a: '{' '}' |
+    b: '{' statement_list '}' |
+    c: '{' declaration_list '}' |
+    d: '{' declaration_list statement_list '}'
 
 declaration_list ->
     a: declaration |
@@ -382,26 +382,26 @@ statement_list ->
     b: statement_list statement
 
 expression_statement ->
-    a: SEMICOLON |
-    b: expression SEMICOLON
+    a: ';' |
+    b: expression ';'
 
 selection_statement ->
-    a: IF LPARAM expression RPARAM statement |
-    b: IF LPARAM expression RPARAM statement ELSE statement |
-    c: SWITCH LPARAM expression RPARAM statement
+    a: IF '(' expression ')' statement |
+    b: IF '(' expression ')' statement ELSE statement |
+    c: SWITCH '(' expression ')' statement
 
 iteration_statement ->
-    a: WHILE LPARAM expression RPARAM statement |
-    b: DO statement WHILE LPARAM expression RPARAM SEMICOLON |
-    c: FOR LPARAM expression_statement expression_statement RPARAM statement |
-    d: FOR LPARAM expression_statement expression_statement expression RPARAM statement
+    a: WHILE '(' expression ')' statement |
+    b: DO statement WHILE '(' expression ')' ';' |
+    c: FOR '(' expression_statement expression_statement ')' statement |
+    d: FOR '(' expression_statement expression_statement expression ')' statement
 
 jump_statement ->
-    a: GOTO IDENTIFIER SEMICOLON |
-    b: CONTINUE SEMICOLON |
-    c: BREAK SEMICOLON |
-    d: RETURN SEMICOLON |
-    e: RETURN expression SEMICOLON
+    a: GOTO IDENTIFIER ';' |
+    b: CONTINUE ';' |
+    c: BREAK ';' |
+    d: RETURN ';' |
+    e: RETURN expression ';'
 
 translation_unit ->
     a: external_declaration |
@@ -423,8 +423,5 @@ go:
     package: ansi_c
 
     prefix: C
-
-    value_types:
-        T: Symbol
 }%%
 

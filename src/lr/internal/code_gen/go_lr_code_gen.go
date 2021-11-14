@@ -9,6 +9,13 @@ import (
 	"github.com/pattyshack/abc/src/lr/internal/parser"
 )
 
+var escapedChar = map[string]byte{
+	"'\\t'":  '\t',
+	"'\\n'":  '\n',
+	"'\\''":  '\'',
+	"'\\\\'": '\\',
+}
+
 type param struct {
 	name      string
 	paramType interface{}
@@ -98,6 +105,8 @@ type goCodeGen struct {
 	tableKey        string
 	actionTableType string
 	actionTable     string
+
+	parse string
 }
 
 func newGoCodeGen(
@@ -171,14 +180,15 @@ func (gen *goCodeGen) populateCodeGenVariables() error {
 	gen.tableKey = "_" + gen.Prefix + "ActionTableKey"
 	gen.actionTableType = "_" + gen.Prefix + "ActionTableType"
 	gen.actionTable = "_" + gen.Prefix + "ActionTable"
+	gen.parse = "_" + gen.Prefix + "Parse"
 
 	for _, term := range gen.Terms {
-		valueType := gen.ValueTypes[term.ValueType.Value]
+		valueType := gen.ValueTypes[term.ValueType]
 		if valueType == "" {
-			if term.ValueType.Value != lr.Generic {
+			if term.ValueType != lr.Generic {
 				return fmt.Errorf(
 					"Undefined value type for <%s> %s",
-					term.ValueType.Value,
+					term.ValueType,
 					term.LRLocation)
 			}
 			valueType = "*" + gen.genericSymbol
@@ -186,11 +196,16 @@ func (gen *goCodeGen) populateCodeGenVariables() error {
 
 		term.CodeGenType = gen.Obj(valueType)
 
-		symbolConst := gen.Prefix + snakeToCamel(term.Name)
-		if term.IsTerminal {
-			symbolConst += "Token"
+		symbolConst := ""
+		if term.SymbolId == parser.LRCharacterToken {
+			symbolConst = term.Name
 		} else {
-			symbolConst += "Type"
+			symbolConst = gen.Prefix + snakeToCamel(term.Name)
+			if term.IsTerminal {
+				symbolConst += "Token"
+			} else {
+				symbolConst += "Type"
+			}
 		}
 
 		err := gen.check(symbolConst, term.LRLocation)
@@ -201,11 +216,8 @@ func (gen *goCodeGen) populateCodeGenVariables() error {
 		term.CodeGenSymbolConst = symbolConst
 
 		for _, clause := range term.Clauses {
-			reducerName := ""
-			if clause.Label != nil {
-				reducerName = snakeToCamel(clause.Label.Value)
-			}
-			reducerName += "To" + snakeToCamel(term.Name)
+			reducerName := snakeToCamel(clause.Label) + "To" +
+				snakeToCamel(term.Name)
 
 			err := gen.check(reducerName, clause.LRLocation)
 			if err != nil {
@@ -260,8 +272,12 @@ func (gen *goCodeGen) generateTerminalSymbolIds() {
 	l("")
 	l("const (")
 	gen.PushIndent()
-	for idx, term := range gen.Terminals {
-		l("%s = %s(%d)", term.CodeGenSymbolConst, gen.symbolId, 256+idx)
+	nextId := 256
+	for _, term := range gen.Terminals {
+		if term.SymbolId == parser.LRIdentifierToken {
+			l("%s = %s(%d)", term.CodeGenSymbolConst, gen.symbolId, nextId)
+			nextId += 1
+		}
 	}
 	gen.PopIndent()
 	l(")")
@@ -277,7 +293,17 @@ func (gen *goCodeGen) generateNonTerminalSymbolIds() {
 	l("case %s: return \"$\"", gen.endSymbol)
 	l("case %s: return \"*\"", gen.wildcardSymbol)
 	for _, term := range gen.Terminals {
-		l("case %s: return \"%s\"", term.CodeGenSymbolConst, term.Name)
+		if term.SymbolId == parser.LRCharacterToken {
+			escaped := term.Name
+			if term.Name == "'\"'" {
+				escaped = "'\\\"'"
+			} else if escaped[1] == '\\' {
+				escaped = "'\\\\" + term.Name[2:]
+			}
+			l("case %s: return \"%s\"", term.CodeGenSymbolConst, escaped)
+		} else {
+			l("case %s: return \"%s\"", term.CodeGenSymbolConst, term.Name)
+		}
 	}
 	for _, term := range gen.NonTerminals {
 		l("case %s: return \"%s\"", term.CodeGenSymbolConst, term.Name)
@@ -377,7 +403,7 @@ func (gen *goCodeGen) generateReducerInterface() {
 				l("")
 			}
 
-			if clause.Label == nil {
+			if clause.Label == "" {
 				l("// %s: %s -> ...",
 					clause.LRLocation.ShortString(),
 					rule.Name)
@@ -385,18 +411,21 @@ func (gen *goCodeGen) generateReducerInterface() {
 				l("// %s: %s -> %s: ...",
 					clause.LRLocation.ShortString(),
 					rule.Name,
-					clause.Label.Value)
+					clause.Label)
 			}
 
 			paramNameCount := map[string]int{}
 
 			params := paramList{}
 			for _, term := range clause.Bindings {
-				paramName := term.Name
-
-				// hack: append "_" to the end of the name ensures the
-				// name is never a go keyword
-				paramName = snakeToCamel(paramName) + "_"
+				paramName := ""
+				if term.SymbolId == parser.LRCharacterToken {
+					paramName = "char"
+				} else {
+					// hack: append "_" to the end of the name ensures the
+					// name is never a go keyword
+					paramName = snakeToCamel(term.Name) + "_"
+				}
 
 				paramNameCount[paramName] += 1
 				cnt := paramNameCount[paramName]
@@ -538,12 +567,12 @@ func (gen *goCodeGen) generateAction() {
 			for i, term := range clause.Bindings {
 				args = append(
 					args,
-					fmt.Sprintf("args[%d].%s", i, term.ValueType.Value))
+					fmt.Sprintf("args[%d].%s", i, term.ValueType))
 			}
 
 			l("symbol.SymbolId_ = %s", rule.CodeGenSymbolConst)
 			l("symbol.%s, err = reducer.%s(%s)",
-				rule.ValueType.Value,
+				rule.ValueType,
 				clause.CodeGenReducerName,
 				strings.Join(args, ", "))
 			pop()
@@ -623,17 +652,15 @@ func (gen *goCodeGen) generateSymbolType() {
 	valueTerms := map[string][]*lr.Term{
 		lr.Generic: []*lr.Term{
 			&lr.Term{
-				TermDeclaration: &parser.TermDeclaration{
-					ValueType: &parser.Token{Value: lr.Generic},
-				},
+				ValueType:          lr.Generic,
 				CodeGenSymbolConst: gen.endSymbol,
 				CodeGenType:        gen.Obj("*" + gen.genericSymbol),
 			},
 		},
 	}
 	for _, term := range gen.Terminals {
-		valueTerms[term.ValueType.Value] = append(
-			valueTerms[term.ValueType.Value],
+		valueTerms[term.ValueType] = append(
+			valueTerms[term.ValueType],
 			term)
 	}
 
@@ -691,8 +718,8 @@ func (gen *goCodeGen) generateSymbolType() {
 	valueTermConsts := map[string][]string{}
 	for _, terms := range [][]*lr.Term{gen.Terminals, gen.NonTerminals} {
 		for _, term := range terms {
-			valueTermConsts[term.ValueType.Value] = append(
-				valueTermConsts[term.ValueType.Value],
+			valueTermConsts[term.ValueType] = append(
+				valueTermConsts[term.ValueType],
 				term.CodeGenSymbolConst)
 		}
 	}
@@ -770,7 +797,7 @@ func (gen *goCodeGen) generateDebugStates() {
 		l("    Kernel Items:")
 		firstNonKernel := true
 		for _, item := range state.Items {
-			if !item.IsKernel() && firstNonKernel {
+			if !item.IsKernel && firstNonKernel {
 				if !gen.OutputDebugNonKernelItems &&
 					len(state.ShiftReduceConflictSymbols) == 0 &&
 					len(state.ReduceReduceConflictSymbols) == 0 {
@@ -911,7 +938,7 @@ func (gen *goCodeGen) generateActionTable() {
 
 	for _, state := range gen.OrderedStates {
 		for _, item := range state.Items {
-			if !item.IsReduce() {
+			if !item.IsReduce {
 				continue
 			}
 
@@ -942,7 +969,7 @@ func (gen *goCodeGen) generateActionTable() {
 
 	for _, state := range gen.OrderedStates {
 		for _, item := range state.Items {
-			if !item.IsReduce() {
+			if !item.IsReduce {
 				continue
 			}
 
@@ -1083,7 +1110,7 @@ func (gen *goCodeGen) generateExpectedTerminals() {
 		}
 
 		for _, item := range state.Items {
-			if item.IsReduce() && item.LookAhead != lr.Wildcard {
+			if item.IsReduce && item.LookAhead != lr.Wildcard {
 				consts = append(consts, idToConst[item.LookAhead])
 			}
 		}
@@ -1128,7 +1155,107 @@ func (gen *goCodeGen) generateParseErrorHandler() {
 	l("")
 }
 
-func (gen *goCodeGen) _generateParse(
+func (gen *goCodeGen) generateParse() {
+	l := gen.Line
+	push := gen.PushIndent
+	pop := gen.PopIndent
+
+	l("func %s(lexer %s, reducer %s, errHandler %s, startState %s) (*%s, error) {",
+		gen.parse,
+		gen.lexer,
+		gen.reducer,
+		gen.errHandler,
+		gen.stateId,
+		gen.stackItem)
+	push()
+
+	l("stateStack := %s{", gen.stack)
+	push()
+	l("// Note: we don't have to populate the start symbol since its value is never accessed")
+	l("&%s{startState, nil},", gen.stackItem)
+	pop()
+	l("}")
+
+	l("symbolStack := &%s{lexer: lexer}", gen.symbolStack)
+	l("")
+
+	l("for {")
+	push()
+
+	l("nextSymbol, err := symbolStack.Top()")
+	l("if err != nil {")
+	push()
+
+	l("return nil, err")
+
+	pop()
+	l("}")
+
+	l("")
+	l("action, ok := %s.Get(stateStack[len(stateStack)-1].StateId, nextSymbol.Id())",
+		gen.actionTable)
+	l("if !ok {")
+	push()
+	l("return nil, errHandler.Error(nextSymbol, stateStack)")
+	pop()
+	l("}")
+
+	l("if action.ActionType == %s {", gen.shiftAction)
+	push()
+	l("stateStack = append(stateStack, action.ShiftItem(nextSymbol))")
+	l("")
+	l("_, err = symbolStack.Pop()")
+	l("if err != nil {")
+	push()
+	l("return nil, err")
+	pop()
+	l("}")
+
+	pop()
+
+	l("} else if action.ActionType == %s {", gen.reduceAction)
+
+	push()
+	l("var reduceSymbol *%s", gen.symbol)
+	l("stateStack, reduceSymbol, err = action.ReduceSymbol(reducer, stateStack)")
+	l("if err != nil {")
+	push()
+	l("return nil, err")
+	pop()
+	l("}")
+	l("")
+
+	l("symbolStack.Push(reduceSymbol)")
+
+	pop()
+	l("} else if action.ActionType == %s {", gen.acceptAction)
+	push()
+
+	l("if len(stateStack) != 2 {")
+	push()
+	l("panic(\"This should never happen\")")
+	pop()
+	l("}")
+
+	l("return stateStack[1], nil")
+	l("")
+
+	pop()
+	l("} else {")
+	push()
+	l("panic(\"Unknown action type: \" + action.ActionType.String())")
+	pop()
+	l("}")
+	pop()
+
+	l("}")
+
+	pop()
+	l("}")
+	l("")
+}
+
+func (gen *goCodeGen) generateParseEntryPoint(
 	startTerm *lr.Term,
 	startState *lr.ItemSet,
 	generateSuffix bool) {
@@ -1166,97 +1293,28 @@ func (gen *goCodeGen) _generateParse(
 		startTerm.CodeGenType)
 	push()
 
-	l("var errRetVal %v", startTerm.CodeGenType)
-	l("stateStack := %s{", gen.stack)
-	push()
-	l("// Note: we don't have to populate the start symbol since its value is never accessed")
-	l("&%s{%s, nil},",
-		gen.stackItem,
+	l("item, err := %s(lexer, reducer, errHandler, %s)",
+		gen.parse,
 		startState.CodeGenConst)
-	pop()
-	l("}")
-
-	l("symbolStack := &%s{lexer: lexer}", gen.symbolStack)
-	l("")
-
-	l("for {")
-	push()
-
-	l("nextSymbol, err := symbolStack.Top()")
 	l("if err != nil {")
 	push()
-
-	l("return errRetVal, err")
-
-	pop()
-	l("}")
-
-	l("")
-	l("action, ok := %s.Get(stateStack[len(stateStack)-1].StateId, nextSymbol.Id())",
-		gen.actionTable)
-	l("if !ok {")
-	push()
-	l("return errRetVal, errHandler.Error(nextSymbol, stateStack)")
-	pop()
-	l("}")
-
-	l("if action.ActionType == %s {", gen.shiftAction)
-	push()
-	l("stateStack = append(stateStack, action.ShiftItem(nextSymbol))")
-	l("")
-	l("_, err = symbolStack.Pop()")
-	l("if err != nil {")
-	push()
+	l("var errRetVal %v", startTerm.CodeGenType)
 	l("return errRetVal, err")
 	pop()
 	l("}")
 
-	pop()
-
-	l("} else if action.ActionType == %s {", gen.reduceAction)
-
-	push()
-	l("var reduceSymbol *%s", gen.symbol)
-	l("stateStack, reduceSymbol, err = action.ReduceSymbol(reducer, stateStack)")
-	l("if err != nil {")
-	push()
-	l("return errRetVal, err")
+	l("return item.%s, nil", startTerm.ValueType)
 	pop()
 	l("}")
 	l("")
-
-	l("symbolStack.Push(reduceSymbol)")
-
-	pop()
-	l("} else if action.ActionType == %s {", gen.acceptAction)
-	push()
-
-	l("if len(stateStack) != 2 {")
-	push()
-	l("panic(\"This should never happen\")")
-	pop()
-	l("}")
-
-	l("return stateStack[1].%s, nil", startTerm.ValueType.Value)
-	l("")
-
-	pop()
-	l("} else {")
-	push()
-	l("panic(\"Unknown action type: \" + action.ActionType.String())")
-	pop()
-	l("}")
-	pop()
-
-	l("}")
-
-	pop()
-	l("}")
 }
 
-func (gen *goCodeGen) generateParse() {
+func (gen *goCodeGen) generateParseEntryPoints() {
 	for idx, start := range gen.Starts {
-		gen._generateParse(start, gen.OrderedStates[idx], len(gen.Starts) > 1)
+		gen.generateParseEntryPoint(
+			start,
+			gen.OrderedStates[idx],
+			len(gen.Starts) > 1)
 	}
 }
 
@@ -1284,7 +1342,7 @@ func GenerateGoLRCode(
 
 	gen.generateParseErrorHandler()
 
-	gen.generateParse()
+	gen.generateParseEntryPoints()
 
 	l := gen.Line
 	l("// ================================================================")
@@ -1292,6 +1350,8 @@ func GenerateGoLRCode(
 	l("// User should normally avoid directly accessing the following code")
 	l("// ================================================================")
 	l("")
+
+	gen.generateParse()
 
 	gen.generateNonTerminalSymbolIds()
 	gen.generateActionTypes()

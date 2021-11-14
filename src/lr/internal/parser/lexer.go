@@ -14,15 +14,15 @@ var (
 		TokenKeyword: LRTokenToken,
 		TypeKeyword:  LRTypeToken,
 		"%start":     LRStartToken,
-		"<":          LRLtToken,
-		">":          LRGtToken,
-		"|":          LROrToken,
-		";":          LRSemicolonToken,
+		"<":          '<',
+		">":          '>',
+		"|":          '|',
+		";":          ';',
 
 		"%%": LRSectionMarkerToken,
 
 		"->": Arrow,
-		":":  Colon,
+		":":  ':',
 	}
 
 	whitespaces = map[string]struct{}{
@@ -56,6 +56,10 @@ func (lexer *rawLexer) Next() (LRToken, error) {
 
 	var token LRToken
 	token, err = lexer.maybeTokenizeKeywordOrSymbol()
+	if token != nil || err != nil {
+		return token, err
+	}
+	token, err = lexer.maybeTokenizeCharacter()
 	if token != nil || err != nil {
 		return token, err
 	}
@@ -163,6 +167,71 @@ func (lexer *rawLexer) maybeTokenizeKeywordOrSymbol() (LRToken, error) {
 	}
 
 	return nil, nil
+}
+
+func (lexer *rawLexer) maybeTokenizeCharacter() (LRToken, error) {
+	bytes, _ := lexer.reader.Peek(4)
+
+	if len(bytes) < 3 {
+		return nil, nil
+	}
+
+	if bytes[0] != '\'' {
+		return nil, nil
+	}
+
+	numBytes := 3
+	if bytes[1] == '\\' { // c escape
+		if len(bytes) < 4 || bytes[3] != '\'' {
+			return nil, nil
+		}
+
+		switch bytes[2] {
+		case 't', 'n', '\'', '\\':
+		default:
+			return nil, nil
+		}
+
+		numBytes = 4
+	} else {
+		if bytes[2] != '\'' {
+			return nil, nil
+		}
+
+		valid := false
+
+		char := bytes[1]
+		if ('a' <= char && char <= 'z') ||
+			('A' <= char && char <= 'Z') ||
+			('0' <= char && char <= '9') {
+
+			valid = true
+		} else {
+			switch char {
+			case '`', '~', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')',
+				'-', '_', '=', '+', '[', '{', ']', '}', '|', ';', ':', '"',
+				',', '<', '.', '>', '/', '?', ' ':
+				valid = true
+
+			}
+		}
+
+		if !valid {
+			return nil, nil
+		}
+	}
+
+	bytes = bytes[:numBytes]
+	n, err := lexer.reader.Read(bytes)
+	if len(bytes) != n || err != nil {
+		panic(err) // should never happen
+	}
+
+	return &Token{
+		LRLocation: LRLocation(lexer.reader.Location),
+		LRSymbolId: LRCharacterToken,
+		Value:      string(bytes),
+	}, nil
 }
 
 func (lexer *rawLexer) maybeTokenizeIdentifier() (LRToken, error) {
@@ -277,7 +346,7 @@ func (lexer *tokenPairLexer) Next() (LRToken, error) {
 		return curr, nil
 	}
 
-	if next.Id() == Colon {
+	if next.Id() == ':' {
 		curr.(*Token).LRSymbolId = LRLabelToken
 		return curr, nil
 	}

@@ -25,8 +25,8 @@ func (list ByRuleLoc) Len() int {
 }
 
 func (list ByRuleLoc) Less(i int, j int) bool {
-	loc1 := list[i].Rule.Loc()
-	loc2 := list[j].Rule.Loc()
+	loc1 := list[i].RuleLocation
+	loc2 := list[j].RuleLocation
 
 	if loc1.Line == loc2.Line {
 		return loc1.Column < loc2.Column

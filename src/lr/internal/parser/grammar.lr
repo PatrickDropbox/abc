@@ -14,13 +14,13 @@
 // a single token by the lexer.
 %token <Token> LABEL
 
-%token LT GT OR SEMICOLON SECTION_MARKER
-%token <Token> IDENTIFIER
+%token '<' '>' '|' ';' SECTION_MARKER
+%token <Token> CHARACTER IDENTIFIER
 
 %token <Token> SECTION_CONTENT
 
 %type rword
-%type <Tokens> nonempty_ident_list ident_list
+%type <Tokens> nonempty_ident_list nonempty_id_or_char_list id_or_char_list
 
 %type <Definition> def
 %type <Definitions> defs
@@ -49,15 +49,15 @@ additional_section -> SECTION_MARKER IDENTIFIER SECTION_CONTENT
 
 defs ->
     add          : defs def |
-    add_explicit : defs def SEMICOLON |
+    add_explicit : defs def ';' |
     def          : def |
-    explicit_def : def SEMICOLON
+    explicit_def : def ';'
 
 // TODO: handle language specific boiler plate, union/struct
 def ->
     // type / token declaration
-    term_decl  : rword LT IDENTIFIER GT nonempty_ident_list |
-    untyped_term_decl  : rword nonempty_ident_list |
+    term_decl  : rword '<' IDENTIFIER '>' nonempty_id_or_char_list |
+    untyped_term_decl  : rword nonempty_id_or_char_list |
     // start declaration
     start_decl : START nonempty_ident_list |
     rule       : rule
@@ -70,19 +70,25 @@ nonempty_ident_list ->
     add   : nonempty_ident_list IDENTIFIER |
     ident : IDENTIFIER
 
-ident_list ->
-    non_empty_list : nonempty_ident_list |
-    nil   :
+nonempty_id_or_char_list ->
+    add_id   : nonempty_id_or_char_list IDENTIFIER |
+    add_char : nonempty_id_or_char_list CHARACTER |
+    id       : IDENTIFIER |
+    char     : CHARACTER
+
+id_or_char_list ->
+    list : nonempty_id_or_char_list |
+    nil  :
 
 rule ->
-    unlabeled_clause : RULE_DEF ident_list |
+    unlabeled_clause : RULE_DEF id_or_char_list |
     clauses          : RULE_DEF labeled_clauses
 
 labeled_clauses ->
-    add    : labeled_clauses OR labeled_clause |
+    add    : labeled_clauses '|' labeled_clause |
     clause : labeled_clause
 
-labeled_clause -> LABEL ident_list
+labeled_clause -> LABEL id_or_char_list
 
 %%lang_specs{
 # The additional lang_specs section is specified in yaml

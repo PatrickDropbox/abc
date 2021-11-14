@@ -24,7 +24,7 @@ state 1
 state 2
 	grammar:  defs.additional_sections 
 	defs:  defs.def 
-	defs:  defs.def SEMICOLON 
+	defs:  defs.def ';' 
 	additional_sections: .    (3)
 
 	TOKEN  shift 7
@@ -40,29 +40,34 @@ state 2
 
 state 3
 	defs:  def.    (7)
-	defs:  def.SEMICOLON 
+	defs:  def.';' 
 
-	SEMICOLON  shift 12
+	';'  shift 12
 	.  reduce 7 (src line 103)
 
 
+4: shift/reduce conflict (shift 16(0), red'n 22(0)) on IDENTIFIER
+4: shift/reduce conflict (shift 17(0), red'n 22(0)) on CHARACTER
 state 4
-	def:  rword.LT IDENTIFIER GT nonempty_ident_list 
-	def:  rword.nonempty_ident_list 
+	def:  rword.'<' IDENTIFIER '>' nonempty_id_or_char_list 
+	def:  rword.nonempty_id_or_char_list 
+	id_or_char_list: .    (22)
 
-	LT  shift 13
-	IDENTIFIER  shift 15
+	IDENTIFIER  shift 16
+	CHARACTER  shift 17
+	'<'  shift 13
 	.  error
 
-	nonempty_ident_list  goto 14
+	nonempty_id_or_char_list  goto 14
+	id_or_char_list  goto 15
 
 state 5
 	def:  START.nonempty_ident_list 
 
-	IDENTIFIER  shift 15
+	IDENTIFIER  shift 19
 	.  error
 
-	nonempty_ident_list  goto 16
+	nonempty_ident_list  goto 18
 
 state 6
 	def:  rule.    (12)
@@ -82,200 +87,252 @@ state 8
 	.  reduce 14 (src line 137)
 
 
+9: shift/reduce conflict (shift 16(0), red'n 22(0)) on IDENTIFIER
+9: shift/reduce conflict (shift 17(0), red'n 22(0)) on CHARACTER
 state 9
-	rule:  RULE_DEF.ident_list 
+	rule:  RULE_DEF.id_or_char_list 
 	rule:  RULE_DEF.labeled_clauses 
-	ident_list: .    (18)
+	id_or_char_list: .    (22)
 
-	LABEL  shift 21
-	IDENTIFIER  shift 15
-	.  reduce 18 (src line 157)
+	LABEL  shift 24
+	IDENTIFIER  shift 16
+	CHARACTER  shift 17
+	.  reduce 22 (src line 175)
 
-	nonempty_ident_list  goto 19
-	ident_list  goto 17
-	labeled_clause  goto 20
-	labeled_clauses  goto 18
+	nonempty_id_or_char_list  goto 22
+	id_or_char_list  goto 20
+	labeled_clause  goto 23
+	labeled_clauses  goto 21
 
 state 10
 	grammar:  defs additional_sections.    (1)
 	additional_sections:  additional_sections.additional_section 
 
-	SECTION_MARKER  shift 23
+	SECTION_MARKER  shift 26
 	.  reduce 1 (src line 73)
 
-	additional_section  goto 22
+	additional_section  goto 25
 
 state 11
 	defs:  defs def.    (5)
-	defs:  defs def.SEMICOLON 
+	defs:  defs def.';' 
 
-	SEMICOLON  shift 24
+	';'  shift 27
 	.  reduce 5 (src line 95)
 
 
 state 12
-	defs:  def SEMICOLON.    (8)
+	defs:  def ';'.    (8)
 
 	.  reduce 8 (src line 107)
 
 
 state 13
-	def:  rword LT.IDENTIFIER GT nonempty_ident_list 
+	def:  rword '<'.IDENTIFIER '>' nonempty_id_or_char_list 
 
-	IDENTIFIER  shift 25
+	IDENTIFIER  shift 28
 	.  error
 
 
 state 14
-	def:  rword nonempty_ident_list.    (10)
-	nonempty_ident_list:  nonempty_ident_list.IDENTIFIER 
+	def:  rword nonempty_id_or_char_list.    (10)
+	id_or_char_list:  nonempty_id_or_char_list.    (21)
 
-	IDENTIFIER  shift 26
+	IDENTIFIER  reduce 21 (src line 171)
+	CHARACTER  reduce 21 (src line 171)
 	.  reduce 10 (src line 119)
 
 
 state 15
+	nonempty_id_or_char_list:  id_or_char_list.IDENTIFIER 
+	nonempty_id_or_char_list:  id_or_char_list.CHARACTER 
+
+	IDENTIFIER  shift 29
+	CHARACTER  shift 30
+	.  error
+
+
+state 16
+	nonempty_id_or_char_list:  IDENTIFIER.    (19)
+
+	.  reduce 19 (src line 161)
+
+
+state 17
+	nonempty_id_or_char_list:  CHARACTER.    (20)
+
+	.  reduce 20 (src line 165)
+
+
+state 18
+	def:  START nonempty_ident_list.    (11)
+	nonempty_ident_list:  nonempty_ident_list.IDENTIFIER 
+
+	IDENTIFIER  shift 31
+	.  reduce 11 (src line 123)
+
+
+state 19
 	nonempty_ident_list:  IDENTIFIER.    (16)
 
 	.  reduce 16 (src line 147)
 
 
-state 16
-	def:  START nonempty_ident_list.    (11)
-	nonempty_ident_list:  nonempty_ident_list.IDENTIFIER 
-
-	IDENTIFIER  shift 26
-	.  reduce 11 (src line 123)
-
-
-state 17
-	rule:  RULE_DEF ident_list.    (19)
-
-	.  reduce 19 (src line 162)
-
-
-state 18
-	rule:  RULE_DEF labeled_clauses.    (20)
-	labeled_clauses:  labeled_clauses.OR labeled_clause 
-
-	OR  shift 27
-	.  reduce 20 (src line 166)
-
-
-state 19
-	nonempty_ident_list:  nonempty_ident_list.IDENTIFIER 
-	ident_list:  nonempty_ident_list.    (17)
-
-	IDENTIFIER  shift 26
-	.  reduce 17 (src line 153)
-
-
 state 20
-	labeled_clauses:  labeled_clause.    (22)
+	nonempty_id_or_char_list:  id_or_char_list.IDENTIFIER 
+	nonempty_id_or_char_list:  id_or_char_list.CHARACTER 
+	rule:  RULE_DEF id_or_char_list.    (23)
 
-	.  reduce 22 (src line 176)
+	IDENTIFIER  shift 29
+	CHARACTER  shift 30
+	.  reduce 23 (src line 180)
 
 
 state 21
-	labeled_clause:  LABEL.ident_list 
-	ident_list: .    (18)
+	rule:  RULE_DEF labeled_clauses.    (24)
+	labeled_clauses:  labeled_clauses.'|' labeled_clause 
 
-	IDENTIFIER  shift 15
-	.  reduce 18 (src line 157)
+	'|'  shift 32
+	.  reduce 24 (src line 184)
 
-	nonempty_ident_list  goto 19
-	ident_list  goto 28
 
 state 22
+	id_or_char_list:  nonempty_id_or_char_list.    (21)
+
+	.  reduce 21 (src line 171)
+
+
+state 23
+	labeled_clauses:  labeled_clause.    (26)
+
+	.  reduce 26 (src line 194)
+
+
+24: shift/reduce conflict (shift 16(0), red'n 22(0)) on IDENTIFIER
+24: shift/reduce conflict (shift 17(0), red'n 22(0)) on CHARACTER
+state 24
+	labeled_clause:  LABEL.id_or_char_list 
+	id_or_char_list: .    (22)
+
+	IDENTIFIER  shift 16
+	CHARACTER  shift 17
+	.  reduce 22 (src line 175)
+
+	nonempty_id_or_char_list  goto 22
+	id_or_char_list  goto 33
+
+state 25
 	additional_sections:  additional_sections additional_section.    (2)
 
 	.  reduce 2 (src line 79)
 
 
-state 23
+state 26
 	additional_section:  SECTION_MARKER.IDENTIFIER SECTION_CONTENT 
 
-	IDENTIFIER  shift 29
+	IDENTIFIER  shift 34
 	.  error
 
 
-state 24
-	defs:  defs def SEMICOLON.    (6)
+state 27
+	defs:  defs def ';'.    (6)
 
 	.  reduce 6 (src line 99)
 
 
-state 25
-	def:  rword LT IDENTIFIER.GT nonempty_ident_list 
+state 28
+	def:  rword '<' IDENTIFIER.'>' nonempty_id_or_char_list 
 
-	GT  shift 30
+	'>'  shift 35
 	.  error
 
 
-state 26
+state 29
+	nonempty_id_or_char_list:  id_or_char_list IDENTIFIER.    (17)
+
+	.  reduce 17 (src line 153)
+
+
+state 30
+	nonempty_id_or_char_list:  id_or_char_list CHARACTER.    (18)
+
+	.  reduce 18 (src line 157)
+
+
+state 31
 	nonempty_ident_list:  nonempty_ident_list IDENTIFIER.    (15)
 
 	.  reduce 15 (src line 143)
 
 
-state 27
-	labeled_clauses:  labeled_clauses OR.labeled_clause 
+state 32
+	labeled_clauses:  labeled_clauses '|'.labeled_clause 
 
-	LABEL  shift 21
+	LABEL  shift 24
 	.  error
 
-	labeled_clause  goto 31
+	labeled_clause  goto 36
 
-state 28
-	labeled_clause:  LABEL ident_list.    (23)
+state 33
+	nonempty_id_or_char_list:  id_or_char_list.IDENTIFIER 
+	nonempty_id_or_char_list:  id_or_char_list.CHARACTER 
+	labeled_clause:  LABEL id_or_char_list.    (27)
 
-	.  reduce 23 (src line 182)
+	IDENTIFIER  shift 29
+	CHARACTER  shift 30
+	.  reduce 27 (src line 200)
 
 
-state 29
+state 34
 	additional_section:  SECTION_MARKER IDENTIFIER.SECTION_CONTENT 
 
-	SECTION_CONTENT  shift 32
+	SECTION_CONTENT  shift 37
 	.  error
 
 
-state 30
-	def:  rword LT IDENTIFIER GT.nonempty_ident_list 
+35: shift/reduce conflict (shift 16(0), red'n 22(0)) on IDENTIFIER
+35: shift/reduce conflict (shift 17(0), red'n 22(0)) on CHARACTER
+state 35
+	def:  rword '<' IDENTIFIER '>'.nonempty_id_or_char_list 
+	id_or_char_list: .    (22)
 
-	IDENTIFIER  shift 15
+	IDENTIFIER  shift 16
+	CHARACTER  shift 17
 	.  error
 
-	nonempty_ident_list  goto 33
+	nonempty_id_or_char_list  goto 38
+	id_or_char_list  goto 15
 
-state 31
-	labeled_clauses:  labeled_clauses OR labeled_clause.    (21)
+state 36
+	labeled_clauses:  labeled_clauses '|' labeled_clause.    (25)
 
-	.  reduce 21 (src line 172)
+	.  reduce 25 (src line 190)
 
 
-state 32
+state 37
 	additional_section:  SECTION_MARKER IDENTIFIER SECTION_CONTENT.    (4)
 
 	.  reduce 4 (src line 89)
 
 
-state 33
-	def:  rword LT IDENTIFIER GT nonempty_ident_list.    (9)
-	nonempty_ident_list:  nonempty_ident_list.IDENTIFIER 
+state 38
+	def:  rword '<' IDENTIFIER '>' nonempty_id_or_char_list.    (9)
+	id_or_char_list:  nonempty_id_or_char_list.    (21)
 
-	IDENTIFIER  shift 26
+	IDENTIFIER  reduce 21 (src line 171)
+	CHARACTER  reduce 21 (src line 171)
 	.  reduce 9 (src line 114)
 
 
-17 terminals, 12 nonterminals
-24 grammar rules, 34/8000 states
-0 shift/reduce, 0 reduce/reduce conflicts reported
-61 working sets used
-memory: parser 19/120000
-3 extra closures
-28 shift entries, 1 exceptions
-17 goto entries
-3 entries saved by goto default
-Optimizer space used: output 36/120000
-36 table entries, 0 zero
-maximum spread: 17, maximum offset: 30
+17 terminals, 13 nonterminals
+28 grammar rules, 39/8000 states
+8 shift/reduce, 0 reduce/reduce conflicts reported
+62 working sets used
+memory: parser 22/120000
+5 extra closures
+35 shift entries, 5 exceptions
+18 goto entries
+4 entries saved by goto default
+Optimizer space used: output 43/120000
+43 table entries, 0 zero
+maximum spread: 17, maximum offset: 35

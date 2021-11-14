@@ -78,11 +78,11 @@ func (l *ScopedLexer) Next() (Token, error) {
 		return nil, err
 	}
 
-	if token.Id() != LbraceToken && token.Id() != RbraceToken {
+	if token.Id() != '{' && token.Id() != '}' {
 		return token, nil
 	}
 
-	if token.Id() == RbraceToken {
+	if token.Id() == '}' {
 		if l.depth > 0 {
 			l.depth -= 1
 			l.scopeEnded = true
@@ -113,9 +113,9 @@ func (l *ScopedLexer) Next() (Token, error) {
 			return &Err{parseErr}, nil
 		}
 
-		if next.Id() == LbraceToken {
+		if next.Id() == '{' {
 			l.depth += 1
-		} else if next.Id() == RbraceToken {
+		} else if next.Id() == '}' {
 			l.depth -= 1
 		}
 

@@ -10,12 +10,8 @@ import (
 type SymbolId int
 
 const (
-	PlusToken   = SymbolId(256)
-	MinusToken  = SymbolId(257)
-	LbraceToken = SymbolId(258)
-	RbraceToken = SymbolId(259)
-	IdToken     = SymbolId(260)
-	ErrorToken  = SymbolId(261)
+	IdToken    = SymbolId(256)
+	ErrorToken = SymbolId(257)
 )
 
 type Location struct {
@@ -77,13 +73,13 @@ type Reducer interface {
 	BinaryToExpr(Expr_ Expr, Op_ *GenericSymbol, Atom_ Expr) (Expr, error)
 
 	// 31:4: op -> plus: ...
-	PlusToOp(Plus_ *GenericSymbol) (*GenericSymbol, error)
+	PlusToOp(char *GenericSymbol) (*GenericSymbol, error)
 
 	// 32:4: op -> minus: ...
-	MinusToOp(Minus_ *GenericSymbol) (*GenericSymbol, error)
+	MinusToOp(char *GenericSymbol) (*GenericSymbol, error)
 
-	// 34:9: block -> ...
-	ToBlock(Lbrace_ *GenericSymbol, ExprList_ []Expr, Rbrace_ *GenericSymbol) (*Block, error)
+	// 34:12: block -> ...
+	ToBlock(char *GenericSymbol, ExprList_ []Expr, char2 *GenericSymbol) (*Block, error)
 }
 
 type ParseErrorHandler interface {
@@ -101,96 +97,25 @@ func ParseExprList(lexer Lexer, reducer Reducer) ([]Expr, error) {
 }
 
 func ParseExprListWithCustomErrorHandler(lexer Lexer, reducer Reducer, errHandler ParseErrorHandler) ([]Expr, error) {
-	var errRetVal []Expr
-	stateStack := _Stack{
-		// Note: we don't have to populate the start symbol since its value is never accessed
-		&_StackItem{_State1, nil},
+	item, err := _Parse(lexer, reducer, errHandler, _State1)
+	if err != nil {
+		var errRetVal []Expr
+		return errRetVal, err
 	}
-	symbolStack := &_PseudoSymbolStack{lexer: lexer}
-
-	for {
-		nextSymbol, err := symbolStack.Top()
-		if err != nil {
-			return errRetVal, err
-		}
-
-		action, ok := _ActionTable.Get(stateStack[len(stateStack)-1].StateId, nextSymbol.Id())
-		if !ok {
-			return errRetVal, errHandler.Error(nextSymbol, stateStack)
-		}
-		if action.ActionType == _ShiftAction {
-			stateStack = append(stateStack, action.ShiftItem(nextSymbol))
-
-			_, err = symbolStack.Pop()
-			if err != nil {
-				return errRetVal, err
-			}
-		} else if action.ActionType == _ReduceAction {
-			var reduceSymbol *Symbol
-			stateStack, reduceSymbol, err = action.ReduceSymbol(reducer, stateStack)
-			if err != nil {
-				return errRetVal, err
-			}
-
-			symbolStack.Push(reduceSymbol)
-		} else if action.ActionType == _AcceptAction {
-			if len(stateStack) != 2 {
-				panic("This should never happen")
-			}
-			return stateStack[1].ExprList, nil
-
-		} else {
-			panic("Unknown action type: " + action.ActionType.String())
-		}
-	}
+	return item.ExprList, nil
 }
+
 func ParseBlock(lexer Lexer, reducer Reducer) (*Block, error) {
 	return ParseBlockWithCustomErrorHandler(lexer, reducer, DefaultParseErrorHandler{})
 }
 
 func ParseBlockWithCustomErrorHandler(lexer Lexer, reducer Reducer, errHandler ParseErrorHandler) (*Block, error) {
-	var errRetVal *Block
-	stateStack := _Stack{
-		// Note: we don't have to populate the start symbol since its value is never accessed
-		&_StackItem{_State2, nil},
+	item, err := _Parse(lexer, reducer, errHandler, _State2)
+	if err != nil {
+		var errRetVal *Block
+		return errRetVal, err
 	}
-	symbolStack := &_PseudoSymbolStack{lexer: lexer}
-
-	for {
-		nextSymbol, err := symbolStack.Top()
-		if err != nil {
-			return errRetVal, err
-		}
-
-		action, ok := _ActionTable.Get(stateStack[len(stateStack)-1].StateId, nextSymbol.Id())
-		if !ok {
-			return errRetVal, errHandler.Error(nextSymbol, stateStack)
-		}
-		if action.ActionType == _ShiftAction {
-			stateStack = append(stateStack, action.ShiftItem(nextSymbol))
-
-			_, err = symbolStack.Pop()
-			if err != nil {
-				return errRetVal, err
-			}
-		} else if action.ActionType == _ReduceAction {
-			var reduceSymbol *Symbol
-			stateStack, reduceSymbol, err = action.ReduceSymbol(reducer, stateStack)
-			if err != nil {
-				return errRetVal, err
-			}
-
-			symbolStack.Push(reduceSymbol)
-		} else if action.ActionType == _AcceptAction {
-			if len(stateStack) != 2 {
-				panic("This should never happen")
-			}
-			return stateStack[1].Block, nil
-
-		} else {
-			panic("Unknown action type: " + action.ActionType.String())
-		}
-	}
+	return item.Block, nil
 }
 
 // ================================================================
@@ -198,20 +123,64 @@ func ParseBlockWithCustomErrorHandler(lexer Lexer, reducer Reducer, errHandler P
 // User should normally avoid directly accessing the following code
 // ================================================================
 
+func _Parse(lexer Lexer, reducer Reducer, errHandler ParseErrorHandler, startState _StateId) (*_StackItem, error) {
+	stateStack := _Stack{
+		// Note: we don't have to populate the start symbol since its value is never accessed
+		&_StackItem{startState, nil},
+	}
+	symbolStack := &_PseudoSymbolStack{lexer: lexer}
+
+	for {
+		nextSymbol, err := symbolStack.Top()
+		if err != nil {
+			return nil, err
+		}
+
+		action, ok := _ActionTable.Get(stateStack[len(stateStack)-1].StateId, nextSymbol.Id())
+		if !ok {
+			return nil, errHandler.Error(nextSymbol, stateStack)
+		}
+		if action.ActionType == _ShiftAction {
+			stateStack = append(stateStack, action.ShiftItem(nextSymbol))
+
+			_, err = symbolStack.Pop()
+			if err != nil {
+				return nil, err
+			}
+		} else if action.ActionType == _ReduceAction {
+			var reduceSymbol *Symbol
+			stateStack, reduceSymbol, err = action.ReduceSymbol(reducer, stateStack)
+			if err != nil {
+				return nil, err
+			}
+
+			symbolStack.Push(reduceSymbol)
+		} else if action.ActionType == _AcceptAction {
+			if len(stateStack) != 2 {
+				panic("This should never happen")
+			}
+			return stateStack[1], nil
+
+		} else {
+			panic("Unknown action type: " + action.ActionType.String())
+		}
+	}
+}
+
 func (i SymbolId) String() string {
 	switch i {
 	case _EndMarker:
 		return "$"
 	case _WildcardMarker:
 		return "*"
-	case PlusToken:
-		return "PLUS"
-	case MinusToken:
-		return "MINUS"
-	case LbraceToken:
-		return "LBRACE"
-	case RbraceToken:
-		return "RBRACE"
+	case '+':
+		return "'+'"
+	case '-':
+		return "'-'"
+	case '{':
+		return "'{'"
+	case '}':
+		return "'}'"
 	case IdToken:
 		return "ID"
 	case ErrorToken:
@@ -357,7 +326,7 @@ func NewSymbol(token Token) (*Symbol, error) {
 			return nil, fmt.Errorf("Invalid value type for token %s.  Expecting *Err (%v)", token.Id(), token.Loc())
 		}
 		symbol.Err = val
-	case _EndMarker, PlusToken, MinusToken, LbraceToken, RbraceToken:
+	case _EndMarker, '+', '-', '{', '}':
 		val, ok := token.(*GenericSymbol)
 		if !ok {
 			return nil, fmt.Errorf("Invalid value type for token %s.  Expecting *GenericSymbol (%v)", token.Id(), token.Loc())
@@ -581,26 +550,26 @@ var _ActionTable = _ActionTableType{
 	{_State3, _EndMarker}:       &_Action{_AcceptAction, 0, 0},
 	{_State4, _EndMarker}:       &_Action{_AcceptAction, 0, 0},
 	{_State1, ExprListType}:     _GotoState3Action,
-	{_State2, LbraceToken}:      _GotoState5Action,
+	{_State2, '{'}:              _GotoState5Action,
 	{_State2, BlockType}:        _GotoState4Action,
-	{_State3, LbraceToken}:      _GotoState5Action,
+	{_State3, '{'}:              _GotoState5Action,
 	{_State3, IdToken}:          _GotoState7Action,
 	{_State3, ErrorToken}:       _GotoState6Action,
 	{_State3, AtomType}:         _GotoState8Action,
 	{_State3, ExprType}:         _GotoState10Action,
 	{_State3, BlockType}:        _GotoState9Action,
 	{_State5, ExprListType}:     _GotoState11Action,
-	{_State10, PlusToken}:       _GotoState13Action,
-	{_State10, MinusToken}:      _GotoState12Action,
+	{_State10, '+'}:             _GotoState12Action,
+	{_State10, '-'}:             _GotoState13Action,
 	{_State10, OpType}:          _GotoState14Action,
-	{_State11, LbraceToken}:     _GotoState5Action,
-	{_State11, RbraceToken}:     _GotoState15Action,
+	{_State11, '{'}:             _GotoState5Action,
+	{_State11, '}'}:             _GotoState15Action,
 	{_State11, IdToken}:         _GotoState7Action,
 	{_State11, ErrorToken}:      _GotoState6Action,
 	{_State11, AtomType}:        _GotoState8Action,
 	{_State11, ExprType}:        _GotoState10Action,
 	{_State11, BlockType}:       _GotoState9Action,
-	{_State14, LbraceToken}:     _GotoState5Action,
+	{_State14, '{'}:             _GotoState5Action,
 	{_State14, IdToken}:         _GotoState7Action,
 	{_State14, ErrorToken}:      _GotoState6Action,
 	{_State14, AtomType}:        _GotoState16Action,
@@ -612,19 +581,19 @@ var _ActionTable = _ActionTableType{
 	{_State8, _WildcardMarker}:  _ReduceAtomToExprAction,
 	{_State9, _WildcardMarker}:  _ReduceBlockToAtomAction,
 	{_State10, _WildcardMarker}: _ReduceAddToExprListAction,
-	{_State12, _WildcardMarker}: _ReduceMinusToOpAction,
-	{_State13, _WildcardMarker}: _ReducePlusToOpAction,
+	{_State12, _WildcardMarker}: _ReducePlusToOpAction,
+	{_State13, _WildcardMarker}: _ReduceMinusToOpAction,
 	{_State15, _WildcardMarker}: _ReduceToBlockAction,
 	{_State16, _WildcardMarker}: _ReduceBinaryToExprAction,
 }
 
 var _ExpectedTerminals = map[_StateId][]SymbolId{
-	_State2:  []SymbolId{LbraceToken},
-	_State3:  []SymbolId{LbraceToken, IdToken, ErrorToken, _EndMarker},
+	_State2:  []SymbolId{'{'},
+	_State3:  []SymbolId{'{', IdToken, ErrorToken, _EndMarker},
 	_State4:  []SymbolId{_EndMarker},
-	_State10: []SymbolId{PlusToken, MinusToken},
-	_State11: []SymbolId{LbraceToken, RbraceToken, IdToken, ErrorToken},
-	_State14: []SymbolId{LbraceToken, IdToken, ErrorToken},
+	_State10: []SymbolId{'+', '-'},
+	_State11: []SymbolId{'{', '}', IdToken, ErrorToken},
+	_State14: []SymbolId{'{', IdToken, ErrorToken},
 }
 
 /*
@@ -643,7 +612,7 @@ Parser Debug States:
     Reduce:
       (nil)
     Goto:
-      LBRACE -> State 5
+      '{' -> State 5
       block -> State 4
 
   State 3:
@@ -653,7 +622,7 @@ Parser Debug States:
     Reduce:
       $ -> [#accept]
     Goto:
-      LBRACE -> State 5
+      '{' -> State 5
       ID -> State 7
       ERROR -> State 6
       atom -> State 8
@@ -670,7 +639,7 @@ Parser Debug States:
 
   State 5:
     Kernel Items:
-      block: LBRACE.expr_list RBRACE
+      block: '{'.expr_list '}'
     Reduce:
       * -> [expr_list]
     Goto:
@@ -710,24 +679,24 @@ Parser Debug States:
 
   State 10:
     Kernel Items:
-      expr: expr.op atom
       expr_list: expr_list expr., *
+      expr: expr.op atom
     Reduce:
       * -> [expr_list]
     Goto:
-      PLUS -> State 13
-      MINUS -> State 12
+      '+' -> State 12
+      '-' -> State 13
       op -> State 14
 
   State 11:
     Kernel Items:
-      block: LBRACE expr_list.RBRACE
       expr_list: expr_list.expr
+      block: '{' expr_list.'}'
     Reduce:
       (nil)
     Goto:
-      LBRACE -> State 5
-      RBRACE -> State 15
+      '{' -> State 5
+      '}' -> State 15
       ID -> State 7
       ERROR -> State 6
       atom -> State 8
@@ -736,7 +705,7 @@ Parser Debug States:
 
   State 12:
     Kernel Items:
-      op: MINUS., *
+      op: '+'., *
     Reduce:
       * -> [op]
     Goto:
@@ -744,7 +713,7 @@ Parser Debug States:
 
   State 13:
     Kernel Items:
-      op: PLUS., *
+      op: '-'., *
     Reduce:
       * -> [op]
     Goto:
@@ -756,7 +725,7 @@ Parser Debug States:
     Reduce:
       (nil)
     Goto:
-      LBRACE -> State 5
+      '{' -> State 5
       ID -> State 7
       ERROR -> State 6
       atom -> State 16
@@ -764,7 +733,7 @@ Parser Debug States:
 
   State 15:
     Kernel Items:
-      block: LBRACE expr_list RBRACE., *
+      block: '{' expr_list '}'., *
     Reduce:
       * -> [block]
     Goto:

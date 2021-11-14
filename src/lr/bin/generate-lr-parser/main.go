@@ -87,6 +87,8 @@ func main() {
 		panic(err)
 	}
 
+	parsed = nil
+
 	lrStates := lr.NewLRStates(grammar)
 
 	if *shouldPrintLRStates {
@@ -201,12 +203,12 @@ func printLRStates(states *lr.LRStates) {
 		fmt.Println("      Kernel Items:")
 		firstNonKernel := true
 		for _, item := range state.Items {
-			if !item.IsKernel() && firstNonKernel {
+			if !item.IsKernel && firstNonKernel {
 				firstNonKernel = false
 				fmt.Println("      Non-kernel Items:")
 			}
 
-			if item.IsReduce() {
+			if item.IsReduce {
 				reduceCount += 1
 				reduce[item.LookAhead] = append(
 					reduce[item.LookAhead],

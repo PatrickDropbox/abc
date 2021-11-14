@@ -33,7 +33,7 @@ import (
 %token <Generic_> TOKEN TYPE START // %<identifier>
 
 // Intermediate token that should not reach the parser
-%token <Token> ARROW COLON
+%token <Token> ARROW
 
 // <identifier> followed by -> (ignoring whitespace and comment), tokenized as a
 // single token by the lexer.  Equivalent to C_IDENTIFIER in yacc
@@ -43,13 +43,13 @@ import (
 // a single token by the lexer.
 %token <Token> LABEL
 
-%token <Generic_> LT GT OR SEMICOLON SECTION_MARKER
-%token <Token> IDENTIFIER
+%token <Generic_> SECTION_MARKER
+%token <Token> IDENTIFIER CHARACTER
 
 %token <Token> SECTION_CONTENT
 
 %type <Generic_> rword
-%type <Tokens> nonempty_ident_list ident_list
+%type <Tokens> nonempty_ident_list nonempty_id_or_char_list id_or_char_list
 
 %type <Definition> def
 %type <Definitions> defs
@@ -97,27 +97,27 @@ defs:
         $$, _ =  Lrlex.(*ParseContext).AddToDefs($1, $2)
     }
     |
-    defs def SEMICOLON {
-        $$, _ =  Lrlex.(*ParseContext).AddExplicitToDefs($1, $2, $3)
+    defs def ';' {
+        $$, _ =  Lrlex.(*ParseContext).AddExplicitToDefs($1, $2, nil)
     }
     |
     def {
         $$, _ =  Lrlex.(*ParseContext).DefToDefs($1)
     }
     |
-    def SEMICOLON {
-        $$, _ =  Lrlex.(*ParseContext).ExplicitDefToDefs($1, $2)
+    def ';' {
+        $$, _ =  Lrlex.(*ParseContext).ExplicitDefToDefs($1, nil)
     }
     ;
 
 // TODO: handle language specific boiler plate, union/struct
 def:
     // type / token declaration
-    rword LT IDENTIFIER GT nonempty_ident_list {
-        $$, _ =  Lrlex.(*ParseContext).TermDeclToDef($1, $2, $3, $4, $5)
+    rword '<' IDENTIFIER '>' nonempty_id_or_char_list {
+        $$, _ =  Lrlex.(*ParseContext).TermDeclToDef($1, nil, $3, nil, $5)
     }
     |
-    rword nonempty_ident_list {
+    rword nonempty_id_or_char_list {
         $$, _ =  Lrlex.(*ParseContext).UntypedTermDeclToDef($1, $2)
     }
     |
@@ -150,17 +150,35 @@ nonempty_ident_list:
     }
     ;
 
-ident_list:
-    nonempty_ident_list {
-        $$, _ = Lrlex.(*ParseContext).NonEmptyListToIdentList($1)
+nonempty_id_or_char_list:
+    id_or_char_list IDENTIFIER {
+        $$, _ = Lrlex.(*ParseContext).AddIdToNonemptyIdOrCharList($1, $2)
+    }
+    |
+    id_or_char_list CHARACTER {
+        $$, _ = Lrlex.(*ParseContext).AddCharToNonemptyIdOrCharList($1, $2)
+    }
+    |
+    IDENTIFIER {
+        $$, _ = Lrlex.(*ParseContext).IdToNonemptyIdOrCharList($1)
+    }
+    |
+    CHARACTER {
+        $$, _ = Lrlex.(*ParseContext).CharToNonemptyIdOrCharList($1)
+    }
+    ;
+
+id_or_char_list:
+    nonempty_id_or_char_list {
+        $$, _ = Lrlex.(*ParseContext).ListToIdOrCharList($1)
     }
     | {
-        $$, _ = Lrlex.(*ParseContext).NilToIdentList()
+        $$, _ = Lrlex.(*ParseContext).NilToIdOrCharList()
     }
     ;
 
 rule:
-    RULE_DEF ident_list {
+    RULE_DEF id_or_char_list {
         $$, _ = Lrlex.(*ParseContext).UnlabeledClauseToRule($1, $2)
     }
     |
@@ -170,8 +188,8 @@ rule:
     ;
 
 labeled_clauses:
-    labeled_clauses OR labeled_clause {
-        $$, _ = Lrlex.(*ParseContext).AddToLabeledClauses($1, $2, $3)
+    labeled_clauses '|' labeled_clause {
+        $$, _ = Lrlex.(*ParseContext).AddToLabeledClauses($1, nil, $3)
     }
     |
     labeled_clause {
@@ -180,7 +198,7 @@ labeled_clauses:
     ;
 
 labeled_clause:
-    LABEL ident_list {
+    LABEL id_or_char_list {
         $$, _ = Lrlex.(*ParseContext).ToLabeledClause($1, $2)
     }
     ;
