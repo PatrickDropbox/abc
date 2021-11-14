@@ -26,29 +26,17 @@ type Item struct {
 	Key  string
 	Next *Item
 	Core *Item
-}
 
-func NewCoreItem(term *Term, clause *Clause) *Item {
-	return &Item{
-		Term:     term,
-		Clause:   clause,
-		IsReduce: len(clause.Bindings) == 0,
-	}
+	Pool *itemPool
 }
 
 func (item *Item) Shift() *Item {
 	if item.Next == nil {
-		next := *item
-		next.Dot += 1
-		if len(next.Clause.Bindings) == next.Dot {
-			next.IsReduce = true
-		}
-		next.Key = ""
-		if item.Core != nil {
-			next.Core = item.Core.Shift()
-		}
-
-		item.Next = &next
+		item.Next = item.Pool.Get(
+			item.Term,
+			item.Clause,
+			item.Dot+1,
+			item.LookAhead)
 	}
 
 	return item.Next
@@ -59,17 +47,11 @@ func (item *Item) ReplaceLookAhead(symbol string) *Item {
 		return item
 	}
 
-	newItem := *item
-
-	if item.LookAhead == "" {
-		newItem.Core = item
-	}
-
-	newItem.LookAhead = symbol
-	newItem.Key = ""
-	newItem.Next = nil
-
-	return &newItem
+	return item.Pool.Get(
+		item.Term,
+		item.Clause,
+		item.Dot,
+		symbol)
 }
 
 func (item *Item) IsKernel() bool {
@@ -79,8 +61,8 @@ func (item *Item) IsKernel() bool {
 func (item *Item) String() string {
 	if item.Key == "" {
 		result := ""
-		if item.Core != nil {
-			result = item.Core.String()
+		if item.LookAhead != "" {
+			result = item.Core.String() + ", " + item.LookAhead
 		} else {
 			result += item.Term.Name + ":"
 
@@ -97,10 +79,6 @@ func (item *Item) String() string {
 			} else {
 				result += " "
 			}
-		}
-
-		if item.LookAhead != "" {
-			result += ", " + item.LookAhead
 		}
 
 		item.Key = result
@@ -149,42 +127,47 @@ func (this *Item) Compare(other *Item) int {
 }
 
 type itemPoolKey struct {
-	Rule      string
-	Label     string
+	ClauseId  int
+	Dot       int
 	LookAhead string
 }
 
 type itemPool struct {
-	// (rule, clause label, "") -> item
-	coreItems map[itemPoolKey]*Item
-
-	// (rule, clause label, look ahead) -> item
-	firstItems map[itemPoolKey]*Item
+	items map[itemPoolKey]*Item
 }
 
 func newItemPool() *itemPool {
-	return &itemPool{map[itemPoolKey]*Item{}, map[itemPoolKey]*Item{}}
+	return &itemPool{map[itemPoolKey]*Item{}}
 }
 
-func (pool *itemPool) Get(term *Term, clause *Clause, lookAhead string) *Item {
-	key := itemPoolKey{term.Name, clause.Label, lookAhead}
+func (pool *itemPool) Get(
+	term *Term,
+	clause *Clause,
+	dot int,
+	lookAhead string) *Item {
 
-	first, ok := pool.firstItems[key]
-	if ok {
-		return first
-	}
-
-	coreKey := itemPoolKey{term.Name, clause.Label, ""}
-	core, ok := pool.coreItems[coreKey]
+	key := itemPoolKey{clause.SortId, dot, lookAhead}
+	item, ok := pool.items[key]
 	if !ok {
-		core = NewCoreItem(term, clause)
-		pool.coreItems[coreKey] = core
+		item = &Item{
+			Term:      term,
+			Clause:    clause,
+			Dot:       dot,
+			LookAhead: lookAhead,
+			IsReduce:  dot == len(clause.Bindings),
+			Pool:      pool,
+		}
+
+		if lookAhead != "" {
+			item.Core = pool.Get(term, clause, dot, "")
+		} else {
+			item.Core = item
+		}
+
+		pool.items[key] = item
 	}
 
-	first = core.ReplaceLookAhead(lookAhead)
-	pool.firstItems[key] = first
-
-	return first
+	return item
 }
 
 type Items []*Item
@@ -234,6 +217,7 @@ type ItemSet struct {
 }
 
 func newItemSet(kernelItems Items) *ItemSet {
+	sort.Sort(kernelItems)
 	return &ItemSet{
 		Kernel:      kernelItems.String(),
 		KernelItems: kernelItems,
@@ -393,6 +377,44 @@ func (set *ItemSet) computeConflictSymbols() {
 	set.ReduceReduceConflictSymbols = reduceReduce
 }
 
+func (set *ItemSet) compressShiftItemsAndSort() {
+	if len(set.ShiftReduceConflictSymbols) > 0 ||
+		len(set.ReduceReduceConflictSymbols) > 0 {
+
+		return // Don't compress error state to output more debug info
+	}
+
+	added := map[string]struct{}{}
+	kernelCount := 0
+	items := Items{}
+	for _, item := range set.Items {
+		toAdd := item
+		if !item.IsReduce {
+			toAdd = item.ReplaceLookAhead("")
+		}
+
+		_, ok := added[toAdd.String()]
+		if ok {
+			continue
+		}
+		added[toAdd.String()] = struct{}{}
+
+		if toAdd.IsKernel() {
+			kernelCount += 1
+		}
+
+		items = append(items, toAdd)
+	}
+
+	// Note that the kernel items are already sorted
+	sort.Sort(items[kernelCount:])
+
+	kernelItems := items[:kernelCount]
+	set.Kernel = kernelItems.String()
+	set.KernelItems = kernelItems
+	set.Items = items
+}
+
 func (set *ItemSet) compress() {
 	if len(set.ShiftReduceConflictSymbols) > 0 ||
 		len(set.ReduceReduceConflictSymbols) > 0 {
@@ -500,15 +522,15 @@ func (states *LRStates) populateStartStates() {
 	}
 
 	for _, start := range states.Starts {
-		core := NewCoreItem(
+		item := states.ItemPool.Get(
 			acceptTerm,
 			&Clause{
 				SortId:   0,
 				Bindings: []*Term{startTerm, start},
-			})
-
-		states.maybeAdd(
-			newItemSet(Items{core.ReplaceLookAhead(EndMarker).Shift()}))
+			},
+			1,
+			EndMarker)
+		states.maybeAdd(newItemSet(Items{item}))
 	}
 }
 
@@ -563,6 +585,11 @@ func (states *LRStates) generateStates() {
 
 			state.computeConflictSymbols()
 
+			// NOTE: it's safe to drop the lookahead symbol from shift items
+			// once the goto states for the current states are initialized
+			// since shifting does not depend on the lookahead symbol.
+			state.compressShiftItemsAndSort()
+
 			exploredIdx += 1
 		}
 	}
@@ -601,7 +628,7 @@ func (states *LRStates) populateClosure(state *ItemSet) {
 				checked[key] = struct{}{}
 
 				for _, clause := range rule.Clauses {
-					item := states.ItemPool.Get(rule, clause, terminal)
+					item := states.ItemPool.Get(rule, clause, 0, terminal)
 
 					_, ok := added[item.String()]
 					if !ok {
@@ -615,8 +642,6 @@ func (states *LRStates) populateClosure(state *ItemSet) {
 
 		toExplore = nextToExplore
 	}
-
-	sort.Sort(state.Items)
 
 	reduce := map[string]Items{}
 	for _, item := range state.Items {
