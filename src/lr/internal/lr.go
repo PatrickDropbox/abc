@@ -22,6 +22,7 @@ type Item struct {
 	LookAhead string
 
 	IsReduce bool
+	IsKernel bool
 
 	Key  string
 	Next *Item
@@ -52,10 +53,6 @@ func (item *Item) ReplaceLookAhead(symbol string) *Item {
 		item.Clause,
 		item.Dot,
 		symbol)
-}
-
-func (item *Item) IsKernel() bool {
-	return item.Dot != 0
 }
 
 func (item *Item) String() string {
@@ -93,11 +90,11 @@ func (item *Item) String() string {
 //  dot position
 //  lookahead string
 func (this *Item) Compare(other *Item) int {
-	if this.IsKernel() {
-		if !other.IsKernel() {
+	if this.IsKernel {
+		if !other.IsKernel {
 			return -1
 		}
-	} else if other.IsKernel() {
+	} else if other.IsKernel {
 		return 1
 	}
 
@@ -155,6 +152,7 @@ func (pool *itemPool) Get(
 			Dot:       dot,
 			LookAhead: lookAhead,
 			IsReduce:  dot == len(clause.Bindings),
+			IsKernel:  dot != 0,
 			Pool:      pool,
 		}
 
@@ -173,7 +171,7 @@ func (pool *itemPool) Get(
 type Items []*Item
 
 func (items Items) String() string {
-	chunks := []string{}
+	chunks := make([]string, 0, len(items))
 	for _, item := range items {
 		chunks = append(chunks, item.String())
 	}
@@ -239,7 +237,7 @@ func (set *ItemSet) canMergeFrom(other *ItemSet) bool {
 		return false
 	}
 
-	actions := map[string]*stateAction{}
+	actions := make(map[string]*stateAction, len(set.Reduce)+len(set.Goto))
 	for symbol, items := range set.Reduce {
 		if len(items) > 1 {
 			return false // don't merge state with reduce/reduce error
@@ -295,7 +293,7 @@ func (set *ItemSet) canMergeFrom(other *ItemSet) bool {
 
 func (set *ItemSet) mergeFrom(other *ItemSet) {
 	kernelCount := 0
-	items := Items{}
+	items := make(Items, 0, len(set.Items)+len(other.Items))
 	thisIdx := 0
 	otherIdx := 0
 	for thisIdx < len(set.Items) && otherIdx < len(other.Items) {
@@ -316,7 +314,7 @@ func (set *ItemSet) mergeFrom(other *ItemSet) {
 			otherIdx += 1
 		}
 
-		if toAdd.IsKernel() {
+		if toAdd.IsKernel {
 			kernelCount += 1
 		}
 
@@ -338,12 +336,12 @@ func (set *ItemSet) mergeFrom(other *ItemSet) {
 }
 
 func (set *ItemSet) clone() *ItemSet {
-	gotoMap := map[string]*ItemSet{}
+	gotoMap := make(map[string]*ItemSet, len(set.Goto))
 	for symbol, state := range set.Goto {
 		gotoMap[symbol] = state
 	}
 
-	reduce := map[string]Items{}
+	reduce := make(map[string]Items, len(set.Reduce))
 	for symbol, items := range set.Reduce {
 		reduce[symbol] = items
 	}
@@ -386,7 +384,7 @@ func (set *ItemSet) compressShiftItemsAndSort() {
 
 	added := map[string]struct{}{}
 	kernelCount := 0
-	items := Items{}
+	items := make(Items, 0, len(set.Items))
 	for _, item := range set.Items {
 		toAdd := item
 		if !item.IsReduce {
@@ -399,7 +397,7 @@ func (set *ItemSet) compressShiftItemsAndSort() {
 		}
 		added[toAdd.String()] = struct{}{}
 
-		if toAdd.IsKernel() {
+		if toAdd.IsKernel {
 			kernelCount += 1
 		}
 
@@ -422,7 +420,7 @@ func (set *ItemSet) compress() {
 		return // Don't compress error state to output more debug info
 	}
 
-	counts := map[string]int{}
+	counts := make(map[string]int, len(set.Items))
 	for _, item := range set.Items {
 		if item.IsReduce {
 			counts[item.Core.String()] += 1
@@ -444,8 +442,8 @@ func (set *ItemSet) compress() {
 
 	added := map[string]struct{}{}
 	kernelCount := 0
-	items := Items{}
-	reduce := map[string]Items{}
+	items := make(Items, 0, len(set.Items))
+	reduce := make(map[string]Items, len(set.Reduce))
 	for _, item := range set.Items {
 		var toAdd *Item
 		if item.IsReduce {
@@ -465,7 +463,7 @@ func (set *ItemSet) compress() {
 		}
 		added[toAdd.String()] = struct{}{}
 
-		if toAdd.IsKernel() {
+		if toAdd.IsKernel {
 			kernelCount += 1
 		}
 
@@ -540,7 +538,7 @@ func (states *LRStates) populateStartStates() {
 }
 
 func (states *LRStates) generateStates() {
-	symbols := []string{}
+	symbols := make([]string, 0, len(states.Terms))
 	for symbol, _ := range states.Terms {
 		symbols = append(symbols, symbol)
 	}
@@ -551,7 +549,7 @@ func (states *LRStates) generateStates() {
 		for _, state := range states.OrderedStates[exploredIdx:] {
 			states.populateClosure(state)
 
-			shiftableItems := map[string]Items{}
+			shiftableItems := make(map[string]Items, len(state.Items))
 			for _, item := range state.Items {
 				if item.IsReduce {
 					continue
@@ -570,7 +568,7 @@ func (states *LRStates) generateStates() {
 					continue
 				}
 
-				gotoKernelItems := Items{}
+				gotoKernelItems := make(Items, 0, len(items))
 				for _, item := range items {
 					gotoKernelItems = append(gotoKernelItems, item.Shift())
 				}
@@ -774,12 +772,12 @@ func (states *LRStates) mergeStates() {
 	for modified {
 		modified = false
 
-		coreKernels := []string{}
-		mergeCandidates := map[string][]*ItemSet{}
+		coreKernels := make([]string, 0, len(states.OrderedStates))
+		mergeCandidates := make(map[string][]*ItemSet, len(states.States))
 
 		for _, state := range states.OrderedStates {
 			added := map[string]struct{}{}
-			kernelItems := Items{}
+			kernelItems := make(Items, 0, len(state.KernelItems))
 
 			for _, item := range state.KernelItems {
 				_, ok := added[item.Core.String()]
@@ -803,16 +801,16 @@ func (states *LRStates) mergeStates() {
 				mergeCandidates[kernelString],
 				state)
 		}
-		newStates := []*ItemSet{}
+		newStates := make([]*ItemSet, 0, len(states.OrderedStates))
 
 		// lr state kernel -> merged state
-		stateMapping := map[string]*ItemSet{}
+		stateMapping := make(map[string]*ItemSet, len(states.States))
 
 		// NOTE: iterate over coreKernels to preserve state ordering
 		for _, coreKernel := range coreKernels {
 			candidates := mergeCandidates[coreKernel]
 
-			mergedStates := []*ItemSet{}
+			mergedStates := make([]*ItemSet, 0, len(candidates))
 			for _, candidate := range candidates {
 				merged := false
 				for _, mergedState := range mergedStates {
@@ -837,7 +835,7 @@ func (states *LRStates) mergeStates() {
 		}
 
 		for idx, state := range newStates {
-			newGoto := map[string]*ItemSet{}
+			newGoto := make(map[string]*ItemSet, len(state.Goto))
 			for symbol, next := range state.Goto {
 				newGoto[symbol] = stateMapping[next.Kernel]
 			}
@@ -851,7 +849,7 @@ func (states *LRStates) mergeStates() {
 
 			states.OrderedStates = newStates
 
-			states.States = map[string]*ItemSet{}
+			states.States = make(map[string]*ItemSet, len(newStates))
 			for _, state := range newStates {
 				states.States[state.Kernel] = state
 			}

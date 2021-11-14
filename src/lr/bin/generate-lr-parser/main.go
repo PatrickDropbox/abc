@@ -203,7 +203,7 @@ func printLRStates(states *lr.LRStates) {
 		fmt.Println("      Kernel Items:")
 		firstNonKernel := true
 		for _, item := range state.Items {
-			if !item.IsKernel() && firstNonKernel {
+			if !item.IsKernel && firstNonKernel {
 				firstNonKernel = false
 				fmt.Println("      Non-kernel Items:")
 			}

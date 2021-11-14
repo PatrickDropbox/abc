@@ -797,7 +797,7 @@ func (gen *goCodeGen) generateDebugStates() {
 		l("    Kernel Items:")
 		firstNonKernel := true
 		for _, item := range state.Items {
-			if !item.IsKernel() && firstNonKernel {
+			if !item.IsKernel && firstNonKernel {
 				if !gen.OutputDebugNonKernelItems &&
 					len(state.ShiftReduceConflictSymbols) == 0 &&
 					len(state.ReduceReduceConflictSymbols) == 0 {
