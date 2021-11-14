@@ -109,6 +109,45 @@ func (item *Item) String() string {
 	return item.Key
 }
 
+// sort order:
+//  kernel items before non-kernel items
+//  clause sort id
+//  dot position
+//  lookahead string
+func (this *Item) Compare(other *Item) int {
+	if this.IsKernel() {
+		if !other.IsKernel() {
+			return -1
+		}
+	} else if other.IsKernel() {
+		return 1
+	}
+
+	if this.SortId != other.SortId {
+		if this.SortId < other.SortId {
+			return -1
+		}
+		return 1
+	}
+
+	if this.Dot != other.Dot {
+		if this.Dot < other.Dot {
+			return -1
+		}
+		return 1
+	}
+
+	if this.LookAhead == other.LookAhead {
+		return 0
+	}
+
+	if this.LookAhead < other.LookAhead {
+		return -1
+	}
+
+	return 1
+}
+
 type itemPoolKey struct {
 	Rule      string
 	Label     string
@@ -163,42 +202,8 @@ func (items Items) Len() int {
 	return len(items)
 }
 
-// sort order:
-//  kernel items before non-kernel items
-//  clause sort id
-//  dot position
-//  lookahead string
 func (items Items) Less(iIdx int, jIdx int) bool {
-	i := items[iIdx]
-	j := items[jIdx]
-
-	if i.IsKernel() {
-		if !j.IsKernel() {
-			return true
-		}
-	} else if j.IsKernel() {
-		return false
-	}
-
-	iSortId := 0
-	if i.Clause != nil {
-		iSortId = i.Clause.SortId
-	}
-
-	jSortId := 0
-	if j.Clause != nil {
-		jSortId = j.Clause.SortId
-	}
-
-	if iSortId != jSortId {
-		return iSortId < jSortId
-	}
-
-	if i.Dot != j.Dot {
-		return i.Dot < j.Dot
-	}
-
-	return i.LookAhead < j.LookAhead
+	return items[iIdx].Compare(items[jIdx]) < 0
 }
 
 func (items Items) Swap(i int, j int) {
@@ -293,32 +298,39 @@ func (set *ItemSet) canMergeFrom(other *ItemSet) bool {
 }
 
 func (set *ItemSet) mergeFrom(other *ItemSet) {
-	added := map[string]struct{}{}
-	for _, item := range set.Items {
-		added[item.String()] = struct{}{}
-	}
+	kernelCount := 0
+	items := Items{}
+	thisIdx := 0
+	otherIdx := 0
+	for thisIdx < len(set.Items) && otherIdx < len(other.Items) {
+		thisItem := set.Items[thisIdx]
+		otherItem := other.Items[otherIdx]
 
-	numKernelItems := len(set.KernelItems)
-
-	for _, item := range other.Items {
-		_, ok := added[item.String()]
-		if ok {
-			continue
+		var toAdd *Item
+		cmp := thisItem.Compare(otherItem)
+		if cmp < 0 {
+			toAdd = thisItem
+			thisIdx += 1
+		} else if cmp == 0 {
+			toAdd = thisItem
+			thisIdx += 1
+			otherIdx += 1
+		} else {
+			toAdd = otherItem
+			otherIdx += 1
 		}
 
-		added[item.String()] = struct{}{}
-		set.Items = append(set.Items, item)
-
-		if item.IsKernel() {
-			numKernelItems += 1
+		if toAdd.IsKernel() {
+			kernelCount += 1
 		}
+
+		items = append(items, toAdd)
 	}
 
-	sort.Sort(set.Items)
-	kernelItems := set.Items[:numKernelItems]
-
+	kernelItems := items[:kernelCount]
 	set.Kernel = kernelItems.String()
 	set.KernelItems = kernelItems
+	set.Items = items
 
 	for symbol, next := range other.Goto {
 		set.Goto[symbol] = next
