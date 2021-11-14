@@ -87,6 +87,8 @@ func main() {
 		panic(err)
 	}
 
+	parsed = nil
+
 	lrStates := lr.NewLRStates(grammar)
 
 	if *shouldPrintLRStates {

@@ -38,10 +38,8 @@ type Term struct {
 
 	ValueType string
 
-	// Rule and ClauseBindings are nil iff the term is terminal
-	*parser.Rule
-
-	Clauses []*Clause
+	RuleLocation parser.LRLocation
+	Clauses      []*Clause
 
 	Reachable bool
 
@@ -120,7 +118,6 @@ func classifyDefinitions(
 					SymbolId:   term.Id(),
 					IsTerminal: def.IsTerminal,
 					ValueType:  valueType,
-					Rule:       nil,
 					Reachable:  false,
 				}
 			}
@@ -192,7 +189,7 @@ func bindTerms(
 			continue
 		}
 
-		term.Rule = rule
+		term.RuleLocation = rule.Loc()
 
 		clauses := []*Clause{}
 		for _, parsedClause := range rule.Clauses {
@@ -228,20 +225,21 @@ func bindTerms(
 	}
 
 	for name, term := range terms {
-		if !term.IsTerminal && term.Rule == nil {
+		rule, ok := rules[name]
+		if !term.IsTerminal && !ok {
 			errStrs = append(
 				errStrs,
 				fmt.Sprintf(
 					"No rule specified for type: %s %v",
 					name,
 					term.LRLocation))
-		} else if term.IsTerminal && term.Rule != nil {
+		} else if term.IsTerminal && ok {
 			errStrs = append(
 				errStrs,
 				fmt.Sprintf(
 					"token cannot have associated rule: %s %v",
 					name,
-					term.Rule.Loc()))
+					rule.Loc()))
 		}
 	}
 
