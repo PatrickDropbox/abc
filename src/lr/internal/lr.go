@@ -1,9 +1,10 @@
 package lr
 
 import (
-	"fmt"
 	"sort"
 	"strings"
+
+	"github.com/pattyshack/abc/src/lr/internal/parser"
 )
 
 const (
@@ -15,30 +16,25 @@ const (
 
 // LR(1) production item of the form: A -> [a B] . [c] , x
 type Item struct {
-	Name string
+	*Term
+	*Clause
 
-	Rule []string
-	Dot  int
+	Dot int
 
 	LookAhead string
 
 	IsReduce bool
-
-	*Term
-	*Clause
 
 	Key  string
 	Next *Item
 	Core *Item
 }
 
-func NewCoreItem(name string, rule []string, term *Term, clause *Clause) *Item {
+func NewCoreItem(term *Term, clause *Clause) *Item {
 	return &Item{
-		Name:     name,
-		Rule:     rule,
-		IsReduce: len(rule) == 0,
 		Term:     term,
 		Clause:   clause,
+		IsReduce: len(clause.Bindings) == 0,
 	}
 }
 
@@ -46,7 +42,7 @@ func (item *Item) Shift() *Item {
 	if item.Next == nil {
 		next := *item
 		next.Dot += 1
-		if len(next.Rule) == next.Dot {
+		if len(next.Clause.Bindings) == next.Dot {
 			next.IsReduce = true
 		}
 		next.Key = ""
@@ -88,17 +84,17 @@ func (item *Item) String() string {
 		if item.Core != nil {
 			result = item.Core.String()
 		} else {
-			result += item.Name + ":"
+			result += item.Term.Name + ":"
 
-			for idx, symbol := range item.Rule {
+			for idx, term := range item.Clause.Bindings {
 				if idx == item.Dot {
-					result += "." + symbol
+					result += "." + term.Name
 				} else {
-					result += " " + symbol
+					result += " " + term.Name
 				}
 			}
 
-			if item.Dot == len(item.Rule) {
+			if item.Dot == len(item.Clause.Bindings) {
 				result += "."
 			} else {
 				result += " "
@@ -148,12 +144,7 @@ func (pool *itemPool) Get(term *Term, clause *Clause, lookAhead string) *Item {
 	coreKey := itemPoolKey{term.Name, label, ""}
 	core, ok := pool.coreItems[coreKey]
 	if !ok {
-		symbols := []string{}
-		for _, term := range clause.Bindings {
-			symbols = append(symbols, term.Name)
-		}
-
-		core = NewCoreItem(term.Name, symbols, term, clause)
+		core = NewCoreItem(term, clause)
 		pool.coreItems[coreKey] = core
 	}
 
@@ -482,12 +473,21 @@ func (states *LRStates) maybeAdd(state *ItemSet) (*ItemSet, bool) {
 }
 
 func (states *LRStates) populateStartStates() {
+	acceptTerm := &Term{
+		Name: AcceptRule,
+	}
+	startTerm := &Term{
+		Name:            StartMarker,
+		TermDeclaration: &parser.TermDeclaration{IsTerminal: true},
+	}
+
 	for _, start := range states.Starts {
 		core := NewCoreItem(
-			AcceptRule,
-			[]string{StartMarker, start.Name},
-			nil,
-			nil)
+			acceptTerm,
+			&Clause{
+				SortId:   0,
+				Bindings: []*Term{startTerm, start},
+			})
 
 		states.maybeAdd(
 			newItemSet(Items{core.ReplaceLookAhead(EndMarker).Shift()}))
@@ -512,7 +512,7 @@ func (states *LRStates) generateStates() {
 					continue
 				}
 
-				nextSymbol := item.Rule[item.Dot]
+				nextSymbol := item.Clause.Bindings[item.Dot].Name
 				shiftableItems[nextSymbol] = append(
 					shiftableItems[nextSymbol],
 					item)
@@ -565,13 +565,12 @@ func (states *LRStates) populateClosure(state *ItemSet) {
 				continue
 			}
 
-			rule := states.Terms[item.Rule[item.Dot]]
+			rule := item.Clause.Bindings[item.Dot]
 			if rule.IsTerminal {
 				continue
 			}
 
-			terminals := states.firstTerminals(
-				append(item.Rule[item.Dot+1:], item.LookAhead))
+			terminals := states.firstTerminals(item)
 
 			for terminal, _ := range terminals {
 				key := checkedEntry{rule.Name, terminal}
@@ -608,9 +607,10 @@ func (states *LRStates) populateClosure(state *ItemSet) {
 	state.Reduce = reduce
 }
 
-func (states *LRStates) firstTerminals(symbols []string) map[string]struct{} {
+func (states *LRStates) firstTerminals(item *Item) map[string]struct{} {
 	result := map[string]struct{}{}
-	for _, symbol := range symbols {
+	for _, term := range item.Clause.Bindings[item.Dot+1:] {
+		symbol := term.Name
 		hasNil := false
 		for term, _ := range states.FirstTerms[symbol] {
 			if term == "" {
@@ -624,7 +624,15 @@ func (states *LRStates) firstTerminals(symbols []string) map[string]struct{} {
 		}
 	}
 
-	panic(fmt.Sprintf("Shouldn't reach here: %v", symbols))
+	for term, _ := range states.FirstTerms[item.LookAhead] {
+		if term == "" {
+			panic("Shouldn't reach here: " + item.String())
+		} else {
+			result[term] = struct{}{}
+		}
+	}
+
+	return result
 }
 
 func (states *LRStates) computeFirstTerminals() {
