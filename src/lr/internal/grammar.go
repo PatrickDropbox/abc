@@ -34,7 +34,9 @@ type Term struct {
 
 	SymbolId parser.LRSymbolId
 
-	*parser.TermDeclaration
+	IsTerminal bool
+
+	ValueType string
 
 	// Rule and ClauseBindings are nil iff the term is terminal
 	*parser.Rule
@@ -96,10 +98,6 @@ func classifyDefinitions(
 
 		case *parser.TermDeclaration:
 			for _, term := range def.Terms {
-				if def.ValueType == nil {
-					def.ValueType = &parser.Token{Value: Generic}
-				}
-
 				prev, ok := terms[term.Value]
 				if ok {
 					errStrs = append(
@@ -111,13 +109,19 @@ func classifyDefinitions(
 							term.LRLocation.ShortString()))
 				}
 
+				valueType := Generic
+				if def.ValueType != nil {
+					valueType = def.ValueType.Value
+				}
+
 				terms[term.Value] = &Term{
-					Name:            term.Value,
-					LRLocation:      term.LRLocation,
-					SymbolId:        term.Id(),
-					TermDeclaration: def,
-					Rule:            nil,
-					Reachable:       false,
+					Name:       term.Value,
+					LRLocation: term.LRLocation,
+					SymbolId:   term.Id(),
+					IsTerminal: def.IsTerminal,
+					ValueType:  valueType,
+					Rule:       nil,
+					Reachable:  false,
 				}
 			}
 

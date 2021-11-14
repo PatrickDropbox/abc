@@ -183,12 +183,12 @@ func (gen *goCodeGen) populateCodeGenVariables() error {
 	gen.parse = "_" + gen.Prefix + "Parse"
 
 	for _, term := range gen.Terms {
-		valueType := gen.ValueTypes[term.ValueType.Value]
+		valueType := gen.ValueTypes[term.ValueType]
 		if valueType == "" {
-			if term.ValueType.Value != lr.Generic {
+			if term.ValueType != lr.Generic {
 				return fmt.Errorf(
 					"Undefined value type for <%s> %s",
-					term.ValueType.Value,
+					term.ValueType,
 					term.LRLocation)
 			}
 			valueType = "*" + gen.genericSymbol
@@ -567,12 +567,12 @@ func (gen *goCodeGen) generateAction() {
 			for i, term := range clause.Bindings {
 				args = append(
 					args,
-					fmt.Sprintf("args[%d].%s", i, term.ValueType.Value))
+					fmt.Sprintf("args[%d].%s", i, term.ValueType))
 			}
 
 			l("symbol.SymbolId_ = %s", rule.CodeGenSymbolConst)
 			l("symbol.%s, err = reducer.%s(%s)",
-				rule.ValueType.Value,
+				rule.ValueType,
 				clause.CodeGenReducerName,
 				strings.Join(args, ", "))
 			pop()
@@ -652,17 +652,15 @@ func (gen *goCodeGen) generateSymbolType() {
 	valueTerms := map[string][]*lr.Term{
 		lr.Generic: []*lr.Term{
 			&lr.Term{
-				TermDeclaration: &parser.TermDeclaration{
-					ValueType: &parser.Token{Value: lr.Generic},
-				},
+				ValueType:          lr.Generic,
 				CodeGenSymbolConst: gen.endSymbol,
 				CodeGenType:        gen.Obj("*" + gen.genericSymbol),
 			},
 		},
 	}
 	for _, term := range gen.Terminals {
-		valueTerms[term.ValueType.Value] = append(
-			valueTerms[term.ValueType.Value],
+		valueTerms[term.ValueType] = append(
+			valueTerms[term.ValueType],
 			term)
 	}
 
@@ -720,8 +718,8 @@ func (gen *goCodeGen) generateSymbolType() {
 	valueTermConsts := map[string][]string{}
 	for _, terms := range [][]*lr.Term{gen.Terminals, gen.NonTerminals} {
 		for _, term := range terms {
-			valueTermConsts[term.ValueType.Value] = append(
-				valueTermConsts[term.ValueType.Value],
+			valueTermConsts[term.ValueType] = append(
+				valueTermConsts[term.ValueType],
 				term.CodeGenSymbolConst)
 		}
 	}
@@ -1305,7 +1303,7 @@ func (gen *goCodeGen) generateParseEntryPoint(
 	pop()
 	l("}")
 
-	l("return item.%s, nil", startTerm.ValueType.Value)
+	l("return item.%s, nil", startTerm.ValueType)
 	pop()
 	l("}")
 	l("")

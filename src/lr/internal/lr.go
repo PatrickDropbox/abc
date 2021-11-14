@@ -3,8 +3,6 @@ package lr
 import (
 	"sort"
 	"strings"
-
-	"github.com/pattyshack/abc/src/lr/internal/parser"
 )
 
 const (
@@ -473,8 +471,8 @@ func (states *LRStates) populateStartStates() {
 		Name: AcceptRule,
 	}
 	startTerm := &Term{
-		Name:            StartMarker,
-		TermDeclaration: &parser.TermDeclaration{IsTerminal: true},
+		Name:       StartMarker,
+		IsTerminal: true,
 	}
 
 	for _, start := range states.Starts {
