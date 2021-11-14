@@ -216,11 +216,8 @@ func (gen *goCodeGen) populateCodeGenVariables() error {
 		term.CodeGenSymbolConst = symbolConst
 
 		for _, clause := range term.Clauses {
-			reducerName := ""
-			if clause.Label != nil {
-				reducerName = snakeToCamel(clause.Label.Value)
-			}
-			reducerName += "To" + snakeToCamel(term.Name)
+			reducerName := snakeToCamel(clause.Label) + "To" +
+				snakeToCamel(term.Name)
 
 			err := gen.check(reducerName, clause.LRLocation)
 			if err != nil {
@@ -406,7 +403,7 @@ func (gen *goCodeGen) generateReducerInterface() {
 				l("")
 			}
 
-			if clause.Label == nil {
+			if clause.Label == "" {
 				l("// %s: %s -> ...",
 					clause.LRLocation.ShortString(),
 					rule.Name)
@@ -414,7 +411,7 @@ func (gen *goCodeGen) generateReducerInterface() {
 				l("// %s: %s -> %s: ...",
 					clause.LRLocation.ShortString(),
 					rule.Name,
-					clause.Label.Value)
+					clause.Label)
 			}
 
 			paramNameCount := map[string]int{}

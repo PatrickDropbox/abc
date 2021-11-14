@@ -130,18 +130,14 @@ func newItemPool() *itemPool {
 }
 
 func (pool *itemPool) Get(term *Term, clause *Clause, lookAhead string) *Item {
-	label := ""
-	if clause.Label != nil {
-		label = clause.Label.Value
-	}
-	key := itemPoolKey{term.Name, label, lookAhead}
+	key := itemPoolKey{term.Name, clause.Label, lookAhead}
 
 	first, ok := pool.firstItems[key]
 	if ok {
 		return first
 	}
 
-	coreKey := itemPoolKey{term.Name, label, ""}
+	coreKey := itemPoolKey{term.Name, clause.Label, ""}
 	core, ok := pool.coreItems[coreKey]
 	if !ok {
 		core = NewCoreItem(term, clause)
@@ -651,7 +647,7 @@ func (states *LRStates) computeFirstTerminals() {
 			set[term.Name] = struct{}{}
 		} else {
 			for _, clause := range term.Clauses {
-				if len(clause.Body) == 0 {
+				if len(clause.Bindings) == 0 {
 					set[""] = struct{}{}
 				}
 			}

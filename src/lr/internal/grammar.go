@@ -16,8 +16,9 @@ const (
 
 type Clause struct {
 	SortId int // 0 is reserved for the start rule.
+	parser.LRLocation
 
-	*parser.Clause
+	Label string
 
 	Bindings []*Term
 
@@ -190,14 +191,19 @@ func bindTerms(
 		term.Rule = rule
 
 		clauses := []*Clause{}
-		for _, clause := range rule.Clauses {
+		for _, parsedClause := range rule.Clauses {
+			label := ""
+			if parsedClause.Label != nil {
+				label = parsedClause.Label.Value
+			}
 			clause := &Clause{
-				SortId:   clause.SortId,
-				Clause:   clause,
-				Bindings: []*Term{},
+				SortId:     parsedClause.SortId,
+				LRLocation: parsedClause.LRLocation,
+				Label:      label,
+				Bindings:   []*Term{},
 			}
 
-			for _, id_or_char := range clause.Body {
+			for _, id_or_char := range parsedClause.Body {
 				t, ok := terms[id_or_char.Value]
 				if ok {
 					clause.Bindings = append(clause.Bindings, t)
