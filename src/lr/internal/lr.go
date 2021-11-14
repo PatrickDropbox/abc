@@ -484,10 +484,15 @@ func (set *ItemSet) compress() {
 	set.Reduce = reduce
 }
 
+type firstTermsEntry struct {
+	hasNil    bool
+	terminals []string
+}
+
 type LRStates struct {
 	*Grammar
 
-	FirstTerms map[string]map[string]struct{}
+	FirstTerms map[string]*firstTermsEntry
 
 	ItemPool *itemPool
 
@@ -603,6 +608,8 @@ func (states *LRStates) populateClosure(state *ItemSet) {
 	checked := map[checkedEntry]struct{}{}
 	added := map[string]struct{}{}
 
+	var workspace []string
+
 	toExplore := state.Items
 	for len(toExplore) > 0 {
 		nextToExplore := Items{}
@@ -617,9 +624,9 @@ func (states *LRStates) populateClosure(state *ItemSet) {
 				continue
 			}
 
-			terminals := states.firstTerminals(item)
+			terminals := states.firstTerminals(item, workspace)
 
-			for terminal, _ := range terminals {
+			for _, terminal := range terminals {
 				key := checkedEntry{rule.Name, terminal}
 				_, ok := checked[key]
 				if ok {
@@ -638,6 +645,10 @@ func (states *LRStates) populateClosure(state *ItemSet) {
 					}
 				}
 			}
+
+			if len(workspace) < len(terminals) {
+				workspace = terminals
+			}
 		}
 
 		toExplore = nextToExplore
@@ -652,32 +663,33 @@ func (states *LRStates) populateClosure(state *ItemSet) {
 	state.Reduce = reduce
 }
 
-func (states *LRStates) firstTerminals(item *Item) map[string]struct{} {
-	result := map[string]struct{}{}
+// NOTE: This works well in practice, but in degenerated case, where all the
+// terms have nil first terminal, the result list could be much longer than
+// the equvialent set.
+func (states *LRStates) firstTerminals(
+	item *Item,
+	workspace []string) []string {
+
+	result := workspace[:0]
+
 	for _, term := range item.Clause.Bindings[item.Dot+1:] {
-		symbol := term.Name
-		hasNil := false
-		for term, _ := range states.FirstTerms[symbol] {
-			if term == "" {
-				hasNil = true
-			} else {
-				result[term] = struct{}{}
-			}
+		entry := states.FirstTerms[term.Name]
+		if entry == nil {
+			continue
 		}
-		if !hasNil {
+
+		result = append(result, entry.terminals...)
+		if !entry.hasNil {
 			return result
 		}
 	}
 
-	for term, _ := range states.FirstTerms[item.LookAhead] {
-		if term == "" {
-			panic("Shouldn't reach here: " + item.String())
-		} else {
-			result[term] = struct{}{}
-		}
+	entry := states.FirstTerms[item.LookAhead]
+	if entry == nil || entry.hasNil {
+		panic("Shouldn't reach here: " + item.String())
 	}
 
-	return result
+	return append(result, entry.terminals...)
 }
 
 func (states *LRStates) computeFirstTerminals() {
@@ -686,7 +698,6 @@ func (states *LRStates) computeFirstTerminals() {
 			"$": struct{}{},
 		},
 	}
-	states.FirstTerms = firstTerms
 
 	for _, term := range states.Terms {
 		set := map[string]struct{}{}
@@ -740,6 +751,21 @@ func (states *LRStates) computeFirstTerminals() {
 				}
 			}
 		}
+	}
+
+	states.FirstTerms = make(map[string]*firstTermsEntry, len(firstTerms))
+	for symbol, set := range firstTerms {
+		hasNil := false
+		terms := make([]string, 0, len(set))
+		for term, _ := range set {
+			if term == "" {
+				hasNil = true
+			} else {
+				terms = append(terms, term)
+			}
+		}
+
+		states.FirstTerms[symbol] = &firstTermsEntry{hasNil, terms}
 	}
 }
 
