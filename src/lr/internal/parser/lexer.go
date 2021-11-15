@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"fmt"
 	"io"
-	"regexp"
 
 	"github.com/pattyshack/abc/src/lr/parseutil"
 )
@@ -31,8 +30,6 @@ var (
 		"\t": struct{}{},
 		"\r": struct{}{},
 	}
-
-	nameRe = regexp.MustCompile(`^([a-zA-Z_]\w*)`)
 )
 
 type rawLexer struct {
@@ -170,91 +167,37 @@ func (lexer *rawLexer) maybeTokenizeKeywordOrSymbol() (LRToken, error) {
 }
 
 func (lexer *rawLexer) maybeTokenizeCharacter() (LRToken, error) {
-	bytes, _ := lexer.reader.Peek(4)
+	bytes, loc, err := parseutil.MaybeTokenizeCharacter(lexer.reader)
+	if err != nil {
+		return nil, err
+	}
 
-	if len(bytes) < 3 {
+	if bytes == nil {
 		return nil, nil
-	}
-
-	if bytes[0] != '\'' {
-		return nil, nil
-	}
-
-	numBytes := 3
-	if bytes[1] == '\\' { // c escape
-		if len(bytes) < 4 || bytes[3] != '\'' {
-			return nil, nil
-		}
-
-		switch bytes[2] {
-		case 't', 'n', '\'', '\\':
-		default:
-			return nil, nil
-		}
-
-		numBytes = 4
-	} else {
-		if bytes[2] != '\'' {
-			return nil, nil
-		}
-
-		valid := false
-
-		char := bytes[1]
-		if ('a' <= char && char <= 'z') ||
-			('A' <= char && char <= 'Z') ||
-			('0' <= char && char <= '9') {
-
-			valid = true
-		} else {
-			switch char {
-			case '`', '~', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')',
-				'-', '_', '=', '+', '[', '{', ']', '}', '|', ';', ':', '"',
-				',', '<', '.', '>', '/', '?', ' ':
-				valid = true
-
-			}
-		}
-
-		if !valid {
-			return nil, nil
-		}
-	}
-
-	bytes = bytes[:numBytes]
-	n, err := lexer.reader.Read(bytes)
-	if len(bytes) != n || err != nil {
-		panic(err) // should never happen
 	}
 
 	return &Token{
-		LRLocation: LRLocation(lexer.reader.Location),
+		LRLocation: LRLocation(loc),
 		LRSymbolId: LRCharacterToken,
 		Value:      string(bytes),
 	}, nil
 }
 
 func (lexer *rawLexer) maybeTokenizeIdentifier() (LRToken, error) {
-	// TODO: handle more gracefully.  Scan until the first \W
-	bytes, _ := lexer.reader.Peek(128)
+    bytes, loc, err := parseutil.MaybeTokenizeIdentifier(lexer.reader)
+    if err != nil {
+        return nil, err
+    }
 
-	name := nameRe.Find(bytes)
-	if name == nil {
-		return nil, nil
-	}
+    if bytes == nil {
+        return nil, nil
+    }
 
-	token := &Token{
-		LRLocation: LRLocation(lexer.reader.Location),
+    return &Token{
+		LRLocation: LRLocation(loc),
 		LRSymbolId: LRIdentifierToken,
-		Value:      string(name),
-	}
-
-	n, err := lexer.reader.Read(name)
-	if len(name) != n || err != nil {
-		panic(err) // should never happen
-	}
-
-	return token, nil
+		Value:      string(bytes),
+    },nil
 }
 
 func (lexer *rawLexer) maybeTokenizeSectionContent() (LRToken, error) {
