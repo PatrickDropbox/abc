@@ -496,6 +496,9 @@ type LRStates struct {
 
 	States        map[string]*ItemSet
 	OrderedStates []*ItemSet
+
+	ShiftReduceConflictsCount  int
+	ReduceReduceConflictsCount int
 }
 
 func (states *LRStates) maybeAdd(state *ItemSet) (*ItemSet, bool) {
@@ -902,9 +905,17 @@ func NewLRStates(grammar *Grammar) *LRStates {
 
 	states.shuffleAcceptStates()
 
+	shiftReduceCount := 0
+	reduceReduceCount := 0
 	for _, state := range states.OrderedStates {
 		state.compress()
+
+		shiftReduceCount += len(state.ShiftReduceConflictSymbols)
+		reduceReduceCount += len(state.ReduceReduceConflictSymbols)
 	}
+
+	states.ShiftReduceConflictsCount = shiftReduceCount
+	states.ReduceReduceConflictsCount = reduceReduceCount
 
 	return states
 }
