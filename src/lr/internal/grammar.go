@@ -15,7 +15,7 @@ const (
 )
 
 type Clause struct {
-	SortId int // 0 is reserved for the start rule.
+	SortId int // 0 (and negatives) are reserved for the start rules.
 	parser.LRLocation
 
 	Label string

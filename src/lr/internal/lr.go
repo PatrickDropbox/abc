@@ -527,11 +527,11 @@ func (states *LRStates) populateStartStates() {
 		IsTerminal: true,
 	}
 
-	for _, start := range states.Starts {
+	for idx, start := range states.Starts {
 		item := states.ItemPool.Get(
 			acceptTerm,
 			&Clause{
-				SortId:   0,
+				SortId:   -(len(states.Starts)-idx - 1),
 				Bindings: []*Term{startTerm, start},
 			},
 			1,
