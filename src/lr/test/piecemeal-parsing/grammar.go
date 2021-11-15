@@ -583,7 +583,7 @@ var _ActionTable = _ActionTableType{
 	{_State10, _WildcardMarker}: _ReduceAddToExprListAction,
 	{_State12, _WildcardMarker}: _ReducePlusToOpAction,
 	{_State13, _WildcardMarker}: _ReduceMinusToOpAction,
-	{_State15, _WildcardMarker}: _ReduceToBlockAction,
+	{_State15, _EndMarker}:      _ReduceToBlockAction,
 	{_State16, _WildcardMarker}: _ReduceBinaryToExprAction,
 }
 
@@ -594,6 +594,7 @@ var _ExpectedTerminals = map[_StateId][]SymbolId{
 	_State10: []SymbolId{'+', '-'},
 	_State11: []SymbolId{'{', '}', IdToken, ErrorToken},
 	_State14: []SymbolId{'{', IdToken, ErrorToken},
+	_State15: []SymbolId{_EndMarker},
 }
 
 /*
@@ -733,9 +734,9 @@ Parser Debug States:
 
   State 15:
     Kernel Items:
-      block: '{' expr_list '}'., *
+      block: '{' expr_list '}'., $
     Reduce:
-      * -> [block]
+      $ -> [block]
     Goto:
       (nil)
 
