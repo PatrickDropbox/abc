@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"fmt"
 	"io"
-	"regexp"
 
 	"github.com/pattyshack/abc/src/lr/parseutil"
 )
