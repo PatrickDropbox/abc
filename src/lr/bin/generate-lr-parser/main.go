@@ -74,7 +74,6 @@ func main() {
 			panic(err)
 		}
 	} else {
-		fmt.Println("Using self generated parser")
 		parsed, err = parser.Parse(filename, file)
 		if err != nil {
 			panic(err)
@@ -123,6 +122,22 @@ func main() {
 				panic(err)
 			}
 		}
+	}
+
+	if lrStates.ShiftReduceConflictsCount > 0 ||
+		lrStates.ReduceReduceConflictsCount > 0 {
+
+		fmt.Print("conflicts:")
+
+		if lrStates.ShiftReduceConflictsCount > 0 {
+			fmt.Print(" ", lrStates.ShiftReduceConflictsCount, " shift/reduce")
+		}
+
+		if lrStates.ReduceReduceConflictsCount > 0 {
+			fmt.Print(" ", lrStates.ReduceReduceConflictsCount, " reduce/reduce")
+		}
+
+		fmt.Print("\n")
 	}
 }
 
