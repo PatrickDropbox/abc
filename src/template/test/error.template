@@ -1,0 +1,7 @@
+package main
+
+template ErrorTemplate {}
+%%
+[[if true]]
+    [[-error fmt.Errorf("bad")-]]
+[[end-]]

@@ -1,0 +1,29 @@
+package main
+
+template OutputTypesTemplate {
+    Custom interface{}
+}
+
+%%
+stringer: $Custom
+
+string: $("abcd")
+bytes: $(append([]byte("hello"), []byte(" world")...))
+
+bool: $true / $false
+
+uint8 (aka byte): $('a')
+int32 (aka rune): $(rune(97))
+
+uint: $(uint(11))
+int: $(int(-11))
+
+uint64: $(uint64(17))
+int64: $(int64(-17))
+
+float32: $(float32(3.14159))
+float64: $(float64(2.71828))
+
+complex: $(complex(0, 1))
+
+invalid: $([]string{"foo", "bar"})

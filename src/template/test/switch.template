@@ -1,0 +1,20 @@
+package main
+
+template SwitchTemplate {
+    TypeSwitch interface{}
+    ValueSwitch string
+}
+
+%%
+
+Type Switch
+[[switch v := TypeSwitch.(type)]]
+[[case int]]int: $v
+[[case string]]string: $v
+[[default]]other: $v
+[[end]]
+
+Value Switch
+[[switch ValueSwitch]][[case "hello"]]you say hello, and I say goodbye
+[[case "goodbye"]]you say goodbye, and I say hello
+[[case "other"]][[case "other2"]][[end]]

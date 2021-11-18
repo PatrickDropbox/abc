@@ -1,0 +1,17 @@
+package main
+
+template TextTemplate {
+}
+
+%%
+escaped?`
+\t
+123$$blah
+asdf
+
+0123456789
+
+foo bar
+hello world!
+
+Show me the $$$$$$money$$$$$$ !!!

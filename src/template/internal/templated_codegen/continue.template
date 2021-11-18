@@ -1,0 +1,14 @@
+package templated_codegen
+
+import (
+    "github.com/pattyshack/abc/src/template/internal"
+)
+
+template Continue{
+    ind string
+    stmt *template.Atom
+}
+
+%%
+$ind// $(stmt.Loc())
+$(ind)continue

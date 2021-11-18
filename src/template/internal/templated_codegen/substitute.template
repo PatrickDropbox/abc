@@ -1,0 +1,24 @@
+package templated_codegen
+
+import (
+    "github.com/pattyshack/abc/src/template/internal"
+)
+
+template Substitute {
+    ind string
+
+    stmt *template.Atom
+}
+
+%%
+$ind// $(stmt.Loc())
+$ind{
+$ind	_n, err := _template.writeValue(
+$ind		_output,
+$ind		($(stmt.Value)),
+$ind		"$(stmt.Loc())")
+$ind	_numWritten += int64(_n)
+$ind	if _err != nil {
+$ind		return _numWritten, _err
+$ind	}
+$ind}

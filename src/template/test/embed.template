@@ -1,0 +1,12 @@
+package main
+
+template EmbedTemplate {
+}
+
+%%
+
+Embed #1
+[[embed &SwitchTemplate{1.5, "hello"}]]
+
+Embed #2
+[[embed &SwitchTemplate{"boo", "goodbye"}]]

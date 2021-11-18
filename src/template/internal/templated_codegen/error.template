@@ -1,0 +1,20 @@
+package templated_codegen
+
+import (
+    "github.com/pattyshack/abc/src/template/internal"
+)
+
+template Error{
+    ind string
+    stmt *template.Atom
+}
+
+%%
+$ind// $(stmt.Loc())
+$ind{
+$ind	_err := ($(stmt.Value))
+$ind	if _err != nil {
+$ind		_err = _fmt.Errorf("Unexpected error ($(stmt.Loc()))")
+$ind	}
+$ind	return _numWritten, _err
+$ind}

@@ -1,0 +1,92 @@
+%token SECTION_MARKER
+%token<Value> PACKAGE IMPORT
+%token<TemplateDecl> TEMPLATE_DECL
+
+%token<Value> FOR SWITCH CASE IF ELSE_IF
+%token<Token> DEFAULT ELSE END
+%token<Atom> TEXT SUBSTITUTION EMBED COPY_SECTION COMMENT CONTINUE BREAK RETURN ERROR
+
+
+%type<Value> optional_imports
+
+%type<Branch> optional_else optional_default
+%type<Branches> else_if_list case_list
+
+%type<Statement> statement atom for switch if
+%type<Statements> body
+
+%type<File> file
+
+%start file
+
+file -> PACKAGE
+        optional_imports
+        TEMPLATE_DECL
+        SECTION_MARKER
+        body
+
+optional_imports ->
+    imports : IMPORT |
+    nil     :
+
+body ->
+    add : body statement |
+    nil :
+
+statement ->
+    atom   : atom |
+    for    : for |
+    switch : switch |
+    if     : if
+
+atom ->
+    text         : TEXT |
+    substitution : SUBSTITUTION |
+    embed        : EMBED |
+    copy_section : COPY_SECTION |
+    comment      : COMMENT |
+    continue     : CONTINUE |
+    break        : BREAK |
+    return       : RETURN |
+    error        : ERROR
+
+for -> FOR body END
+
+switch ->
+    // TEXT must contain only whitespaces
+    with_whitespace: SWITCH TEXT case_list optional_default END |
+    without_whitespace: SWITCH case_list optional_default END
+
+case_list ->
+    add : case_list CASE body |
+    case : CASE body
+
+optional_default ->
+    default : DEFAULT body |
+    nil     :
+
+if -> IF body else_if_list optional_else END
+
+else_if_list ->
+    add : else_if_list ELSE_IF body |
+    nil :
+
+optional_else ->
+    else : ELSE body |
+    nil  :
+
+%%lang_specs{
+go:
+    package: template
+
+    value_types:
+        Token:        "*TToken"
+        Value:        "*Value"
+        Atom:         "*Atom"
+        Branch:       "*Branch"
+        Branches:     "[]*Branch"
+        Statement:    "Statement"
+        Statements:   "[]Statement"
+        TemplateDecl: "*TemplateDeclaration"
+        File:         "*File"
+}%%

@@ -1,0 +1,18 @@
+package templated_codegen
+
+import (
+    "github.com/pattyshack/abc/src/template/internal"
+)
+
+template For{
+    ind string
+    stmt *template.For
+}
+
+%%
+$ind// $(stmt.Loc())
+$(ind)for $(stmt.Predicate.Value) {
+
+    [[-embed &Body{ind + "\t", stmt.Body}-]]
+
+$ind}

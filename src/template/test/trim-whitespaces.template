@@ -1,0 +1,24 @@
+package main
+
+template TrimWhitespacesTemplate {}
+%%
+list 1: 
+[[-for idx, i := range []int{1, 2, 3, 4}-]]
+    [[-if idx != 3 -]]
+$i, 
+    [[-else-]]
+$i
+    [[-end-]]
+[[-end]]
+
+list 2:
+[[-for idx, i := range []int{1, 2, 3, 4}-]]
+    [[-if idx != 3 -]]
+ $i,
+    [[-else-]]
+ $i
+    [[-end-]]
+[[-end]]
+
+[[for _, c := range "abcde" -]] $(string(c)) [[-end]]
+

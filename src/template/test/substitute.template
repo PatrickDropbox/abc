@@ -1,0 +1,10 @@
+package main
+
+template SubstituteTemplate {
+}
+
+%%
+[[$
+prefix := "I own "
+]]
+$prefix$$$(2*(1-1))

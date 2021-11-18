@@ -1,0 +1,83 @@
+package templated_codegen
+
+import (
+    "github.com/pattyshack/abc/src/template/internal"
+)
+
+template File {
+    spec *template.File
+}
+
+%%
+package $(spec.PackageName)
+
+import (
+	_fmt "fmt"
+	_io "io"
+
+[[-if spec.Imports != ""]]
+$(spec.Imports)
+[[-end-]]
+
+)
+
+type $(spec.TemplateName) struct {
+
+[[-for _, arg := range spec.Arguments]]
+	$(arg.Name) $(arg.Type)
+[[-end-]]
+
+}
+
+func ($spec.TemplateName) Name() string { return "$(spec.TemplateName)" }
+
+func (template *$(spec.TemplateName)) writeValue(
+	output _io.Writer,
+	value interface{},
+	loc string) (
+	int,
+	error) {
+
+	var valueBytes []byte
+	switch val := value.(type) {
+	case _fmt.Stringer:
+		valueBytes = []byte(val.String())
+	case string:
+		valueBytes = []byte(val)
+	case []byte:
+		valueBytes = val
+
+[[-for _, primitive := range template.OutputablePrimitiveTypes-]]
+
+	case $primitive:
+		valueBytes = []byte(_fmt.Sprintf("%v", val))
+
+[[-end-]]
+
+	default:
+		return 0, _fmt.Errorf(
+			"Unsupported output value type (%s): %v",
+			loc,
+			value)
+	}
+
+	return output.Write(valueBytes)
+}
+
+func (_template *$(spec.TemplateName)) WriteTo(
+	_output _io.Writer) (
+	int64,
+	error) {
+
+	_numWritten := int64(0)
+
+[[-for _, arg := range spec.Arguments-]]
+
+	$(arg.Name) := _template.$(arg.Name)
+
+[[-end]]
+
+[[-embed &Body{"\t", spec.Body}]]
+
+	return _numWritten, nil
+}

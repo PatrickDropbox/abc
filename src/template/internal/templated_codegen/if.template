@@ -1,0 +1,34 @@
+package templated_codegen
+
+import (
+    "github.com/pattyshack/abc/src/template/internal"
+)
+
+template If{
+    ind string
+    stmt *template.If
+}
+
+%%
+$ind// $(stmt.Loc())
+$(ind)if $(stmt.If.Predicate.Value) {
+
+[[-embed &Body{ind + "\t", stmt.If.Body}-]]
+
+[[-for _, branch := range stmt.ElseIfs-]]
+
+$ind} else if $(branch.Predicate.Value) {
+
+    [[-embed &Body{ind + "\t", branch.Body}-]]
+
+[[-end-]]
+
+[[-if stmt.Else != nil -]]
+
+$ind} else {
+
+    [[-embed &Body{ind + "\t", stmt.Else.Body}-]]
+
+[[-end-]]
+
+$ind}

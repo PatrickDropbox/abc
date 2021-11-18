@@ -1,0 +1,67 @@
+package templated_codegen
+
+import (
+    "github.com/pattyshack/abc/src/template/internal"
+)
+
+template Body {
+    ind string
+    body []template.Statement
+}
+
+%%
+
+[[-for _, statement := range body-]]
+    [[-switch stmt := statement.(type)-]]
+    [[-case *template.Atom-]]
+
+        [[-switch stmt.Id()-]]
+        [[-case template.CommentToken-]]
+            [[-# do nothing-]]
+
+        [[-case template.TextToken-]]
+            [[-embed &Text{ind, stmt}-]]
+
+        [[-case template.SubstitutionToken-]]
+            [[-embed &Substitute{ind, stmt}-]]
+
+        [[-case template.EmbedToken-]]
+            [[-embed &Embed{ind, stmt}-]]
+
+        [[-case template.CopySectionToken-]]
+            [[-embed &CopySection{ind, stmt}-]]
+
+        [[-case template.ContinueToken-]]
+            [[-embed &Continue{ind, stmt}-]]
+
+        [[-case template.BreakToken-]]
+            [[-embed &Break{ind, stmt}-]]
+
+        [[-case template.ReturnToken-]]
+            [[-embed &Return{ind, stmt}-]]
+
+        [[-case template.ErrorToken-]]
+            [[-embed &Error{ind, stmt}-]]
+
+        [[-default]]
+            // $(statement.Loc())
+            COMPILE ERROR: bug in template generation code
+            Unexpected atom type: $(stmt.Id())
+
+        [[-end-]]
+
+    [[-case *template.For-]]
+        [[-embed &For{ind, stmt}-]]
+
+    [[-case *template.Switch-]]
+        [[-embed &Switch{ind, stmt}-]]
+
+    [[-case *template.If-]]
+        [[-embed &If{ind, stmt}-]]
+
+    [[-default]]
+        // $(statement.Loc())
+        COMPILE ERROR: bug in template generation code
+        Unexpected statement type: $(statement.Id())
+    [[end]]
+[[end]]
