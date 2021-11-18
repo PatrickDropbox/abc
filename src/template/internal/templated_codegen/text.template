@@ -1,0 +1,23 @@
+package templated_codegen
+
+import (
+    "github.com/pattyshack/abc/src/template/internal"
+)
+
+template Text {
+    ind string
+
+    // Note: This assumes the value is already golang raw string escaped
+    stmt *template.Atom
+}
+%%
+[[-if stmt.Value != ""-]]
+$ind// $(stmt.Loc())
+$ind{
+$ind	_n, _err := _output.Write([]byte(`$(stmt.Value)`))
+$ind	_numWritten += int64(_n)
+$ind	if _err != nil {
+$ind		return _numWritten, _err
+$ind	}
+$ind}
+[[end-]]

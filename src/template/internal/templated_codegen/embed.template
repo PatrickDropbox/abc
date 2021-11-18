@@ -1,0 +1,20 @@
+package templated_codegen
+
+import (
+    "github.com/pattyshack/abc/src/template/internal"
+)
+
+template Embed {
+    ind string
+    stmt *template.Atom
+}
+
+%%
+$ind// $(stmt.Loc())
+$ind{
+$ind	_n, _err := ($(stmt.Value)).WriteTo(_output)
+$ind	_numWritten += _n
+$ind	if _err != nil {
+$ind		return _numWritten, _err
+$ind	}
+$ind}

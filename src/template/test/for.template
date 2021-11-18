@@ -1,0 +1,85 @@
+package main
+
+import (
+    "fmt"
+)
+
+template ForTemplate {
+    Chan <-chan int
+
+    Count int
+}
+
+%%
+[[-#
+infinite for loop
+-]]
+Infinite Loop:
+[[-for-]]
+    [[-$ Count += 1-]]
+    [[-if Count % 3 == 0-]]
+
+  $Count % 3 == 0
+        [[-continue-]]
+    [[-else if Count % 3 == 1-]]
+
+  $Count % 3 == 1
+    [[-else-]]
+
+  $Count % 3 == 2
+        [[-if Count > 10-]]
+            [[-break-]]
+        [[-end-]]
+    [[-end-]]
+[[end]]
+
+[[-#
+predicate for loop
+-]]
+
+Predicate Loop
+[[for Count < 30-]]
+  $Count
+
+    [[-$
+    Count = (Count +
+             1) * 2
+    -]]
+[[-end-]]
+
+[[-#
+counter for loop
+-]]
+
+Counter Loop
+[[-for i := 0; i < 5; i++]]
+  $i.0
+[[-end]]
+
+[[-#
+range for loops
+-]]
+
+Slice Range Loop
+[[-for _, item := range []string{"foo", "bar"}]]
+  $(fmt.Sprintf("item: %s", item))
+[[-end]]
+
+Map Range Loop
+[[-for key, val := range map[string]int{"key1":1, "key2":2}]]
+  $key -> $val
+[[-end]]
+
+Channel Range Loop
+[[ for val := range Chan ]]$val,[[end]]
+
+Infinite Loop 2:
+[[$ cnt := 0 -]]
+[[-for-]]
+    [[- if cnt > 3 -]]
+        [[-return -]]
+    [[- end-]]
+Iteration: $cnt
+
+    [[-$ cnt += 1-]]
+[[-end]]

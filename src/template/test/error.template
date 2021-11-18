@@ -1,0 +1,11 @@
+package main
+
+import (
+    "fmt"
+)
+
+template ErrorTemplate {}
+%%
+[[if true]]
+    [[-error fmt.Errorf("bad")-]]
+[[end-]]

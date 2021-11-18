@@ -1,0 +1,28 @@
+package templated_codegen
+
+import (
+    "github.com/pattyshack/abc/src/template/internal"
+)
+
+template Switch{
+    ind string
+    stmt *template.Switch
+}
+
+%%
+$ind// $(stmt.Loc())
+$(ind)switch $(stmt.Switch.Value) {
+[[for _, branch := range stmt.Cases-]]
+$(ind)case $(branch.Predicate.Value):
+
+    [[-embed &Body{ind + "\t", branch.Body}-]]
+
+[[-end-]]
+
+[[-if stmt.Default != nil -]]
+$(ind)default:
+
+    [[-embed &Body{ind + "\t", stmt.Default.Body}-]]
+
+[[-end-]]
+$ind}
