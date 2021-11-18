@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"fmt"
 	"io"
+	"sort"
 
 	"github.com/pattyshack/abc/src/lr/parseutil"
 )
@@ -23,25 +24,26 @@ var (
 		"->": Arrow,
 		":":  ':',
 	}
-
-	whitespaces = map[string]struct{}{
-		" ":  struct{}{},
-		"\n": struct{}{},
-		"\t": struct{}{},
-		"\r": struct{}{},
-	}
 )
 
 type rawLexer struct {
 	reader *parseutil.LocationReader
+
+	sorted parseutil.Symbols
 }
 
 func newRawLexer(filename string, reader io.Reader) *rawLexer {
-	return &rawLexer{parseutil.NewLocationReader(filename, reader)}
+	sorted := parseutil.Symbols{}
+	for val, id := range keywordsAndSymbols {
+		sorted = append(sorted, parseutil.Symbol{val, int(id)})
+	}
+	sort.Sort(sorted)
+
+	return &rawLexer{parseutil.NewLocationReader(filename, reader), sorted}
 }
 
 func (lexer *rawLexer) Next() (LRToken, error) {
-	err := lexer.stripLeadingWhitespacesAndComments()
+	err := parseutil.StripLeadingWhitespacesAndComments(lexer.reader)
 	if err != nil {
 		return nil, err
 	}
@@ -74,130 +76,53 @@ func (lexer *rawLexer) Next() (LRToken, error) {
 	return nil, fmt.Errorf("Unexpected character at %s", lexer.reader.Location)
 }
 
-func (lexer *rawLexer) stripLeadingWhitespacesAndComments() error {
-	modified := true
-	for modified {
-		modified = false
-
-		bytes, err := lexer.reader.Peek(1)
-		if err != nil {
-			return err
-		}
-
-		_, ok := whitespaces[string(bytes)]
-		if ok {
-			_, err = lexer.reader.ReadByte()
-			if err != nil {
-				panic(err) // should never happen
-			}
-
-			modified = true
-			continue
-		}
-
-		bytes, _ = lexer.reader.Peek(2)
-
-		if string(bytes) == "//" {
-			for {
-				char, err := lexer.reader.ReadByte()
-				if err != nil {
-					return err
-				}
-
-				if char == '\n' {
-					break
-				}
-			}
-
-			modified = true
-			continue
-		}
-
-		if string(bytes) == "/*" {
-			n, err := lexer.reader.Read(bytes)
-			if n != 2 || err != nil {
-				panic(err) // should never happen
-			}
-
-			for {
-				bytes, err = lexer.reader.Peek(2)
-				if err != nil {
-					return err
-				}
-
-				if string(bytes) == "*/" {
-					n, err := lexer.reader.Read(bytes)
-					if n != 2 || err != nil {
-						panic(err) // should never happen
-					}
-
-					break
-				}
-
-				_, err = lexer.reader.ReadByte()
-				if err != nil {
-					panic(err)
-				}
-			}
-
-			modified = true
-		}
-	}
-
-	return nil
-}
-
 func (lexer *rawLexer) maybeTokenizeKeywordOrSymbol() (LRToken, error) {
-	for str, ttype := range keywordsAndSymbols {
-		bytes, _ := lexer.reader.Peek(len(str))
-
-		if string(bytes) == str {
-			token := &LRGenericSymbol{ttype, LRLocation(lexer.reader.Location)}
-
-			n, err := lexer.reader.Read(bytes)
-			if len(bytes) != n || err != nil {
-				panic(err) // should never happen
-			}
-
-			return token, nil
-		}
-	}
-
-	return nil, nil
-}
-
-func (lexer *rawLexer) maybeTokenizeCharacter() (LRToken, error) {
-	bytes, loc, err := parseutil.MaybeTokenizeCharacter(lexer.reader)
+	symbol, loc, err := parseutil.MaybeTokenizeSymbol(
+		lexer.reader,
+		lexer.sorted)
 	if err != nil {
 		return nil, err
 	}
 
-	if bytes == nil {
+	if symbol == nil {
+		return nil, nil
+	}
+
+	return &LRGenericSymbol{LRSymbolId(symbol.Id), LRLocation(loc)}, nil
+}
+
+func (lexer *rawLexer) maybeTokenizeCharacter() (LRToken, error) {
+	value, loc, err := parseutil.MaybeTokenizeCharacter(lexer.reader)
+	if err != nil {
+		return nil, err
+	}
+
+	if value == "" {
 		return nil, nil
 	}
 
 	return &Token{
 		LRLocation: LRLocation(loc),
 		LRSymbolId: LRCharacterToken,
-		Value:      string(bytes),
+		Value:      value,
 	}, nil
 }
 
 func (lexer *rawLexer) maybeTokenizeIdentifier() (LRToken, error) {
-    bytes, loc, err := parseutil.MaybeTokenizeIdentifier(lexer.reader)
-    if err != nil {
-        return nil, err
-    }
+	value, loc, err := parseutil.MaybeTokenizeIdentifier(lexer.reader)
+	if err != nil {
+		return nil, err
+	}
 
-    if bytes == nil {
-        return nil, nil
-    }
+	if value == "" {
+		return nil, nil
+	}
 
-    return &Token{
+	return &Token{
 		LRLocation: LRLocation(loc),
 		LRSymbolId: LRIdentifierToken,
-		Value:      string(bytes),
-    },nil
+		Value:      value,
+	}, nil
 }
 
 func (lexer *rawLexer) maybeTokenizeSectionContent() (LRToken, error) {
