@@ -1,3 +1,5 @@
+// Auto-generated from source: embed.template
+
 package main
 
 import (

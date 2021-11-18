@@ -1,3 +1,5 @@
+// Auto-generated from source: output-types.template
+
 package main
 
 import (

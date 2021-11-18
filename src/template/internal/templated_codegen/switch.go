@@ -1,3 +1,5 @@
+// Auto-generated from source: switch.template
+
 package templated_codegen
 
 import (

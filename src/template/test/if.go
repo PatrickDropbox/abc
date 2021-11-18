@@ -1,3 +1,5 @@
+// Auto-generated from source: if.template
+
 package main
 
 import (

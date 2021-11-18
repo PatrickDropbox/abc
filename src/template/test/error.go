@@ -1,3 +1,5 @@
+// Auto-generated from source: error.template
+
 package main
 
 import (

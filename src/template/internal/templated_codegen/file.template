@@ -5,10 +5,13 @@ import (
 )
 
 template File {
+    source string
     spec *template.File
 }
 
 %%
+// Auto-generated from source: $(source)
+
 package $(spec.PackageName)
 
 import (

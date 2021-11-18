@@ -1,3 +1,5 @@
+// Auto-generated from source: continue.template
+
 package templated_codegen
 
 import (

@@ -1,3 +1,5 @@
+// Auto-generated from source: substitute.template
+
 package main
 
 import (

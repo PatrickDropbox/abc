@@ -1,3 +1,5 @@
+// Auto-generated from source: return.template
+
 package templated_codegen
 
 import (

@@ -10,19 +10,20 @@ import (
 )
 
 type Template struct {
-	file *template.File
+	source string
+	file   *template.File
 
 	shouldFormat bool
 }
 
-func NewTemplate(file *template.File) io.WriterTo {
-	return &Template{file, true}
+func NewTemplate(source string, file *template.File) io.WriterTo {
+	return &Template{source, file, true}
 }
 
 func (template *Template) WriteTo(output io.Writer) (int64, error) {
 	buffer := bytes.NewBuffer(nil)
 
-	_, err := (&File{template.file}).WriteTo(buffer)
+	_, err := (&File{template.source, template.file}).WriteTo(buffer)
 	if err != nil {
 		return 0, err
 	}

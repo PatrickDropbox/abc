@@ -1,3 +1,5 @@
+// Auto-generated from source: trim-whitespaces.template
+
 package main
 
 import (

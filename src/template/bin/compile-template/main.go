@@ -16,7 +16,8 @@ func main() {
 	useManualCodeGen := flag.Bool(
 		"use-manual-code-gen",
 		false,
-		"Use hand written code generator instead template based code generator")
+		"Use hand written code generator instead template based code " +
+        "generator, primarily used for bootstrapping.")
 
 	shouldPrintGenerated := flag.Bool(
 		"print-generated",
@@ -55,7 +56,7 @@ func main() {
 		fmt.Println("Using manual code generator")
 		codeGenTemplate = manual_codegen.NewTemplate(templateFile)
 	} else {
-		codeGenTemplate = templated_codegen.NewTemplate(templateFile)
+		codeGenTemplate = templated_codegen.NewTemplate(filename, templateFile)
 	}
 
 	if *output != "" {

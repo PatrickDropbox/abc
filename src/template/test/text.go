@@ -1,3 +1,5 @@
+// Auto-generated from source: text.template
+
 package main
 
 import (

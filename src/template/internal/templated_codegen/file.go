@@ -1,3 +1,5 @@
+// Auto-generated from source: file.template
+
 package templated_codegen
 
 import (
@@ -8,7 +10,8 @@ import (
 )
 
 type File struct {
-	spec *template.File
+	source string
+	spec   *template.File
 }
 
 func (File) Name() string { return "File" }
@@ -75,28 +78,50 @@ func (_template *File) WriteTo(
 
 	_numWritten := int64(0)
 
+	source := _template.source
 	spec := _template.spec
 
-	// file.template:12:0
+	// file.template:13:0
 	{
-		_n, _err := _output.Write([]byte(`package `))
+		_n, _err := _output.Write([]byte(`// Auto-generated from source: `))
 		_numWritten += int64(_n)
 		if _err != nil {
 			return _numWritten, _err
 		}
 	}
-	// file.template:12:8
+	// file.template:13:31
+	{
+		_n, _err := _template.writeValue(
+			_output,
+			(source),
+			"file.template:13:31")
+		_numWritten += int64(_n)
+		if _err != nil {
+			return _numWritten, _err
+		}
+	}
+	// file.template:13:40
+	{
+		_n, _err := _output.Write([]byte(`
+
+package `))
+		_numWritten += int64(_n)
+		if _err != nil {
+			return _numWritten, _err
+		}
+	}
+	// file.template:15:8
 	{
 		_n, _err := _template.writeValue(
 			_output,
 			(spec.PackageName),
-			"file.template:12:8")
+			"file.template:15:8")
 		_numWritten += int64(_n)
 		if _err != nil {
 			return _numWritten, _err
 		}
 	}
-	// file.template:12:27
+	// file.template:15:27
 	{
 		_n, _err := _output.Write([]byte(`
 
@@ -108,9 +133,9 @@ import (
 			return _numWritten, _err
 		}
 	}
-	// file.template:17:0
+	// file.template:20:0
 	if spec.Imports != "" {
-		// file.template:17:26
+		// file.template:20:26
 		{
 			_n, _err := _output.Write([]byte(`
 
@@ -120,19 +145,19 @@ import (
 				return _numWritten, _err
 			}
 		}
-		// file.template:19:0
+		// file.template:22:0
 		{
 			_n, _err := _template.writeValue(
 				_output,
 				(spec.Imports),
-				"file.template:19:0")
+				"file.template:22:0")
 			_numWritten += int64(_n)
 			if _err != nil {
 				return _numWritten, _err
 			}
 		}
 	}
-	// file.template:20:8
+	// file.template:23:8
 	{
 		_n, _err := _output.Write([]byte(`
 )
@@ -143,18 +168,18 @@ type `))
 			return _numWritten, _err
 		}
 	}
-	// file.template:23:5
+	// file.template:26:5
 	{
 		_n, _err := _template.writeValue(
 			_output,
 			(spec.TemplateName),
-			"file.template:23:5")
+			"file.template:26:5")
 		_numWritten += int64(_n)
 		if _err != nil {
 			return _numWritten, _err
 		}
 	}
-	// file.template:23:25
+	// file.template:26:25
 	{
 		_n, _err := _output.Write([]byte(` struct {`))
 		_numWritten += int64(_n)
@@ -162,9 +187,9 @@ type `))
 			return _numWritten, _err
 		}
 	}
-	// file.template:24:0
+	// file.template:27:0
 	for _, arg := range spec.Arguments {
-		// file.template:24:39
+		// file.template:27:39
 		{
 			_n, _err := _output.Write([]byte(`
 	`))
@@ -173,18 +198,18 @@ type `))
 				return _numWritten, _err
 			}
 		}
-		// file.template:25:1
+		// file.template:28:1
 		{
 			_n, _err := _template.writeValue(
 				_output,
 				(arg.Name),
-				"file.template:25:1")
+				"file.template:28:1")
 			_numWritten += int64(_n)
 			if _err != nil {
 				return _numWritten, _err
 			}
 		}
-		// file.template:25:12
+		// file.template:28:12
 		{
 			_n, _err := _output.Write([]byte(` `))
 			_numWritten += int64(_n)
@@ -192,19 +217,19 @@ type `))
 				return _numWritten, _err
 			}
 		}
-		// file.template:25:13
+		// file.template:28:13
 		{
 			_n, _err := _template.writeValue(
 				_output,
 				(arg.Type),
-				"file.template:25:13")
+				"file.template:28:13")
 			_numWritten += int64(_n)
 			if _err != nil {
 				return _numWritten, _err
 			}
 		}
 	}
-	// file.template:26:8
+	// file.template:29:8
 	{
 		_n, _err := _output.Write([]byte(`
 }
@@ -215,18 +240,18 @@ func (`))
 			return _numWritten, _err
 		}
 	}
-	// file.template:29:6
+	// file.template:32:6
 	{
 		_n, _err := _template.writeValue(
 			_output,
 			(spec.TemplateName),
-			"file.template:29:6")
+			"file.template:32:6")
 		_numWritten += int64(_n)
 		if _err != nil {
 			return _numWritten, _err
 		}
 	}
-	// file.template:29:26
+	// file.template:32:26
 	{
 		_n, _err := _output.Write([]byte(`) Name() string { return "`))
 		_numWritten += int64(_n)
@@ -234,18 +259,18 @@ func (`))
 			return _numWritten, _err
 		}
 	}
-	// file.template:29:52
+	// file.template:32:52
 	{
 		_n, _err := _template.writeValue(
 			_output,
 			(spec.TemplateName),
-			"file.template:29:52")
+			"file.template:32:52")
 		_numWritten += int64(_n)
 		if _err != nil {
 			return _numWritten, _err
 		}
 	}
-	// file.template:29:72
+	// file.template:32:72
 	{
 		_n, _err := _output.Write([]byte(`" }
 
@@ -255,18 +280,18 @@ func (template *`))
 			return _numWritten, _err
 		}
 	}
-	// file.template:31:16
+	// file.template:34:16
 	{
 		_n, _err := _template.writeValue(
 			_output,
 			(spec.TemplateName),
-			"file.template:31:16")
+			"file.template:34:16")
 		_numWritten += int64(_n)
 		if _err != nil {
 			return _numWritten, _err
 		}
 	}
-	// file.template:31:36
+	// file.template:34:36
 	{
 		_n, _err := _output.Write([]byte(`) writeValue(
 	output _io.Writer,
@@ -288,9 +313,9 @@ func (template *`))
 			return _numWritten, _err
 		}
 	}
-	// file.template:46:0
+	// file.template:49:0
 	for _, primitive := range template.OutputablePrimitiveTypes {
-		// file.template:46:64
+		// file.template:49:64
 		{
 			_n, _err := _output.Write([]byte(`
 	case `))
@@ -299,18 +324,18 @@ func (template *`))
 				return _numWritten, _err
 			}
 		}
-		// file.template:47:6
+		// file.template:50:6
 		{
 			_n, _err := _template.writeValue(
 				_output,
 				(primitive),
-				"file.template:47:6")
+				"file.template:50:6")
 			_numWritten += int64(_n)
 			if _err != nil {
 				return _numWritten, _err
 			}
 		}
-		// file.template:47:16
+		// file.template:50:16
 		{
 			_n, _err := _output.Write([]byte(`:
 		valueBytes = []byte(_fmt.Sprintf("%v", val))`))
@@ -320,7 +345,7 @@ func (template *`))
 			}
 		}
 	}
-	// file.template:49:9
+	// file.template:52:9
 	{
 		_n, _err := _output.Write([]byte(`
 	default:
@@ -339,18 +364,18 @@ func (_template *`))
 			return _numWritten, _err
 		}
 	}
-	// file.template:61:17
+	// file.template:64:17
 	{
 		_n, _err := _template.writeValue(
 			_output,
 			(spec.TemplateName),
-			"file.template:61:17")
+			"file.template:64:17")
 		_numWritten += int64(_n)
 		if _err != nil {
 			return _numWritten, _err
 		}
 	}
-	// file.template:61:37
+	// file.template:64:37
 	{
 		_n, _err := _output.Write([]byte(`) WriteTo(
 	_output _io.Writer) (
@@ -364,11 +389,11 @@ func (_template *`))
 			return _numWritten, _err
 		}
 	}
-	// file.template:68:0
+	// file.template:71:0
 	for idx, arg := range spec.Arguments {
-		// file.template:69:4
+		// file.template:72:4
 		if idx == 0 {
-			// file.template:69:20
+			// file.template:72:20
 			{
 				_n, _err := _output.Write([]byte(`
 `))
@@ -378,7 +403,7 @@ func (_template *`))
 				}
 			}
 		}
-		// file.template:71:13
+		// file.template:74:13
 		{
 			_n, _err := _output.Write([]byte(`	`))
 			_numWritten += int64(_n)
@@ -386,18 +411,18 @@ func (_template *`))
 				return _numWritten, _err
 			}
 		}
-		// file.template:72:1
+		// file.template:75:1
 		{
 			_n, _err := _template.writeValue(
 				_output,
 				(arg.Name),
-				"file.template:72:1")
+				"file.template:75:1")
 			_numWritten += int64(_n)
 			if _err != nil {
 				return _numWritten, _err
 			}
 		}
-		// file.template:72:12
+		// file.template:75:12
 		{
 			_n, _err := _output.Write([]byte(` := _template.`))
 			_numWritten += int64(_n)
@@ -405,18 +430,18 @@ func (_template *`))
 				return _numWritten, _err
 			}
 		}
-		// file.template:72:26
+		// file.template:75:26
 		{
 			_n, _err := _template.writeValue(
 				_output,
 				(arg.Name),
-				"file.template:72:26")
+				"file.template:75:26")
 			_numWritten += int64(_n)
 			if _err != nil {
 				return _numWritten, _err
 			}
 		}
-		// file.template:72:37
+		// file.template:75:37
 		{
 			_n, _err := _output.Write([]byte(`
 `))
@@ -426,7 +451,7 @@ func (_template *`))
 			}
 		}
 	}
-	// file.template:73:7
+	// file.template:76:7
 	{
 		_n, _err := _output.Write([]byte(`
 `))
@@ -435,7 +460,7 @@ func (_template *`))
 			return _numWritten, _err
 		}
 	}
-	// file.template:75:0
+	// file.template:78:0
 	{
 		_n, _err := (&Body{"\t", spec.Body}).WriteTo(_output)
 		_numWritten += _n
@@ -443,7 +468,7 @@ func (_template *`))
 			return _numWritten, _err
 		}
 	}
-	// file.template:75:34
+	// file.template:78:34
 	{
 		_n, _err := _output.Write([]byte(`
 	return _numWritten, nil

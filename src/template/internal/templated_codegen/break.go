@@ -1,3 +1,5 @@
+// Auto-generated from source: break.template
+
 package templated_codegen
 
 import (

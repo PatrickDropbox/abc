@@ -1,3 +1,5 @@
+// Auto-generated from source: copy-section.template
+
 package templated_codegen
 
 import (
