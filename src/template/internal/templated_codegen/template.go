@@ -16,7 +16,7 @@ type Template struct {
 }
 
 func NewTemplate(file *template.File) io.WriterTo {
-	return &Template{file, false}
+	return &Template{file, true}
 }
 
 func (template *Template) WriteTo(output io.Writer) (int64, error) {
