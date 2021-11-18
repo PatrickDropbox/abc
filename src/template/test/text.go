@@ -74,7 +74,7 @@ func (_template *TextTemplate) WriteTo(
 
 	// text.template:7:0
 	{
-		_n, _err := _output.Write([]byte(`escaped?`+"`"+`
+		_n, _err := _output.Write([]byte(`escaped?` + "`" + `
 \t
 123$blah
 asdf

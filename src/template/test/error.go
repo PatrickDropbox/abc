@@ -4,9 +4,7 @@ import (
 	_fmt "fmt"
 	_io "io"
 
-
-    "fmt"
-
+	"fmt"
 )
 
 type ErrorTemplate struct {

@@ -83,7 +83,7 @@ func (_template *TrimWhitespacesTemplate) WriteTo(
 	// trim-whitespaces.template:6:0
 	for idx, i := range []int{1, 2, 3, 4} {
 		// trim-whitespaces.template:7:4
-		if idx != 3  {
+		if idx != 3 {
 			// trim-whitespaces.template:8:0
 			{
 				_n, _err := _template.writeValue(
@@ -130,7 +130,7 @@ list 2:`))
 	// trim-whitespaces.template:15:0
 	for idx, i := range []int{1, 2, 3, 4} {
 		// trim-whitespaces.template:16:4
-		if idx != 3  {
+		if idx != 3 {
 			// trim-whitespaces.template:16:22
 			{
 				_n, _err := _output.Write([]byte(` `))
@@ -191,7 +191,7 @@ list 2:`))
 		}
 	}
 	// trim-whitespaces.template:23:0
-	for _, c := range "abcde"  {
+	for _, c := range "abcde" {
 		// trim-whitespaces.template:23:32
 		{
 			_n, _err := _template.writeValue(

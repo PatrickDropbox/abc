@@ -73,10 +73,10 @@ func (_template *IfTemplate) WriteTo(
 	_numWritten := int64(0)
 
 	// if.template:6:0
-	
-    val := 3
 
-    pred := func() bool { return false }
+	val := 3
+
+	pred := func() bool { return false }
 
 	// if.template:10:3
 	{
@@ -89,7 +89,7 @@ If Without Else If / Else 1
 		}
 	}
 	// if.template:13:0
-	if val * 7 == 21 {
+	if val*7 == 21 {
 		// if.template:13:20
 		{
 			_n, _err := _output.Write([]byte(`val * 7 = 21`))
@@ -111,7 +111,7 @@ If Without Else If / Else 2
 		}
 	}
 	// if.template:16:0
-	if (val == 3 && pred()) {
+	if val == 3 && pred() {
 		// if.template:16:27
 		{
 			_n, _err := _output.Write([]byte(`sadness`))

@@ -73,8 +73,8 @@ func (_template *SubstituteTemplate) WriteTo(
 	_numWritten := int64(0)
 
 	// substitute.template:7:0
-	
-prefix := "My bank account balance is "
+
+	prefix := "My bank account balance is "
 
 	// substitute.template:10:0
 	{
@@ -99,7 +99,7 @@ prefix := "My bank account balance is "
 	{
 		_n, _err := _template.writeValue(
 			_output,
-			(2*(1-1)),
+			(2 * (1 - 1)),
 			"substitute.template:10:9")
 		_numWritten += int64(_n)
 		if _err != nil {

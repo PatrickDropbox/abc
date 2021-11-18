@@ -4,13 +4,11 @@ import (
 	_fmt "fmt"
 	_io "io"
 
-
-    "fmt"
-
+	"fmt"
 )
 
 type ForTemplate struct {
-	Chan <-chan int
+	Chan  <-chan int
 	Count int
 }
 
@@ -90,11 +88,11 @@ func (_template *ForTemplate) WriteTo(
 		}
 	}
 	// for.template:18:0
-	for  {
+	for {
 		// for.template:19:4
-		 Count += 1
+		Count += 1
 		// for.template:20:4
-		if Count % 3 == 0 {
+		if Count%3 == 0 {
 			// for.template:20:27
 			{
 				_n, _err := _output.Write([]byte(`
@@ -126,7 +124,7 @@ func (_template *ForTemplate) WriteTo(
 			// for.template:23:8
 			continue
 
-		} else if Count % 3 == 1 {
+		} else if Count%3 == 1 {
 			// for.template:24:32
 			{
 				_n, _err := _output.Write([]byte(`
@@ -241,10 +239,10 @@ Predicate Loop
 			}
 		}
 		// for.template:44:4
-		
-    Count = (Count +
-             1) * 2
-    
+
+		Count = (Count +
+			1) * 2
+
 	}
 	// for.template:52:3
 	{
@@ -338,7 +336,7 @@ Map Range Loop`))
 		}
 	}
 	// for.template:69:0
-	for key, val := range map[string]int{"key1":1, "key2":2} {
+	for key, val := range map[string]int{"key1": 1, "key2": 2} {
 		// for.template:69:61
 		{
 			_n, _err := _output.Write([]byte(`
@@ -391,7 +389,7 @@ Channel Range Loop
 		}
 	}
 	// for.template:74:0
-	for val := range Chan  {
+	for val := range Chan {
 		// for.template:74:27
 		{
 			_n, _err := _template.writeValue(
@@ -424,11 +422,11 @@ Infinite Loop 2:
 		}
 	}
 	// for.template:77:0
-	 cnt := 0 
+	cnt := 0
 	// for.template:78:0
-	for  {
+	for {
 		// for.template:79:4
-		if cnt > 3  {
+		if cnt > 3 {
 			// for.template:80:8
 			return _numWritten, nil
 		}
@@ -461,7 +459,7 @@ Infinite Loop 2:
 			}
 		}
 		// for.template:84:4
-		 cnt += 1
+		cnt += 1
 	}
 	// for.template:85:8
 	{

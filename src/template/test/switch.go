@@ -6,7 +6,7 @@ import (
 )
 
 type SwitchTemplate struct {
-	TypeSwitch interface{}
+	TypeSwitch  interface{}
 	ValueSwitch string
 }
 
