@@ -3,7 +3,7 @@ MAKEFLAGS = -s
 TEMPLATES = $(wildcard *.template)
 GENERATED = $(TEMPLATES:.template=.go)
 
-all: clean $(GENERATED)
+all: $(GENERATED)
 
 %.go: %.template
 	echo Compiling $<

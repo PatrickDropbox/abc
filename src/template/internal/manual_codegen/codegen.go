@@ -17,7 +17,6 @@ func NewTemplate(spec *template.File) io.WriterTo {
 func (temp *Template) WriteTo(output io.Writer) (int64, error) {
 	spec := temp.spec
 	builder := NewGoCodeBuilder(spec.PackageName)
-	builder.ShouldFormat = false
 
 	l := builder.Line
 
