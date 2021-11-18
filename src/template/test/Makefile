@@ -8,7 +8,7 @@ all: clean $(GENERATED)
 
 %.go: %.template
 	echo Compiling $<
-	go run ./../bin/compile-template -use-manual-code-gen=false -o $@ $<
+	go run ./../bin/compile-template -o $@ $<
 
 clean:
 	rm -f $(GENERATED)

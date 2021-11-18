@@ -15,7 +15,7 @@ import (
 func main() {
 	useManualCodeGen := flag.Bool(
 		"use-manual-code-gen",
-		true,
+		false,
 		"Use hand written code generator instead template based code generator")
 
 	shouldPrintGenerated := flag.Bool(
