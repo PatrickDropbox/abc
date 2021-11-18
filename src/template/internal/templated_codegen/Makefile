@@ -3,11 +3,14 @@ MAKEFLAGS = -s
 TEMPLATES = $(wildcard *.template)
 GENERATED = $(TEMPLATES:.template=.go)
 
-all: $(GENERATED)
+all: touch $(GENERATED)
 
 %.go: %.template
 	echo Compiling $<
 	go run ./../../bin/compile-template -o $@ $<
+
+touch:
+	touch *.template
 
 clean:
 	rm -f $(GENERATED)
