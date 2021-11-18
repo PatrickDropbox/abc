@@ -1,5 +1,9 @@
 package main
 
+import (
+    "fmt"
+)
+
 template ForTemplate {
     Chan <-chan int
 
@@ -10,7 +14,6 @@ template ForTemplate {
 [[-#
 infinite for loop
 -]]
-
 Infinite Loop:
 [[-for-]]
     [[-$ Count += 1-]]
@@ -35,26 +38,27 @@ predicate for loop
 -]]
 
 Predicate Loop
-[[-for Count < 30]]
+[[for Count < 30-]]
   $Count
+
     [[-$
     Count = (Count +
              1) * 2
     -]]
-[[-end]]
+[[-end-]]
 
-[[#
+[[-#
 counter for loop
-]]
+-]]
 
 Counter Loop
 [[-for i := 0; i < 5; i++]]
   $i.0
 [[-end]]
 
-[[#
+[[-#
 range for loops
-]]
+-]]
 
 Slice Range Loop
 [[-for _, item := range []string{"foo", "bar"}]]
@@ -70,13 +74,12 @@ Channel Range Loop
 [[ for val := range Chan ]]$val,[[end]]
 
 Infinite Loop 2:
-[[-$ cnt := 0 -]]
+[[$ cnt := 0 -]]
 [[-for-]]
     [[- if cnt > 3 -]]
-
-
         [[-return -]]
-    [[- end]]
+    [[- end-]]
 Iteration: $cnt
+
     [[-$ cnt += 1-]]
-[[end]]
+[[-end]]

@@ -1,8 +1,8 @@
 package main
 
 import (
-	fmt "fmt"
-	io "io"
+	_fmt "fmt"
+	_io "io"
 )
 
 type OutputTypesTemplate struct {
@@ -12,53 +12,65 @@ type OutputTypesTemplate struct {
 func (OutputTypesTemplate) Name() string { return "OutputTypesTemplate" }
 
 func (template *OutputTypesTemplate) writeValue(
-	output io.Writer, value interface{}, loc string) (int, error) {
+	output _io.Writer,
+	value interface{},
+	loc string) (
+	int,
+	error) {
+
 	var valueBytes []byte
 	switch val := value.(type) {
-	case fmt.Stringer:
+	case _fmt.Stringer:
 		valueBytes = []byte(val.String())
 	case string:
 		valueBytes = []byte(val)
 	case []byte:
 		valueBytes = val
 	case bool:
-		valueBytes = []byte(fmt.Sprintf("%v", val))
+		valueBytes = []byte(_fmt.Sprintf("%v", val))
 	case uint:
-		valueBytes = []byte(fmt.Sprintf("%v", val))
+		valueBytes = []byte(_fmt.Sprintf("%v", val))
 	case uint8:
-		valueBytes = []byte(fmt.Sprintf("%v", val))
+		valueBytes = []byte(_fmt.Sprintf("%v", val))
 	case uint16:
-		valueBytes = []byte(fmt.Sprintf("%v", val))
+		valueBytes = []byte(_fmt.Sprintf("%v", val))
 	case uint32:
-		valueBytes = []byte(fmt.Sprintf("%v", val))
+		valueBytes = []byte(_fmt.Sprintf("%v", val))
 	case uint64:
-		valueBytes = []byte(fmt.Sprintf("%v", val))
+		valueBytes = []byte(_fmt.Sprintf("%v", val))
 	case int:
-		valueBytes = []byte(fmt.Sprintf("%v", val))
+		valueBytes = []byte(_fmt.Sprintf("%v", val))
 	case int8:
-		valueBytes = []byte(fmt.Sprintf("%v", val))
+		valueBytes = []byte(_fmt.Sprintf("%v", val))
 	case int16:
-		valueBytes = []byte(fmt.Sprintf("%v", val))
+		valueBytes = []byte(_fmt.Sprintf("%v", val))
 	case int32:
-		valueBytes = []byte(fmt.Sprintf("%v", val))
+		valueBytes = []byte(_fmt.Sprintf("%v", val))
 	case int64:
-		valueBytes = []byte(fmt.Sprintf("%v", val))
+		valueBytes = []byte(_fmt.Sprintf("%v", val))
 	case float32:
-		valueBytes = []byte(fmt.Sprintf("%v", val))
+		valueBytes = []byte(_fmt.Sprintf("%v", val))
 	case float64:
-		valueBytes = []byte(fmt.Sprintf("%v", val))
+		valueBytes = []byte(_fmt.Sprintf("%v", val))
 	case complex64:
-		valueBytes = []byte(fmt.Sprintf("%v", val))
+		valueBytes = []byte(_fmt.Sprintf("%v", val))
 	case complex128:
-		valueBytes = []byte(fmt.Sprintf("%v", val))
+		valueBytes = []byte(_fmt.Sprintf("%v", val))
 	default:
-		return 0, fmt.Errorf("Unsupported output value type (%s): %v", loc, value)
+		return 0, _fmt.Errorf(
+			"Unsupported output value type (%s): %v",
+			loc,
+			value)
 	}
 
 	return output.Write(valueBytes)
 }
 
-func (_template *OutputTypesTemplate) WriteTo(_output io.Writer) (int64, error) {
+func (_template *OutputTypesTemplate) WriteTo(
+	_output _io.Writer) (
+	int64,
+	error) {
+
 	_numWritten := int64(0)
 
 	Custom := _template.Custom
@@ -71,7 +83,6 @@ func (_template *OutputTypesTemplate) WriteTo(_output io.Writer) (int64, error) 
 			return _numWritten, _err
 		}
 	}
-
 	// output-types.template:8:10
 	{
 		_n, _err := _template.writeValue(
@@ -83,7 +94,6 @@ func (_template *OutputTypesTemplate) WriteTo(_output io.Writer) (int64, error) 
 			return _numWritten, _err
 		}
 	}
-
 	// output-types.template:8:17
 	{
 		_n, _err := _output.Write([]byte(`
@@ -94,7 +104,6 @@ string: `))
 			return _numWritten, _err
 		}
 	}
-
 	// output-types.template:10:8
 	{
 		_n, _err := _template.writeValue(
@@ -106,7 +115,6 @@ string: `))
 			return _numWritten, _err
 		}
 	}
-
 	// output-types.template:10:17
 	{
 		_n, _err := _output.Write([]byte(`
@@ -116,7 +124,6 @@ bytes: `))
 			return _numWritten, _err
 		}
 	}
-
 	// output-types.template:11:7
 	{
 		_n, _err := _template.writeValue(
@@ -128,7 +135,6 @@ bytes: `))
 			return _numWritten, _err
 		}
 	}
-
 	// output-types.template:11:54
 	{
 		_n, _err := _output.Write([]byte(`
@@ -139,7 +145,6 @@ bool: `))
 			return _numWritten, _err
 		}
 	}
-
 	// output-types.template:13:6
 	{
 		_n, _err := _template.writeValue(
@@ -151,7 +156,6 @@ bool: `))
 			return _numWritten, _err
 		}
 	}
-
 	// output-types.template:13:11
 	{
 		_n, _err := _output.Write([]byte(` / `))
@@ -160,7 +164,6 @@ bool: `))
 			return _numWritten, _err
 		}
 	}
-
 	// output-types.template:13:14
 	{
 		_n, _err := _template.writeValue(
@@ -172,7 +175,6 @@ bool: `))
 			return _numWritten, _err
 		}
 	}
-
 	// output-types.template:13:20
 	{
 		_n, _err := _output.Write([]byte(`
@@ -183,7 +185,6 @@ uint8 (aka byte): `))
 			return _numWritten, _err
 		}
 	}
-
 	// output-types.template:15:18
 	{
 		_n, _err := _template.writeValue(
@@ -195,7 +196,6 @@ uint8 (aka byte): `))
 			return _numWritten, _err
 		}
 	}
-
 	// output-types.template:15:24
 	{
 		_n, _err := _output.Write([]byte(`
@@ -205,7 +205,6 @@ int32 (aka rune): `))
 			return _numWritten, _err
 		}
 	}
-
 	// output-types.template:16:18
 	{
 		_n, _err := _template.writeValue(
@@ -217,7 +216,6 @@ int32 (aka rune): `))
 			return _numWritten, _err
 		}
 	}
-
 	// output-types.template:16:29
 	{
 		_n, _err := _output.Write([]byte(`
@@ -228,7 +226,6 @@ uint: `))
 			return _numWritten, _err
 		}
 	}
-
 	// output-types.template:18:6
 	{
 		_n, _err := _template.writeValue(
@@ -240,7 +237,6 @@ uint: `))
 			return _numWritten, _err
 		}
 	}
-
 	// output-types.template:18:17
 	{
 		_n, _err := _output.Write([]byte(`
@@ -250,7 +246,6 @@ int: `))
 			return _numWritten, _err
 		}
 	}
-
 	// output-types.template:19:5
 	{
 		_n, _err := _template.writeValue(
@@ -262,7 +257,6 @@ int: `))
 			return _numWritten, _err
 		}
 	}
-
 	// output-types.template:19:16
 	{
 		_n, _err := _output.Write([]byte(`
@@ -273,7 +267,6 @@ uint64: `))
 			return _numWritten, _err
 		}
 	}
-
 	// output-types.template:21:8
 	{
 		_n, _err := _template.writeValue(
@@ -285,7 +278,6 @@ uint64: `))
 			return _numWritten, _err
 		}
 	}
-
 	// output-types.template:21:21
 	{
 		_n, _err := _output.Write([]byte(`
@@ -295,7 +287,6 @@ int64: `))
 			return _numWritten, _err
 		}
 	}
-
 	// output-types.template:22:7
 	{
 		_n, _err := _template.writeValue(
@@ -307,7 +298,6 @@ int64: `))
 			return _numWritten, _err
 		}
 	}
-
 	// output-types.template:22:20
 	{
 		_n, _err := _output.Write([]byte(`
@@ -318,7 +308,6 @@ float32: `))
 			return _numWritten, _err
 		}
 	}
-
 	// output-types.template:24:9
 	{
 		_n, _err := _template.writeValue(
@@ -330,7 +319,6 @@ float32: `))
 			return _numWritten, _err
 		}
 	}
-
 	// output-types.template:24:28
 	{
 		_n, _err := _output.Write([]byte(`
@@ -340,7 +328,6 @@ float64: `))
 			return _numWritten, _err
 		}
 	}
-
 	// output-types.template:25:9
 	{
 		_n, _err := _template.writeValue(
@@ -352,7 +339,6 @@ float64: `))
 			return _numWritten, _err
 		}
 	}
-
 	// output-types.template:25:28
 	{
 		_n, _err := _output.Write([]byte(`
@@ -363,7 +349,6 @@ complex: `))
 			return _numWritten, _err
 		}
 	}
-
 	// output-types.template:27:9
 	{
 		_n, _err := _template.writeValue(
@@ -375,7 +360,6 @@ complex: `))
 			return _numWritten, _err
 		}
 	}
-
 	// output-types.template:27:25
 	{
 		_n, _err := _output.Write([]byte(`
@@ -386,7 +370,6 @@ invalid: `))
 			return _numWritten, _err
 		}
 	}
-
 	// output-types.template:29:9
 	{
 		_n, _err := _template.writeValue(
@@ -398,7 +381,6 @@ invalid: `))
 			return _numWritten, _err
 		}
 	}
-
 	// output-types.template:29:34
 	{
 		_n, _err := _output.Write([]byte(`

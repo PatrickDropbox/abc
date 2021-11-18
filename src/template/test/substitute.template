@@ -4,7 +4,7 @@ template SubstituteTemplate {
 }
 
 %%
-[[$
-prefix := "I own "
-]]
+[[-$
+prefix := "My bank account balance is "
+-]]
 $prefix$$$(2*(1-1))
