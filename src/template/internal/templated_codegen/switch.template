@@ -12,9 +12,7 @@ template Switch{
 %%
 $ind// $(stmt.Loc())
 $(ind)switch $(stmt.Switch.Value) {
-
-[[-for _, branch := range stmt.Cases-]]
-
+[[for _, branch := range stmt.Cases-]]
 $(ind)case $(branch.Predicate.Value):
 
     [[-embed &Body{ind + "\t", branch.Body}-]]
@@ -22,11 +20,9 @@ $(ind)case $(branch.Predicate.Value):
 [[-end-]]
 
 [[-if stmt.Default != nil -]]
-
 $(ind)default:
 
     [[-embed &Body{ind + "\t", stmt.Default.Body}-]]
 
 [[-end-]]
-
 $ind}

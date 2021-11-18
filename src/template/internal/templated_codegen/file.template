@@ -14,22 +14,19 @@ package $(spec.PackageName)
 import (
 	_fmt "fmt"
 	_io "io"
-
 [[-if spec.Imports != ""]]
-$(spec.Imports)
-[[-end-]]
 
+$(spec.Imports)
+[[-end]]
 )
 
 type $(spec.TemplateName) struct {
-
 [[-for _, arg := range spec.Arguments]]
 	$(arg.Name) $(arg.Type)
-[[-end-]]
-
+[[-end]]
 }
 
-func ($spec.TemplateName) Name() string { return "$(spec.TemplateName)" }
+func ($(spec.TemplateName)) Name() string { return "$(spec.TemplateName)" }
 
 func (template *$(spec.TemplateName)) writeValue(
 	output _io.Writer,
@@ -46,12 +43,9 @@ func (template *$(spec.TemplateName)) writeValue(
 		valueBytes = []byte(val)
 	case []byte:
 		valueBytes = val
-
-[[-for _, primitive := range template.OutputablePrimitiveTypes-]]
-
+[[-for _, primitive := range template.OutputablePrimitiveTypes]]
 	case $primitive:
 		valueBytes = []byte(_fmt.Sprintf("%v", val))
-
 [[-end-]]
 
 	default:
@@ -71,13 +65,14 @@ func (_template *$(spec.TemplateName)) WriteTo(
 
 	_numWritten := int64(0)
 
-[[-for _, arg := range spec.Arguments-]]
+[[-for idx, arg := range spec.Arguments-]]
+    [[-if idx == 0]]
 
+    [[-end-]]
 	$(arg.Name) := _template.$(arg.Name)
+[[end]]
 
-[[-end]]
-
-[[-embed &Body{"\t", spec.Body}]]
+[[-embed &Body{"\t", spec.Body}-]]
 
 	return _numWritten, nil
 }

@@ -24,11 +24,9 @@ $ind} else if $(branch.Predicate.Value) {
 [[-end-]]
 
 [[-if stmt.Else != nil -]]
-
 $ind} else {
 
     [[-embed &Body{ind + "\t", stmt.Else.Body}-]]
 
 [[-end-]]
-
 $ind}

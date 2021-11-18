@@ -13,7 +13,7 @@ template Substitute {
 %%
 $ind// $(stmt.Loc())
 $ind{
-$ind	_n, err := _template.writeValue(
+$ind	_n, _err := _template.writeValue(
 $ind		_output,
 $ind		($(stmt.Value)),
 $ind		"$(stmt.Loc())")

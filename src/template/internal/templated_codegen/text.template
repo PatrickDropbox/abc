@@ -14,7 +14,7 @@ template Text {
 [[-if stmt.Value != ""-]]
 $ind// $(stmt.Loc())
 $ind{
-$ind	_n, err := _output.Write([]byte(`stmt.Value`))
+$ind	_n, _err := _output.Write([]byte(`$(stmt.Value)`))
 $ind	_numWritten += int64(_n)
 $ind	if _err != nil {
 $ind		return _numWritten, _err

@@ -94,20 +94,20 @@ func (_template *File) WriteTo(_output io.Writer) (int64, error) {
 
 import (
 	_fmt "fmt"
-	_io "io"
-`))
+	_io "io"`))
 		_numWritten += int64(_n)
 		if _err != nil {
 			return _numWritten, _err
 		}
 	}
 
-	// file.template:18:0
+	// file.template:17:0
 	if spec.Imports != "" {
 
-		// file.template:18:26
+		// file.template:17:26
 		{
 			_n, _err := _output.Write([]byte(`
+
 `))
 			_numWritten += int64(_n)
 			if _err != nil {
@@ -129,7 +129,7 @@ import (
 
 	}
 
-	// file.template:20:9
+	// file.template:20:8
 	{
 		_n, _err := _output.Write([]byte(`
 )
@@ -141,32 +141,31 @@ type `))
 		}
 	}
 
-	// file.template:24:5
+	// file.template:23:5
 	{
 		_n, _err := _template.writeValue(
 			_output,
 			(spec.TemplateName),
-			"file.template:24:5")
+			"file.template:23:5")
 		_numWritten += int64(_n)
 		if _err != nil {
 			return _numWritten, _err
 		}
 	}
 
-	// file.template:24:25
+	// file.template:23:25
 	{
-		_n, _err := _output.Write([]byte(` struct {
-`))
+		_n, _err := _output.Write([]byte(` struct {`))
 		_numWritten += int64(_n)
 		if _err != nil {
 			return _numWritten, _err
 		}
 	}
 
-	// file.template:26:0
+	// file.template:24:0
 	for _, arg := range spec.Arguments {
 
-		// file.template:26:39
+		// file.template:24:39
 		{
 			_n, _err := _output.Write([]byte(`
 	`))
@@ -176,19 +175,19 @@ type `))
 			}
 		}
 
-		// file.template:27:1
+		// file.template:25:1
 		{
 			_n, _err := _template.writeValue(
 				_output,
 				(arg.Name),
-				"file.template:27:1")
+				"file.template:25:1")
 			_numWritten += int64(_n)
 			if _err != nil {
 				return _numWritten, _err
 			}
 		}
 
-		// file.template:27:12
+		// file.template:25:12
 		{
 			_n, _err := _output.Write([]byte(` `))
 			_numWritten += int64(_n)
@@ -197,12 +196,12 @@ type `))
 			}
 		}
 
-		// file.template:27:13
+		// file.template:25:13
 		{
 			_n, _err := _template.writeValue(
 				_output,
 				(arg.Type),
-				"file.template:27:13")
+				"file.template:25:13")
 			_numWritten += int64(_n)
 			if _err != nil {
 				return _numWritten, _err
@@ -211,7 +210,7 @@ type `))
 
 	}
 
-	// file.template:28:9
+	// file.template:26:8
 	{
 		_n, _err := _output.Write([]byte(`
 }
@@ -223,40 +222,40 @@ func (`))
 		}
 	}
 
-	// file.template:32:6
-	{
-		_n, _err := _template.writeValue(
-			_output,
-			(spec),
-			"file.template:32:6")
-		_numWritten += int64(_n)
-		if _err != nil {
-			return _numWritten, _err
-		}
-	}
-
-	// file.template:32:11
-	{
-		_n, _err := _output.Write([]byte(`.TemplateName) Name() string { return "`))
-		_numWritten += int64(_n)
-		if _err != nil {
-			return _numWritten, _err
-		}
-	}
-
-	// file.template:32:50
+	// file.template:29:6
 	{
 		_n, _err := _template.writeValue(
 			_output,
 			(spec.TemplateName),
-			"file.template:32:50")
+			"file.template:29:6")
 		_numWritten += int64(_n)
 		if _err != nil {
 			return _numWritten, _err
 		}
 	}
 
-	// file.template:32:70
+	// file.template:29:26
+	{
+		_n, _err := _output.Write([]byte(`) Name() string { return "`))
+		_numWritten += int64(_n)
+		if _err != nil {
+			return _numWritten, _err
+		}
+	}
+
+	// file.template:29:52
+	{
+		_n, _err := _template.writeValue(
+			_output,
+			(spec.TemplateName),
+			"file.template:29:52")
+		_numWritten += int64(_n)
+		if _err != nil {
+			return _numWritten, _err
+		}
+	}
+
+	// file.template:29:72
 	{
 		_n, _err := _output.Write([]byte(`" }
 
@@ -267,19 +266,19 @@ func (template *`))
 		}
 	}
 
-	// file.template:34:16
+	// file.template:31:16
 	{
 		_n, _err := _template.writeValue(
 			_output,
 			(spec.TemplateName),
-			"file.template:34:16")
+			"file.template:31:16")
 		_numWritten += int64(_n)
 		if _err != nil {
 			return _numWritten, _err
 		}
 	}
 
-	// file.template:34:36
+	// file.template:31:36
 	{
 		_n, _err := _output.Write([]byte(`) writeValue(
 	output _io.Writer,
@@ -295,18 +294,17 @@ func (template *`))
 	case string:
 		valueBytes = []byte(val)
 	case []byte:
-		valueBytes = val
-`))
+		valueBytes = val`))
 		_numWritten += int64(_n)
 		if _err != nil {
 			return _numWritten, _err
 		}
 	}
 
-	// file.template:50:0
+	// file.template:46:0
 	for _, primitive := range template.OutputablePrimitiveTypes {
 
-		// file.template:50:65
+		// file.template:46:64
 		{
 			_n, _err := _output.Write([]byte(`
 	case `))
@@ -316,23 +314,22 @@ func (template *`))
 			}
 		}
 
-		// file.template:52:6
+		// file.template:47:6
 		{
 			_n, _err := _template.writeValue(
 				_output,
 				(primitive),
-				"file.template:52:6")
+				"file.template:47:6")
 			_numWritten += int64(_n)
 			if _err != nil {
 				return _numWritten, _err
 			}
 		}
 
-		// file.template:52:16
+		// file.template:47:16
 		{
 			_n, _err := _output.Write([]byte(`:
-		valueBytes = []byte(_fmt.Sprintf("%v", val))
-`))
+		valueBytes = []byte(_fmt.Sprintf("%v", val))`))
 			_numWritten += int64(_n)
 			if _err != nil {
 				return _numWritten, _err
@@ -340,7 +337,7 @@ func (template *`))
 		}
 	}
 
-	// file.template:55:9
+	// file.template:49:9
 	{
 		_n, _err := _output.Write([]byte(`
 	default:
@@ -360,19 +357,19 @@ func (_template *`))
 		}
 	}
 
-	// file.template:67:17
+	// file.template:61:17
 	{
 		_n, _err := _template.writeValue(
 			_output,
 			(spec.TemplateName),
-			"file.template:67:17")
+			"file.template:61:17")
 		_numWritten += int64(_n)
 		if _err != nil {
 			return _numWritten, _err
 		}
 	}
 
-	// file.template:67:37
+	// file.template:61:37
 	{
 		_n, _err := _output.Write([]byte(`) WriteTo(
 	_output _io.Writer) (
@@ -387,32 +384,45 @@ func (_template *`))
 		}
 	}
 
-	// file.template:74:0
-	for _, arg := range spec.Arguments {
+	// file.template:68:0
+	for idx, arg := range spec.Arguments {
 
-		// file.template:74:40
+		// file.template:69:4
+		if idx == 0 {
+
+			// file.template:69:20
+			{
+				_n, _err := _output.Write([]byte(`
+`))
+				_numWritten += int64(_n)
+				if _err != nil {
+					return _numWritten, _err
+				}
+			}
+		}
+
+		// file.template:71:13
 		{
-			_n, _err := _output.Write([]byte(`
-	`))
+			_n, _err := _output.Write([]byte(`	`))
 			_numWritten += int64(_n)
 			if _err != nil {
 				return _numWritten, _err
 			}
 		}
 
-		// file.template:76:1
+		// file.template:72:1
 		{
 			_n, _err := _template.writeValue(
 				_output,
 				(arg.Name),
-				"file.template:76:1")
+				"file.template:72:1")
 			_numWritten += int64(_n)
 			if _err != nil {
 				return _numWritten, _err
 			}
 		}
 
-		// file.template:76:12
+		// file.template:72:12
 		{
 			_n, _err := _output.Write([]byte(` := _template.`))
 			_numWritten += int64(_n)
@@ -421,19 +431,19 @@ func (_template *`))
 			}
 		}
 
-		// file.template:76:26
+		// file.template:72:26
 		{
 			_n, _err := _template.writeValue(
 				_output,
 				(arg.Name),
-				"file.template:76:26")
+				"file.template:72:26")
 			_numWritten += int64(_n)
 			if _err != nil {
 				return _numWritten, _err
 			}
 		}
 
-		// file.template:76:37
+		// file.template:72:37
 		{
 			_n, _err := _output.Write([]byte(`
 `))
@@ -444,7 +454,7 @@ func (_template *`))
 		}
 	}
 
-	// file.template:78:8
+	// file.template:73:7
 	{
 		_n, _err := _output.Write([]byte(`
 `))
@@ -454,7 +464,7 @@ func (_template *`))
 		}
 	}
 
-	// file.template:80:0
+	// file.template:75:0
 	{
 		_n, _err := (&Body{"\t", spec.Body}).WriteTo(_output)
 		_numWritten += _n
@@ -463,10 +473,9 @@ func (_template *`))
 		}
 	}
 
-	// file.template:80:33
+	// file.template:75:34
 	{
 		_n, _err := _output.Write([]byte(`
-
 	return _numWritten, nil
 }
 `))

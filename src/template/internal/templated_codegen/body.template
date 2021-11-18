@@ -47,7 +47,6 @@ template Body {
             // $(statement.Loc())
             COMPILE ERROR: bug in template generation code
             Unexpected atom type: $(stmt.Id())
-
         [[-end-]]
 
     [[-case *template.For-]]
@@ -63,5 +62,5 @@ template Body {
         // $(statement.Loc())
         COMPILE ERROR: bug in template generation code
         Unexpected statement type: $(statement.Id())
-    [[end]]
-[[end]]
+    [[-end-]]
+[[-end-]]

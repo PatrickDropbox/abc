@@ -191,7 +191,7 @@ func (_template *Error) WriteTo(_output io.Writer) (int64, error) {
 
 	// error.template:16:4
 	{
-		_n, _err := _output.Write([]byte(`	if _err != nil {
+		_n, _err := _output.Write([]byte(`	if _err == nil {
 `))
 		_numWritten += int64(_n)
 		if _err != nil {

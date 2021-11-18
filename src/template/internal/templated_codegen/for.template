@@ -14,5 +14,4 @@ $ind// $(stmt.Loc())
 $(ind)for $(stmt.Predicate.Value) {
 
     [[-embed &Body{ind + "\t", stmt.Body}-]]
-
 $ind}

@@ -215,20 +215,11 @@ func (_template *Body) WriteTo(_output io.Writer) (int64, error) {
 					}
 				}
 
-				// body.template:49:46
-				{
-					_n, _err := _output.Write([]byte(`
-`))
-					_numWritten += int64(_n)
-					if _err != nil {
-						return _numWritten, _err
-					}
-				}
 			}
 
 		case *template.For:
 
-			// body.template:54:8
+			// body.template:53:8
 			{
 				_n, _err := (&For{ind, stmt}).WriteTo(_output)
 				_numWritten += _n
@@ -239,7 +230,7 @@ func (_template *Body) WriteTo(_output io.Writer) (int64, error) {
 
 		case *template.Switch:
 
-			// body.template:57:8
+			// body.template:56:8
 			{
 				_n, _err := (&Switch{ind, stmt}).WriteTo(_output)
 				_numWritten += _n
@@ -250,7 +241,7 @@ func (_template *Body) WriteTo(_output io.Writer) (int64, error) {
 
 		case *template.If:
 
-			// body.template:60:8
+			// body.template:59:8
 			{
 				_n, _err := (&If{ind, stmt}).WriteTo(_output)
 				_numWritten += _n
@@ -261,7 +252,7 @@ func (_template *Body) WriteTo(_output io.Writer) (int64, error) {
 
 		default:
 
-			// body.template:62:16
+			// body.template:61:16
 			{
 				_n, _err := _output.Write([]byte(`
         // `))
@@ -271,19 +262,19 @@ func (_template *Body) WriteTo(_output io.Writer) (int64, error) {
 				}
 			}
 
-			// body.template:63:11
+			// body.template:62:11
 			{
 				_n, _err := _template.writeValue(
 					_output,
 					(statement.Loc()),
-					"body.template:63:11")
+					"body.template:62:11")
 				_numWritten += int64(_n)
 				if _err != nil {
 					return _numWritten, _err
 				}
 			}
 
-			// body.template:63:29
+			// body.template:62:29
 			{
 				_n, _err := _output.Write([]byte(`
         COMPILE ERROR: bug in template generation code
@@ -294,48 +285,20 @@ func (_template *Body) WriteTo(_output io.Writer) (int64, error) {
 				}
 			}
 
-			// body.template:65:35
+			// body.template:64:35
 			{
 				_n, _err := _template.writeValue(
 					_output,
 					(statement.Id()),
-					"body.template:65:35")
+					"body.template:64:35")
 				_numWritten += int64(_n)
 				if _err != nil {
 					return _numWritten, _err
 				}
 			}
 
-			// body.template:65:52
-			{
-				_n, _err := _output.Write([]byte(`
-    `))
-				_numWritten += int64(_n)
-				if _err != nil {
-					return _numWritten, _err
-				}
-			}
 		}
 
-		// body.template:66:11
-		{
-			_n, _err := _output.Write([]byte(`
-`))
-			_numWritten += int64(_n)
-			if _err != nil {
-				return _numWritten, _err
-			}
-		}
-	}
-
-	// body.template:67:7
-	{
-		_n, _err := _output.Write([]byte(`
-`))
-		_numWritten += int64(_n)
-		if _err != nil {
-			return _numWritten, _err
-		}
 	}
 
 	return _numWritten, nil

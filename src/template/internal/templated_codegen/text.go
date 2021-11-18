@@ -151,7 +151,28 @@ func (_template *Text) WriteTo(_output io.Writer) (int64, error) {
 
 		// text.template:17:4
 		{
-			_n, _err := _output.Write([]byte(`	_n, err := _output.Write([]byte(` + "`" + `stmt.Value` + "`" + `))
+			_n, _err := _output.Write([]byte(`	_n, _err := _output.Write([]byte(` + "`" + ``))
+			_numWritten += int64(_n)
+			if _err != nil {
+				return _numWritten, _err
+			}
+		}
+
+		// text.template:17:39
+		{
+			_n, _err := _template.writeValue(
+				_output,
+				(stmt.Value),
+				"text.template:17:39")
+			_numWritten += int64(_n)
+			if _err != nil {
+				return _numWritten, _err
+			}
+		}
+
+		// text.template:17:52
+		{
+			_n, _err := _output.Write([]byte(`` + "`" + `))
 `))
 			_numWritten += int64(_n)
 			if _err != nil {

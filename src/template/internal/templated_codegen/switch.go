@@ -155,32 +155,22 @@ func (_template *Switch) WriteTo(_output io.Writer) (int64, error) {
 		}
 	}
 
-	// switch.template:16:0
+	// switch.template:15:0
 	for _, branch := range stmt.Cases {
 
-		// switch.template:16:39
-		{
-			_n, _err := _output.Write([]byte(`
-`))
-			_numWritten += int64(_n)
-			if _err != nil {
-				return _numWritten, _err
-			}
-		}
-
-		// switch.template:18:0
+		// switch.template:16:0
 		{
 			_n, _err := _template.writeValue(
 				_output,
 				(ind),
-				"switch.template:18:0")
+				"switch.template:16:0")
 			_numWritten += int64(_n)
 			if _err != nil {
 				return _numWritten, _err
 			}
 		}
 
-		// switch.template:18:6
+		// switch.template:16:6
 		{
 			_n, _err := _output.Write([]byte(`case `))
 			_numWritten += int64(_n)
@@ -189,19 +179,19 @@ func (_template *Switch) WriteTo(_output io.Writer) (int64, error) {
 			}
 		}
 
-		// switch.template:18:11
+		// switch.template:16:11
 		{
 			_n, _err := _template.writeValue(
 				_output,
 				(branch.Predicate.Value),
-				"switch.template:18:11")
+				"switch.template:16:11")
 			_numWritten += int64(_n)
 			if _err != nil {
 				return _numWritten, _err
 			}
 		}
 
-		// switch.template:18:36
+		// switch.template:16:36
 		{
 			_n, _err := _output.Write([]byte(`:
 `))
@@ -211,7 +201,7 @@ func (_template *Switch) WriteTo(_output io.Writer) (int64, error) {
 			}
 		}
 
-		// switch.template:20:4
+		// switch.template:18:4
 		{
 			_n, _err := (&Body{ind + "\t", branch.Body}).WriteTo(_output)
 			_numWritten += _n
@@ -222,32 +212,22 @@ func (_template *Switch) WriteTo(_output io.Writer) (int64, error) {
 
 	}
 
-	// switch.template:24:0
+	// switch.template:22:0
 	if stmt.Default != nil {
 
-		// switch.template:24:29
-		{
-			_n, _err := _output.Write([]byte(`
-`))
-			_numWritten += int64(_n)
-			if _err != nil {
-				return _numWritten, _err
-			}
-		}
-
-		// switch.template:26:0
+		// switch.template:23:0
 		{
 			_n, _err := _template.writeValue(
 				_output,
 				(ind),
-				"switch.template:26:0")
+				"switch.template:23:0")
 			_numWritten += int64(_n)
 			if _err != nil {
 				return _numWritten, _err
 			}
 		}
 
-		// switch.template:26:6
+		// switch.template:23:6
 		{
 			_n, _err := _output.Write([]byte(`default:
 `))
@@ -257,7 +237,7 @@ func (_template *Switch) WriteTo(_output io.Writer) (int64, error) {
 			}
 		}
 
-		// switch.template:28:4
+		// switch.template:25:4
 		{
 			_n, _err := (&Body{ind + "\t", stmt.Default.Body}).WriteTo(_output)
 			_numWritten += _n
@@ -268,29 +248,19 @@ func (_template *Switch) WriteTo(_output io.Writer) (int64, error) {
 
 	}
 
-	// switch.template:30:9
-	{
-		_n, _err := _output.Write([]byte(`
-`))
-		_numWritten += int64(_n)
-		if _err != nil {
-			return _numWritten, _err
-		}
-	}
-
-	// switch.template:32:0
+	// switch.template:28:0
 	{
 		_n, _err := _template.writeValue(
 			_output,
 			(ind),
-			"switch.template:32:0")
+			"switch.template:28:0")
 		_numWritten += int64(_n)
 		if _err != nil {
 			return _numWritten, _err
 		}
 	}
 
-	// switch.template:32:4
+	// switch.template:28:4
 	{
 		_n, _err := _output.Write([]byte(`}
 `))

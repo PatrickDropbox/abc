@@ -148,7 +148,7 @@ func (_template *Substitute) WriteTo(_output io.Writer) (int64, error) {
 
 	// substitute.template:16:4
 	{
-		_n, _err := _output.Write([]byte(`	_n, err := _template.writeValue(
+		_n, _err := _output.Write([]byte(`	_n, _err := _template.writeValue(
 `))
 		_numWritten += int64(_n)
 		if _err != nil {

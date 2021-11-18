@@ -234,29 +234,19 @@ func (_template *If) WriteTo(_output io.Writer) (int64, error) {
 	// if.template:26:0
 	if stmt.Else != nil {
 
-		// if.template:26:26
-		{
-			_n, _err := _output.Write([]byte(`
-`))
-			_numWritten += int64(_n)
-			if _err != nil {
-				return _numWritten, _err
-			}
-		}
-
-		// if.template:28:0
+		// if.template:27:0
 		{
 			_n, _err := _template.writeValue(
 				_output,
 				(ind),
-				"if.template:28:0")
+				"if.template:27:0")
 			_numWritten += int64(_n)
 			if _err != nil {
 				return _numWritten, _err
 			}
 		}
 
-		// if.template:28:4
+		// if.template:27:4
 		{
 			_n, _err := _output.Write([]byte(`} else {
 `))
@@ -266,7 +256,7 @@ func (_template *If) WriteTo(_output io.Writer) (int64, error) {
 			}
 		}
 
-		// if.template:30:4
+		// if.template:29:4
 		{
 			_n, _err := (&Body{ind + "\t", stmt.Else.Body}).WriteTo(_output)
 			_numWritten += _n
@@ -277,29 +267,19 @@ func (_template *If) WriteTo(_output io.Writer) (int64, error) {
 
 	}
 
-	// if.template:32:9
-	{
-		_n, _err := _output.Write([]byte(`
-`))
-		_numWritten += int64(_n)
-		if _err != nil {
-			return _numWritten, _err
-		}
-	}
-
-	// if.template:34:0
+	// if.template:32:0
 	{
 		_n, _err := _template.writeValue(
 			_output,
 			(ind),
-			"if.template:34:0")
+			"if.template:32:0")
 		_numWritten += int64(_n)
 		if _err != nil {
 			return _numWritten, _err
 		}
 	}
 
-	// if.template:34:4
+	// if.template:32:4
 	{
 		_n, _err := _output.Write([]byte(`}
 `))

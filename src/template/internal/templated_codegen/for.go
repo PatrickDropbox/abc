@@ -164,29 +164,19 @@ func (_template *For) WriteTo(_output io.Writer) (int64, error) {
 		}
 	}
 
-	// for.template:16:44
-	{
-		_n, _err := _output.Write([]byte(`
-`))
-		_numWritten += int64(_n)
-		if _err != nil {
-			return _numWritten, _err
-		}
-	}
-
-	// for.template:18:0
+	// for.template:17:0
 	{
 		_n, _err := _template.writeValue(
 			_output,
 			(ind),
-			"for.template:18:0")
+			"for.template:17:0")
 		_numWritten += int64(_n)
 		if _err != nil {
 			return _numWritten, _err
 		}
 	}
 
-	// for.template:18:4
+	// for.template:17:4
 	{
 		_n, _err := _output.Write([]byte(`}
 `))
