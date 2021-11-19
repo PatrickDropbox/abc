@@ -2,6 +2,7 @@ package code_gen
 
 import (
 	"fmt"
+	"io"
 
 	lr "github.com/pattyshack/abc/src/lr/internal"
 )
@@ -14,7 +15,7 @@ func GenerateLRCode(
 	grammar *lr.Grammar,
 	states *lr.LRStates,
 	targetLanguage string) (
-	Code,
+	io.WriterTo,
 	error) {
 
 	switch targetLanguage {

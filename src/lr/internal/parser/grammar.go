@@ -168,11 +168,20 @@ func LRParseWithCustomErrorHandler(lexer LRLexer, reducer LRReducer, errHandler 
 // User should normally avoid directly accessing the following code
 // ================================================================
 
-func _LRParse(lexer LRLexer, reducer LRReducer, errHandler LRParseErrorHandler, startState _LRStateId) (*_LRStackItem, error) {
+func _LRParse(
+	lexer LRLexer,
+	reducer LRReducer,
+	errHandler LRParseErrorHandler,
+	startState _LRStateId) (
+	*_LRStackItem,
+	error) {
+
 	stateStack := _LRStack{
-		// Note: we don't have to populate the start symbol since its value is never accessed
+		// Note: we don't have to populate the start symbol since its value
+		// is never accessed.
 		&_LRStackItem{startState, nil},
 	}
+
 	symbolStack := &_LRPseudoSymbolStack{lexer: lexer}
 
 	for {
@@ -181,10 +190,13 @@ func _LRParse(lexer LRLexer, reducer LRReducer, errHandler LRParseErrorHandler, 
 			return nil, err
 		}
 
-		action, ok := _LRActionTable.Get(stateStack[len(stateStack)-1].StateId, nextSymbol.Id())
+		action, ok := _LRActionTable.Get(
+			stateStack[len(stateStack)-1].StateId,
+			nextSymbol.Id())
 		if !ok {
 			return nil, errHandler.Error(nextSymbol, stateStack)
 		}
+
 		if action.ActionType == _LRShiftAction {
 			stateStack = append(stateStack, action.ShiftItem(nextSymbol))
 
@@ -194,7 +206,9 @@ func _LRParse(lexer LRLexer, reducer LRReducer, errHandler LRParseErrorHandler, 
 			}
 		} else if action.ActionType == _LRReduceAction {
 			var reduceSymbol *LRSymbol
-			stateStack, reduceSymbol, err = action.ReduceSymbol(reducer, stateStack)
+			stateStack, reduceSymbol, err = action.ReduceSymbol(
+				reducer,
+				stateStack)
 			if err != nil {
 				return nil, err
 			}
@@ -205,13 +219,11 @@ func _LRParse(lexer LRLexer, reducer LRReducer, errHandler LRParseErrorHandler, 
 				panic("This should never happen")
 			}
 			return stateStack[1], nil
-
 		} else {
 			panic("Unknown action type: " + action.ActionType.String())
 		}
 	}
 }
-
 func (i LRSymbolId) String() string {
 	switch i {
 	case _LREndMarker:

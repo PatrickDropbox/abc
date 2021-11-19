@@ -123,11 +123,20 @@ func ParseBlockWithCustomErrorHandler(lexer Lexer, reducer Reducer, errHandler P
 // User should normally avoid directly accessing the following code
 // ================================================================
 
-func _Parse(lexer Lexer, reducer Reducer, errHandler ParseErrorHandler, startState _StateId) (*_StackItem, error) {
+func _Parse(
+	lexer Lexer,
+	reducer Reducer,
+	errHandler ParseErrorHandler,
+	startState _StateId) (
+	*_StackItem,
+	error) {
+
 	stateStack := _Stack{
-		// Note: we don't have to populate the start symbol since its value is never accessed
+		// Note: we don't have to populate the start symbol since its value
+		// is never accessed.
 		&_StackItem{startState, nil},
 	}
+
 	symbolStack := &_PseudoSymbolStack{lexer: lexer}
 
 	for {
@@ -136,10 +145,13 @@ func _Parse(lexer Lexer, reducer Reducer, errHandler ParseErrorHandler, startSta
 			return nil, err
 		}
 
-		action, ok := _ActionTable.Get(stateStack[len(stateStack)-1].StateId, nextSymbol.Id())
+		action, ok := _ActionTable.Get(
+			stateStack[len(stateStack)-1].StateId,
+			nextSymbol.Id())
 		if !ok {
 			return nil, errHandler.Error(nextSymbol, stateStack)
 		}
+
 		if action.ActionType == _ShiftAction {
 			stateStack = append(stateStack, action.ShiftItem(nextSymbol))
 
@@ -149,7 +161,9 @@ func _Parse(lexer Lexer, reducer Reducer, errHandler ParseErrorHandler, startSta
 			}
 		} else if action.ActionType == _ReduceAction {
 			var reduceSymbol *Symbol
-			stateStack, reduceSymbol, err = action.ReduceSymbol(reducer, stateStack)
+			stateStack, reduceSymbol, err = action.ReduceSymbol(
+				reducer,
+				stateStack)
 			if err != nil {
 				return nil, err
 			}
@@ -160,13 +174,11 @@ func _Parse(lexer Lexer, reducer Reducer, errHandler ParseErrorHandler, startSta
 				panic("This should never happen")
 			}
 			return stateStack[1], nil
-
 		} else {
 			panic("Unknown action type: " + action.ActionType.String())
 		}
 	}
 }
-
 func (i SymbolId) String() string {
 	switch i {
 	case _EndMarker:

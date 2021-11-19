@@ -769,11 +769,20 @@ func CParseWithCustomErrorHandler(lexer CLexer, reducer CReducer, errHandler CPa
 // User should normally avoid directly accessing the following code
 // ================================================================
 
-func _CParse(lexer CLexer, reducer CReducer, errHandler CParseErrorHandler, startState _CStateId) (*_CStackItem, error) {
+func _CParse(
+	lexer CLexer,
+	reducer CReducer,
+	errHandler CParseErrorHandler,
+	startState _CStateId) (
+	*_CStackItem,
+	error) {
+
 	stateStack := _CStack{
-		// Note: we don't have to populate the start symbol since its value is never accessed
+		// Note: we don't have to populate the start symbol since its value
+		// is never accessed.
 		&_CStackItem{startState, nil},
 	}
+
 	symbolStack := &_CPseudoSymbolStack{lexer: lexer}
 
 	for {
@@ -782,10 +791,13 @@ func _CParse(lexer CLexer, reducer CReducer, errHandler CParseErrorHandler, star
 			return nil, err
 		}
 
-		action, ok := _CActionTable.Get(stateStack[len(stateStack)-1].StateId, nextSymbol.Id())
+		action, ok := _CActionTable.Get(
+			stateStack[len(stateStack)-1].StateId,
+			nextSymbol.Id())
 		if !ok {
 			return nil, errHandler.Error(nextSymbol, stateStack)
 		}
+
 		if action.ActionType == _CShiftAction {
 			stateStack = append(stateStack, action.ShiftItem(nextSymbol))
 
@@ -795,7 +807,9 @@ func _CParse(lexer CLexer, reducer CReducer, errHandler CParseErrorHandler, star
 			}
 		} else if action.ActionType == _CReduceAction {
 			var reduceSymbol *CSymbol
-			stateStack, reduceSymbol, err = action.ReduceSymbol(reducer, stateStack)
+			stateStack, reduceSymbol, err = action.ReduceSymbol(
+				reducer,
+				stateStack)
 			if err != nil {
 				return nil, err
 			}
@@ -806,13 +820,11 @@ func _CParse(lexer CLexer, reducer CReducer, errHandler CParseErrorHandler, star
 				panic("This should never happen")
 			}
 			return stateStack[1], nil
-
 		} else {
 			panic("Unknown action type: " + action.ActionType.String())
 		}
 	}
 }
-
 func (i CSymbolId) String() string {
 	switch i {
 	case _CEndMarker:
