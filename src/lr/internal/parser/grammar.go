@@ -147,9 +147,12 @@ type LRParseErrorHandler interface {
 type LRDefaultParseErrorHandler struct{}
 
 func (LRDefaultParseErrorHandler) Error(nextToken LRToken, stack _LRStack) error {
-	return fmt.Errorf("Syntax error: unexpected symbol %v. Expecting: %v (%v)", nextToken.Id(), _LRExpectedTerminals[stack[len(stack)-1].StateId], nextToken.Loc())
+	return fmt.Errorf(
+		"Syntax error: unexpected symbol %v. Expecting %v (%v)",
+		nextToken.Id(),
+		_LRExpectedTerminals[stack[len(stack)-1].StateId],
+		nextToken.Loc())
 }
-
 func LRParse(lexer LRLexer, reducer LRReducer) (*Grammar, error) {
 	return LRParseWithCustomErrorHandler(lexer, reducer, LRDefaultParseErrorHandler{})
 }

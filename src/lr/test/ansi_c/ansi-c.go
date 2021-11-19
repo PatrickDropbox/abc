@@ -748,9 +748,12 @@ type CParseErrorHandler interface {
 type CDefaultParseErrorHandler struct{}
 
 func (CDefaultParseErrorHandler) Error(nextToken CToken, stack _CStack) error {
-	return fmt.Errorf("Syntax error: unexpected symbol %v. Expecting: %v (%v)", nextToken.Id(), _CExpectedTerminals[stack[len(stack)-1].StateId], nextToken.Loc())
+	return fmt.Errorf(
+		"Syntax error: unexpected symbol %v. Expecting %v (%v)",
+		nextToken.Id(),
+		_CExpectedTerminals[stack[len(stack)-1].StateId],
+		nextToken.Loc())
 }
-
 func CParse(lexer CLexer, reducer CReducer) (*CGenericSymbol, error) {
 	return CParseWithCustomErrorHandler(lexer, reducer, CDefaultParseErrorHandler{})
 }

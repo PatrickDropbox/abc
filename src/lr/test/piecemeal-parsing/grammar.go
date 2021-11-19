@@ -89,9 +89,12 @@ type ParseErrorHandler interface {
 type DefaultParseErrorHandler struct{}
 
 func (DefaultParseErrorHandler) Error(nextToken Token, stack _Stack) error {
-	return fmt.Errorf("Syntax error: unexpected symbol %v. Expecting: %v (%v)", nextToken.Id(), _ExpectedTerminals[stack[len(stack)-1].StateId], nextToken.Loc())
+	return fmt.Errorf(
+		"Syntax error: unexpected symbol %v. Expecting %v (%v)",
+		nextToken.Id(),
+		_ExpectedTerminals[stack[len(stack)-1].StateId],
+		nextToken.Loc())
 }
-
 func ParseExprList(lexer Lexer, reducer Reducer) ([]Expr, error) {
 	return ParseExprListWithCustomErrorHandler(lexer, reducer, DefaultParseErrorHandler{})
 }

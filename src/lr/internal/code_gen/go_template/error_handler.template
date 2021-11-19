@@ -1,0 +1,28 @@
+package go_template
+
+template ErrorHandler {
+    ErrHandler          string
+
+    TokenType           string
+    StackType           string
+
+    DefaultErrHandler   string
+
+    Errorf              interface{}
+
+    ExpectedTerminals   string
+}
+%%
+type $ErrHandler interface {
+    Error(nextToken $TokenType, parseStack $StackType) error
+}
+
+type $DefaultErrHandler struct {}
+
+func ($DefaultErrHandler) Error(nextToken $TokenType, stack $StackType) error {
+    return $Errorf(
+        "Syntax error: unexpected symbol %v. Expecting %v (%v)",
+        nextToken.Id(),
+        $ExpectedTerminals[stack[len(stack)-1].StateId],
+        nextToken.Loc())
+}

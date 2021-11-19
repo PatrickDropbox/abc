@@ -1130,30 +1130,15 @@ func (gen *goCodeGen) generateExpectedTerminals() {
 }
 
 func (gen *goCodeGen) generateParseErrorHandler() {
-	l := gen.Line
-	push := gen.PushIndent
-	pop := gen.PopIndent
-
-	l("type %s interface {", gen.errHandler)
-	push()
-	l("Error(nextToken %s, parseStack %s) error", gen.token, gen.stack)
-	pop()
-	l("}")
-	l("")
-
-	l("type %s struct {}", gen.defaultErrHandler)
-	l("")
-	l("func (%s) Error(nextToken %s, stack %s) error {",
-		gen.defaultErrHandler,
-		gen.token,
-		gen.stack)
-	push()
-	l("return %v(\"Syntax error: unexpected symbol %%v. Expecting: %%v (%%v)\", nextToken.Id(), %s[stack[len(stack)-1].StateId], nextToken.Loc())",
-		gen.Obj("fmt.Errorf"),
-		gen.expectedTerminals)
-	pop()
-	l("}")
-	l("")
+    gen.Embed(
+        &go_template.ErrorHandler{
+            ErrHandler: gen.errHandler,
+            TokenType: gen.token,
+            StackType: gen.stack,
+            DefaultErrHandler: gen.defaultErrHandler,
+            Errorf: gen.Obj("fmt.Errorf"),
+            ExpectedTerminals: gen.expectedTerminals,
+        })
 }
 
 func (gen *goCodeGen) generateParse() {
