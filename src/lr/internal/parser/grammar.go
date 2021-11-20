@@ -153,11 +153,22 @@ func (LRDefaultParseErrorHandler) Error(nextToken LRToken, stack _LRStack) error
 		_LRExpectedTerminals[stack[len(stack)-1].StateId],
 		nextToken.Loc())
 }
+
 func LRParse(lexer LRLexer, reducer LRReducer) (*Grammar, error) {
-	return LRParseWithCustomErrorHandler(lexer, reducer, LRDefaultParseErrorHandler{})
+
+	return LRParseWithCustomErrorHandler(
+		lexer,
+		reducer,
+		LRDefaultParseErrorHandler{})
 }
 
-func LRParseWithCustomErrorHandler(lexer LRLexer, reducer LRReducer, errHandler LRParseErrorHandler) (*Grammar, error) {
+func LRParseWithCustomErrorHandler(
+	lexer LRLexer,
+	reducer LRReducer,
+	errHandler LRParseErrorHandler) (
+	*Grammar,
+	error) {
+
 	item, err := _LRParse(lexer, reducer, errHandler, _LRState1)
 	if err != nil {
 		var errRetVal *Grammar

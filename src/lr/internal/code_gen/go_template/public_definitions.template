@@ -1,0 +1,190 @@
+package go_template
+
+import (
+    "fmt"
+
+    lr "github.com/pattyshack/abc/src/lr/internal"
+    "github.com/pattyshack/abc/src/lr/internal/parser"
+)
+
+template PublicDefinitions {
+    LocationType        string
+
+    SymbolIdType        string
+
+    SymbolType          string
+    GenericSymbolType   string
+
+
+    LexerType           string
+    ReducerType         string
+
+    ErrHandler          string
+    DefaultErrHandler   string
+
+    StackType           string
+    ExpectedTerminals   string
+
+    ParsePrefix         string
+    InternalParse       string
+
+    Sprintf             interface{}
+    Errorf              interface{}
+
+    Terminals           []*lr.Term
+    NonTerminals        []*lr.Term
+    Starts              []*lr.Term
+
+    OrderedStates       []*lr.ItemSet
+}
+%%
+type $SymbolIdType int
+
+const (
+[[-$ nextId := 256 -]]
+[[-for _, term := range Terminals-]]
+    [[-if term.SymbolId == parser.LRIdentifierToken]]
+    $(term.CodeGenSymbolConst) = $(SymbolIdType)($nextId)
+        [[-$ nextId += 1 -]]
+    [[-end-]]
+[[-end]]
+)
+
+type $LocationType struct {
+    FileName string
+    Line int
+    Column int
+}
+
+func (l $LocationType) String() string {
+    return $Sprintf("%v:%v:%v", l.FileName, l.Line, l.Column)
+}
+
+func (l $LocationType) ShortString() string {
+    return $Sprintf("%v:%v", l.Line, l.Column)
+}
+
+type $SymbolType interface {
+    Id() $SymbolIdType
+    Loc() $LocationType
+}
+
+type $GenericSymbolType struct {
+    $SymbolIdType
+    $LocationType
+}
+
+func (t *$GenericSymbolType) Id() $SymbolIdType { return t.$SymbolIdType }
+
+func (t *$GenericSymbolType) Loc() $LocationType { return t.$LocationType }
+
+type $LexerType interface {
+    // Note: Return io.EOF to indicate end of stream
+    // Token with unspecified value type should return *$GenericSymbolType
+    Next() ($SymbolType, error)
+
+    CurrentLocation() $LocationType
+}
+
+
+type $ReducerType interface {
+[[-for ruleIdx, rule := range NonTerminals-]]
+    [[-if ruleIdx > 0]]
+
+    [[-end-]]
+
+    [[-for clauseIdx, clause := range rule.Clauses-]]
+        [[-if clauseIdx > 0]]
+
+        [[-end-]]
+
+        [[-if clause.Label == ""]]
+    // $(clause.LRLocation.ShortString()): $(rule.Name) -> ...
+        [[-else]]
+    // $(clause.LRLocation.ShortString()): $(rule.Name) -> $(clause.Label): ...
+        [[-end-]]
+
+        [[-$ paramNameCount := map[string]int{}]]
+    $(clause.CodeGenReducerName)(
+        [[-for termIdx, term := range clause.Bindings-]]
+
+            [[-$
+
+            paramName := ""
+            if term.SymbolId == parser.LRCharacterToken {
+                paramName = "char"
+            } else {
+                // hack: append "_" to the end of the name ensures the
+                // name is never a go keyword
+                paramName = snakeToCamel(term.Name) + "_"
+            }
+
+            paramNameCount[paramName] += 1
+            cnt := paramNameCount[paramName]
+            if cnt > 1 {
+                paramName = fmt.Sprintf("%s%d", paramName, cnt)
+            }
+
+            suffix := ""
+            if termIdx != len(clause.Bindings) {
+                suffix = ", "
+            }
+
+            -]]
+        $paramName $(term.CodeGenType)$suffix
+        [[-end-]]
+) ($(rule.CodeGenType), error)
+    [[-end-]]
+[[-end]]
+}
+
+type $ErrHandler interface {
+    Error(nextToken $SymbolType, parseStack $StackType) error
+}
+
+type $DefaultErrHandler struct {}
+
+func ($DefaultErrHandler) Error(nextToken $SymbolType, stack $StackType) error {
+    return $Errorf(
+        "Syntax error: unexpected symbol %v. Expecting %v (%v)",
+        nextToken.Id(),
+        $ExpectedTerminals[stack[len(stack)-1].StateId],
+        nextToken.Loc())
+}
+
+[[-for idx, start := range Starts-]]
+    [[-$
+
+    parseSuffix := ""
+    if len(Starts) > 1 {
+        parseSuffix = snakeToCamel(start.Name)
+    }
+
+    ]]
+func $(ParsePrefix)$(parseSuffix)(lexer $LexerType, reducer $ReducerType) (
+[[-#-]]
+$(start.CodeGenType), error) {
+
+    return $(ParsePrefix)$(parseSuffix)WithCustomErrorHandler(
+        lexer,
+        reducer,
+        $DefaultErrHandler{})
+}
+
+func $(ParsePrefix)$(parseSuffix)WithCustomErrorHandler(
+    lexer $LexerType,
+    reducer $ReducerType,
+    errHandler $ErrHandler) (
+    $(start.CodeGenType),
+    error) {
+
+    item, err := $InternalParse(lexer, reducer, errHandler, $(
+        OrderedStates[idx].CodeGenConst))
+    if err != nil {
+        var errRetVal $(start.CodeGenType)
+        return errRetVal, err
+    }
+    return item.$(start.ValueType), nil
+}
+[[end-]]
+

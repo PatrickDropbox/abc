@@ -95,11 +95,22 @@ func (DefaultParseErrorHandler) Error(nextToken Token, stack _Stack) error {
 		_ExpectedTerminals[stack[len(stack)-1].StateId],
 		nextToken.Loc())
 }
+
 func ParseExprList(lexer Lexer, reducer Reducer) ([]Expr, error) {
-	return ParseExprListWithCustomErrorHandler(lexer, reducer, DefaultParseErrorHandler{})
+
+	return ParseExprListWithCustomErrorHandler(
+		lexer,
+		reducer,
+		DefaultParseErrorHandler{})
 }
 
-func ParseExprListWithCustomErrorHandler(lexer Lexer, reducer Reducer, errHandler ParseErrorHandler) ([]Expr, error) {
+func ParseExprListWithCustomErrorHandler(
+	lexer Lexer,
+	reducer Reducer,
+	errHandler ParseErrorHandler) (
+	[]Expr,
+	error) {
+
 	item, err := _Parse(lexer, reducer, errHandler, _State1)
 	if err != nil {
 		var errRetVal []Expr
@@ -109,10 +120,20 @@ func ParseExprListWithCustomErrorHandler(lexer Lexer, reducer Reducer, errHandle
 }
 
 func ParseBlock(lexer Lexer, reducer Reducer) (*Block, error) {
-	return ParseBlockWithCustomErrorHandler(lexer, reducer, DefaultParseErrorHandler{})
+
+	return ParseBlockWithCustomErrorHandler(
+		lexer,
+		reducer,
+		DefaultParseErrorHandler{})
 }
 
-func ParseBlockWithCustomErrorHandler(lexer Lexer, reducer Reducer, errHandler ParseErrorHandler) (*Block, error) {
+func ParseBlockWithCustomErrorHandler(
+	lexer Lexer,
+	reducer Reducer,
+	errHandler ParseErrorHandler) (
+	*Block,
+	error) {
+
 	item, err := _Parse(lexer, reducer, errHandler, _State2)
 	if err != nil {
 		var errRetVal *Block

@@ -754,11 +754,22 @@ func (CDefaultParseErrorHandler) Error(nextToken CToken, stack _CStack) error {
 		_CExpectedTerminals[stack[len(stack)-1].StateId],
 		nextToken.Loc())
 }
+
 func CParse(lexer CLexer, reducer CReducer) (*CGenericSymbol, error) {
-	return CParseWithCustomErrorHandler(lexer, reducer, CDefaultParseErrorHandler{})
+
+	return CParseWithCustomErrorHandler(
+		lexer,
+		reducer,
+		CDefaultParseErrorHandler{})
 }
 
-func CParseWithCustomErrorHandler(lexer CLexer, reducer CReducer, errHandler CParseErrorHandler) (*CGenericSymbol, error) {
+func CParseWithCustomErrorHandler(
+	lexer CLexer,
+	reducer CReducer,
+	errHandler CParseErrorHandler) (
+	*CGenericSymbol,
+	error) {
+
 	item, err := _CParse(lexer, reducer, errHandler, _CState1)
 	if err != nil {
 		var errRetVal *CGenericSymbol

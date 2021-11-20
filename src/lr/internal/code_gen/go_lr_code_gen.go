@@ -266,25 +266,6 @@ func (gen *goCodeGen) populateCodeGenVariables() error {
 	return nil
 }
 
-func (gen *goCodeGen) generateTerminalSymbolIds() {
-	l := gen.Line
-
-	l("type %s int", gen.symbolId)
-	l("")
-	l("const (")
-	gen.PushIndent()
-	nextId := 256
-	for _, term := range gen.Terminals {
-		if term.SymbolId == parser.LRIdentifierToken {
-			l("%s = %s(%d)", term.CodeGenSymbolConst, gen.symbolId, nextId)
-			nextId += 1
-		}
-	}
-	gen.PopIndent()
-	l(")")
-	l("")
-}
-
 func (gen *goCodeGen) generateNonTerminalSymbolIds() {
 	l := gen.Line
 
@@ -332,120 +313,6 @@ func (gen *goCodeGen) generateNonTerminalSymbolIds() {
 	}
 	gen.PopIndent()
 	l(")")
-	l("")
-}
-
-func (gen *goCodeGen) generateTokenInterface() {
-	l := gen.Line
-	push := gen.PushIndent
-	pop := gen.PopIndent
-
-	l("type %s struct {", gen.location)
-	push()
-	l("FileName string")
-	l("Line int")
-	l("Column int")
-	pop()
-	l("}")
-	l("")
-
-	l("func (l %s) String() string {", gen.location)
-	push()
-	l("return %v(\"%%v:%%v:%%v\", l.FileName, l.Line, l.Column)",
-		gen.Obj("fmt.Sprintf"))
-	pop()
-	l("}")
-	l("")
-
-	l("func (l %s) ShortString() string {", gen.location)
-	push()
-	l("return %v(\"%%v:%%v\", l.Line, l.Column)", gen.Obj("fmt.Sprintf"))
-	pop()
-	l("}")
-	l("")
-
-	l("type %s interface {", gen.token)
-	push()
-	l("Id() %s", gen.symbolId)
-	l("Loc() %v", gen.location)
-	pop()
-	l("}")
-	l("")
-}
-
-func (gen *goCodeGen) generateLexerInterface() {
-	l := gen.Line
-
-	l("type %s interface {", gen.lexer)
-	gen.PushIndent()
-	l("// Note: Return io.EOF to indicate end of stream")
-	l("// Token with unspecified value type should return *%s", gen.genericSymbol)
-	l("Next() (%s, error)", gen.token)
-	l("")
-	l("CurrentLocation() %s", gen.location)
-	gen.PopIndent()
-	l("}")
-	l("")
-}
-
-func (gen *goCodeGen) generateReducerInterface() {
-	l := gen.Line
-
-	l("type %s interface {", gen.reducer)
-	gen.PushIndent()
-
-	for ruleIdx, rule := range gen.NonTerminals {
-		if ruleIdx > 0 {
-			l("")
-		}
-
-		for clauseIdx, clause := range rule.Clauses {
-			if clauseIdx > 0 {
-				l("")
-			}
-
-			if clause.Label == "" {
-				l("// %s: %s -> ...",
-					clause.LRLocation.ShortString(),
-					rule.Name)
-			} else {
-				l("// %s: %s -> %s: ...",
-					clause.LRLocation.ShortString(),
-					rule.Name,
-					clause.Label)
-			}
-
-			paramNameCount := map[string]int{}
-
-			params := paramList{}
-			for _, term := range clause.Bindings {
-				paramName := ""
-				if term.SymbolId == parser.LRCharacterToken {
-					paramName = "char"
-				} else {
-					// hack: append "_" to the end of the name ensures the
-					// name is never a go keyword
-					paramName = snakeToCamel(term.Name) + "_"
-				}
-
-				paramNameCount[paramName] += 1
-				cnt := paramNameCount[paramName]
-				if cnt > 1 {
-					paramName = fmt.Sprintf("%s%d", paramName, cnt)
-				}
-
-				params = append(params, &param{paramName, term.CodeGenType})
-			}
-
-			l("%s(%v) (%v, error)",
-				clause.CodeGenReducerName,
-				params,
-				rule.CodeGenType)
-		}
-	}
-
-	gen.PopIndent()
-	l("}")
 	l("")
 }
 
@@ -989,29 +856,6 @@ func (gen *goCodeGen) generateActionTable() {
 	l("")
 }
 
-func (gen *goCodeGen) generateGenericSymbol() {
-	l := gen.Line
-
-	l("type %s struct {", gen.genericSymbol)
-	gen.PushIndent()
-	l("%s", gen.symbolId)
-	l("%s", gen.location)
-	gen.PopIndent()
-	l("}")
-	l("")
-
-	l("func (t *%s) Id() %s { return t.%s }",
-		gen.genericSymbol,
-		gen.symbolId,
-		gen.symbolId)
-	l("")
-	l("func (t *%s) Loc() %v { return t.%v }",
-		gen.genericSymbol,
-		gen.location,
-		gen.location)
-	l("")
-}
-
 func (gen *goCodeGen) generateSymbolStack() {
 	l := gen.Line
 	push := gen.PushIndent
@@ -1129,104 +973,6 @@ func (gen *goCodeGen) generateExpectedTerminals() {
 	l("")
 }
 
-func (gen *goCodeGen) generateParseErrorHandler() {
-    gen.Embed(
-        &go_template.ErrorHandler{
-            ErrHandler: gen.errHandler,
-            TokenType: gen.token,
-            StackType: gen.stack,
-            DefaultErrHandler: gen.defaultErrHandler,
-            Errorf: gen.Obj("fmt.Errorf"),
-            ExpectedTerminals: gen.expectedTerminals,
-        })
-}
-
-func (gen *goCodeGen) generateParse() {
-	gen.Embed(
-		&go_template.ParseFunc{
-			ParseFuncName:  gen.parse,
-			LexerType:      gen.lexer,
-			ReducerType:    gen.reducer,
-			ErrHandlerType: gen.errHandler,
-
-			StateIdType: gen.stateId,
-			SymbolType:  gen.symbol,
-
-			StackItemType:   gen.stackItem,
-			StackType:       gen.stack,
-			SymbolStackType: gen.symbolStack,
-
-			ActionTable: gen.actionTable,
-
-			AcceptAction: gen.acceptAction,
-			ShiftAction:  gen.shiftAction,
-			ReduceAction: gen.reduceAction,
-		})
-}
-
-func (gen *goCodeGen) generateParseEntryPoint(
-	startTerm *lr.Term,
-	startState *lr.ItemSet,
-	generateSuffix bool) {
-
-	parseSuffix := ""
-	if generateSuffix {
-		parseSuffix = snakeToCamel(startTerm.Name)
-	}
-
-	l := gen.Line
-	push := gen.PushIndent
-	pop := gen.PopIndent
-
-	l("func %sParse%s(lexer %s, reducer %s) (%v, error) {",
-		gen.Prefix,
-		parseSuffix,
-		gen.lexer,
-		gen.reducer,
-		startTerm.CodeGenType)
-	push()
-	l("return %sParse%sWithCustomErrorHandler(lexer, reducer, %s{})",
-		gen.Prefix,
-		parseSuffix,
-		gen.defaultErrHandler)
-	pop()
-	l("}")
-	l("")
-
-	l("func %sParse%sWithCustomErrorHandler(lexer %s, reducer %s, errHandler %s) (%v, error) {",
-		gen.Prefix,
-		parseSuffix,
-		gen.lexer,
-		gen.reducer,
-		gen.errHandler,
-		startTerm.CodeGenType)
-	push()
-
-	l("item, err := %s(lexer, reducer, errHandler, %s)",
-		gen.parse,
-		startState.CodeGenConst)
-	l("if err != nil {")
-	push()
-	l("var errRetVal %v", startTerm.CodeGenType)
-	l("return errRetVal, err")
-	pop()
-	l("}")
-
-	l("return item.%s, nil", startTerm.ValueType)
-	pop()
-	l("}")
-	l("")
-}
-
-func (gen *goCodeGen) generateParseEntryPoints() {
-	for idx, start := range gen.Starts {
-		gen.generateParseEntryPoint(
-			start,
-			gen.OrderedStates[idx],
-			len(gen.Starts) > 1)
-	}
-}
-
 func GenerateGoLRCode(
 	grammar *lr.Grammar,
 	states *lr.LRStates) (
@@ -1243,15 +989,27 @@ func GenerateGoLRCode(
 		return nil, err
 	}
 
-	gen.generateTerminalSymbolIds()
-	gen.generateTokenInterface()
-	gen.generateGenericSymbol()
-	gen.generateLexerInterface()
-	gen.generateReducerInterface()
-
-	gen.generateParseErrorHandler()
-
-	gen.generateParseEntryPoints()
+	gen.Embed(
+		&go_template.PublicDefinitions{
+			LocationType:      gen.location,
+			SymbolIdType:      gen.symbolId,
+			SymbolType:        gen.token,
+			GenericSymbolType: gen.genericSymbol,
+			LexerType:         gen.lexer,
+			ReducerType:       gen.reducer,
+			ErrHandler:        gen.errHandler,
+			DefaultErrHandler: gen.defaultErrHandler,
+			StackType:         gen.stack,
+			ExpectedTerminals: gen.expectedTerminals,
+			ParsePrefix:       gen.Prefix + "Parse",
+			InternalParse:     gen.parse,
+			Sprintf:           gen.Obj("fmt.Sprintf"),
+			Errorf:            gen.Obj("fmt.Errorf"),
+			Terminals:         gen.Terminals,
+			NonTerminals:      gen.NonTerminals,
+			Starts:            gen.Starts,
+            OrderedStates: gen.OrderedStates,
+		})
 
 	l := gen.Line
 	l("// ================================================================")
@@ -1260,7 +1018,22 @@ func GenerateGoLRCode(
 	l("// ================================================================")
 	l("")
 
-	gen.generateParse()
+	gen.Embed(
+		&go_template.ParseFunc{
+			ParseFuncName:   gen.parse,
+			LexerType:       gen.lexer,
+			ReducerType:     gen.reducer,
+			ErrHandlerType:  gen.errHandler,
+			StateIdType:     gen.stateId,
+			SymbolType:      gen.symbol,
+			StackItemType:   gen.stackItem,
+			StackType:       gen.stack,
+			SymbolStackType: gen.symbolStack,
+			ActionTable:     gen.actionTable,
+			AcceptAction:    gen.acceptAction,
+			ShiftAction:     gen.shiftAction,
+			ReduceAction:    gen.reduceAction,
+		})
 
 	gen.generateNonTerminalSymbolIds()
 	gen.generateActionTypes()
