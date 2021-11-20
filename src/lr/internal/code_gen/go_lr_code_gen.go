@@ -465,33 +465,6 @@ func (gen *goCodeGen) generateAction() {
 	l("")
 }
 
-func (gen *goCodeGen) generateActionEntries() {
-	l := gen.Line
-
-	l("var (")
-	gen.PushIndent()
-	for _, state := range gen.OrderedStates {
-		l("%s = &%s{%s, %s, 0}",
-			state.CodeGenAction,
-			gen.action,
-			gen.shiftAction,
-			state.CodeGenConst)
-	}
-
-	for _, term := range gen.NonTerminals {
-		for _, clause := range term.Clauses {
-			l("%s = &%s{%s, 0, %s}",
-				clause.CodeGenReduceAction,
-				gen.action,
-				gen.reduceAction,
-				clause.CodeGenReducerNameConst)
-		}
-	}
-	gen.PopIndent()
-	l(")")
-	l("")
-}
-
 func (gen *goCodeGen) generateSymbolType() {
 	l := gen.Line
 	push := gen.PushIndent
@@ -752,7 +725,7 @@ func (gen *goCodeGen) generateStateIds() {
 	l(")")
 }
 
-func (gen *goCodeGen) generateActionTable() {
+func (gen *goCodeGen) generateActionTableType() {
 	l := gen.Line
 	push := gen.PushIndent
 	pop := gen.PopIndent
@@ -784,6 +757,12 @@ func (gen *goCodeGen) generateActionTable() {
 	pop()
 	l("}")
 	l("")
+}
+
+func (gen *goCodeGen) generateActionTable() {
+	l := gen.Line
+	push := gen.PushIndent
+	pop := gen.PopIndent
 
 	symbols := []string{"$", "*"}
 	for _, terms := range [][]*lr.Term{gen.Terminals, gen.NonTerminals} {
@@ -1048,7 +1027,17 @@ func GenerateGoLRCode(
 	gen.generateStack()
 
 	gen.generateAction()
-	gen.generateActionEntries()
+
+	gen.generateActionTableType()
+
+    gen.Embed(
+        &go_template.ActionTable{
+            ActionType      :gen.action,
+            ShiftAction     :gen.shiftAction,
+            ReduceAction    :gen.reduceAction,
+            OrderedStates   :gen.OrderedStates,
+            NonTerminals    :gen.NonTerminals,
+        })
 
 	gen.generateActionTable()
 

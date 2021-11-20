@@ -3401,6 +3401,22 @@ func (act *_CAction) ReduceSymbol(reducer CReducer, stack _CStack) (_CStack, *CS
 	return stack, symbol, err
 }
 
+type _CActionTableKey struct {
+	_CStateId
+	CSymbolId
+}
+
+type _CActionTableType map[_CActionTableKey]*_CAction
+
+func (table _CActionTableType) Get(stateId _CStateId, symbol CSymbolId) (*_CAction, bool) {
+	action, ok := table[_CActionTableKey{stateId, symbol}]
+	if ok {
+		return action, ok
+	}
+	action, ok = table[_CActionTableKey{stateId, _CWildcardMarker}]
+	return action, ok
+}
+
 var (
 	_CGotoState1Action                        = &_CAction{_CShiftAction, _CState1, 0}
 	_CGotoState2Action                        = &_CAction{_CShiftAction, _CState2, 0}
@@ -3965,23 +3981,6 @@ var (
 	_CReduceCToFunctionDefinitionAction       = &_CAction{_CReduceAction, 0, _CReduceCToFunctionDefinition}
 	_CReduceDToFunctionDefinitionAction       = &_CAction{_CReduceAction, 0, _CReduceDToFunctionDefinition}
 )
-
-type _CActionTableKey struct {
-	_CStateId
-	CSymbolId
-}
-
-type _CActionTableType map[_CActionTableKey]*_CAction
-
-func (table _CActionTableType) Get(stateId _CStateId, symbol CSymbolId) (*_CAction, bool) {
-	action, ok := table[_CActionTableKey{stateId, symbol}]
-	if ok {
-		return action, ok
-	}
-	action, ok = table[_CActionTableKey{stateId, _CWildcardMarker}]
-	return action, ok
-}
-
 var _CActionTable = _CActionTableType{
 	{_CState2, _CEndMarker}:                     &_CAction{_CAcceptAction, 0, 0},
 	{_CState1, CIdentifierToken}:                _CGotoState12Action,

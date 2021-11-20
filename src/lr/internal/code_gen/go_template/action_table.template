@@ -1,0 +1,28 @@
+package go_template
+
+import (
+    lr "github.com/pattyshack/abc/src/lr/internal"
+)
+
+template ActionTable {
+    ActionType      string
+
+    ShiftAction     string
+    ReduceAction    string
+
+    OrderedStates   []*lr.ItemSet
+    NonTerminals    []*lr.Term
+}
+
+%%
+var (
+[[-for _, state := range OrderedStates]]
+    $(state.CodeGenAction) = &$ActionType{$ShiftAction, $(state.CodeGenConst), 0}
+[[-end-]]
+
+[[-for _, term := range NonTerminals-]]
+    [[-for _, clause := range term.Clauses]]
+    $(clause.CodeGenReduceAction) = &$ActionType{$ReduceAction, 0, $(clause.CodeGenReducerNameConst)}
+    [[-end]]
+[[-end]]
+)

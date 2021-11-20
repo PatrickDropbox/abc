@@ -787,6 +787,22 @@ func (act *_LRAction) ReduceSymbol(reducer LRReducer, stack _LRStack) (_LRStack,
 	return stack, symbol, err
 }
 
+type _LRActionTableKey struct {
+	_LRStateId
+	LRSymbolId
+}
+
+type _LRActionTableType map[_LRActionTableKey]*_LRAction
+
+func (table _LRActionTableType) Get(stateId _LRStateId, symbol LRSymbolId) (*_LRAction, bool) {
+	action, ok := table[_LRActionTableKey{stateId, symbol}]
+	if ok {
+		return action, ok
+	}
+	action, ok = table[_LRActionTableKey{stateId, _LRWildcardMarker}]
+	return action, ok
+}
+
 var (
 	_LRGotoState1Action                          = &_LRAction{_LRShiftAction, _LRState1, 0}
 	_LRGotoState2Action                          = &_LRAction{_LRShiftAction, _LRState2, 0}
@@ -854,23 +870,6 @@ var (
 	_LRReduceClauseToLabeledClausesAction        = &_LRAction{_LRReduceAction, 0, _LRReduceClauseToLabeledClauses}
 	_LRReduceToLabeledClauseAction               = &_LRAction{_LRReduceAction, 0, _LRReduceToLabeledClause}
 )
-
-type _LRActionTableKey struct {
-	_LRStateId
-	LRSymbolId
-}
-
-type _LRActionTableType map[_LRActionTableKey]*_LRAction
-
-func (table _LRActionTableType) Get(stateId _LRStateId, symbol LRSymbolId) (*_LRAction, bool) {
-	action, ok := table[_LRActionTableKey{stateId, symbol}]
-	if ok {
-		return action, ok
-	}
-	action, ok = table[_LRActionTableKey{stateId, _LRWildcardMarker}]
-	return action, ok
-}
-
 var _LRActionTable = _LRActionTableType{
 	{_LRState2, _LREndMarker}:                &_LRAction{_LRAcceptAction, 0, 0},
 	{_LRState1, LRTokenToken}:                _LRGotoState5Action,

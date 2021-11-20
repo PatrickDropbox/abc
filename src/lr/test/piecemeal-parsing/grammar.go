@@ -537,6 +537,22 @@ func (act *_Action) ReduceSymbol(reducer Reducer, stack _Stack) (_Stack, *Symbol
 	return stack, symbol, err
 }
 
+type _ActionTableKey struct {
+	_StateId
+	SymbolId
+}
+
+type _ActionTableType map[_ActionTableKey]*_Action
+
+func (table _ActionTableType) Get(stateId _StateId, symbol SymbolId) (*_Action, bool) {
+	action, ok := table[_ActionTableKey{stateId, symbol}]
+	if ok {
+		return action, ok
+	}
+	action, ok = table[_ActionTableKey{stateId, _WildcardMarker}]
+	return action, ok
+}
+
 var (
 	_GotoState1Action          = &_Action{_ShiftAction, _State1, 0}
 	_GotoState2Action          = &_Action{_ShiftAction, _State2, 0}
@@ -565,23 +581,6 @@ var (
 	_ReduceMinusToOpAction     = &_Action{_ReduceAction, 0, _ReduceMinusToOp}
 	_ReduceToBlockAction       = &_Action{_ReduceAction, 0, _ReduceToBlock}
 )
-
-type _ActionTableKey struct {
-	_StateId
-	SymbolId
-}
-
-type _ActionTableType map[_ActionTableKey]*_Action
-
-func (table _ActionTableType) Get(stateId _StateId, symbol SymbolId) (*_Action, bool) {
-	action, ok := table[_ActionTableKey{stateId, symbol}]
-	if ok {
-		return action, ok
-	}
-	action, ok = table[_ActionTableKey{stateId, _WildcardMarker}]
-	return action, ok
-}
-
 var _ActionTable = _ActionTableType{
 	{_State3, _EndMarker}:       &_Action{_AcceptAction, 0, 0},
 	{_State4, _EndMarker}:       &_Action{_AcceptAction, 0, 0},
