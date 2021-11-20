@@ -615,93 +615,6 @@ func (gen *goCodeGen) generateStack() {
 	l("")
 }
 
-func (gen *goCodeGen) generateDebugStates() {
-	l := gen.Line
-
-	symbols := []string{"$", "*"}
-	for _, terms := range [][]*lr.Term{gen.Terminals, gen.NonTerminals} {
-		for _, term := range terms {
-			symbols = append(symbols, term.Name)
-		}
-	}
-
-	gotoCount := 0
-	reduceCount := 0
-	shiftReduceCount := 0
-	reduceReduceCount := 0
-
-	l("/*")
-	l("Parser Debug States:")
-
-	for _, state := range gen.OrderedStates {
-		l("  State %d:", state.StateNum)
-		l("    Kernel Items:")
-		firstNonKernel := true
-		for _, item := range state.Items {
-			if !item.IsKernel && firstNonKernel {
-				if !gen.OutputDebugNonKernelItems &&
-					len(state.ShiftReduceConflictSymbols) == 0 &&
-					len(state.ReduceReduceConflictSymbols) == 0 {
-					break
-				}
-
-				firstNonKernel = false
-				l("    Non-kernel Items:")
-			}
-
-			l("      %s", item)
-		}
-		l("    Reduce:")
-		if len(state.Reduce) == 0 {
-			l("      (nil)")
-		}
-		for _, symbol := range symbols {
-			items := state.Reduce[symbol]
-			reduceCount += len(items)
-			if len(items) > 0 {
-				list := []string{}
-				for _, item := range items {
-					list = append(list, item.Name)
-				}
-				l("      %s -> %v", symbol, list)
-			}
-		}
-		l("    Goto:")
-		gotoCount += len(state.Goto)
-		if len(state.Goto) == 0 {
-			l("      (nil)")
-		}
-		for _, symbol := range symbols {
-			child, ok := state.Goto[symbol]
-			if ok {
-				l("      %s -> State %d", symbol, child.StateNum)
-			}
-		}
-		if len(state.ShiftReduceConflictSymbols) > 0 {
-			l("    Shift/reduce conflict symbols:")
-			l("      %v", state.ShiftReduceConflictSymbols)
-			shiftReduceCount += len(state.ShiftReduceConflictSymbols)
-		}
-		if len(state.ReduceReduceConflictSymbols) > 0 {
-			l("    Reduce/reduce conflict symbols:")
-			l("      %v", state.ReduceReduceConflictSymbols)
-			for _, symbol := range state.ReduceReduceConflictSymbols {
-				reduceReduceCount += len(state.Reduce[symbol])
-			}
-		}
-
-		l("")
-	}
-
-	l("Number of states: %d", len(gen.States))
-	l("Number of shift actions: %d", gotoCount)
-	l("Number of reduce actions: %d", reduceCount)
-	l("Number of shift/reduce conflicts: %d", shiftReduceCount)
-	l("Number of reduce/reduce conflicts: %d", reduceReduceCount)
-	l("*/")
-	l("")
-}
-
 func (gen *goCodeGen) generateStateIds() {
 	l := gen.Line
 
@@ -1045,7 +958,19 @@ func GenerateGoLRCode(
 	// extract the expected terminal symbols from the action table
 	gen.generateExpectedTerminals()
 
-	gen.generateDebugStates()
+	orderedSymbols := []string{"$", "*"}
+	for _, terms := range [][]*lr.Term{gen.Terminals, gen.NonTerminals} {
+		for _, term := range terms {
+			orderedSymbols = append(orderedSymbols, term.Name)
+		}
+	}
+
+    gen.Embed(
+        &go_template.DebugStates{
+            OutputDebugNonKernelItems: gen. OutputDebugNonKernelItems,
+            OrderedSymbols: orderedSymbols,
+            OrderedStates: gen.OrderedStates,
+        })
 
 	return gen.GoCodeBuilder, nil
 }
