@@ -638,40 +638,6 @@ func (gen *goCodeGen) generateStateIds() {
 	l(")")
 }
 
-func (gen *goCodeGen) generateActionTableType() {
-	l := gen.Line
-	push := gen.PushIndent
-	pop := gen.PopIndent
-
-	l("type %s struct {", gen.tableKey)
-	push()
-	l("%s", gen.stateId)
-	l("%s", gen.symbolId)
-	pop()
-	l("}")
-	l("")
-
-	l("type %s map[%s]*%s", gen.actionTableType, gen.tableKey, gen.action)
-	l("")
-	l("func (table %s) Get(stateId %s, symbol %s) (*%s, bool) {",
-		gen.actionTableType,
-		gen.stateId,
-		gen.symbolId,
-		gen.action)
-	push()
-	l("action, ok := table[%s{stateId, symbol}]", gen.tableKey)
-	l("if ok {")
-	push()
-	l("return action, ok")
-	pop()
-	l("}")
-	l("action, ok = table[%s{stateId, %s}]", gen.tableKey, gen.wildcardSymbol)
-	l("return action, ok")
-	pop()
-	l("}")
-	l("")
-}
-
 func (gen *goCodeGen) generateActionTable() {
 	l := gen.Line
 	push := gen.PushIndent
@@ -900,7 +866,7 @@ func GenerateGoLRCode(
 			Terminals:         gen.Terminals,
 			NonTerminals:      gen.NonTerminals,
 			Starts:            gen.Starts,
-            OrderedStates: gen.OrderedStates,
+			OrderedStates:     gen.OrderedStates,
 		})
 
 	l := gen.Line
@@ -941,16 +907,19 @@ func GenerateGoLRCode(
 
 	gen.generateAction()
 
-	gen.generateActionTableType()
-
-    gen.Embed(
-        &go_template.ActionTable{
-            ActionType      :gen.action,
-            ShiftAction     :gen.shiftAction,
-            ReduceAction    :gen.reduceAction,
-            OrderedStates   :gen.OrderedStates,
-            NonTerminals    :gen.NonTerminals,
-        })
+	gen.Embed(
+		&go_template.ActionTable{
+			TableKeyType:     gen.tableKey,
+			StateIdType:      gen.stateId,
+			SymbolIdType:     gen.symbolId,
+			WildcardSymbolId: gen.wildcardSymbol,
+			ActionTableType:  gen.actionTableType,
+			ActionType:       gen.action,
+			ShiftAction:      gen.shiftAction,
+			ReduceAction:     gen.reduceAction,
+			OrderedStates:    gen.OrderedStates,
+			NonTerminals:     gen.NonTerminals,
+		})
 
 	gen.generateActionTable()
 
@@ -965,12 +934,12 @@ func GenerateGoLRCode(
 		}
 	}
 
-    gen.Embed(
-        &go_template.DebugStates{
-            OutputDebugNonKernelItems: gen. OutputDebugNonKernelItems,
-            OrderedSymbols: orderedSymbols,
-            OrderedStates: gen.OrderedStates,
-        })
+	gen.Embed(
+		&go_template.DebugStates{
+			OutputDebugNonKernelItems: gen.OutputDebugNonKernelItems,
+			OrderedSymbols:            orderedSymbols,
+			OrderedStates:             gen.OrderedStates,
+		})
 
 	return gen.GoCodeBuilder, nil
 }

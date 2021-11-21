@@ -5,16 +5,46 @@ import (
 )
 
 template ActionTable {
-    ActionType      string
+    TableKeyType        string
 
-    ShiftAction     string
-    ReduceAction    string
+    StateIdType         string
 
-    OrderedStates   []*lr.ItemSet
-    NonTerminals    []*lr.Term
+    SymbolIdType        string
+    WildcardSymbolId    string
+
+    ActionTableType     string
+
+    ActionType          string
+    ShiftAction         string
+    ReduceAction        string
+
+    OrderedStates       []*lr.ItemSet
+    NonTerminals        []*lr.Term
 }
 
 %%
+type $TableKeyType struct {
+    $StateIdType
+    $SymbolIdType
+}
+
+type $ActionTableType map[$TableKeyType]*$ActionType
+
+func (table $ActionTableType) Get(
+    stateId $StateIdType,
+    symbolId $SymbolIdType) (
+    *$ActionType,
+    bool) {
+
+    action, ok := table[$TableKeyType{stateId, symbolId}]
+    if ok {
+        return action, ok
+    }
+
+    action, ok = table[$TableKeyType{stateId, $WildcardSymbolId}]
+    return action, ok
+}
+
 var (
 [[-for _, state := range OrderedStates]]
     $(state.CodeGenAction) = &$ActionType{$ShiftAction, $(state.CodeGenConst), 0}

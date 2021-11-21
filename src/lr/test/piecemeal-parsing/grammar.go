@@ -544,11 +544,17 @@ type _ActionTableKey struct {
 
 type _ActionTableType map[_ActionTableKey]*_Action
 
-func (table _ActionTableType) Get(stateId _StateId, symbol SymbolId) (*_Action, bool) {
-	action, ok := table[_ActionTableKey{stateId, symbol}]
+func (table _ActionTableType) Get(
+	stateId _StateId,
+	symbolId SymbolId) (
+	*_Action,
+	bool) {
+
+	action, ok := table[_ActionTableKey{stateId, symbolId}]
 	if ok {
 		return action, ok
 	}
+
 	action, ok = table[_ActionTableKey{stateId, _WildcardMarker}]
 	return action, ok
 }

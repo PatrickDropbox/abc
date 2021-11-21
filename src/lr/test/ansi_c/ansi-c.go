@@ -3408,11 +3408,17 @@ type _CActionTableKey struct {
 
 type _CActionTableType map[_CActionTableKey]*_CAction
 
-func (table _CActionTableType) Get(stateId _CStateId, symbol CSymbolId) (*_CAction, bool) {
-	action, ok := table[_CActionTableKey{stateId, symbol}]
+func (table _CActionTableType) Get(
+	stateId _CStateId,
+	symbolId CSymbolId) (
+	*_CAction,
+	bool) {
+
+	action, ok := table[_CActionTableKey{stateId, symbolId}]
 	if ok {
 		return action, ok
 	}
+
 	action, ok = table[_CActionTableKey{stateId, _CWildcardMarker}]
 	return action, ok
 }

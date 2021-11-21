@@ -794,11 +794,17 @@ type _LRActionTableKey struct {
 
 type _LRActionTableType map[_LRActionTableKey]*_LRAction
 
-func (table _LRActionTableType) Get(stateId _LRStateId, symbol LRSymbolId) (*_LRAction, bool) {
-	action, ok := table[_LRActionTableKey{stateId, symbol}]
+func (table _LRActionTableType) Get(
+	stateId _LRStateId,
+	symbolId LRSymbolId) (
+	*_LRAction,
+	bool) {
+
+	action, ok := table[_LRActionTableKey{stateId, symbolId}]
 	if ok {
 		return action, ok
 	}
+
 	action, ok = table[_LRActionTableKey{stateId, _LRWildcardMarker}]
 	return action, ok
 }
