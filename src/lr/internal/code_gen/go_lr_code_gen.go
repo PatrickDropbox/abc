@@ -638,82 +638,6 @@ func (gen *goCodeGen) generateStateIds() {
 	l(")")
 }
 
-func (gen *goCodeGen) generateActionTable() {
-	l := gen.Line
-	push := gen.PushIndent
-	pop := gen.PopIndent
-
-	symbols := []string{"$", "*"}
-	for _, terms := range [][]*lr.Term{gen.Terminals, gen.NonTerminals} {
-		for _, term := range terms {
-			symbols = append(symbols, term.Name)
-		}
-	}
-
-	idToConst := map[string]string{
-		lr.EndMarker: gen.endSymbol,
-		lr.Wildcard:  gen.wildcardSymbol,
-	}
-
-	for _, term := range gen.Terms {
-		idToConst[term.Name] = term.CodeGenSymbolConst
-	}
-
-	l("var %s = %s{", gen.actionTable, gen.actionTableType)
-	push()
-
-	for _, state := range gen.OrderedStates {
-		for _, item := range state.Items {
-			if !item.IsReduce {
-				continue
-			}
-
-			if item.Name != lr.AcceptRule || item.LookAhead != lr.EndMarker {
-				// regular reduction
-				continue
-			}
-
-			l("{%s, %s}: &%s{%s, 0, 0},",
-				state.CodeGenConst,
-				gen.endSymbol,
-				gen.action,
-				gen.acceptAction)
-		}
-	}
-
-	for _, state := range gen.OrderedStates {
-		for _, symbol := range symbols {
-			child, ok := state.Goto[symbol]
-			if ok {
-				l("{%s, %s}: %s,",
-					state.CodeGenConst,
-					idToConst[symbol],
-					child.CodeGenAction)
-			}
-		}
-	}
-
-	for _, state := range gen.OrderedStates {
-		for _, item := range state.Items {
-			if !item.IsReduce {
-				continue
-			}
-
-			if item.Name == lr.AcceptRule && item.LookAhead == lr.EndMarker {
-				continue
-			}
-
-			l("{%s, %s}: %s,",
-				state.CodeGenConst,
-				idToConst[item.LookAhead],
-				item.Clause.CodeGenReduceAction)
-		}
-	}
-	pop()
-	l("}")
-	l("")
-}
-
 func (gen *goCodeGen) generateSymbolStack() {
 	l := gen.Line
 	push := gen.PushIndent
@@ -907,32 +831,46 @@ func GenerateGoLRCode(
 
 	gen.generateAction()
 
-	gen.Embed(
-		&go_template.ActionTable{
-			TableKeyType:     gen.tableKey,
-			StateIdType:      gen.stateId,
-			SymbolIdType:     gen.symbolId,
-			WildcardSymbolId: gen.wildcardSymbol,
-			ActionTableType:  gen.actionTableType,
-			ActionType:       gen.action,
-			ShiftAction:      gen.shiftAction,
-			ReduceAction:     gen.reduceAction,
-			OrderedStates:    gen.OrderedStates,
-			NonTerminals:     gen.NonTerminals,
-		})
-
-	gen.generateActionTable()
-
-	// Maybe make the action table map[StateId]map[Symbol]Action and
-	// extract the expected terminal symbols from the action table
-	gen.generateExpectedTerminals()
-
 	orderedSymbols := []string{"$", "*"}
 	for _, terms := range [][]*lr.Term{gen.Terminals, gen.NonTerminals} {
 		for _, term := range terms {
 			orderedSymbols = append(orderedSymbols, term.Name)
 		}
 	}
+
+	idToConst := map[string]string{
+		lr.EndMarker: gen.endSymbol,
+		lr.Wildcard:  gen.wildcardSymbol,
+	}
+
+	for _, term := range gen.Terms {
+		idToConst[term.Name] = term.CodeGenSymbolConst
+	}
+
+	gen.Embed(
+		&go_template.ActionTable{
+			TableKeyType:     gen.tableKey,
+			StateIdType:      gen.stateId,
+			SymbolIdType:     gen.symbolId,
+			EndSymbolId:      gen.endSymbol,
+			WildcardSymbolId: gen.wildcardSymbol,
+			ActionTableType:  gen.actionTableType,
+			ActionType:       gen.action,
+			AcceptAction:     gen.acceptAction,
+			ShiftAction:      gen.shiftAction,
+			ReduceAction:     gen.reduceAction,
+			OrderedStates:    gen.OrderedStates,
+			NonTerminals:     gen.NonTerminals,
+			ActionTable:      gen.actionTable,
+			OrderedSymbolIds: orderedSymbols,
+			SymbolIdToConst:  idToConst,
+		})
+
+	gen.Line("")
+
+	// Maybe make the action table map[StateId]map[Symbol]Action and
+	// extract the expected terminal symbols from the action table
+	gen.generateExpectedTerminals()
 
 	gen.Embed(
 		&go_template.DebugStates{

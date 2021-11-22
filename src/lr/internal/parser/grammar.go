@@ -876,6 +876,7 @@ var (
 	_LRReduceClauseToLabeledClausesAction        = &_LRAction{_LRReduceAction, 0, _LRReduceClauseToLabeledClauses}
 	_LRReduceToLabeledClauseAction               = &_LRAction{_LRReduceAction, 0, _LRReduceToLabeledClause}
 )
+
 var _LRActionTable = _LRActionTableType{
 	{_LRState2, _LREndMarker}:                &_LRAction{_LRAcceptAction, 0, 0},
 	{_LRState1, LRTokenToken}:                _LRGotoState5Action,

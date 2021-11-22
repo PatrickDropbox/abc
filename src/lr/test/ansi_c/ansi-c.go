@@ -3987,6 +3987,7 @@ var (
 	_CReduceCToFunctionDefinitionAction       = &_CAction{_CReduceAction, 0, _CReduceCToFunctionDefinition}
 	_CReduceDToFunctionDefinitionAction       = &_CAction{_CReduceAction, 0, _CReduceDToFunctionDefinition}
 )
+
 var _CActionTable = _CActionTableType{
 	{_CState2, _CEndMarker}:                     &_CAction{_CAcceptAction, 0, 0},
 	{_CState1, CIdentifierToken}:                _CGotoState12Action,

@@ -587,6 +587,7 @@ var (
 	_ReduceMinusToOpAction     = &_Action{_ReduceAction, 0, _ReduceMinusToOp}
 	_ReduceToBlockAction       = &_Action{_ReduceAction, 0, _ReduceToBlock}
 )
+
 var _ActionTable = _ActionTableType{
 	{_State3, _EndMarker}:       &_Action{_AcceptAction, 0, 0},
 	{_State4, _EndMarker}:       &_Action{_AcceptAction, 0, 0},

@@ -186,5 +186,4 @@ func $(ParsePrefix)$(parseSuffix)WithCustomErrorHandler(
     }
     return item.$(start.ValueType), nil
 }
-[[end-]]
-
+[[end]]

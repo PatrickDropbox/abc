@@ -10,16 +10,25 @@ template ActionTable {
     StateIdType         string
 
     SymbolIdType        string
+
+    EndSymbolId         string
     WildcardSymbolId    string
 
     ActionTableType     string
 
     ActionType          string
+
+    AcceptAction        string
     ShiftAction         string
     ReduceAction        string
 
     OrderedStates       []*lr.ItemSet
     NonTerminals        []*lr.Term
+
+    ActionTable         string
+
+    OrderedSymbolIds    []string
+    SymbolIdToConst     map[string]string
 }
 
 %%
@@ -53,6 +62,59 @@ var (
 [[-for _, term := range NonTerminals-]]
     [[-for _, clause := range term.Clauses]]
     $(clause.CodeGenReduceAction) = &$ActionType{$ReduceAction, 0, $(clause.CodeGenReducerNameConst)}
-    [[-end]]
+    [[-end-]]
 [[-end]]
 )
+
+var $ActionTable = $ActionTableType{
+[[-for _, state := range OrderedStates-]]
+    [[-for _, item := range state.Items-]]
+        [[-$
+
+        if !item.IsReduce {
+            continue
+        }
+
+        if item.Name != lr.AcceptRule || item.LookAhead != lr.EndMarker {
+            continue
+        }
+
+        ]]
+    {$(state.CodeGenConst), $EndSymbolId}: &$ActionType{$AcceptAction, 0, 0},
+    [[-end-]]
+[[-end-]]
+
+[[-for _, state := range OrderedStates-]]
+    [[-for _, symbol := range OrderedSymbolIds-]]
+        [[-$
+
+        child, ok := state.Goto[symbol]
+        if !ok {
+            continue
+        }
+
+        ]]
+    {$(state.CodeGenConst), $(SymbolIdToConst[symbol])}: $(child.CodeGenAction),
+    [[-end-]]
+[[-end-]]
+
+[[-for _, state := range OrderedStates-]]
+    [[-for _, item := range state.Items-]]
+        [[-$
+
+        if !item.IsReduce {
+            continue
+        }
+
+        if item.Name == lr.AcceptRule && item.LookAhead == lr.EndMarker {
+            continue
+        }
+
+        idConst := SymbolIdToConst[item.LookAhead]
+        reduceAction := item.Clause.CodeGenReduceAction
+
+        ]]
+    {$(state.CodeGenConst), $idConst}: $reduceAction,
+    [[-end-]]
+[[-end]]
+}

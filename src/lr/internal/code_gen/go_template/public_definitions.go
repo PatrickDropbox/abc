@@ -1519,7 +1519,7 @@ func `))
 			}
 		}
 	}
-	// public_definitions.template:189:8
+	// public_definitions.template:189:7
 	{
 		_n, _err := _output.Write([]byte(`
 `))
