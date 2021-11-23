@@ -1,4 +1,5 @@
 // Auto-generated from source: grammar.lr
+
 package main
 
 import (

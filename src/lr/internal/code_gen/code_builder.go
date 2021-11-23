@@ -118,16 +118,12 @@ func (obj *importObject) String() string {
 }
 
 type goHeader struct {
-	HeaderBoilerplate *CodeBuilder
-	pkg               string
-	imports           map[string]*importEntry
+	imports map[string]*importEntry
 }
 
-func newGoHeader(pkg string) *goHeader {
+func newGoHeader() *goHeader {
 	return &goHeader{
-		HeaderBoilerplate: NewCodeBuilder(),
-		pkg:               pkg,
-		imports:           map[string]*importEntry{},
+		imports: map[string]*importEntry{},
 	}
 }
 
@@ -186,15 +182,7 @@ func (header *goHeader) WriteTo(output io.Writer) (int64, error) {
 		return 0, err
 	}
 
-	numWritten, err := header.HeaderBoilerplate.WriteTo(output)
-	if err != nil {
-		return numWritten, err
-	}
-
 	builder := NewCodeBuilder()
-	builder.Line("package %s", header.pkg)
-	builder.Line("")
-
 	if len(header.imports) > 0 {
 		builder.Line("import (")
 		builder.PushIndent()
@@ -207,6 +195,5 @@ func (header *goHeader) WriteTo(output io.Writer) (int64, error) {
 		builder.Line("")
 	}
 
-	numWritten2, err := builder.WriteTo(output)
-	return numWritten + numWritten2, err
+	return builder.WriteTo(output)
 }

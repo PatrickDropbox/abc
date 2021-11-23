@@ -1,4 +1,5 @@
 // Auto-generated from source: ansi-c.lr
+
 package ansi_c
 
 import (

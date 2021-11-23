@@ -10,6 +10,7 @@ import (
 
 template File {
     Source                  string
+    Package                 string
 
     Imports                 io.WriterTo
 
@@ -71,6 +72,8 @@ template File {
 
 %%
 // Auto-generated from source: $Source
+
+package $Package
 
 [[-embed Imports -]]
 
