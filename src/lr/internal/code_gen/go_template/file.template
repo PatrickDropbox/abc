@@ -1,0 +1,35 @@
+package go_template
+
+import (
+    "io"
+)
+
+template File {
+    Source          string
+
+    Header          io.WriterTo
+    PublicDefs      io.WriterTo
+    ParseFunc       io.WriterTo
+    InternalDefs    io.WriterTo
+    ActionTable     io.WriterTo
+    DebugStates     io.WriterTo
+}
+%%
+// Auto-generated from source: $Source
+
+[[embed Header -]]
+
+[[-embed PublicDefs -]]
+
+// ================================================================
+// Parser internal implementation
+// User should normally avoid directly accessing the following code
+// ================================================================
+
+[[embed ParseFunc -]]
+
+[[-embed InternalDefs -]]
+
+[[-embed ActionTable -]]
+
+[[-embed DebugStates -]]

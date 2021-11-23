@@ -1,6 +1,9 @@
 package code_gen
 
 import (
+"io"
+"bytes"
+"go/format"
 	"fmt"
 	"sort"
 	"strings"
@@ -15,6 +18,30 @@ var escapedChar = map[string]byte{
 	"'\\n'":  '\n',
 	"'\\''":  '\'',
 	"'\\\\'": '\\',
+}
+
+type GoCodeBuilder struct {
+    *go_template.File
+}
+
+func (cb *GoCodeBuilder) WriteTo(output io.Writer) (int64, error) {
+    buffer := bytes.NewBuffer(nil)
+
+    _, err := cb.File.WriteTo(buffer)
+    if err != nil {
+        return 0, err
+    }
+
+    formatted, err := format.Source(buffer.Bytes())
+    if err != nil {
+        return 0, fmt.Errorf(
+            "Failed to format (%s) generated code:\n%s",
+            err,
+            buffer.Bytes())
+    }
+
+    n, err := output.Write(formatted)
+    return int64(n), err
 }
 
 // TODO handle this more gracefully
@@ -35,7 +62,7 @@ type goCodeGen struct {
 
 	*lr.LRStates
 
-	*GoCodeBuilder
+    *goHeader
 
 	nameLocs map[string]parser.LRLocation
 
@@ -95,18 +122,11 @@ func newGoCodeGen(
 		return nil, fmt.Errorf("package name not specified")
 	}
 
-	builder := NewGoCodeBuilder(cfg.Package)
-
-	builder.HeaderBoilerplate.Line(
-		"// Auto-generated from source: %s",
-		grammar.Source)
-	builder.HeaderBoilerplate.Line("")
-
 	return &goCodeGen{
 		Grammar:       grammar,
 		GoSpec:        cfg,
 		LRStates:      states,
-		GoCodeBuilder: builder,
+        goHeader:      newGoHeader(cfg.Package),
 		nameLocs:      map[string]parser.LRLocation{},
 	}, nil
 }
@@ -239,7 +259,7 @@ func (gen *goCodeGen) populateCodeGenVariables() error {
 func GenerateGoLRCode(
 	grammar *lr.Grammar,
 	states *lr.LRStates) (
-	*GoCodeBuilder,
+	io.WriterTo,
 	error) {
 
 	gen, err := newGoCodeGen(grammar, states)
@@ -294,40 +314,33 @@ func GenerateGoLRCode(
 		symbols[symbol.Name] = symbol
 	}
 
-	gen.Embed(
-		&go_template.PublicDefinitions{
-			LocationType:      gen.location,
-			SymbolIdType:      gen.symbolId,
-			SymbolType:        gen.token,
-			GenericSymbolType: gen.genericSymbol,
-			LexerType:         gen.lexer,
-			ReducerType:       gen.reducer,
-			ErrHandler:        gen.errHandler,
-			DefaultErrHandler: gen.defaultErrHandler,
-			StackType:         gen.stack,
-			ParsePrefix:       gen.Prefix + "Parse",
-			InternalParse:     gen.parse,
-			Sprintf:           gen.Obj("fmt.Sprintf"),
-			Errorf:            gen.Obj("fmt.Errorf"),
-			Terminals:         gen.Terminals,
-			NonTerminals:      gen.NonTerminals,
-			Starts:            gen.Starts,
-			OrderedStates:     gen.OrderedStates,
-            ExpectedTerminals: gen.expectedTerminals,
-			StateIdType:       gen.stateId,
-			ActionTable:       gen.actionTable,
-			SortSlice:        gen.Obj("sort.Slice"),
-		})
-
-	l := gen.Line
-	l("// ================================================================")
-	l("// Parser internal implementation")
-	l("// User should normally avoid directly accessing the following code")
-	l("// ================================================================")
-	l("")
-
-	gen.Embed(
-		&go_template.ParseFunc{
+    file := &go_template.File{
+        Source: grammar.Source,
+        Header: gen.goHeader,
+		PublicDefs: &go_template.PublicDefinitions{
+                LocationType:      gen.location,
+                SymbolIdType:      gen.symbolId,
+                SymbolType:        gen.token,
+                GenericSymbolType: gen.genericSymbol,
+                LexerType:         gen.lexer,
+                ReducerType:       gen.reducer,
+                ErrHandler:        gen.errHandler,
+                DefaultErrHandler: gen.defaultErrHandler,
+                StackType:         gen.stack,
+                ParsePrefix:       gen.Prefix + "Parse",
+                InternalParse:     gen.parse,
+                Sprintf:           gen.Obj("fmt.Sprintf"),
+                Errorf:            gen.Obj("fmt.Errorf"),
+                Terminals:         gen.Terminals,
+                NonTerminals:      gen.NonTerminals,
+                Starts:            gen.Starts,
+                OrderedStates:     gen.OrderedStates,
+                ExpectedTerminals: gen.expectedTerminals,
+                StateIdType:       gen.stateId,
+                ActionTable:       gen.actionTable,
+                SortSlice:        gen.Obj("sort.Slice"),
+            },
+		ParseFunc: &go_template.ParseFunc{
 			ParseFuncName:   gen.parse,
 			LexerType:       gen.lexer,
 			ReducerType:     gen.reducer,
@@ -341,10 +354,8 @@ func GenerateGoLRCode(
 			AcceptAction:    gen.acceptAction,
 			ShiftAction:     gen.shiftAction,
 			ReduceAction:    gen.reduceAction,
-		})
-
-	gen.Embed(
-		&go_template.InternalDefinitions{
+		},
+		InternalDefs: &go_template.InternalDefinitions{
 			ActionType:        gen.action,
 			ActionIdType:      gen.actionType,
 			ShiftAction:       gen.shiftAction,
@@ -370,10 +381,8 @@ func GenerateGoLRCode(
 			OrderedSymbols:    orderedSymbols,
 			OrderedStates:     gen.OrderedStates,
 			OrderedValueTypes: orderedValueTypes,
-		})
-
-	gen.Embed(
-		&go_template.ActionTable{
+		},
+		ActionTable: &go_template.ActionTable{
 			TableKeyType:     gen.tableKey,
 			StateIdType:      gen.stateId,
 			SymbolIdType:     gen.symbolId,
@@ -388,16 +397,13 @@ func GenerateGoLRCode(
 			ActionTable:      gen.actionTable,
 			OrderedSymbols:   orderedSymbols,
 			Symbols:          symbols,
-		})
-
-	l("")
-
-	gen.Embed(
-		&go_template.DebugStates{
+		},
+		DebugStates: &go_template.DebugStates{
 			OutputDebugNonKernelItems: gen.OutputDebugNonKernelItems,
 			OrderedSymbols:            orderedSymbols,
 			OrderedStates:             gen.OrderedStates,
-		})
+		},
+    }
 
-	return gen.GoCodeBuilder, nil
+    return &GoCodeBuilder{file}, nil
 }

@@ -1,9 +1,7 @@
 package code_gen
 
 import (
-	"bytes"
 	"fmt"
-	"go/format"
 	"io"
 	"path/filepath"
 	"regexp"
@@ -211,42 +209,4 @@ func (header *goHeader) WriteTo(output io.Writer) (int64, error) {
 
 	numWritten2, err := builder.WriteTo(output)
 	return numWritten + numWritten2, err
-}
-
-type GoCodeBuilder struct {
-	*CodeBuilder
-
-	*goHeader
-}
-
-func NewGoCodeBuilder(pkg string) *GoCodeBuilder {
-	return &GoCodeBuilder{
-		NewCodeBuilder(),
-		newGoHeader(pkg),
-	}
-}
-
-func (cb *GoCodeBuilder) WriteTo(output io.Writer) (int64, error) {
-	buffer := bytes.NewBuffer(nil)
-
-	_, err := cb.goHeader.WriteTo(buffer)
-	if err != nil {
-		return 0, err
-	}
-
-	_, err = cb.CodeBuilder.WriteTo(buffer)
-	if err != nil {
-		return 0, err
-	}
-
-	formatted, err := format.Source(buffer.Bytes())
-	if err != nil {
-		return 0, fmt.Errorf(
-			"Failed to format (%s) generated code:\n%s",
-			err,
-			buffer.Bytes())
-	}
-
-	n, err := output.Write(formatted)
-	return int64(n), err
 }
