@@ -5,6 +5,7 @@ package main
 import (
 	fmt "fmt"
 	io "io"
+	sort "sort"
 )
 
 type SymbolId int
@@ -92,8 +93,21 @@ func (DefaultParseErrorHandler) Error(nextToken Token, stack _Stack) error {
 	return fmt.Errorf(
 		"Syntax error: unexpected symbol %v. Expecting %v (%v)",
 		nextToken.Id(),
-		_ExpectedTerminals[stack[len(stack)-1].StateId],
+		ExpectedTerminals(stack[len(stack)-1].StateId),
 		nextToken.Loc())
+}
+
+func ExpectedTerminals(id _StateId) []SymbolId {
+	result := []SymbolId{}
+	for key, _ := range _ActionTable {
+		if key._StateId != id {
+			continue
+		}
+		result = append(result, key.SymbolId)
+	}
+
+	sort.Slice(result, func(i int, j int) bool { return result[i] < result[j] })
+	return result
 }
 
 func ParseExprList(lexer Lexer, reducer Reducer) ([]Expr, error) {
@@ -553,16 +567,6 @@ func (act *_Action) ReduceSymbol(
 	}
 
 	return stack, symbol, err
-}
-
-var _ExpectedTerminals = map[_StateId][]SymbolId{
-	_State2:  []SymbolId{'{'},
-	_State3:  []SymbolId{'{', IdToken, ErrorToken, _EndMarker},
-	_State4:  []SymbolId{_EndMarker},
-	_State10: []SymbolId{'+', '-'},
-	_State11: []SymbolId{'{', '}', IdToken, ErrorToken},
-	_State14: []SymbolId{'{', IdToken, ErrorToken},
-	_State15: []SymbolId{_EndMarker},
 }
 
 type _ActionTableKey struct {

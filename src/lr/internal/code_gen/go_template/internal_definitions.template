@@ -29,7 +29,7 @@ template InternalDefinitions {
 
     SymbolIdType        string
     EndSymbolId         string
-    WildcardSymbolId         string
+    WildcardSymbolId    string
 
     LocationType        string
     TokenType           string
@@ -39,6 +39,7 @@ template InternalDefinitions {
     EOF                 interface{}
 
     OrderedSymbols      []*lr.Term
+
     OrderedStates       []*lr.ItemSet
     OrderedValueTypes   lr.ParamList
 }

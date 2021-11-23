@@ -5,6 +5,7 @@ package template
 import (
 	fmt "fmt"
 	io "io"
+	sort "sort"
 )
 
 type SymbolId int
@@ -171,8 +172,21 @@ func (DefaultParseErrorHandler) Error(nextToken Token, stack _Stack) error {
 	return fmt.Errorf(
 		"Syntax error: unexpected symbol %v. Expecting %v (%v)",
 		nextToken.Id(),
-		_ExpectedTerminals[stack[len(stack)-1].StateId],
+		ExpectedTerminals(stack[len(stack)-1].StateId),
 		nextToken.Loc())
+}
+
+func ExpectedTerminals(id _StateId) []SymbolId {
+	result := []SymbolId{}
+	for key, _ := range _ActionTable {
+		if key._StateId != id {
+			continue
+		}
+		result = append(result, key.SymbolId)
+	}
+
+	sort.Slice(result, func(i int, j int) bool { return result[i] < result[j] })
+	return result
 }
 
 func Parse(lexer Lexer, reducer Reducer) (*File, error) {
@@ -888,31 +902,6 @@ func (act *_Action) ReduceSymbol(
 	}
 
 	return stack, symbol, err
-}
-
-var _ExpectedTerminals = map[_StateId][]SymbolId{
-	_State1:  []SymbolId{PackageToken},
-	_State2:  []SymbolId{_EndMarker},
-	_State3:  []SymbolId{ImportToken, TemplateDeclToken},
-	_State4:  []SymbolId{TemplateDeclToken},
-	_State5:  []SymbolId{TemplateDeclToken},
-	_State6:  []SymbolId{SectionMarkerToken},
-	_State8:  []SymbolId{ForToken, SwitchToken, IfToken, TextToken, SubstitutionToken, EmbedToken, CopySectionToken, CommentToken, ContinueToken, BreakToken, ReturnToken, ErrorToken, _EndMarker},
-	_State19: []SymbolId{CaseToken, TextToken},
-	_State26: []SymbolId{ForToken, SwitchToken, IfToken, EndToken, TextToken, SubstitutionToken, EmbedToken, CopySectionToken, CommentToken, ContinueToken, BreakToken, ReturnToken, ErrorToken},
-	_State27: []SymbolId{ForToken, SwitchToken, IfToken, TextToken, SubstitutionToken, EmbedToken, CopySectionToken, CommentToken, ContinueToken, BreakToken, ReturnToken, ErrorToken},
-	_State29: []SymbolId{CaseToken},
-	_State30: []SymbolId{CaseToken, DefaultToken, EndToken},
-	_State32: []SymbolId{ElseIfToken, ElseToken, EndToken},
-	_State33: []SymbolId{ForToken, SwitchToken, IfToken, TextToken, SubstitutionToken, EmbedToken, CopySectionToken, CommentToken, ContinueToken, BreakToken, ReturnToken, ErrorToken},
-	_State34: []SymbolId{CaseToken, DefaultToken, EndToken},
-	_State37: []SymbolId{EndToken},
-	_State40: []SymbolId{EndToken},
-	_State41: []SymbolId{EndToken},
-	_State42: []SymbolId{ForToken, SwitchToken, IfToken, TextToken, SubstitutionToken, EmbedToken, CopySectionToken, CommentToken, ContinueToken, BreakToken, ReturnToken, ErrorToken},
-	_State43: []SymbolId{ForToken, SwitchToken, IfToken, TextToken, SubstitutionToken, EmbedToken, CopySectionToken, CommentToken, ContinueToken, BreakToken, ReturnToken, ErrorToken, EndToken},
-	_State45: []SymbolId{ForToken, SwitchToken, IfToken, TextToken, SubstitutionToken, EmbedToken, CopySectionToken, CommentToken, ContinueToken, BreakToken, ReturnToken, ErrorToken, EndToken},
-	_State46: []SymbolId{ForToken, SwitchToken, IfToken, TextToken, SubstitutionToken, EmbedToken, CopySectionToken, CommentToken, ContinueToken, BreakToken, ReturnToken, ErrorToken},
 }
 
 type _ActionTableKey struct {

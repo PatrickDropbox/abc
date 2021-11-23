@@ -137,7 +137,7 @@ func (gen *goCodeGen) populateCodeGenVariables() error {
 	gen.reducer = gen.Prefix + "Reducer"
 	gen.errHandler = gen.Prefix + "ParseErrorHandler"
 	gen.defaultErrHandler = gen.Prefix + "DefaultParseErrorHandler"
-	gen.expectedTerminals = "_" + gen.Prefix + "ExpectedTerminals"
+	gen.expectedTerminals = gen.Prefix + "ExpectedTerminals"
 	gen.genericSymbol = gen.Prefix + "GenericSymbol"
 	gen.symbolStack = "_" + gen.Prefix + "PseudoSymbolStack"
 	gen.stackItem = "_" + gen.Prefix + "StackItem"
@@ -236,52 +236,6 @@ func (gen *goCodeGen) populateCodeGenVariables() error {
 	return nil
 }
 
-func (gen *goCodeGen) generateExpectedTerminals() {
-	l := gen.Line
-
-	idToConst := map[string]string{
-		lr.EndMarker: gen.endSymbol,
-	}
-	symbols := []string{}
-
-	for _, term := range gen.Terminals {
-		idToConst[term.Name] = term.CodeGenSymbolConst
-		symbols = append(symbols, term.Name)
-	}
-
-	l("var %s = map[%s][]%s{", gen.expectedTerminals, gen.stateId, gen.symbolId)
-	gen.PushIndent()
-
-	for _, state := range gen.OrderedStates {
-		consts := []string{}
-
-		for _, symbol := range symbols {
-			_, ok := state.Goto[symbol]
-			if !ok {
-				continue
-			}
-			consts = append(consts, idToConst[symbol])
-		}
-
-		for _, item := range state.Items {
-			if item.IsReduce && item.LookAhead != lr.Wildcard {
-				consts = append(consts, idToConst[item.LookAhead])
-			}
-		}
-
-		if len(consts) > 0 {
-			l("%s: []%s{%s},",
-				state.CodeGenConst,
-				gen.symbolId,
-				strings.Join(consts, ", "))
-		}
-	}
-
-	gen.PopIndent()
-	l("}")
-	l("")
-}
-
 func GenerateGoLRCode(
 	grammar *lr.Grammar,
 	states *lr.LRStates) (
@@ -318,17 +272,17 @@ func GenerateGoLRCode(
 			CodeGenType:        genericPtr,
 		},
 		&lr.Term{
-			Name:               lr.EndMarker,
-			IsTerminal:         true,
-			ValueType:          lr.Generic,
-			CodeGenSymbolConst: gen.endSymbol,
-			CodeGenType:        genericPtr,
-		},
-		&lr.Term{
 			Name:               lr.Wildcard,
 			IsTerminal:         true,
 			ValueType:          lr.Generic,
 			CodeGenSymbolConst: gen.wildcardSymbol,
+			CodeGenType:        genericPtr,
+		},
+		&lr.Term{
+			Name:               lr.EndMarker,
+			IsTerminal:         true,
+			ValueType:          lr.Generic,
+			CodeGenSymbolConst: gen.endSymbol,
 			CodeGenType:        genericPtr,
 		},
 	}
@@ -351,7 +305,6 @@ func GenerateGoLRCode(
 			ErrHandler:        gen.errHandler,
 			DefaultErrHandler: gen.defaultErrHandler,
 			StackType:         gen.stack,
-			ExpectedTerminals: gen.expectedTerminals,
 			ParsePrefix:       gen.Prefix + "Parse",
 			InternalParse:     gen.parse,
 			Sprintf:           gen.Obj("fmt.Sprintf"),
@@ -360,6 +313,10 @@ func GenerateGoLRCode(
 			NonTerminals:      gen.NonTerminals,
 			Starts:            gen.Starts,
 			OrderedStates:     gen.OrderedStates,
+            ExpectedTerminals: gen.expectedTerminals,
+			StateIdType:       gen.stateId,
+			ActionTable:       gen.actionTable,
+			SortSlice:        gen.Obj("sort.Slice"),
 		})
 
 	l := gen.Line
@@ -390,9 +347,9 @@ func GenerateGoLRCode(
 		&go_template.InternalDefinitions{
 			ActionType:        gen.action,
 			ActionIdType:      gen.actionType,
-			ShiftAction:      gen.shiftAction,
-			ReduceAction:     gen.reduceAction,
-			AcceptAction:     gen.acceptAction,
+			ShiftAction:       gen.shiftAction,
+			ReduceAction:      gen.reduceAction,
+			AcceptAction:      gen.acceptAction,
 			StateIdType:       gen.stateId,
 			ReduceType:        gen.reduceType,
 			SymbolType:        gen.symbol,
@@ -404,7 +361,7 @@ func GenerateGoLRCode(
 			SymbolStackType:   gen.symbolStack,
 			SymbolIdType:      gen.symbolId,
 			EndSymbolId:       gen.endSymbol,
-			WildcardSymbolId:       gen.wildcardSymbol,
+			WildcardSymbolId:  gen.wildcardSymbol,
 			LocationType:      gen.location,
 			TokenType:         gen.token,
 			Sprintf:           gen.Obj("fmt.Sprintf"),
@@ -414,10 +371,6 @@ func GenerateGoLRCode(
 			OrderedStates:     gen.OrderedStates,
 			OrderedValueTypes: orderedValueTypes,
 		})
-
-	// Maybe make the action table map[StateId]map[Symbol]Action and
-	// extract the expected terminal symbols from the action table
-	gen.generateExpectedTerminals()
 
 	gen.Embed(
 		&go_template.ActionTable{

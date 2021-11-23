@@ -5,6 +5,7 @@ package parser
 import (
 	fmt "fmt"
 	io "io"
+	sort "sort"
 )
 
 type LRSymbolId int
@@ -150,8 +151,21 @@ func (LRDefaultParseErrorHandler) Error(nextToken LRToken, stack _LRStack) error
 	return fmt.Errorf(
 		"Syntax error: unexpected symbol %v. Expecting %v (%v)",
 		nextToken.Id(),
-		_LRExpectedTerminals[stack[len(stack)-1].StateId],
+		LRExpectedTerminals(stack[len(stack)-1].StateId),
 		nextToken.Loc())
+}
+
+func LRExpectedTerminals(id _LRStateId) []LRSymbolId {
+	result := []LRSymbolId{}
+	for key, _ := range _LRActionTable {
+		if key._LRStateId != id {
+			continue
+		}
+		result = append(result, key.LRSymbolId)
+	}
+
+	sort.Slice(result, func(i int, j int) bool { return result[i] < result[j] })
+	return result
 }
 
 func LRParse(lexer LRLexer, reducer LRReducer) (*Grammar, error) {
@@ -799,30 +813,6 @@ func (act *_LRAction) ReduceSymbol(
 	}
 
 	return stack, symbol, err
-}
-
-var _LRExpectedTerminals = map[_LRStateId][]LRSymbolId{
-	_LRState1:  []LRSymbolId{LRTokenToken, LRTypeToken, LRStartToken, LRRuleDefToken},
-	_LRState2:  []LRSymbolId{_LREndMarker},
-	_LRState3:  []LRSymbolId{LRLabelToken, LRCharacterToken, LRIdentifierToken},
-	_LRState4:  []LRSymbolId{LRIdentifierToken},
-	_LRState7:  []LRSymbolId{';'},
-	_LRState8:  []LRSymbolId{LRTokenToken, LRTypeToken, LRStartToken, LRRuleDefToken},
-	_LRState10: []LRSymbolId{'<', LRCharacterToken, LRIdentifierToken},
-	_LRState13: []LRSymbolId{LRCharacterToken, LRIdentifierToken},
-	_LRState16: []LRSymbolId{'|'},
-	_LRState17: []LRSymbolId{LRCharacterToken, LRIdentifierToken},
-	_LRState19: []LRSymbolId{LRIdentifierToken},
-	_LRState21: []LRSymbolId{LRSectionMarkerToken, _LREndMarker},
-	_LRState22: []LRSymbolId{';'},
-	_LRState23: []LRSymbolId{LRIdentifierToken},
-	_LRState24: []LRSymbolId{LRCharacterToken, LRIdentifierToken},
-	_LRState26: []LRSymbolId{LRLabelToken},
-	_LRState30: []LRSymbolId{LRIdentifierToken},
-	_LRState33: []LRSymbolId{'>'},
-	_LRState35: []LRSymbolId{LRSectionContentToken},
-	_LRState36: []LRSymbolId{LRCharacterToken, LRIdentifierToken},
-	_LRState38: []LRSymbolId{LRCharacterToken, LRIdentifierToken},
 }
 
 type _LRActionTableKey struct {

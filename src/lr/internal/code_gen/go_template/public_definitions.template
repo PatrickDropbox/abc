@@ -23,7 +23,6 @@ template PublicDefinitions {
     DefaultErrHandler   string
 
     StackType           string
-    ExpectedTerminals   string
 
     ParsePrefix         string
     InternalParse       string
@@ -36,6 +35,11 @@ template PublicDefinitions {
     Starts              []*lr.Term
 
     OrderedStates       []*lr.ItemSet
+
+    ExpectedTerminals   string
+    StateIdType         string
+    ActionTable         string
+    SortSlice           interface{}
 }
 %%
 type $SymbolIdType int
@@ -148,8 +152,21 @@ func ($DefaultErrHandler) Error(nextToken $SymbolType, stack $StackType) error {
     return $Errorf(
         "Syntax error: unexpected symbol %v. Expecting %v (%v)",
         nextToken.Id(),
-        $ExpectedTerminals[stack[len(stack)-1].StateId],
+        $ExpectedTerminals(stack[len(stack)-1].StateId),
         nextToken.Loc())
+}
+
+func $ExpectedTerminals(id $StateIdType) []$SymbolIdType {
+    result := []$SymbolIdType{}
+    for key, _ := range $ActionTable {
+        if key.$StateIdType != id {
+            continue
+        }
+        result = append(result, key.$SymbolIdType)
+    }
+
+    $SortSlice(result, func(i int, j int) bool {return result[i] < result[j]})
+    return result
 }
 
 [[-for idx, start := range Starts-]]

@@ -22,7 +22,6 @@ type PublicDefinitions struct {
 	ErrHandler        string
 	DefaultErrHandler string
 	StackType         string
-	ExpectedTerminals string
 	ParsePrefix       string
 	InternalParse     string
 	Sprintf           interface{}
@@ -31,6 +30,10 @@ type PublicDefinitions struct {
 	NonTerminals      []*lr.Term
 	Starts            []*lr.Term
 	OrderedStates     []*lr.ItemSet
+	ExpectedTerminals string
+	StateIdType       string
+	ActionTable       string
+	SortSlice         interface{}
 }
 
 func (PublicDefinitions) Name() string { return "PublicDefinitions" }
@@ -106,7 +109,6 @@ func (_template *PublicDefinitions) WriteTo(
 	ErrHandler := _template.ErrHandler
 	DefaultErrHandler := _template.DefaultErrHandler
 	StackType := _template.StackType
-	ExpectedTerminals := _template.ExpectedTerminals
 	ParsePrefix := _template.ParsePrefix
 	InternalParse := _template.InternalParse
 	Sprintf := _template.Sprintf
@@ -115,8 +117,12 @@ func (_template *PublicDefinitions) WriteTo(
 	NonTerminals := _template.NonTerminals
 	Starts := _template.Starts
 	OrderedStates := _template.OrderedStates
+	ExpectedTerminals := _template.ExpectedTerminals
+	StateIdType := _template.StateIdType
+	ActionTable := _template.ActionTable
+	SortSlice := _template.SortSlice
 
-	// public_definitions.template:41:0
+	// public_definitions.template:45:0
 	{
 		_n, _err := _output.Write([]byte(`type `))
 		_numWritten += int64(_n)
@@ -124,18 +130,18 @@ func (_template *PublicDefinitions) WriteTo(
 			return _numWritten, _err
 		}
 	}
-	// public_definitions.template:41:5
+	// public_definitions.template:45:5
 	{
 		_n, _err := _template.writeValue(
 			_output,
 			(SymbolIdType),
-			"public_definitions.template:41:5")
+			"public_definitions.template:45:5")
 		_numWritten += int64(_n)
 		if _err != nil {
 			return _numWritten, _err
 		}
 	}
-	// public_definitions.template:41:18
+	// public_definitions.template:45:18
 	{
 		_n, _err := _output.Write([]byte(` int
 
@@ -145,13 +151,13 @@ const (`))
 			return _numWritten, _err
 		}
 	}
-	// public_definitions.template:44:0
+	// public_definitions.template:48:0
 	nextId := 256
-	// public_definitions.template:45:0
+	// public_definitions.template:49:0
 	for _, term := range Terminals {
-		// public_definitions.template:46:4
+		// public_definitions.template:50:4
 		if term.SymbolId == parser.LRIdentifierToken {
-			// public_definitions.template:46:53
+			// public_definitions.template:50:53
 			{
 				_n, _err := _output.Write([]byte(`
     `))
@@ -160,18 +166,18 @@ const (`))
 					return _numWritten, _err
 				}
 			}
-			// public_definitions.template:47:4
+			// public_definitions.template:51:4
 			{
 				_n, _err := _template.writeValue(
 					_output,
 					(term.CodeGenSymbolConst),
-					"public_definitions.template:47:4")
+					"public_definitions.template:51:4")
 				_numWritten += int64(_n)
 				if _err != nil {
 					return _numWritten, _err
 				}
 			}
-			// public_definitions.template:47:30
+			// public_definitions.template:51:30
 			{
 				_n, _err := _output.Write([]byte(` = `))
 				_numWritten += int64(_n)
@@ -179,18 +185,18 @@ const (`))
 					return _numWritten, _err
 				}
 			}
-			// public_definitions.template:47:33
+			// public_definitions.template:51:33
 			{
 				_n, _err := _template.writeValue(
 					_output,
 					(SymbolIdType),
-					"public_definitions.template:47:33")
+					"public_definitions.template:51:33")
 				_numWritten += int64(_n)
 				if _err != nil {
 					return _numWritten, _err
 				}
 			}
-			// public_definitions.template:47:48
+			// public_definitions.template:51:48
 			{
 				_n, _err := _output.Write([]byte(`(`))
 				_numWritten += int64(_n)
@@ -198,18 +204,18 @@ const (`))
 					return _numWritten, _err
 				}
 			}
-			// public_definitions.template:47:49
+			// public_definitions.template:51:49
 			{
 				_n, _err := _template.writeValue(
 					_output,
 					(nextId),
-					"public_definitions.template:47:49")
+					"public_definitions.template:51:49")
 				_numWritten += int64(_n)
 				if _err != nil {
 					return _numWritten, _err
 				}
 			}
-			// public_definitions.template:47:56
+			// public_definitions.template:51:56
 			{
 				_n, _err := _output.Write([]byte(`)`))
 				_numWritten += int64(_n)
@@ -217,11 +223,11 @@ const (`))
 					return _numWritten, _err
 				}
 			}
-			// public_definitions.template:48:8
+			// public_definitions.template:52:8
 			nextId += 1
 		}
 	}
-	// public_definitions.template:50:8
+	// public_definitions.template:54:8
 	{
 		_n, _err := _output.Write([]byte(`
 )
@@ -232,65 +238,23 @@ type `))
 			return _numWritten, _err
 		}
 	}
-	// public_definitions.template:53:5
+	// public_definitions.template:57:5
 	{
 		_n, _err := _template.writeValue(
 			_output,
 			(LocationType),
-			"public_definitions.template:53:5")
+			"public_definitions.template:57:5")
 		_numWritten += int64(_n)
 		if _err != nil {
 			return _numWritten, _err
 		}
 	}
-	// public_definitions.template:53:18
+	// public_definitions.template:57:18
 	{
 		_n, _err := _output.Write([]byte(` struct {
     FileName string
     Line int
     Column int
-}
-
-func (l `))
-		_numWritten += int64(_n)
-		if _err != nil {
-			return _numWritten, _err
-		}
-	}
-	// public_definitions.template:59:8
-	{
-		_n, _err := _template.writeValue(
-			_output,
-			(LocationType),
-			"public_definitions.template:59:8")
-		_numWritten += int64(_n)
-		if _err != nil {
-			return _numWritten, _err
-		}
-	}
-	// public_definitions.template:59:21
-	{
-		_n, _err := _output.Write([]byte(`) String() string {
-    return `))
-		_numWritten += int64(_n)
-		if _err != nil {
-			return _numWritten, _err
-		}
-	}
-	// public_definitions.template:60:11
-	{
-		_n, _err := _template.writeValue(
-			_output,
-			(Sprintf),
-			"public_definitions.template:60:11")
-		_numWritten += int64(_n)
-		if _err != nil {
-			return _numWritten, _err
-		}
-	}
-	// public_definitions.template:60:19
-	{
-		_n, _err := _output.Write([]byte(`("%v:%v:%v", l.FileName, l.Line, l.Column)
 }
 
 func (l `))
@@ -312,7 +276,7 @@ func (l `))
 	}
 	// public_definitions.template:63:21
 	{
-		_n, _err := _output.Write([]byte(`) ShortString() string {
+		_n, _err := _output.Write([]byte(`) String() string {
     return `))
 		_numWritten += int64(_n)
 		if _err != nil {
@@ -332,6 +296,48 @@ func (l `))
 	}
 	// public_definitions.template:64:19
 	{
+		_n, _err := _output.Write([]byte(`("%v:%v:%v", l.FileName, l.Line, l.Column)
+}
+
+func (l `))
+		_numWritten += int64(_n)
+		if _err != nil {
+			return _numWritten, _err
+		}
+	}
+	// public_definitions.template:67:8
+	{
+		_n, _err := _template.writeValue(
+			_output,
+			(LocationType),
+			"public_definitions.template:67:8")
+		_numWritten += int64(_n)
+		if _err != nil {
+			return _numWritten, _err
+		}
+	}
+	// public_definitions.template:67:21
+	{
+		_n, _err := _output.Write([]byte(`) ShortString() string {
+    return `))
+		_numWritten += int64(_n)
+		if _err != nil {
+			return _numWritten, _err
+		}
+	}
+	// public_definitions.template:68:11
+	{
+		_n, _err := _template.writeValue(
+			_output,
+			(Sprintf),
+			"public_definitions.template:68:11")
+		_numWritten += int64(_n)
+		if _err != nil {
+			return _numWritten, _err
+		}
+	}
+	// public_definitions.template:68:19
+	{
 		_n, _err := _output.Write([]byte(`("%v:%v", l.Line, l.Column)
 }
 
@@ -341,18 +347,18 @@ type `))
 			return _numWritten, _err
 		}
 	}
-	// public_definitions.template:67:5
+	// public_definitions.template:71:5
 	{
 		_n, _err := _template.writeValue(
 			_output,
 			(SymbolType),
-			"public_definitions.template:67:5")
+			"public_definitions.template:71:5")
 		_numWritten += int64(_n)
 		if _err != nil {
 			return _numWritten, _err
 		}
 	}
-	// public_definitions.template:67:16
+	// public_definitions.template:71:16
 	{
 		_n, _err := _output.Write([]byte(` interface {
     Id() `))
@@ -361,18 +367,18 @@ type `))
 			return _numWritten, _err
 		}
 	}
-	// public_definitions.template:68:9
+	// public_definitions.template:72:9
 	{
 		_n, _err := _template.writeValue(
 			_output,
 			(SymbolIdType),
-			"public_definitions.template:68:9")
+			"public_definitions.template:72:9")
 		_numWritten += int64(_n)
 		if _err != nil {
 			return _numWritten, _err
 		}
 	}
-	// public_definitions.template:68:22
+	// public_definitions.template:72:22
 	{
 		_n, _err := _output.Write([]byte(`
     Loc() `))
@@ -381,18 +387,18 @@ type `))
 			return _numWritten, _err
 		}
 	}
-	// public_definitions.template:69:10
+	// public_definitions.template:73:10
 	{
 		_n, _err := _template.writeValue(
 			_output,
 			(LocationType),
-			"public_definitions.template:69:10")
+			"public_definitions.template:73:10")
 		_numWritten += int64(_n)
 		if _err != nil {
 			return _numWritten, _err
 		}
 	}
-	// public_definitions.template:69:23
+	// public_definitions.template:73:23
 	{
 		_n, _err := _output.Write([]byte(`
 }
@@ -403,18 +409,18 @@ type `))
 			return _numWritten, _err
 		}
 	}
-	// public_definitions.template:72:5
+	// public_definitions.template:76:5
 	{
 		_n, _err := _template.writeValue(
 			_output,
 			(GenericSymbolType),
-			"public_definitions.template:72:5")
+			"public_definitions.template:76:5")
 		_numWritten += int64(_n)
 		if _err != nil {
 			return _numWritten, _err
 		}
 	}
-	// public_definitions.template:72:23
+	// public_definitions.template:76:23
 	{
 		_n, _err := _output.Write([]byte(` struct {
     `))
@@ -423,18 +429,18 @@ type `))
 			return _numWritten, _err
 		}
 	}
-	// public_definitions.template:73:4
+	// public_definitions.template:77:4
 	{
 		_n, _err := _template.writeValue(
 			_output,
 			(SymbolIdType),
-			"public_definitions.template:73:4")
+			"public_definitions.template:77:4")
 		_numWritten += int64(_n)
 		if _err != nil {
 			return _numWritten, _err
 		}
 	}
-	// public_definitions.template:73:17
+	// public_definitions.template:77:17
 	{
 		_n, _err := _output.Write([]byte(`
     `))
@@ -443,18 +449,18 @@ type `))
 			return _numWritten, _err
 		}
 	}
-	// public_definitions.template:74:4
+	// public_definitions.template:78:4
 	{
 		_n, _err := _template.writeValue(
 			_output,
 			(LocationType),
-			"public_definitions.template:74:4")
+			"public_definitions.template:78:4")
 		_numWritten += int64(_n)
 		if _err != nil {
 			return _numWritten, _err
 		}
 	}
-	// public_definitions.template:74:17
+	// public_definitions.template:78:17
 	{
 		_n, _err := _output.Write([]byte(`
 }
@@ -465,18 +471,18 @@ func (t *`))
 			return _numWritten, _err
 		}
 	}
-	// public_definitions.template:77:9
+	// public_definitions.template:81:9
 	{
 		_n, _err := _template.writeValue(
 			_output,
 			(GenericSymbolType),
-			"public_definitions.template:77:9")
+			"public_definitions.template:81:9")
 		_numWritten += int64(_n)
 		if _err != nil {
 			return _numWritten, _err
 		}
 	}
-	// public_definitions.template:77:27
+	// public_definitions.template:81:27
 	{
 		_n, _err := _output.Write([]byte(`) Id() `))
 		_numWritten += int64(_n)
@@ -484,18 +490,18 @@ func (t *`))
 			return _numWritten, _err
 		}
 	}
-	// public_definitions.template:77:34
+	// public_definitions.template:81:34
 	{
 		_n, _err := _template.writeValue(
 			_output,
 			(SymbolIdType),
-			"public_definitions.template:77:34")
+			"public_definitions.template:81:34")
 		_numWritten += int64(_n)
 		if _err != nil {
 			return _numWritten, _err
 		}
 	}
-	// public_definitions.template:77:47
+	// public_definitions.template:81:47
 	{
 		_n, _err := _output.Write([]byte(` { return t.`))
 		_numWritten += int64(_n)
@@ -503,18 +509,18 @@ func (t *`))
 			return _numWritten, _err
 		}
 	}
-	// public_definitions.template:77:59
+	// public_definitions.template:81:59
 	{
 		_n, _err := _template.writeValue(
 			_output,
 			(SymbolIdType),
-			"public_definitions.template:77:59")
+			"public_definitions.template:81:59")
 		_numWritten += int64(_n)
 		if _err != nil {
 			return _numWritten, _err
 		}
 	}
-	// public_definitions.template:77:72
+	// public_definitions.template:81:72
 	{
 		_n, _err := _output.Write([]byte(` }
 
@@ -524,18 +530,18 @@ func (t *`))
 			return _numWritten, _err
 		}
 	}
-	// public_definitions.template:79:9
+	// public_definitions.template:83:9
 	{
 		_n, _err := _template.writeValue(
 			_output,
 			(GenericSymbolType),
-			"public_definitions.template:79:9")
+			"public_definitions.template:83:9")
 		_numWritten += int64(_n)
 		if _err != nil {
 			return _numWritten, _err
 		}
 	}
-	// public_definitions.template:79:27
+	// public_definitions.template:83:27
 	{
 		_n, _err := _output.Write([]byte(`) Loc() `))
 		_numWritten += int64(_n)
@@ -543,18 +549,18 @@ func (t *`))
 			return _numWritten, _err
 		}
 	}
-	// public_definitions.template:79:35
+	// public_definitions.template:83:35
 	{
 		_n, _err := _template.writeValue(
 			_output,
 			(LocationType),
-			"public_definitions.template:79:35")
+			"public_definitions.template:83:35")
 		_numWritten += int64(_n)
 		if _err != nil {
 			return _numWritten, _err
 		}
 	}
-	// public_definitions.template:79:48
+	// public_definitions.template:83:48
 	{
 		_n, _err := _output.Write([]byte(` { return t.`))
 		_numWritten += int64(_n)
@@ -562,18 +568,18 @@ func (t *`))
 			return _numWritten, _err
 		}
 	}
-	// public_definitions.template:79:60
+	// public_definitions.template:83:60
 	{
 		_n, _err := _template.writeValue(
 			_output,
 			(LocationType),
-			"public_definitions.template:79:60")
+			"public_definitions.template:83:60")
 		_numWritten += int64(_n)
 		if _err != nil {
 			return _numWritten, _err
 		}
 	}
-	// public_definitions.template:79:73
+	// public_definitions.template:83:73
 	{
 		_n, _err := _output.Write([]byte(` }
 
@@ -583,18 +589,18 @@ type `))
 			return _numWritten, _err
 		}
 	}
-	// public_definitions.template:81:5
+	// public_definitions.template:85:5
 	{
 		_n, _err := _template.writeValue(
 			_output,
 			(LexerType),
-			"public_definitions.template:81:5")
+			"public_definitions.template:85:5")
 		_numWritten += int64(_n)
 		if _err != nil {
 			return _numWritten, _err
 		}
 	}
-	// public_definitions.template:81:15
+	// public_definitions.template:85:15
 	{
 		_n, _err := _output.Write([]byte(` interface {
     // Note: Return io.EOF to indicate end of stream
@@ -604,18 +610,18 @@ type `))
 			return _numWritten, _err
 		}
 	}
-	// public_definitions.template:83:56
+	// public_definitions.template:87:56
 	{
 		_n, _err := _template.writeValue(
 			_output,
 			(GenericSymbolType),
-			"public_definitions.template:83:56")
+			"public_definitions.template:87:56")
 		_numWritten += int64(_n)
 		if _err != nil {
 			return _numWritten, _err
 		}
 	}
-	// public_definitions.template:83:74
+	// public_definitions.template:87:74
 	{
 		_n, _err := _output.Write([]byte(`
     Next() (`))
@@ -624,18 +630,18 @@ type `))
 			return _numWritten, _err
 		}
 	}
-	// public_definitions.template:84:12
+	// public_definitions.template:88:12
 	{
 		_n, _err := _template.writeValue(
 			_output,
 			(SymbolType),
-			"public_definitions.template:84:12")
+			"public_definitions.template:88:12")
 		_numWritten += int64(_n)
 		if _err != nil {
 			return _numWritten, _err
 		}
 	}
-	// public_definitions.template:84:23
+	// public_definitions.template:88:23
 	{
 		_n, _err := _output.Write([]byte(`, error)
 
@@ -645,18 +651,18 @@ type `))
 			return _numWritten, _err
 		}
 	}
-	// public_definitions.template:86:22
+	// public_definitions.template:90:22
 	{
 		_n, _err := _template.writeValue(
 			_output,
 			(LocationType),
-			"public_definitions.template:86:22")
+			"public_definitions.template:90:22")
 		_numWritten += int64(_n)
 		if _err != nil {
 			return _numWritten, _err
 		}
 	}
-	// public_definitions.template:86:35
+	// public_definitions.template:90:35
 	{
 		_n, _err := _output.Write([]byte(`
 }
@@ -668,18 +674,18 @@ type `))
 			return _numWritten, _err
 		}
 	}
-	// public_definitions.template:90:5
+	// public_definitions.template:94:5
 	{
 		_n, _err := _template.writeValue(
 			_output,
 			(ReducerType),
-			"public_definitions.template:90:5")
+			"public_definitions.template:94:5")
 		_numWritten += int64(_n)
 		if _err != nil {
 			return _numWritten, _err
 		}
 	}
-	// public_definitions.template:90:17
+	// public_definitions.template:94:17
 	{
 		_n, _err := _output.Write([]byte(` interface {`))
 		_numWritten += int64(_n)
@@ -687,11 +693,11 @@ type `))
 			return _numWritten, _err
 		}
 	}
-	// public_definitions.template:91:0
+	// public_definitions.template:95:0
 	for ruleIdx, rule := range NonTerminals {
-		// public_definitions.template:92:4
+		// public_definitions.template:96:4
 		if ruleIdx > 0 {
-			// public_definitions.template:92:23
+			// public_definitions.template:96:23
 			{
 				_n, _err := _output.Write([]byte(`
 `))
@@ -701,11 +707,11 @@ type `))
 				}
 			}
 		}
-		// public_definitions.template:96:4
+		// public_definitions.template:100:4
 		for clauseIdx, clause := range rule.Clauses {
-			// public_definitions.template:97:8
+			// public_definitions.template:101:8
 			if clauseIdx > 0 {
-				// public_definitions.template:97:29
+				// public_definitions.template:101:29
 				{
 					_n, _err := _output.Write([]byte(`
 `))
@@ -715,9 +721,9 @@ type `))
 					}
 				}
 			}
-			// public_definitions.template:101:8
+			// public_definitions.template:105:8
 			if clause.Label == "" {
-				// public_definitions.template:101:34
+				// public_definitions.template:105:34
 				{
 					_n, _err := _output.Write([]byte(`
     // `))
@@ -726,18 +732,18 @@ type `))
 						return _numWritten, _err
 					}
 				}
-				// public_definitions.template:102:7
+				// public_definitions.template:106:7
 				{
 					_n, _err := _template.writeValue(
 						_output,
 						(clause.LRLocation.ShortString()),
-						"public_definitions.template:102:7")
+						"public_definitions.template:106:7")
 					_numWritten += int64(_n)
 					if _err != nil {
 						return _numWritten, _err
 					}
 				}
-				// public_definitions.template:102:41
+				// public_definitions.template:106:41
 				{
 					_n, _err := _output.Write([]byte(`: `))
 					_numWritten += int64(_n)
@@ -745,18 +751,18 @@ type `))
 						return _numWritten, _err
 					}
 				}
-				// public_definitions.template:102:43
+				// public_definitions.template:106:43
 				{
 					_n, _err := _template.writeValue(
 						_output,
 						(rule.Name),
-						"public_definitions.template:102:43")
+						"public_definitions.template:106:43")
 					_numWritten += int64(_n)
 					if _err != nil {
 						return _numWritten, _err
 					}
 				}
-				// public_definitions.template:102:55
+				// public_definitions.template:106:55
 				{
 					_n, _err := _output.Write([]byte(` -> ...`))
 					_numWritten += int64(_n)
@@ -765,7 +771,7 @@ type `))
 					}
 				}
 			} else {
-				// public_definitions.template:103:17
+				// public_definitions.template:107:17
 				{
 					_n, _err := _output.Write([]byte(`
     // `))
@@ -774,18 +780,18 @@ type `))
 						return _numWritten, _err
 					}
 				}
-				// public_definitions.template:104:7
+				// public_definitions.template:108:7
 				{
 					_n, _err := _template.writeValue(
 						_output,
 						(clause.LRLocation.ShortString()),
-						"public_definitions.template:104:7")
+						"public_definitions.template:108:7")
 					_numWritten += int64(_n)
 					if _err != nil {
 						return _numWritten, _err
 					}
 				}
-				// public_definitions.template:104:41
+				// public_definitions.template:108:41
 				{
 					_n, _err := _output.Write([]byte(`: `))
 					_numWritten += int64(_n)
@@ -793,18 +799,18 @@ type `))
 						return _numWritten, _err
 					}
 				}
-				// public_definitions.template:104:43
+				// public_definitions.template:108:43
 				{
 					_n, _err := _template.writeValue(
 						_output,
 						(rule.Name),
-						"public_definitions.template:104:43")
+						"public_definitions.template:108:43")
 					_numWritten += int64(_n)
 					if _err != nil {
 						return _numWritten, _err
 					}
 				}
-				// public_definitions.template:104:55
+				// public_definitions.template:108:55
 				{
 					_n, _err := _output.Write([]byte(` -> `))
 					_numWritten += int64(_n)
@@ -812,18 +818,18 @@ type `))
 						return _numWritten, _err
 					}
 				}
-				// public_definitions.template:104:59
+				// public_definitions.template:108:59
 				{
 					_n, _err := _template.writeValue(
 						_output,
 						(clause.Label),
-						"public_definitions.template:104:59")
+						"public_definitions.template:108:59")
 					_numWritten += int64(_n)
 					if _err != nil {
 						return _numWritten, _err
 					}
 				}
-				// public_definitions.template:104:74
+				// public_definitions.template:108:74
 				{
 					_n, _err := _output.Write([]byte(`: ...`))
 					_numWritten += int64(_n)
@@ -832,9 +838,9 @@ type `))
 					}
 				}
 			}
-			// public_definitions.template:107:8
+			// public_definitions.template:111:8
 			paramNameCount := map[string]int{}
-			// public_definitions.template:107:49
+			// public_definitions.template:111:49
 			{
 				_n, _err := _output.Write([]byte(`
     `))
@@ -843,18 +849,18 @@ type `))
 					return _numWritten, _err
 				}
 			}
-			// public_definitions.template:108:4
+			// public_definitions.template:112:4
 			{
 				_n, _err := _template.writeValue(
 					_output,
 					(clause.CodeGenReducerName),
-					"public_definitions.template:108:4")
+					"public_definitions.template:112:4")
 				_numWritten += int64(_n)
 				if _err != nil {
 					return _numWritten, _err
 				}
 			}
-			// public_definitions.template:108:32
+			// public_definitions.template:112:32
 			{
 				_n, _err := _output.Write([]byte(`(`))
 				_numWritten += int64(_n)
@@ -862,9 +868,9 @@ type `))
 					return _numWritten, _err
 				}
 			}
-			// public_definitions.template:109:8
+			// public_definitions.template:113:8
 			for termIdx, term := range clause.Bindings {
-				// public_definitions.template:111:12
+				// public_definitions.template:115:12
 
 				paramName := ""
 				if term.SymbolId == parser.LRCharacterToken {
@@ -886,7 +892,7 @@ type `))
 					suffix = ", "
 				}
 
-				// public_definitions.template:133:15
+				// public_definitions.template:137:15
 				{
 					_n, _err := _output.Write([]byte(`        `))
 					_numWritten += int64(_n)
@@ -894,18 +900,18 @@ type `))
 						return _numWritten, _err
 					}
 				}
-				// public_definitions.template:134:8
+				// public_definitions.template:138:8
 				{
 					_n, _err := _template.writeValue(
 						_output,
 						(paramName),
-						"public_definitions.template:134:8")
+						"public_definitions.template:138:8")
 					_numWritten += int64(_n)
 					if _err != nil {
 						return _numWritten, _err
 					}
 				}
-				// public_definitions.template:134:18
+				// public_definitions.template:138:18
 				{
 					_n, _err := _output.Write([]byte(` `))
 					_numWritten += int64(_n)
@@ -913,30 +919,30 @@ type `))
 						return _numWritten, _err
 					}
 				}
-				// public_definitions.template:134:19
+				// public_definitions.template:138:19
 				{
 					_n, _err := _template.writeValue(
 						_output,
 						(term.CodeGenType),
-						"public_definitions.template:134:19")
+						"public_definitions.template:138:19")
 					_numWritten += int64(_n)
 					if _err != nil {
 						return _numWritten, _err
 					}
 				}
-				// public_definitions.template:134:38
+				// public_definitions.template:138:38
 				{
 					_n, _err := _template.writeValue(
 						_output,
 						(suffix),
-						"public_definitions.template:134:38")
+						"public_definitions.template:138:38")
 					_numWritten += int64(_n)
 					if _err != nil {
 						return _numWritten, _err
 					}
 				}
 			}
-			// public_definitions.template:135:17
+			// public_definitions.template:139:17
 			{
 				_n, _err := _output.Write([]byte(`) (`))
 				_numWritten += int64(_n)
@@ -944,18 +950,18 @@ type `))
 					return _numWritten, _err
 				}
 			}
-			// public_definitions.template:136:3
+			// public_definitions.template:140:3
 			{
 				_n, _err := _template.writeValue(
 					_output,
 					(rule.CodeGenType),
-					"public_definitions.template:136:3")
+					"public_definitions.template:140:3")
 				_numWritten += int64(_n)
 				if _err != nil {
 					return _numWritten, _err
 				}
 			}
-			// public_definitions.template:136:22
+			// public_definitions.template:140:22
 			{
 				_n, _err := _output.Write([]byte(`, error)`))
 				_numWritten += int64(_n)
@@ -965,70 +971,9 @@ type `))
 			}
 		}
 	}
-	// public_definitions.template:138:8
+	// public_definitions.template:142:8
 	{
 		_n, _err := _output.Write([]byte(`
-}
-
-type `))
-		_numWritten += int64(_n)
-		if _err != nil {
-			return _numWritten, _err
-		}
-	}
-	// public_definitions.template:141:5
-	{
-		_n, _err := _template.writeValue(
-			_output,
-			(ErrHandler),
-			"public_definitions.template:141:5")
-		_numWritten += int64(_n)
-		if _err != nil {
-			return _numWritten, _err
-		}
-	}
-	// public_definitions.template:141:16
-	{
-		_n, _err := _output.Write([]byte(` interface {
-    Error(nextToken `))
-		_numWritten += int64(_n)
-		if _err != nil {
-			return _numWritten, _err
-		}
-	}
-	// public_definitions.template:142:20
-	{
-		_n, _err := _template.writeValue(
-			_output,
-			(SymbolType),
-			"public_definitions.template:142:20")
-		_numWritten += int64(_n)
-		if _err != nil {
-			return _numWritten, _err
-		}
-	}
-	// public_definitions.template:142:31
-	{
-		_n, _err := _output.Write([]byte(`, parseStack `))
-		_numWritten += int64(_n)
-		if _err != nil {
-			return _numWritten, _err
-		}
-	}
-	// public_definitions.template:142:44
-	{
-		_n, _err := _template.writeValue(
-			_output,
-			(StackType),
-			"public_definitions.template:142:44")
-		_numWritten += int64(_n)
-		if _err != nil {
-			return _numWritten, _err
-		}
-	}
-	// public_definitions.template:142:54
-	{
-		_n, _err := _output.Write([]byte(`) error
 }
 
 type `))
@@ -1041,14 +986,75 @@ type `))
 	{
 		_n, _err := _template.writeValue(
 			_output,
-			(DefaultErrHandler),
+			(ErrHandler),
 			"public_definitions.template:145:5")
 		_numWritten += int64(_n)
 		if _err != nil {
 			return _numWritten, _err
 		}
 	}
-	// public_definitions.template:145:23
+	// public_definitions.template:145:16
+	{
+		_n, _err := _output.Write([]byte(` interface {
+    Error(nextToken `))
+		_numWritten += int64(_n)
+		if _err != nil {
+			return _numWritten, _err
+		}
+	}
+	// public_definitions.template:146:20
+	{
+		_n, _err := _template.writeValue(
+			_output,
+			(SymbolType),
+			"public_definitions.template:146:20")
+		_numWritten += int64(_n)
+		if _err != nil {
+			return _numWritten, _err
+		}
+	}
+	// public_definitions.template:146:31
+	{
+		_n, _err := _output.Write([]byte(`, parseStack `))
+		_numWritten += int64(_n)
+		if _err != nil {
+			return _numWritten, _err
+		}
+	}
+	// public_definitions.template:146:44
+	{
+		_n, _err := _template.writeValue(
+			_output,
+			(StackType),
+			"public_definitions.template:146:44")
+		_numWritten += int64(_n)
+		if _err != nil {
+			return _numWritten, _err
+		}
+	}
+	// public_definitions.template:146:54
+	{
+		_n, _err := _output.Write([]byte(`) error
+}
+
+type `))
+		_numWritten += int64(_n)
+		if _err != nil {
+			return _numWritten, _err
+		}
+	}
+	// public_definitions.template:149:5
+	{
+		_n, _err := _template.writeValue(
+			_output,
+			(DefaultErrHandler),
+			"public_definitions.template:149:5")
+		_numWritten += int64(_n)
+		if _err != nil {
+			return _numWritten, _err
+		}
+	}
+	// public_definitions.template:149:23
 	{
 		_n, _err := _output.Write([]byte(` struct {}
 
@@ -1058,18 +1064,18 @@ func (`))
 			return _numWritten, _err
 		}
 	}
-	// public_definitions.template:147:6
+	// public_definitions.template:151:6
 	{
 		_n, _err := _template.writeValue(
 			_output,
 			(DefaultErrHandler),
-			"public_definitions.template:147:6")
+			"public_definitions.template:151:6")
 		_numWritten += int64(_n)
 		if _err != nil {
 			return _numWritten, _err
 		}
 	}
-	// public_definitions.template:147:24
+	// public_definitions.template:151:24
 	{
 		_n, _err := _output.Write([]byte(`) Error(nextToken `))
 		_numWritten += int64(_n)
@@ -1077,18 +1083,18 @@ func (`))
 			return _numWritten, _err
 		}
 	}
-	// public_definitions.template:147:42
+	// public_definitions.template:151:42
 	{
 		_n, _err := _template.writeValue(
 			_output,
 			(SymbolType),
-			"public_definitions.template:147:42")
+			"public_definitions.template:151:42")
 		_numWritten += int64(_n)
 		if _err != nil {
 			return _numWritten, _err
 		}
 	}
-	// public_definitions.template:147:53
+	// public_definitions.template:151:53
 	{
 		_n, _err := _output.Write([]byte(`, stack `))
 		_numWritten += int64(_n)
@@ -1096,18 +1102,18 @@ func (`))
 			return _numWritten, _err
 		}
 	}
-	// public_definitions.template:147:61
+	// public_definitions.template:151:61
 	{
 		_n, _err := _template.writeValue(
 			_output,
 			(StackType),
-			"public_definitions.template:147:61")
+			"public_definitions.template:151:61")
 		_numWritten += int64(_n)
 		if _err != nil {
 			return _numWritten, _err
 		}
 	}
-	// public_definitions.template:147:71
+	// public_definitions.template:151:71
 	{
 		_n, _err := _output.Write([]byte(`) error {
     return `))
@@ -1116,18 +1122,18 @@ func (`))
 			return _numWritten, _err
 		}
 	}
-	// public_definitions.template:148:11
+	// public_definitions.template:152:11
 	{
 		_n, _err := _template.writeValue(
 			_output,
 			(Errorf),
-			"public_definitions.template:148:11")
+			"public_definitions.template:152:11")
 		_numWritten += int64(_n)
 		if _err != nil {
 			return _numWritten, _err
 		}
 	}
-	// public_definitions.template:148:18
+	// public_definitions.template:152:18
 	{
 		_n, _err := _output.Write([]byte(`(
         "Syntax error: unexpected symbol %v. Expecting %v (%v)",
@@ -1138,21 +1144,186 @@ func (`))
 			return _numWritten, _err
 		}
 	}
-	// public_definitions.template:151:8
+	// public_definitions.template:155:8
 	{
 		_n, _err := _template.writeValue(
 			_output,
 			(ExpectedTerminals),
-			"public_definitions.template:151:8")
+			"public_definitions.template:155:8")
 		_numWritten += int64(_n)
 		if _err != nil {
 			return _numWritten, _err
 		}
 	}
-	// public_definitions.template:151:26
+	// public_definitions.template:155:26
 	{
-		_n, _err := _output.Write([]byte(`[stack[len(stack)-1].StateId],
+		_n, _err := _output.Write([]byte(`(stack[len(stack)-1].StateId),
         nextToken.Loc())
+}
+
+func `))
+		_numWritten += int64(_n)
+		if _err != nil {
+			return _numWritten, _err
+		}
+	}
+	// public_definitions.template:159:5
+	{
+		_n, _err := _template.writeValue(
+			_output,
+			(ExpectedTerminals),
+			"public_definitions.template:159:5")
+		_numWritten += int64(_n)
+		if _err != nil {
+			return _numWritten, _err
+		}
+	}
+	// public_definitions.template:159:23
+	{
+		_n, _err := _output.Write([]byte(`(id `))
+		_numWritten += int64(_n)
+		if _err != nil {
+			return _numWritten, _err
+		}
+	}
+	// public_definitions.template:159:27
+	{
+		_n, _err := _template.writeValue(
+			_output,
+			(StateIdType),
+			"public_definitions.template:159:27")
+		_numWritten += int64(_n)
+		if _err != nil {
+			return _numWritten, _err
+		}
+	}
+	// public_definitions.template:159:39
+	{
+		_n, _err := _output.Write([]byte(`) []`))
+		_numWritten += int64(_n)
+		if _err != nil {
+			return _numWritten, _err
+		}
+	}
+	// public_definitions.template:159:43
+	{
+		_n, _err := _template.writeValue(
+			_output,
+			(SymbolIdType),
+			"public_definitions.template:159:43")
+		_numWritten += int64(_n)
+		if _err != nil {
+			return _numWritten, _err
+		}
+	}
+	// public_definitions.template:159:56
+	{
+		_n, _err := _output.Write([]byte(` {
+    result := []`))
+		_numWritten += int64(_n)
+		if _err != nil {
+			return _numWritten, _err
+		}
+	}
+	// public_definitions.template:160:16
+	{
+		_n, _err := _template.writeValue(
+			_output,
+			(SymbolIdType),
+			"public_definitions.template:160:16")
+		_numWritten += int64(_n)
+		if _err != nil {
+			return _numWritten, _err
+		}
+	}
+	// public_definitions.template:160:29
+	{
+		_n, _err := _output.Write([]byte(`{}
+    for key, _ := range `))
+		_numWritten += int64(_n)
+		if _err != nil {
+			return _numWritten, _err
+		}
+	}
+	// public_definitions.template:161:24
+	{
+		_n, _err := _template.writeValue(
+			_output,
+			(ActionTable),
+			"public_definitions.template:161:24")
+		_numWritten += int64(_n)
+		if _err != nil {
+			return _numWritten, _err
+		}
+	}
+	// public_definitions.template:161:36
+	{
+		_n, _err := _output.Write([]byte(` {
+        if key.`))
+		_numWritten += int64(_n)
+		if _err != nil {
+			return _numWritten, _err
+		}
+	}
+	// public_definitions.template:162:15
+	{
+		_n, _err := _template.writeValue(
+			_output,
+			(StateIdType),
+			"public_definitions.template:162:15")
+		_numWritten += int64(_n)
+		if _err != nil {
+			return _numWritten, _err
+		}
+	}
+	// public_definitions.template:162:27
+	{
+		_n, _err := _output.Write([]byte(` != id {
+            continue
+        }
+        result = append(result, key.`))
+		_numWritten += int64(_n)
+		if _err != nil {
+			return _numWritten, _err
+		}
+	}
+	// public_definitions.template:165:36
+	{
+		_n, _err := _template.writeValue(
+			_output,
+			(SymbolIdType),
+			"public_definitions.template:165:36")
+		_numWritten += int64(_n)
+		if _err != nil {
+			return _numWritten, _err
+		}
+	}
+	// public_definitions.template:165:49
+	{
+		_n, _err := _output.Write([]byte(`)
+    }
+
+    `))
+		_numWritten += int64(_n)
+		if _err != nil {
+			return _numWritten, _err
+		}
+	}
+	// public_definitions.template:168:4
+	{
+		_n, _err := _template.writeValue(
+			_output,
+			(SortSlice),
+			"public_definitions.template:168:4")
+		_numWritten += int64(_n)
+		if _err != nil {
+			return _numWritten, _err
+		}
+	}
+	// public_definitions.template:168:14
+	{
+		_n, _err := _output.Write([]byte(`(result, func(i int, j int) bool {return result[i] < result[j]})
+    return result
 }
 `))
 		_numWritten += int64(_n)
@@ -1160,16 +1331,16 @@ func (`))
 			return _numWritten, _err
 		}
 	}
-	// public_definitions.template:155:0
+	// public_definitions.template:172:0
 	for idx, start := range Starts {
-		// public_definitions.template:156:4
+		// public_definitions.template:173:4
 
 		parseSuffix := ""
 		if len(Starts) > 1 {
 			parseSuffix = snakeToCamel(start.Name)
 		}
 
-		// public_definitions.template:163:6
+		// public_definitions.template:180:6
 		{
 			_n, _err := _output.Write([]byte(`
 func `))
@@ -1178,29 +1349,29 @@ func `))
 				return _numWritten, _err
 			}
 		}
-		// public_definitions.template:164:5
+		// public_definitions.template:181:5
 		{
 			_n, _err := _template.writeValue(
 				_output,
 				(ParsePrefix),
-				"public_definitions.template:164:5")
+				"public_definitions.template:181:5")
 			_numWritten += int64(_n)
 			if _err != nil {
 				return _numWritten, _err
 			}
 		}
-		// public_definitions.template:164:19
+		// public_definitions.template:181:19
 		{
 			_n, _err := _template.writeValue(
 				_output,
 				(parseSuffix),
-				"public_definitions.template:164:19")
+				"public_definitions.template:181:19")
 			_numWritten += int64(_n)
 			if _err != nil {
 				return _numWritten, _err
 			}
 		}
-		// public_definitions.template:164:33
+		// public_definitions.template:181:33
 		{
 			_n, _err := _output.Write([]byte(`(lexer `))
 			_numWritten += int64(_n)
@@ -1208,18 +1379,18 @@ func `))
 				return _numWritten, _err
 			}
 		}
-		// public_definitions.template:164:40
+		// public_definitions.template:181:40
 		{
 			_n, _err := _template.writeValue(
 				_output,
 				(LexerType),
-				"public_definitions.template:164:40")
+				"public_definitions.template:181:40")
 			_numWritten += int64(_n)
 			if _err != nil {
 				return _numWritten, _err
 			}
 		}
-		// public_definitions.template:164:50
+		// public_definitions.template:181:50
 		{
 			_n, _err := _output.Write([]byte(`, reducer `))
 			_numWritten += int64(_n)
@@ -1227,18 +1398,18 @@ func `))
 				return _numWritten, _err
 			}
 		}
-		// public_definitions.template:164:60
+		// public_definitions.template:181:60
 		{
 			_n, _err := _template.writeValue(
 				_output,
 				(ReducerType),
-				"public_definitions.template:164:60")
+				"public_definitions.template:181:60")
 			_numWritten += int64(_n)
 			if _err != nil {
 				return _numWritten, _err
 			}
 		}
-		// public_definitions.template:164:72
+		// public_definitions.template:181:72
 		{
 			_n, _err := _output.Write([]byte(`) (`))
 			_numWritten += int64(_n)
@@ -1246,18 +1417,18 @@ func `))
 				return _numWritten, _err
 			}
 		}
-		// public_definitions.template:166:0
+		// public_definitions.template:183:0
 		{
 			_n, _err := _template.writeValue(
 				_output,
 				(start.CodeGenType),
-				"public_definitions.template:166:0")
+				"public_definitions.template:183:0")
 			_numWritten += int64(_n)
 			if _err != nil {
 				return _numWritten, _err
 			}
 		}
-		// public_definitions.template:166:20
+		// public_definitions.template:183:20
 		{
 			_n, _err := _output.Write([]byte(`, error) {
 
@@ -1267,29 +1438,29 @@ func `))
 				return _numWritten, _err
 			}
 		}
-		// public_definitions.template:168:11
+		// public_definitions.template:185:11
 		{
 			_n, _err := _template.writeValue(
 				_output,
 				(ParsePrefix),
-				"public_definitions.template:168:11")
+				"public_definitions.template:185:11")
 			_numWritten += int64(_n)
 			if _err != nil {
 				return _numWritten, _err
 			}
 		}
-		// public_definitions.template:168:25
+		// public_definitions.template:185:25
 		{
 			_n, _err := _template.writeValue(
 				_output,
 				(parseSuffix),
-				"public_definitions.template:168:25")
+				"public_definitions.template:185:25")
 			_numWritten += int64(_n)
 			if _err != nil {
 				return _numWritten, _err
 			}
 		}
-		// public_definitions.template:168:39
+		// public_definitions.template:185:39
 		{
 			_n, _err := _output.Write([]byte(`WithCustomErrorHandler(
         lexer,
@@ -1300,18 +1471,18 @@ func `))
 				return _numWritten, _err
 			}
 		}
-		// public_definitions.template:171:8
+		// public_definitions.template:188:8
 		{
 			_n, _err := _template.writeValue(
 				_output,
 				(DefaultErrHandler),
-				"public_definitions.template:171:8")
+				"public_definitions.template:188:8")
 			_numWritten += int64(_n)
 			if _err != nil {
 				return _numWritten, _err
 			}
 		}
-		// public_definitions.template:171:26
+		// public_definitions.template:188:26
 		{
 			_n, _err := _output.Write([]byte(`{})
 }
@@ -1322,29 +1493,29 @@ func `))
 				return _numWritten, _err
 			}
 		}
-		// public_definitions.template:174:5
+		// public_definitions.template:191:5
 		{
 			_n, _err := _template.writeValue(
 				_output,
 				(ParsePrefix),
-				"public_definitions.template:174:5")
+				"public_definitions.template:191:5")
 			_numWritten += int64(_n)
 			if _err != nil {
 				return _numWritten, _err
 			}
 		}
-		// public_definitions.template:174:19
+		// public_definitions.template:191:19
 		{
 			_n, _err := _template.writeValue(
 				_output,
 				(parseSuffix),
-				"public_definitions.template:174:19")
+				"public_definitions.template:191:19")
 			_numWritten += int64(_n)
 			if _err != nil {
 				return _numWritten, _err
 			}
 		}
-		// public_definitions.template:174:33
+		// public_definitions.template:191:33
 		{
 			_n, _err := _output.Write([]byte(`WithCustomErrorHandler(
     lexer `))
@@ -1353,18 +1524,18 @@ func `))
 				return _numWritten, _err
 			}
 		}
-		// public_definitions.template:175:10
+		// public_definitions.template:192:10
 		{
 			_n, _err := _template.writeValue(
 				_output,
 				(LexerType),
-				"public_definitions.template:175:10")
+				"public_definitions.template:192:10")
 			_numWritten += int64(_n)
 			if _err != nil {
 				return _numWritten, _err
 			}
 		}
-		// public_definitions.template:175:20
+		// public_definitions.template:192:20
 		{
 			_n, _err := _output.Write([]byte(`,
     reducer `))
@@ -1373,18 +1544,18 @@ func `))
 				return _numWritten, _err
 			}
 		}
-		// public_definitions.template:176:12
+		// public_definitions.template:193:12
 		{
 			_n, _err := _template.writeValue(
 				_output,
 				(ReducerType),
-				"public_definitions.template:176:12")
+				"public_definitions.template:193:12")
 			_numWritten += int64(_n)
 			if _err != nil {
 				return _numWritten, _err
 			}
 		}
-		// public_definitions.template:176:24
+		// public_definitions.template:193:24
 		{
 			_n, _err := _output.Write([]byte(`,
     errHandler `))
@@ -1393,18 +1564,18 @@ func `))
 				return _numWritten, _err
 			}
 		}
-		// public_definitions.template:177:15
+		// public_definitions.template:194:15
 		{
 			_n, _err := _template.writeValue(
 				_output,
 				(ErrHandler),
-				"public_definitions.template:177:15")
+				"public_definitions.template:194:15")
 			_numWritten += int64(_n)
 			if _err != nil {
 				return _numWritten, _err
 			}
 		}
-		// public_definitions.template:177:26
+		// public_definitions.template:194:26
 		{
 			_n, _err := _output.Write([]byte(`) (
     `))
@@ -1413,18 +1584,18 @@ func `))
 				return _numWritten, _err
 			}
 		}
-		// public_definitions.template:178:4
+		// public_definitions.template:195:4
 		{
 			_n, _err := _template.writeValue(
 				_output,
 				(start.CodeGenType),
-				"public_definitions.template:178:4")
+				"public_definitions.template:195:4")
 			_numWritten += int64(_n)
 			if _err != nil {
 				return _numWritten, _err
 			}
 		}
-		// public_definitions.template:178:24
+		// public_definitions.template:195:24
 		{
 			_n, _err := _output.Write([]byte(`,
     error) {
@@ -1435,18 +1606,18 @@ func `))
 				return _numWritten, _err
 			}
 		}
-		// public_definitions.template:181:17
+		// public_definitions.template:198:17
 		{
 			_n, _err := _template.writeValue(
 				_output,
 				(InternalParse),
-				"public_definitions.template:181:17")
+				"public_definitions.template:198:17")
 			_numWritten += int64(_n)
 			if _err != nil {
 				return _numWritten, _err
 			}
 		}
-		// public_definitions.template:181:31
+		// public_definitions.template:198:31
 		{
 			_n, _err := _output.Write([]byte(`(lexer, reducer, errHandler, `))
 			_numWritten += int64(_n)
@@ -1454,18 +1625,18 @@ func `))
 				return _numWritten, _err
 			}
 		}
-		// public_definitions.template:181:60
+		// public_definitions.template:198:60
 		{
 			_n, _err := _template.writeValue(
 				_output,
 				(OrderedStates[idx].CodeGenConst),
-				"public_definitions.template:181:60")
+				"public_definitions.template:198:60")
 			_numWritten += int64(_n)
 			if _err != nil {
 				return _numWritten, _err
 			}
 		}
-		// public_definitions.template:182:40
+		// public_definitions.template:199:40
 		{
 			_n, _err := _output.Write([]byte(`)
     if err != nil {
@@ -1475,18 +1646,18 @@ func `))
 				return _numWritten, _err
 			}
 		}
-		// public_definitions.template:184:22
+		// public_definitions.template:201:22
 		{
 			_n, _err := _template.writeValue(
 				_output,
 				(start.CodeGenType),
-				"public_definitions.template:184:22")
+				"public_definitions.template:201:22")
 			_numWritten += int64(_n)
 			if _err != nil {
 				return _numWritten, _err
 			}
 		}
-		// public_definitions.template:184:42
+		// public_definitions.template:201:42
 		{
 			_n, _err := _output.Write([]byte(`
         return errRetVal, err
@@ -1497,18 +1668,18 @@ func `))
 				return _numWritten, _err
 			}
 		}
-		// public_definitions.template:187:16
+		// public_definitions.template:204:16
 		{
 			_n, _err := _template.writeValue(
 				_output,
 				(start.ValueType),
-				"public_definitions.template:187:16")
+				"public_definitions.template:204:16")
 			_numWritten += int64(_n)
 			if _err != nil {
 				return _numWritten, _err
 			}
 		}
-		// public_definitions.template:187:34
+		// public_definitions.template:204:34
 		{
 			_n, _err := _output.Write([]byte(`, nil
 }
@@ -1519,7 +1690,7 @@ func `))
 			}
 		}
 	}
-	// public_definitions.template:189:7
+	// public_definitions.template:206:7
 	{
 		_n, _err := _output.Write([]byte(`
 `))
