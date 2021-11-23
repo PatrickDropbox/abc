@@ -555,6 +555,16 @@ func (act *_Action) ReduceSymbol(
 	return stack, symbol, err
 }
 
+var _ExpectedTerminals = map[_StateId][]SymbolId{
+	_State2:  []SymbolId{'{'},
+	_State3:  []SymbolId{'{', IdToken, ErrorToken, _EndMarker},
+	_State4:  []SymbolId{_EndMarker},
+	_State10: []SymbolId{'+', '-'},
+	_State11: []SymbolId{'{', '}', IdToken, ErrorToken},
+	_State14: []SymbolId{'{', IdToken, ErrorToken},
+	_State15: []SymbolId{_EndMarker},
+}
+
 type _ActionTableKey struct {
 	_StateId
 	SymbolId
@@ -645,16 +655,6 @@ var _ActionTable = _ActionTableType{
 	{_State13, _WildcardMarker}: _ReduceMinusToOpAction,
 	{_State15, _EndMarker}:      _ReduceToBlockAction,
 	{_State16, _WildcardMarker}: _ReduceBinaryToExprAction,
-}
-
-var _ExpectedTerminals = map[_StateId][]SymbolId{
-	_State2:  []SymbolId{'{'},
-	_State3:  []SymbolId{'{', IdToken, ErrorToken, _EndMarker},
-	_State4:  []SymbolId{_EndMarker},
-	_State10: []SymbolId{'+', '-'},
-	_State11: []SymbolId{'{', '}', IdToken, ErrorToken},
-	_State14: []SymbolId{'{', IdToken, ErrorToken},
-	_State15: []SymbolId{_EndMarker},
 }
 
 /*

@@ -801,6 +801,30 @@ func (act *_LRAction) ReduceSymbol(
 	return stack, symbol, err
 }
 
+var _LRExpectedTerminals = map[_LRStateId][]LRSymbolId{
+	_LRState1:  []LRSymbolId{LRTokenToken, LRTypeToken, LRStartToken, LRRuleDefToken},
+	_LRState2:  []LRSymbolId{_LREndMarker},
+	_LRState3:  []LRSymbolId{LRLabelToken, LRCharacterToken, LRIdentifierToken},
+	_LRState4:  []LRSymbolId{LRIdentifierToken},
+	_LRState7:  []LRSymbolId{';'},
+	_LRState8:  []LRSymbolId{LRTokenToken, LRTypeToken, LRStartToken, LRRuleDefToken},
+	_LRState10: []LRSymbolId{'<', LRCharacterToken, LRIdentifierToken},
+	_LRState13: []LRSymbolId{LRCharacterToken, LRIdentifierToken},
+	_LRState16: []LRSymbolId{'|'},
+	_LRState17: []LRSymbolId{LRCharacterToken, LRIdentifierToken},
+	_LRState19: []LRSymbolId{LRIdentifierToken},
+	_LRState21: []LRSymbolId{LRSectionMarkerToken, _LREndMarker},
+	_LRState22: []LRSymbolId{';'},
+	_LRState23: []LRSymbolId{LRIdentifierToken},
+	_LRState24: []LRSymbolId{LRCharacterToken, LRIdentifierToken},
+	_LRState26: []LRSymbolId{LRLabelToken},
+	_LRState30: []LRSymbolId{LRIdentifierToken},
+	_LRState33: []LRSymbolId{'>'},
+	_LRState35: []LRSymbolId{LRSectionContentToken},
+	_LRState36: []LRSymbolId{LRCharacterToken, LRIdentifierToken},
+	_LRState38: []LRSymbolId{LRCharacterToken, LRIdentifierToken},
+}
+
 type _LRActionTableKey struct {
 	_LRStateId
 	LRSymbolId
@@ -976,30 +1000,6 @@ var _LRActionTable = _LRActionTableType{
 	{_LRState34, _LRWildcardMarker}:          _LRReduceAddToLabeledClausesAction,
 	{_LRState37, _LRWildcardMarker}:          _LRReduceToAdditionalSectionAction,
 	{_LRState38, _LRWildcardMarker}:          _LRReduceTermDeclToDefAction,
-}
-
-var _LRExpectedTerminals = map[_LRStateId][]LRSymbolId{
-	_LRState1:  []LRSymbolId{LRTokenToken, LRTypeToken, LRStartToken, LRRuleDefToken},
-	_LRState2:  []LRSymbolId{_LREndMarker},
-	_LRState3:  []LRSymbolId{LRLabelToken, LRCharacterToken, LRIdentifierToken},
-	_LRState4:  []LRSymbolId{LRIdentifierToken},
-	_LRState7:  []LRSymbolId{';'},
-	_LRState8:  []LRSymbolId{LRTokenToken, LRTypeToken, LRStartToken, LRRuleDefToken},
-	_LRState10: []LRSymbolId{'<', LRCharacterToken, LRIdentifierToken},
-	_LRState13: []LRSymbolId{LRCharacterToken, LRIdentifierToken},
-	_LRState16: []LRSymbolId{'|'},
-	_LRState17: []LRSymbolId{LRCharacterToken, LRIdentifierToken},
-	_LRState19: []LRSymbolId{LRIdentifierToken},
-	_LRState21: []LRSymbolId{LRSectionMarkerToken, _LREndMarker},
-	_LRState22: []LRSymbolId{';'},
-	_LRState23: []LRSymbolId{LRIdentifierToken},
-	_LRState24: []LRSymbolId{LRCharacterToken, LRIdentifierToken},
-	_LRState26: []LRSymbolId{LRLabelToken},
-	_LRState30: []LRSymbolId{LRIdentifierToken},
-	_LRState33: []LRSymbolId{'>'},
-	_LRState35: []LRSymbolId{LRSectionContentToken},
-	_LRState36: []LRSymbolId{LRCharacterToken, LRIdentifierToken},
-	_LRState38: []LRSymbolId{LRCharacterToken, LRIdentifierToken},
 }
 
 /*

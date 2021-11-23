@@ -415,6 +415,10 @@ func GenerateGoLRCode(
 			OrderedValueTypes: orderedValueTypes,
 		})
 
+	// Maybe make the action table map[StateId]map[Symbol]Action and
+	// extract the expected terminal symbols from the action table
+	gen.generateExpectedTerminals()
+
 	gen.Embed(
 		&go_template.ActionTable{
 			TableKeyType:     gen.tableKey,
@@ -434,10 +438,6 @@ func GenerateGoLRCode(
 		})
 
 	l("")
-
-	// Maybe make the action table map[StateId]map[Symbol]Action and
-	// extract the expected terminal symbols from the action table
-	gen.generateExpectedTerminals()
 
 	gen.Embed(
 		&go_template.DebugStates{
