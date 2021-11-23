@@ -1,10 +1,10 @@
 package code_gen
 
 import (
-"io"
-"bytes"
-"go/format"
+	"bytes"
 	"fmt"
+	"go/format"
+	"io"
 	"sort"
 	"strings"
 
@@ -21,27 +21,27 @@ var escapedChar = map[string]byte{
 }
 
 type GoCodeBuilder struct {
-    *go_template.File
+	*go_template.File
 }
 
 func (cb *GoCodeBuilder) WriteTo(output io.Writer) (int64, error) {
-    buffer := bytes.NewBuffer(nil)
+	buffer := bytes.NewBuffer(nil)
 
-    _, err := cb.File.WriteTo(buffer)
-    if err != nil {
-        return 0, err
-    }
+	_, err := cb.File.WriteTo(buffer)
+	if err != nil {
+		return 0, err
+	}
 
-    formatted, err := format.Source(buffer.Bytes())
-    if err != nil {
-        return 0, fmt.Errorf(
-            "Failed to format (%s) generated code:\n%s",
-            err,
-            buffer.Bytes())
-    }
+	formatted, err := format.Source(buffer.Bytes())
+	if err != nil {
+		return 0, fmt.Errorf(
+			"Failed to format (%s) generated code:\n%s",
+			err,
+			buffer.Bytes())
+	}
 
-    n, err := output.Write(formatted)
-    return int64(n), err
+	n, err := output.Write(formatted)
+	return int64(n), err
 }
 
 // TODO handle this more gracefully
@@ -62,7 +62,7 @@ type goCodeGen struct {
 
 	*lr.LRStates
 
-    *goHeader
+	*goHeader
 
 	nameLocs map[string]parser.LRLocation
 
@@ -123,11 +123,11 @@ func newGoCodeGen(
 	}
 
 	return &goCodeGen{
-		Grammar:       grammar,
-		GoSpec:        cfg,
-		LRStates:      states,
-        goHeader:      newGoHeader(cfg.Package),
-		nameLocs:      map[string]parser.LRLocation{},
+		Grammar:  grammar,
+		GoSpec:   cfg,
+		LRStates: states,
+		goHeader: newGoHeader(cfg.Package),
+		nameLocs: map[string]parser.LRLocation{},
 	}, nil
 }
 
@@ -314,32 +314,32 @@ func GenerateGoLRCode(
 		symbols[symbol.Name] = symbol
 	}
 
-    file := &go_template.File{
-        Source: grammar.Source,
-        Header: gen.goHeader,
+	file := &go_template.File{
+		Source: grammar.Source,
+		Header: gen.goHeader,
 		PublicDefs: &go_template.PublicDefinitions{
-                LocationType:      gen.location,
-                SymbolIdType:      gen.symbolId,
-                SymbolType:        gen.token,
-                GenericSymbolType: gen.genericSymbol,
-                LexerType:         gen.lexer,
-                ReducerType:       gen.reducer,
-                ErrHandler:        gen.errHandler,
-                DefaultErrHandler: gen.defaultErrHandler,
-                StackType:         gen.stack,
-                ParsePrefix:       gen.Prefix + "Parse",
-                InternalParse:     gen.parse,
-                Sprintf:           gen.Obj("fmt.Sprintf"),
-                Errorf:            gen.Obj("fmt.Errorf"),
-                Terminals:         gen.Terminals,
-                NonTerminals:      gen.NonTerminals,
-                Starts:            gen.Starts,
-                OrderedStates:     gen.OrderedStates,
-                ExpectedTerminals: gen.expectedTerminals,
-                StateIdType:       gen.stateId,
-                ActionTable:       gen.actionTable,
-                SortSlice:        gen.Obj("sort.Slice"),
-            },
+			LocationType:      gen.location,
+			SymbolIdType:      gen.symbolId,
+			SymbolType:        gen.token,
+			GenericSymbolType: gen.genericSymbol,
+			LexerType:         gen.lexer,
+			ReducerType:       gen.reducer,
+			ErrHandler:        gen.errHandler,
+			DefaultErrHandler: gen.defaultErrHandler,
+			StackType:         gen.stack,
+			ParsePrefix:       gen.Prefix + "Parse",
+			InternalParse:     gen.parse,
+			Sprintf:           gen.Obj("fmt.Sprintf"),
+			Errorf:            gen.Obj("fmt.Errorf"),
+			Terminals:         gen.Terminals,
+			NonTerminals:      gen.NonTerminals,
+			Starts:            gen.Starts,
+			OrderedStates:     gen.OrderedStates,
+			ExpectedTerminals: gen.expectedTerminals,
+			StateIdType:       gen.stateId,
+			ActionTable:       gen.actionTable,
+			SortSlice:         gen.Obj("sort.Slice"),
+		},
 		ParseFunc: &go_template.ParseFunc{
 			ParseFuncName:   gen.parse,
 			LexerType:       gen.lexer,
@@ -403,7 +403,7 @@ func GenerateGoLRCode(
 			OrderedSymbols:            orderedSymbols,
 			OrderedStates:             gen.OrderedStates,
 		},
-    }
+	}
 
-    return &GoCodeBuilder{file}, nil
+	return &GoCodeBuilder{file}, nil
 }
