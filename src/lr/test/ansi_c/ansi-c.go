@@ -1227,7 +1227,7 @@ func (i _CActionType) String() string {
 	case _CAcceptAction:
 		return "accept"
 	default:
-		return fmt.Sprintf("?unknown action %d", int(i))
+		return fmt.Sprintf("?Unknown action %d?", int(i))
 	}
 }
 
@@ -2253,7 +2253,11 @@ func NewSymbol(token CToken) (*CSymbol, error) {
 	case _CEndMarker, CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CPtrOpToken, CIncOpToken, CDecOpToken, CLeftOpToken, CRightOpToken, CLeOpToken, CGeOpToken, CEqOpToken, CNeOpToken, CAndOpToken, COrOpToken, CMulAssignToken, CDivAssignToken, CModAssignToken, CAddAssignToken, CSubAssignToken, CLeftAssignToken, CRightAssignToken, CAndAssignToken, CXorAssignToken, COrAssignToken, CTypeNameToken, CTypedefToken, CExternToken, CStaticToken, CAutoToken, CRegisterToken, CCharToken, CShortToken, CIntToken, CLongToken, CSignedToken, CUnsignedToken, CFloatToken, CDoubleToken, CConstToken, CVolatileToken, CVoidToken, CStructToken, CUnionToken, CEnumToken, CEllipsisToken, CCaseToken, CDefaultToken, CIfToken, CElseToken, CSwitchToken, CWhileToken, CDoToken, CForToken, CGotoToken, CContinueToken, CBreakToken, CReturnToken, '(', ')', '{', '}', '[', ']', ';', ':', ',', '=', '?', '*', '/', '-', '+', '%', '&', '|', '!', '.', '^', '<', '>', '~':
 		val, ok := token.(*CGenericSymbol)
 		if !ok {
-			return nil, fmt.Errorf("Invalid value type for token %s.  Expecting *CGenericSymbol (%v)", token.Id(), token.Loc())
+			return nil, fmt.Errorf(
+				"Invalid value type for token %s.  "+
+					"Expecting *CGenericSymbol (%v)",
+				token.Id(),
+				token.Loc())
 		}
 		symbol.Generic_ = val
 	default:
@@ -2303,7 +2307,7 @@ func (stack *_CPseudoSymbolStack) Push(symbol *CSymbol) {
 	stack.top = append(stack.top, symbol)
 }
 
-func (stack *_CPseudoSymbolStack) Pop() (CToken, error) {
+func (stack *_CPseudoSymbolStack) Pop() (*CSymbol, error) {
 	if len(stack.top) == 0 {
 		return nil, fmt.Errorf("internal error: cannot pop an empty top")
 	}
@@ -2331,7 +2335,13 @@ func (act *_CAction) ShiftItem(symbol *CSymbol) *_CStackItem {
 	return &_CStackItem{StateId: act.ShiftStateId, CSymbol: symbol}
 }
 
-func (act *_CAction) ReduceSymbol(reducer CReducer, stack _CStack) (_CStack, *CSymbol, error) {
+func (act *_CAction) ReduceSymbol(
+	reducer CReducer,
+	stack _CStack) (
+	_CStack,
+	*CSymbol,
+	error) {
+
 	var err error
 	symbol := &CSymbol{}
 	switch act.ReduceType {

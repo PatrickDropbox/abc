@@ -23,12 +23,11 @@ template ActionTable {
     ReduceAction        string
 
     OrderedStates       []*lr.ItemSet
-    NonTerminals        []*lr.Term
 
     ActionTable         string
 
-    OrderedSymbolIds    []string
-    SymbolIdToConst     map[string]string
+    OrderedSymbols      []*lr.Term
+    Symbols             map[string]*lr.Term
 }
 
 %%
@@ -59,7 +58,7 @@ var (
     $(state.CodeGenAction) = &$ActionType{$ShiftAction, $(state.CodeGenConst), 0}
 [[-end-]]
 
-[[-for _, term := range NonTerminals-]]
+[[-for _, term := range OrderedSymbols-]]
     [[-for _, clause := range term.Clauses]]
     $(clause.CodeGenReduceAction) = &$ActionType{$ReduceAction, 0, $(clause.CodeGenReducerNameConst)}
     [[-end-]]
@@ -85,16 +84,16 @@ var $ActionTable = $ActionTableType{
 [[-end-]]
 
 [[-for _, state := range OrderedStates-]]
-    [[-for _, symbol := range OrderedSymbolIds-]]
+    [[-for _, symbol := range OrderedSymbols-]]
         [[-$
 
-        child, ok := state.Goto[symbol]
+        child, ok := state.Goto[symbol.Name]
         if !ok {
             continue
         }
 
         ]]
-    {$(state.CodeGenConst), $(SymbolIdToConst[symbol])}: $(child.CodeGenAction),
+    {$(state.CodeGenConst), $(symbol.CodeGenSymbolConst)}: $(child.CodeGenAction),
     [[-end-]]
 [[-end-]]
 
@@ -110,7 +109,7 @@ var $ActionTable = $ActionTableType{
             continue
         }
 
-        idConst := SymbolIdToConst[item.LookAhead]
+        idConst := Symbols[item.LookAhead].CodeGenSymbolConst
         reduceAction := item.Clause.CodeGenReduceAction
 
         ]]

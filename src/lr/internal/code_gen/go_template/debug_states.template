@@ -7,7 +7,7 @@ import (
 template DebugStates {
     OutputDebugNonKernelItems bool
 
-    OrderedSymbols  []string
+    OrderedSymbols  []*lr.Term
 
     OrderedStates []*lr.ItemSet
 }
@@ -54,7 +54,7 @@ Parser Debug States:
     [[-for _, symbol := range OrderedSymbols]]
         [[-$
 
-        items := state.Reduce[symbol]
+        items := state.Reduce[symbol.Name]
         reduceCount += len(items)
 
         if len(items) == 0 {
@@ -63,7 +63,7 @@ Parser Debug States:
 
         -]]
 
-      $symbol -> [
+      $(symbol.Name) -> [
         [[-for idx, item := range items-]]
 $(item.Name)
             [[-if idx != len(items) - 1]] [[end-]]
@@ -78,9 +78,9 @@ $(item.Name)
     [[-end-]]
 
     [[-for _, symbol := range OrderedSymbols-]]
-        [[-$ child, ok := state.Goto[symbol] -]]
+        [[-$ child, ok := state.Goto[symbol.Name] -]]
         [[-if ok]]
-      $symbol -> State $(child.StateNum)
+      $(symbol.Name) -> State $(child.StateNum)
         [[-end-]]
     [[-end-]]
 

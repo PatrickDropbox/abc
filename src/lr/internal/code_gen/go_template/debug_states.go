@@ -11,7 +11,7 @@ import (
 
 type DebugStates struct {
 	OutputDebugNonKernelItems bool
-	OrderedSymbols            []string
+	OrderedSymbols            []*lr.Term
 	OrderedStates             []*lr.ItemSet
 }
 
@@ -203,7 +203,7 @@ Parser Debug States:`))
 		for _, symbol := range OrderedSymbols {
 			// debug_states.template:55:8
 
-			items := state.Reduce[symbol]
+			items := state.Reduce[symbol.Name]
 			reduceCount += len(items)
 
 			if len(items) == 0 {
@@ -223,14 +223,14 @@ Parser Debug States:`))
 			{
 				_n, _err := _template.writeValue(
 					_output,
-					(symbol),
+					(symbol.Name),
 					"debug_states.template:66:6")
 				_numWritten += int64(_n)
 				if _err != nil {
 					return _numWritten, _err
 				}
 			}
-			// debug_states.template:66:13
+			// debug_states.template:66:20
 			{
 				_n, _err := _output.Write([]byte(` -> [`))
 				_numWritten += int64(_n)
@@ -298,7 +298,7 @@ Parser Debug States:`))
 		// debug_states.template:80:4
 		for _, symbol := range OrderedSymbols {
 			// debug_states.template:81:8
-			child, ok := state.Goto[symbol]
+			child, ok := state.Goto[symbol.Name]
 			// debug_states.template:82:8
 			if ok {
 				// debug_states.template:82:18
@@ -314,14 +314,14 @@ Parser Debug States:`))
 				{
 					_n, _err := _template.writeValue(
 						_output,
-						(symbol),
+						(symbol.Name),
 						"debug_states.template:83:6")
 					_numWritten += int64(_n)
 					if _err != nil {
 						return _numWritten, _err
 					}
 				}
-				// debug_states.template:83:13
+				// debug_states.template:83:20
 				{
 					_n, _err := _output.Write([]byte(` -> State `))
 					_numWritten += int64(_n)
@@ -329,12 +329,12 @@ Parser Debug States:`))
 						return _numWritten, _err
 					}
 				}
-				// debug_states.template:83:23
+				// debug_states.template:83:30
 				{
 					_n, _err := _template.writeValue(
 						_output,
 						(child.StateNum),
-						"debug_states.template:83:23")
+						"debug_states.template:83:30")
 					_numWritten += int64(_n)
 					if _err != nil {
 						return _numWritten, _err

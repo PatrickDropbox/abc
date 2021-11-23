@@ -265,7 +265,7 @@ func (i _ActionType) String() string {
 	case _AcceptAction:
 		return "accept"
 	default:
-		return fmt.Sprintf("?unknown action %d", int(i))
+		return fmt.Sprintf("?Unknown action %d?", int(i))
 	}
 }
 
@@ -359,19 +359,31 @@ func NewSymbol(token Token) (*Symbol, error) {
 	case ErrorToken:
 		val, ok := token.(*Err)
 		if !ok {
-			return nil, fmt.Errorf("Invalid value type for token %s.  Expecting *Err (%v)", token.Id(), token.Loc())
+			return nil, fmt.Errorf(
+				"Invalid value type for token %s.  "+
+					"Expecting *Err (%v)",
+				token.Id(),
+				token.Loc())
 		}
 		symbol.Err = val
 	case _EndMarker, '+', '-', '{', '}':
 		val, ok := token.(*GenericSymbol)
 		if !ok {
-			return nil, fmt.Errorf("Invalid value type for token %s.  Expecting *GenericSymbol (%v)", token.Id(), token.Loc())
+			return nil, fmt.Errorf(
+				"Invalid value type for token %s.  "+
+					"Expecting *GenericSymbol (%v)",
+				token.Id(),
+				token.Loc())
 		}
 		symbol.Generic_ = val
 	case IdToken:
 		val, ok := token.(*Id)
 		if !ok {
-			return nil, fmt.Errorf("Invalid value type for token %s.  Expecting *Id (%v)", token.Id(), token.Loc())
+			return nil, fmt.Errorf(
+				"Invalid value type for token %s.  "+
+					"Expecting *Id (%v)",
+				token.Id(),
+				token.Loc())
 		}
 		symbol.Ident = val
 	default:
@@ -446,7 +458,7 @@ func (stack *_PseudoSymbolStack) Push(symbol *Symbol) {
 	stack.top = append(stack.top, symbol)
 }
 
-func (stack *_PseudoSymbolStack) Pop() (Token, error) {
+func (stack *_PseudoSymbolStack) Pop() (*Symbol, error) {
 	if len(stack.top) == 0 {
 		return nil, fmt.Errorf("internal error: cannot pop an empty top")
 	}
@@ -474,7 +486,13 @@ func (act *_Action) ShiftItem(symbol *Symbol) *_StackItem {
 	return &_StackItem{StateId: act.ShiftStateId, Symbol: symbol}
 }
 
-func (act *_Action) ReduceSymbol(reducer Reducer, stack _Stack) (_Stack, *Symbol, error) {
+func (act *_Action) ReduceSymbol(
+	reducer Reducer,
+	stack _Stack) (
+	_Stack,
+	*Symbol,
+	error) {
+
 	var err error
 	symbol := &Symbol{}
 	switch act.ReduceType {

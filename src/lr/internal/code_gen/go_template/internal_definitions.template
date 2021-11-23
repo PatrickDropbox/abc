@@ -1,0 +1,341 @@
+package go_template
+
+import (
+    lr "github.com/pattyshack/abc/src/lr/internal"
+    parser "github.com/pattyshack/abc/src/lr/internal/parser"
+)
+
+template InternalDefinitions {
+    ActionType          string
+    ActionIdType        string
+
+    ShiftAction         string
+    ReduceAction        string
+    AcceptAction        string
+
+    StateIdType         string
+    ReduceType          string
+
+    SymbolType          string
+    GenericSymbolType   string
+
+    StackItemType       string
+    StackType           string
+
+    LexerType           string
+    ReducerType         string
+
+    SymbolStackType     string
+
+    SymbolIdType        string
+    EndSymbolId         string
+    WildcardSymbolId         string
+
+    LocationType        string
+    TokenType           string
+
+    Sprintf             interface{}
+    Errorf              interface{}
+    EOF                 interface{}
+
+    OrderedSymbols      []*lr.Term
+    OrderedStates       []*lr.ItemSet
+    OrderedValueTypes   lr.ParamList
+}
+
+%%
+func (i $SymbolIdType) String() string {
+    switch i {
+    case $EndSymbolId:
+        return "$$"
+    case $WildcardSymbolId:
+        return "*"
+[[-for _, term := range OrderedSymbols[3:]]]
+    [[-if term.SymbolId == parser.LRCharacterToken -]]
+        [[-$
+
+        escaped := term.Name
+        if term.Name == "'\"'" {
+            escaped = "'\\\"'"
+        } else if escaped[1] == '\\' {
+            escaped = "'\\\\" + term.Name[2:]
+        }
+
+        ]]
+    case $(term.CodeGenSymbolConst):
+        return "$escaped"
+    [[-else]]
+    case $(term.CodeGenSymbolConst):
+        return "$(term.Name)"
+    [[-end-]]
+[[-end]]
+    default:
+        return $Sprintf("?unknown symbol %d?", int(i))
+    }
+}
+
+const (
+    $EndSymbolId = $SymbolIdType(0)
+    $WildcardSymbolId = $SymbolIdType(-1)
+
+[[-for idx, term := range OrderedSymbols[3:]]]
+    [[-if term.IsTerminal-]]
+        [[-continue-]]
+    [[-end]]
+    $(term.CodeGenSymbolConst) = $SymbolIdType($(256+idx))
+[[-end]]
+)
+
+type $ActionIdType int
+
+const (
+    // NOTE: error action is implicit
+    $ShiftAction = $ActionIdType(0)
+    $ReduceAction = $ActionIdType(1)
+    $AcceptAction = $ActionIdType(2)
+)
+
+func (i $ActionIdType) String() string {
+    switch i {
+    case $ShiftAction:
+        return "shift"
+    case $ReduceAction:
+        return "reduce"
+    case $AcceptAction:
+        return "accept"
+    default:
+        return $Sprintf("?Unknown action %d?", int(i))
+    }
+}
+
+type $ReduceType int
+
+const (
+[[-$ clauseIdx := 1 -]]
+[[-for _, rule := range OrderedSymbols-]]
+    [[-for _, clause := range rule.Clauses]]
+    $(clause.CodeGenReducerNameConst) = $ReduceType($clauseIdx)
+        [[-$ clauseIdx += 1 -]]
+    [[-end-]]
+[[-end]]
+)
+
+func (i $ReduceType) String() string {
+    switch i {
+[[-for _, rule := range OrderedSymbols-]]
+    [[-for _, clause := range rule.Clauses]]
+    case $(clause.CodeGenReducerNameConst):
+        return "$(clause.CodeGenReducerName)"
+    [[-end-]]
+[[-end]]
+    default:
+        return $Sprintf("?unknown reduce type %d?", int(i))
+    }
+}
+
+type $StateIdType int
+
+func (id $StateIdType) String() string {
+    return $Sprintf("State %d", int(id))
+}
+
+const (
+[[-for _, state := range OrderedStates]]
+    $(state.CodeGenConst) = $StateIdType($(state.StateNum))
+[[-end]]
+)
+
+type $SymbolType struct {
+    SymbolId_ $SymbolIdType
+
+    Generic_ *$GenericSymbolType
+
+[[-for _, valueType := range OrderedValueTypes-]]
+    [[-if valueType.Name == lr.Generic-]]
+        [[-continue-]]
+    [[-end]]
+    $(valueType.Name) $(valueType.ParamType)
+[[-end]]
+}
+
+[[-$
+
+valueTerms := map[string][]*lr.Term{}
+for _, term := range OrderedSymbols {
+    if term.Name == lr.StartMarker ||
+        term.Name == lr.Wildcard {
+
+        continue
+    }
+
+    valueTerms[term.ValueType] = append(valueTerms[term.ValueType], term)
+}
+
+-]]
+func NewSymbol(token $TokenType) (*$SymbolType, error) {
+    symbol, ok := token.(*$SymbolType)
+    if ok {
+        return symbol, nil
+    }
+
+    symbol = &$SymbolType{SymbolId_: token.Id()}
+    switch token.Id() {
+[[-for _, valueType := range OrderedValueTypes-]]
+    [[-$
+
+    consts := []string{}
+    for _, term := range valueTerms[valueType.Name] {
+        if !term.IsTerminal {
+            break
+        }
+
+        consts = append(consts, term.CodeGenSymbolConst)
+    }
+
+    if len(consts) == 0 {
+        continue
+    }
+
+    ]]
+    case 
+    [[-for idx, kconst := range consts-]]
+$kconst [[-if idx != len(consts)-1 ]], [[end-]]
+    [[-end-]]
+:
+        val, ok := token.($(valueType.ParamType))
+        if !ok {
+            return nil, $Errorf(
+                "Invalid value type for token %s.  "+
+                    "Expecting $(valueType.ParamType) (%v)",
+                token.Id(),
+                token.Loc())
+        }
+        symbol.$(valueType.Name) = val
+[[-end]]
+    default:
+        return nil, $Errorf("Unexpected token type: %s", symbol.Id())
+    }
+    return symbol, nil
+}
+
+func (s *$SymbolType) Id() $SymbolIdType {
+    return s.SymbolId_
+}
+
+func (s *$SymbolType) Loc() $LocationType {
+    type locator interface { Loc() $LocationType }
+    switch s.SymbolId_ {
+[[-for _, field := range OrderedValueTypes-]]
+    [[-if field.Name == lr.Generic-]]
+        [[-continue-]]
+    [[-end-]]
+    [[-$ terms := valueTerms[field.Name]]]
+    case 
+    [[-for idx, term := range terms -]]
+$(term.CodeGenSymbolConst)
+        [[-if idx != len(terms)-1 -]], [[end-]]
+    [[-end-]]
+:
+        loc, ok := interface{}(s.$(field.Name)).(locator)
+        if ok {
+            return loc.Loc()
+        }
+[[-end]]
+    }
+    if s.Generic_ != nil {
+        return s.Generic_.Loc()
+    }
+    return $LocationType{}
+}
+
+type $SymbolStackType struct {
+    lexer $LexerType
+    top []*$SymbolType
+}
+
+func (stack *$SymbolStackType) Top() (*$SymbolType, error) {
+    if len(stack.top) == 0 {
+        token, err := stack.lexer.Next()
+        if err != nil {
+            if err != $EOF {
+                return nil, $Errorf("Unexpected lex error: %s", err)
+            }
+            token = &$GenericSymbolType{$EndSymbolId, stack.lexer.CurrentLocation()}
+        }
+        item, err := NewSymbol(token)
+        if err != nil {
+            return nil, err
+        }
+        stack.top = append(stack.top, item)
+    }
+    return stack.top[len(stack.top)-1], nil
+}
+
+func (stack *$SymbolStackType) Push(symbol *$SymbolType) {
+    stack.top = append(stack.top, symbol)
+}
+
+func (stack *$SymbolStackType) Pop() (*$SymbolType, error) {
+    if len(stack.top) == 0 {
+        return nil, $Errorf("internal error: cannot pop an empty top")
+    }
+    ret := stack.top[len(stack.top)-1]
+    stack.top = stack.top[:len(stack.top)-1]
+    return ret, nil
+}
+
+type $StackItemType struct {
+    StateId $StateIdType
+
+    *$SymbolType
+}
+
+type $StackType []*$StackItemType
+
+type $ActionType struct {
+    ActionType $ActionIdType
+
+    ShiftStateId $StateIdType
+    ReduceType $ReduceType
+}
+
+func (act *$ActionType) ShiftItem(symbol *$SymbolType) *$StackItemType {
+    return &$StackItemType{StateId: act.ShiftStateId, $SymbolType: symbol}
+}
+
+func (act *$ActionType) ReduceSymbol(
+    reducer $ReducerType,
+    stack $StackType) (
+    $StackType,
+    *$SymbolType,
+    error) {
+
+    var err error
+    symbol := &$SymbolType{}
+    switch act.ReduceType {
+[[-for _, rule := range OrderedSymbols-]]
+    [[-for _, clause := range rule.Clauses]]
+    case $(clause.CodeGenReducerNameConst):
+        [[-if len(clause.Bindings) > 0]]
+        args := stack[len(stack)-$(len(clause.Bindings)):]
+        stack = stack[:len(stack)-$(len(clause.Bindings))]
+        [[-end]]
+        symbol.SymbolId_ = $(rule.CodeGenSymbolConst)
+        symbol.$(rule.ValueType), err = reducer.$(clause.CodeGenReducerName)(
+        [[-for idx, term := range clause.Bindings-]]
+args[$idx].$(term.ValueType)
+            [[-if idx != len(clause.Bindings)-1]], [[-end-]]
+        [[-end-]]
+)
+    [[-end-]]
+[[-end]]
+    default:
+        panic("Unknown reduce type: " + act.ReduceType.String())
+    }
+
+    if err != nil {
+        err = $Errorf("Unexpected %s reduce error: %s", act.ReduceType, err)
+    }
+
+    return stack, symbol, err
+}

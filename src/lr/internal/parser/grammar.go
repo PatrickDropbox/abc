@@ -335,7 +335,7 @@ func (i _LRActionType) String() string {
 	case _LRAcceptAction:
 		return "accept"
 	default:
-		return fmt.Sprintf("?unknown action %d", int(i))
+		return fmt.Sprintf("?Unknown action %d?", int(i))
 	}
 }
 
@@ -507,13 +507,21 @@ func NewSymbol(token LRToken) (*LRSymbol, error) {
 	case _LREndMarker, LRTokenToken, LRTypeToken, LRStartToken, '<', '>', '|', ';', LRSectionMarkerToken:
 		val, ok := token.(*LRGenericSymbol)
 		if !ok {
-			return nil, fmt.Errorf("Invalid value type for token %s.  Expecting *LRGenericSymbol (%v)", token.Id(), token.Loc())
+			return nil, fmt.Errorf(
+				"Invalid value type for token %s.  "+
+					"Expecting *LRGenericSymbol (%v)",
+				token.Id(),
+				token.Loc())
 		}
 		symbol.Generic_ = val
 	case LRRuleDefToken, LRLabelToken, LRCharacterToken, LRIdentifierToken, LRSectionContentToken:
 		val, ok := token.(*Token)
 		if !ok {
-			return nil, fmt.Errorf("Invalid value type for token %s.  Expecting *Token (%v)", token.Id(), token.Loc())
+			return nil, fmt.Errorf(
+				"Invalid value type for token %s.  "+
+					"Expecting *Token (%v)",
+				token.Id(),
+				token.Loc())
 		}
 		symbol.Token = val
 	default:
@@ -613,7 +621,7 @@ func (stack *_LRPseudoSymbolStack) Push(symbol *LRSymbol) {
 	stack.top = append(stack.top, symbol)
 }
 
-func (stack *_LRPseudoSymbolStack) Pop() (LRToken, error) {
+func (stack *_LRPseudoSymbolStack) Pop() (*LRSymbol, error) {
 	if len(stack.top) == 0 {
 		return nil, fmt.Errorf("internal error: cannot pop an empty top")
 	}
@@ -641,7 +649,13 @@ func (act *_LRAction) ShiftItem(symbol *LRSymbol) *_LRStackItem {
 	return &_LRStackItem{StateId: act.ShiftStateId, LRSymbol: symbol}
 }
 
-func (act *_LRAction) ReduceSymbol(reducer LRReducer, stack _LRStack) (_LRStack, *LRSymbol, error) {
+func (act *_LRAction) ReduceSymbol(
+	reducer LRReducer,
+	stack _LRStack) (
+	_LRStack,
+	*LRSymbol,
+	error) {
+
 	var err error
 	symbol := &LRSymbol{}
 	switch act.ReduceType {
