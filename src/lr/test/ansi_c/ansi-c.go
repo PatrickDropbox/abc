@@ -1,5 +1,4 @@
 // Auto-generated from source: ansi-c.lr
-
 package ansi_c
 
 import (
@@ -853,6 +852,7 @@ func _CParse(
 		}
 	}
 }
+
 func (i CSymbolId) String() string {
 	switch i {
 	case _CEndMarker:

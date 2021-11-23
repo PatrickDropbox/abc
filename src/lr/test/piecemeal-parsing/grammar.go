@@ -1,5 +1,4 @@
 // Auto-generated from source: grammar.lr
-
 package main
 
 import (
@@ -217,6 +216,7 @@ func _Parse(
 		}
 	}
 }
+
 func (i SymbolId) String() string {
 	switch i {
 	case _EndMarker:

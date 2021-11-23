@@ -252,6 +252,7 @@ func _LRParse(
 		}
 	}
 }
+
 func (i LRSymbolId) String() string {
 	switch i {
 	case _LREndMarker:
