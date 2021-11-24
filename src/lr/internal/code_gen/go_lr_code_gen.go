@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"go/format"
 	"io"
+	"path/filepath"
+	"regexp"
 	"sort"
 	"strings"
 
@@ -13,11 +15,116 @@ import (
 	"github.com/pattyshack/abc/src/lr/internal/parser"
 )
 
-var escapedChar = map[string]byte{
-	"'\\t'":  '\t',
-	"'\\n'":  '\n',
-	"'\\''":  '\'',
-	"'\\\\'": '\\',
+var (
+	escapedChar = map[string]byte{
+		"'\\t'":  '\t',
+		"'\\n'":  '\n',
+		"'\\''":  '\'',
+		"'\\\\'": '\\',
+	}
+
+	nameRe = regexp.MustCompile(`((?:(?:\[\])*\**)*)(?:(.+)\.)?(\w+(?:{})?)$`)
+)
+
+type importEntry struct {
+	path  string
+	alias string
+}
+
+type importObject struct {
+	*importEntry
+
+	prefix string // * or &
+	name   string
+}
+
+func (obj *importObject) String() string {
+	if obj.alias == "" {
+		return obj.prefix + obj.name
+	}
+
+	return obj.prefix + obj.alias + "." + obj.name
+}
+
+type goImports struct {
+	imports map[string]*importEntry
+}
+
+func newGoImports() *goImports {
+	return &goImports{
+		imports: map[string]*importEntry{},
+	}
+}
+
+// This supports accessing objects of the form:
+//     *(\[\])*(\*)*)*(<full module path>\.)?<object>({})?
+// map objects are not supported
+func (imports *goImports) Obj(fullName string) *importObject {
+	match := nameRe.FindStringSubmatch(fullName)
+	if match == nil {
+		panic("Invalid fullName: " + fullName)
+	}
+
+	prefix := match[1]
+	modulePath := match[2]
+	name := match[3]
+
+	if modulePath == "" {
+		return &importObject{&importEntry{}, prefix, name}
+	}
+
+	entry, ok := imports.imports[modulePath]
+	if !ok {
+		entry = &importEntry{
+			path: modulePath,
+		}
+
+		imports.imports[modulePath] = entry
+	}
+
+	return &importObject{entry, prefix, name}
+}
+
+func (imports *goImports) assignAlias() error {
+	aliasCount := map[string]int{}
+	for pkg, entry := range imports.imports {
+		base := filepath.Base(pkg)
+		if base == "." || base == "/" {
+			return fmt.Errorf("Invalid import path: %s", pkg)
+		}
+
+		alias := base
+		aliasCount[alias] += 1
+		if aliasCount[alias] > 1 {
+			alias = fmt.Sprintf("%s%d", alias, aliasCount[alias])
+		}
+
+		entry.alias = alias
+	}
+
+	return nil
+}
+
+func (imports *goImports) WriteTo(output io.Writer) (int64, error) {
+	err := imports.assignAlias()
+	if err != nil {
+		return 0, err
+	}
+
+	builder := NewCodeBuilder()
+	if len(imports.imports) > 0 {
+		builder.Line("import (")
+		builder.PushIndent()
+		// Maybe separate built-in packages from other packages
+		for _, entry := range imports.imports {
+			builder.Line("%s \"%s\"", entry.alias, entry.path)
+		}
+		builder.PopIndent()
+		builder.Line(")")
+		builder.Line("")
+	}
+
+	return builder.WriteTo(output)
 }
 
 type GoCodeBuilder struct {
@@ -62,49 +169,14 @@ type goCodeGen struct {
 
 	*lr.LRStates
 
-	*goHeader
+	*goImports
 
 	nameLocs map[string]parser.LRLocation
-
-	location string
-
-	symbolId string
-	stateId  string
-
-	symbol string
 
 	endSymbol      string
 	wildcardSymbol string
 
-	token   string
-	lexer   string
-	reducer string
-
-	errHandler        string
-	defaultErrHandler string
-	expectedTerminals string
-
 	genericSymbol string
-
-	symbolStack string
-
-	stackItem string
-	stack     string
-
-	reduceType string
-	actionType string
-
-	shiftAction  string
-	reduceAction string
-	acceptAction string
-
-	action string
-
-	tableKey        string
-	actionTableType string
-	actionTable     string
-
-	parse string
 }
 
 func newGoCodeGen(
@@ -123,11 +195,11 @@ func newGoCodeGen(
 	}
 
 	return &goCodeGen{
-		Grammar:  grammar,
-		GoSpec:   cfg,
-		LRStates: states,
-		goHeader: newGoHeader(),
-		nameLocs: map[string]parser.LRLocation{},
+		Grammar:   grammar,
+		GoSpec:    cfg,
+		LRStates:  states,
+		goImports: newGoImports(),
+		nameLocs:  map[string]parser.LRLocation{},
 	}, nil
 }
 
@@ -146,32 +218,9 @@ func (gen *goCodeGen) check(name string, loc parser.LRLocation) error {
 }
 
 func (gen *goCodeGen) populateCodeGenVariables() error {
-	gen.location = gen.Prefix + "Location"
-	gen.symbolId = gen.Prefix + "SymbolId"
-	gen.symbol = gen.Prefix + "Symbol"
-	gen.stateId = "_" + gen.Prefix + "StateId"
 	gen.endSymbol = "_" + gen.Prefix + "EndMarker"
 	gen.wildcardSymbol = "_" + gen.Prefix + "WildcardMarker"
-	gen.token = gen.Prefix + "Token"
-	gen.lexer = gen.Prefix + "Lexer"
-	gen.reducer = gen.Prefix + "Reducer"
-	gen.errHandler = gen.Prefix + "ParseErrorHandler"
-	gen.defaultErrHandler = gen.Prefix + "DefaultParseErrorHandler"
-	gen.expectedTerminals = gen.Prefix + "ExpectedTerminals"
 	gen.genericSymbol = gen.Prefix + "GenericSymbol"
-	gen.symbolStack = "_" + gen.Prefix + "PseudoSymbolStack"
-	gen.stackItem = "_" + gen.Prefix + "StackItem"
-	gen.stack = "_" + gen.Prefix + "Stack"
-	gen.reduceType = "_" + gen.Prefix + "ReduceType"
-	gen.actionType = "_" + gen.Prefix + "ActionType"
-	gen.shiftAction = "_" + gen.Prefix + "ShiftAction"
-	gen.reduceAction = "_" + gen.Prefix + "ReduceAction"
-	gen.acceptAction = "_" + gen.Prefix + "AcceptAction"
-	gen.action = "_" + gen.Prefix + "Action"
-	gen.tableKey = "_" + gen.Prefix + "ActionTableKey"
-	gen.actionTableType = "_" + gen.Prefix + "ActionTableType"
-	gen.actionTable = "_" + gen.Prefix + "ActionTable"
-	gen.parse = "_" + gen.Prefix + "Parse"
 
 	for _, term := range gen.Terms {
 		valueType := gen.ValueTypes[term.ValueType]
@@ -262,6 +311,15 @@ func GenerateGoLRCode(
 	io.WriterTo,
 	error) {
 
+	cfg := grammar.LangSpecs.Go
+	if cfg == nil {
+		return nil, fmt.Errorf("go configuration not specified in lang_specs")
+	}
+
+	if cfg.Package == "" {
+		return nil, fmt.Errorf("package name not specified")
+	}
+
 	gen, err := newGoCodeGen(grammar, states)
 	if err != nil {
 		return nil, err
@@ -316,45 +374,45 @@ func GenerateGoLRCode(
 
 	file := &go_template.File{
 		Source:                    grammar.Source,
-		Package:                   gen.Package,
-		Imports:                   gen.goHeader,
-		ActionType:                gen.action,
-		ActionIdType:              gen.actionType,
-		ShiftAction:               gen.shiftAction,
-		ReduceAction:              gen.reduceAction,
-		AcceptAction:              gen.acceptAction,
-		StateIdType:               gen.stateId,
-		ReduceType:                gen.reduceType,
-		SymbolType:                gen.symbol,
+		Package:                   cfg.Package,
+		Imports:                   gen.goImports,
+		ActionType:                "_" + cfg.Prefix + "Action",
+		ActionIdType:              "_" + cfg.Prefix + "ActionType",
+		ShiftAction:               "_" + cfg.Prefix + "ShiftAction",
+		ReduceAction:              "_" + cfg.Prefix + "ReduceAction",
+		AcceptAction:              "_" + cfg.Prefix + "AcceptAction",
+		StateIdType:               "_" + cfg.Prefix + "StateId",
+		ReduceType:                "_" + cfg.Prefix + "ReduceType",
+		SymbolType:                cfg.Prefix + "Symbol",
 		GenericSymbolType:         gen.genericSymbol,
-		StackItemType:             gen.stackItem,
-		StackType:                 gen.stack,
-		SymbolStackType:           gen.symbolStack,
-		SymbolIdType:              gen.symbolId,
+		StackItemType:             "_" + cfg.Prefix + "StackItem",
+		StackType:                 "_" + cfg.Prefix + "Stack",
+		SymbolStackType:           "_" + cfg.Prefix + "PseudoSymbolStack",
+		SymbolIdType:              cfg.Prefix + "SymbolId",
 		EndSymbolId:               gen.endSymbol,
 		WildcardSymbolId:          gen.wildcardSymbol,
-		LocationType:              gen.location,
-		TokenType:                 gen.token,
-		LexerType:                 gen.lexer,
-		ReducerType:               gen.reducer,
-		ErrHandlerType:            gen.errHandler,
-		DefaultErrHandlerType:     gen.defaultErrHandler,
-		ExpectedTerminalsFunc:     gen.expectedTerminals,
-		ParseFuncPrefix:           gen.Prefix + "Parse",
-		InternalParseFunc:         gen.parse,
-		TableKeyType:              gen.tableKey,
-		ActionTableType:           gen.actionTableType,
-		ActionTable:               gen.actionTable,
+		LocationType:              cfg.Prefix + "Location",
+		TokenType:                 cfg.Prefix + "Token",
+		LexerType:                 cfg.Prefix + "Lexer",
+		ReducerType:               cfg.Prefix + "Reducer",
+		ErrHandlerType:            cfg.Prefix + "ParseErrorHandler",
+		DefaultErrHandlerType:     cfg.Prefix + "DefaultParseErrorHandler",
+		ExpectedTerminalsFunc:     cfg.Prefix + "ExpectedTerminals",
+		ParseFuncPrefix:           cfg.Prefix + "Parse",
+		InternalParseFunc:         "_" + cfg.Prefix + "Parse",
+		TableKeyType:              "_" + cfg.Prefix + "ActionTableKey",
+		ActionTableType:           "_" + cfg.Prefix + "ActionTableType",
+		ActionTable:               "_" + cfg.Prefix + "ActionTable",
 		SortSlice:                 gen.Obj("sort.Slice"),
 		Sprintf:                   gen.Obj("fmt.Sprintf"),
 		Errorf:                    gen.Obj("fmt.Errorf"),
 		EOF:                       gen.Obj("io.EOF"),
 		OrderedSymbols:            orderedSymbols,
 		Symbols:                   symbols,
-		StartSymbols:              gen.Starts,
-		OrderedStates:             gen.OrderedStates,
+		StartSymbols:              grammar.Starts,
+		OrderedStates:             states.OrderedStates,
 		OrderedValueTypes:         orderedValueTypes,
-		OutputDebugNonKernelItems: gen.OutputDebugNonKernelItems,
+		OutputDebugNonKernelItems: cfg.OutputDebugNonKernelItems,
 	}
 
 	return &GoCodeBuilder{file}, nil
