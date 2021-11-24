@@ -123,7 +123,6 @@ func GenerateGoLRCode(
 
 	endSymbol := nameGen.Internal("EndMarker")
 	wildcardSymbol := nameGen.Internal("WildcardMarker")
-
 	genericSymbol := nameGen.Public("GenericSymbol")
 	genericSymbolPtr := "*" + genericSymbol
 
@@ -141,16 +140,6 @@ func GenerateGoLRCode(
     for _, vt := range orderedValueTypes {
         valueTypes[vt.Name] = vt
     }
-
-	err := populateCodeGenVariables(
-        cfg.Prefix,
-        grammar.Terms,
-        states.OrderedStates,
-        valueTypes,
-        nameGen)
-	if err != nil {
-		return nil, err
-	}
 
 	orderedSymbols := []*lr.Term{
 		&lr.Term{
@@ -224,6 +213,16 @@ func GenerateGoLRCode(
 		OrderedStates:             states.OrderedStates,
 		OrderedValueTypes:         orderedValueTypes,
 		OutputDebugNonKernelItems: cfg.OutputDebugNonKernelItems,
+	}
+
+	err := populateCodeGenVariables(
+        cfg.Prefix,
+        grammar.Terms,
+        states.OrderedStates,
+        valueTypes,
+        nameGen)
+	if err != nil {
+		return nil, err
 	}
 
 	return codegenutil.NewFormattedGoSource(file), nil
