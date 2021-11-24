@@ -1,7 +1,7 @@
 package main
 
 import (
-    "fmt"
+    fmt2 "fmt"
 )
 
 template ForTemplate {
@@ -62,7 +62,7 @@ range for loops
 
 Slice Range Loop
 [[-for _, item := range []string{"foo", "bar"}]]
-  $(fmt.Sprintf("item: %s", item))
+  $(fmt2.Sprintf("item: %s", item))
 [[-end]]
 
 Map Range Loop

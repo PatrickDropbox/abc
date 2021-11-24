@@ -1,11 +1,11 @@
 package main
 
 import (
-    "fmt"
+    fmt2 "fmt"
 )
 
 template ErrorTemplate {}
 %%
 [[if true]]
-    [[-error fmt.Errorf("bad")-]]
+    [[-error fmt2.Errorf("bad")-]]
 [[end-]]

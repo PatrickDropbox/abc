@@ -3,22 +3,32 @@ package manual_codegen
 import (
 	"io"
 
+    "github.com/pattyshack/abc/src/lr/codegenutil"
 	"github.com/pattyshack/abc/src/template/internal"
 )
 
 type Template struct {
+    source string
 	spec *template.File
 }
 
-func NewTemplate(spec *template.File) io.WriterTo {
-	return &Template{spec}
+func NewTemplate(source string, spec *template.File) io.WriterTo {
+	return &Template{source, spec}
 }
 
 func (temp *Template) WriteTo(output io.Writer) (int64, error) {
 	spec := temp.spec
-	builder := NewGoCodeBuilder(spec.PackageName)
+	builder := codegenutil.NewCodeBuilder()
+    imports := codegenutil.NewGoImports()
 
 	l := builder.Line
+
+    l("// Auto-generated from source: %s", temp.source)
+    l("")
+    l("package %s", spec.PackageName)
+    l("")
+    builder.Embed(imports)
+    l("")
 
 	if spec.Imports != "" {
 		l("import (")
@@ -40,21 +50,21 @@ func (temp *Template) WriteTo(output io.Writer) (int64, error) {
 
 	l("func (template *%s) writeValue(", spec.TemplateName)
 	l("    output %v, value interface{}, loc string) (int, error) {",
-		builder.Obj("io.Writer"))
+		imports.Obj("io.Writer"))
 	builder.PushIndent()
 	l("var valueBytes []byte")
 	l("switch val := value.(type) {")
 	l("case %v: valueBytes = []byte(val.String())",
-		builder.Obj("fmt.Stringer"))
+		imports.Obj("fmt.Stringer"))
 	l("case string: valueBytes = []byte(val)")
 	l("case []byte: valueBytes = val")
 	for _, primitive := range template.OutputablePrimitiveTypes {
 		l("case %s: valueBytes = []byte(%v(\"%%v\", val))",
 			primitive,
-			builder.Obj("fmt.Sprintf"))
+			imports.Obj("fmt.Sprintf"))
 	}
 	l("default:	return 0, %v(\"Unsupported output value type (%%s): %%v\", loc, value)",
-		builder.Obj("fmt.Errorf"))
+		imports.Obj("fmt.Errorf"))
 	l("}")
 	l("")
 
@@ -66,7 +76,7 @@ func (temp *Template) WriteTo(output io.Writer) (int64, error) {
 
 	l("func (_template *%s) WriteTo(_output %s) (int64, error) {",
 		spec.TemplateName,
-		builder.Obj("io.Writer"))
+		imports.Obj("io.Writer"))
 	builder.PushIndent()
 	l("_numWritten := int64(0)")
 	l("")
@@ -75,19 +85,22 @@ func (temp *Template) WriteTo(output io.Writer) (int64, error) {
 		l("%s := _template.%s", arg.Name, arg.Name)
 	}
 
-	buildBody(spec.Body, builder)
+	buildBody(spec.Body, builder, imports)
 
 	l("")
 	l("return _numWritten, nil")
 	builder.PopIndent()
 	l("}")
 
-	return builder.WriteTo(output)
+    return codegenutil.NewFormattedGoSource(builder).WriteTo(output)
 }
 
-func buildBody(body []template.Statement, builder *GoCodeBuilder) {
+func buildBody(
+    body []template.Statement,
+    builder *codegenutil.CodeBuilder,
+    imports *codegenutil.GoImports) {
+
 	l := builder.Line
-	o := builder.Obj
 	push := builder.PushIndent
 	pop := builder.PopIndent
 
@@ -156,7 +169,7 @@ func buildBody(body []template.Statement, builder *GoCodeBuilder) {
 				l("_err := (%s)", stmt.Value)
 				l("if _err == nil {")
 				l("    _err = %v(\"Unexpected error (%s)\")",
-					o("fmt.Errorf"),
+					imports.Obj("fmt.Errorf"),
 					stmt.Loc())
 				l("}")
 				l("return _numWritten, _err")
@@ -168,30 +181,30 @@ func buildBody(body []template.Statement, builder *GoCodeBuilder) {
 			}
 		case *template.For:
 			l("for %s {", stmt.Predicate.Value)
-			buildBody(stmt.Body, builder)
+			buildBody(stmt.Body, builder, imports)
 			l("}")
 		case *template.Switch:
 			l("switch %s {", stmt.Switch.Value)
 			for _, branch := range stmt.Cases {
 				l("case %s:", branch.Predicate.Value)
-				buildBody(branch.Body, builder)
+				buildBody(branch.Body, builder, imports)
 			}
 
 			if stmt.Default != nil {
 				l("default:")
-				buildBody(stmt.Default.Body, builder)
+				buildBody(stmt.Default.Body, builder, imports)
 			}
 			l("}")
 		case *template.If:
 			l("if %s {", stmt.If.Predicate.Value)
-			buildBody(stmt.If.Body, builder)
+			buildBody(stmt.If.Body, builder, imports)
 			for _, branch := range stmt.ElseIfs {
 				l("} else if %s {", branch.Predicate.Value)
-				buildBody(branch.Body, builder)
+				buildBody(branch.Body, builder, imports)
 			}
 			if stmt.Else != nil {
 				l("} else {")
-				buildBody(stmt.Else.Body, builder)
+				buildBody(stmt.Else.Body, builder, imports)
 			}
 			l("}")
 		default:

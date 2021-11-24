@@ -5,6 +5,7 @@ package template
 import (
 	fmt "fmt"
 	io "io"
+	sort "sort"
 )
 
 type SymbolId int
@@ -168,14 +169,41 @@ type ParseErrorHandler interface {
 type DefaultParseErrorHandler struct{}
 
 func (DefaultParseErrorHandler) Error(nextToken Token, stack _Stack) error {
-	return fmt.Errorf("Syntax error: unexpected symbol %v. Expecting: %v (%v)", nextToken.Id(), _ExpectedTerminals[stack[len(stack)-1].StateId], nextToken.Loc())
+	return fmt.Errorf(
+		"Syntax error: unexpected symbol %v. Expecting %v (%v)",
+		nextToken.Id(),
+		ExpectedTerminals(stack[len(stack)-1].StateId),
+		nextToken.Loc())
+}
+
+func ExpectedTerminals(id _StateId) []SymbolId {
+	result := []SymbolId{}
+	for key, _ := range _ActionTable {
+		if key._StateId != id {
+			continue
+		}
+		result = append(result, key.SymbolId)
+	}
+
+	sort.Slice(result, func(i int, j int) bool { return result[i] < result[j] })
+	return result
 }
 
 func Parse(lexer Lexer, reducer Reducer) (*File, error) {
-	return ParseWithCustomErrorHandler(lexer, reducer, DefaultParseErrorHandler{})
+
+	return ParseWithCustomErrorHandler(
+		lexer,
+		reducer,
+		DefaultParseErrorHandler{})
 }
 
-func ParseWithCustomErrorHandler(lexer Lexer, reducer Reducer, errHandler ParseErrorHandler) (*File, error) {
+func ParseWithCustomErrorHandler(
+	lexer Lexer,
+	reducer Reducer,
+	errHandler ParseErrorHandler) (
+	*File,
+	error) {
+
 	item, err := _Parse(lexer, reducer, errHandler, _State1)
 	if err != nil {
 		var errRetVal *File
@@ -189,11 +217,20 @@ func ParseWithCustomErrorHandler(lexer Lexer, reducer Reducer, errHandler ParseE
 // User should normally avoid directly accessing the following code
 // ================================================================
 
-func _Parse(lexer Lexer, reducer Reducer, errHandler ParseErrorHandler, startState _StateId) (*_StackItem, error) {
+func _Parse(
+	lexer Lexer,
+	reducer Reducer,
+	errHandler ParseErrorHandler,
+	startState _StateId) (
+	*_StackItem,
+	error) {
+
 	stateStack := _Stack{
-		// Note: we don't have to populate the start symbol since its value is never accessed
+		// Note: we don't have to populate the start symbol since its value
+		// is never accessed.
 		&_StackItem{startState, nil},
 	}
+
 	symbolStack := &_PseudoSymbolStack{lexer: lexer}
 
 	for {
@@ -202,10 +239,13 @@ func _Parse(lexer Lexer, reducer Reducer, errHandler ParseErrorHandler, startSta
 			return nil, err
 		}
 
-		action, ok := _ActionTable.Get(stateStack[len(stateStack)-1].StateId, nextSymbol.Id())
+		action, ok := _ActionTable.Get(
+			stateStack[len(stateStack)-1].StateId,
+			nextSymbol.Id())
 		if !ok {
 			return nil, errHandler.Error(nextSymbol, stateStack)
 		}
+
 		if action.ActionType == _ShiftAction {
 			stateStack = append(stateStack, action.ShiftItem(nextSymbol))
 
@@ -215,7 +255,9 @@ func _Parse(lexer Lexer, reducer Reducer, errHandler ParseErrorHandler, startSta
 			}
 		} else if action.ActionType == _ReduceAction {
 			var reduceSymbol *Symbol
-			stateStack, reduceSymbol, err = action.ReduceSymbol(reducer, stateStack)
+			stateStack, reduceSymbol, err = action.ReduceSymbol(
+				reducer,
+				stateStack)
 			if err != nil {
 				return nil, err
 			}
@@ -226,7 +268,6 @@ func _Parse(lexer Lexer, reducer Reducer, errHandler ParseErrorHandler, startSta
 				panic("This should never happen")
 			}
 			return stateStack[1], nil
-
 		} else {
 			panic("Unknown action type: " + action.ActionType.String())
 		}
@@ -346,7 +387,7 @@ func (i _ActionType) String() string {
 	case _AcceptAction:
 		return "accept"
 	default:
-		return fmt.Sprintf("?unknown action %d", int(i))
+		return fmt.Sprintf("?Unknown action %d?", int(i))
 	}
 }
 
@@ -536,31 +577,51 @@ func NewSymbol(token Token) (*Symbol, error) {
 	case TextToken, SubstitutionToken, EmbedToken, CopySectionToken, CommentToken, ContinueToken, BreakToken, ReturnToken, ErrorToken:
 		val, ok := token.(*Atom)
 		if !ok {
-			return nil, fmt.Errorf("Invalid value type for token %s.  Expecting *Atom (%v)", token.Id(), token.Loc())
+			return nil, fmt.Errorf(
+				"Invalid value type for token %s.  "+
+					"Expecting *Atom (%v)",
+				token.Id(),
+				token.Loc())
 		}
 		symbol.Atom = val
 	case _EndMarker, SectionMarkerToken:
 		val, ok := token.(*GenericSymbol)
 		if !ok {
-			return nil, fmt.Errorf("Invalid value type for token %s.  Expecting *GenericSymbol (%v)", token.Id(), token.Loc())
+			return nil, fmt.Errorf(
+				"Invalid value type for token %s.  "+
+					"Expecting *GenericSymbol (%v)",
+				token.Id(),
+				token.Loc())
 		}
 		symbol.Generic_ = val
 	case TemplateDeclToken:
 		val, ok := token.(*TemplateDeclaration)
 		if !ok {
-			return nil, fmt.Errorf("Invalid value type for token %s.  Expecting *TemplateDeclaration (%v)", token.Id(), token.Loc())
+			return nil, fmt.Errorf(
+				"Invalid value type for token %s.  "+
+					"Expecting *TemplateDeclaration (%v)",
+				token.Id(),
+				token.Loc())
 		}
 		symbol.TemplateDecl = val
 	case DefaultToken, ElseToken, EndToken:
 		val, ok := token.(*TToken)
 		if !ok {
-			return nil, fmt.Errorf("Invalid value type for token %s.  Expecting *TToken (%v)", token.Id(), token.Loc())
+			return nil, fmt.Errorf(
+				"Invalid value type for token %s.  "+
+					"Expecting *TToken (%v)",
+				token.Id(),
+				token.Loc())
 		}
 		symbol.Token = val
 	case PackageToken, ImportToken, ForToken, SwitchToken, CaseToken, IfToken, ElseIfToken:
 		val, ok := token.(*Value)
 		if !ok {
-			return nil, fmt.Errorf("Invalid value type for token %s.  Expecting *Value (%v)", token.Id(), token.Loc())
+			return nil, fmt.Errorf(
+				"Invalid value type for token %s.  "+
+					"Expecting *Value (%v)",
+				token.Id(),
+				token.Loc())
 		}
 		symbol.Value = val
 	default:
@@ -655,7 +716,7 @@ func (stack *_PseudoSymbolStack) Push(symbol *Symbol) {
 	stack.top = append(stack.top, symbol)
 }
 
-func (stack *_PseudoSymbolStack) Pop() (Token, error) {
+func (stack *_PseudoSymbolStack) Pop() (*Symbol, error) {
 	if len(stack.top) == 0 {
 		return nil, fmt.Errorf("internal error: cannot pop an empty top")
 	}
@@ -683,7 +744,13 @@ func (act *_Action) ShiftItem(symbol *Symbol) *_StackItem {
 	return &_StackItem{StateId: act.ShiftStateId, Symbol: symbol}
 }
 
-func (act *_Action) ReduceSymbol(reducer Reducer, stack _Stack) (_Stack, *Symbol, error) {
+func (act *_Action) ReduceSymbol(
+	reducer Reducer,
+	stack _Stack) (
+	_Stack,
+	*Symbol,
+	error) {
+
 	var err error
 	symbol := &Symbol{}
 	switch act.ReduceType {
@@ -838,6 +905,28 @@ func (act *_Action) ReduceSymbol(reducer Reducer, stack _Stack) (_Stack, *Symbol
 	return stack, symbol, err
 }
 
+type _ActionTableKey struct {
+	_StateId
+	SymbolId
+}
+
+type _ActionTableType map[_ActionTableKey]*_Action
+
+func (table _ActionTableType) Get(
+	stateId _StateId,
+	symbolId SymbolId) (
+	*_Action,
+	bool) {
+
+	action, ok := table[_ActionTableKey{stateId, symbolId}]
+	if ok {
+		return action, ok
+	}
+
+	action, ok = table[_ActionTableKey{stateId, _WildcardMarker}]
+	return action, ok
+}
+
 var (
 	_GotoState1Action                      = &_Action{_ShiftAction, _State1, 0}
 	_GotoState2Action                      = &_Action{_ShiftAction, _State2, 0}
@@ -918,22 +1007,6 @@ var (
 	_ReduceElseToOptionalElseAction        = &_Action{_ReduceAction, 0, _ReduceElseToOptionalElse}
 	_ReduceNilToOptionalElseAction         = &_Action{_ReduceAction, 0, _ReduceNilToOptionalElse}
 )
-
-type _ActionTableKey struct {
-	_StateId
-	SymbolId
-}
-
-type _ActionTableType map[_ActionTableKey]*_Action
-
-func (table _ActionTableType) Get(stateId _StateId, symbol SymbolId) (*_Action, bool) {
-	action, ok := table[_ActionTableKey{stateId, symbol}]
-	if ok {
-		return action, ok
-	}
-	action, ok = table[_ActionTableKey{stateId, _WildcardMarker}]
-	return action, ok
-}
 
 var _ActionTable = _ActionTableType{
 	{_State2, _EndMarker}:           &_Action{_AcceptAction, 0, 0},
@@ -1144,31 +1217,6 @@ var _ActionTable = _ActionTableType{
 	{_State46, _WildcardMarker}:     _ReduceAddToElseIfListAction,
 	{_State47, _WildcardMarker}:     _ReduceToIfAction,
 	{_State48, _WildcardMarker}:     _ReduceWithWhitespaceToSwitchAction,
-}
-
-var _ExpectedTerminals = map[_StateId][]SymbolId{
-	_State1:  []SymbolId{PackageToken},
-	_State2:  []SymbolId{_EndMarker},
-	_State3:  []SymbolId{ImportToken, TemplateDeclToken},
-	_State4:  []SymbolId{TemplateDeclToken},
-	_State5:  []SymbolId{TemplateDeclToken},
-	_State6:  []SymbolId{SectionMarkerToken},
-	_State8:  []SymbolId{ForToken, SwitchToken, IfToken, TextToken, SubstitutionToken, EmbedToken, CopySectionToken, CommentToken, ContinueToken, BreakToken, ReturnToken, ErrorToken, _EndMarker},
-	_State19: []SymbolId{CaseToken, TextToken},
-	_State26: []SymbolId{ForToken, SwitchToken, IfToken, EndToken, TextToken, SubstitutionToken, EmbedToken, CopySectionToken, CommentToken, ContinueToken, BreakToken, ReturnToken, ErrorToken},
-	_State27: []SymbolId{ForToken, SwitchToken, IfToken, TextToken, SubstitutionToken, EmbedToken, CopySectionToken, CommentToken, ContinueToken, BreakToken, ReturnToken, ErrorToken},
-	_State29: []SymbolId{CaseToken},
-	_State30: []SymbolId{CaseToken, DefaultToken, EndToken},
-	_State32: []SymbolId{ElseIfToken, ElseToken, EndToken},
-	_State33: []SymbolId{ForToken, SwitchToken, IfToken, TextToken, SubstitutionToken, EmbedToken, CopySectionToken, CommentToken, ContinueToken, BreakToken, ReturnToken, ErrorToken},
-	_State34: []SymbolId{CaseToken, DefaultToken, EndToken},
-	_State37: []SymbolId{EndToken},
-	_State40: []SymbolId{EndToken},
-	_State41: []SymbolId{EndToken},
-	_State42: []SymbolId{ForToken, SwitchToken, IfToken, TextToken, SubstitutionToken, EmbedToken, CopySectionToken, CommentToken, ContinueToken, BreakToken, ReturnToken, ErrorToken},
-	_State43: []SymbolId{ForToken, SwitchToken, IfToken, TextToken, SubstitutionToken, EmbedToken, CopySectionToken, CommentToken, ContinueToken, BreakToken, ReturnToken, ErrorToken, EndToken},
-	_State45: []SymbolId{ForToken, SwitchToken, IfToken, TextToken, SubstitutionToken, EmbedToken, CopySectionToken, CommentToken, ContinueToken, BreakToken, ReturnToken, ErrorToken, EndToken},
-	_State46: []SymbolId{ForToken, SwitchToken, IfToken, TextToken, SubstitutionToken, EmbedToken, CopySectionToken, CommentToken, ContinueToken, BreakToken, ReturnToken, ErrorToken},
 }
 
 /*

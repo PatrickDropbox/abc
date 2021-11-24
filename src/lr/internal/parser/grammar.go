@@ -5,6 +5,7 @@ package parser
 import (
 	fmt "fmt"
 	io "io"
+	sort "sort"
 )
 
 type LRSymbolId int
@@ -147,14 +148,41 @@ type LRParseErrorHandler interface {
 type LRDefaultParseErrorHandler struct{}
 
 func (LRDefaultParseErrorHandler) Error(nextToken LRToken, stack _LRStack) error {
-	return fmt.Errorf("Syntax error: unexpected symbol %v. Expecting: %v (%v)", nextToken.Id(), _LRExpectedTerminals[stack[len(stack)-1].StateId], nextToken.Loc())
+	return fmt.Errorf(
+		"Syntax error: unexpected symbol %v. Expecting %v (%v)",
+		nextToken.Id(),
+		LRExpectedTerminals(stack[len(stack)-1].StateId),
+		nextToken.Loc())
+}
+
+func LRExpectedTerminals(id _LRStateId) []LRSymbolId {
+	result := []LRSymbolId{}
+	for key, _ := range _LRActionTable {
+		if key._LRStateId != id {
+			continue
+		}
+		result = append(result, key.LRSymbolId)
+	}
+
+	sort.Slice(result, func(i int, j int) bool { return result[i] < result[j] })
+	return result
 }
 
 func LRParse(lexer LRLexer, reducer LRReducer) (*Grammar, error) {
-	return LRParseWithCustomErrorHandler(lexer, reducer, LRDefaultParseErrorHandler{})
+
+	return LRParseWithCustomErrorHandler(
+		lexer,
+		reducer,
+		LRDefaultParseErrorHandler{})
 }
 
-func LRParseWithCustomErrorHandler(lexer LRLexer, reducer LRReducer, errHandler LRParseErrorHandler) (*Grammar, error) {
+func LRParseWithCustomErrorHandler(
+	lexer LRLexer,
+	reducer LRReducer,
+	errHandler LRParseErrorHandler) (
+	*Grammar,
+	error) {
+
 	item, err := _LRParse(lexer, reducer, errHandler, _LRState1)
 	if err != nil {
 		var errRetVal *Grammar
@@ -168,11 +196,20 @@ func LRParseWithCustomErrorHandler(lexer LRLexer, reducer LRReducer, errHandler 
 // User should normally avoid directly accessing the following code
 // ================================================================
 
-func _LRParse(lexer LRLexer, reducer LRReducer, errHandler LRParseErrorHandler, startState _LRStateId) (*_LRStackItem, error) {
+func _LRParse(
+	lexer LRLexer,
+	reducer LRReducer,
+	errHandler LRParseErrorHandler,
+	startState _LRStateId) (
+	*_LRStackItem,
+	error) {
+
 	stateStack := _LRStack{
-		// Note: we don't have to populate the start symbol since its value is never accessed
+		// Note: we don't have to populate the start symbol since its value
+		// is never accessed.
 		&_LRStackItem{startState, nil},
 	}
+
 	symbolStack := &_LRPseudoSymbolStack{lexer: lexer}
 
 	for {
@@ -181,10 +218,13 @@ func _LRParse(lexer LRLexer, reducer LRReducer, errHandler LRParseErrorHandler, 
 			return nil, err
 		}
 
-		action, ok := _LRActionTable.Get(stateStack[len(stateStack)-1].StateId, nextSymbol.Id())
+		action, ok := _LRActionTable.Get(
+			stateStack[len(stateStack)-1].StateId,
+			nextSymbol.Id())
 		if !ok {
 			return nil, errHandler.Error(nextSymbol, stateStack)
 		}
+
 		if action.ActionType == _LRShiftAction {
 			stateStack = append(stateStack, action.ShiftItem(nextSymbol))
 
@@ -194,7 +234,9 @@ func _LRParse(lexer LRLexer, reducer LRReducer, errHandler LRParseErrorHandler, 
 			}
 		} else if action.ActionType == _LRReduceAction {
 			var reduceSymbol *LRSymbol
-			stateStack, reduceSymbol, err = action.ReduceSymbol(reducer, stateStack)
+			stateStack, reduceSymbol, err = action.ReduceSymbol(
+				reducer,
+				stateStack)
 			if err != nil {
 				return nil, err
 			}
@@ -205,7 +247,6 @@ func _LRParse(lexer LRLexer, reducer LRReducer, errHandler LRParseErrorHandler, 
 				panic("This should never happen")
 			}
 			return stateStack[1], nil
-
 		} else {
 			panic("Unknown action type: " + action.ActionType.String())
 		}
@@ -309,7 +350,7 @@ func (i _LRActionType) String() string {
 	case _LRAcceptAction:
 		return "accept"
 	default:
-		return fmt.Sprintf("?unknown action %d", int(i))
+		return fmt.Sprintf("?Unknown action %d?", int(i))
 	}
 }
 
@@ -481,13 +522,21 @@ func NewSymbol(token LRToken) (*LRSymbol, error) {
 	case _LREndMarker, LRTokenToken, LRTypeToken, LRStartToken, '<', '>', '|', ';', LRSectionMarkerToken:
 		val, ok := token.(*LRGenericSymbol)
 		if !ok {
-			return nil, fmt.Errorf("Invalid value type for token %s.  Expecting *LRGenericSymbol (%v)", token.Id(), token.Loc())
+			return nil, fmt.Errorf(
+				"Invalid value type for token %s.  "+
+					"Expecting *LRGenericSymbol (%v)",
+				token.Id(),
+				token.Loc())
 		}
 		symbol.Generic_ = val
 	case LRRuleDefToken, LRLabelToken, LRCharacterToken, LRIdentifierToken, LRSectionContentToken:
 		val, ok := token.(*Token)
 		if !ok {
-			return nil, fmt.Errorf("Invalid value type for token %s.  Expecting *Token (%v)", token.Id(), token.Loc())
+			return nil, fmt.Errorf(
+				"Invalid value type for token %s.  "+
+					"Expecting *Token (%v)",
+				token.Id(),
+				token.Loc())
 		}
 		symbol.Token = val
 	default:
@@ -587,7 +636,7 @@ func (stack *_LRPseudoSymbolStack) Push(symbol *LRSymbol) {
 	stack.top = append(stack.top, symbol)
 }
 
-func (stack *_LRPseudoSymbolStack) Pop() (LRToken, error) {
+func (stack *_LRPseudoSymbolStack) Pop() (*LRSymbol, error) {
 	if len(stack.top) == 0 {
 		return nil, fmt.Errorf("internal error: cannot pop an empty top")
 	}
@@ -615,7 +664,13 @@ func (act *_LRAction) ShiftItem(symbol *LRSymbol) *_LRStackItem {
 	return &_LRStackItem{StateId: act.ShiftStateId, LRSymbol: symbol}
 }
 
-func (act *_LRAction) ReduceSymbol(reducer LRReducer, stack _LRStack) (_LRStack, *LRSymbol, error) {
+func (act *_LRAction) ReduceSymbol(
+	reducer LRReducer,
+	stack _LRStack) (
+	_LRStack,
+	*LRSymbol,
+	error) {
+
 	var err error
 	symbol := &LRSymbol{}
 	switch act.ReduceType {
@@ -761,6 +816,28 @@ func (act *_LRAction) ReduceSymbol(reducer LRReducer, stack _LRStack) (_LRStack,
 	return stack, symbol, err
 }
 
+type _LRActionTableKey struct {
+	_LRStateId
+	LRSymbolId
+}
+
+type _LRActionTableType map[_LRActionTableKey]*_LRAction
+
+func (table _LRActionTableType) Get(
+	stateId _LRStateId,
+	symbolId LRSymbolId) (
+	*_LRAction,
+	bool) {
+
+	action, ok := table[_LRActionTableKey{stateId, symbolId}]
+	if ok {
+		return action, ok
+	}
+
+	action, ok = table[_LRActionTableKey{stateId, _LRWildcardMarker}]
+	return action, ok
+}
+
 var (
 	_LRGotoState1Action                          = &_LRAction{_LRShiftAction, _LRState1, 0}
 	_LRGotoState2Action                          = &_LRAction{_LRShiftAction, _LRState2, 0}
@@ -828,22 +905,6 @@ var (
 	_LRReduceClauseToLabeledClausesAction        = &_LRAction{_LRReduceAction, 0, _LRReduceClauseToLabeledClauses}
 	_LRReduceToLabeledClauseAction               = &_LRAction{_LRReduceAction, 0, _LRReduceToLabeledClause}
 )
-
-type _LRActionTableKey struct {
-	_LRStateId
-	LRSymbolId
-}
-
-type _LRActionTableType map[_LRActionTableKey]*_LRAction
-
-func (table _LRActionTableType) Get(stateId _LRStateId, symbol LRSymbolId) (*_LRAction, bool) {
-	action, ok := table[_LRActionTableKey{stateId, symbol}]
-	if ok {
-		return action, ok
-	}
-	action, ok = table[_LRActionTableKey{stateId, _LRWildcardMarker}]
-	return action, ok
-}
 
 var _LRActionTable = _LRActionTableType{
 	{_LRState2, _LREndMarker}:                &_LRAction{_LRAcceptAction, 0, 0},
@@ -930,30 +991,6 @@ var _LRActionTable = _LRActionTableType{
 	{_LRState34, _LRWildcardMarker}:          _LRReduceAddToLabeledClausesAction,
 	{_LRState37, _LRWildcardMarker}:          _LRReduceToAdditionalSectionAction,
 	{_LRState38, _LRWildcardMarker}:          _LRReduceTermDeclToDefAction,
-}
-
-var _LRExpectedTerminals = map[_LRStateId][]LRSymbolId{
-	_LRState1:  []LRSymbolId{LRTokenToken, LRTypeToken, LRStartToken, LRRuleDefToken},
-	_LRState2:  []LRSymbolId{_LREndMarker},
-	_LRState3:  []LRSymbolId{LRLabelToken, LRCharacterToken, LRIdentifierToken},
-	_LRState4:  []LRSymbolId{LRIdentifierToken},
-	_LRState7:  []LRSymbolId{';'},
-	_LRState8:  []LRSymbolId{LRTokenToken, LRTypeToken, LRStartToken, LRRuleDefToken},
-	_LRState10: []LRSymbolId{'<', LRCharacterToken, LRIdentifierToken},
-	_LRState13: []LRSymbolId{LRCharacterToken, LRIdentifierToken},
-	_LRState16: []LRSymbolId{'|'},
-	_LRState17: []LRSymbolId{LRCharacterToken, LRIdentifierToken},
-	_LRState19: []LRSymbolId{LRIdentifierToken},
-	_LRState21: []LRSymbolId{LRSectionMarkerToken, _LREndMarker},
-	_LRState22: []LRSymbolId{';'},
-	_LRState23: []LRSymbolId{LRIdentifierToken},
-	_LRState24: []LRSymbolId{LRCharacterToken, LRIdentifierToken},
-	_LRState26: []LRSymbolId{LRLabelToken},
-	_LRState30: []LRSymbolId{LRIdentifierToken},
-	_LRState33: []LRSymbolId{'>'},
-	_LRState35: []LRSymbolId{LRSectionContentToken},
-	_LRState36: []LRSymbolId{LRCharacterToken, LRIdentifierToken},
-	_LRState38: []LRSymbolId{LRCharacterToken, LRIdentifierToken},
 }
 
 /*

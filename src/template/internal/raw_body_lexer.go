@@ -374,7 +374,11 @@ func (lexer *rawBodyLexer) maybeTokenizeDirective() (BodyToken, error) {
 
 		} else if content[1] == '$' {
 			panic("Programming error")
-		}
+		} else {
+            return nil, fmt.Errorf(
+                "invalid substitute directive (%s)",
+			    lexer.reader.Location)
+        }
 	}
 
 	panic("Programming error")

@@ -6,7 +6,7 @@ import (
 	_fmt "fmt"
 	_io "io"
 
-	"fmt"
+	fmt2 "fmt"
 )
 
 type ForTemplate struct {
@@ -319,7 +319,7 @@ Slice Range Loop`))
 		{
 			_n, _err := _template.writeValue(
 				_output,
-				(fmt.Sprintf("item: %s", item)),
+				(fmt2.Sprintf("item: %s", item)),
 				"for.template:65:2")
 			_numWritten += int64(_n)
 			if _err != nil {

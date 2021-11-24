@@ -5,6 +5,7 @@ package main
 import (
 	fmt "fmt"
 	io "io"
+	sort "sort"
 )
 
 type SymbolId int
@@ -89,14 +90,41 @@ type ParseErrorHandler interface {
 type DefaultParseErrorHandler struct{}
 
 func (DefaultParseErrorHandler) Error(nextToken Token, stack _Stack) error {
-	return fmt.Errorf("Syntax error: unexpected symbol %v. Expecting: %v (%v)", nextToken.Id(), _ExpectedTerminals[stack[len(stack)-1].StateId], nextToken.Loc())
+	return fmt.Errorf(
+		"Syntax error: unexpected symbol %v. Expecting %v (%v)",
+		nextToken.Id(),
+		ExpectedTerminals(stack[len(stack)-1].StateId),
+		nextToken.Loc())
+}
+
+func ExpectedTerminals(id _StateId) []SymbolId {
+	result := []SymbolId{}
+	for key, _ := range _ActionTable {
+		if key._StateId != id {
+			continue
+		}
+		result = append(result, key.SymbolId)
+	}
+
+	sort.Slice(result, func(i int, j int) bool { return result[i] < result[j] })
+	return result
 }
 
 func ParseExprList(lexer Lexer, reducer Reducer) ([]Expr, error) {
-	return ParseExprListWithCustomErrorHandler(lexer, reducer, DefaultParseErrorHandler{})
+
+	return ParseExprListWithCustomErrorHandler(
+		lexer,
+		reducer,
+		DefaultParseErrorHandler{})
 }
 
-func ParseExprListWithCustomErrorHandler(lexer Lexer, reducer Reducer, errHandler ParseErrorHandler) ([]Expr, error) {
+func ParseExprListWithCustomErrorHandler(
+	lexer Lexer,
+	reducer Reducer,
+	errHandler ParseErrorHandler) (
+	[]Expr,
+	error) {
+
 	item, err := _Parse(lexer, reducer, errHandler, _State1)
 	if err != nil {
 		var errRetVal []Expr
@@ -106,10 +134,20 @@ func ParseExprListWithCustomErrorHandler(lexer Lexer, reducer Reducer, errHandle
 }
 
 func ParseBlock(lexer Lexer, reducer Reducer) (*Block, error) {
-	return ParseBlockWithCustomErrorHandler(lexer, reducer, DefaultParseErrorHandler{})
+
+	return ParseBlockWithCustomErrorHandler(
+		lexer,
+		reducer,
+		DefaultParseErrorHandler{})
 }
 
-func ParseBlockWithCustomErrorHandler(lexer Lexer, reducer Reducer, errHandler ParseErrorHandler) (*Block, error) {
+func ParseBlockWithCustomErrorHandler(
+	lexer Lexer,
+	reducer Reducer,
+	errHandler ParseErrorHandler) (
+	*Block,
+	error) {
+
 	item, err := _Parse(lexer, reducer, errHandler, _State2)
 	if err != nil {
 		var errRetVal *Block
@@ -123,11 +161,20 @@ func ParseBlockWithCustomErrorHandler(lexer Lexer, reducer Reducer, errHandler P
 // User should normally avoid directly accessing the following code
 // ================================================================
 
-func _Parse(lexer Lexer, reducer Reducer, errHandler ParseErrorHandler, startState _StateId) (*_StackItem, error) {
+func _Parse(
+	lexer Lexer,
+	reducer Reducer,
+	errHandler ParseErrorHandler,
+	startState _StateId) (
+	*_StackItem,
+	error) {
+
 	stateStack := _Stack{
-		// Note: we don't have to populate the start symbol since its value is never accessed
+		// Note: we don't have to populate the start symbol since its value
+		// is never accessed.
 		&_StackItem{startState, nil},
 	}
+
 	symbolStack := &_PseudoSymbolStack{lexer: lexer}
 
 	for {
@@ -136,10 +183,13 @@ func _Parse(lexer Lexer, reducer Reducer, errHandler ParseErrorHandler, startSta
 			return nil, err
 		}
 
-		action, ok := _ActionTable.Get(stateStack[len(stateStack)-1].StateId, nextSymbol.Id())
+		action, ok := _ActionTable.Get(
+			stateStack[len(stateStack)-1].StateId,
+			nextSymbol.Id())
 		if !ok {
 			return nil, errHandler.Error(nextSymbol, stateStack)
 		}
+
 		if action.ActionType == _ShiftAction {
 			stateStack = append(stateStack, action.ShiftItem(nextSymbol))
 
@@ -149,7 +199,9 @@ func _Parse(lexer Lexer, reducer Reducer, errHandler ParseErrorHandler, startSta
 			}
 		} else if action.ActionType == _ReduceAction {
 			var reduceSymbol *Symbol
-			stateStack, reduceSymbol, err = action.ReduceSymbol(reducer, stateStack)
+			stateStack, reduceSymbol, err = action.ReduceSymbol(
+				reducer,
+				stateStack)
 			if err != nil {
 				return nil, err
 			}
@@ -160,7 +212,6 @@ func _Parse(lexer Lexer, reducer Reducer, errHandler ParseErrorHandler, startSta
 				panic("This should never happen")
 			}
 			return stateStack[1], nil
-
 		} else {
 			panic("Unknown action type: " + action.ActionType.String())
 		}
@@ -229,7 +280,7 @@ func (i _ActionType) String() string {
 	case _AcceptAction:
 		return "accept"
 	default:
-		return fmt.Sprintf("?unknown action %d", int(i))
+		return fmt.Sprintf("?Unknown action %d?", int(i))
 	}
 }
 
@@ -323,19 +374,31 @@ func NewSymbol(token Token) (*Symbol, error) {
 	case ErrorToken:
 		val, ok := token.(*Err)
 		if !ok {
-			return nil, fmt.Errorf("Invalid value type for token %s.  Expecting *Err (%v)", token.Id(), token.Loc())
+			return nil, fmt.Errorf(
+				"Invalid value type for token %s.  "+
+					"Expecting *Err (%v)",
+				token.Id(),
+				token.Loc())
 		}
 		symbol.Err = val
 	case _EndMarker, '+', '-', '{', '}':
 		val, ok := token.(*GenericSymbol)
 		if !ok {
-			return nil, fmt.Errorf("Invalid value type for token %s.  Expecting *GenericSymbol (%v)", token.Id(), token.Loc())
+			return nil, fmt.Errorf(
+				"Invalid value type for token %s.  "+
+					"Expecting *GenericSymbol (%v)",
+				token.Id(),
+				token.Loc())
 		}
 		symbol.Generic_ = val
 	case IdToken:
 		val, ok := token.(*Id)
 		if !ok {
-			return nil, fmt.Errorf("Invalid value type for token %s.  Expecting *Id (%v)", token.Id(), token.Loc())
+			return nil, fmt.Errorf(
+				"Invalid value type for token %s.  "+
+					"Expecting *Id (%v)",
+				token.Id(),
+				token.Loc())
 		}
 		symbol.Ident = val
 	default:
@@ -410,7 +473,7 @@ func (stack *_PseudoSymbolStack) Push(symbol *Symbol) {
 	stack.top = append(stack.top, symbol)
 }
 
-func (stack *_PseudoSymbolStack) Pop() (Token, error) {
+func (stack *_PseudoSymbolStack) Pop() (*Symbol, error) {
 	if len(stack.top) == 0 {
 		return nil, fmt.Errorf("internal error: cannot pop an empty top")
 	}
@@ -438,7 +501,13 @@ func (act *_Action) ShiftItem(symbol *Symbol) *_StackItem {
 	return &_StackItem{StateId: act.ShiftStateId, Symbol: symbol}
 }
 
-func (act *_Action) ReduceSymbol(reducer Reducer, stack _Stack) (_Stack, *Symbol, error) {
+func (act *_Action) ReduceSymbol(
+	reducer Reducer,
+	stack _Stack) (
+	_Stack,
+	*Symbol,
+	error) {
+
 	var err error
 	symbol := &Symbol{}
 	switch act.ReduceType {
@@ -501,6 +570,28 @@ func (act *_Action) ReduceSymbol(reducer Reducer, stack _Stack) (_Stack, *Symbol
 	return stack, symbol, err
 }
 
+type _ActionTableKey struct {
+	_StateId
+	SymbolId
+}
+
+type _ActionTableType map[_ActionTableKey]*_Action
+
+func (table _ActionTableType) Get(
+	stateId _StateId,
+	symbolId SymbolId) (
+	*_Action,
+	bool) {
+
+	action, ok := table[_ActionTableKey{stateId, symbolId}]
+	if ok {
+		return action, ok
+	}
+
+	action, ok = table[_ActionTableKey{stateId, _WildcardMarker}]
+	return action, ok
+}
+
 var (
 	_GotoState1Action          = &_Action{_ShiftAction, _State1, 0}
 	_GotoState2Action          = &_Action{_ShiftAction, _State2, 0}
@@ -529,22 +620,6 @@ var (
 	_ReduceMinusToOpAction     = &_Action{_ReduceAction, 0, _ReduceMinusToOp}
 	_ReduceToBlockAction       = &_Action{_ReduceAction, 0, _ReduceToBlock}
 )
-
-type _ActionTableKey struct {
-	_StateId
-	SymbolId
-}
-
-type _ActionTableType map[_ActionTableKey]*_Action
-
-func (table _ActionTableType) Get(stateId _StateId, symbol SymbolId) (*_Action, bool) {
-	action, ok := table[_ActionTableKey{stateId, symbol}]
-	if ok {
-		return action, ok
-	}
-	action, ok = table[_ActionTableKey{stateId, _WildcardMarker}]
-	return action, ok
-}
 
 var _ActionTable = _ActionTableType{
 	{_State3, _EndMarker}:       &_Action{_AcceptAction, 0, 0},
@@ -585,16 +660,6 @@ var _ActionTable = _ActionTableType{
 	{_State13, _WildcardMarker}: _ReduceMinusToOpAction,
 	{_State15, _EndMarker}:      _ReduceToBlockAction,
 	{_State16, _WildcardMarker}: _ReduceBinaryToExprAction,
-}
-
-var _ExpectedTerminals = map[_StateId][]SymbolId{
-	_State2:  []SymbolId{'{'},
-	_State3:  []SymbolId{'{', IdToken, ErrorToken, _EndMarker},
-	_State4:  []SymbolId{_EndMarker},
-	_State10: []SymbolId{'+', '-'},
-	_State11: []SymbolId{'{', '}', IdToken, ErrorToken},
-	_State14: []SymbolId{'{', IdToken, ErrorToken},
-	_State15: []SymbolId{_EndMarker},
 }
 
 /*

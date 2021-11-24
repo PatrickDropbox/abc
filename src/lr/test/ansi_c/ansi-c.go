@@ -5,6 +5,7 @@ package ansi_c
 import (
 	fmt "fmt"
 	io "io"
+	sort "sort"
 )
 
 type CSymbolId int
@@ -748,14 +749,41 @@ type CParseErrorHandler interface {
 type CDefaultParseErrorHandler struct{}
 
 func (CDefaultParseErrorHandler) Error(nextToken CToken, stack _CStack) error {
-	return fmt.Errorf("Syntax error: unexpected symbol %v. Expecting: %v (%v)", nextToken.Id(), _CExpectedTerminals[stack[len(stack)-1].StateId], nextToken.Loc())
+	return fmt.Errorf(
+		"Syntax error: unexpected symbol %v. Expecting %v (%v)",
+		nextToken.Id(),
+		CExpectedTerminals(stack[len(stack)-1].StateId),
+		nextToken.Loc())
+}
+
+func CExpectedTerminals(id _CStateId) []CSymbolId {
+	result := []CSymbolId{}
+	for key, _ := range _CActionTable {
+		if key._CStateId != id {
+			continue
+		}
+		result = append(result, key.CSymbolId)
+	}
+
+	sort.Slice(result, func(i int, j int) bool { return result[i] < result[j] })
+	return result
 }
 
 func CParse(lexer CLexer, reducer CReducer) (*CGenericSymbol, error) {
-	return CParseWithCustomErrorHandler(lexer, reducer, CDefaultParseErrorHandler{})
+
+	return CParseWithCustomErrorHandler(
+		lexer,
+		reducer,
+		CDefaultParseErrorHandler{})
 }
 
-func CParseWithCustomErrorHandler(lexer CLexer, reducer CReducer, errHandler CParseErrorHandler) (*CGenericSymbol, error) {
+func CParseWithCustomErrorHandler(
+	lexer CLexer,
+	reducer CReducer,
+	errHandler CParseErrorHandler) (
+	*CGenericSymbol,
+	error) {
+
 	item, err := _CParse(lexer, reducer, errHandler, _CState1)
 	if err != nil {
 		var errRetVal *CGenericSymbol
@@ -769,11 +797,20 @@ func CParseWithCustomErrorHandler(lexer CLexer, reducer CReducer, errHandler CPa
 // User should normally avoid directly accessing the following code
 // ================================================================
 
-func _CParse(lexer CLexer, reducer CReducer, errHandler CParseErrorHandler, startState _CStateId) (*_CStackItem, error) {
+func _CParse(
+	lexer CLexer,
+	reducer CReducer,
+	errHandler CParseErrorHandler,
+	startState _CStateId) (
+	*_CStackItem,
+	error) {
+
 	stateStack := _CStack{
-		// Note: we don't have to populate the start symbol since its value is never accessed
+		// Note: we don't have to populate the start symbol since its value
+		// is never accessed.
 		&_CStackItem{startState, nil},
 	}
+
 	symbolStack := &_CPseudoSymbolStack{lexer: lexer}
 
 	for {
@@ -782,10 +819,13 @@ func _CParse(lexer CLexer, reducer CReducer, errHandler CParseErrorHandler, star
 			return nil, err
 		}
 
-		action, ok := _CActionTable.Get(stateStack[len(stateStack)-1].StateId, nextSymbol.Id())
+		action, ok := _CActionTable.Get(
+			stateStack[len(stateStack)-1].StateId,
+			nextSymbol.Id())
 		if !ok {
 			return nil, errHandler.Error(nextSymbol, stateStack)
 		}
+
 		if action.ActionType == _CShiftAction {
 			stateStack = append(stateStack, action.ShiftItem(nextSymbol))
 
@@ -795,7 +835,9 @@ func _CParse(lexer CLexer, reducer CReducer, errHandler CParseErrorHandler, star
 			}
 		} else if action.ActionType == _CReduceAction {
 			var reduceSymbol *CSymbol
-			stateStack, reduceSymbol, err = action.ReduceSymbol(reducer, stateStack)
+			stateStack, reduceSymbol, err = action.ReduceSymbol(
+				reducer,
+				stateStack)
 			if err != nil {
 				return nil, err
 			}
@@ -806,7 +848,6 @@ func _CParse(lexer CLexer, reducer CReducer, errHandler CParseErrorHandler, star
 				panic("This should never happen")
 			}
 			return stateStack[1], nil
-
 		} else {
 			panic("Unknown action type: " + action.ActionType.String())
 		}
@@ -1201,7 +1242,7 @@ func (i _CActionType) String() string {
 	case _CAcceptAction:
 		return "accept"
 	default:
-		return fmt.Sprintf("?unknown action %d", int(i))
+		return fmt.Sprintf("?Unknown action %d?", int(i))
 	}
 }
 
@@ -2227,7 +2268,11 @@ func NewSymbol(token CToken) (*CSymbol, error) {
 	case _CEndMarker, CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CPtrOpToken, CIncOpToken, CDecOpToken, CLeftOpToken, CRightOpToken, CLeOpToken, CGeOpToken, CEqOpToken, CNeOpToken, CAndOpToken, COrOpToken, CMulAssignToken, CDivAssignToken, CModAssignToken, CAddAssignToken, CSubAssignToken, CLeftAssignToken, CRightAssignToken, CAndAssignToken, CXorAssignToken, COrAssignToken, CTypeNameToken, CTypedefToken, CExternToken, CStaticToken, CAutoToken, CRegisterToken, CCharToken, CShortToken, CIntToken, CLongToken, CSignedToken, CUnsignedToken, CFloatToken, CDoubleToken, CConstToken, CVolatileToken, CVoidToken, CStructToken, CUnionToken, CEnumToken, CEllipsisToken, CCaseToken, CDefaultToken, CIfToken, CElseToken, CSwitchToken, CWhileToken, CDoToken, CForToken, CGotoToken, CContinueToken, CBreakToken, CReturnToken, '(', ')', '{', '}', '[', ']', ';', ':', ',', '=', '?', '*', '/', '-', '+', '%', '&', '|', '!', '.', '^', '<', '>', '~':
 		val, ok := token.(*CGenericSymbol)
 		if !ok {
-			return nil, fmt.Errorf("Invalid value type for token %s.  Expecting *CGenericSymbol (%v)", token.Id(), token.Loc())
+			return nil, fmt.Errorf(
+				"Invalid value type for token %s.  "+
+					"Expecting *CGenericSymbol (%v)",
+				token.Id(),
+				token.Loc())
 		}
 		symbol.Generic_ = val
 	default:
@@ -2277,7 +2322,7 @@ func (stack *_CPseudoSymbolStack) Push(symbol *CSymbol) {
 	stack.top = append(stack.top, symbol)
 }
 
-func (stack *_CPseudoSymbolStack) Pop() (CToken, error) {
+func (stack *_CPseudoSymbolStack) Pop() (*CSymbol, error) {
 	if len(stack.top) == 0 {
 		return nil, fmt.Errorf("internal error: cannot pop an empty top")
 	}
@@ -2305,7 +2350,13 @@ func (act *_CAction) ShiftItem(symbol *CSymbol) *_CStackItem {
 	return &_CStackItem{StateId: act.ShiftStateId, CSymbol: symbol}
 }
 
-func (act *_CAction) ReduceSymbol(reducer CReducer, stack _CStack) (_CStack, *CSymbol, error) {
+func (act *_CAction) ReduceSymbol(
+	reducer CReducer,
+	stack _CStack) (
+	_CStack,
+	*CSymbol,
+	error) {
+
 	var err error
 	symbol := &CSymbol{}
 	switch act.ReduceType {
@@ -3375,6 +3426,28 @@ func (act *_CAction) ReduceSymbol(reducer CReducer, stack _CStack) (_CStack, *CS
 	return stack, symbol, err
 }
 
+type _CActionTableKey struct {
+	_CStateId
+	CSymbolId
+}
+
+type _CActionTableType map[_CActionTableKey]*_CAction
+
+func (table _CActionTableType) Get(
+	stateId _CStateId,
+	symbolId CSymbolId) (
+	*_CAction,
+	bool) {
+
+	action, ok := table[_CActionTableKey{stateId, symbolId}]
+	if ok {
+		return action, ok
+	}
+
+	action, ok = table[_CActionTableKey{stateId, _CWildcardMarker}]
+	return action, ok
+}
+
 var (
 	_CGotoState1Action                        = &_CAction{_CShiftAction, _CState1, 0}
 	_CGotoState2Action                        = &_CAction{_CShiftAction, _CState2, 0}
@@ -3939,22 +4012,6 @@ var (
 	_CReduceCToFunctionDefinitionAction       = &_CAction{_CReduceAction, 0, _CReduceCToFunctionDefinition}
 	_CReduceDToFunctionDefinitionAction       = &_CAction{_CReduceAction, 0, _CReduceDToFunctionDefinition}
 )
-
-type _CActionTableKey struct {
-	_CStateId
-	CSymbolId
-}
-
-type _CActionTableType map[_CActionTableKey]*_CAction
-
-func (table _CActionTableType) Get(stateId _CStateId, symbol CSymbolId) (*_CAction, bool) {
-	action, ok := table[_CActionTableKey{stateId, symbol}]
-	if ok {
-		return action, ok
-	}
-	action, ok = table[_CActionTableKey{stateId, _CWildcardMarker}]
-	return action, ok
-}
 
 var _CActionTable = _CActionTableType{
 	{_CState2, _CEndMarker}:                     &_CAction{_CAcceptAction, 0, 0},
@@ -7192,198 +7249,6 @@ var _CActionTable = _CActionTableType{
 	{_CState349, _CWildcardMarker}:              _CReduceBToIterationStatementAction,
 	{_CState350, _CWildcardMarker}:              _CReduceDToIterationStatementAction,
 	{_CState351, _CWildcardMarker}:              _CReduceBToSelectionStatementAction,
-}
-
-var _CExpectedTerminals = map[_CStateId][]CSymbolId{
-	_CState1:   []CSymbolId{CIdentifierToken, CTypeNameToken, CTypedefToken, CExternToken, CStaticToken, CAutoToken, CRegisterToken, CCharToken, CShortToken, CIntToken, CLongToken, CSignedToken, CUnsignedToken, CFloatToken, CDoubleToken, CConstToken, CVolatileToken, CVoidToken, CStructToken, CUnionToken, CEnumToken, '(', '*'},
-	_CState2:   []CSymbolId{CIdentifierToken, CTypeNameToken, CTypedefToken, CExternToken, CStaticToken, CAutoToken, CRegisterToken, CCharToken, CShortToken, CIntToken, CLongToken, CSignedToken, CUnsignedToken, CFloatToken, CDoubleToken, CConstToken, CVolatileToken, CVoidToken, CStructToken, CUnionToken, CEnumToken, '(', '*', _CEndMarker},
-	_CState3:   []CSymbolId{CIdentifierToken, '(', '*'},
-	_CState4:   []CSymbolId{CConstToken, CVolatileToken, '*'},
-	_CState9:   []CSymbolId{CIdentifierToken, '{'},
-	_CState27:  []CSymbolId{CIdentifierToken, '(', ';', '*'},
-	_CState28:  []CSymbolId{CTypeNameToken, CTypedefToken, CExternToken, CStaticToken, CAutoToken, CRegisterToken, CCharToken, CShortToken, CIntToken, CLongToken, CSignedToken, CUnsignedToken, CFloatToken, CDoubleToken, CConstToken, CVolatileToken, CVoidToken, CStructToken, CUnionToken, CEnumToken, '{'},
-	_CState29:  []CSymbolId{'(', '['},
-	_CState33:  []CSymbolId{CIdentifierToken, '('},
-	_CState34:  []CSymbolId{CTypeNameToken, CTypedefToken, CExternToken, CStaticToken, CAutoToken, CRegisterToken, CCharToken, CShortToken, CIntToken, CLongToken, CSignedToken, CUnsignedToken, CFloatToken, CDoubleToken, CConstToken, CVolatileToken, CVoidToken, CStructToken, CUnionToken, CEnumToken},
-	_CState35:  []CSymbolId{CIdentifierToken, '{'},
-	_CState37:  []CSymbolId{CTypeNameToken, CTypedefToken, CExternToken, CStaticToken, CAutoToken, CRegisterToken, CCharToken, CShortToken, CIntToken, CLongToken, CSignedToken, CUnsignedToken, CFloatToken, CDoubleToken, CConstToken, CVolatileToken, CVoidToken, CStructToken, CUnionToken, CEnumToken},
-	_CState38:  []CSymbolId{CTypeNameToken, CTypedefToken, CExternToken, CStaticToken, CAutoToken, CRegisterToken, CCharToken, CShortToken, CIntToken, CLongToken, CSignedToken, CUnsignedToken, CFloatToken, CDoubleToken, CConstToken, CVolatileToken, CVoidToken, CStructToken, CUnionToken, CEnumToken},
-	_CState39:  []CSymbolId{')'},
-	_CState42:  []CSymbolId{CConstToken, CVolatileToken, '*'},
-	_CState43:  []CSymbolId{CIdentifierToken},
-	_CState44:  []CSymbolId{'{'},
-	_CState46:  []CSymbolId{CTypeNameToken, CTypedefToken, CExternToken, CStaticToken, CAutoToken, CRegisterToken, CCharToken, CShortToken, CIntToken, CLongToken, CSignedToken, CUnsignedToken, CFloatToken, CDoubleToken, CConstToken, CVolatileToken, CVoidToken, CStructToken, CUnionToken, CEnumToken, '{', '='},
-	_CState48:  []CSymbolId{';', ','},
-	_CState49:  []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, CTypeNameToken, CTypedefToken, CExternToken, CStaticToken, CAutoToken, CRegisterToken, CCharToken, CShortToken, CIntToken, CLongToken, CSignedToken, CUnsignedToken, CFloatToken, CDoubleToken, CConstToken, CVolatileToken, CVoidToken, CStructToken, CUnionToken, CEnumToken, CCaseToken, CDefaultToken, CIfToken, CSwitchToken, CWhileToken, CDoToken, CForToken, CGotoToken, CContinueToken, CBreakToken, CReturnToken, '(', '{', '}', ';', '*', '-', '+', '&', '!', '~'},
-	_CState52:  []CSymbolId{CTypeNameToken, CTypedefToken, CExternToken, CStaticToken, CAutoToken, CRegisterToken, CCharToken, CShortToken, CIntToken, CLongToken, CSignedToken, CUnsignedToken, CFloatToken, CDoubleToken, CConstToken, CVolatileToken, CVoidToken, CStructToken, CUnionToken, CEnumToken, '{'},
-	_CState53:  []CSymbolId{CIdentifierToken, '(', ';', '*'},
-	_CState54:  []CSymbolId{CIdentifierToken, CTypeNameToken, CTypedefToken, CExternToken, CStaticToken, CAutoToken, CRegisterToken, CCharToken, CShortToken, CIntToken, CLongToken, CSignedToken, CUnsignedToken, CFloatToken, CDoubleToken, CConstToken, CVolatileToken, CVoidToken, CStructToken, CUnionToken, CEnumToken, ')'},
-	_CState55:  []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, '(', ']', '*', '-', '+', '&', '!', '~'},
-	_CState56:  []CSymbolId{'(', '['},
-	_CState58:  []CSymbolId{CTypeNameToken, CCharToken, CShortToken, CIntToken, CLongToken, CSignedToken, CUnsignedToken, CFloatToken, CDoubleToken, CConstToken, CVolatileToken, CVoidToken, CStructToken, CUnionToken, CEnumToken},
-	_CState59:  []CSymbolId{'{'},
-	_CState66:  []CSymbolId{'='},
-	_CState68:  []CSymbolId{'}', ','},
-	_CState69:  []CSymbolId{CIdentifierToken},
-	_CState70:  []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, '(', '{', '*', '-', '+', '&', '!', '~'},
-	_CState72:  []CSymbolId{CTypeNameToken, CTypedefToken, CExternToken, CStaticToken, CAutoToken, CRegisterToken, CCharToken, CShortToken, CIntToken, CLongToken, CSignedToken, CUnsignedToken, CFloatToken, CDoubleToken, CConstToken, CVolatileToken, CVoidToken, CStructToken, CUnionToken, CEnumToken, '{'},
-	_CState73:  []CSymbolId{CIdentifierToken, '(', '*'},
-	_CState77:  []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, CTypeNameToken, CCharToken, CShortToken, CIntToken, CLongToken, CSignedToken, CUnsignedToken, CFloatToken, CDoubleToken, CConstToken, CVolatileToken, CVoidToken, CStructToken, CUnionToken, CEnumToken, '(', '*', '-', '+', '&', '!', '~'},
-	_CState84:  []CSymbolId{';'},
-	_CState85:  []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, '(', '*', '-', '+', '&', '!', '~'},
-	_CState87:  []CSymbolId{';'},
-	_CState88:  []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, '(', '*', '-', '+', '&', '!', '~'},
-	_CState89:  []CSymbolId{':'},
-	_CState90:  []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, CCaseToken, CDefaultToken, CIfToken, CSwitchToken, CWhileToken, CDoToken, CForToken, CGotoToken, CContinueToken, CBreakToken, CReturnToken, '(', '{', ';', '*', '-', '+', '&', '!', '~'},
-	_CState91:  []CSymbolId{'('},
-	_CState92:  []CSymbolId{CIdentifierToken},
-	_CState93:  []CSymbolId{':'},
-	_CState94:  []CSymbolId{'('},
-	_CState95:  []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, '(', '*', '-', '+', '&', '!', '~'},
-	_CState96:  []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, '(', ';', '*', '-', '+', '&', '!', '~'},
-	_CState97:  []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, '(', '*', '-', '+', '&', '!', '~'},
-	_CState99:  []CSymbolId{'('},
-	_CState100: []CSymbolId{'('},
-	_CState101: []CSymbolId{'-', '+'},
-	_CState102: []CSymbolId{'&'},
-	_CState107: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, CTypeNameToken, CTypedefToken, CExternToken, CStaticToken, CAutoToken, CRegisterToken, CCharToken, CShortToken, CIntToken, CLongToken, CSignedToken, CUnsignedToken, CFloatToken, CDoubleToken, CConstToken, CVolatileToken, CVoidToken, CStructToken, CUnionToken, CEnumToken, CCaseToken, CDefaultToken, CIfToken, CSwitchToken, CWhileToken, CDoToken, CForToken, CGotoToken, CContinueToken, CBreakToken, CReturnToken, '(', '{', '}', ';', '*', '-', '+', '&', '!', '~'},
-	_CState108: []CSymbolId{CEqOpToken, CNeOpToken},
-	_CState109: []CSymbolId{'^'},
-	_CState110: []CSymbolId{';', ','},
-	_CState112: []CSymbolId{'|'},
-	_CState116: []CSymbolId{CAndOpToken},
-	_CState117: []CSymbolId{COrOpToken, '?'},
-	_CState118: []CSymbolId{'*', '/', '%'},
-	_CState119: []CSymbolId{CPtrOpToken, CIncOpToken, CDecOpToken, '(', '[', '.'},
-	_CState121: []CSymbolId{CLeOpToken, CGeOpToken, '<', '>'},
-	_CState123: []CSymbolId{CLeftOpToken, CRightOpToken},
-	_CState125: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, CCaseToken, CDefaultToken, CIfToken, CSwitchToken, CWhileToken, CDoToken, CForToken, CGotoToken, CContinueToken, CBreakToken, CReturnToken, '(', '{', '}', ';', '*', '-', '+', '&', '!', '~'},
-	_CState126: []CSymbolId{CMulAssignToken, CDivAssignToken, CModAssignToken, CAddAssignToken, CSubAssignToken, CLeftAssignToken, CRightAssignToken, CAndAssignToken, CXorAssignToken, COrAssignToken, '='},
-	_CState127: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, '(', '*', '-', '+', '&', '!', '~'},
-	_CState130: []CSymbolId{'='},
-	_CState133: []CSymbolId{CIdentifierToken, '(', '[', '*'},
-	_CState134: []CSymbolId{')', ','},
-	_CState136: []CSymbolId{',', ')'},
-	_CState137: []CSymbolId{')'},
-	_CState141: []CSymbolId{']'},
-	_CState143: []CSymbolId{CIdentifierToken, '(', ':', '*'},
-	_CState145: []CSymbolId{CTypeNameToken, CCharToken, CShortToken, CIntToken, CLongToken, CSignedToken, CUnsignedToken, CFloatToken, CDoubleToken, CConstToken, CVolatileToken, CVoidToken, CStructToken, CUnionToken, CEnumToken, '}'},
-	_CState146: []CSymbolId{CTypeNameToken, CCharToken, CShortToken, CIntToken, CLongToken, CSignedToken, CUnsignedToken, CFloatToken, CDoubleToken, CConstToken, CVolatileToken, CVoidToken, CStructToken, CUnionToken, CEnumToken},
-	_CState147: []CSymbolId{CTypeNameToken, CCharToken, CShortToken, CIntToken, CLongToken, CSignedToken, CUnsignedToken, CFloatToken, CDoubleToken, CConstToken, CVolatileToken, CVoidToken, CStructToken, CUnionToken, CEnumToken},
-	_CState148: []CSymbolId{CTypeNameToken, CCharToken, CShortToken, CIntToken, CLongToken, CSignedToken, CUnsignedToken, CFloatToken, CDoubleToken, CConstToken, CVolatileToken, CVoidToken, CStructToken, CUnionToken, CEnumToken},
-	_CState149: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, '(', '*', '-', '+', '&', '!', '~'},
-	_CState150: []CSymbolId{CIdentifierToken},
-	_CState152: []CSymbolId{'}', ','},
-	_CState153: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, '(', '{', '*', '-', '+', '&', '!', '~'},
-	_CState158: []CSymbolId{')', ','},
-	_CState159: []CSymbolId{'(', '[', '*', ')'},
-	_CState160: []CSymbolId{')'},
-	_CState162: []CSymbolId{':'},
-	_CState164: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, '(', '*', '-', '+', '&', '!', '~'},
-	_CState166: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, CCaseToken, CDefaultToken, CIfToken, CSwitchToken, CWhileToken, CDoToken, CForToken, CGotoToken, CContinueToken, CBreakToken, CReturnToken, '(', '{', ';', '*', '-', '+', '&', '!', '~'},
-	_CState167: []CSymbolId{CWhileToken},
-	_CState168: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, '(', ';', '*', '-', '+', '&', '!', '~'},
-	_CState169: []CSymbolId{';'},
-	_CState170: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, CCaseToken, CDefaultToken, CIfToken, CSwitchToken, CWhileToken, CDoToken, CForToken, CGotoToken, CContinueToken, CBreakToken, CReturnToken, '(', '{', ';', '*', '-', '+', '&', '!', '~'},
-	_CState171: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, '(', '*', '-', '+', '&', '!', '~'},
-	_CState174: []CSymbolId{';', ','},
-	_CState175: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, CTypeNameToken, CCharToken, CShortToken, CIntToken, CLongToken, CSignedToken, CUnsignedToken, CFloatToken, CDoubleToken, CConstToken, CVolatileToken, CVoidToken, CStructToken, CUnionToken, CEnumToken, '(', '*', '-', '+', '&', '!', '~'},
-	_CState177: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, '(', '*', '-', '+', '&', '!', '~'},
-	_CState178: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, '(', '*', '-', '+', '&', '!', '~'},
-	_CState179: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, '(', '*', '-', '+', '&', '!', '~'},
-	_CState180: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, '(', '*', '-', '+', '&', '!', '~'},
-	_CState181: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, '(', '*', '-', '+', '&', '!', '~'},
-	_CState183: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, CCaseToken, CDefaultToken, CIfToken, CSwitchToken, CWhileToken, CDoToken, CForToken, CGotoToken, CContinueToken, CBreakToken, CReturnToken, '(', '{', '}', ';', '*', '-', '+', '&', '!', '~'},
-	_CState184: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, '(', '*', '-', '+', '&', '!', '~'},
-	_CState185: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, '(', '*', '-', '+', '&', '!', '~'},
-	_CState186: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, '(', '*', '-', '+', '&', '!', '~'},
-	_CState187: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, '(', '*', '-', '+', '&', '!', '~'},
-	_CState189: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, '(', '*', '-', '+', '&', '!', '~'},
-	_CState190: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, '(', '*', '-', '+', '&', '!', '~'},
-	_CState191: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, '(', '*', '-', '+', '&', '!', '~'},
-	_CState192: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, '(', '*', '-', '+', '&', '!', '~'},
-	_CState193: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, '(', '*', '-', '+', '&', '!', '~'},
-	_CState194: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, '(', '*', '-', '+', '&', '!', '~'},
-	_CState195: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, '(', '*', '-', '+', '&', '!', '~'},
-	_CState196: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, '(', ')', '*', '-', '+', '&', '!', '~'},
-	_CState197: []CSymbolId{CIdentifierToken},
-	_CState198: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, '(', '*', '-', '+', '&', '!', '~'},
-	_CState201: []CSymbolId{CIdentifierToken},
-	_CState202: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, '(', '*', '-', '+', '&', '!', '~'},
-	_CState203: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, '(', '*', '-', '+', '&', '!', '~'},
-	_CState204: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, '(', '*', '-', '+', '&', '!', '~'},
-	_CState205: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, '(', '*', '-', '+', '&', '!', '~'},
-	_CState206: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, '(', '*', '-', '+', '&', '!', '~'},
-	_CState207: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, '(', '*', '-', '+', '&', '!', '~'},
-	_CState221: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, '(', '*', '-', '+', '&', '!', '~'},
-	_CState223: []CSymbolId{CIdentifierToken, CTypeNameToken, CTypedefToken, CExternToken, CStaticToken, CAutoToken, CRegisterToken, CCharToken, CShortToken, CIntToken, CLongToken, CSignedToken, CUnsignedToken, CFloatToken, CDoubleToken, CConstToken, CVolatileToken, CVoidToken, CStructToken, CUnionToken, CEnumToken, '(', ')', '[', '*'},
-	_CState224: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, '(', ']', '*', '-', '+', '&', '!', '~'},
-	_CState227: []CSymbolId{'(', '['},
-	_CState228: []CSymbolId{CIdentifierToken, '(', '['},
-	_CState230: []CSymbolId{CIdentifierToken},
-	_CState231: []CSymbolId{CTypeNameToken, CTypedefToken, CExternToken, CStaticToken, CAutoToken, CRegisterToken, CCharToken, CShortToken, CIntToken, CLongToken, CSignedToken, CUnsignedToken, CFloatToken, CDoubleToken, CConstToken, CVolatileToken, CVoidToken, CStructToken, CUnionToken, CEnumToken, CEllipsisToken},
-	_CState234: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, '(', '*', '-', '+', '&', '!', '~'},
-	_CState235: []CSymbolId{':'},
-	_CState237: []CSymbolId{';', ','},
-	_CState242: []CSymbolId{CTypeNameToken, CCharToken, CShortToken, CIntToken, CLongToken, CSignedToken, CUnsignedToken, CFloatToken, CDoubleToken, CConstToken, CVolatileToken, CVoidToken, CStructToken, CUnionToken, CEnumToken, '}'},
-	_CState247: []CSymbolId{'}', ','},
-	_CState249: []CSymbolId{CTypeNameToken, CTypedefToken, CExternToken, CStaticToken, CAutoToken, CRegisterToken, CCharToken, CShortToken, CIntToken, CLongToken, CSignedToken, CUnsignedToken, CFloatToken, CDoubleToken, CConstToken, CVolatileToken, CVoidToken, CStructToken, CUnionToken, CEnumToken, '(', ')', '[', '*'},
-	_CState250: []CSymbolId{')'},
-	_CState251: []CSymbolId{'(', '[', ')'},
-	_CState252: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, '(', '*', '-', '+', '&', '!', '~'},
-	_CState253: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, CCaseToken, CDefaultToken, CIfToken, CSwitchToken, CWhileToken, CDoToken, CForToken, CGotoToken, CContinueToken, CBreakToken, CReturnToken, '(', '{', ';', '*', '-', '+', '&', '!', '~'},
-	_CState255: []CSymbolId{'('},
-	_CState256: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, '(', ';', '*', '-', '+', '&', '!', '~'},
-	_CState259: []CSymbolId{')', ','},
-	_CState261: []CSymbolId{')'},
-	_CState262: []CSymbolId{')', ','},
-	_CState263: []CSymbolId{')', ','},
-	_CState264: []CSymbolId{'*', '/', '%'},
-	_CState265: []CSymbolId{'*', '/', '%'},
-	_CState266: []CSymbolId{CEqOpToken, CNeOpToken},
-	_CState268: []CSymbolId{CLeOpToken, CGeOpToken, '<', '>'},
-	_CState269: []CSymbolId{CLeOpToken, CGeOpToken, '<', '>'},
-	_CState270: []CSymbolId{'&'},
-	_CState272: []CSymbolId{'^'},
-	_CState273: []CSymbolId{'|'},
-	_CState274: []CSymbolId{':', ','},
-	_CState275: []CSymbolId{CAndOpToken},
-	_CState280: []CSymbolId{')', ','},
-	_CState283: []CSymbolId{']', ','},
-	_CState285: []CSymbolId{CLeftOpToken, CRightOpToken},
-	_CState286: []CSymbolId{CLeftOpToken, CRightOpToken},
-	_CState287: []CSymbolId{CLeftOpToken, CRightOpToken},
-	_CState288: []CSymbolId{CLeftOpToken, CRightOpToken},
-	_CState289: []CSymbolId{'-', '+'},
-	_CState290: []CSymbolId{'-', '+'},
-	_CState293: []CSymbolId{')'},
-	_CState294: []CSymbolId{')'},
-	_CState296: []CSymbolId{']'},
-	_CState297: []CSymbolId{CTypeNameToken, CTypedefToken, CExternToken, CStaticToken, CAutoToken, CRegisterToken, CCharToken, CShortToken, CIntToken, CLongToken, CSignedToken, CUnsignedToken, CFloatToken, CDoubleToken, CConstToken, CVolatileToken, CVoidToken, CStructToken, CUnionToken, CEnumToken, ')'},
-	_CState298: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, '(', ']', '*', '-', '+', '&', '!', '~'},
-	_CState299: []CSymbolId{'(', '['},
-	_CState301: []CSymbolId{')'},
-	_CState304: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, '(', '*', '-', '+', '&', '!', '~'},
-	_CState305: []CSymbolId{CIdentifierToken, '(', ':', '*'},
-	_CState308: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, '(', '{', '}', '*', '-', '+', '&', '!', '~'},
-	_CState312: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, '(', '*', '-', '+', '&', '!', '~'},
-	_CState313: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, '(', ')', '*', '-', '+', '&', '!', '~'},
-	_CState314: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, CCaseToken, CDefaultToken, CIfToken, CSwitchToken, CWhileToken, CDoToken, CForToken, CGotoToken, CContinueToken, CBreakToken, CReturnToken, '(', '{', ';', '*', '-', '+', '&', '!', '~'},
-	_CState316: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, CCaseToken, CDefaultToken, CIfToken, CSwitchToken, CWhileToken, CDoToken, CForToken, CGotoToken, CContinueToken, CBreakToken, CReturnToken, '(', '{', ';', '*', '-', '+', '&', '!', '~'},
-	_CState317: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, CCaseToken, CDefaultToken, CIfToken, CSwitchToken, CWhileToken, CDoToken, CForToken, CGotoToken, CContinueToken, CBreakToken, CReturnToken, '(', '{', ';', '*', '-', '+', '&', '!', '~'},
-	_CState318: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, '(', '*', '-', '+', '&', '!', '~'},
-	_CState320: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, '(', '*', '-', '+', '&', '!', '~'},
-	_CState326: []CSymbolId{')'},
-	_CState328: []CSymbolId{']'},
-	_CState333: []CSymbolId{')', ','},
-	_CState334: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, CCaseToken, CDefaultToken, CIfToken, CSwitchToken, CWhileToken, CDoToken, CForToken, CGotoToken, CContinueToken, CBreakToken, CReturnToken, '(', '{', ';', '*', '-', '+', '&', '!', '~'},
-	_CState335: []CSymbolId{')', ','},
-	_CState336: []CSymbolId{CElseToken},
-	_CState337: []CSymbolId{CElseToken, '!', '&', '(', '*', '+', '-', ';', '{', '}', '~', CBreakToken, CCaseToken, CConstantToken, CContinueToken, CDecOpToken, CDefaultToken, CDoToken, CElseToken, CForToken, CGotoToken, CIdentifierToken, CIfToken, CIncOpToken, CReturnToken, CSizeofToken, CStringLiteralToken, CSwitchToken, CWhileToken},
-	_CState338: []CSymbolId{CElseToken, CElseToken, CWhileToken},
-	_CState345: []CSymbolId{';'},
-	_CState347: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, CCaseToken, CDefaultToken, CIfToken, CSwitchToken, CWhileToken, CDoToken, CForToken, CGotoToken, CContinueToken, CBreakToken, CReturnToken, '(', '{', ';', '*', '-', '+', '&', '!', '~'},
-	_CState348: []CSymbolId{CIdentifierToken, CConstantToken, CStringLiteralToken, CSizeofToken, CIncOpToken, CDecOpToken, CCaseToken, CDefaultToken, CIfToken, CSwitchToken, CWhileToken, CDoToken, CForToken, CGotoToken, CContinueToken, CBreakToken, CReturnToken, '(', '{', ';', '*', '-', '+', '&', '!', '~'},
 }
 
 /*
