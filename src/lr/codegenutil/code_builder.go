@@ -1,4 +1,4 @@
-package code_gen
+package codegenutil
 
 import (
 	"fmt"

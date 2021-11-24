@@ -5,7 +5,7 @@ import (
 )
 
 // TODO handle this more gracefully
-func snakeToCamel(str string) string {
+func SnakeToCamel(str string) string {
 	chunks := strings.Split(str, "_")
 
 	result := ""

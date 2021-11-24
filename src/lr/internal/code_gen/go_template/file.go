@@ -988,7 +988,7 @@ type `))
 				} else {
 					// hack: append "_" to the end of the name ensures the
 					// name is never a go keyword
-					paramName = snakeToCamel(term.Name) + "_"
+					paramName = SnakeToCamel(term.Name) + "_"
 				}
 
 				paramNameCount[paramName] += 1
@@ -1439,7 +1439,7 @@ func `))
 
 		parseSuffix := ""
 		if len(StartSymbols) > 1 {
-			parseSuffix = snakeToCamel(start.Name)
+			parseSuffix = SnakeToCamel(start.Name)
 		}
 
 		// file.template:224:6
