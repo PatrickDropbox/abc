@@ -54,7 +54,7 @@ func main() {
 	var codeGenTemplate io.WriterTo
 	if *useManualCodeGen {
 		fmt.Println("Using manual code generator")
-		codeGenTemplate = manual_codegen.NewTemplate(templateFile)
+		codeGenTemplate = manual_codegen.NewTemplate(filename, templateFile)
 	} else {
 		codeGenTemplate = templated_codegen.NewTemplate(filename, templateFile)
 	}

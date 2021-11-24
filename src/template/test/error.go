@@ -6,7 +6,7 @@ import (
 	_fmt "fmt"
 	_io "io"
 
-	"fmt"
+	fmt2 "fmt"
 )
 
 type ErrorTemplate struct {
@@ -80,7 +80,7 @@ func (_template *ErrorTemplate) WriteTo(
 	if true {
 		// error.template:10:4
 		{
-			_err := (fmt.Errorf("bad"))
+			_err := (fmt2.Errorf("bad"))
 			if _err == nil {
 				_err = _fmt.Errorf("Unexpected error (error.template:10:4)")
 			}
