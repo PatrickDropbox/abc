@@ -273,6 +273,7 @@ func _Parse(
 		}
 	}
 }
+
 func (i SymbolId) String() string {
 	switch i {
 	case _EndMarker:
