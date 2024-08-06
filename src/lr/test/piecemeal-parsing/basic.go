@@ -125,24 +125,6 @@ func (BasicLexer) CurrentLocation() Location { return Location{} }
 
 type ReducerImpl struct{}
 
-func (ReducerImpl) ParseAllToRoot(
-	marker *GenericSymbol,
-	list []Expr) (
-	interface{},
-	error) {
-
-	return list, nil
-}
-
-func (ReducerImpl) ParseBlockToRoot(
-	marker *GenericSymbol,
-	block *Block) (
-	interface{},
-	error) {
-
-	return block, nil
-}
-
 func (ReducerImpl) AddToExprList(list []Expr, expr Expr) ([]Expr, error) {
 	return append(list, expr), nil
 }

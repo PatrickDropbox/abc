@@ -1,0 +1,112 @@
+package debug_template
+
+import (
+    lr "github.com/pattyshack/abc/src/lr/internal"
+)
+
+template File {
+    OrderedSymbolNames        []string  // ^, *, $, terminals, non-terminals
+    States                    *lr.LRStates
+    OutputDebugNonKernelItems bool
+}
+
+%%
+[[-$
+
+gotoCount := 0
+reduceCount := 0
+shiftReduceCount := 0
+reduceReduceCount := 0
+
+-]]
+Parser Debug States:
+[[-for _, state := range States.OrderedStates]]
+  State $(state.StateNum):
+    Kernel Items:
+    [[-$ firstNonKernel := true -]]
+    [[-for _, item := range state.Items-]]
+        [[-if !item.IsKernel && firstNonKernel-]]
+            [[-$
+
+            if !OutputDebugNonKernelItems &&
+                len(state.ShiftReduceConflictSymbols) == 0 &&
+                len(state.ReduceReduceConflictSymbols) == 0 {
+
+                break
+            }
+
+            firstNonKernel = false
+
+            ]]
+    Non-kernel Items:
+        [[-end-]]
+
+      $item
+    [[-end-]]
+
+    Reduce:
+    [[-if len(state.Reduce) == 0]]
+      (nil)
+    [[-end-]]
+
+    [[-for _, symbolName := range OrderedSymbolNames]]
+        [[-$
+
+        items := state.Reduce[symbolName]
+        reduceCount += len(items)
+
+        if len(items) == 0 {
+            continue
+        }
+
+        -]]
+
+      $symbolName -> [
+        [[-for idx, item := range items-]]
+$(item.Name)
+            [[-if idx != len(items) - 1]] [[end-]]
+        [[-end-]]
+]
+    [[-end-]]
+
+    Goto:
+    [[-$ gotoCount += len(state.Goto) -]]
+    [[- if len(state.Goto) == 0]]
+      (nil)
+    [[-end-]]
+
+    [[-for _, symbolName := range OrderedSymbolNames-]]
+        [[-$ child, ok := state.Goto[symbolName] -]]
+        [[-if ok]]
+      $symbolName -> State $(child.StateNum)
+        [[-end-]]
+    [[-end-]]
+
+    [[-if len(state.ShiftReduceConflictSymbols) > 0-]]
+        [[-$ shiftReduceCount += len(state.ShiftReduceConflictSymbols) ]]
+    Shift/reduce conflict symbols:
+      [
+        [[-for idx, symbol := range state.ShiftReduceConflictSymbols-]]
+$symbol
+            [[-if idx != len(state.ShiftReduceConflictSymbols) - 1]] [[end-]]
+        [[-end-]]
+]
+    [[-end-]]
+
+    [[-if len(state.ReduceReduceConflictSymbols) > 0-]]
+        [[-$ reduceReduceCount += len(state.ReduceReduceConflictSymbols) ]]
+    Reduce/reduce conflict symbols:
+      [
+        [[-for idx, symbol := range state.ReduceReduceConflictSymbols-]]
+$symbol
+            [[-if idx != len(state.ShiftReduceConflictSymbols) - 1]] [[end-]]
+        [[-end-]]
+]
+    [[-end-]]
+
+[[end]]
+Number of states: $(len(States.OrderedStates))
+Number of shift actions: $gotoCount
+Number of reduce actions: $reduceCount
+Number of shift/reduce conflicts: $shiftReduceCount
+Number of reduce/reduce conflicts: $reduceReduceCount

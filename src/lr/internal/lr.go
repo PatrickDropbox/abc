@@ -531,7 +531,7 @@ func (states *LRStates) populateStartStates() {
 		item := states.ItemPool.Get(
 			acceptTerm,
 			&Clause{
-				SortId:   -(len(states.Starts)-idx - 1),
+				SortId:   -(len(states.Starts) - idx - 1),
 				Bindings: []*Term{startTerm, start},
 			},
 			1,

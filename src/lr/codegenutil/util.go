@@ -1,4 +1,4 @@
-package go_template
+package codegenutil
 
 import (
 	"strings"

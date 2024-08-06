@@ -30,12 +30,17 @@ func printTree(input string) {
 }
 
 func main() {
-	// printTree("a + b")
-	// printTree("a + b + c - d")
-	// printTree("{ }")
-	// printTree("a + { }")
+	printTree("a + b")
+	printTree("a + b + c - d")
+	printTree("{ }")
+	printTree("a + { }")
 
-	// printTree("a { }")
+	printTree("a { }")
+	printTree("{ } { }")
+	printTree("{ } + { }")
+	printTree("{ { } }")
+	printTree("{ { 1 } }")
 	printTree("{ } a b + c d { 1 2 3 4 + { 5 + 6 } + 7 }")
-	printTree("{ } } a b + c d { 1 2 3 4 + { { a + + b }  + 6 } + 7 } foo { a + } blah {")
+	printTree("{ } } a b + c d { 1 2 3 4 + { { a + + b }  + 6 } + 7 } f { a + } b {")
+	printTree("{ } a b + c d { 1 2 3 4 + { { a + + b }  + 6 } + 7 } f { a + } b {")
 }
