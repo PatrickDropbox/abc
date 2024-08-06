@@ -1,7 +1,8 @@
 package lr
 
 type LangSpecs struct {
-	Go *GoSpec `yaml:"go"`
+	Go   *GoSpec   `yaml:"go"`
+	Rust *RustSpec `yaml:"rust"`
 }
 
 type GoSpec struct {
@@ -11,21 +12,27 @@ type GoSpec struct {
 	OutputDebugNonKernelItems bool              `yaml:"output_debug_non_kernel_items"`
 }
 
+type RustSpec struct {
+	UseList    []string          `yaml:"use_list"`
+	ValueTypes map[string]string `yaml:"value_types"`
+	OutputDebugNonKernelItems bool              `yaml:"output_debug_non_kernel_items"`
+}
+
 type Param struct {
-    Name      string
-    ParamType interface{}
+	Name      string
+	ParamType interface{}
 }
 
 type ParamList []*Param
 
 func (list ParamList) Len() int {
-    return len(list)
+	return len(list)
 }
 
 func (list ParamList) Less(i int, j int) bool {
-    return list[i].Name < list[j].Name
+	return list[i].Name < list[j].Name
 }
 
 func (list ParamList) Swap(i int, j int) {
-    list[i], list[j] = list[j], list[i]
+	list[i], list[j] = list[j], list[i]
 }

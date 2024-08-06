@@ -1,0 +1,563 @@
+package rust_template
+
+import (
+  "fmt"
+  "sort"
+  "strings"
+
+  lr "github.com/pattyshack/abc/src/lr/internal"
+  parser "github.com/pattyshack/abc/src/lr/internal/parser"
+  "github.com/pattyshack/abc/src/lr/internal/code_gen/debug_template"
+)
+
+template File {
+  Grammar *lr.Grammar
+  States *lr.LRStates
+  Cfg *lr.RustSpec
+
+  OrderedSymbolNames []string  // ^, *, $, terminals, non-terminals
+}
+
+%%
+[[-$
+  sortedValueDecls := []string{}
+  for name, actualType := range Cfg.ValueTypes {
+    sortedValueDecls = append(sortedValueDecls, name + "(" + actualType + "),")
+  }
+  sort.Strings(sortedValueDecls)
+
+  rustType := func(name string) string {
+    actualType := Cfg.ValueTypes[name]
+    if actualType != "" {
+      return actualType
+    }
+
+    return "Symbol"
+  }
+
+  rustSymbolKind := func(termName string) string {
+    if termName == lr.StartMarker {
+      return "SymbolKind::_StartParseMarker"
+    } else if termName == lr.Wildcard {
+      return "SymbolKind::_WildcardMarker"
+    } else if termName == lr.EndMarker {
+      return "SymbolKind::EofToken"
+    }
+
+    term := Grammar.Terms[termName]
+    if term == nil {
+      panic("Invalid term name: " + termName)
+    }
+
+    if !term.IsTerminal {
+      return "SymbolKind::" + term.CodeGenSymbolConst + "Type"
+    }
+
+    if term.SymbolId != parser.LRIdentifierToken {
+      return "SymbolKind::AsciiCharToken(" + term.Name + ")"
+    }
+
+    return "SymbolKind::" + term.CodeGenSymbolConst + "Token"
+  }
+-]]
+// Auto-generated from source: $(Grammar.Source)
+
+use std::error;
+use std::fmt;
+
+[[for _, entry := range Cfg.UseList-]]
+use $entry;
+[[-end]]
+
+#[derive(Debug, Clone)]
+pub enum SymbolKind {
+  //
+  // Token symbols.
+  //
+  EofToken,
+  AsciiCharToken(char),
+
+[[-for _, term := range Grammar.Terminals-]]
+  [[-if term.SymbolId == parser.LRIdentifierToken]]
+  $(term.CodeGenSymbolConst)Token,
+  [[-end-]]
+[[-end]]
+
+  //
+  // Type symbols.
+  //
+[[for _, term := range Grammar.NonTerminals-]]
+  $(term.CodeGenSymbolConst)Type,
+[[end-]]
+
+  //
+  // For internal use only.
+  //
+  _StartParseMarker,
+  _WildcardMarker,
+}
+
+impl SymbolKind {
+  fn to_string(&self) -> String {
+    match self {
+      SymbolKind::_StartParseMarker => "^",
+      SymbolKind::_WildcardMarker => "*",
+      SymbolKind::EofToken => "$$",
+[[for _, term := range Grammar.Terminals]]
+      $(rustSymbolKind(term.Name)) => "$(term.Name)",
+[[-end]]
+[[for _, term := range Grammar.NonTerminals]]
+      $(rustSymbolKind(term.Name)) => "$(term.Name)",
+[[-end]]
+      SymbolKind::AsciiCharToken(c) => panic!("Unexpected token '{}'", c),
+    }.to_string()
+  }
+}
+
+#[derive(Debug)]
+pub enum SymbolData {
+  // Note: %token without value declaration must have Nil data.
+  Nil,
+  // Note: %type without value declaration must have Any data.
+  Any(Box<Symbol>),
+
+[[-for _, decl := range sortedValueDecls]]
+  $decl
+[[-end]]
+}
+
+#[derive(Debug)]
+pub struct Symbol {
+  pub kind: SymbolKind,
+  pub data: SymbolData,
+}
+
+impl Symbol {
+  pub fn validate(&self) -> Result<(), Box<dyn error::Error>> {
+    match self {
+      Symbol{
+        kind: SymbolKind::EofToken,
+        data: _,
+      } => (),
+[[-for _, term := range Grammar.Terminals]]
+  [[-$
+    enumData := "SymbolData::Nil"
+    if term.ValueType != lr.Generic {
+      enumData = "SymbolData::" + term.ValueType + "(_)"
+    }
+  ]]
+      Symbol{
+        kind: $(rustSymbolKind(term.Name)),
+        data: $enumData,
+      } => (),
+[[-end]]
+[[-for _, term := range Grammar.NonTerminals]]
+  [[-$
+    enumData := "SymbolData::Any(_)"
+    if term.ValueType != lr.Generic {
+      enumData = "SymbolData::" + term.ValueType + "(_)"
+    }
+  ]]
+      Symbol{
+        kind: $(rustSymbolKind(term.Name)),
+        data: $enumData,
+      } => (),
+[[-end]]
+      _ => return Err(Box::new(Error::new(format!(
+        "Unexpected symbol {:?}",
+        self)))),
+    };
+
+    Ok(())
+  }
+}
+
+pub trait Lexer {
+  fn next(&mut self) -> Result<Symbol, Box<dyn error::Error>>;
+}
+
+pub trait Reducer {
+[[-for _, rule := range Grammar.NonTerminals-]]
+  [[-if len(rule.Clauses) == 0-]]
+    [[-continue-]]
+  [[-end-]]
+
+  [[-for _, clause := range rule.Clauses]]
+  // $(clause.LRLocation.ShortString()): $(rule.Name) ->
+    [[-if clause.Label == ""-]]
+ ...
+    [[-else-]]
+ $(clause.Label): ...
+    [[-end]]
+  fn $(clause.CodeGenReducerName)(&self, 
+    [[-$ paramNameCount := map[string]int{}-]]
+    [[-for termIdx, term := range clause.Bindings-]]
+      [[-$
+        // hack: append "_" to name to ensure the name isn't a keyword.
+        paramName := "char_"
+        if term.SymbolId != parser.LRCharacterToken {
+          paramName = strings.ToLower(term.Name) + "_"
+        }
+
+        paramNameCount[paramName] += 1
+        cnt := paramNameCount[paramName]
+        if cnt > 1 {
+          paramName = fmt.Sprintf("%s%d", paramName, cnt)
+        }
+      -]]
+$paramName: $(rustType(term.ValueType))
+      [[-if termIdx != len(clause.Bindings) -1 -]]
+, 
+      [[-end-]]
+    [[-end-]]
+) -> Result<$(rustType(rule.ValueType)), Box<dyn error::Error>>;
+  [[-end]]
+[[end-]]
+}
+
+#[derive(Debug)]
+pub struct Error {
+  msg: String,
+}
+
+impl Error {
+  pub fn new(msg: String) -> Self {
+    Self{
+      msg: msg,
+    }
+  }
+}
+
+impl fmt::Display for Error {
+  fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+    write!(f, "{}", self.msg)
+  }
+}
+
+impl error::Error for Error {
+}
+
+[[-for idx, start := range Grammar.Starts ]]
+pub fn parse_$(start.Name)<L: Lexer, R: Reducer>(
+  lexer: &mut L,
+  reducer: &R,
+) -> Result<$(rustType(start.ValueType)), Box<dyn error::Error>> {
+  let result = parse(
+    lexer,
+    reducer,
+    StateId::$(States.OrderedStates[idx].CodeGenConst))?;
+
+  match result {
+  [[-if start.ValueType == lr.Generic]]
+    SymbolData::Any(val) => Ok(*val),
+  [[-else]]
+    SymbolData::$(start.ValueType)(val) => return Ok(val),
+  [[-end]]
+    _ => (),
+  }
+
+  panic!("Invalid symbol data type. This should never happen");
+}
+[[-end]]
+
+// ==============================
+// Parser internal implementation
+// ==============================
+
+fn parse<L: Lexer, R: Reducer>(
+  lexer: &mut L,
+  reducer: &R,
+  start_state: StateId,
+) -> Result<SymbolData, Box<dyn error::Error>> {
+
+  let mut state_stack = vec![
+    ParseStackFrame{
+      state_id: start_state,
+      symbol: Symbol{
+        kind: SymbolKind::_StartParseMarker,
+        data: SymbolData::Nil,
+      }
+    },
+  ];
+
+  let mut symbol_stack = SymbolStack::new(lexer);
+
+  loop {
+    let next_symbol_kind = symbol_stack.peek()?;
+
+    let current_state_id = state_stack[state_stack.len() - 1].state_id.clone();
+
+    match lookup_action(current_state_id, next_symbol_kind) {
+      Action::Goto(next_state_id) => {
+        state_stack.push(ParseStackFrame{
+          state_id: next_state_id,
+          symbol: symbol_stack.pop(),
+        })
+      },
+      Action::Reduce(reduce_kind) => {
+        symbol_stack.push(reduce_symbol(
+            reduce_kind,
+            reducer,
+            &mut state_stack)?)?;
+      },
+      Action::Accept => {
+        assert_eq!(state_stack.len(), 2, "This should never happen");
+        return Ok(state_stack.pop().unwrap().symbol.data)
+      },
+      Action::Error => return Err(new_syntax_error(
+        symbol_stack.pop(),
+        state_stack.pop().unwrap().state_id)),
+    }
+  }
+}
+
+fn reduce_symbol<R: Reducer>(
+  reduce_kind: ReduceKind,
+  reducer: &R,
+  state_stack: &mut Vec<ParseStackFrame>,
+) -> Result<Symbol, Box<dyn error::Error>> {
+  let reduced = match reduce_kind {
+[[-for _, rule := range Grammar.NonTerminals-]]
+  [[-for _, clause := range rule.Clauses]]
+    ReduceKind::$(clause.CodeGenReducerNameConst) => {
+      [[-for idx := len(clause.Bindings) - 1; idx >= 0; idx -= 1 ]]
+      let symbol$idx = state_stack.pop().unwrap().symbol;
+        [[-$ term := clause.Bindings[idx] ]]
+        [[-if term.ValueType == lr.Generic]]
+      let arg$idx = symbol$idx;
+        [[-else]]
+      let arg$idx = match symbol$idx {
+        Symbol{data: SymbolData::$(term.ValueType)(val), ..} => val,
+        _ => panic!("Failed to extract argument.  This should never happen"),
+      };
+        [[-end]]
+
+      [[-end]]
+      let result = reducer.$(clause.CodeGenReducerName)(
+      [[-for idx := 0; idx < len(clause.Bindings); idx += 1 -]]
+arg$idx
+        [[-if idx != len(clause.Bindings) - 1 -]]
+, 
+        [[-end-]]
+      [[-end-]]
+)?;
+      Symbol{
+        kind: $(rustSymbolKind(rule.Name)),
+      [[-if rule.ValueType == lr.Generic]]
+        data: SymbolData::Any(Box::new(result)),
+      [[-else]]
+        data: SymbolData::$(rule.ValueType)(result),
+      [[-end]]
+      }
+    },
+  [[-end-]]
+[[-end]]
+  };
+
+  Ok(reduced)
+}
+
+struct SymbolStack<'a, L: Lexer> {
+  lexer: &'a mut L,
+  top: Vec<Symbol>,
+}
+
+impl<'a, L: Lexer> SymbolStack<'a, L> {
+  fn new(lexer: &'a mut L) -> Self {
+    Self{
+      lexer: lexer,
+      top: Vec::new(),
+    }
+  }
+
+  fn peek(&mut self) -> Result<SymbolKind, Box<dyn error::Error>> {
+    if self.top.is_empty() {
+      let symbol = self.lexer.next()?;
+      let _ = symbol.validate()?;
+      self.top.push(symbol);
+    }
+
+    Ok(self.top[self.top.len()-1].kind.clone())
+  }
+
+  fn push(&mut self, symbol: Symbol) -> Result<(), Box<dyn error::Error>> {
+    symbol.validate()?;
+    self.top.push(symbol);
+    Ok(())
+  }
+
+  fn pop(&mut self) -> Symbol {
+    if self.top.is_empty() {
+      panic!("Cannot pop an empty symbol stack. This should never happen");
+    }
+
+    self.top.pop().unwrap()
+  }
+}
+
+#[derive(Clone, Debug)]
+enum StateId {
+[[-for _, state := range States.OrderedStates]]
+  $(state.CodeGenConst),
+[[-end]]
+}
+
+struct ParseStackFrame {
+  state_id: StateId,
+  symbol: Symbol,
+}
+
+#[derive(Clone, Debug)]
+enum ReduceKind {
+[[-for _, term := range Grammar.NonTerminals-]]
+  [[-for _, clause := range term.Clauses]]
+  $(clause.CodeGenReducerNameConst),
+  [[-end-]]
+[[-end]]
+}
+
+#[derive(Clone, Debug)]
+enum Action {
+  Goto(StateId),
+  Reduce(ReduceKind),
+  Accept,
+  Error,
+}
+
+fn lookup_action(current_state: StateId, next_symbol: SymbolKind) -> Action {
+  match current_state {
+[[-for _, state := range States.OrderedStates]]
+    StateId::$(state.CodeGenConst) => match next_symbol {
+  [[-$
+
+  wildcard := "_ => Action::Error,"
+
+  nextState := state.Goto[lr.Wildcard]
+  if nextState != nil {
+    wildcard = "_ => Action::Goto(StateId::" + nextState.CodeGenConst + "),"
+  }
+
+  -]]
+  [[-for _, item := range state.Items-]]
+    [[-$
+
+    if !item.IsReduce {
+      continue
+    }
+
+    if item.Name != lr.AcceptRule {
+      continue
+    }
+
+    if item.LookAhead != lr.EndMarker {
+      panic("Expecting end marker. This should never happen")
+    }
+
+    ]]
+      $(rustSymbolKind(item.LookAhead)) => Action::Accept,
+  [[-end-]]
+
+  [[-for _, name := range OrderedSymbolNames[2:]-]]
+    [[-$
+
+    nextState := state.Goto[name]
+    if nextState == nil {
+      continue
+    }
+
+    ]]
+      $(rustSymbolKind(name)) => Action::Goto(StateId::$(nextState.CodeGenConst)),
+  [[-end-]]
+
+  [[-for _, item := range state.Items-]]
+    [[-$
+
+    if !item.IsReduce {
+      continue
+    }
+
+    if item.Name == lr.AcceptRule {
+      continue
+    }
+
+    reduce := "Action::Reduce(ReduceKind::" + item.Clause.CodeGenReducerNameConst + "),"
+
+    if item.LookAhead == lr.Wildcard {
+      wildcard = "_ => " + reduce
+      continue
+    }
+
+    ]]
+      $(rustSymbolKind(item.LookAhead)) => $reduce
+  [[-end]]
+      $(wildcard)
+    },
+[[-end]]
+  }
+}
+
+[[-$
+/*
+symboDebugName := func(name string) string {
+  if name == lr.StartMarker {
+    return "^"
+  }
+  if name == lr.Wildcard {
+    return "*"
+  }
+  if name == lr.EndMarker {
+    return "$"
+  }
+
+  return name
+}
+*/
+-]]
+fn new_syntax_error(
+  next_symbol: Symbol,
+  current_state_id: StateId,
+) -> Box<dyn error::Error> {
+  let expected_terminals = match current_state_id {
+[[-for _, state := range States.OrderedStates]]
+    StateId::$(state.CodeGenConst) => "
+  [[-$ first := true -]]
+  [[-for _, item := range state.Items -]]
+    [[-if !item.IsReduce -]]
+      [[-continue-]]
+    [[-end-]]
+
+    [[-if !first-]]
+, 
+    [[-end-]]
+    [[-$ first = false -]]
+$(item.LookAhead)
+  [[-end-]]
+
+  [[-for _, name := range OrderedSymbolNames[2:]-]]
+    [[-if _, ok := state.Goto[name]; ok -]]
+      [[-if !first-]]
+, 
+      [[-end-]]
+      [[-$ first = false -]]
+$name
+    [[-end-]]
+  [[-end-]]
+",
+[[-end-]]
+  };
+
+  Box::new(Error::new(format!(
+    "Syntax error: unexpected symbol {}. Expecting [{}]",
+    next_symbol.kind.to_string(),
+    expected_terminals)))
+}
+
+/*
+[[embed
+&debug_template.File{
+    OrderedSymbolNames: OrderedSymbolNames,
+    States: States,
+    OutputDebugNonKernelItems: Cfg.OutputDebugNonKernelItems,
+}
+-]]]
+*/

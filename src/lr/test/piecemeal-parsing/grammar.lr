@@ -46,4 +46,13 @@ go:
         ExprList: "[]Expr"
 
     #output_debug_non_kernel_items: true
+
+rust:
+    use_list: ["super::node::{Block, Err, Expr, Id}"]
+    value_types:
+        Ident: "Id"
+        Err: "Err"
+        Block: "Block"
+        Expr: "Expr"
+        ExprList: "Vec<Expr>"
 }%%
