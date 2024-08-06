@@ -7,6 +7,7 @@ import (
 	_io "io"
 
 	"github.com/pattyshack/abc/src/template/internal"
+	"strings"
 )
 
 type Embed struct {
@@ -81,45 +82,6 @@ func (_template *Embed) WriteTo(
 	ind := _template.ind
 	stmt := _template.stmt
 
-	// embed.template:13:0
-	{
-		_n, _err := _template.writeValue(
-			_output,
-			(ind),
-			"embed.template:13:0")
-		_numWritten += int64(_n)
-		if _err != nil {
-			return _numWritten, _err
-		}
-	}
-	// embed.template:13:4
-	{
-		_n, _err := _output.Write([]byte(`// `))
-		_numWritten += int64(_n)
-		if _err != nil {
-			return _numWritten, _err
-		}
-	}
-	// embed.template:13:7
-	{
-		_n, _err := _template.writeValue(
-			_output,
-			(stmt.Loc()),
-			"embed.template:13:7")
-		_numWritten += int64(_n)
-		if _err != nil {
-			return _numWritten, _err
-		}
-	}
-	// embed.template:13:20
-	{
-		_n, _err := _output.Write([]byte(`
-`))
-		_numWritten += int64(_n)
-		if _err != nil {
-			return _numWritten, _err
-		}
-	}
 	// embed.template:14:0
 	{
 		_n, _err := _template.writeValue(
@@ -133,7 +95,26 @@ func (_template *Embed) WriteTo(
 	}
 	// embed.template:14:4
 	{
-		_n, _err := _output.Write([]byte(`{
+		_n, _err := _output.Write([]byte(`// `))
+		_numWritten += int64(_n)
+		if _err != nil {
+			return _numWritten, _err
+		}
+	}
+	// embed.template:14:7
+	{
+		_n, _err := _template.writeValue(
+			_output,
+			(stmt.Loc()),
+			"embed.template:14:7")
+		_numWritten += int64(_n)
+		if _err != nil {
+			return _numWritten, _err
+		}
+	}
+	// embed.template:14:20
+	{
+		_n, _err := _output.Write([]byte(`
 `))
 		_numWritten += int64(_n)
 		if _err != nil {
@@ -153,26 +134,7 @@ func (_template *Embed) WriteTo(
 	}
 	// embed.template:15:4
 	{
-		_n, _err := _output.Write([]byte(`	_n, _err := (`))
-		_numWritten += int64(_n)
-		if _err != nil {
-			return _numWritten, _err
-		}
-	}
-	// embed.template:15:18
-	{
-		_n, _err := _template.writeValue(
-			_output,
-			(stmt.Value),
-			"embed.template:15:18")
-		_numWritten += int64(_n)
-		if _err != nil {
-			return _numWritten, _err
-		}
-	}
-	// embed.template:15:31
-	{
-		_n, _err := _output.Write([]byte(`).WriteTo(_output)
+		_n, _err := _output.Write([]byte(`{
 `))
 		_numWritten += int64(_n)
 		if _err != nil {
@@ -192,7 +154,26 @@ func (_template *Embed) WriteTo(
 	}
 	// embed.template:16:4
 	{
-		_n, _err := _output.Write([]byte(`	_numWritten += _n
+		_n, _err := _output.Write([]byte(`	_n, _err := (`))
+		_numWritten += int64(_n)
+		if _err != nil {
+			return _numWritten, _err
+		}
+	}
+	// embed.template:16:18
+	{
+		_n, _err := _template.writeValue(
+			_output,
+			(strings.TrimSpace(stmt.Value)),
+			"embed.template:16:18")
+		_numWritten += int64(_n)
+		if _err != nil {
+			return _numWritten, _err
+		}
+	}
+	// embed.template:16:50
+	{
+		_n, _err := _output.Write([]byte(`).WriteTo(_output)
 `))
 		_numWritten += int64(_n)
 		if _err != nil {
@@ -212,7 +193,7 @@ func (_template *Embed) WriteTo(
 	}
 	// embed.template:17:4
 	{
-		_n, _err := _output.Write([]byte(`	if _err != nil {
+		_n, _err := _output.Write([]byte(`	_numWritten += _n
 `))
 		_numWritten += int64(_n)
 		if _err != nil {
@@ -232,7 +213,7 @@ func (_template *Embed) WriteTo(
 	}
 	// embed.template:18:4
 	{
-		_n, _err := _output.Write([]byte(`		return _numWritten, _err
+		_n, _err := _output.Write([]byte(`	if _err != nil {
 `))
 		_numWritten += int64(_n)
 		if _err != nil {
@@ -252,7 +233,7 @@ func (_template *Embed) WriteTo(
 	}
 	// embed.template:19:4
 	{
-		_n, _err := _output.Write([]byte(`	}
+		_n, _err := _output.Write([]byte(`		return _numWritten, _err
 `))
 		_numWritten += int64(_n)
 		if _err != nil {
@@ -271,6 +252,26 @@ func (_template *Embed) WriteTo(
 		}
 	}
 	// embed.template:20:4
+	{
+		_n, _err := _output.Write([]byte(`	}
+`))
+		_numWritten += int64(_n)
+		if _err != nil {
+			return _numWritten, _err
+		}
+	}
+	// embed.template:21:0
+	{
+		_n, _err := _template.writeValue(
+			_output,
+			(ind),
+			"embed.template:21:0")
+		_numWritten += int64(_n)
+		if _err != nil {
+			return _numWritten, _err
+		}
+	}
+	// embed.template:21:4
 	{
 		_n, _err := _output.Write([]byte(`}
 `))

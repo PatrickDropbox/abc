@@ -1,6 +1,7 @@
 package templated_codegen
 
 import (
+    "strings"
     "github.com/pattyshack/abc/src/template/internal"
 )
 
@@ -12,7 +13,7 @@ template Embed {
 %%
 $ind// $(stmt.Loc())
 $ind{
-$ind	_n, _err := ($(stmt.Value)).WriteTo(_output)
+$ind	_n, _err := ($(strings.TrimSpace(stmt.Value))).WriteTo(_output)
 $ind	_numWritten += _n
 $ind	if _err != nil {
 $ind		return _numWritten, _err
