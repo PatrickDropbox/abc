@@ -11,6 +11,10 @@ import (
 type SymbolId int
 
 const (
+	// char token '+' = SymbolId(43)
+	// char token '-' = SymbolId(45)
+	// char token '{' = SymbolId(123)
+	// char token '}' = SymbolId(125)
 	IdToken    = SymbolId(256)
 	ErrorToken = SymbolId(257)
 )

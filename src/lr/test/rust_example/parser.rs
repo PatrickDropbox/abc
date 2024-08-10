@@ -11,7 +11,7 @@ pub enum SymbolKind {
     // Token symbols.
     //
     EofToken,
-    AsciiCharToken(char),
+    CharToken(char),
 
     IdToken,
     ErrorToken,
@@ -39,10 +39,10 @@ impl SymbolKind {
             SymbolKind::_WildcardMarker => "*",
             SymbolKind::EofToken => "$",
 
-            SymbolKind::AsciiCharToken('+') => "'+'",
-            SymbolKind::AsciiCharToken('-') => "'-'",
-            SymbolKind::AsciiCharToken('{') => "'{'",
-            SymbolKind::AsciiCharToken('}') => "'}'",
+            SymbolKind::CharToken('+') => "'+'",
+            SymbolKind::CharToken('-') => "'-'",
+            SymbolKind::CharToken('{') => "'{'",
+            SymbolKind::CharToken('}') => "'}'",
             SymbolKind::IdToken => "ID",
             SymbolKind::ErrorToken => "ERROR",
 
@@ -51,7 +51,7 @@ impl SymbolKind {
             SymbolKind::ExprType => "expr",
             SymbolKind::OpType => "op",
             SymbolKind::BlockType => "block",
-            SymbolKind::AsciiCharToken(c) => panic!("Unexpected token '{}'", c),
+            SymbolKind::CharToken(c) => panic!("Unexpected token '{}'", c),
         }
         .to_string()
     }
@@ -85,19 +85,19 @@ impl Symbol {
                 data: _,
             } => (),
             Symbol {
-                kind: SymbolKind::AsciiCharToken('+'),
+                kind: SymbolKind::CharToken('+'),
                 data: SymbolData::Nil,
             } => (),
             Symbol {
-                kind: SymbolKind::AsciiCharToken('-'),
+                kind: SymbolKind::CharToken('-'),
                 data: SymbolData::Nil,
             } => (),
             Symbol {
-                kind: SymbolKind::AsciiCharToken('{'),
+                kind: SymbolKind::CharToken('{'),
                 data: SymbolData::Nil,
             } => (),
             Symbol {
-                kind: SymbolKind::AsciiCharToken('}'),
+                kind: SymbolKind::CharToken('}'),
                 data: SymbolData::Nil,
             } => (),
             Symbol {
@@ -546,13 +546,13 @@ fn lookup_action(current_state: StateId, next_symbol: SymbolKind) -> Action {
             _ => Action::Reduce(ReduceKind::NilToExprList),
         },
         StateId::State2 => match next_symbol {
-            SymbolKind::AsciiCharToken('{') => Action::Goto(StateId::State5),
+            SymbolKind::CharToken('{') => Action::Goto(StateId::State5),
             SymbolKind::BlockType => Action::Goto(StateId::State4),
             _ => Action::Error,
         },
         StateId::State3 => match next_symbol {
             SymbolKind::EofToken => Action::Accept,
-            SymbolKind::AsciiCharToken('{') => Action::Goto(StateId::State5),
+            SymbolKind::CharToken('{') => Action::Goto(StateId::State5),
             SymbolKind::IdToken => Action::Goto(StateId::State7),
             SymbolKind::ErrorToken => Action::Goto(StateId::State6),
             SymbolKind::AtomType => Action::Goto(StateId::State8),
@@ -581,14 +581,14 @@ fn lookup_action(current_state: StateId, next_symbol: SymbolKind) -> Action {
             _ => Action::Reduce(ReduceKind::BlockToAtom),
         },
         StateId::State10 => match next_symbol {
-            SymbolKind::AsciiCharToken('+') => Action::Goto(StateId::State12),
-            SymbolKind::AsciiCharToken('-') => Action::Goto(StateId::State13),
+            SymbolKind::CharToken('+') => Action::Goto(StateId::State12),
+            SymbolKind::CharToken('-') => Action::Goto(StateId::State13),
             SymbolKind::OpType => Action::Goto(StateId::State14),
             _ => Action::Reduce(ReduceKind::AddToExprList),
         },
         StateId::State11 => match next_symbol {
-            SymbolKind::AsciiCharToken('{') => Action::Goto(StateId::State5),
-            SymbolKind::AsciiCharToken('}') => Action::Goto(StateId::State15),
+            SymbolKind::CharToken('{') => Action::Goto(StateId::State5),
+            SymbolKind::CharToken('}') => Action::Goto(StateId::State15),
             SymbolKind::IdToken => Action::Goto(StateId::State7),
             SymbolKind::ErrorToken => Action::Goto(StateId::State6),
             SymbolKind::AtomType => Action::Goto(StateId::State8),
@@ -603,7 +603,7 @@ fn lookup_action(current_state: StateId, next_symbol: SymbolKind) -> Action {
             _ => Action::Reduce(ReduceKind::MinusToOp),
         },
         StateId::State14 => match next_symbol {
-            SymbolKind::AsciiCharToken('{') => Action::Goto(StateId::State5),
+            SymbolKind::CharToken('{') => Action::Goto(StateId::State5),
             SymbolKind::IdToken => Action::Goto(StateId::State7),
             SymbolKind::ErrorToken => Action::Goto(StateId::State6),
             SymbolKind::AtomType => Action::Goto(StateId::State16),

@@ -54,7 +54,7 @@ impl parser::Reducer for Reducer {
         } = op_
         {
             if let Symbol {
-                kind: SymbolKind::AsciiCharToken(op_char),
+                kind: SymbolKind::CharToken(op_char),
                 ..
             } = *token
             {

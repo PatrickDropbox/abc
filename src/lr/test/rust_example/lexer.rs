@@ -23,7 +23,7 @@ impl BasicLexer {
 
             tokens.push_back(match character {
                 '{' | '}' | '+' | '-' => Symbol {
-                    kind: SymbolKind::AsciiCharToken(character),
+                    kind: SymbolKind::CharToken(character),
                     data: SymbolData::Nil,
                 },
                 _ => Symbol {
@@ -114,7 +114,7 @@ impl<'a, L: Lexer, R: Reducer> Lexer for ScopedLexer<'a, L, R> {
 
         let symbol = result?;
         match symbol.kind.clone() {
-            SymbolKind::AsciiCharToken('{') => {
+            SymbolKind::CharToken('{') => {
                 let block_depth = self.depth;
                 self.depth += 1;
 
@@ -135,8 +135,8 @@ impl<'a, L: Lexer, R: Reducer> Lexer for ScopedLexer<'a, L, R> {
                             let (next, _) = self.base.next();
                             if let Ok(next_symbol) = next {
                                 match next_symbol.kind.clone() {
-                                    SymbolKind::AsciiCharToken('{') => self.depth += 1,
-                                    SymbolKind::AsciiCharToken('}') => self.depth -= 1,
+                                    SymbolKind::CharToken('{') => self.depth += 1,
+                                    SymbolKind::CharToken('}') => self.depth -= 1,
                                     SymbolKind::EofToken => {
                                         self.base.push_front(Ok(next_symbol));
                                         break;
@@ -156,7 +156,7 @@ impl<'a, L: Lexer, R: Reducer> Lexer for ScopedLexer<'a, L, R> {
                     }
                 }
             }
-            SymbolKind::AsciiCharToken('}') => {
+            SymbolKind::CharToken('}') => {
                 assert!(self.depth >= 0);
                 if self.depth == 0 {
                     let e = Box::new(Error::new(
