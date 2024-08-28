@@ -166,7 +166,7 @@ const YCErrCode = 2
 const YCInitialStackSize = 16
 
 //line yacctab:1
-var YCExca = [...]int{
+var YCExca = [...]int8{
 	-1, 1,
 	1, -1,
 	-2, 0,
@@ -176,7 +176,7 @@ const YCPrivate = 57344
 
 const YCLast = 1280
 
-var YCAct = [...]int{
+var YCAct = [...]int16{
 	72, 95, 94, 296, 145, 6, 233, 93, 121, 75,
 	149, 41, 47, 5, 5, 226, 133, 123, 116, 11,
 	48, 49, 50, 115, 201, 140, 10, 144, 139, 308,
@@ -307,7 +307,7 @@ var YCAct = [...]int{
 	24, 25, 22, 23, 29, 30, 17, 36, 37, 35,
 }
 
-var YCPact = [...]int{
+var YCPact = [...]int16{
 	926, 926, -1000, -1000, -1000, 28, 498, 1231, 1231, 1231,
 	310, 236, -1000, -1000, -1000, -1000, -1000, -1000, -1000, -1000,
 	-1000, -1000, -1000, -1000, -1000, -1000, -1000, -1000, -1000, -1000,
@@ -345,7 +345,7 @@ var YCPact = [...]int{
 	-1000, -1000, 580, -41, -1000, 580, -1000, -1000, -1000,
 }
 
-var YCPgo = [...]int{
+var YCPgo = [...]int16{
 	0, 428, 427, 34, 426, 419, 7, 1, 418, 8,
 	24, 35, 44, 51, 45, 18, 23, 64, 67, 80,
 	417, 2, 416, 17, 301, 12, 415, 405, 50, 236,
@@ -355,7 +355,7 @@ var YCPgo = [...]int{
 	106, 505, 353, 354,
 }
 
-var YCR1 = [...]int{
+var YCR1 = [...]int8{
 	0, 2, 2, 2, 2, 4, 4, 4, 4, 4,
 	4, 4, 4, 5, 5, 7, 7, 7, 7, 7,
 	7, 8, 8, 8, 8, 8, 8, 9, 9, 11,
@@ -380,7 +380,7 @@ var YCR1 = [...]int{
 	63, 63,
 }
 
-var YCR2 = [...]int{
+var YCR2 = [...]int8{
 	0, 1, 1, 1, 3, 1, 4, 3, 4, 3,
 	3, 2, 2, 1, 3, 1, 2, 2, 2, 2,
 	4, 1, 1, 1, 1, 1, 1, 1, 4, 1,
@@ -405,7 +405,7 @@ var YCR2 = [...]int{
 	3, 2,
 }
 
-var YCChk = [...]int{
+var YCChk = [...]int16{
 	-1000, -1, -62, -63, -24, -25, -31, -27, -28, -29,
 	-43, -44, 30, 31, 32, 33, 34, 45, 35, 36,
 	37, 38, 41, 42, 39, 40, -33, -34, 29, 43,
@@ -443,7 +443,7 @@ var YCChk = [...]int{
 	65, 63, 53, 63, -53, 63, -53, 83, -53,
 }
 
-var YCDef = [...]int{
+var YCDef = [...]int16{
 	0, -2, 204, 206, 207, 0, 0, 77, 79, 81,
 	0, 131, 87, 88, 89, 90, 91, 92, 93, 94,
 	95, 96, 97, 98, 99, 100, 101, 102, 103, 128,
@@ -481,7 +481,7 @@ var YCDef = [...]int{
 	163, 167, 0, 0, 197, 0, 193, 196, 198,
 }
 
-var YCTok1 = [...]int{
+var YCTok1 = [...]int8{
 	1, 3, 3, 3, 3, 3, 3, 3, 3, 3,
 	3, 3, 3, 3, 3, 3, 3, 3, 3, 3,
 	3, 3, 3, 3, 3, 3, 3, 3, 3, 3,
@@ -497,7 +497,7 @@ var YCTok1 = [...]int{
 	3, 3, 3, 84, 79, 85, 72,
 }
 
-var YCTok2 = [...]int{
+var YCTok2 = [...]int8{
 	2, 3, 4, 5, 6, 7, 8, 9, 10, 11,
 	12, 13, 14, 15, 16, 17, 18, 19, 20, 21,
 	22, 23, 24, 25, 26, 27, 28, 29, 30, 31,
@@ -506,7 +506,7 @@ var YCTok2 = [...]int{
 	52, 53, 54, 55, 56, 57, 58, 59, 60, 61,
 }
 
-var YCTok3 = [...]int{
+var YCTok3 = [...]int8{
 	0,
 }
 
@@ -588,9 +588,9 @@ func YCErrorMessage(state, lookAhead int) string {
 	expected := make([]int, 0, 4)
 
 	// Look for shiftable tokens.
-	base := YCPact[state]
+	base := int(YCPact[state])
 	for tok := TOKSTART; tok-1 < len(YCToknames); tok++ {
-		if n := base + tok; n >= 0 && n < YCLast && YCChk[YCAct[n]] == tok {
+		if n := base + tok; n >= 0 && n < YCLast && int(YCChk[int(YCAct[n])]) == tok {
 			if len(expected) == cap(expected) {
 				return res
 			}
@@ -600,13 +600,13 @@ func YCErrorMessage(state, lookAhead int) string {
 
 	if YCDef[state] == -2 {
 		i := 0
-		for YCExca[i] != -1 || YCExca[i+1] != state {
+		for YCExca[i] != -1 || int(YCExca[i+1]) != state {
 			i += 2
 		}
 
 		// Look for tokens that we accept or reduce.
 		for i += 2; YCExca[i] >= 0; i += 2 {
-			tok := YCExca[i]
+			tok := int(YCExca[i])
 			if tok < TOKSTART || YCExca[i+1] == 0 {
 				continue
 			}
@@ -637,30 +637,30 @@ func YClex1(lex YCLexer, lval *YCSymType) (char, token int) {
 	token = 0
 	char = lex.Lex(lval)
 	if char <= 0 {
-		token = YCTok1[0]
+		token = int(YCTok1[0])
 		goto out
 	}
 	if char < len(YCTok1) {
-		token = YCTok1[char]
+		token = int(YCTok1[char])
 		goto out
 	}
 	if char >= YCPrivate {
 		if char < YCPrivate+len(YCTok2) {
-			token = YCTok2[char-YCPrivate]
+			token = int(YCTok2[char-YCPrivate])
 			goto out
 		}
 	}
 	for i := 0; i < len(YCTok3); i += 2 {
-		token = YCTok3[i+0]
+		token = int(YCTok3[i+0])
 		if token == char {
-			token = YCTok3[i+1]
+			token = int(YCTok3[i+1])
 			goto out
 		}
 	}
 
 out:
 	if token == 0 {
-		token = YCTok2[1] /* unknown char */
+		token = int(YCTok2[1]) /* unknown char */
 	}
 	if YCDebug >= 3 {
 		__yyfmt__.Printf("lex %s(%d)\n", YCTokname(token), uint(char))
@@ -715,7 +715,7 @@ YCstack:
 	YCS[YCp].yys = YCstate
 
 YCnewstate:
-	YCn = YCPact[YCstate]
+	YCn = int(YCPact[YCstate])
 	if YCn <= YCFlag {
 		goto YCdefault /* simple state */
 	}
@@ -726,8 +726,8 @@ YCnewstate:
 	if YCn < 0 || YCn >= YCLast {
 		goto YCdefault
 	}
-	YCn = YCAct[YCn]
-	if YCChk[YCn] == YCtoken { /* valid shift */
+	YCn = int(YCAct[YCn])
+	if int(YCChk[YCn]) == YCtoken { /* valid shift */
 		YCrcvr.char = -1
 		YCtoken = -1
 		YCVAL = YCrcvr.lval
@@ -740,7 +740,7 @@ YCnewstate:
 
 YCdefault:
 	/* default state action */
-	YCn = YCDef[YCstate]
+	YCn = int(YCDef[YCstate])
 	if YCn == -2 {
 		if YCrcvr.char < 0 {
 			YCrcvr.char, YCtoken = YClex1(YClex, &YCrcvr.lval)
@@ -749,18 +749,18 @@ YCdefault:
 		/* look through exception table */
 		xi := 0
 		for {
-			if YCExca[xi+0] == -1 && YCExca[xi+1] == YCstate {
+			if YCExca[xi+0] == -1 && int(YCExca[xi+1]) == YCstate {
 				break
 			}
 			xi += 2
 		}
 		for xi += 2; ; xi += 2 {
-			YCn = YCExca[xi+0]
+			YCn = int(YCExca[xi+0])
 			if YCn < 0 || YCn == YCtoken {
 				break
 			}
 		}
-		YCn = YCExca[xi+1]
+		YCn = int(YCExca[xi+1])
 		if YCn < 0 {
 			goto ret0
 		}
@@ -782,10 +782,10 @@ YCdefault:
 
 			/* find a state where "error" is a legal shift action */
 			for YCp >= 0 {
-				YCn = YCPact[YCS[YCp].yys] + YCErrCode
+				YCn = int(YCPact[YCS[YCp].yys]) + YCErrCode
 				if YCn >= 0 && YCn < YCLast {
-					YCstate = YCAct[YCn] /* simulate a shift of "error" */
-					if YCChk[YCstate] == YCErrCode {
+					YCstate = int(YCAct[YCn]) /* simulate a shift of "error" */
+					if int(YCChk[YCstate]) == YCErrCode {
 						goto YCstack
 					}
 				}
@@ -821,7 +821,7 @@ YCdefault:
 	YCpt := YCp
 	_ = YCpt // guard against "declared and not used"
 
-	YCp -= YCR2[YCn]
+	YCp -= int(YCR2[YCn])
 	// YCp is now the index of $0. Perform the default action. Iff the
 	// reduced production is ε, $1 is possibly out of range.
 	if YCp+1 >= len(YCS) {
@@ -832,16 +832,16 @@ YCdefault:
 	YCVAL = YCS[YCp+1]
 
 	/* consult goto table to find next state */
-	YCn = YCR1[YCn]
-	YCg := YCPgo[YCn]
+	YCn = int(YCR1[YCn])
+	YCg := int(YCPgo[YCn])
 	YCj := YCg + YCS[YCp].yys + 1
 
 	if YCj >= YCLast {
-		YCstate = YCAct[YCg]
+		YCstate = int(YCAct[YCg])
 	} else {
-		YCstate = YCAct[YCj]
-		if YCChk[YCstate] != -YCn {
-			YCstate = YCAct[YCg]
+		YCstate = int(YCAct[YCj])
+		if int(YCChk[YCstate]) != -YCn {
+			YCstate = int(YCAct[YCg])
 		}
 	}
 	// dummy call; replaced with literal code

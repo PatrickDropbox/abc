@@ -11,6 +11,30 @@ import (
 type CSymbolId int
 
 const (
+	// char token '(' = CSymbolId(40)
+	// char token ')' = CSymbolId(41)
+	// char token '{' = CSymbolId(123)
+	// char token '}' = CSymbolId(125)
+	// char token '[' = CSymbolId(91)
+	// char token ']' = CSymbolId(93)
+	// char token ';' = CSymbolId(59)
+	// char token ':' = CSymbolId(58)
+	// char token ',' = CSymbolId(44)
+	// char token '=' = CSymbolId(61)
+	// char token '?' = CSymbolId(63)
+	// char token '*' = CSymbolId(42)
+	// char token '/' = CSymbolId(47)
+	// char token '-' = CSymbolId(45)
+	// char token '+' = CSymbolId(43)
+	// char token '%' = CSymbolId(37)
+	// char token '&' = CSymbolId(38)
+	// char token '|' = CSymbolId(124)
+	// char token '!' = CSymbolId(33)
+	// char token '.' = CSymbolId(46)
+	// char token '^' = CSymbolId(94)
+	// char token '<' = CSymbolId(60)
+	// char token '>' = CSymbolId(62)
+	// char token '~' = CSymbolId(126)
 	CIdentifierToken    = CSymbolId(256)
 	CConstantToken      = CSymbolId(257)
 	CStringLiteralToken = CSymbolId(258)
@@ -13129,4 +13153,7 @@ Number of shift actions: 2989
 Number of reduce actions: 246
 Number of shift/reduce conflicts: 2
 Number of reduce/reduce conflicts: 0
+Number of unoptimized states: 1572
+Number of unoptimized shift actions: 14481
+Number of unoptimized reduce actions: 15182
 */

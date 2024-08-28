@@ -5254,14 +5254,14 @@ state 348
 
 
 85 terminals, 64 nonterminals
-212 grammar rules, 349/8000 states
+212 grammar rules, 349/16000 states
 1 shift/reduce, 0 reduce/reduce conflicts reported
 163 working sets used
-memory: parser 1598/120000
+memory: parser 1598/240000
 242 extra closures
 1702 shift entries, 1 exceptions
 238 goto entries
 1047 entries saved by goto default
-Optimizer space used: output 1280/120000
+Optimizer space used: output 1280/240000
 1280 table entries, 287 zero
 maximum spread: 85, maximum offset: 345
